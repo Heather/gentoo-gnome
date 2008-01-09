@@ -1,0 +1,15 @@
+--- plugins/nautilus/Makefile.in.orig	2007-01-24 20:37:53.000000000 -0600
++++ plugins/nautilus/Makefile.in	2007-01-24 20:38:06.000000000 -0600
+@@ -786,11 +786,9 @@
+ 
+ 
+ @UPDATE_MIME_DATABASE_TRUE@install-data-local:
+-@UPDATE_MIME_DATABASE_TRUE@	mkdir -p $(mimedir)
+-@UPDATE_MIME_DATABASE_TRUE@	update-mime-database $(datadir)/mime/
+ 
+ @UPDATE_MIME_DATABASE_TRUE@uninstall-local:
+-@UPDATE_MIME_DATABASE_TRUE@	update-mime-database $(datadir)/mime/
++
+ @UPDATE_MIME_DATABASE_FALSE@install-data-local:
+ 
+ @UPDATE_MIME_DATABASE_FALSE@uninstall-local:
