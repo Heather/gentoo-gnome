@@ -1,0 +1,11 @@
+--- gnome-doc-utils.make.orig	2007-04-14 16:50:19.000000000 -0500
++++ gnome-doc-utils.make	2007-04-14 16:52:06.000000000 -0500
+@@ -116,7 +116,7 @@
+ 	$(filter $(LINGUAS),$(DOC_LINGUAS)),					\
+ 	$(DOC_LINGUAS))
+ 
+-_DOC_ABS_SRCDIR = @abs_srcdir@
++_DOC_ABS_SRCDIR = "`pwd`/@abs_srcdir@"
+ 
+ 
+ ################################################################################

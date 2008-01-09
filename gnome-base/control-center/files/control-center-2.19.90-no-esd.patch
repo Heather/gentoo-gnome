@@ -1,0 +1,20 @@
+diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN gnome-control-center-2.19.90.orig/configure.in gnome-control-center-2.19.90/configure.in
+--- gnome-control-center-2.19.90.orig/configure.in	2007-08-13 18:01:24.000000000 -0400
++++ gnome-control-center-2.19.90/configure.in	2007-08-27 20:48:02.000000000 -0400
+@@ -100,7 +100,7 @@ PKG_CHECK_MODULES(LIBSLAB, $COMMON_MODUL
+ PKG_CHECK_MODULES(CAPPLET, $COMMON_MODULES)
+ PKG_CHECK_MODULES(GNOMECC, $COMMON_MODULES libgnome-menu >= 2.10.1 libpanelapplet-2.0)
+ PKG_CHECK_MODULES(GNOME_SETTINGS_DAEMON,
+-  [gtk+-2.0 gconf-2.0 libgnomeui-2.0 esound gnome-desktop-2.0 libglade-2.0])
++  [gtk+-2.0 gconf-2.0 libgnomeui-2.0 gnome-desktop-2.0 libglade-2.0])
+ PKG_CHECK_MODULES(OLD_CAPPLET, libgnomeui-2.0 libglade-2.0)
+ PKG_CHECK_MODULES(GNOME, libgnomeui-2.0)
+ PKG_CHECK_MODULES(GTK, gtk+-2.0)
+@@ -432,7 +432,6 @@ AC_SUBST(GST_LIBS)
+ AC_SUBST(GST_CFLAGS)
+ 
+ if test "x$have_gstreamer" = "xyes"; then
+-  PKG_CHECK_MODULES(SOUND_CAPPLET, esound)
+   SOUND_CAPPLET_LIBS="$SOUND_CAPPLET_LIBS $GST_LIBS -lgstaudio-0.10 -lgstinterfaces-0.10"
+   SOUND_CAPPLET_CFLAGS="$SOUND_CAPPLET_CFLAGS $GST_CFLAGS"
+   AC_SUBST(SOUND_CAPPLET_LIBS)
