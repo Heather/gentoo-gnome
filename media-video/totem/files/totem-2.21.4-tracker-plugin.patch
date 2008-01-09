@@ -1,0 +1,11 @@
+--- configure.in.orig	2007-12-05 20:24:37.000000000 -0800
++++ configure.in	2007-12-05 20:26:51.000000000 -0800
+@@ -362,7 +362,7 @@
+ 			fi
+ 		;;
+ 		tracker)
+-			PKG_CHECK_MODULES(TRACKER, tracker, [HAVE_TRACKER=yes], [HAVE_TRACKER=no])
++			PKG_CHECK_MODULES(TRACKER, tracker libgnomeui-2.0, [HAVE_TRACKER=yes], [HAVE_TRACKER=no])
+ 			if test "${HAVE_TRACKER}" != "yes" ; then
+ 				plugin_error_or_ignore "you need the tracker development headers installed for the tracker plugin"
+ 				add_plugin="0"
