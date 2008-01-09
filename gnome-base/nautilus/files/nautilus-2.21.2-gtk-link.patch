@@ -1,0 +1,12 @@
+diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN nautilus-2.21.2.orig/configure.in nautilus-2.21.2/configure.in
+--- nautilus-2.21.2.orig/configure.in	2008-01-08 04:29:18.000000000 -0500
++++ nautilus-2.21.2/configure.in	2008-01-08 12:10:15.000000000 -0500
+@@ -403,7 +403,7 @@ LIBNAUTILUS_EXTENSION_LIBS="`$PKG_CONFIG
+ AC_SUBST(LIBNAUTILUS_EXTENSION_LIBS)
+ 
+ dnl core nautilus (must list bonobo-activation and libbonobo because idldir does not respect "requires")
+-CORE_MODULES="eel-2.0 librsvg-2.0 bonobo-activation-2.0 libbonobo-2.0 esound gnome-desktop-2.0 gio-2.0 gio-unix-2.0 $EXTRA_CORE_MODULES"
++CORE_MODULES="gtk+-2.0 eel-2.0 librsvg-2.0 bonobo-activation-2.0 libbonobo-2.0 gnome-desktop-2.0 gio-2.0 gio-unix-2.0 $EXTRA_CORE_MODULES"
+ CORE_CFLAGS="`$PKG_CONFIG --cflags $CORE_MODULES` $x_cflags $WARNING_CFLAGS"
+ AC_SUBST(CORE_CFLAGS)
+ CORE_LIBS="`$PKG_CONFIG --libs $CORE_MODULES` $x_libs"
