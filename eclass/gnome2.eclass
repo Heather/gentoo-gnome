@@ -97,7 +97,7 @@ gnome2_src_install() {
 	# 1. The scrollkeeper database is regenerated at pkg_postinst()
 	# 2. ${D}/var/lib/scrollkeeper contains only indexes for the current pkg
 	#    thus it makes no sense if pkg_postinst ISN'T run for some reason.
-	if [[ -z "$(find ${D} -name '*.omf')" ]]; then
+	if [[ -z "$(find "${D}" -name '*.omf')" ]]; then
 		export SCROLLKEEPER_UPDATE="0"
 	fi
 	rm -rf "${D}${sk_tmp_dir}"
