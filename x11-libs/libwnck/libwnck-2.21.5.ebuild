@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/libwnck/libwnck-2.20.1.ebuild,v 1.1 2007/10/16 08:32:07 remi Exp $
 
-inherit gnome2
+inherit gnome2 eutils
 
 DESCRIPTION="A window navigation construction kit"
 HOMEPAGE="http://www.gnome.org/"
@@ -25,3 +25,10 @@ DEPEND="${RDEPEND}
 		doc? ( >=dev-util/gtk-doc-1 )"
 
 DOCS="AUTHORS ChangeLog HACKING NEWS README"
+
+src_unpack() {
+	gnome2_src_unpack
+	cd "${S}"
+
+	epatch "${FILESDIR}/${PN}-2.21.5-gtk-doc-die-die-die.patch"
+}
