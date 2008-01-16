@@ -1,0 +1,30 @@
+--- applets/clock/clock.c.orig	2008-01-15 22:53:42.000000000 -0800
++++ applets/clock/clock.c	2008-01-15 22:54:40.000000000 -0800
+@@ -49,6 +49,7 @@
+ #include <gconf/gconf-client.h>
+ 
+ #include <glade/glade.h>
++#define GWEATHER_I_KNOW_THIS_IS_UNSTABLE
+ #include <libgweather/gweather-prefs.h>
+ 
+ #include "clock.h"
+--- applets/clock/clock-location.h.orig	2008-01-15 23:01:27.000000000 -0800
++++ applets/clock/clock-location.h	2008-01-15 23:01:36.000000000 -0800
+@@ -4,6 +4,7 @@
+ #include <time.h>
+ #include <glib.h>
+ #include <glib-object.h>
++#define GWEATHER_I_KNOW_THIS_IS_UNSTABLE
+ #include <libgweather/weather.h>
+ 
+ #include "clock-zonetable.h"
+--- applets/clock/gweather-xml.h.orig	2008-01-15 23:05:18.000000000 -0800
++++ applets/clock/gweather-xml.h	2008-01-15 23:05:27.000000000 -0800
+@@ -21,6 +21,7 @@
+ #define __GWEATHER_XML_H__
+ 
+ #include <gtk/gtk.h>
++#define GWEATHER_I_KNOW_THIS_IS_UNSTABLE
+ #include <libgweather/weather.h>
+ 
+ enum

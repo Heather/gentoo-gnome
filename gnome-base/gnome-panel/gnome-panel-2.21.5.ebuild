@@ -16,6 +16,7 @@ RDEPEND=">=gnome-base/gnome-desktop-2.12
 		 >=x11-libs/pango-1.15.4
 		 >=dev-libs/glib-2.13.0
 		 >=x11-libs/gtk+-2.11.3
+		 >=dev-libs/libgweather-2.21.2
 		 >=gnome-base/libglade-2.5
 		 >=gnome-base/libgnome-2.13
 		 >=gnome-base/libgnomeui-2.5.4
@@ -55,7 +56,8 @@ src_unpack() {
 	# We should patch in a switch here and send it upstream
 	sed -i 's:--load:-v:' "${S}/gnome-panel/Makefile.in" || die "sed failed"
 
-	epatch "${FILESDIR}/gnome-panel-2.21.5-gtk-doc-die-die-die.patch"
+	epatch "${FILESDIR}/${PN}-2.21.5-gtk-doc-die-die-die.patch"
+	epatch "${FILESDIR}/${PN}-2.21.5-gweather-i-know-this-is-unstable.patch"
 }
 
 pkg_postinst() {
