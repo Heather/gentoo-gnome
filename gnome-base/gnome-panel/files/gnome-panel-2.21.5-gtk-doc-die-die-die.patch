@@ -1,0 +1,26 @@
+--- gtk-doc.make.orig	2008-01-15 21:29:16.000000000 -0800
++++ gtk-doc.make	2008-01-15 21:29:40.000000000 -0800
+@@ -139,8 +139,9 @@
+ 	  done; \
+ 	  echo '-- Installing $(srcdir)/html/index.sgml' ; \
+ 	  $(INSTALL_DATA) $(srcdir)/html/index.sgml $(DESTDIR)$(TARGET_DIR) || :; \
+-	  which gtkdoc-rebase >/dev/null && \
++	  if test $(which gtkdoc-rebase 2> /dev/null) ; then \
+ 	    gtkdoc-rebase --relative --dest-dir=$(DESTDIR) --html-dir=$(DESTDIR)$(TARGET_DIR) ; \
++	  fi \
+ 	fi
+ 	
+ 
+--- doc/reference/panel-applet/Makefile.in.orig	2008-01-15 21:30:06.000000000 -0800
++++ doc/reference/panel-applet/Makefile.in	2008-01-15 21:30:35.000000000 -0800
+@@ -609,8 +609,9 @@
+ 	  done; \
+ 	  echo '-- Installing $(srcdir)/html/index.sgml' ; \
+ 	  $(INSTALL_DATA) $(srcdir)/html/index.sgml $(DESTDIR)$(TARGET_DIR) || :; \
+-	  which gtkdoc-rebase >/dev/null && \
++	  if test $(which gtkdoc-rebase 2> /dev/null) ; then \
+ 	    gtkdoc-rebase --relative --dest-dir=$(DESTDIR) --html-dir=$(DESTDIR)$(TARGET_DIR) ; \
++	  fi \
+ 	fi
+ 
+ uninstall-local:
