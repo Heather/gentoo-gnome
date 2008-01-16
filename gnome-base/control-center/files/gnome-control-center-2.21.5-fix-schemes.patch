@@ -1,0 +1,36 @@
+Index: configure.in
+===================================================================
+--- configure.in	(revision 8396)
++++ configure.in	(revision 8397)
+@@ -525,7 +525,6 @@
+ libwindow-settings/Makefile
+ libwindow-settings/gnome-window-settings-2.0.pc
+ po/Makefile.in
+-schemas/Makefile
+ shell/Makefile
+ shell/gnomecc.desktop.in
+ typing-break/Makefile
+Index: ChangeLog
+===================================================================
+--- ChangeLog	(revision 8396)
++++ ChangeLog	(revision 8397)
+@@ -1,3 +1,9 @@
++2008-01-16  Rodrigo Moya <rodrigo@gnome-db.org>
++
++	* Makefile.am:
++	* configure.in: disabled schemas directory from the build, those
++	files are now part of gnome-settings-daemon.
++
+ 2008-01-14  Rodrigo Moya <rodrigo@gnome-db.org>
+ 
+ 	* configure.in:
+Index: Makefile.am
+===================================================================
+--- Makefile.am	(revision 8396)
++++ Makefile.am	(revision 8397)
+@@ -1,4 +1,4 @@
+-SUBDIRS = po libsounds libbackground libwindow-settings libslab capplets shell help vfs-methods schemas $(TYPING_BREAK)
++SUBDIRS = po libsounds libbackground libwindow-settings libslab capplets shell help vfs-methods $(TYPING_BREAK)
+ 
+ ACLOCAL_AMFLAGS = -I m4
+ 
