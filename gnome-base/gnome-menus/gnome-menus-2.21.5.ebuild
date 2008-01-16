@@ -10,14 +10,13 @@ HOMEPAGE="http://www.gnome.org"
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="debug python kernel_linux"
+IUSE="debug python"
 
-RDEPEND=">=dev-libs/glib-2.6
+RDEPEND=">=dev-libs/glib-2.15.1
 		 python? (
 					>=dev-lang/python-2.4.4-r5
 					dev-python/pygtk
-				)
-		 !kernel_linux? ( virtual/fam )"
+				 )"
 DEPEND="${RDEPEND}
 		  sys-devel/gettext
 		>=dev-util/pkgconfig-0.9
@@ -26,26 +25,16 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
 pkg_setup() {
-	local backend=
-
-	if use kernel_linux ; then
-		CONFIG_CHECK="~INOTIFY"
-		linux-info_pkg_setup
-	fi
-
-	if use kernel_linux ; then
-		backend=inotify
-	else
-		backend=fam
-	fi
-
-	G2CONF="--with-monitor-backend=$backend $(use_enable debug) $(use_enable python)"
+	G2CONF="--with-monitor-backend=gio $(use_enable debug) $(use_enable python)"
 }
 
 src_unpack() {
 	gnome2_src_unpack
+
 	# Don't show KDE standalone settings desktop files in GNOME others menu
 	epatch "${FILESDIR}/${PN}-2.18.3-ignore_kde_standalone.patch"
+
+	epatch "${FILESDIR}/${PN}-2.21.5-drop-gio-deps.patch"
 }
 
 pkg_postinst() {
