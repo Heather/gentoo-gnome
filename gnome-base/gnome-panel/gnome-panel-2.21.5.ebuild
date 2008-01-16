@@ -58,6 +58,7 @@ src_unpack() {
 
 	epatch "${FILESDIR}/${PN}-2.21.5-gtk-doc-die-die-die.patch"
 	epatch "${FILESDIR}/${PN}-2.21.5-gweather-i-know-this-is-unstable.patch"
+	epatch "${FILESDIR}/${PN}-2.21.5-fix-undefined-symbol-without-libecal.patch"
 }
 
 pkg_postinst() {
