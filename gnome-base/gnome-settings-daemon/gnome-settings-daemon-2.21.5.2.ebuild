@@ -9,7 +9,7 @@ HOMEPAGE="http://www.gnome.org"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="-*"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="alsa debug esd gstreamer"
 
 RDEPEND=">=dev-libs/dbus-glib-0.74
@@ -32,8 +32,7 @@ RDEPEND=">=dev-libs/dbus-glib-0.74
 		 gstreamer? (
 						>=media-libs/gstreamer-0.10.1.2
 						>=media-libs/gst-plugins-base-0.10.1.2
-					)
-		 !gnome-base/control-center"
+					)"
 DEPEND="${RDEPEND}
 		  sys-devel/gettext
 		>=dev-util/intltool-0.35.0
