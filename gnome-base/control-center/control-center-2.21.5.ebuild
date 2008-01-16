@@ -30,6 +30,7 @@ RDEPEND=">=virtual/xft-2.1.2
 		 >=gnome-base/libgnomekbd-2.21.4.1
 		 >=gnome-base/gnome-desktop-2.2
 		 >=gnome-base/gnome-menus-2.11.1
+		 >=gnome-base/gnome-settings-daemon-${PV}
 
 		>=media-libs/gstreamer-0.10.1.2
 		>=media-libs/gst-plugins-base-0.10.1.2
