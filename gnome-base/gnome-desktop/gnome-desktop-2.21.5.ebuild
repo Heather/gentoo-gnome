@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-desktop/gnome-desktop-2.20.1.ebuild,v 1.1 2007/10/17 20:26:26 eva Exp $
 
-inherit gnome2
+inherit gnome2 eutils
 
 DESCRIPTION="Libraries for the gnome desktop that is not part of the UI"
 HOMEPAGE="http://www.gnome.org/"
@@ -32,4 +32,11 @@ DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
 pkg_setup() {
 	G2CONF="${G2CONF} --with-gnome-distributor=Gentoo --disable-scrollkeeper"
+}
+
+src_unpack() {
+	gnome2_src_unpack
+	cd "${S}"
+
+	epatch "${FILESDIR}/${PN}-2.21.5-gtk-doc-die-die-die.patch"
 }
