@@ -101,5 +101,7 @@ src_unpack() {
 	# Drop esound unless requested
 	use esd || epatch "${FILESDIR}/${PN}-2.19.90-no-esd.patch"
 
+	epatch "${FILESDIR}/gnome-control-center-2.21.5-fix-schemes.patch"
+
 	eautoreconf
 }
