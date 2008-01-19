@@ -14,7 +14,7 @@ IUSE="beagle gnome tracker"
 
 RDEPEND=">=x11-libs/startup-notification-0.8
 		 >=gnome-base/libbonobo-2.1
-		 >=gnome-base/eel-2.21.1
+		 >=gnome-base/eel-2.21.5
 		 >=dev-libs/glib-2.15.1
 		 >=gnome-base/gnome-desktop-2.10
 		 >=gnome-base/orbit-2.4
@@ -24,7 +24,7 @@ RDEPEND=">=x11-libs/startup-notification-0.8
 		 >=dev-libs/libxml2-2.4.7
 		 >=media-libs/libexif-0.5.12
 		 >=gnome-base/gconf-2.0
-		 >=gnome-base/gvfs-0.1.1
+		 >=gnome-base/gvfs-0.1.2
 		 beagle? ( >=app-misc/beagle-0.0.12 )
 		 tracker? ( >=app-misc/tracker-0.6.4 )
 		 >=gnome-base/libgnome-2.14
@@ -44,7 +44,7 @@ pkg_setup() {
 src_unpack() {
 	gnome2_src_unpack
 
-	epatch "${FILESDIR}/${PN}-2.21.2-no-esd.patch"
+	epatch "${FILESDIR}/${PN}-2.21.5-no-esd.patch"
 	epatch "${FILESDIR}/${PN}-2.21.2-gtk-link.patch"
 	eautoreconf
 }
