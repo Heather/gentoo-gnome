@@ -33,8 +33,6 @@ src_unpack() {
 
 	# Don't show KDE standalone settings desktop files in GNOME others menu
 	epatch "${FILESDIR}/${PN}-2.18.3-ignore_kde_standalone.patch"
-
-	epatch "${FILESDIR}/${PN}-2.21.5-drop-gio-deps.patch"
 }
 
 pkg_postinst() {
