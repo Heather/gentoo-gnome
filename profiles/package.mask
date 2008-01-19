@@ -6,8 +6,8 @@
 # NOTE: Please add your entry at the top!
 #
 
-# Saleem Abdulrasool <compnerd@gentoo.org> (25 Dec 2007)
-# This is fairly broken still
+# Rémi Cardona <remi@gentoo.org> (19 Jan 2007)
+# Still missing network browsing capabilities, but works
 >=gnome-base/eel-2.21
 >=gnome-base/nautilus-2.21
 
