@@ -1,0 +1,42 @@
+diff -ur a/glib/glibmm/date.cc b/glib/glibmm/date.cc
+--- a/glib/glibmm/date.cc	2007-08-13 11:51:09 +0100
++++ b/glib/glibmm/date.cc	2007-10-19 10:02:22 +0100
+@@ -71,16 +71,6 @@
+   g_date_set_parse(&gobject_, str.c_str());
+ }
+ 
+-#ifndef GLIBMM_DISABLE_DEPRECATED
+-
+-void Date::set_time(GTime time)
+-{
+-  //This method, and the C function that it wraps, are deprecated.
+-  g_date_set_time(&gobject_, time);
+-}
+-#endif // GLIBMM_DISABLE_DEPRECATED
+-
+-
+ void Date::set_time(time_t timet)
+ {
+   g_date_set_time_t(&gobject_, timet);
+diff -ur a/glib/glibmm/date.h b/glib/glibmm/date.h
+--- a/glib/glibmm/date.h	2007-08-13 11:51:09 +0100
++++ b/glib/glibmm/date.h	2007-10-19 10:02:08 +0100
+@@ -119,18 +119,6 @@
+    */
+   void set_parse (const Glib::ustring& str);
+ 
+-  #ifndef GLIBMM_DISABLE_DEPRECATED
+-
+-  /** Sets the value of a date from a GTime (time_t) value. 
+-   *
+-   * @param time GTime value to set.
+-   *
+-   * @deprecated Please use set_time(time_t) or set_time(const GTimeVal&).
+-   */
+-  void set_time(GTime time);
+-  #endif // GLIBMM_DISABLE_DEPRECATED
+-
+-
+   /** Sets the value of a date from a <type>time_t</type> value. 
+    *
+    * @param timet time_t value to set
