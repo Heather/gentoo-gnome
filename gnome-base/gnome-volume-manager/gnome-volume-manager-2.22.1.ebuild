@@ -19,7 +19,7 @@ RDEPEND=">=gnome-base/libgnomeui-2.1.5
 		 >=gnome-base/libglade-2
 		 >=x11-libs/libnotify-0.3
 		 >=gnome-base/gconf-2
-		 
+
 		 gnome-base/nautilus
 		 >=gnome-base/gnome-mount-0.6"
 DEPEND="${RDEPEND}
