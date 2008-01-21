@@ -12,7 +12,7 @@ SLOT="3.14"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="static"
 
-RDEPEND=">=x11-libs/gtk+-2.10
+RDEPEND=">=x11-libs/gtk+-2.12
 	>=gnome-base/gail-1.1
 	>=x11-themes/gnome-icon-theme-1.2
 	>=gnome-base/libbonoboui-2.2.4
