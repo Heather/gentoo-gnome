@@ -10,12 +10,12 @@ HOMEPAGE="http://www.gtk.org/"
 LICENSE="LGPL-2"
 SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
-IUSE="attr debug doc fam hardened selinux"
+IUSE="debug doc fam hardened selinux xattr"
 
 # dang remove gio-standalone blocker before moving to portage
 RDEPEND="virtual/libc
 		 virtual/libiconv
-		 attr? ( sys-apps/attr )
+		 xattr? ( sys-apps/attr )
 		 fam? ( virtual/fam )
 		 !gnome-base/gio-standalone"
 DEPEND="${RDEPEND}
@@ -67,7 +67,7 @@ src_compile() {
 
 	# always build static libs, see #153807
 	econf ${myconf}                 \
-		  $(use_enable attr xattr)  \
+		  $(use_enable xattr)  \
 		  $(use_enable doc man)     \
 		  $(use_enable doc gtk-doc) \
 		  $(use_enable fam)         \
@@ -79,7 +79,7 @@ src_compile() {
 }
 
 src_install() {
-	make DESTDIR="${D}" install || die "Installation failed"
+	emake DESTDIR="${D}" install || die "Installation failed"
 
 	# Do not install charset.alias even if generated, leave it to libiconv
 	rm -f "${D}/usr/lib/charset.alias"
