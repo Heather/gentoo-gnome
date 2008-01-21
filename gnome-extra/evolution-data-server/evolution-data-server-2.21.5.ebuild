@@ -81,10 +81,10 @@ src_unpack() {
 	epatch "${FILESDIR}"/${PN}-1.12.1-icaltz-util.patch
 
 	# Don't error out if gtkdoc-rebase doesn't exist.
-	epatch "${FILESDIR}"/${P}-gtkdoc-rebase.patch
+	epatch "${FILESDIR}"/${PN}-2.21.4-gtkdoc-rebase.patch
 
 	# Fix building evo-exchange with --as-needed
-	epatch "${FILESDIR}"/${P}-as-needed.patch
+	epatch "${FILESDIR}"/${PN}-2.21.4-as-needed.patch
 
 	eautoreconf
 }
