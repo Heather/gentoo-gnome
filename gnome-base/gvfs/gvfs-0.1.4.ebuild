@@ -13,23 +13,23 @@ KEYWORDS="~amd64 ~x86"
 IUSE="cdda doc fuse samba"
 
 # dang remove gio-standalone before putting in portage
-RDEPEND="${DEPEND}
-	>=dev-libs/glib-2.15.2
-	sys-apps/dbus
-	>=sys-apps/hal-0.5.9
-	>=net-libs/libsoup-2.2.104
-	cdda? ( >=dev-libs/libcdio-0.78.2 )
-	fuse? ( sys-fs/fuse )
-	samba? ( >=net-fs/samba-3 )"
-DEPEND="
-	dev-util/pkgconfig
-	sys-devel/gettext
-	doc? ( >=dev-util/gtk-doc-1 )"
+RDEPEND=">=dev-libs/glib-2.15.2
+		 sys-apps/dbus
+		 >=sys-apps/hal-0.5.9
+		 >=net-libs/libsoup-2.3
+		 cdda? ( >=dev-libs/libcdio-0.78.2 )
+		 fuse? ( sys-fs/fuse )
+		 samba? ( >=net-fs/samba-3 )"
+DEPEND="${RDEPEND}
+		sys-devel/gettext
+		>=dev-util/intltool-0.31
+		>=dev-util/pkgconfig-0.19
+		doc? ( >=dev-util/gtk-doc-1 )"
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
 pkg_setup() {
-	G2CONF="--enable-hal
+	G2CONF="--enable-hal --enable-http
 		$(use_enable doc gtk-doc)
 		$(use_enable cdda)
 		$(use_enable fuse)
