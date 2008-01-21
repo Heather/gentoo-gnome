@@ -1,0 +1,72 @@
+# ChangeLog for mail-client/evolution
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  21 Jan 2008; Daniel Gryniewicz <dang@gentoo.org> evolution-2.21.5:
+  Bump to 2.21.5
+  New in 2.21.5:
+  	Mail errors are now non-intrusive (Srinivasa Ragavan)
+  	RTL fixes - Mail and Addressbook (Djihed Afifi)
+  
+  Bug fixes:
+  	- Allow categories to be assigned to emails (Milan Crha)
+  	- Quit application when session dies (Milan Crha)
+  	- Skip disabled accounts. (Suman Manjunath)
+  	- Added checkbox for "Enable Search Folders" option (Milan Crha)
+  	- Ensure vfolder is running. (Milan Crha)
+  	- Fix message headers for RTL languages. (Djihed Afifi)
+  	- Bump GtkHTML requirement to 3.17.5 (Matthew Barnes)
+  	- Save inline pictures embedded into HTML Mails (Milan Crha)
+  	- Fixed multiple password prompts in an exchange account (Sushma Rai)
+  	- Get the content size of the MIME part (Jean-Christophe BEGUE)
+  	- Print attenddes/roles in the print view (Milan Crha)
+  	- Setting new option 'e_date_edit_set_twodigit_year_can_future' to FALSE
+  	  (Milan Crha)
+  	- Remove pre-edit buffer cleanly in day view (Mayank Jain)
+  	- Enable the use of scrollable tabs in the mail-preferences dialog. (Gert
+  	  Kulyk)
+  	- Overhaul the message passing API (Matthew Barnes)
+  	- New option in Composer tab to preset Request Read Receipt in composer
+  	  (Milan Crha)
+  	- Use ISO-8859-1 encoding to store contacts in iPod (João Vale)
+  	- Disable "OK" and "Edit Full" buttons if no source is selected. Also set
+  	  always book from combo, do not use the new created (Milan Crha)
+  	- Do not call edit/start editing of the event when double clicked on the
+  	  same component as is actually editing (Milan Crha)
+  	- Check for the right type of store and invoke appropriate functions
+  	  (Bharath Acharya)
+  	- Add mnemonic_widget for default junk plugin (Andre Klapper)
+  	- Fix locks when displaying e-mail with large tiff drawing attached (Milan
+  	  Crha)
+  	- Use the new Tangoized icons instead of deprecated icons from
+  	  gnome-icon-theme. (Michael Monreal)
+  	- Just disable the dbus message part of mail notification if dbus isn't
+  	  there. Also remove new-mail-notify plugin (Srinivasa Ragavan)
+  	- Clean up the schema (Martin Meyer)
+  	- Do not synchronize blocked bodies from pidgin (Milan Crha)
+  	- backport changes from the copy/pasted code in imap-headers plugin
+  	  (Gilles Dartiguelongue)
+  	- Fix mnemonic issues (David Turner)
+  	- Follow RFC 3798 to send return receipts. (Colin Leroy)
+  	- Plugins configure widgets are not freed correctly in plugin-mamager
+  	  (Milan Crha)
+  	- Restore message states (read receipt/priority) when opening from a draft
+  	  (nickspoon0@gmail.com)
+  	- Do not write NULL into gconf (Milan Crha)
+  	- Accept custom domain names while setting up account (Nyall Dawson)
+  	- Increases the height of the ETaskBar to eliminate the constant resizing
+  	  (Milan Crha)
+  	- Add --with[out]-help option to make it possible to skip building and
+  	  installing user documentation (Matthew Barnes)
+  	- Not-NULL check for a string array before finding its length (Christian
+  	  Krause)
+  	- Add the signal only if the view is present (Srinivasa Ragavan)
+  	- Can't save pictures embedded in HTML Mail when picture = link (Milan
+  	  Crha)
+  	- Submit bugs to the "BugBuddyBugs" Bugzilla component (Matthew Barnes)
+  	- Also check if toplevel widget has non-NULL window property (Milan Crha)
+  	- Mark the window title for translation. (Changwoo Ryu)
+  	- Included missing header glib/gi18n.h (Bharath Acharya)
+  	- Have a safe default, if the values from gconf isn't so nice. (Srinivasa
+  	  Ragavan)
+
