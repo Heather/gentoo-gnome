@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gconf/gconf-2.20.1-r1.ebuild,v 1.2 2008/01/02 07:06:17 eva Exp $
 
+WANT_AUTOMAKE="1.10"
+
 inherit gnome2 autotools
 
 MY_PN=GConf
