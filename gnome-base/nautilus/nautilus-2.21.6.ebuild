@@ -44,7 +44,7 @@ pkg_setup() {
 src_unpack() {
 	gnome2_src_unpack
 
-	epatch "${FILESDIR}/${PN}-2.21.5-no-esd.patch"
+	epatch "${FILESDIR}/${PN}-2.21.6-no-esd.patch"
 	epatch "${FILESDIR}/${PN}-2.21.2-gtk-link.patch"
 	eautoreconf
 }
