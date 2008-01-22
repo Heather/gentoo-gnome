@@ -23,7 +23,6 @@ RDEPEND=">=dev-libs/glib-2.15.2
 		 >=gnome-base/gconf-2
 		 >=gnome-base/gnome-mount-0.4
 		 >=gnome-base/libgnomeui-2.14
-		 >=net-libs/libsoup-2.2.104
 		 cdr? ( virtual/cdrtools )
 		 dvdr? ( >=app-cdr/dvd+rw-tools-6.1 )"
 DEPEND="${RDEPEND}
