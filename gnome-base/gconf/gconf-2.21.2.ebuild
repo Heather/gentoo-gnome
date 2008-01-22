@@ -42,8 +42,6 @@ src_unpack() {
 	# fix bug #193442
 	epatch "${FILESDIR}/${PN}-2.20.1-automagic-ldap.patch"
 
-	use doc || epatch "${FILESDIR}/${PN}-2.21.1-gtk-doc-die-die-die.patch"
-
 	cp aclocal.m4 old.m4
 	AT_M4DIR="." eautoreconf
 }
