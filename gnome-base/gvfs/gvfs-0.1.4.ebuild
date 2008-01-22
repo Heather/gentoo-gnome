@@ -16,7 +16,7 @@ IUSE="cdda doc fuse samba"
 RDEPEND=">=dev-libs/glib-2.15.2
 		 sys-apps/dbus
 		 >=sys-apps/hal-0.5.9
-		 >=net-libs/libsoup-2.3
+		 >=net-libs/libsoup-2.2.104
 		 cdda? ( >=dev-libs/libcdio-0.78.2 )
 		 fuse? ( sys-fs/fuse )
 		 samba? ( >=net-fs/samba-3 )"
