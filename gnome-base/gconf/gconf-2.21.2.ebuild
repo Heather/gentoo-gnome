@@ -45,7 +45,10 @@ src_unpack() {
 	epatch "${FILESDIR}/${PN}-2.20.1-automagic-ldap.patch"
 
 	cp aclocal.m4 old.m4
-	AT_M4DIR="." eautoreconf
+	# dang: Note: current eautoconf, not eautoreconf, because automake 1.10.1
+	# refuses to build something that used automake 1.10, and they're not
+	# slotted
+	AT_M4DIR="." eautoconf
 }
 
 src_install() {
