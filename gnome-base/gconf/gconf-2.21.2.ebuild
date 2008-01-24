@@ -44,11 +44,11 @@ src_unpack() {
 	# fix bug #193442
 	epatch "${FILESDIR}/${PN}-2.20.1-automagic-ldap.patch"
 
-	cp aclocal.m4 old.m4
-	# dang: Note: current eautoconf, not eautoreconf, because automake 1.10.1
-	# refuses to build something that used automake 1.10, and they're not
-	# slotted
-	AT_M4DIR="." eautoconf
+	use doc || epatch "${FILESDIR}/${PN}-2.21.2-gtk-doc-die-die-die.patch"
+	eautoreconf
+	einfo "Running intltoolize --force ..."
+	intltoolize --force > /dev/null 2>&1 || die "intltoolize failed"
+	eend
 }
 
 src_install() {
