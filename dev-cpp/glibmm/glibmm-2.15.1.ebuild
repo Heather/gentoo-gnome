@@ -32,6 +32,17 @@ src_unpack() {
 
 	# GTime and time_t are equivalent on fbsd, so we cannot define both
 	use x86-fbsd && epatch "${FILESDIR}/${P}-date.patch"
+
+	cd "${S}"
+	epatch "${FILESDIR}/${P}-svn-r519-r531-diff.patch"
+
+}
+
+src_compile() {
+	gnome2_src_configure
+	perl -I tools/pm -- tools/gmmproc -I tools/m4 fileinputstream gio/src gio/giomm
+	perl -I tools/pm -- tools/gmmproc -I tools/m4 fileoutputstream gio/src gio/giomm
+	emake || die "compile failed"
 }
 
 src_install() {
