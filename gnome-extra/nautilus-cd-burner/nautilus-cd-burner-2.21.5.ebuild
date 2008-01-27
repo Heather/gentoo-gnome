@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/nautilus-cd-burner/nautilus-cd-burner-2.20.0.ebuild,v 1.7 2007/11/29 05:32:23 jer Exp $
 
-inherit gnome2
+inherit eutils gnome2
 
 DESCRIPTION="CD and DVD writer plugin for Nautilus"
 HOMEPAGE="http://www.gnome.org/"
@@ -34,4 +34,9 @@ DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README TODO"
 
 pkg_setup() {
 	G2CONF="${G2CONF} --enable-gnome-mount"
+}
+
+src_unpack() {
+	gnome2_src_unpack
+	epatch "${FILESDIR}/${P}-fix-includes.patch"
 }

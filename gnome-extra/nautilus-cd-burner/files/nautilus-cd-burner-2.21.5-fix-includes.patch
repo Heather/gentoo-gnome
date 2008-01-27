@@ -1,0 +1,10 @@
+--- src/burn-extension.c.orig	2008-01-26 23:44:48.000000000 -0800
++++ src/burn-extension.c	2008-01-26 23:44:54.000000000 -0800
+@@ -25,6 +25,7 @@
+ 
+ #include <stdlib.h>
+ #include <string.h>
++#include <gio/gio.h>
+ #include <glib/gi18n-lib.h>
+ #include <gtk/gtk.h>
+ #include <libhal.h>
