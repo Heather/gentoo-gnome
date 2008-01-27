@@ -63,5 +63,7 @@ src_unpack() {
 	# Make libattr optional; bug #191989
 	epatch "${FILESDIR}"/${PN}-2.20.3-libattr.patch
 
+	epatch "${FILESDIR}/${PN}-2.21.1-gtk-doc-die-die-die.patch"
+
 	AT_M4DIR="m4" eautoreconf
 }
