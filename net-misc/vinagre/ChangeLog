@@ -1,0 +1,10 @@
+# ChangeLog for net-misc/vinagre
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+*vinagre-0.4 (28 Jan 2008)
+
+  28 Jan 2008; Mart Raudsepp <leio@gentoo.org> +vinagre-0.4.ebuild:
+  Initial ebuild for vinagre for testing. Crashes on me upon VNC connection
+  opening, so not putting to portage yet
+
