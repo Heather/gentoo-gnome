@@ -1,0 +1,10 @@
+# ChangeLog for x11-libs/libwnck
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  28 Jan 2008; Daniel Gryniewicz <dang@gentoo.org> -libwnck-2.21.5.ebuild,
+  +libwnck-2.21.90.ebuild:
+  Bump to 2.21.90
+    - Fix pager to correctly work in multiscreen environment (Vincent, with help
+      from David Sundqvist)
+
