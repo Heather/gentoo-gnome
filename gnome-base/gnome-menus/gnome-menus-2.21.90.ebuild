@@ -12,7 +12,7 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="debug python"
 
-RDEPEND=">=dev-libs/glib-2.15.1
+RDEPEND=">=dev-libs/glib-2.15.2
 		 python? (
 					>=dev-lang/python-2.4.4-r5
 					dev-python/pygtk
