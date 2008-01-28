@@ -15,15 +15,15 @@ KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="branding esd ipv6 tcpd"
 
 RDEPEND=">=dev-libs/glib-2.13
+		 >=gnome-base/libgnomeui-2.2
 		 >=x11-libs/gtk+-2.11.1
+		 >=dev-libs/dbus-glib-0.71
+		 >=gnome-base/gnome-keyring-0.5.1
+		 >=x11-libs/libnotify-0.2.1
 		 x11-libs/libXau
 		 x11-apps/xdpyinfo
-		 >=gnome-base/libgnomeui-2.2
 		 >=gnome-base/control-center-2.15.4
-		 >=x11-libs/libnotify-0.2.1
 		 >=gnome-base/gconf-2
-		 >=gnome-base/gnome-keyring-0.5.1
-		 >=dev-libs/dbus-glib-0.71
 		 esd? ( >=media-sound/esound-0.2.26 )
 		 tcpd? ( >=sys-apps/tcp-wrappers-7.6 )"
 DEPEND="${RDEPEND}

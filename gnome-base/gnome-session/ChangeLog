@@ -1,0 +1,10 @@
+# ChangeLog for gnome-base/gnome-session
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  28 Jan 2008; Daniel Gryniewicz <dang@gentoo.org> gnome-session-2.21.90:
+  Bump to 2.21.90
+  	* Use max dithering again for splash (Frederic Crozat)
+  	* Change capplet title (Luca Ferretti)
+  	* HIG fixes in the capplet (Luca Ferretti)
+
