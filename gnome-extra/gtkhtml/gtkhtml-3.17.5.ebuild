@@ -1,6 +1,7 @@
-# Copyright 1999-2007 Gentoo Foundation
+# Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/gtkhtml/gtkhtml-3.16.2.ebuild,v 1.1 2007/11/26 13:12:23 leio Exp $
+EAPI="1"
 
 inherit gnome2
 
@@ -20,7 +21,7 @@ RDEPEND=">=x11-libs/gtk+-2.12
 	>=gnome-base/libgnomeui-2
 	>=gnome-base/orbit-2
 	>=gnome-base/libbonobo-2
-	>=net-libs/libsoup-2.1.6"
+	net-libs/libsoup:2.2"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/intltool-0.35.5
