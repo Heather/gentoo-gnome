@@ -1,10 +1,9 @@
-diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN nautilus-1.21.2.orig/configure.in nautilus-2.21.2/configure.in
 --- configure.in	2008-01-08 04:29:18.000000000 -0500
 +++ configure.in	2008-01-08 12:06:58.000000000 -0500
 @@ -5,7 +5,6 @@ dnl ====================================
  m4_define(bonobo_activation_minver,    2.1.0)
  m4_define(bonobo_minver,               2.1.0)
- m4_define(eel_minver,                  2.21.5)
+ m4_define(eel_minver,                  2.21.90)
 -m4_define(esound_minver,               0.2.27)
  m4_define(glib_minver,                 2.15.3)
  m4_define(gnome_desktop_minver,        2.9.91)
@@ -25,7 +24,6 @@ diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN nautilus-1.21.2.orig/con
  	bonobo-activation-2.0	>= bonobo_activation_minver
  	eel-2.0			>= eel_minver
  	glib-2.0		>= glib_minver
-diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN nautilus-2.21.2.orig/src/file-manager/fm-icon-view.c nautilus-2.21.2/src/file-manager/fm-icon-view.c
 --- src/file-manager/fm-icon-view.c	2007-12-14 05:23:13.000000000 -0500
 +++ src/file-manager/fm-icon-view.c	2008-01-08 12:06:32.000000000 -0500
 @@ -68,7 +68,6 @@
