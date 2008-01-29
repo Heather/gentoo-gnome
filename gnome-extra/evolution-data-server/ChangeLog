@@ -2,6 +2,10 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  29 Jan 2008; Daniel Gryniewicz <dang@gentoo.org>
+  evolution-data-server-2.21.5.1:
+  Add a slot dep on libsoup to prepare for the new 2.4 slot
+
   22 Jan 2008; Daniel Gryniewicz <dang@gentoo.org>
   -evolution-data-server-2.21.5.ebuild,
   +evolution-data-server-2.21.5.1.ebuild:

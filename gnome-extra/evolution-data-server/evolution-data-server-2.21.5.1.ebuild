@@ -25,7 +25,7 @@ RDEPEND=">=x11-libs/gtk+-2.10
 		>=dev-libs/nspr-4.4
 		>=dev-libs/nss-3.9 )
 	>=gnome-base/libgnomeui-2
-	>=net-libs/libsoup-2.2.91
+	>=net-libs/libsoup-2.2.91:2.2
 	>=gnome-base/gnome-common-2
 	sys-libs/zlib
 	=sys-libs/db-4*
