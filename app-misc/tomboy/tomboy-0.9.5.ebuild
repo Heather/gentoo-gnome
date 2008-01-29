@@ -16,7 +16,9 @@ RDEPEND=">=dev-lang/mono-1.2
 		 >=dev-dotnet/gtk-sharp-2
 		 >=dev-dotnet/gconf-sharp-2
 		 >=dev-dotnet/gnome-sharp-2
-		 >=sys-apps/dbus-0.90
+		 >=dev-dotnet/dbus-sharp-0.4
+		 >=dev-dotnet/dbus-glib-sharp-0.3
+		 >=dev-dotnet/mono-addins-0.3
 		 >=x11-libs/gtk+-2.6.0
 		 >=dev-libs/atk-1.2.4
 		 >=gnome-base/gconf-2
@@ -47,5 +49,5 @@ pkg_setup() {
 		die "gmime without mono support detected"
 	fi
 
-	G2CONF="${G2CONF} $(use_enable galago) $(use_enable eds evolution)"
+	G2CONF="${G2CONF} $(use_enable galago) $(use_enable eds evolution) --with-mono-addins=system"
 }
