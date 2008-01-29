@@ -1,6 +1,7 @@
-# Copyright 1999-2007 Gentoo Foundation
+# Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/evolution-exchange/evolution-exchange-2.12.2.ebuild,v 1.1 2007/11/27 10:56:39 leio Exp $
+EAPI="1"
 
 inherit gnome2 eutils
 
@@ -20,7 +21,7 @@ RDEPEND=">=x11-libs/gtk+-2.10
 	dev-libs/libxml2
 	>=mail-client/evolution-2.21
 	>=gnome-extra/evolution-data-server-2.21
-	>=net-libs/libsoup-2.2.96
+	>=net-libs/libsoup-2.2.96:2.2
 	>=net-nds/openldap-2.1.30-r2"
 
 DEPEND="${RDEPEND}
