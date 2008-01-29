@@ -1,0 +1,21 @@
+# ChangeLog for gnome-base/libgnomeui
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  29 Jan 2008; Daniel Gryniewicz <dang@gentoo.org>
+  +libgnomeui-2.19.1-enable-druid.patch, libgnomeui-2.21.90:
+  Bump to 2.21.90 * Win32 fixes (Tor) * Portability fixes (Christian) *
+  Cleanups (Kjartan) * Gio based GtkFileSystem implementation (#509262) *
+  Remove MD5 code, and use GChecksum (#501866) * Don't use GConf for getting
+  the toolbar style (#497380) * Fall back to DESKTOP_AUTOSTART_ID as startup
+  ID (#496571) * Fix a crash in the thumbnailer (#487117) * Fix error
+  reporting on directory creation failure in the gnome-vfs filesystem
+  
+  backend (#464383) * Make error messages in the gnome-vfs filesystem backend
+  translatable,
+  
+  and improve the messaged (#485922) * Fix i18n (#483263) * Warning fixes
+  (#315205) * Fix a crash in the filename entry widget when entering a path
+  without trailing '/' * Allow showing seconds in the date chooser (#473410) *
+  Translation updates
+
