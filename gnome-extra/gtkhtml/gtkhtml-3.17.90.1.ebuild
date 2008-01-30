@@ -21,7 +21,7 @@ RDEPEND=">=x11-libs/gtk+-2.12
 	>=gnome-base/libgnomeui-2
 	>=gnome-base/orbit-2
 	>=gnome-base/libbonobo-2
-	net-libs/libsoup:2.2"
+	net-libs/libsoup:2.4"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/intltool-0.35.5

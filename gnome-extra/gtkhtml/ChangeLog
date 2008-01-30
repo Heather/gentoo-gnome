@@ -2,6 +2,27 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  30 Jan 2008; Daniel Gryniewicz <dang@gentoo.org> gtkhtml-3.17.90.1:
+  Bump to 3.17.90.1
+  
+  Support for Anchors (Frame/IFRAME) (Milan Crha)
+  
+  Bug Fixes:
+  
+  #371011: crash in undo_or_redo (Matthew Barnes/Johnny)
+  
+  #431190: Look for anchors in FRAME and IFRAME too (Milan Crha)
+  
+  #447122: Move to next character when searching forward also when found as
+  first character of paragraph (Milan Crha)
+  
+  #489456: evolution crashed when changing image alignment (Bharath Acharya)
+  
+  #491210: The GtkHTMLSearchDialog was being accessed after destroying it
+  (Bharath Acharya)
+  
+  #505819: We should not unref ourself (Milan Crha)
+
   29 Jan 2008; Daniel Gryniewicz <dang@gentoo.org> gtkhtml-3.17.5:
   Add a slot dep on libsoup to prepare for the new 2.4 slot
 
