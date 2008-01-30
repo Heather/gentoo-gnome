@@ -12,7 +12,8 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="doc ipv6 kerberos keyring krb4 ldap ssl"
 
-RDEPEND=">=x11-libs/gtk+-2.10
+RDEPEND=">=dev-libs/glib-2.15.3
+	>=x11-libs/gtk+-2.10
 	>=gnome-base/orbit-2.9.8
 	>=gnome-base/gnome-vfs-2.4
 	>=gnome-base/libbonobo-2.4.2
@@ -25,7 +26,7 @@ RDEPEND=">=x11-libs/gtk+-2.10
 		>=dev-libs/nspr-4.4
 		>=dev-libs/nss-3.9 )
 	>=gnome-base/libgnomeui-2
-	>=net-libs/libsoup-2.2.91:2.2
+	net-libs/libsoup:2.4
 	>=gnome-base/gnome-common-2
 	sys-libs/zlib
 	=sys-libs/db-4*
@@ -78,7 +79,7 @@ src_unpack() {
 	epatch "${FILESDIR}"/${PN}-1.8.0-camel-rewind.patch
 
 	# Don't assume that endian.h and byteswap.h exist on all non sun os's
-	epatch "${FILESDIR}"/${PN}-1.12.1-icaltz-util.patch
+	epatch "${FILESDIR}"/${PN}-2.21.90-icaltz-util.patch
 
 	# Don't error out if gtkdoc-rebase doesn't exist.
 	epatch "${FILESDIR}"/${PN}-2.21.4-gtkdoc-rebase.patch

@@ -2,6 +2,86 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  30 Jan 2008; Daniel Gryniewicz <dang@gentoo.org>
+  -evolution-data-server-1.12.1-icaltz-util.patch,
+  +evolution-data-server-2.21.90-icaltz-util.patch,
+  evolution-data-server-2.21.90:
+  Bump to 2.21.90
+  
+  Speed up spam filtering and spam whitelist implementation (Srinivasa
+  Ragavan)
+  
+  #213072: Avoids the infinite loop that might be caused in case of broken
+  mbox files or null From addresses. (Sankar P)
+  
+  #213072: Remove the error condition that inits and persists the infamous
+  "folder summary mismatch" bug (Sankar P)
+  
+  #300098: Set proper dependencies for stand-alone programs linking against
+  camel. (Øystein Gisnås)
+  
+  #324168: Crash while disabling/Deleting accounts (Milan Crha)
+  
+  #335217: Memory leak fixes + Invalid memory read (Chenthill)
+  
+  #386157: crash in Evolution (Milan Crha)
+  
+  #445309: Save certificates before cleaning up (Matthew Barnes)
+  
+  #450840: Do not crash if a message is not there in the summary (Srinivasa
+  Ragavan)
+  
+  #456019: Use 'pop' as service name, instead of 'pop3', in the digest-uri
+  (hggdh2)
+  
+  #475781: Fix memory leaks (Milan Crha)
+  
+  #481699: Don't crash if the server returns you bad COPYUID (Srinivasa
+  Ragavan)
+  
+  #482940: Make the maildir summary check thread safe. May be needed for other
+  functions too. (Srinivasa Ragavan)
+  
+  #496081: Can't find string in phone field, but can in all fields (Milan
+  Crha)
+  
+  #498977: Prevent encoding to base64 of no data in the content buffer. (Milan
+  Crha)
+  
+  #506250: Improvements in password prompt (Matthew Barnes)
+  
+  #509124: Check pointer for NULL (Matthew Barnes)
+  
+  #509644: Use the correct response codes for the dialog buttons. (Matthew
+  Barnes)
+  
+  #509985: Refactor the keyring logic and emit more informative warning
+  messages when a keyring operation fails (Matthew Barnes)
+  
+  #510168: Ensure slave gone in dispose function of the backend (Milan Crha)
+  
+  #510303: Escape the authentication error message so the markup parser will
+  parse it verbatim (Matthew Barnes)
+  
+  #510409: Fix memory leaks (Milan Crha)
+  
+  #511235: Changed prototype to reflect actual libsoup (Milan Crha/Dan
+  Winship)
+  
+  #511301: Crash on Exchange startup (Dan Winship)
+  
+  #511717: Add gettext imap folders (Takao Fujiwara)
+  
+  Camel mime fixes (Jeffrey Stedfast)
+  
+  Implement byte order for win32 (Tor Lillqvist)
+  
+  Changed error message to a better string (Sankar P)
+  
+  Remove unused libsoup includes and update for libsoup 2.4 (Dan Winship)
+  
+  Adapt to newer libsoup (Kjartan Maraas)
+
   29 Jan 2008; Daniel Gryniewicz <dang@gentoo.org>
   evolution-data-server-2.21.5.1:
   Add a slot dep on libsoup to prepare for the new 2.4 slot
