@@ -27,6 +27,7 @@ RDEPEND=">=gnome-base/gnome-desktop-2.12
 		 >=gnome-base/gconf-2.6.1
 		 >=gnome-base/gnome-menus-2.11.1
 		 >=gnome-base/libbonobo-2
+		 gnome-base/librsvg
 		 >=dev-libs/dbus-glib-0.71
 		 >=sys-apps/dbus-1.1.2
 		 x11-libs/libXau
