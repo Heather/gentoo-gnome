@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/control-center/control-center-2.20.1.ebuild,v 1.1 2007/10/17 21:03:56 eva Exp $
 
+EAPI="1"
+
 inherit eutils gnome2 autotools
 
 DESCRIPTION="The gnome2 Desktop configuration tool"
@@ -9,7 +11,6 @@ HOMEPAGE="http://www.gnome.org/"
 SRC_URI="mirror://gnome/sources/gnome-${PN}/${PVP[0]}.${PVP[1]}/gnome-${P}.tar.bz2"
 
 LICENSE="GPL-2"
-EAPI="1"
 SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="alsa eds esd hal"
@@ -100,8 +101,6 @@ src_unpack() {
 
 	# Drop esound unless requested
 	use esd || epatch "${FILESDIR}/${PN}-2.19.90-no-esd.patch"
-
-	epatch "${FILESDIR}/gnome-control-center-2.21.5-fix-schemes.patch"
 
 	eautoreconf
 }
