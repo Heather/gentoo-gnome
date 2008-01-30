@@ -1,0 +1,21 @@
+# ChangeLog for gnome-base/gnome-vfs
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  30 Jan 2008; Daniel Gryniewicz <dang@gentoo.org>
+  +gnome-vfs-2.12.0-afs.patch, +gnome-vfs-2.15.2-headers-define.patch,
+  +gnome-vfs-2.16.0-no-dbus-crash.patch,
+  +gnome-vfs-2.18.1-drop-gtk-doc-check.patch,
+  +gnome-vfs-2.20.0-automagic-deps.patch,
+  +gnome-vfs-2.20.0-home_dir_fakeroot.patch,
+  +gnome-vfs-2.20.1-automagic-deps.patch:
+  Bump to 2.21.90
+  	  * Fix memory leaks
+  	  * Don't use deprecated glib APIs
+  	  * Handle non-utf8 locales better in gnome_vfs_make_uri_from_input
+  	  * ftp: Handle links with spaces in them
+  	  * actually use the mmap cache
+  	  * webdav: Handle filenames with reserved char
+  	  * use only system inotify headers
+  	  * win32 fixes
+

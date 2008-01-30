@@ -1,0 +1,35 @@
+--- configure.in	2007-07-30 00:18:01.000000000 -0500
++++ configure.in	2007-07-30 00:37:03.000000000 -0500
+@@ -1245,8 +1245,14 @@
+ dnl *** Checks for gtk-doc ***
+ dnl **************************
+ 
++dnl Crazy hack for dropping the dep on gtk-doc
++AC_DEFUN(GTK_DOC_CHECK, [])
+ GTK_DOC_CHECK([1.0])
+ 
++dnl Crazy hack for dropping the dep on gtk-doc
++AM_CONDITIONAL(ENABLE_GTK_DOC, 0, [])
++AM_CONDITIONAL(GTK_DOC_USE_LIBTOOL, 0, [])
++
+ dnl ******************************
+ dnl *** End checks for gtk-doc ***
+ dnl ******************************
+--- Makefile.am	2007-07-30 00:31:41.000000000 -0500
++++ Makefile.am	2007-07-30 00:33:55.000000000 -0500
+@@ -7,11 +7,14 @@
+ 	daemon					\
+ 	schemas					\
+ 	devel-docs				\
+-	doc					\
+ 	programs				\
+ 	test					\
+ 	po
+ 
++if ENABLE_GTK_DOC
++SUBDIRS += doc
++endif
++
+ EXTRA_DIST =					\
+ 	HACKING					\
+ 	MAINTAINERS 				\
