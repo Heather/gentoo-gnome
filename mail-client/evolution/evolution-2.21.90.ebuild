@@ -12,16 +12,15 @@ SRC_URI="${SRC_URI}"
 LICENSE="GPL-2 FDL-1.1"
 SLOT="2.0"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
-# gstreamer for audio-inline, when it uses 0.10
 IUSE="crypt dbus debug hal ipv6 kerberos krb4 ldap mono networkmanager nntp pda profile spell ssl"
 
 # Pango dependency required to avoid font rendering problems
-RDEPEND="
+RDEPEND=">=dev-libs/glib-2.15.3
 	>=x11-libs/gtk+-2.12
-	>=gnome-extra/evolution-data-server-2.21.4
+	>=gnome-extra/evolution-data-server-2.21.90
 	>=x11-themes/gnome-icon-theme-2.20
 	>=gnome-base/gnome-vfs-2.4
-	>=gnome-base/libbonobo-2.16
+	>=gnome-base/libbonobo-2.20.3
 	>=gnome-base/libbonoboui-2.4.2
 	>=gnome-extra/gtkhtml-3.17.5
 	>=gnome-base/gconf-2

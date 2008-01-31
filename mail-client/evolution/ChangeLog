@@ -2,6 +2,87 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  31 Jan 2008; Daniel Gryniewicz <dang@gentoo.org> evolution-2.21.90:
+  Bump to 2.21.90
+  
+  Improved spam filtering and new preferences UI for configuring spam
+  filtering (Srinivasa Ragavan)
+  
+  #324604: Ensure the print of the email is transformed from RFC822 or RFC2047
+  (Milan Crha)
+  
+  #329712: Add a new state to maintian forced offline (Srinivasa Ragavan)
+  
+  #333695: Print attendee name instead of email address if available (Milan
+  Crha)
+  
+  #337046: Have a ticking filename for attachment, if the mime doesn't carry
+  it (Srinivasa Ragavan)
+  
+  #339156: Translation issues (Andre Klapper)
+  
+  #355864: Critical Crash warning while unchecking web calendar (Milan Crha)
+  
+  #371011: Insert a new paragraph for signature (Johnny Jacob)
+  
+  #391408: Fix contact minicards for RTL languages (Djihed Afifi)
+  
+  #395939: Memory leak fix (Milan Crha)
+  
+  #402487: Memory leak fix (Milan Crha)
+  
+  #405777: Fix a crash when previewing mails (Srinivasa Ragavan)
+  
+  #426159: Allow users to snooze for 1+ hour 0 minutes (Suman Manjunath)
+  
+  #467581: Don't cancel all threads for a vfolder based search (all/account
+  search) (Johnny Jacob)
+  
+  #475781: Fix memory leaks (Milan Crha)
+  
+  #503327,503678: Return GByteArray instead of gchar* (Johnny Jacob)
+  
+  #503551: Fix a crash when trying to delete unselected contact (Milan Crha)
+  
+  #504062: Fix message list sorting (Milan Crha)
+  
+  #507564: Fix contact view for RTL languages. (Djihed Afifi)
+  
+  #509124: Check result of build_message() for NULL before proceeding (Matthew
+  Barnes)
+  
+  #509509: Make the status bar height as large as the task bar to eliminate
+  "bouncing" when navigating the main menu (Jean-Christophe)
+  
+  #509697: Ensure search folders are running before calling anything from this
+  (Milan Crha)
+  
+  #509741: Fix a crash that occurs when prompted to accept a certificate
+  (Matthew Barnes)
+  
+  #509879: Drop code to clear memo preview every 60 seconds (Milan Crha)
+  
+  #510409: Free memory before assigning NULL (Milan Crha)
+  
+  #511094: Set proper foreground color based on focused/non-focused canvas
+  (Milan Crha)
+  
+  #511105: Free allocated memory properly (Milan Crha)
+  
+  #511232: Fixed typo Uknown -> Unknown (Jan Tichavsky)
+  
+  #511488: Ensure vfolder is running (Milan Crha)
+  
+  #512020: Imposible to remove categories of weather (Milan Crha)
+  
+  Windows build fixes (Tor Lillqvist)
+  
+  Message list cairo drawing (Srinivasa Ragavan)
+  
+  Added localized screenshots (Andre Klapper)
+  
+  libsoup updates (Dan Winship)
+
   29 Jan 2008; Daniel Gryniewicz <dang@gentoo.org> evolution-2.21.5:
   Add a slot dep on libsoup to prepare for the new 2.4 slot
 
