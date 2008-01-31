@@ -1,0 +1,8 @@
+# ChangeLog for gnome-base/gnome-applets
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  31 Jan 2008; Daniel Gryniewicz <dang@gentoo.org>
+  -gnome-applets-2.21.2.ebuild, +gnome-applets-2.21.4.ebuild:
+  Bump to 2.21.4
+
