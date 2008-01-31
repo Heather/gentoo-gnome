@@ -46,6 +46,9 @@ src_unpack() {
 	gnome2_src_unpack
 	epatch "${FILESDIR}/${PN}-2.21.4-no-esound.patch"
 
+	# The dbus file uses libexecdir/gnome-settings-daemon/gnome-settings-daemon
+	epatch "${FILESDIR}"/${P}-path.patch
+
 	eautoreconf
 	intltoolize --force || die
 }

@@ -1,0 +1,8 @@
+# ChangeLog for gnome-base/gnome-settings-daemon
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  31 Jan 2008; Daniel Gryniewicz <dang@gentoo.org>
+  +gnome-settings-daemon-2.21.90.1-path.patch:
+  Fix dbus path to gnome-settings-daemon
+
