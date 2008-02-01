@@ -17,7 +17,7 @@ RDEPEND=">=dev-libs/glib-2.15.2
 		 >=gnome-base/libglade-2
 		 >=gnome-base/libgnome-2.14
 		 >=gnome-base/eel-2.14
-		 >=gnome-base/nautilus-2.16
+		 >=gnome-base/nautilus-2.21.5
 		 >=sys-apps/hal-0.5.7
 		 >=dev-libs/dbus-glib-0.71
 		 >=gnome-base/gconf-2
@@ -34,9 +34,4 @@ DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README TODO"
 
 pkg_setup() {
 	G2CONF="${G2CONF} --enable-gnome-mount"
-}
-
-src_unpack() {
-	gnome2_src_unpack
-	epatch "${FILESDIR}/${P}-fix-includes.patch"
 }
