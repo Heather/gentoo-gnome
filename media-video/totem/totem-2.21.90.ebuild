@@ -21,7 +21,7 @@ RDEPEND=">=dev-libs/glib-2.13.4
 	 >=gnome-base/gconf-2.0
 	 >=gnome-base/libglade-2.0
 	 >=gnome-base/gnome-vfs-2.16
-	 >=dev-libs/totem-pl-parser-2.21.3
+	 >=dev-libs/totem-pl-parser-2.21.90
 	 >=x11-themes/gnome-icon-theme-2.16
 	 >=x11-libs/startup-notification-0.8
 	   app-text/iso-codes
