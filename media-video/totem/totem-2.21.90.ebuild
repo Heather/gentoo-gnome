@@ -153,16 +153,10 @@ src_unpack() {
 
 	gnome2_src_unpack
 
-	if use tracker ; then
-		epatch "${FILESDIR}/${PN}-2.21.4-tracker-plugin.patch"
-	fi
-
 	use nsplugin && epatch "${FILESDIR}/${PN}-2.20.1-startup-notification.patch"
 	$needs_xpcom_hack && epatch "${FILESDIR}/${PN}-2.20.1-xpcom-hack.patch"
 
-	if use tracker || $needs_xpcom_hack ; then
-		eautoreconf
-	fi
+	$needs_xpcom_hack && eautoreconf
 }
 
 src_compile() {
