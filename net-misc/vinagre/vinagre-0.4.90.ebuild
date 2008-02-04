@@ -12,13 +12,12 @@ SLOT="0"
 KEYWORDS="~x86"
 IUSE="avahi"
 
-RDEPEND=">=dev-libs/glib-2.11
-	>=x11-libs/gtk+-2.11
+RDEPEND=">=dev-libs/glib-2.15.3
+	>=x11-libs/gtk+-2.12
 	>=gnome-base/libglade-2.6
 	>=gnome-base/gconf-2.16
 	>=net-libs/gtk-vnc-0.3
 	>=gnome-base/gnome-keyring-1
-	>=gnome-base/gnome-vfs-2.0
 	avahi? ( >=net-dns/avahi-0.6.18 )"
 
 DEPEND="${RDEPEND}
