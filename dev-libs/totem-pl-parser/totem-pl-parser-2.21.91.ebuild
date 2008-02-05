@@ -15,6 +15,7 @@ IUSE="hal"
 RDEPEND=">=dev-libs/glib-2.13.4
 		 >=x11-libs/gtk+-2.12
 		 >=gnome-base/gnome-vfs-2.16
+		 >=gnome-extra/evolution-data-server-1.12
 		 hal? ( =sys-apps/hal-0.5* >=sys-apps/dbus-1.0 )"
 DEPEND="${RDEPEND}
 		!<media-video/totem-2.21
