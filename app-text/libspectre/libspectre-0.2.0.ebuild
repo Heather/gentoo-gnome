@@ -8,7 +8,7 @@ SRC_URI="http://libspectre.freedesktop.org/releases/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 RDEPEND=">=app-text/ghostscript-gpl-8.61"
