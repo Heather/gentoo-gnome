@@ -1,0 +1,24 @@
+# ChangeLog for dev-libs/liboobs
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  06 Feb 2008; Daniel Gryniewicz <dang@gentoo.org>
+  system-tools-backends-2.5.7:
+  Bump to 2.21.90 - Accept unsetting the ethernet interface used for PPPoE
+  (garnacho) - Fix typos when trying to write SelfConfig to the backend
+  (garnacho) - Fix a possible crasher when saving the network configuration
+  (garnacho) - Do not allow creating users with NULL login (garnacho) - Fix a
+  double unref in OobsSelfConfig (garnacho) - Add SMB password handling
+  (garnacho) - Replace OobsIfaceModem and OobsIfaceIsdn with OobsIfacePPP,
+  which does modem, isdn, pppoe and gprs (garnacho) - Make the right libhal.h
+  include. Bug #496639 - Added the possibility to have per-object PolicyKit
+  actions (garnacho) - Added OobsSelfConfig, to edit the user settings for the
+  requester uid (garnacho) - Adapt to s-t-b >= 2.5.2 and disallow the
+  possibility to change users/groups name (garnacho) - Add API to know whether
+  an user is currently active (garnacho) - Add network interfaces state
+  monitoring, at the moment it only works in linux (garnacho) - Add optional
+  HAL support, used for monitoring the addition/removal of network interfaces
+  (garnacho) - Do not update synchronously on object creation, liboobs users
+  can choose whether to do it synchronously or asynchronously later, this is
+  an ABI change. (garnacho) - Added PolicyKit support (garnacho)
+

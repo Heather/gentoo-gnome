@@ -1,6 +1,33 @@
 # ChangeLog for app-admin/system-tools-backends
-# Copyright 1999-2007 Gentoo Foundation; Distributed under the GPL v2
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
+
+  06 Feb 2008; Daniel Gryniewicz <dang@gentoo.org>
+  system-tools-backends-2.5.7:
+  Bump to 2.5.7 - Get correctly the contents of SelfConfig messages (garnacho)
+  - Do not depend on unreleased glib (garnacho) - Use /etc/rc.d/rc.inet1 to
+  start/stop network interfaces for slackware (garnacho) - Make sure there are
+  time servers when using ntpdate (garnacho) - Do call reset_counter() when
+  the configuration has been set (garnacho) - Check correctly whether PPP
+  interfaces are configured or not (garnacho) - Add Ubuntu 8.04 (garnacho) -
+  Added logging messages to the dispatcher (available through -d) (garnacho) -
+  Add password management to SMBConfig (garnacho) - Add file monitoring to
+  configuration files, emit "changed" when the configuration has potentially
+  changed, this requires gio (garnacho) - Fix services configuration saving
+  for ArchLinux (Hugo Doria) - Set gateway for static interfaces in Slackware,
+  do not try to set auto (garnacho) - Use DBus system bus activation
+  (garnacho) - Add PPPoE support for distros that use pppd (garnacho) - Add
+  basic GPRS/UMTS support for distros that use pppd (garnacho) - Actually use
+  correct/new GroupsConfig/UsersConfig message format (garnacho) - Add an
+  internal UserConfig module, this is accessible outside s-t-b as SelfConfig,
+  to edit the requester user settings (garnacho) - Compare internally users
+  through login name instead of the exported ID (independent to UID), this
+  will make a login change count as a user addition+removal, but will make the
+  process more reliable, and will not have to count on having the other side
+  implementing the right behavior. This is a behavior and format change, but
+  given that the adoption of s-t-b isn't very wide, it's worth to do it now.
+  (garnacho) - Add optional PolicyKit usage (garnacho) - Add users correctly
+  in rPath (garnacho)
 
   06 Nov 2007; Gilles Dartiguelongue <eva@gentoo.org>
   +files/system-tools-backends-2.4.1-baselayout2.patch, files/stb.rc,

@@ -1,6 +1,88 @@
 # ChangeLog for app-admin/gnome-system-tools
-# Copyright 1999-2007 Gentoo Foundation; Distributed under the GPL v2
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
+
+  06 Feb 2008; Daniel Gryniewicz <dang@gentoo.org>
+  system-tools-backends-2.5.7:
+  Bump to 2.21.90
+  
+  - plug a leak (garnacho);
+  
+  - Do not depend on unreleased Glib (garnacho)
+  
+  - Switch CFLAGS order to be able to compile with other gst.h files around
+  (Jeremy Messenger)
+  
+  - Use Gio to monitor changes in locations (garnacho)
+  
+  - Do not put a \n in a window title (Alex "weej" Jones)
+  
+  - Use non-obsolete icons (Jaap Haitsma)
+  
+  - Make locations code more extensible (garnacho)
+  
+  - Fix nautilus extension, update emblem after any change to folders
+  (garnacho)
+  
+  - Locate correctly the nautilus extensions dir (Damien Carbery)
+  
+  - Label the OK button "Share", more according to HIG (Andreas Nilsson)
+  
+  - Fix share dialog width (garnacho)
+  
+  - Use HIG capitalization for window title (garnacho)
+  
+  - Put the "synchronize now" button besides the time spin buttons (garnacho)
+  
+  - Fix potential crash if it couldn't get dbus connection to inhibit the
+  screensaver (garnacho)
+  
+  - Use HIG capitalization for window title (garnacho)
+  
+  - Use non-obsolete icons (Jaap Haitsma)
+  
+  - Use HIG capitalization for window title (garnacho)
+  
+  - Fixed potential crash when adding a new user (garnacho)
+  
+  - Do not mislead people putting something in the password entries when
+  editing an user (garnacho)
+  
+  - Check whether the home directory doesn't exist before adding a new user
+  (garnacho)
+  
+  - Support PPPoE/GPRS/UMTS interfaces. (garnacho)
+  
+  - Handle SMB passwords (garnacho)
+  
+  - Improvements to UI locking (garnacho)
+  
+  - Ask whether to update config if the user is editing configuration and the
+  backends detect some change (garnacho)
+  
+  - Actually compile if PolicyKit is not present
+  
+  - Use OobsSelfConfig to be able to edit that loads the UI (garnacho)
+  
+  - Make groups in profiles work for groups that don't appear in the
+  privileges table (garnacho)
+  
+  - Do not allow changing user/group name. (garnacho)
+  
+  - use GtkBuilder (garnacho)
+  
+  - optionally use PolicyKit, showing a locked down UI if it doesn't have
+  permissions. (garnacho, Denis Washington)
+  
+  - use latest liboobs features (garnacho)
+  
+  - make it show the courier service (Ermanno Scaglione)
+  
+  - mark DBus as a critical service (garnacho)
+  
+  - fix network-admin not showing in the correct control center section
+  
+  - fix shares-admin not showing in the correct control-center section
 
   11 Oct 2007; Gilles Dartiguelongue <eva@gentoo.org>
   +files/digest-gnome-system-tools-2.20.0:
