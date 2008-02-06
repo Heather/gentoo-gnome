@@ -1,0 +1,10 @@
+# ChangeLog for net-www/swfdec-mozilla
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  06 Feb 2008; Daniel Gryniewicz <dang@gentoo.org>
+  +swfdec-mozilla-0.5.90.ebuild:
+  Bump to 0.5.90
+  - update API to new version
+  - resolve relative links correctly
+
