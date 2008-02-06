@@ -1,0 +1,37 @@
+# ChangeLog for gnome-extra/yelp
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  06 Feb 2008; Daniel Gryniewicz <dang@gentoo.org>
+  +rarian-0.6.0-posix-getopt.patch, rarian-0.7.1, yelp-2.21.90:
+  Bump to 2.21.90
+  * Fix various compiler warnings
+  * Remove additional debug printf
+  * Fix man sectioning stuff
+  * Fix reloading (Davyd Madeley)
+  * Make / activate find
+  * Make find go away on focus-out
+  * Readd games category
+  * Fix some menu titles in TOC
+  * Crash on backward and then 
+    forward on external links (bug #487849)
+  * Depreciated items in yelp.desktop (bug #500483)
+  * Potential crash in search (bug #501559 - Matt Keenan
+  * Crash on shutdown using XULRunner 1.8 
+    (bug #503317 - Markus Kanet)
+  * Initialise Beagle, allowing its use again
+    (bug #504163)
+  * Add LZMA support - bug #470990 
+    - Per Øyvind Karlsen
+  * Fix find bar up to look more like epiphany - bug #483305 
+    - Michael Monreal
+  * Make colours reflect theme better
+  * Fix crash on NULL search string.  Again.
+  * String corrections - bug #505797
+    - Seán de Búrca
+  * Port to Rarian 0.8 series
+  * Strip '#' and '?' from TOC URIs (bug #482290)
+  * Fix debug build (bug #492882)
+  * Fix HTML doc loading (bug #493594 - Matthias Clasen)
+  * Fix slow search NULL checking (bug #493751)
+
