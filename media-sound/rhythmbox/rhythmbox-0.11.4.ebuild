@@ -46,7 +46,8 @@ RDEPEND=">=x11-libs/gtk+-2.8
 	libnotify? ( >=x11-libs/libnotify-0.3.2 )
 	python? ( >=dev-lang/python-2.4.2
 				>=dev-python/pygtk-2.8
-				>=dev-python/gnome-python-2.12 )"
+				>=dev-python/gnome-python-2.12
+				>=dev-python/gst-python-0.10.8 )"
 
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
