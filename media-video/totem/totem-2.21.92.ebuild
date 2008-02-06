@@ -84,7 +84,7 @@ pkg_setup() {
 	# Plugin Configuration
 	G2CONF="${G2CONF} PLUGINDIR=/usr/$(get_libdir)/totem/plugins"
 
-	local plugins="thumbnail,screensaver,ontop,gromit,media-player-keys,skipto"
+	local plugins="properties,thumbnail,screensaver,ontop,gromit,media-player-keys,skipto"
 	use bluetooth && plugins="${plugins},bemused"
 	use galago && plugins="${plugins},galago"
 	use lirc && plugins="${plugins},lirc"
