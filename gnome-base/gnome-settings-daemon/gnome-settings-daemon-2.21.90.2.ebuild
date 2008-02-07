@@ -45,6 +45,7 @@ pkg_config() {
 src_unpack() {
 	gnome2_src_unpack
 	epatch "${FILESDIR}/${PN}-2.21.4-no-esound.patch"
+	epatch "${FILESDIR}/${PN}-2.21.90.2-no-error-for-manager-start.patch"
 
 	eautoreconf
 	intltoolize --force || die
