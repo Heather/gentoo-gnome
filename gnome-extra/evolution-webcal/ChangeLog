@@ -1,0 +1,8 @@
+# ChangeLog for gnome-extra/evolution-webcal
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  07 Feb 2008; Daniel Gryniewicz <dang@gentoo.org> evolution-webcal-2.13.90:
+  Bump to 2.13.90
+  	* Minor updates for libsoup 2.4
+
