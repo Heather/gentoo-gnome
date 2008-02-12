@@ -13,14 +13,16 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="alsa debug esd gstreamer"
 
 RDEPEND=">=dev-libs/dbus-glib-0.74
-		 >=dev-libs/glib-2.13
+		 >=dev-libs/glib-2.15
 		 >=x11-libs/gtk+-2.10
 		 >=gnome-base/gconf-2.6.1
 		 >=gnome-base/gnome-vfs-2.18
 		 >=gnome-base/libgnomekbd-2.21.4
 
+		 >=gnome-base/libglade-2
 		 >=gnome-base/libgnome-2.0
 		 >=gnome-base/libgnomeui-2.0
+		 >=gnome-base/gnome-desktop-2.21.4
 
 		 x11-libs/libX11
 		 x11-libs/libXext
@@ -45,7 +47,6 @@ pkg_config() {
 src_unpack() {
 	gnome2_src_unpack
 	epatch "${FILESDIR}/${PN}-2.21.4-no-esound.patch"
-	epatch "${FILESDIR}/${PN}-2.21.90.2-no-error-for-manager-start.patch"
 
 	eautoreconf
 	intltoolize --force || die
