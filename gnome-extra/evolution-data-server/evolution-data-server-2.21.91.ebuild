@@ -18,17 +18,17 @@ RDEPEND=">=dev-libs/glib-2.15.3
 	>=x11-libs/gtk+-2.10
 	>=gnome-base/orbit-2.9.8
 	>=gnome-base/gnome-vfs-2.4
-	>=gnome-base/libbonobo-2.4.2
+	>=gnome-base/libbonobo-2.20.3
 	>=gnome-base/gconf-2
 	>=gnome-base/libglade-2
 	>=gnome-base/libgnome-2
 	>=dev-libs/libxml2-2
+	net-libs/libsoup:2.4
 	keyring? ( gnome-base/gnome-keyring )
 	ssl? (
 		>=dev-libs/nspr-4.4
 		>=dev-libs/nss-3.9 )
 	>=gnome-base/libgnomeui-2
-	net-libs/libsoup:2.4
 	>=gnome-base/gnome-common-2
 	sys-libs/zlib
 	=sys-libs/db-4*
