@@ -12,8 +12,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="cdda doc fuse samba"
 
-# dang remove gio-standalone before putting in portage
-RDEPEND=">=dev-libs/glib-2.15.2
+RDEPEND="=dev-libs/glib-2.15.5
 		 sys-apps/dbus
 		 >=sys-apps/hal-0.5.9
 		 >=net-libs/libsoup-2.2.104

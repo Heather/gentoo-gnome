@@ -13,17 +13,17 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-
 IUSE="debug doc hal pam test"
 
 RDEPEND=">=dev-libs/glib-2.6
-	>=x11-libs/gtk+-2.6
-	>=sys-apps/dbus-1.0
-	hal? ( >=sys-apps/hal-0.5.7 )
-	pam? ( virtual/pam )
-	>=dev-libs/libgcrypt-1.2.2
-	>=dev-libs/libtasn1-0.3.4"
+		 >=x11-libs/gtk+-2.6
+		 >=sys-apps/dbus-1.0
+		 hal? ( >=sys-apps/hal-0.5.7 )
+		 pam? ( virtual/pam )
+		 >=dev-libs/libgcrypt-1.2.2
+		 >=dev-libs/libtasn1-0.3.4"
 DEPEND="${RDEPEND}
-	sys-devel/gettext
-	>=dev-util/intltool-0.35
-	>=dev-util/pkgconfig-0.9
-	doc? ( dev-util/gtk-doc )"
+		sys-devel/gettext
+		>=dev-util/intltool-0.35
+		>=dev-util/pkgconfig-0.9
+		doc? ( dev-util/gtk-doc )"
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
@@ -32,5 +32,6 @@ pkg_setup() {
 			$(use_enable hal) \
 			$(use_enable test tests) \
 			$(use_enable pam) \
-			$(use_with pam pam-dir $(getpam_mod_dir))"
+			$(use_with pam pam-dir $(getpam_mod_dir))
+			--with-root-certs=/usr/share/ca-certificates/"
 }

@@ -13,11 +13,11 @@ KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="doc ssl"
 
 RDEPEND=">=dev-libs/glib-2.15.3
-	>=dev-libs/libxml2-2
-	ssl? ( >=net-libs/gnutls-1 )"
+		 >=dev-libs/libxml2-2
+		 ssl? ( >=net-libs/gnutls-1 )"
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0.9
-	doc? ( >=dev-util/gtk-doc-1 )"
+		>=dev-util/pkgconfig-0.9
+		doc? ( >=dev-util/gtk-doc-1 )"
 
 DOCS="AUTHORS ChangeLog NEWS README"
 

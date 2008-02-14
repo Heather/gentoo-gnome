@@ -10,7 +10,7 @@ HOMEPAGE="http://www.gnome.org/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="xinerama"
+IUSE="debug xinerama"
 
 RDEPEND=">=x11-libs/gtk+-2.10
 		 >=x11-libs/pango-1.2
@@ -27,5 +27,5 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog HACKING NEWS README *.txt doc/*.txt"
 
 pkg_setup() {
-	G2CONF="$(use_enable xinerama)"
+	G2CONF="$(use_enable debug) $(use_enable xinerama)"
 }
