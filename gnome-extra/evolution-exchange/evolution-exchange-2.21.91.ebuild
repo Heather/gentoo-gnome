@@ -13,15 +13,17 @@ SLOT="2.0"
 KEYWORDS="~amd64 ~ppc ~sparc ~x86"
 IUSE="debug doc static"
 
-RDEPEND=">=x11-libs/gtk+-2.10
+RDEPEND="
+	>=mail-client/evolution-2.21.90
+	>=dev-libs/glib-2.15.3
+	>=x11-libs/gtk+-2.10
 	>=gnome-base/gconf-2.0
-	>=gnome-base/libbonobo-2.0
+	>=gnome-base/libbonobo-2.20.3
 	>=gnome-base/libglade-2.0
 	>=gnome-base/libgnomeui-2.0
 	dev-libs/libxml2
-	>=mail-client/evolution-2.21
+	net-libs/libsoup:2.4
 	>=gnome-extra/evolution-data-server-2.21
-	>=net-libs/libsoup-2.2.96:2.2
 	>=net-nds/openldap-2.1.30-r2"
 
 DEPEND="${RDEPEND}

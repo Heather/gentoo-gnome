@@ -2,6 +2,15 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  14 Feb 2008; Daniel Gryniewicz <dang@gentoo.org>
+  evolution-exchange-2.21.91:
+  Bump to 2.21.91
+  	#420503 - Crash while filtering (Milan Crha)
+  	#436628 - Fix alarms for Exchange calendar
+  	#501295 - Crash while caching in addressbook.
+  	Patch for crash in process_flags (Srinivasa Ragavan and Bharath Acharya)
+  	Fix two junk folder (Sankar P)
+
   29 Jan 2008; Daniel Gryniewicz <dang@gentoo.org>
   evolution-exchange-2.21.4:
   Add a slot dep on libsoup to prepare for the new 2.4 slot
