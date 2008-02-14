@@ -42,7 +42,6 @@ RDEPEND=">=dev-libs/glib-2.15.3
 	>=net-libs/libsoup-2.2.96:2.2
 	kerberos? ( virtual/krb5 )
 	krb4? ( virtual/krb5 )
-	>=dev-libs/glib-2.10
 	>=gnome-base/orbit-2.9.8
 	spell? ( >=app-text/gnome-spell-1.0.5 )
 	crypt? ( || ( >=app-crypt/gnupg-2.0.1-r2 =app-crypt/gnupg-1.4* ) )

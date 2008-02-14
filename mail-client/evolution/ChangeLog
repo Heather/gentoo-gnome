@@ -2,6 +2,51 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  14 Feb 2008; Daniel Gryniewicz <dang@gentoo.org> evolution-2.21.91:
+  Bump to 2.21.91
+  
+  #240073 - Fix regression in strike out completed task (Milan Crha)
+  
+  #249501 - Fix for attachments with '%' in the filename to be handled well
+  (Milan Crha)
+  
+  #395939 - Free alarms (Milan Crha)
+  
+  #411576 - Give gconf option to have same fonts in vertical view column.
+  (Srinivasa Ragavan)
+  
+  #468427 - Fixes lots of crashes around itip-formatter (Srinivasa Ragavan)
+  
+  #502571 - Name change to Crash Detection (Srinivasa Ragavan)
+  
+  #506948 - Unescape while copying urls (Srinivasa Ragavan)
+  
+  #509741 - Crash while asking certificate popup (Matthew Barnes)
+  
+  #510642 - Improved error messages (Suman Manjunath)
+  
+  #514736 - Added application/ms-tnef to supported mime type. (Paul Bolle)
+  
+  #514771 - Fixes a crash while decoding attachments (Paul Bolle)
+  
+  #511600 - Doc fixes (PC Radhika)
+  
+  #511602 - Doc fixes (PC Radhila)
+  
+  #512623 - Fix keystates for thread expand (Milan Crha)
+  
+  #513285 - Do not use entities in doc (Wouter Bolsterlee)
+  
+  #513395 - Make sure that camel url isn't null (Jeff Cai)
+  
+  #515054 - Better spam support - Upsync SPAM flags (Milan Crha)
+  
+  Windows build fixes (Tor Lillqvist)
+  
+  G_STRFUNC build fixes (Matthew Barnes)
+  
+  Fix for Google Calendar Alarm (Srinivasa Ragavan)
+
   31 Jan 2008; Daniel Gryniewicz <dang@gentoo.org> evolution-2.21.90:
   Bump to 2.21.90
   
