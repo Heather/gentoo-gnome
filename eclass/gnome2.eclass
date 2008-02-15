@@ -106,6 +106,10 @@ gnome2_src_install() {
 	rm -fr "${D}/usr/share/applications/mimeinfo.cache"
 }
 
+gnome2_pkg_preinst() {
+	gnome2_gconf_savelist
+}
+
 gnome2_pkg_postinst() {
 	gnome2_gconf_install
 	fdo-mime_desktop_database_update
@@ -117,9 +121,9 @@ gnome2_pkg_postinst() {
 	fi
 }
 
-#gnome2_pkg_prerm() {
-#	gnome2_gconf_uninstall
-#}
+gnome2_pkg_prerm() {
+	gnome2_gconf_uninstall
+}
 
 gnome2_pkg_postrm() {
 	fdo-mime_desktop_database_update
@@ -131,4 +135,4 @@ gnome2_pkg_postrm() {
 	fi
 }
 
-EXPORT_FUNCTIONS src_unpack src_compile src_install pkg_postinst pkg_postrm
+EXPORT_FUNCTIONS src_unpack src_compile src_install pkg_preinst pkg_postinst pkg_prerm pkg_postrm
