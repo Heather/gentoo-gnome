@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-menus/gnome-menus-2.20.1.ebuild,v 1.1 2007/10/17 20:25:59 eva Exp $
 
-inherit eutils gnome2 python multilib linux-info
+inherit eutils gnome2 python
 
 DESCRIPTION="The GNOME menu system, implementing the F.D.O cross-desktop spec"
 HOMEPAGE="http://www.gnome.org"
@@ -25,7 +25,7 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
 pkg_setup() {
-	G2CONF="--with-monitor-backend=gio $(use_enable debug) $(use_enable python)"
+	G2CONF="$(use_enable debug) $(use_enable python)"
 }
 
 src_unpack() {
