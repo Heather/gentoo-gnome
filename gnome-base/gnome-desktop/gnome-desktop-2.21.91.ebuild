@@ -14,12 +14,10 @@ IUSE="doc"
 
 RDEPEND=">=dev-libs/libxml2-2.4.20
 		 >=x11-libs/gtk+-2.11.3
-		 >=dev-libs/glib-2.13.0
+		 >=dev-libs/glib-2.15.4
 		 >=gnome-base/gconf-2
 		 >=gnome-base/libgnomeui-2.6
-		 >=gnome-base/gnome-vfs-2
-		 >=x11-libs/startup-notification-0.5
-		 !gnome-base/gnome-core"
+		 >=x11-libs/startup-notification-0.5"
 DEPEND="${RDEPEND}
 		app-text/scrollkeeper
 		sys-devel/gettext
