@@ -31,7 +31,9 @@ DEPEND=">=sys-apps/sed-4"
 # Find the GConf schemas that are about to be installed and save their location
 # in the GNOME2_ECLASS_SCHEMAS environment variable
 gnome2_gconf_savelist() {
-	export GNOME2_ECLASS_SCHEMAS=$(find "${ROOT}etc/gconf/schemas/" -name '*.schemas')
+	pushd "${D}" &> /dev/null
+	export GNOME2_ECLASS_SCHEMAS=$(find 'etc/gconf/schemas/' -name '*.schemas')
+	popd &> /dev/null
 }
 
 
