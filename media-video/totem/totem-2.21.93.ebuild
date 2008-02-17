@@ -23,7 +23,7 @@ RDEPEND=">=dev-libs/glib-2.15
 		   app-text/iso-codes
 		   dev-libs/libxml2
 
-		 >=media-libs/gstreamer-0.10.12
+		 >=media-libs/gstreamer-0.10.16
 		 >=media-libs/gst-plugins-good-0.10
 		 >=media-libs/gst-plugins-base-0.10.12
 		 >=media-plugins/gst-plugins-gconf-0.10
