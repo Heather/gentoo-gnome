@@ -22,7 +22,7 @@ DEPEND="${RDEPEND}
 		sys-devel/gettext
 		>=dev-util/pkgconfig-0.9
 		>=dev-util/intltool-0.35
-		doc? ( >=dev-util/gtk-doc-1 )"
+		doc? ( >=dev-util/gtk-doc-1.9 )"
 
 DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
