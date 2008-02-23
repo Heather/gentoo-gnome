@@ -39,15 +39,13 @@ RDEPEND=">=dev-libs/glib-2.15
 		 lirc? ( app-misc/lirc )
 		 nautilus? ( >=gnome-base/nautilus-2.10 )
 		 nsplugin?	(
-						|| (
-							xulrunner? ( net-libs/xulrunner )
-							seamonkey? ( www-client/seamonkey )
-							www-client/mozilla-firefox
-						)
-					>=x11-misc/shared-mime-info-0.22
-					>=x11-libs/startup-notification-0.8
-				)
-		 python? ( >=dev-python/pygtk-2.12 >=dev-python/gdata-1  )
+						xulrunner? ( net-libs/xulrunner )
+						!xulrunner? ( seamonkey? ( www-client/seamonkey ) )
+						!xulrunner? ( !seamonkey? ( www-client/mozilla-firefox ) )
+						>=x11-misc/shared-mime-info-0.22
+						>=x11-libs/startup-notification-0.8
+					)
+		 python? ( >=dev-python/pygtk-2.12 >=dev-python/gdata-1 )
 		 tracker? ( >=app-misc/tracker-0.5.3 >=gnome-base/libgnomeui-2 )
 		 nvtv? ( >=media-tv/nvtv-0.4.5 )"
 DEPEND="${RDEPEND}
