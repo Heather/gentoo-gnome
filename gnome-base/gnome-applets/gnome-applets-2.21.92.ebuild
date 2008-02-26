@@ -13,26 +13,27 @@ KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="acpi apm doc gnome gstreamer hal ipv6 test"
 
 RDEPEND=">=x11-libs/gtk+-2.11
-		>=dev-libs/glib-2.13
-		>=gnome-base/libgnome-2.8
-		>=gnome-base/libgnomeui-2.8
-		>=gnome-base/gconf-2.8
-		>=gnome-base/gnome-panel-2.13.4
-		>=gnome-base/libglade-2.4
-		>=gnome-base/gail-1.1
-		>=x11-libs/libxklavier-2.91
-		>=x11-libs/libwnck-2.9.3
-		>=app-admin/system-tools-backends-1.1.3
-		>=gnome-base/gnome-desktop-2.11.1
-		>=x11-libs/libnotify-0.3.2
-		hal? ( >=sys-apps/hal-0.5.3 )
-		>=dev-libs/dbus-glib-0.71
-		>=x11-themes/gnome-icon-theme-2.15.91
-		>=dev-libs/libxml2-2.5.0
-		>=virtual/python-2.4
-		apm? ( sys-apps/apmd )
-		x11-apps/xrdb x11-libs/libX11
-		gnome?	(
+		 >=dev-libs/glib-2.15.6
+		 >=gnome-base/libgnome-2.8
+		 >=gnome-base/libgnomeui-2.8
+		 >=gnome-base/gconf-2.8
+		 >=gnome-base/gnome-panel-2.13.4
+		 >=gnome-base/libglade-2.4
+		 >=gnome-base/gail-1.1
+		 >=x11-libs/libxklavier-2.91
+		 >=x11-libs/libwnck-2.9.3
+		 >=app-admin/system-tools-backends-1.1.3
+		 >=gnome-base/gnome-desktop-2.11.1
+		 >=x11-libs/libnotify-0.3.2
+		 hal? ( >=sys-apps/hal-0.5.3 )
+		 >=dev-libs/dbus-glib-0.71
+		 >=x11-themes/gnome-icon-theme-2.15.91
+		 >=dev-libs/libxml2-2.5.0
+		 >=dev-libs/libgweather-2.21.1
+		 >=virtual/python-2.4
+		 apm? ( sys-apps/apmd )
+		 x11-apps/xrdb x11-libs/libX11
+		 gnome?	(
 					gnome-base/libgnomekbd
 					gnome-base/control-center
 
@@ -43,11 +44,10 @@ RDEPEND=">=x11-libs/gtk+-2.11
 					>=dev-python/pygtk-2.6
 					>=dev-python/gnome-python-2.10
 				)
-		gstreamer?	(
+		 gstreamer?	(
 						>=media-libs/gstreamer-0.10.2
 						>=media-libs/gst-plugins-base-0.10.14
 					)"
-
 DEPEND="${RDEPEND}
 		>=app-text/scrollkeeper-0.1.4
 		>=dev-util/pkgconfig-0.19
