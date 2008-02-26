@@ -15,7 +15,7 @@ IUSE="avahi doc networkmanager python spell xulrunner"
 # FIXME: add webkit/gecko switch possibility
 # dang: *after* webkit actually works.
 
-RDEPEND=">=dev-libs/glib-2.15.2
+RDEPEND=">=dev-libs/glib-2.15.6
 		 >=x11-libs/gtk+-2.12.0
 		 >=dev-libs/libxml2-2.6.12
 		 >=dev-libs/libxslt-1.1.7
@@ -67,11 +67,11 @@ pkg_setup() {
 	fi
 }
 
-src_unpack()
-{
+src_unpack() {
 	gnome2_src_unpack
 
-	epatch "${FILESDIR}/${PN}-2.20.3-fix-de-docs-tests.patch"
+	epatch "${FILESDIR}/${P}-typecast.patch"
+	epatch "${FILESDIR}/${P}-define-earlier.patch"
 }
 
 src_compile() {
