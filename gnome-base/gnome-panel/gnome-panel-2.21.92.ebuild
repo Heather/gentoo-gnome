@@ -14,7 +14,7 @@ IUSE="doc eds networkmanager"
 
 RDEPEND=">=gnome-base/gnome-desktop-2.12
 		 >=x11-libs/pango-1.15.4
-		 >=dev-libs/glib-2.15.5
+		 >=dev-libs/glib-2.15.6
 		 >=x11-libs/gtk+-2.11.3
 		 >=dev-libs/libgweather-2.21.2
 		 >=gnome-base/libglade-2.5
@@ -55,8 +55,6 @@ src_unpack() {
 	# FIXME : uh yeah, this is nice
 	# We should patch in a switch here and send it upstream
 	sed -i 's:--load:-v:' "${S}/gnome-panel/Makefile.in" || die "sed failed"
-
-	epatch "${FILESDIR}/${PN}-2.21.5-gtk-doc-die-die-die.patch"
 }
 
 pkg_postinst() {
