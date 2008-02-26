@@ -121,9 +121,9 @@ gnome2_pkg_postinst() {
 	fi
 }
 
-gnome2_pkg_prerm() {
-	gnome2_gconf_uninstall
-}
+#gnome2_pkg_prerm() {
+#	gnome2_gconf_uninstall
+#}
 
 gnome2_pkg_postrm() {
 	fdo-mime_desktop_database_update
@@ -135,4 +135,5 @@ gnome2_pkg_postrm() {
 	fi
 }
 
-EXPORT_FUNCTIONS src_unpack src_compile src_install pkg_preinst pkg_postinst pkg_prerm pkg_postrm
+# pkg_prerm
+EXPORT_FUNCTIONS src_unpack src_compile src_install pkg_preinst pkg_postinst pkg_postrm
