@@ -15,7 +15,7 @@ IUSE="beagle gnome tracker"
 RDEPEND=">=x11-libs/startup-notification-0.8
 		 >=gnome-base/libbonobo-2.1
 		 >=gnome-base/eel-2.21.90
-		 >=dev-libs/glib-2.15.5
+		 >=dev-libs/glib-2.15.6
 		 >=gnome-base/gnome-desktop-2.10
 		 >=gnome-base/orbit-2.4
 		 >=x11-libs/pango-1.1.2
