@@ -12,12 +12,10 @@ SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
 IUSE="debug doc fam hardened selinux xattr"
 
-# dang remove gio-standalone blocker before moving to portage
 RDEPEND="virtual/libc
 		 virtual/libiconv
 		 xattr? ( sys-apps/attr )
-		 fam? ( virtual/fam )
-		 !gnome-base/gio-standalone"
+		 fam? ( virtual/fam )"
 DEPEND="${RDEPEND}
 		>=dev-util/pkgconfig-0.16
 		>=sys-devel/gettext-0.11
@@ -55,9 +53,9 @@ src_unpack() {
 }
 
 src_compile() {
-	epunt_cxx
-
 	local myconf
+
+	epunt_cxx
 
 	# Building with --disable-debug highly unrecommended.  It will build glib in
 	# an unusable form as it disables some commonly used API.  Please do not
@@ -67,7 +65,7 @@ src_compile() {
 
 	# always build static libs, see #153807
 	econf ${myconf}                 \
-		  $(use_enable xattr)  \
+		  $(use_enable xattr)       \
 		  $(use_enable doc man)     \
 		  $(use_enable doc gtk-doc) \
 		  $(use_enable fam)         \
