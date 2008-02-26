@@ -17,7 +17,7 @@ IUSE="alsa eds esd hal"
 
 RDEPEND=">=virtual/xft-2.1.2
 		 >=x11-libs/gtk+-2.11.6
-		 >=dev-libs/glib-2.13.0
+		 >=dev-libs/glib-2.15.5
 		 >=gnome-base/gconf-2.0
 		 >=gnome-base/libglade-2
 		 >=gnome-base/librsvg-2.0
@@ -26,12 +26,12 @@ RDEPEND=">=virtual/xft-2.1.2
 		 >=dev-libs/dbus-glib-0.73
 		 >=gnome-base/gnome-vfs-2.2
 		 >=x11-libs/libxklavier-3.3
-		 >=x11-wm/metacity-2.8.6-r1
+		 >=x11-wm/metacity-2.21.21
 		 >=gnome-base/gnome-panel-2.0
 		 >=gnome-base/libgnomekbd-2.21.4.1
 		 >=gnome-base/gnome-desktop-2.2
 		 >=gnome-base/gnome-menus-2.11.1
-		 >=gnome-base/gnome-settings-daemon-${PV}
+		 >=gnome-base/gnome-settings-daemon-2.21.91
 
 		>=media-libs/gstreamer-0.10.1.2
 		>=media-libs/gst-plugins-base-0.10.1.2
@@ -98,9 +98,5 @@ src_unpack() {
 
 	# Allow building with scrollkeeper
 	epatch "${FILESDIR}/${PN}-2.18.1-gnome-doc-utils-fix.patch"
-
-	# Drop esound unless requested
-	use esd || epatch "${FILESDIR}/${PN}-2.19.90-no-esd.patch"
-
 	eautoreconf
 }
