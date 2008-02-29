@@ -110,6 +110,15 @@ gnome2_gconf_uninstall() {
 }
 
 
+# Find the icons that are about to be installed and save their location
+# in the GNOME2_ECLASS_ICONS environment variable
+gnome2_icons_savelist() {
+	pushd "${D}" &> /dev/null
+	export GNOME2_ECLASS_ICONS=$(find 'usr/share/icons' -maxdepth 1 -mindepth 1 -type d)
+	popd &> /dev/null
+}
+
+
 # Updates Gtk+ icon cache files under /usr/share/icons if the current ebuild
 # have installed anything under that location.
 gnome2_icon_cache_update() {
@@ -120,24 +129,29 @@ gnome2_icon_cache_update() {
 		return
 	fi
 
+	if [[ -z "${GNOME2_ECLASS_ICONS}" ]]; then
+		return
+	fi
+
+
 	ebegin "Updating icons cache"
 
 	local retval=0
 	local fails=( )
 
-	for dir in $(find "${ROOT}/usr/share/icons" -maxdepth 1 -mindepth 1 -type d)
+	for dir in ${GNOME2_ECLASS_ICONS}
 	do
-		if [[ -f "${dir}/index.theme" ]] ; then
+		if [[ -f "${ROOT}${dir}/index.theme" ]] ; then
 			local rv=0
 
-			"${updater}" -qf "${dir}"
+			"${updater}" -qf "${ROOT}${dir}"
 			rv=$?
 
 			if [[ ! $rv -eq 0 ]] ; then
-				debug-print "Updating cache failed on ${dir}"
+				debug-print "Updating cache failed on ${ROOT}${dir}"
 
 				# Add to the list of failures
-				fails[$(( ${#fails[@]} + 1 ))]=$dir
+				fails[$(( ${#fails[@]} + 1 ))]="${ROOT}${dir}"
 
 				retval=2
 			fi
@@ -146,16 +160,8 @@ gnome2_icon_cache_update() {
 
 	eend ${retval}
 
-	for (( i = 0 ; i < ${#fails[@]} ; i++ )) ; do
-		### HACK!! This is needed until bash 3.1 is unmasked.
-		## The current stable version of bash lists the sizeof fails to be 1
-		## when there are no elements in the list because it is declared local.
-		## In order to prevent the declaration from being in global scope, we
-		## this hack to prevent an empty error message being printed for stable
-		## users. -- compnerd && allanonjl
-		if [[ "${fails[i]}" != "" && "${fails[i]}" != "()" ]] ; then
-			eerror "Failed to update cache with icon ${fails[i]}"
-		fi
+	for f in "${fails[@]}" ; do
+		eerror "Failed to update cache with icon $f"
 	done
 }
 

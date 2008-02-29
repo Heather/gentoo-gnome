@@ -108,6 +108,7 @@ gnome2_src_install() {
 
 gnome2_pkg_preinst() {
 	gnome2_gconf_savelist
+	gnome2_icons_savelist
 }
 
 gnome2_pkg_postinst() {
