@@ -43,11 +43,3 @@ DEPEND="${RDEPEND}
 pkg_config() {
 	G2CONF="${G2CONF} $(use_enable alsa) $(use_enable debug) $(use_enable esd) $(use_enable gstreamer)"
 }
-
-src_unpack() {
-	gnome2_src_unpack
-	epatch "${FILESDIR}/${PN}-2.21.4-no-esound.patch"
-
-	eautoreconf
-	intltoolize --force || die
-}
