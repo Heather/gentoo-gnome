@@ -2,6 +2,10 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  02 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org>
+  -liboobs-2.21.90.ebuild, +liboobs-2.21.92.ebuild:
+  bump to 2.21.92
+
   06 Feb 2008; Daniel Gryniewicz <dang@gentoo.org>
   system-tools-backends-2.5.7:
   Bump to 2.21.90 - Accept unsetting the ethernet interface used for PPPoE
