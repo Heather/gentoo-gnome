@@ -2,6 +2,32 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  02 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org>
+  -evolution-data-server-2.21.91.ebuild, +evolution-data-server-2.21.92.ebuild:
+  bump to 2.21.92
+  #163982: (Novell Bugzilla) Do not keep popping up error dialogs in case of
+  failure (Chenthill Palanisamy)
+  #164140: (Novell Bugzilla) Fixes a crash (Chenthill Palanisamy)
+  #167638: Dont try downloading while exitting (Jeffrey Stedfast, SankarP)
+  #183819: (Novell Bugzilla) Fixes a crashwhile closing evolution in offline
+  mode (Chenthill Palanisamy)
+  #445489: Handle emails without '<>' in DLs.
+  #459468: Return proper error codes from e_gw_* if no items aren't return
+  (Milan Crha)
+  #469119: Check also for correct date values if parse is OK (Milan Crha)
+  #489043: Do not store quotes in param values when quoting, it is not allowed
+  (Milan Crha)
+  #489810: Remember Google calendar passwords in keyring (Srinivasa Ragavan)
+  #510949: Memory leak fixes. (Milan Crha)
+  #514836: Memory leak fixes (Milan Crha)
+  #516074: Don't assume NI_MAXHOST and NI_MAXSERV are defined in <netdb.h>
+  since these are GNU extensions (Matthew Barnes)
+  #516408: Memory leak fixes (Chenthill Palanisamy)
+  #516474: Query on EContact should work for custom fields too (Milan Crha)
+  #517190: Fix a crash when refreshing mail folders (Jeff Cai)
+  #517885: Do not compare value/parameter names case sensitively (Milan Crha)
+  * translation updates
+
   14 Feb 2008; Daniel Gryniewicz <dang@gentoo.org>
   evolution-data-server-2.21.91:
   Bump to 2.21.91
