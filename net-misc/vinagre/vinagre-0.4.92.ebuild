@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit gnome2
+inherit gnome2 eutils
 
 DESCRIPTION="VNC Client for the GNOME Desktop"
 HOMEPAGE="http://www.gnome.org/projects/vinagre/"
@@ -27,6 +27,11 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README"
 
 pkg_setup() {
+	if ! built_with_use net-dns/avahi gtk; then
+		eerror "gtk support in avahi needed"
+		die "Please rebuild avahi with USE='gtk'"
+	fi
+
 	G2CONF="${G2CONF} $(use_enable avahi)"
 }
 
