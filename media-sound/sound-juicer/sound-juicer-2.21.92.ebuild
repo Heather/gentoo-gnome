@@ -10,10 +10,10 @@ HOMEPAGE="http://www.burtonini.com/blog/computers/sound-juicer/"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="alpha amd64 hppa ia64 ppc ppc64 sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="flac ogg test"
 
-RDEPEND=">=dev-libs/glib-2
+RDEPEND=">=dev-libs/glib-2.14
 	>=gnome-extra/nautilus-cd-burner-2.15.3
 	>=x11-libs/gtk+-2.8
 	>=gnome-base/libglade-2
@@ -43,12 +43,6 @@ DOCS="AUTHORS ChangeLog NEWS README TODO"
 
 # needed to get around some sandboxing checks
 export GST_INSPECT=/bin/true
-
-src_unpack() {
-	gnome2_src_unpack
-	# Fix tests. Upstream SVN has this fixed so we can probably remove it for next version
-	echo "data/sound-juicer.desktop.in" >> "${S}/po/POTFILES.skip"
-}
 
 pkg_setup() {
 	G2CONF="${G2CONF} --disable-scrollkeeper"

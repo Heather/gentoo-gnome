@@ -2,6 +2,9 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  02 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org> +sound-juicer-2.21.92:
+  bump to 2.21.92
+
   30 Jan 2008; Daniel Gryniewicz <dang@gentoo.org>
   Add slotdep for musicbrainz
 
