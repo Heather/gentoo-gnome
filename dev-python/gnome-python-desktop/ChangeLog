@@ -1,0 +1,8 @@
+# ChangeLog for dev-python/gnome-python-desktop
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  02 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org> 
+  -gnome-python-desktop-2.20.3.ebuild, +gnome-python-desktop-2.21.3.ebuild:
+  bump to 2.21.3, add eds USE flag to control new libebook bindings
+
