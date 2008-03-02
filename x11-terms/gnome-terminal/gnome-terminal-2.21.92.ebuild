@@ -18,7 +18,6 @@ RDEPEND="virtual/xft
 	>=gnome-base/gconf-2.14
 	>=x11-libs/startup-notification-0.8
 	>=x11-libs/vte-0.15.3
-	>=gnome-base/gnome-vfs-2.4
 	>=gnome-base/libglade-2
 	>=gnome-base/libgnomeui-2"
 DEPEND="${RDEPEND}
@@ -36,7 +35,7 @@ src_unpack() {
 	gnome2_src_unpack
 
 	# Use login shell by default (#12900)
-	epatch "${FILESDIR}"/${PN}-2-default_shell.patch
+	epatch "${FILESDIR}"/${PN}-2.21.92-default_shell.patch
 
 	# terminal enhancement, inserts a space after a DND URL
 	# patch by Zach Bagnall <yem@y3m.net> in #13801

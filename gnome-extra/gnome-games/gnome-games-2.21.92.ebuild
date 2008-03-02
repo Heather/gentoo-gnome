@@ -4,7 +4,7 @@
 
 # make sure games is inherited first so that the gnome2
 # functions will be called if they are not overridden
-inherit games eutils gnome2 autotools virtualx
+inherit games eutils gnome2 python autotools virtualx
 
 DESCRIPTION="Collection of games for the GNOME desktop"
 HOMEPAGE="http://www.gnome.org/"
@@ -42,7 +42,7 @@ DEPEND="${RDEPEND}
 	>=app-text/scrollkeeper-0.3.8"
 
 # Others are installed below; multiples in this package.
-DOCS="HACKING MAINTAINERS"
+DOCS="AUTHORS HACKING MAINTAINERS TODO"
 
 # dang make-check fails on docs with -j > 1.  Restrict them for the moment until
 # it can be chased down.
@@ -52,7 +52,7 @@ pkg_setup() {
 	# create the games user / group
 	games_pkg_setup
 
-	G2CONF="--with-scores-group=${GAMES_GROUP}"
+	G2CONF="--with-scores-group=${GAMES_GROUP} --with-sound=gstreamer"
 
 	if use guile; then
 		if has_version =dev-scheme/guile-1.8*; then
@@ -69,6 +69,10 @@ src_unpack() {
 
 	# Resolve symbols at execution time in setgid binaries
 	epatch "${FILESDIR}/${PN}-2.14.0-no_lazy_bindings.patch"
+
+	# disable pyc compiling
+	mv py-compile py-compile.orig
+	ln -s $(type -P true) py-compile
 
 	AT_M4DIR="m4" eautoreconf
 }
@@ -100,4 +104,17 @@ pkg_preinst() {
 			"${D}/var/lib/games/${basefile}"
 		fi
 	done
+}
+
+pkg_postinst() {
+	games_pkg_postinst
+	gnome2_pkg_postinst
+	python_version
+	python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages
+}
+
+pkg_postrm() {
+	gnome2_pkg_postrm
+	python_version
+	python_mod_cleanup /usr/$(get_libdir)/python${PYVER}/site-packages
 }
