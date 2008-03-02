@@ -50,5 +50,5 @@ src_unpack() {
 }
 
 src_test() {
-	Xmake check || die "Testing phase failed"
+	Xemake check || die "Testing phase failed"
 }
