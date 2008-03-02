@@ -1,0 +1,7 @@
+# ChangeLog for gnome-extra/zenity
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  02 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org> +zenity-2.21.1.ebuild:
+  bump to 2.21.1, translation updates
+
