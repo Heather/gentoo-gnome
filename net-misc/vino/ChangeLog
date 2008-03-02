@@ -1,0 +1,8 @@
+# ChangeLog for net-misc/vino
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  02 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org> -devhelp-0.19.ebuild,
+  +vino-2.21.92.ebuild:
+  bump to 2.21.92
+
