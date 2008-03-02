@@ -16,14 +16,14 @@ IUSE="dbus djvu doc dvi gnome t1lib tiff"
 RDEPEND="
 	dbus? ( >=dev-libs/dbus-glib-0.71 )
 	>=x11-libs/gtk+-2.10
-	gnome-base/gnome-keyring
+	>=dev-libs/glib-2.15.4
+	>=gnome-base/gnome-keyring-0.4
 	>=gnome-base/libgnomeui-2.14
 	>=gnome-base/libgnome-2.14
-	dev-libs/libxml2
 	>=x11-themes/gnome-icon-theme-2.17.1
-	>=gnome-base/gnome-vfs-2.0
+	>=dev-libs/libxml2-2.5
 	>=gnome-base/libglade-2
-	>=dev-libs/glib-2
+	>=gnome-base/gconf-2
 	gnome? ( >=gnome-base/nautilus-2.10 )
 	>=app-text/poppler-bindings-0.6
 	dvi? (
@@ -31,7 +31,6 @@ RDEPEND="
 		t1lib? ( >=media-libs/t1lib-5.0.0 )
 	)
 	tiff? ( >=media-libs/tiff-3.6 )
-	>=gnome-base/gconf-2
 	djvu? ( >=app-text/djvu-3.5.17 )
 	>=app-text/libspectre-0.2.0"
 
