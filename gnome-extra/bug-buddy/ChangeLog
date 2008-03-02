@@ -1,0 +1,8 @@
+# ChangeLog for gnome-extra/bug-buddy
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  02 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org>
+  +bug-buddy-2.21.90.ebuild:
+  bump to 2.21.90, move to libsoup-2.4
+
