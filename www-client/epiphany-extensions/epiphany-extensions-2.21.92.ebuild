@@ -12,21 +12,24 @@ LICENSE="GPL-2"
 
 SLOT="0"
 KEYWORDS="~amd64 ~hppa ~ppc ~sparc ~x86"
-IUSE="dbus example pcre python useless"
+IUSE="dbus example pcre python useless xulrunner"
 
-RDEPEND="app-text/opensp
-		 >=dev-libs/glib-2.15.5
-		 >=gnome-base/gconf-2.0
-		 >=dev-libs/libxml2-2.6
-		 >=x11-libs/gtk+-2.11.6
-		 >=gnome-base/libglade-2
-		 dbus? ( >=dev-libs/dbus-glib-0.34 )
-		 pcre? ( >=dev-libs/libpcre-3.9-r2 )
-		 python? ( >=dev-python/pygtk-2.11 )"
+RDEPEND=">=www-client/epiphany-2.21
+	app-text/opensp
+	>=dev-libs/glib-2.15.5
+	>=gnome-base/gconf-2.0
+	>=dev-libs/libxml2-2.6
+	>=x11-libs/gtk+-2.11.6
+	>=gnome-base/libglade-2
+	xulrunner? ( net-libs/xulrunner )
+	!xulrunner? ( >=www-client/mozilla-firefox-1.5 )
+	dbus? ( >=dev-libs/dbus-glib-0.34 )
+	pcre? ( >=dev-libs/libpcre-3.9-r2 )
+	python? ( >=dev-python/pygtk-2.11 )"
 DEPEND="${RDEPEND}
-		>=dev-util/intltool-0.35
-		>=dev-util/pkgconfig-0.20
-		>=app-text/gnome-doc-utils-0.3.2"
+	>=dev-util/intltool-0.35
+	>=dev-util/pkgconfig-0.20
+	>=app-text/gnome-doc-utils-0.3.2"
 
 DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
@@ -35,12 +38,12 @@ pkg_setup() {
 
 	extensions="actions auto-reload auto-scroller certificates error-viewer \
 				extensions-manager-ui gestures java-console page-info push-scroller \
-				select-stylesheet sidebar smart-bookmarks tab-groups tab-states"
+				select-stylesheet sessionsaver sidebar smart-bookmarks \
+				tab-groups tab-states"
 
 	use dbus && extensions="${extensions} rss"
 
-	use pcre && extensions="${extensions} adblock"
-	use pcre && use useless && extensions="${extensions} greasemonkey"
+	use pcre && extensions="${extensions} adblock greasemonkey"
 
 	use python && extensions="${extensions} python-console favicon cc-license-viewer"
 	use python && use example && extensions="${extensions} sample-python"
@@ -51,6 +54,20 @@ pkg_setup() {
 
 
 	G2CONF="${G2CONF} --with-extensions=$(echo "${extensions}" | sed -e 's/[[:space:]]\+/,/g')"
+	if use xulrunner; then 
+		G2CONF="${G2CONF} --with-gecko=xulrunner" 
+	else 
+		G2CONF="${G2CONF} --with-gecko=firefox" 
+	fi 
+}
+
+src_unpack() {
+	gnome2_src_unpack
+
+	# Don't remove sessionsaver, please.  -dang
+	epatch "${FILESDIR}"/${PN}-2.21.92-sessionsaver-v4.patch.gz
+	echo "extensions/sessionsaver/ephy-sessionsaver-extension.c" >> po/POTFILES.in
+	AT_M4DIR="m4" eautoreconf
 }
 
 pkg_postinst() {
