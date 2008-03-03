@@ -23,7 +23,10 @@ RDEPEND=">=dev-libs/glib-2.15.2
 		 >=gnome-base/gconf-2
 		 >=gnome-base/gnome-mount-0.4
 		 >=gnome-base/libgnomeui-2.14
-		 cdr? ( virtual/cdrtools )
+		 cdr? (
+		 	virtual/cdrtools
+			app-cdr/cdrdao
+		 )
 		 dvdr? ( >=app-cdr/dvd+rw-tools-6.1 )"
 DEPEND="${RDEPEND}
 		sys-devel/gettext
