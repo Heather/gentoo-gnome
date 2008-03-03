@@ -11,7 +11,3 @@
 >=gnome-base/eel-2.21
 >=gnome-base/nautilus-2.21
 >=gnome-extra/nautilus-cd-burner-2.21
-
-# Mart Raudsepp <leio@gentoo.org> (29 Nov 2007)
-# Causes packages released with older intltool to fail build, bug #199595
-=dev-util/intltool-0.36.2
