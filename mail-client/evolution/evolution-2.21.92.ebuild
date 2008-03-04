@@ -17,7 +17,7 @@ IUSE="crypt dbus debug hal ipv6 kerberos krb4 ldap mono networkmanager nntp pda 
 # Pango dependency required to avoid font rendering problems
 RDEPEND=">=dev-libs/glib-2.15.3
 	>=x11-libs/gtk+-2.12
-	>=gnome-extra/evolution-data-server-2.21.90
+	>=gnome-extra/evolution-data-server-2.21.92
 	>=x11-themes/gnome-icon-theme-2.20
 	>=gnome-base/gnome-vfs-2.4
 	>=gnome-base/libbonobo-2.20.3
