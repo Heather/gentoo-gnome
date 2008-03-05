@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-editors/gedit/gedit-2.20.4.ebuild,v 1.1 2007/12/06 22:10:07 eva Exp $
 
+EAPI="1"
+
 inherit gnome2 eutils autotools
 
 DESCRIPTION="A text editor for the GNOME desktop"
