@@ -13,10 +13,20 @@ SLOT="0"
 KEYWORDS="~amd64 ~ppc ~x86"
 IUSE="xulrunner"
 
-DEPEND="=media-libs/swfdec-${PV}*
+DEPEND="
+	dev-libs/glib:2
+	=media-libs/swfdec-${PV}*
 	xulrunner? ( net-libs/xulrunner )
 	!xulrunner? ( || ( www-client/mozilla-firefox www-client/seamonkey ) )"
 RDEPEND=""
+
+pkg_setup() {
+	if !built_with_use media-libs/swfdec soup ; then
+		einfo "You must build swfdec with the soup USE flag to build"
+		einfo "swfdec-gtk, which is required by swfdec-mozilla"
+		die "Please re-emerge media-libs/swfdec with the soup USE flag"
+	fi
+}
 
 src_compile() {
 	econf --with-plugin-dir=/usr/$(get_libdir)/nsbrowser/plugins
