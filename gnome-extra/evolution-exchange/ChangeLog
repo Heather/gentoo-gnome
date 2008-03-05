@@ -2,6 +2,27 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  05 Mar 2008; Daniel Gryniewicz <dang@gentoo.org>
+  -evolution-exchange-2.21.91.ebuild, +evolution-exchange-2.21.92.ebuild:
+  Bump to 2.21.92 Bug fixes:
+  
+  #432885: Fix to subscribe to other user's folders (Bharath)
+  
+  #514836: Fix importing contact lists into a attendee lists for a meeting
+  (Milan Crha)
+  
+  #515744: Free our message info members properly (Milan Crha)
+  
+  #516248: Hierarchy wont be available if we are offline (Srinivasa Ragavan)
+  
+  #516250: Allow it to reauth if we are connecting after a offline (Srinivasa
+  Ragavan)
+  
+  #516252: Determine that we are in offline if we cant get info from the
+  server (Srinivasa Ragavan)
+  
+  #516408: Free memory returned by libical (Chenthill)
+
   14 Feb 2008; Daniel Gryniewicz <dang@gentoo.org>
   evolution-exchange-2.21.91:
   Bump to 2.21.91

@@ -2,6 +2,10 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  05 Mar 2008; Daniel Gryniewicz <dang@gentoo.org> gcalctool-5.21.92:
+  Bump to 5.21.92
+      * Released a gcalctool tarball for GNOME 5.21.92.
+
   29 Jan 2008; Daniel Gryniewicz <dang@gentoo.org> gcalctool-5.21.90:
   Bump to 5.21.90
   

@@ -15,7 +15,7 @@ LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~amd64 ~ppc ~x86"
 
-IUSE="ffmpeg gstreamer gnome mad oss alsa pulseaudio soup"
+IUSE="ffmpeg gstreamer mad oss alsa pulseaudio soup"
 
 RESTRICT="test"
 
@@ -28,8 +28,10 @@ RDEPEND=">=dev-libs/glib-2.12
 	>=media-libs/alsa-lib-1.0.12
 	ffmpeg? ( >=media-video/ffmpeg-0.4.9_p20070330 )
 	mad? ( >=media-libs/libmad-0.15.1b )
-	gstreamer? ( >=media-libs/gstreamer-0.10.11 )
-	gnome? ( gnome-base/gnome-vfs )
+	gstreamer? (
+		>=media-libs/gstreamer-0.10.11
+		>=media-libs/gst-plugins-base-0.10.15
+		)
 	alsa? ( >=media-libs/alsa-lib-1.0 )
 	pulseaudio? ( media-sound/pulseaudio )"
 
@@ -42,10 +44,6 @@ pkg_setup() {
 		eerror "ppc arch. See bug #11841 in Freedesktop Bugzilla."
 		eerror "Please disable ffmpeg flag and enable gstreamer"
 		die "Depends failed"
-	fi
-	if use !gnome ; then
-		ewarn "In order to compile libswfdec-gtk with Gnome-VFS"
-		ewarn "support you must have 'gnome' USE flag enabled"
 	fi
 	if use !soup ; then
 		ewarn "swfdec will be built without HTTP protocol support"
@@ -70,8 +68,7 @@ src_compile() {
 		$(use_enable gstreamer) \
 		$(use_enable ffmpeg) \
 		$(use_enable mad) \
-		$(use_enable gnome gnome-vfs) \
-		$(use_enable soup) \
+		$(use_enable soup gtk) \
 		${myconf} || die "configure failed"
 
 	emake || die "emake failed"
