@@ -16,7 +16,7 @@ RDEPEND=">=gnome-base/gconf-2
 	xattr? ( sys-apps/attr )
 	>=dev-libs/glib-2.14
 	>=x11-libs/gtk+-2.12
-	>=x11-libs/gtksourceview-2.1
+	>=x11-libs/gtksourceview-2.1:2.0
 	>=gnome-base/libgnomeui-2.16
 	>=gnome-base/libglade-2.5.1
 	>=gnome-base/gnome-vfs-2.16
