@@ -39,6 +39,10 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
+# needs a live properly configured environment. Not really suited to
+# an ebuild restricted environment
+RESTRICT="test"
+
 src_unpack() {
 	gnome2_src_unpack
 
