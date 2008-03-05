@@ -1,0 +1,7 @@
+# ChangeLog for app-accessibility/orca
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  05 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org> swfdec-gnome-2.21.91.ebuild:
+  bump to 2.21.91
+
