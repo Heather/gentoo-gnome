@@ -13,7 +13,15 @@ IUSE=""
 
 RDEPEND=">=x11-libs/gtk+-2.12.0
 		gnome-base/gconf
-		>=media-libs/swfdec-0.5.90"
+		>=media-libs/swfdec-0.6"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35.0
 	sys-devel/gettext"
+
+pkg_setup() {
+	if !built_with_use media-libs/swfdec soup ; then
+		einfo "You must build swfdec with the soup USE flag to build"
+		einfo "swfdec-gtk, which is required by swfdec-gnome"
+		die "Please re-emerge media-libs/swfdec with the soup USE flag"
+	fi
+}
