@@ -2,6 +2,16 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  05 Mar 2008; Daniel Gryniewicz <dang@gentoo.org> swfdec-0.6.0:
+  Bump to 0.6.0
+  Here is the first API/ABI-stable release of Swfdec. Enjoy!
+  - support missing plugin installation. GStreamer requirement bumped to 0.10.17
+  - lots of improvements to testsuite. It uses plugins now so multiple Flash 
+    players can be tested.
+  - XMLSocket now works
+  - rework buffer API
+  - lots of bug- and conformance fixes
+
   06 Feb 2008; Daniel Gryniewicz <dang@gentoo.org> +swfdec-0.5.90.ebuild,
   +swfdec-gnome-2.21.90.ebuild:
   Bump to 0.5.90 This is a preparation for the upcoming 0.6 release to go in
