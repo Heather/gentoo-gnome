@@ -4,7 +4,7 @@
 
 EAPI="1"
 
-inherit multilib versionator
+inherit multilib versionator eutils
 
 MY_PV=$(get_version_component_range 1-2)
 
