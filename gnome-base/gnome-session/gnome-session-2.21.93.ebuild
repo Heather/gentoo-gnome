@@ -12,7 +12,7 @@ SRC_URI="${SRC_URI}
 LICENSE="GPL-2 LGPL-2 FDL-1.1"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
-IUSE="branding esd ipv6 tcpd"
+IUSE="branding ipv6 tcpd"
 
 RDEPEND=">=dev-libs/glib-2.13
 		 >=gnome-base/libgnomeui-2.2
@@ -24,7 +24,6 @@ RDEPEND=">=dev-libs/glib-2.13
 		 x11-apps/xdpyinfo
 		 >=gnome-base/control-center-2.15.4
 		 >=gnome-base/gconf-2
-		 esd? ( >=media-sound/esound-0.2.26 )
 		 tcpd? ( >=sys-apps/tcp-wrappers-7.6 )"
 DEPEND="${RDEPEND}
 		  x11-apps/xrdb
@@ -38,7 +37,7 @@ DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
 pkg_setup() {
 	# TODO: convert libnotify to a configure option
-	G2CONF="${G2CONF} $(use_enable ipv6) $(use_enable esd) $(use_enable tcpd tcp-wrappers)"
+	G2CONF="${G2CONF} $(use_enable ipv6) $(use_enable tcpd tcp-wrappers)"
 }
 
 src_unpack() {
