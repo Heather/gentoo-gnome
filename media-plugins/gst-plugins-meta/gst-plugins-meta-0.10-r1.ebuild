@@ -8,10 +8,15 @@ HOMEPAGE="http://www.gentoo.org"
 LICENSE="GPL-2"
 SLOT="0.10"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="a52 alsa dvd esd ffmpeg flac mad mpeg ogg oss theora vorbis X xv"
+IUSE="a52 alsa dvb dvd esd ffmpeg flac mad mpeg mythtv ogg oss theora vorbis X xv"
 
 RDEPEND="a52? ( >=media-plugins/gst-plugins-a52dec-0.10 )
 		 alsa? ( >=media-plugins/gst-plugins-alsa-0.10 )
+		 dvb? (
+				media-plugins/gst-plugins-dbb
+				>=media-lib/gst-plugins-bad-0.10.6
+				>=media-plugins/gst-plugins-fluendo-mpegdemux-0.10.15
+			  )
 		 dvd? (
 				>=media-libs/gst-plugins-ugly-0.10
 				>=media-plugins/gst-plugins-a52dec-0.10
@@ -23,6 +28,7 @@ RDEPEND="a52? ( >=media-plugins/gst-plugins-a52dec-0.10 )
 		 flac? ( >=media-plugins/gst-plugins-flac-0.10 )
 		 mad? ( >=media-plugins/gst-plugins-mad-0.10 )
 		 mpeg? ( >=media-plugins/gst-plugins-mpeg2dec-0.10 )
+		 mythtv? ( media-plugins/gst-plugins-mythtv )
 		 ogg? ( >=media-plugins/gst-plugins-ogg-0.10 )
 		 oss? ( >=media-plugins/gst-plugins-oss-0.10 )
 		 theora? (
