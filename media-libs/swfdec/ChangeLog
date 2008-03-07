@@ -2,6 +2,9 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  07 Mar 2008; Daniel Gryniewicz <dang@gentoo.org> swfdec-0.6.0:
+  Fix gtk dep to depend on soup flag, since we don't support vivi
+
   05 Mar 2008; Daniel Gryniewicz <dang@gentoo.org> swfdec-0.6.0:
   Bump to 0.6.0
   Here is the first API/ABI-stable release of Swfdec. Enjoy!

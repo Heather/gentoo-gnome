@@ -22,9 +22,11 @@ RESTRICT="test"
 RDEPEND=">=dev-libs/glib-2.12
 	>=dev-libs/liboil-0.3.1
 	>=x11-libs/pango-1.16.4
-	soup? ( net-libs/libsoup:2.4 )
+	soup? (
+		>=x11-libs/gtk+-2.8.0
+		net-libs/libsoup:2.4
+		)
 	>=x11-libs/cairo-1.2
-	>=x11-libs/gtk+-2.8.0
 	>=media-libs/alsa-lib-1.0.12
 	ffmpeg? ( >=media-video/ffmpeg-0.4.9_p20070330 )
 	mad? ( >=media-libs/libmad-0.15.1b )
