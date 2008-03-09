@@ -2,6 +2,9 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  09 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org> gedit-2.21.2:
+  reimport python stuff from portage
+
   05 Mar 2008; Daniel Gryniewicz <dang@gentoo.org> gedit-2.21.2:
   Bump to 2.21.2
   - Misc bugfixes
