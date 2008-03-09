@@ -2,6 +2,9 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  06 Mar 2008; Mart Raudsepp <leio@gentoo.org> swfdec-gnome-2.21.91.ebuild:
+  Inherit eutils to have built_with_use work. Thanks to Cardoe
+
   05 Mar 2008; Daniel Gryniewicz <dang@gentoo.org> swfdec-gnome-2.21.91:
   Bump to 2.21.91
   
