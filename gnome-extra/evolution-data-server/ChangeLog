@@ -2,6 +2,17 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  10 Mar 2008; Daniel Gryniewicz <dang@gentoo.org>
+  -evolution-data-server-2.21.92.ebuild,
+  +evolution-data-server-2.22.0.ebuild:
+  Bump to 2.22.0
+  	#327851: Try find timezone if entered only as a location name (Milan
+  	 Crha)
+  	#518728: Fix linking order of libecal-1.2 and libedata-cal-1.2.
+  	 (Patrick Ohly)
+  	#520362: Put all declarations at the beginnings of code blocks to make
+  	 older compilers happy (Jens Granseuer)
+
   02 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org>
   -evolution-data-server-2.21.91.ebuild, +evolution-data-server-2.21.92.ebuild:
   bump to 2.21.92
