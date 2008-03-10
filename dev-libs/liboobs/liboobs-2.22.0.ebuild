@@ -13,8 +13,8 @@ KEYWORDS="~amd64 ~x86"
 IUSE="doc"
 
 RDEPEND=">=dev-libs/glib-2.14
-	>=app-admin/system-tools-backends-2.5.4
 	>=dev-libs/dbus-glib-0.70
+	>=app-admin/system-tools-backends-2.5.4
 	>=sys-apps/hal-0.5.9"
 
 DEPEND="${RDEPEND}

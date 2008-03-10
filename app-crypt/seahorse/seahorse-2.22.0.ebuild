@@ -13,7 +13,7 @@ HOMEPAGE="http://www.gnome.org/projects/seahorse/index.html"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="alpha amd64 ppc ppc64 sparc x86"
+KEYWORDS="~alpha ~amd64 ~ppc ~ppc64 ~sparc ~x86"
 IUSE="applet avahi dbus debug epiphany gedit keyring ldap libnotify nautilus"
 
 RDEPEND=">=gnome-base/libgnome-2.14
@@ -23,7 +23,7 @@ RDEPEND=">=gnome-base/libgnome-2.14
 		 >=gnome-base/gconf-2.0
 		 >=dev-libs/glib-2.10
 		 >=x11-libs/gtk+-2.10
-		 net-libs/libsoup:2.2
+		 net-libs/libsoup:2.4
 		 >=dev-libs/libxml2-2.6.0
 		 >=app-crypt/gpgme-1.0.0
 		 || (
@@ -34,10 +34,8 @@ RDEPEND=">=gnome-base/libgnome-2.14
 		   net-misc/openssh
 		   x11-misc/shared-mime-info
 		 avahi? ( >=net-dns/avahi-0.6 )
-		 dbus?	( ||	(
-							>=dev-libs/dbus-glib-0.72
-							( <sys-apps/dbus-0.90 >=sys-apps/dbus-0.60 )
-						)
+		 dbus?	(
+		 			>=dev-libs/dbus-glib-0.72
 					applet? ( >=gnome-base/gnome-panel-2.10 )
 					epiphany? ( >=www-client/epiphany-2.14 )
 					gedit? ( >=app-editors/gedit-2.16 )

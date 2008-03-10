@@ -12,8 +12,9 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="debug doc hal pam test"
 
-RDEPEND=">=dev-libs/glib-2.6
+RDEPEND=">=dev-libs/glib-2.8
 		 >=x11-libs/gtk+-2.6
+		 gnome-base/gconf
 		 >=sys-apps/dbus-1.0
 		 hal? ( >=sys-apps/hal-0.5.7 )
 		 pam? ( virtual/pam )
@@ -34,4 +35,11 @@ pkg_setup() {
 			$(use_enable pam) \
 			$(use_with pam pam-dir $(getpam_mod_dir))
 			--with-root-certs=/usr/share/ca-certificates/"
+}
+
+src_unpack() {
+	gnome2_src_unpack
+
+	echo gkr-pk-object-storage.c >> po/POTFILES.in
+	echo gkr-ask-tool.c >> po/POTFILES.in
 }

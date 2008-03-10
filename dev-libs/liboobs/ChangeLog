@@ -2,6 +2,11 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  10 Mar 2008; Daniel Gryniewicz <dang@gentoo.org> liboobs-2.22.0:
+  Bump to 2.22.0
+  - Do crash in OobsServicesConfig if the backends couldn't get the current
+    runlevel (garnacho)
+
   02 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org>
   -liboobs-2.21.90.ebuild, +liboobs-2.21.92.ebuild:
   bump to 2.21.92
