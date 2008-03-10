@@ -29,7 +29,7 @@ RDEPEND=">=virtual/xft-2.1.2
 		 >=x11-wm/metacity-2.21.21
 		 >=gnome-base/gnome-panel-2.0
 		 >=gnome-base/libgnomekbd-2.21.4.1
-		 >=gnome-base/gnome-desktop-2.2
+		 >=gnome-base/gnome-desktop-2.21.4
 		 >=gnome-base/gnome-menus-2.11.1
 		 >=gnome-base/gnome-settings-daemon-2.21.91
 
