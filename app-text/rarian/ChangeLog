@@ -2,6 +2,11 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  10 Mar 2008; Daniel Gryniewicz <dang@gentoo.org> rarian-0.8.0:
+  Bump to 0.8.0
+  * Remove debug output that got left in
+  * Slightly better categorisation
+
   06 Feb 2008; Daniel Gryniewicz <dang@gentoo.org> rarian-0.7.1:
   Bump to 0.7.1
   * Improve parsing of omf categories

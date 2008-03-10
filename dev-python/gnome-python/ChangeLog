@@ -2,6 +2,10 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  10 Mar 2008; Daniel Gryniewicz <dang@gentoo.org>
+  -gnome-python-2.21.1.ebuild, +gnome-python-2.22.0.ebuild:
+  Bump to 2.22.0
+
   05 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org>
   +gnome-python-2.21.1.ebuild:
   bump to 2.21.1

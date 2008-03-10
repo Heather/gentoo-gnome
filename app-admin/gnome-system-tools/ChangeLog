@@ -2,6 +2,37 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  10 Mar 2008; Daniel Gryniewicz <dang@gentoo.org>
+  -gnome-system-tools-2.21.92.ebuild, +gnome-system-tools-2.22.0.ebuild:
+  Bump to 2.22.0
+  
+  Users
+  
+  =====
+  
+  - Fix #518785 (garnacho)
+  
+  Common
+  
+  ======
+  
+  - Fix #518796 (garnacho)
+  
+  Shares
+  
+  ======
+  
+  - Fix spurious critical warning in the nautilus extension (garnacho)
+  
+  Network
+  
+  =======
+  
+  - Support having '/' in location names (garnacho)
+  
+  - Support better having a NULL OobsIfacePPP::ethernet when dealing with
+  locations (garnacho)
+
   02 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org>
   -gnome-system-tools-2.21.90.ebuild, +gnome-system-tools-2.21.92.ebuild:
   bump to 2.21.92

@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-python/gnome-python-desktop/gnome-python-desktop-2.20.0.ebuild,v 1.9 2008/02/10 22:04:04 eva Exp $
 
+EAPI="1"
+
 inherit gnome2 python virtualx
 
 DESCRIPTION="provides python interfacing modules for some GNOME desktop libraries"
@@ -22,7 +24,7 @@ RDEPEND="virtual/python
 	>=gnome-base/gnome-panel-2.13.4
 	>=gnome-base/libgnomeprint-2.2.0
 	>=gnome-base/libgnomeprintui-2.2.0
-	=x11-libs/gtksourceview-1*
+	x11-libs/gtksourceview:1.0
 	>=x11-libs/libwnck-2.19.3
 	>=gnome-base/libgtop-2.13.0
 	>=gnome-extra/nautilus-cd-burner-2.15.3
