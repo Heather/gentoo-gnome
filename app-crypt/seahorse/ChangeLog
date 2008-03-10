@@ -2,6 +2,10 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  10 Mar 2008; Daniel Gryniewicz <dang@gentoo.org> seahorse-2.22.0:
+  Bump to 2.22.0
+      (no changes)
+
   29 Jan 2008; Daniel Gryniewicz <dang@gentoo.org> seahorse-2.21.4-r1:
   Add a slot dep on libsoup to prepare for the new 2.4 slot
 
