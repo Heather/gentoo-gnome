@@ -11,7 +11,7 @@ HOMEPAGE="http://www.burtonini.com/blog/computers/sound-juicer/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
-IUSE="flac ogg test"
+IUSE="test"
 
 RDEPEND=">=dev-libs/glib-2.14
 	>=gnome-extra/nautilus-cd-burner-2.15.3
@@ -20,6 +20,7 @@ RDEPEND=">=dev-libs/glib-2.14
 	>=gnome-base/gconf-2
 	>=gnome-base/libgnomeui-2.13
 	>=gnome-base/gnome-vfs-2.9
+	dev-libs/dbus-glib
 	>=media-libs/gstreamer-0.10.5
 	>=gnome-extra/gnome-media-2.11.91
 	>=media-libs/musicbrainz-2.1.3:1
@@ -29,8 +30,7 @@ RDEPEND=">=dev-libs/glib-2.14
 	>=media-plugins/gst-plugins-gconf-0.10
 	>=media-plugins/gst-plugins-gnomevfs-0.10
 	>=media-plugins/gst-plugins-cdparanoia-0.10
-	ogg? ( >=media-plugins/gst-plugins-ogg-0.10 )
-	flac? ( >=media-plugins/gst-plugins-flac-0.10 )"
+	>=media-plugins/gst-plugins-meta-0.10"
 
 DEPEND="${RDEPEND}
 	app-text/gnome-doc-utils

@@ -32,10 +32,6 @@ src_unpack() {
 
 	# GTime and time_t are equivalent on fbsd, so we cannot define both
 	use x86-fbsd && epatch "${FILESDIR}/${P}-date.patch"
-
-	cd "${S}"
-	epatch "${FILESDIR}/${P}-svn-r519-r531-diff.patch"
-
 }
 
 src_compile() {
