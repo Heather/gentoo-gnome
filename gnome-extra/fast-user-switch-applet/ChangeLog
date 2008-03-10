@@ -1,0 +1,18 @@
+# ChangeLog for gnome-extra/fast-user-switch-applet
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  10 Mar 2008; Daniel Gryniewicz <dang@gentoo.org>
+  fast-user-switch-applet-2.22.0:
+  Bump to 2.22.0
+   * gtk+ minimum version is now 2.8 (Jaap Haitsma)
+   * Show correct name in about dialogue (Jaap Haitsma)
+   * Fix the infamous socket-finding bug in various ways
+     (Loïc Minier, Craig Keogh)
+   * Add information for bug-buddy (Matthias Clasen)
+   * Remove inappropriate line from help (Thomas Thurman)
+   * Session persistence under D-Bus (Alex Jones)
+   * Careful checking to make sure all code from branches
+     is actually in trunk now.
+   * Honour "disable_user_switching" gconf setting on applet creation;
+
