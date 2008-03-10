@@ -1,0 +1,27 @@
+# ChangeLog for media-gfx/eog
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  10 Mar 2008; Daniel Gryniewicz <dang@gentoo.org> eog-2.22.0:
+  Bump to 2.22.0
+  New features:
+  
+    * Contextual menu in image view widget 
+    * Support for resetting the toolbar to its default layout
+  
+  Misc improvements/fixes:
+  
+    * Performance improvements
+    * Several fixes and improvements in the UI 
+    * Improvements in plugin API
+  
+  Bug fixes:
+  
+    #519028, EOG crashes when loading too small ICC chunk (Felix Riemann)
+    #519910, crash in Image Viewer: I saved a new picture in... (Felix Riemann)
+    #498989, Eog gets it's locking wrong and crashes. (Matt Keenan)
+    #506421, eog with python enabled requires NO_IMPORT, NO_IMPORT_PYGOBJECT 
+             defined to prevent multiply defined symbols (Paul)
+    #509079, Recent files wrong direction when in RTL with latin file names 
+             (Djihed Afifi)
+

@@ -15,7 +15,7 @@ IUSE="dbus jpeg lcms python"
 # FIXME: add exempi to the tree ?
 
 RDEPEND=">=x11-libs/gtk+-2.11.6
-		 >=dev-libs/glib-2.12
+		 >=dev-libs/glib-2.15.3
 		 >=gnome-base/gnome-vfs-2.10
 		 >=gnome-base/libgnomeui-2.10
 		 >=gnome-base/libglade-2.3.6
@@ -29,8 +29,8 @@ RDEPEND=">=x11-libs/gtk+-2.11.6
 		 lcms? ( media-libs/lcms )
 		 python? (
 					>=virtual/python-2.3
-					>=dev-python/pygtk-2.9.7
 					>=dev-python/pygobject-2.11.5
+					>=dev-python/pygtk-2.9.7
 					>=dev-python/gnome-python-2.18.2
 				 )"
 DEPEND="${RDEPEND}
