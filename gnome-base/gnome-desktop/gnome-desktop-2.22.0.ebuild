@@ -34,7 +34,7 @@ pkg_setup() {
 
 src_unpack() {
 	gnome2_src_unpack
-	cd "${S}"
 
+	# Fix broken gtk-doc test
 	epatch "${FILESDIR}/${PN}-2.21.5-gtk-doc-die-die-die.patch"
 }
