@@ -2,6 +2,11 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  10 Mar 2008; Daniel Gryniewicz <dang@gentoo.org>
+  -libbonoboui-2.21.90.ebuild, +libbonoboui-2.22.0.ebuild:
+  Bump to 2.22.0
+  	* Translation updates.
+
   29 Jan 2008; Daniel Gryniewicz <dang@gentoo.org>
   +libbonoboui-2.21.90.ebuild:
   Bump to 2.21.90
