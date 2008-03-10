@@ -2,6 +2,18 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  10 Mar 2008; Daniel Gryniewicz <dang@gentoo.org>
+  -evolution-2.21.92.ebuild, +evolution-2.22.0.ebuild:
+  Bump to 2.22.0
+  	#282466: (Novell Bugzilla) Handle CIDs of broken cases too (Srinivasa
+  	 Ragavan)
+  	#351672: Dragging imap message when another is copying locks X
+  	 (Matthew Barnes)
+  	#520745: Fix format-string vulnerability (Tor Lillqvist/Srinivasa
+  	 Ragavan)
+  	Changes for Windows. Misc simplification and cleanup. (Tor Lillqvist)
+  	Updated contributors list (Johnny Jacob)
+
   03 Mar 2008; Daniel Gryniewicz <dang@gentoo.org> evolution-2.21.92:
   Bump to 2.21.92 Bug Fixes:
   
