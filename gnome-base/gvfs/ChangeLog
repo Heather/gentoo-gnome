@@ -1,0 +1,17 @@
+# ChangeLog for gnome-base/gvfs
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  10 Mar 2008; Daniel Gryniewicz <dang@gentoo.org> gvfs-0.2.0.1:
+  Bump to 0.2.0.1
+  * Fix crashes
+  * Build and portability fixes
+  * Better mime icons for remote shares
+  * Don't show mounts and volumes outside /media
+  * Don't automount gphoto mounts
+  * Translate cd disc names
+  * ftp: Updates
+  * obex: Give better error message on broken phones
+  * sftp: Allow setting permissions
+  * dav: Correct mount name, file icons and file types
+
