@@ -9,7 +9,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="alpha amd64 hppa ia64 ppc ppc64 sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 #KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="beagle xulrunner"
 
@@ -25,12 +25,12 @@ RDEPEND=">=gnome-base/gconf-2
 	>=x11-libs/startup-notification-0.8
 	>=dev-libs/glib-2
 	>=dev-libs/dbus-glib-0.71
+	>=app-text/rarian-0.7
 	beagle? ( >=app-misc/beagle-0.2.4 )
 	!xulrunner? ( >=www-client/mozilla-firefox-1.5 )
 	xulrunner? ( net-libs/xulrunner )
 	sys-libs/zlib
 	app-arch/bzip2
-	>=app-text/rarian-0.7
 	>=app-text/scrollkeeper-9999"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
