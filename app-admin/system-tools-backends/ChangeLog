@@ -2,6 +2,11 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  10 Mar 2008; Daniel Gryniewicz <dang@gentoo.org>
+  -system-tools-backends-2.5.8.ebuild, +system-tools-backends-2.6.0.ebuild:
+  Bump to 2.6.0
+  - Reset the gateway in slackware when deleting the interface (garnacho)
+
   02 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org>
   -system-tools-backends-2.5.7.ebuild, +system-tools-backends-2.5.8.ebuild:
   bump to 2.5.8
