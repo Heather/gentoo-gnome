@@ -14,11 +14,11 @@ SRC_URI="http://pkgconfig.freedesktop.org/releases/${MY_P}.tar.gz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
-IUSE="hardened elibc_FreeBSD"
+IUSE="build hardened elibc_FreeBSD"
 
-RDEPEND=">=dev-libs/glib-2"
+RDEPEND="!build? ( >=dev-libs/glib-2 )"
 DEPEND="${RDEPEND}
-		dev-util/pkgconfig"
+		!build? ( dev-util/pkgconfig )"
 
 S=${WORKDIR}/${MY_P}
 
@@ -38,7 +38,9 @@ src_compile() {
 
 	use ppc64 && use hardened && replace-flags -O[2-3] -O1
 
-	econf ${myconf} --with-installed-glib || die "econf failed"
+	! use build && myconf="${myconf} --with-installed-glib"
+
+	econf ${myconf} || die "econf failed"
 	emake || die "emake failed"
 }
 
