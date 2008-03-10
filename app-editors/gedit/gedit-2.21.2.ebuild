@@ -1,10 +1,10 @@
-# Copyright 1999-2007 Gentoo Foundation
+# Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-editors/gedit/gedit-2.20.4.ebuild,v 1.1 2007/12/06 22:10:07 eva Exp $
 
 EAPI="1"
 
-inherit gnome2 eutils autotools
+inherit gnome2 python eutils autotools
 
 DESCRIPTION="A text editor for the GNOME desktop"
 HOMEPAGE="http://www.gnome.org/"
@@ -37,7 +37,9 @@ DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9
 	>=app-text/scrollkeeper-0.3.11
 	>=dev-util/intltool-0.35
-	>=app-text/gnome-doc-utils-0.3.2"
+	>=app-text/gnome-doc-utils-0.3.2
+	gnome-base/gnome-common"
+# gnome-common needed to eautoreconf
 
 DOCS="AUTHORS BUGS ChangeLog MAINTAINERS NEWS README"
 
@@ -47,7 +49,10 @@ if [[ "${ARCH}" == "PPC" ]] ; then
 fi
 
 pkg_setup() {
-	G2CONF="${G2CONF} $(use_enable python) $(use_enable spell) $(use_enable xattr attr)"
+	G2CONF="${G2CONF}
+		$(use_enable python)
+		$(use_enable spell)
+		$(use_enable xattr attr)"
 }
 
 src_unpack() {
@@ -65,7 +70,20 @@ src_unpack() {
 	# Make libattr optional; bug #191989
 	epatch "${FILESDIR}"/${PN}-2.20.3-libattr.patch
 
+	# Fix improper gtk-doc checks
 	epatch "${FILESDIR}/${PN}-2.21.1-gtk-doc-die-die-die.patch"
 
+	# disable pyc compiling
+	mv "${S}"/py-compile "${S}"/py-compile.orig
+	ln -s $(type -P true) "${S}"/py-compile
+
 	AT_M4DIR="m4" eautoreconf
+}
+
+pkg_postinst() {
+	python_mod_optimize "${ROOT}usr/$(get_libdir)/gedit-2/plugins"
+}
+
+pkg_postrm() {
+	python_mod_cleanup /usr/$(get_libdir)/gedit-2/plugins
 }
