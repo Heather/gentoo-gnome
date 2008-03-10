@@ -12,7 +12,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="avahi bluetooth cdda doc fuse gnome gphoto2 hal keyring samba"
 
-RDEPEND="=dev-libs/glib-2.15.6
+RDEPEND=">=dev-libs/glib-2.15.6
 		 >=sys-apps/dbus-1.0
 		 >=net-libs/libsoup-2.3.0
 		   net-misc/openssh
