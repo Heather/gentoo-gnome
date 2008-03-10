@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+EAPI="1"
+
 inherit autotools gnome2
 
 DESCRIPTION="GNOME Virtual Filesystem Layer"
@@ -12,17 +14,21 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="avahi bluetooth cdda doc fuse gnome gphoto2 hal keyring samba"
 
-RDEPEND=">=dev-libs/glib-2.15.6
+RDEPEND=">=dev-libs/glib-2.16
 		 >=sys-apps/dbus-1.0
-		 >=net-libs/libsoup-2.3.0
+		 net-libs/libsoup:2.4
 		   net-misc/openssh
 		 avahi? ( >=net-dns/avahi-0.6 )
-		 bluetooth? ( >=net-wireless/bluez-libs-3.12 dev-libs/expat )
 		 cdda? ( >=dev-libs/libcdio-0.78.2 )
 		 fuse? ( sys-fs/fuse )
 		 gnome? ( >=gnome-base/gconf-2.0 )
+		 hal? ( >=sys-apps/hal-0.5.10 )
+		 bluetooth? (
+		 	dev-libs/dbus-glib
+		 	>=net-wireless/bluez-libs-3.12
+			dev-libs/expat
+			)
 		 gphoto2? ( media-gfx/gphoto2 )
-		 hal? ( >=sys-apps/hal-0.5.9 )
 		 keyring? ( >=gnome-base/gnome-keyring-1.0 )
 		 samba? ( >=net-fs/samba-3 )"
 DEPEND="${RDEPEND}

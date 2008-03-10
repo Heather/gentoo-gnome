@@ -12,7 +12,7 @@ LICENSE="GPL-2"
 
 SLOT="0"
 KEYWORDS="~amd64 ~hppa ~ppc ~sparc ~x86"
-IUSE="dbus example pcre python useless xulrunner"
+IUSE="dbus examples pcre python xulrunner"
 
 RDEPEND=">=www-client/epiphany-2.21
 	app-text/opensp
@@ -36,8 +36,9 @@ DOCS="AUTHORS ChangeLog HACKING NEWS README"
 pkg_setup() {
 	local extensions=
 
-	extensions="actions auto-reload auto-scroller certificates error-viewer \
-				extensions-manager-ui gestures java-console page-info push-scroller \
+	extensions="actions auto-reload auto-scroller certificates epilicious \
+				error-viewer extensions-manager-ui gestures java-console \
+				livehttpheaders page-info permissions push-scroller \
 				select-stylesheet sessionsaver sidebar smart-bookmarks \
 				tab-groups tab-states"
 
@@ -46,19 +47,17 @@ pkg_setup() {
 	use pcre && extensions="${extensions} adblock greasemonkey"
 
 	use python && extensions="${extensions} python-console favicon cc-license-viewer"
-	use python && use example && extensions="${extensions} sample-python"
-	use python && use useless && extensions="${extensions} epilicious"
+	use python && use examples && extensions="${extensions} sample-python"
 
-	use example && extensions="${extensions} sample sample-mozilla"
-	use useless && extensions="${extensions} livehttpheaders permissions"
-
+	use examples && extensions="${extensions} sample sample-mozilla"
 
 	G2CONF="${G2CONF} --with-extensions=$(echo "${extensions}" | sed -e 's/[[:space:]]\+/,/g')"
-	if use xulrunner; then 
-		G2CONF="${G2CONF} --with-gecko=xulrunner" 
-	else 
-		G2CONF="${G2CONF} --with-gecko=firefox" 
-	fi 
+
+	if use xulrunner; then
+		G2CONF="${G2CONF} --with-gecko=xulrunner"
+	else
+		G2CONF="${G2CONF} --with-gecko=firefox"
+	fi
 }
 
 src_unpack() {
@@ -75,7 +74,7 @@ pkg_postinst() {
 
 	if use python; then
 		python_version
-		python_mod_optimize	/usr/$(get_libdir)/epiphany/${MY_MAJORV}/extensions
+		python_mod_optimize	"${ROOT}"/usr/$(get_libdir)/epiphany/${MY_MAJORV}/extensions
 	fi
 }
 
