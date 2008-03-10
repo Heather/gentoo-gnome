@@ -1,0 +1,12 @@
+# ChangeLog for www-client/epiphany-extensions
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  10 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org>
+  epiphany-extensions-2.21.92:
+  * removing useless "useless" USE flag, it doesn't do anything but remove
+    plugins based on random selection
+  * use examples in place of example since
+    it's the flag used in tree 
+  * add ${ROOT} for python_mod_optimize
+
