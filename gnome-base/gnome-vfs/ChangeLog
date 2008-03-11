@@ -2,6 +2,10 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  10 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org>
+  -gnome-vfs-2.21.90.ebuild, +gnome-vfs-2.22.0.ebuild:
+  bump to 2.22.0
+
   30 Jan 2008; Daniel Gryniewicz <dang@gentoo.org>
   +gnome-vfs-2.12.0-afs.patch, +gnome-vfs-2.15.2-headers-define.patch,
   +gnome-vfs-2.16.0-no-dbus-crash.patch,

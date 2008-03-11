@@ -67,13 +67,6 @@ pkg_setup() {
 	fi
 }
 
-src_unpack() {
-	gnome2_src_unpack
-
-	epatch "${FILESDIR}/${P}-typecast.patch"
-	epatch "${FILESDIR}/${P}-define-earlier.patch"
-}
-
 src_compile() {
 	addpredict /usr/$(get_libdir)/mozilla-firefox/components/xpti.dat
 	addpredict /usr/$(get_libdir)/mozilla-firefox/components/xpti.dat.tmp
