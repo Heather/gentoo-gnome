@@ -18,7 +18,7 @@ RDEPEND=">=gnome-base/gconf-2
 	xattr? ( sys-apps/attr )
 	>=dev-libs/glib-2.14
 	>=x11-libs/gtk+-2.12
-	>=x11-libs/gtksourceview-2.1:2.0
+	>=x11-libs/gtksourceview-2.2:2.0
 	>=gnome-base/libgnomeui-2.16
 	>=gnome-base/libglade-2.5.1
 	>=gnome-base/gnome-vfs-2.16
@@ -27,9 +27,9 @@ RDEPEND=">=gnome-base/gconf-2
 		app-text/iso-codes
 	)
 	python? (
-		>=dev-python/pygobject-2.11.5
-		>=dev-python/pygtk-2.9.7
-		>=dev-python/pygtksourceview-2
+		>=dev-python/pygobject-2.12
+		>=dev-python/pygtk-2.12
+		>=dev-python/pygtksourceview-2.2
 	)"
 
 DEPEND="${RDEPEND}
@@ -81,9 +81,9 @@ src_unpack() {
 }
 
 pkg_postinst() {
-	python_mod_optimize "${ROOT}usr/$(get_libdir)/gedit-2/plugins"
+	use python && python_mod_optimize "${ROOT}usr/$(get_libdir)/gedit-2/plugins"
 }
 
 pkg_postrm() {
-	python_mod_cleanup /usr/$(get_libdir)/gedit-2/plugins
+	use python && python_mod_cleanup /usr/$(get_libdir)/gedit-2/plugins
 }

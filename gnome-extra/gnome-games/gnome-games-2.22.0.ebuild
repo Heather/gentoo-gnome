@@ -110,7 +110,7 @@ pkg_postinst() {
 	games_pkg_postinst
 	gnome2_pkg_postinst
 	python_version
-	python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages
+	python_mod_optimize "${ROOT}"usr/$(get_libdir)/python${PYVER}/site-packages
 }
 
 pkg_postrm() {
