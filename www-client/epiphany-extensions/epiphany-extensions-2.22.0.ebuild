@@ -14,7 +14,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~hppa ~ppc ~sparc ~x86"
 IUSE="dbus examples pcre python xulrunner"
 
-RDEPEND=">=www-client/epiphany-2.21
+RDEPEND=">=www-client/epiphany-2.22
 	app-text/opensp
 	>=dev-libs/glib-2.15.5
 	>=gnome-base/gconf-2.0
