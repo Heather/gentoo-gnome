@@ -2,6 +2,10 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  11 Mar 2008; Daniel Gryniewicz <dang@gentoo.org>
+  epiphany-extensions-2.22.0:
+  Bump to 2.22.0
+
   10 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org>
   epiphany-extensions-2.21.92:
   * removing useless "useless" USE flag, it doesn't do anything but remove
