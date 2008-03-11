@@ -2,6 +2,9 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  11 Mar 2008; Daniel Gryniewicz <dang@gentoo.org> evince-2.22.0:
+  Dep on gtk-doc to get eautoreconf working properly
+
   11 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org>
   -evince-2.21.91.ebuild, +evince-2.22.0.ebuild:
   bump to 2.22.0

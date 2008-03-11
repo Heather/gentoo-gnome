@@ -33,7 +33,9 @@ RDEPEND="
 	djvu? ( >=app-text/djvu-3.5.17 )
 	>=app-text/libspectre-0.2.0"
 
+# gtk-doc necessary for eutoreconf
 DEPEND="${RDEPEND}
+	dev-util/gtk-doc
 	app-text/scrollkeeper
 	>=app-text/gnome-doc-utils-0.3.2
 	>=dev-util/pkgconfig-0.9
@@ -70,8 +72,5 @@ src_unpack() {
 	# Make dbus actually switchable
 	epatch "${FILESDIR}"/${PN}-0.6.1-dbus-switch.patch
 
-	# needed for gtk-doc ???
-	#cp aclocal.m4 old_macros.m4
-	#AT_M4DIR="."
 	eautoreconf
 }
