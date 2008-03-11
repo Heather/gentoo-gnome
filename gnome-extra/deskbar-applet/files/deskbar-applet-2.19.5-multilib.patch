@@ -1,0 +1,66 @@
+diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN deskbar-applet-2.19.5.orig/deskbar/core/gnomedesktop/Makefile.am deskbar-applet-2.19.5/deskbar/core/gnomedesktop/Makefile.am
+--- deskbar-applet-2.19.5.orig/deskbar/core/gnomedesktop/Makefile.am	2007-07-09 17:25:59.000000000 -0400
++++ deskbar-applet-2.19.5/deskbar/core/gnomedesktop/Makefile.am	2007-07-11 14:44:32.000000000 -0400
+@@ -1,6 +1,6 @@
+ INCLUDES = $(PYTHON_INCLUDES) $(DESKBAR_CFLAGS)
+ 
+-_gnomedesktopdir = $(pythondir)/deskbar/core/gnomedesktop
++_gnomedesktopdir = $(pyexecdir)/deskbar/core/gnomedesktop
+ _gnomedesktop_LTLIBRARIES = _gnomedesktop.la
+ _gnomedesktop_la_LDFLAGS = -module -avoid-version -export-symbols-regex init_gnomedesktop
+ _gnomedesktop_la_LIBADD = $(DESKBAR_LIBS)
+diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN deskbar-applet-2.19.5.orig/deskbar/core/keybinder/Makefile.am deskbar-applet-2.19.5/deskbar/core/keybinder/Makefile.am
+--- deskbar-applet-2.19.5.orig/deskbar/core/keybinder/Makefile.am	2007-07-09 17:25:59.000000000 -0400
++++ deskbar-applet-2.19.5/deskbar/core/keybinder/Makefile.am	2007-07-11 14:44:53.000000000 -0400
+@@ -1,6 +1,6 @@
+ INCLUDES = $(PYTHON_INCLUDES) $(DESKBAR_CFLAGS)
+ 
+-_keybinderdir = $(pythondir)/deskbar/core/keybinder
++_keybinderdir = $(pyexecdir)/deskbar/core/keybinder
+ _keybinder_LTLIBRARIES = _keybinder.la
+ _keybinder_la_LDFLAGS = -module -avoid-version -export-symbols-regex init_keybinder
+ _keybinder_la_LIBADD = $(DESKBAR_LIBS)
+diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN deskbar-applet-2.19.5.orig/deskbar/handlers/evolution/Makefile.am deskbar-applet-2.19.5/deskbar/handlers/evolution/Makefile.am
+--- deskbar-applet-2.19.5.orig/deskbar/handlers/evolution/Makefile.am	2007-07-09 17:25:59.000000000 -0400
++++ deskbar-applet-2.19.5/deskbar/handlers/evolution/Makefile.am	2007-07-11 14:45:45.000000000 -0400
+@@ -1,6 +1,6 @@
+ INCLUDES = $(PYTHON_INCLUDES) $(EVOLUTION_CFLAGS)
+ 
+-_evolutiondir = $(pythondir)/deskbar/handlers/evolution
++_evolutiondir = $(pyexecdir)/deskbar/handlers/evolution
+ _evolution_LTLIBRARIES = _evolution.la
+ _evolution_la_LDFLAGS = -module -avoid-version -export-symbols-regex init_evolution
+ _evolution_la_LIBADD = $(EVOLUTION_LIBS)
+diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN deskbar-applet-2.19.5.orig/deskbar/handlers/gdmclient/Makefile.am deskbar-applet-2.19.5/deskbar/handlers/gdmclient/Makefile.am
+--- deskbar-applet-2.19.5.orig/deskbar/handlers/gdmclient/Makefile.am	2007-07-09 17:25:59.000000000 -0400
++++ deskbar-applet-2.19.5/deskbar/handlers/gdmclient/Makefile.am	2007-07-11 14:45:35.000000000 -0400
+@@ -1,6 +1,6 @@
+ INCLUDES = $(PYTHON_INCLUDES) $(DESKBAR_CFLAGS)
+ 
+-_gdmclientdir = $(pythondir)/deskbar/handlers/gdmclient
++_gdmclientdir = $(pyexecdir)/deskbar/handlers/gdmclient
+ _gdmclient_LTLIBRARIES = _gdmclient.la
+ _gdmclient_la_LDFLAGS = -module -avoid-version -export-symbols-regex init_gdmclient
+ _gdmclient_la_LIBADD = $(DESKBAR_LIBS)
+diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN deskbar-applet-2.19.5.orig/deskbar/osutils/Makefile.am deskbar-applet-2.19.5/deskbar/osutils/Makefile.am
+--- deskbar-applet-2.19.5.orig/deskbar/osutils/Makefile.am	2007-07-09 17:25:59.000000000 -0400
++++ deskbar-applet-2.19.5/deskbar/osutils/Makefile.am	2007-07-11 15:07:35.000000000 -0400
+@@ -1,6 +1,6 @@
+ INCLUDES = $(PYTHON_INCLUDES) $(DESKBAR_CFLAGS)
+ 
+-_osutilsdir = $(pythondir)/deskbar/osutils
++_osutilsdir = $(pyexecdir)/deskbar/osutils
+ _osutils_LTLIBRARIES = _osutils.la
+ _osutils_la_LDFLAGS = -module -avoid-version init_osutils
+ _osutils_la_LIBADD = $(DESKBAR_LIBS)
+diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN deskbar-applet-2.19.5.orig/deskbar/ui/iconentry/Makefile.am deskbar-applet-2.19.5/deskbar/ui/iconentry/Makefile.am
+--- deskbar-applet-2.19.5.orig/deskbar/ui/iconentry/Makefile.am	2007-07-09 17:25:59.000000000 -0400
++++ deskbar-applet-2.19.5/deskbar/ui/iconentry/Makefile.am	2007-07-11 14:45:19.000000000 -0400
+@@ -1,6 +1,6 @@
+ INCLUDES = $(PYTHON_INCLUDES) $(DESKBAR_CFLAGS)
+ 
+-_iconentrydir = $(pythondir)/deskbar/ui/iconentry
++_iconentrydir = $(pyexecdir)/deskbar/ui/iconentry
+ _iconentry_LTLIBRARIES = _iconentry.la
+ _iconentry_la_LDFLAGS = -module -avoid-version -export-symbols-regex init_iconentry
+ _iconentry_la_LIBADD = $(DESKBAR_LIBS)

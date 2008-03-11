@@ -2,7 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-text/evince/evince-2.20.2.ebuild,v 1.4 2008/02/01 18:47:28 ranger Exp $
 
-WANT_AUTOMAKE="1.9"
 inherit eutils gnome2 autotools
 
 DESCRIPTION="Simple document viewer for GNOME"
@@ -16,7 +15,7 @@ IUSE="dbus djvu doc dvi gnome t1lib tiff"
 RDEPEND="
 	dbus? ( >=dev-libs/dbus-glib-0.71 )
 	>=x11-libs/gtk+-2.10
-	>=dev-libs/glib-2.15.4
+	>=dev-libs/glib-2.15.6
 	>=gnome-base/gnome-keyring-0.4
 	>=gnome-base/libgnomeui-2.14
 	>=gnome-base/libgnome-2.14
@@ -71,6 +70,8 @@ src_unpack() {
 	# Make dbus actually switchable
 	epatch "${FILESDIR}"/${PN}-0.6.1-dbus-switch.patch
 
-	cp aclocal.m4 old_macros.m4
-	AT_M4DIR="." eautoreconf
+	# needed for gtk-doc ???
+	#cp aclocal.m4 old_macros.m4
+	#AT_M4DIR="."
+	eautoreconf
 }

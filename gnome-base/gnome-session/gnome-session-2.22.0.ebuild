@@ -19,6 +19,7 @@ RDEPEND=">=dev-libs/glib-2.13
 		 >=x11-libs/gtk+-2.11.1
 		 >=dev-libs/dbus-glib-0.71
 		 >=gnome-base/gnome-keyring-2.21.92
+		 gnome-base/gnome-settings-daemon
 		 >=x11-libs/libnotify-0.2.1
 		 x11-libs/libXau
 		 x11-apps/xdpyinfo

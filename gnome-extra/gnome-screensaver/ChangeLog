@@ -1,0 +1,8 @@
+# ChangeLog for gnome-extra/gnome-screensaver
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  11 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org>
+  +gnome-screensaver-2.22.0.ebuild:
+  bump to 2.22.0, translation updates
+
