@@ -1,0 +1,49 @@
+# ChangeLog for media-video/cheese
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  12 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org> -cheese-2.21.5.ebuild,
+  +cheese-2.22.0.ebuild:
+  bump to 2.22, imported ebuild from sunrise
+   * drop gnome-vfs, replaced by gio
+   * drop libglade to use gtkbuilder
+
+  16 Jan 2008; Alexandre Rostovtsev (tetromino) <tetromino@gmail.com>
+  -cheese-0.3.0.ebuild, +cheese-2.21.5.ebuild:
+  Version bump. Cheese is now an official part of Gnome.
+
+  27 Dec 2007; Alexandre Rostovtsev (tetromino) <tetromino@gmail.com>
+  -cheese-0.2.4.ebuild, +cheese-0.3.0.ebuild:
+  Version bump. Add USE flag for v4l (needed for old webcams). Drop the
+  linguas hack, since cheese now uses standard Gnome build system.
+
+  28 Nov 2007; Stefan Schweizer <genstef@gentoo.org> cheese-0.2.4.ebuild:
+  works without gstreamer v4l for me - only v4l2 is enough
+
+  15 Sep 2007; Alexandre Rostovtsev (tetromino) <tetromino@gmail.com>
+  -files/cheese-0.2.3-video-v4l.patch, -cheese-0.2.3.ebuild,
+  +cheese-0.2.4.ebuild:
+  Version bump
+
+  05 Sep 2007; Alexandre Rostovtsev (tetromino) <tetromino@gmail.com>
+  +files/cheese-0.2.3-video-v4l.patch, -cheese-0.1.3.ebuild,
+  +cheese-0.2.3.ebuild:
+  Version bump; thanks to Colin Macdonald <cbm@sfu.ca> from bug 184115
+
+  04 Jul 2007; Jakub Moc <jakub@gentoo.org> cheese-0.1.3.ebuild:
+  Add an ugly hack to honor LINGUAS
+
+  04 Jul 2007; Jakub Moc <jakub@gentoo.org> cheese-0.1.3.ebuild:
+  Fix dependencies.
+
+  04 Jul 2007; Jakub Moc <jakub@gentoo.org> cheese-0.1.3.ebuild:
+  Nuke FILESDIR; mirror this manually due to retarded SRC_URI
+
+  03 Jul 2007; Mikel Olasagasti (Hey_neken) <hey_neken@mundurat.net>
+  cheese-0.1.3.ebuild:
+  Remove unused eutils inherit
+
+  03 Jul 2007; Mikel Olasagasti (Hey_neken) <hey_neken@mundurat.net>
+  +cheese-0.1.3.ebuild, +metadata.xml:
+  New ebuild for bug 184115
+
