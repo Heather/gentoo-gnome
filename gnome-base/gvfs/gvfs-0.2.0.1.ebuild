@@ -28,7 +28,7 @@ RDEPEND=">=dev-libs/glib-2.16
 		 	>=net-wireless/bluez-libs-3.12
 			dev-libs/expat
 			)
-		 gphoto2? ( media-gfx/gphoto2 )
+		 gphoto2? ( media-libs/libgphoto2 )
 		 keyring? ( >=gnome-base/gnome-keyring-1.0 )
 		 samba? ( >=net-fs/samba-3 )"
 DEPEND="${RDEPEND}
