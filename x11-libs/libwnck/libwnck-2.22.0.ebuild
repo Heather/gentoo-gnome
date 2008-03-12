@@ -28,7 +28,6 @@ DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
 src_unpack() {
 	gnome2_src_unpack
-	cd "${S}"
 
 	epatch "${FILESDIR}/${PN}-2.21.5-gtk-doc-die-die-die.patch"
 }
