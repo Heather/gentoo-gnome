@@ -2,6 +2,9 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  12 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org> vinagre-0.4.92:
+  fix avahi test thanks to bheekling
+
   02 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org> vinagre-0.4.92:
   add avahi-ui check
 

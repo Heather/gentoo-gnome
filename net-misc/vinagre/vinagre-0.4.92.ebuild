@@ -27,7 +27,7 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README"
 
 pkg_setup() {
-	if ! built_with_use net-dns/avahi gtk; then
+	if use avahi && ! built_with_use net-dns/avahi gtk; then
 		eerror "gtk support in avahi needed"
 		die "Please rebuild avahi with USE='gtk'"
 	fi
