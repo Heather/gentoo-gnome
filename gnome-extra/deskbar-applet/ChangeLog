@@ -2,6 +2,10 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  12 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org>
+  -deskbar-applet-2.22.0.ebuild, +deskbar-applet-2.22.0.1.ebuild:
+  bump to 2.22.0.1, fixes tomboy detection
+
   10 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org>
   -deskbar-applet-2.21.92.ebuild, +deskbar-applet-2.22.0.ebuild:
   bump to 2.22.0
