@@ -1,0 +1,8 @@
+# ChangeLog for dev-libs/atk
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  12 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org> -atk-1.21.92.ebuild,
+  +atk-1.22.0.ebuild:
+  bump to 1.22
+
