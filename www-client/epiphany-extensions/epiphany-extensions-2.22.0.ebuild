@@ -36,7 +36,7 @@ DOCS="AUTHORS ChangeLog HACKING NEWS README"
 pkg_setup() {
 	local extensions=
 
-	extensions="actions auto-reload auto-scroller certificates epilicious \
+	extensions="actions auto-reload auto-scroller certificates \
 				error-viewer extensions-manager-ui gestures java-console \
 				livehttpheaders page-info permissions push-scroller \
 				select-stylesheet sessionsaver sidebar smart-bookmarks \
@@ -46,7 +46,7 @@ pkg_setup() {
 
 	use pcre && extensions="${extensions} adblock greasemonkey"
 
-	use python && extensions="${extensions} python-console favicon cc-license-viewer"
+	use python && extensions="${extensions} python-console favicon cc-license-viewer epilicious"
 	use python && use examples && extensions="${extensions} sample-python"
 
 	use examples && extensions="${extensions} sample sample-mozilla"
