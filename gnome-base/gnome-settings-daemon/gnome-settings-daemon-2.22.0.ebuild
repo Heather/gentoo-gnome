@@ -1,4 +1,4 @@
-# Copyright 1999-2007 Gentoo Foundation
+# Copyright 2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -34,7 +34,8 @@ RDEPEND=">=dev-libs/dbus-glib-0.74
 		 gstreamer? (
 						>=media-libs/gstreamer-0.10.1.2
 						>=media-libs/gst-plugins-base-0.10.1.2
-					)"
+					)
+		!<gnome-base/control-center-2.22"
 DEPEND="${RDEPEND}
 		  sys-devel/gettext
 		>=dev-util/intltool-0.35.0

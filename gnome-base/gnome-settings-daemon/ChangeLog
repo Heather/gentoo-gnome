@@ -2,6 +2,10 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  12 Mar 2008; Daniel Gryniewicz <dang@gentoo.org>
+  gnome-settings-daemon-2.22.0:
+  Block control-center < 2.22
+
   31 Jan 2008; Daniel Gryniewicz <dang@gentoo.org>
   +gnome-settings-daemon-2.21.90.1-path.patch:
   Fix dbus path to gnome-settings-daemon
