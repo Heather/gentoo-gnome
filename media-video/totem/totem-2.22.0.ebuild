@@ -14,7 +14,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="bluetooth debug galago gnome lirc nautilus nsplugin nvtv python seamonkey tracker xulrunner"
 
 RDEPEND=">=dev-libs/glib-2.15
-		 >=x11-libs/gtk+-2.12.1
+		 >=x11-libs/gtk+-2.12.6
 		 >=gnome-base/gconf-2.0
 		 >=gnome-base/gnome-vfs-2.16
 		 >=dev-libs/totem-pl-parser-2.21.90
