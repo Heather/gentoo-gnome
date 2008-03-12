@@ -32,15 +32,13 @@ RDEPEND="
 	tiff? ( >=media-libs/tiff-3.6 )
 	djvu? ( >=app-text/djvu-3.5.17 )
 	>=app-text/libspectre-0.2.0"
-
-# gtk-doc necessary for eutoreconf
 DEPEND="${RDEPEND}
-	dev-util/gtk-doc
 	app-text/scrollkeeper
-	>=app-text/gnome-doc-utils-0.3.2
 	>=dev-util/pkgconfig-0.9
 	>=sys-devel/automake-1.9
-	>=dev-util/intltool-0.35"
+	>=dev-util/intltool-0.35
+	>=app-text/gnome-doc-utils-0.3.2
+	doc? ( dev-util/gtk-doc )"
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 ELTCONF="--portage"
@@ -71,6 +69,8 @@ src_unpack() {
 
 	# Make dbus actually switchable
 	epatch "${FILESDIR}"/${PN}-0.6.1-dbus-switch.patch
+
+	use doc || epatch "${FILESDIR}/${PN}-2.22.0-gtk-doc-die-die-die.patch"
 
 	eautoreconf
 }
