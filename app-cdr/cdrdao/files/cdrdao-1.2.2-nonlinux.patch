@@ -1,0 +1,12 @@
+diff -ur a/dao/ScsiIf-lib.cc b/dao/ScsiIf-lib.cc
+--- a/dao/ScsiIf-lib.cc	2007-08-22 12:21:11 +0100
++++ b/dao/ScsiIf-lib.cc	2007-08-22 12:25:04 +0100
+@@ -430,7 +430,7 @@
+ #include "ScsiIf-common.cc"
+ //<<<<<<< ScsiIf-lib.cc
+ 
+-#ifndef linux
++#ifdef wedontwantthis
+ 
+ /* Function for mapping any SCSI device to the corresponding SG device.
+  * Taken from D. Gilbert's example code.
