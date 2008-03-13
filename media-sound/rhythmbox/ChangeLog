@@ -2,6 +2,10 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  13 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org> rhythmbox-0.11.4:
+  now uses gst-plugins-meta, removed codec related use flags and imported
+  python fixes from portage
+
   29 Jan 2008; Daniel Gryniewicz <dang@gentoo.org> rhythmbox-0.11.4:
   Bump to 0.11.4
   * Support automatic GStreamer plugin installation
