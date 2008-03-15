@@ -7,7 +7,7 @@
 inherit games eutils gnome2 python autotools virtualx
 
 DESCRIPTION="Collection of games for the GNOME desktop"
-HOMEPAGE="http://www.gnome.org/"
+HOMEPAGE="http://live.gnome.org/GnomeGames/"
 
 LICENSE="GPL-2 FDL-1.1"
 SLOT="0"
