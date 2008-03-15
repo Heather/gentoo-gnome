@@ -12,3 +12,16 @@
  
  GETTEXT_PACKAGE=evince
  AC_SUBST(GETTEXT_PACKAGE)
+--- help/Makefile.old.am	2008-03-15 12:54:08.000000000 +0100
++++ help/Makefile.am	2008-03-15 12:54:40.000000000 +0100
+@@ -1,4 +1,9 @@
+-SUBDIRS = reference
++
++SUBDIRS =
++
++if ENABLE_GTK_DOC
++SUBDIRS += reference
++endif
+ 
+ include $(top_srcdir)/gnome-doc-utils.make
+ dist-hook: doc-dist-hook

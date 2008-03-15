@@ -2,6 +2,10 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  15 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org>
+  evince-2.22.0-gtk-doc-die-die-die.patch:
+  fix gtk-doc patch, bug #213472
+
   11 Mar 2008; Daniel Gryniewicz <dang@gentoo.org> evince-2.22.0:
   Dep on gtk-doc to get eautoreconf working properly
 
