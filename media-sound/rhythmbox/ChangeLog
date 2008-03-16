@@ -2,6 +2,16 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  16 Mar 2008; Daniel Gryniewicz <dang@gentoo.org> rhythmbox-0.11.5:
+  Bump to 0.11.5
+  * Improvements to the cross-fading playback backend
+  * Assorted bug fixed for MTP device support
+  * Add "shuffle playlist" command for playlists
+  * Improvements to iPod art and podcast support
+  * Fix some issues causing problems for accessability tools
+  * Several major improvements to UPnP support (including acting as a renderer)
+  * List Rhythmbox as supporting lastfm:// URIs
+
   13 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org> rhythmbox-0.11.4:
   now uses gst-plugins-meta, removed codec related use flags and imported
   python fixes from portage

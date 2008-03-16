@@ -1,4 +1,4 @@
-# Copyright 1999-2008 Gentoo Foundation
+m Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-sound/rhythmbox/rhythmbox-0.11.2-r1.ebuild,v 1.4 2008/01/29 18:22:35 dang Exp $
 
@@ -33,7 +33,7 @@ RDEPEND=">=x11-libs/gtk+-2.8
 			>=sys-apps/hal-0.5 )
 	daap? ( >=net-dns/avahi-0.6 )
 	dbus? ( >=dev-libs/dbus-glib-0.71 )
-	>=media-libs/gst-plugins-base-0.10.11
+	>=media-libs/gst-plugins-base-0.10.12
 	>=media-plugins/gst-plugins-gnomevfs-0.10
 	>=media-plugins/gst-plugins-cdparanoia-0.10
 	>=media-plugins/gst-plugins-meta-0.10-r1:0.10
