@@ -1,9 +1,0 @@
-# ChangeLog for dev-cpp/glibmm
-# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
-# $Header: $
-
-  12 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org> -glibmm-2.15.8.ebuild,
-  +glibmm-2.16.0.ebuild:
-  bump to 2.16.0,
-   * new giomm, Glib::Checksum and uri helper functions
-
