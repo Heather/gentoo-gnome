@@ -1,0 +1,36 @@
+diff -Nbur gnome-keyring-2.22.0.old/pam/gkr-pam-module.c gnome-keyring-2.22.0/pam/gkr-pam-module.c
+--- gnome-keyring-2.22.0.old/pam/gkr-pam-module.c	2008-02-13 22:07:21.000000000 +0100
++++ gnome-keyring-2.22.0/pam/gkr-pam-module.c	2008-03-16 12:39:41.000000000 +0100
+@@ -773,6 +773,7 @@
+ 		return PAM_SERVICE_ERR;
+ 	}
+ 		
++#if 0
+ 	/* Look up the password */
+ 	ret = pam_get_item (ph, PAM_AUTHTOK, (const void**)&password);
+ 	if (ret != PAM_SUCCESS || password == NULL) {
+@@ -783,6 +784,24 @@
+ 			        pam_strerror (ph, ret));
+ 		return PAM_SUCCESS;
+ 	}
++#else
++	/* Look up the password */
++	ret = pam_get_item (ph, PAM_AUTHTOK, (const void**)&password);
++	if (ret != PAM_SUCCESS || password == NULL) {
++		ret = prompt_password (ph);
++		if (ret != PAM_SUCCESS) {
++			syslog (GKR_LOG_ERR, "gkr-pam: couldn't get the password from user: %s", 
++			        pam_strerror (ph, ret));
++			return PAM_AUTH_ERR;
++		}
++		ret = pam_get_item (ph, PAM_AUTHTOK, (const void**)&password);
++		if (ret != PAM_SUCCESS || password == NULL) {
++			syslog (GKR_LOG_ERR, "gkr-pam: couldn't get the password from user: %s", 
++			        ret == PAM_SUCCESS ? "password was null" : pam_strerror (ph, ret));
++			return PAM_AUTHTOK_RECOVER_ERR;
++		}
++	}
++#endif
+ 
+ 	started_daemon = 0;
+ 

@@ -28,6 +28,16 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
+src_unpack() {
+	gnome2_src_unpack
+
+	# fix bug #213578
+	epatch "${FILESDIR}/${PN}-2.22.0-fix-pam.patch"
+
+	echo gkr-pk-object-storage.c >> po/POTFILES.in
+	echo gkr-ask-tool.c >> po/POTFILES.in
+}
+
 pkg_setup() {
 	G2CONF="$(use_enable debug) \
 			$(use_enable hal) \
@@ -35,11 +45,4 @@ pkg_setup() {
 			$(use_enable pam) \
 			$(use_with pam pam-dir $(getpam_mod_dir))
 			--with-root-certs=/usr/share/ca-certificates/"
-}
-
-src_unpack() {
-	gnome2_src_unpack
-
-	echo gkr-pk-object-storage.c >> po/POTFILES.in
-	echo gkr-ask-tool.c >> po/POTFILES.in
 }
