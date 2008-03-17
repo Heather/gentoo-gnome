@@ -1,4 +1,4 @@
-# Copyright 1999-2007 Gentoo Foundation
+# Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-plugins/gst-plugins-meta/gst-plugins-meta-0.10.ebuild,v 1.7 2007/11/27 15:22:59 dang Exp $
 
@@ -13,7 +13,7 @@ IUSE="a52 alsa dvb dvd esd ffmpeg flac mad mpeg mythtv ogg oss theora vorbis X x
 RDEPEND="a52? ( >=media-plugins/gst-plugins-a52dec-0.10 )
 		 alsa? ( >=media-plugins/gst-plugins-alsa-0.10 )
 		 dvb? (
-				media-plugins/gst-plugins-dbb
+				media-plugins/gst-plugins-dvb
 				>=media-lib/gst-plugins-bad-0.10.6
 				>=media-plugins/gst-plugins-fluendo-mpegdemux-0.10.15
 			  )
