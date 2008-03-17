@@ -14,7 +14,7 @@ RDEPEND="a52? ( >=media-plugins/gst-plugins-a52dec-0.10 )
 		 alsa? ( >=media-plugins/gst-plugins-alsa-0.10 )
 		 dvb? (
 				media-plugins/gst-plugins-dvb
-				>=media-lib/gst-plugins-bad-0.10.6
+				>=media-libs/gst-plugins-bad-0.10.6
 				>=media-plugins/gst-plugins-fluendo-mpegdemux-0.10.15
 			  )
 		 dvd? (
