@@ -17,7 +17,8 @@ IUSE="avahi bluetooth cdda doc fuse gnome gphoto2 hal keyring samba"
 RDEPEND=">=dev-libs/glib-2.16
 		 >=sys-apps/dbus-1.0
 		 net-libs/libsoup:2.4
-		   net-misc/openssh
+		 dev-libs/libxml2
+		 net-misc/openssh
 		 avahi? ( >=net-dns/avahi-0.6 )
 		 cdda? ( >=dev-libs/libcdio-0.78.2 )
 		 fuse? ( sys-fs/fuse )

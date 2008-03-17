@@ -2,6 +2,16 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*gvfs-0.2.1 (17 Mar 2008)
+
+  17 Mar 2008; Daniel Gryniewicz <dang@gentoo.org> -gvfs-0.2.0.1.ebuild,
+  +gvfs-0.2.1.ebuild:
+  Bump to 0.2.1 * Added archive backend * Implement most of the async
+  functions in GDaemonFile * Correctly handle usernames in uris for ftp:// *
+  Ftp fixes * Webdav fixes * Add gvfs-rename command line utility * Fix
+  cancellation * OpenBSD fixes * smb: hide dot files * Enviroment variable
+  to disable fuse backend at runtime
+
   10 Mar 2008; Daniel Gryniewicz <dang@gentoo.org> gvfs-0.2.0.1:
   Bump to 0.2.0.1
   * Fix crashes
