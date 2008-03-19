@@ -1,0 +1,255 @@
+diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN at-spi-1.19.3.orig/atk-bridge/bridge.c at-spi-1.19.3/atk-bridge/bridge.c
+--- at-spi-1.19.3.orig/atk-bridge/bridge.c	2007-04-28 02:56:51.000000000 -0400
++++ at-spi-1.19.3/atk-bridge/bridge.c	2007-06-04 13:29:46.000000000 -0400
+@@ -435,10 +435,23 @@ spi_atk_bridge_get_registry (void)
+ 	  
+       if (ev._major != CORBA_NO_EXCEPTION)
+         {
++		  gchar *err_desc = NULL;
++		  const CORBA_char *id = CORBA_exception_id (&ev);
++
++		  if (strcmp(id, "IDL:Bonobo/GeneralError:1.0") == 0)
++		  {
++			  Bonobo_GeneralError* ge = CORBA_exception_value (&ev);
++			  err_desc = g_strdup_printf ("bonobo activation problem: %s",
++				  ge->description);
++		  }
++
+           g_error ("Accessibility app error: exception during "
+-		   "registry activation from id: %s\n",
+-		   CORBA_exception_id (&ev));
++			   "registry activation from id: %s\n"
++			   "Error description: %s\n", id, err_desc == NULL ? "-" : err_desc);
++
+           CORBA_exception_free (&ev);
++		  if (err_desc != NULL)
++			  g_free (err_desc);
+         }
+ 	  
+       if (registry_died && registry) 
+diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN at-spi-1.19.3.orig/test/Makefile.am at-spi-1.19.3/test/Makefile.am
+--- at-spi-1.19.3.orig/test/Makefile.am	2007-05-22 05:40:43.000000000 -0400
++++ at-spi-1.19.3/test/Makefile.am	2007-06-04 13:31:11.000000000 -0400
+@@ -37,11 +37,18 @@ INCLUDES = -I$(top_srcdir)           \
+ 	   $(TESTS_CFLAGS)	     \
+ 	   $(DEBUG_CFLAGS)
+ 
+-LDADD = ../libspi/libspi.la ../cspi/libcspi.la ../login-helper/libloginhelper.la $(TESTS_LIBS) $(X_LIBS) $(XINPUT_LIBS)
++LDADD = ../libspi/libspi.la ../cspi/libcspi.la ../login-helper/libloginhelper.la ../atk-bridge/libatk-bridge.la $(TESTS_LIBS) $(X_LIBS) $(XINPUT_LIBS)
+ 
+ TESTS = test-simple
+ 
+ TESTS_ENVIRONMENT =					\
+-	LD_LIBRARY_PATH=$(top_builddir)/libspi/.libs/:$(top_builddir)/cspi/.libs/	\
+-	PATH=$(top_builddir)/registryd/.libs/:$(PATH)
++	BONOBO_ACTIVATION_PATH=$(top_builddir)/test
++
++BUILT_SOURCES = Accessibility_Registry.server
++
++Accessibility_Registry.server:
++	rm -f Accessibility_Registry.server
++	sed -e "s,@REGISTRYD_PATH\@,`which libtool` --mode=execute `pwd`/../registryd,g" \
++		$(top_builddir)/registryd/Accessibility_Registry.server.in.in > \
++		Accessibility_Registry.server
+ 
+diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN at-spi-1.19.3.orig/test/test-simple.c at-spi-1.19.3/test/test-simple.c
+--- at-spi-1.19.3.orig/test/test-simple.c	2007-01-09 22:08:21.000000000 -0500
++++ at-spi-1.19.3/test/test-simple.c	2007-06-04 13:29:46.000000000 -0400
+@@ -714,7 +714,7 @@ test_keylisteners (void)
+ 	key_listener = SPI_createAccessibleKeystrokeListener (
+ 		key_listener_cb, &stroke);
+ 
+-	test_keyset = SPI_createAccessibleKeySet (1, "=", NULL, NULL);
++	test_keyset = SPI_createAccessibleKeySet (1, "t", NULL, NULL);
+ 
+ 	g_assert (SPI_registerAccessibleKeystrokeListener (
+ 		key_listener,
+@@ -725,11 +725,11 @@ test_keylisteners (void)
+ 
+ 	for (i = 0; i < 3; i++) {
+ 		memset (&stroke, 0, sizeof (AccessibleKeystroke));
+-		g_assert (SPI_generateKeyboardEvent ('=', NULL, SPI_KEY_SYM));
++		g_assert (SPI_generateKeyboardEvent ('t', NULL, SPI_KEY_SYM));
+ 		while (!(key_press_received))
+ 			g_main_context_iteration (NULL, TRUE);
+ 		fprintf (stderr, "p [%s]", stroke.keystring);
+-	        g_assert (!strcmp (stroke.keystring, "="));
++	        g_assert (!strcmp (stroke.keystring, "t"));
+ 		while (!(key_release_received))
+ 			g_main_context_iteration (NULL, TRUE);
+ 		fprintf (stderr, "r [%s]", stroke.keystring);
+diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN at-spi-1.19.3.orig/test/Makefile.in at-spi-1.19.3/test/Makefile.in
+--- at-spi-1.19.3.orig/test/Makefile.in	2008-03-20 00:21:40.000000000 +0100
++++ at-spi-1.19.3/test/Makefile.in	2008-03-20 00:27:11.000000000 +0100
+@@ -55,45 +55,50 @@
+ app_LDADD = $(LDADD)
+ am__DEPENDENCIES_1 =
+ app_DEPENDENCIES = ../libspi/libspi.la ../cspi/libcspi.la \
+-	../login-helper/libloginhelper.la $(am__DEPENDENCIES_1) \
++	../login-helper/libloginhelper.la \
++	../atk-bridge/libatk-bridge.la $(am__DEPENDENCIES_1) \
+ 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+ am_at_OBJECTS = at.$(OBJEXT)
+ at_OBJECTS = $(am_at_OBJECTS)
+ at_LDADD = $(LDADD)
+ at_DEPENDENCIES = ../libspi/libspi.la ../cspi/libcspi.la \
+-	../login-helper/libloginhelper.la $(am__DEPENDENCIES_1) \
++	../login-helper/libloginhelper.la \
++	../atk-bridge/libatk-bridge.la $(am__DEPENDENCIES_1) \
+ 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+ am_event_listener_test_OBJECTS = event-listener-test.$(OBJEXT)
+ event_listener_test_OBJECTS = $(am_event_listener_test_OBJECTS)
+ event_listener_test_LDADD = $(LDADD)
+ event_listener_test_DEPENDENCIES = ../libspi/libspi.la \
+ 	../cspi/libcspi.la ../login-helper/libloginhelper.la \
+-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+-	$(am__DEPENDENCIES_1)
++	../atk-bridge/libatk-bridge.la $(am__DEPENDENCIES_1) \
++	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+ am_key_listener_test_OBJECTS = key-listener-test.$(OBJEXT)
+ key_listener_test_OBJECTS = $(am_key_listener_test_OBJECTS)
+ key_listener_test_LDADD = $(LDADD)
+ key_listener_test_DEPENDENCIES = ../libspi/libspi.la \
+ 	../cspi/libcspi.la ../login-helper/libloginhelper.la \
+-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+-	$(am__DEPENDENCIES_1)
++	../atk-bridge/libatk-bridge.la $(am__DEPENDENCIES_1) \
++	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+ am_keypad_test_OBJECTS = keypad-test.$(OBJEXT)
+ keypad_test_OBJECTS = $(am_keypad_test_OBJECTS)
+ keypad_test_LDADD = $(LDADD)
+ keypad_test_DEPENDENCIES = ../libspi/libspi.la ../cspi/libcspi.la \
+-	../login-helper/libloginhelper.la $(am__DEPENDENCIES_1) \
++	../login-helper/libloginhelper.la \
++	../atk-bridge/libatk-bridge.la $(am__DEPENDENCIES_1) \
+ 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+ am_keysynth_demo_OBJECTS = keysynth-demo.$(OBJEXT)
+ keysynth_demo_OBJECTS = $(am_keysynth_demo_OBJECTS)
+ keysynth_demo_LDADD = $(LDADD)
+ keysynth_demo_DEPENDENCIES = ../libspi/libspi.la ../cspi/libcspi.la \
+-	../login-helper/libloginhelper.la $(am__DEPENDENCIES_1) \
++	../login-helper/libloginhelper.la \
++	../atk-bridge/libatk-bridge.la $(am__DEPENDENCIES_1) \
+ 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+ am_keysynth_test_OBJECTS = keysynth-test.$(OBJEXT)
+ keysynth_test_OBJECTS = $(am_keysynth_test_OBJECTS)
+ keysynth_test_LDADD = $(LDADD)
+ keysynth_test_DEPENDENCIES = ../libspi/libspi.la ../cspi/libcspi.la \
+-	../login-helper/libloginhelper.la $(am__DEPENDENCIES_1) \
++	../login-helper/libloginhelper.la \
++	../atk-bridge/libatk-bridge.la $(am__DEPENDENCIES_1) \
+ 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+ am_login_helper_client_test_OBJECTS =  \
+ 	login-helper-client-test.$(OBJEXT)
+@@ -102,8 +107,8 @@
+ login_helper_client_test_LDADD = $(LDADD)
+ login_helper_client_test_DEPENDENCIES = ../libspi/libspi.la \
+ 	../cspi/libcspi.la ../login-helper/libloginhelper.la \
+-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+-	$(am__DEPENDENCIES_1)
++	../atk-bridge/libatk-bridge.la $(am__DEPENDENCIES_1) \
++	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+ am_login_helper_server_test_OBJECTS =  \
+ 	login-helper-server-test.$(OBJEXT)
+ login_helper_server_test_OBJECTS =  \
+@@ -111,41 +116,44 @@
+ login_helper_server_test_LDADD = $(LDADD)
+ login_helper_server_test_DEPENDENCIES = ../libspi/libspi.la \
+ 	../cspi/libcspi.la ../login-helper/libloginhelper.la \
+-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+-	$(am__DEPENDENCIES_1)
++	../atk-bridge/libatk-bridge.la $(am__DEPENDENCIES_1) \
++	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+ am_screen_review_test_OBJECTS = screen-review-test.$(OBJEXT)
+ screen_review_test_OBJECTS = $(am_screen_review_test_OBJECTS)
+ screen_review_test_LDADD = $(LDADD)
+ screen_review_test_DEPENDENCIES = ../libspi/libspi.la \
+ 	../cspi/libcspi.la ../login-helper/libloginhelper.la \
+-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+-	$(am__DEPENDENCIES_1)
++	../atk-bridge/libatk-bridge.la $(am__DEPENDENCIES_1) \
++	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+ am_simple_at_OBJECTS = simple-at.$(OBJEXT)
+ simple_at_OBJECTS = $(am_simple_at_OBJECTS)
+ simple_at_LDADD = $(LDADD)
+ simple_at_DEPENDENCIES = ../libspi/libspi.la ../cspi/libcspi.la \
+-	../login-helper/libloginhelper.la $(am__DEPENDENCIES_1) \
++	../login-helper/libloginhelper.la \
++	../atk-bridge/libatk-bridge.la $(am__DEPENDENCIES_1) \
+ 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+ am_stress_test_OBJECTS = stress-test.$(OBJEXT)
+ stress_test_OBJECTS = $(am_stress_test_OBJECTS)
+ stress_test_LDADD = $(LDADD)
+ stress_test_DEPENDENCIES = ../libspi/libspi.la ../cspi/libcspi.la \
+-	../login-helper/libloginhelper.la $(am__DEPENDENCIES_1) \
++	../login-helper/libloginhelper.la \
++	../atk-bridge/libatk-bridge.la $(am__DEPENDENCIES_1) \
+ 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+ am_test_simple_OBJECTS = test-simple.$(OBJEXT)
+ test_simple_OBJECTS = $(am_test_simple_OBJECTS)
+ test_simple_LDADD = $(LDADD)
+ test_simple_DEPENDENCIES = ../libspi/libspi.la ../cspi/libcspi.la \
+-	../login-helper/libloginhelper.la $(am__DEPENDENCIES_1) \
++	../login-helper/libloginhelper.la \
++	../atk-bridge/libatk-bridge.la $(am__DEPENDENCIES_1) \
+ 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+ am_window_listener_test_OBJECTS = window-listener-test.$(OBJEXT)
+ window_listener_test_OBJECTS = $(am_window_listener_test_OBJECTS)
+ window_listener_test_LDADD = $(LDADD)
+ window_listener_test_DEPENDENCIES = ../libspi/libspi.la \
+ 	../cspi/libcspi.la ../login-helper/libloginhelper.la \
+-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+-	$(am__DEPENDENCIES_1)
+-DEFAULT_INCLUDES = -I. -I$(top_builddir)@am__isrc@
++	../atk-bridge/libatk-bridge.la $(am__DEPENDENCIES_1) \
++	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
++DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
+ depcomp = $(SHELL) $(top_srcdir)/depcomp
+ am__depfiles_maybe = depfiles
+ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+@@ -394,12 +405,13 @@
+ 	   $(TESTS_CFLAGS)	     \
+ 	   $(DEBUG_CFLAGS)
+ 
+-LDADD = ../libspi/libspi.la ../cspi/libcspi.la ../login-helper/libloginhelper.la $(TESTS_LIBS) $(X_LIBS) $(XINPUT_LIBS)
++LDADD = ../libspi/libspi.la ../cspi/libcspi.la ../login-helper/libloginhelper.la ../atk-bridge/libatk-bridge.la $(TESTS_LIBS) $(X_LIBS) $(XINPUT_LIBS)
+ TESTS_ENVIRONMENT = \
+-	LD_LIBRARY_PATH=$(top_builddir)/libspi/.libs/:$(top_builddir)/cspi/.libs/	\
+-	PATH=$(top_builddir)/registryd/.libs/:$(PATH)
++	BONOBO_ACTIVATION_PATH=$(top_builddir)/test
+ 
+-all: all-am
++BUILT_SOURCES = Accessibility_Registry.server
++all: $(BUILT_SOURCES)
++	$(MAKE) $(AM_MAKEFLAGS) all-am
+ 
+ .SUFFIXES:
+ .SUFFIXES: .c .lo .o .obj
+@@ -679,10 +690,12 @@
+ 	done
+ check-am: all-am
+ 	$(MAKE) $(AM_MAKEFLAGS) check-TESTS
+-check: check-am
++check: $(BUILT_SOURCES)
++	$(MAKE) $(AM_MAKEFLAGS) check-am
+ all-am: Makefile $(PROGRAMS)
+ installdirs:
+-install: install-am
++install: $(BUILT_SOURCES)
++	$(MAKE) $(AM_MAKEFLAGS) install-am
+ install-exec: install-exec-am
+ install-data: install-data-am
+ uninstall: uninstall-am
+@@ -781,6 +795,12 @@
+ 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+ 	tags uninstall uninstall-am
+ 
++
++Accessibility_Registry.server:
++	rm -f Accessibility_Registry.server
++	sed -e "s,@REGISTRYD_PATH\@,`which libtool` --mode=execute `pwd`/../registryd,g" \
++		$(top_builddir)/registryd/Accessibility_Registry.server.in.in > \
++		Accessibility_Registry.server
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.
+ .NOEXPORT:

@@ -2,8 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/at-spi/at-spi-1.20.1.ebuild,v 1.7 2007/11/29 05:12:27 jer Exp $
 
-WANT_AUTOMAKE="1.9"
-
 inherit virtualx autotools eutils gnome2
 
 DESCRIPTION="The Gnome Accessibility Toolkit"
@@ -46,11 +44,8 @@ RESTRICT="test"
 src_unpack() {
 	gnome2_src_unpack
 
-	#
-	epatch "${FILESDIR}"/${PN}-1.19.3-tests.patch
-
-	cp aclocal.m4 old_macros.m4
-	AT_M4DIR="." eautoreconf
+	# should fix tests
+	epatch "${FILESDIR}"/${PN}-1.22.0-tests.patch
 }
 
 src_test() {
