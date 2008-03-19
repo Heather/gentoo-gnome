@@ -1,0 +1,10 @@
+# ChangeLog for gnome-base/libgnomekbd
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+*libgnomekbd-2.22.0 (19 Mar 2008)
+
+  19 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org>
+  -libgnomekbd-2.21.4.1.ebuild, +libgnomekbd-2.22.0.ebuild:
+  bump to 2.22. New icons
+
