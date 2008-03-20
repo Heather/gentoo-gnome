@@ -1,6 +1,6 @@
-# Copyright 1999-2007 Gentoo Foundation
+# Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-keyring/gnome-keyring-2.20.2.ebuild,v 1.1 2007/11/25 15:31:48 leio Exp $
+# $Header: $
 
 inherit gnome2 eutils pam
 
@@ -13,33 +13,34 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-
 IUSE="debug doc hal pam test"
 
 RDEPEND=">=dev-libs/glib-2.8
-		 >=x11-libs/gtk+-2.6
-		 gnome-base/gconf
-		 >=sys-apps/dbus-1.0
-		 hal? ( >=sys-apps/hal-0.5.7 )
-		 pam? ( virtual/pam )
-		 >=dev-libs/libgcrypt-1.2.2
-		 >=dev-libs/libtasn1-0.3.4"
+	 >=x11-libs/gtk+-2.6
+	 gnome-base/gconf
+	 >=sys-apps/dbus-1.0
+	 hal? ( >=sys-apps/hal-0.5.7 )
+	 pam? ( virtual/pam )
+	 >=dev-libs/libgcrypt-1.2.2
+	 >=dev-libs/libtasn1-0.3.4"
 DEPEND="${RDEPEND}
-		sys-devel/gettext
-		>=dev-util/intltool-0.35
-		>=dev-util/pkgconfig-0.9
-		doc? ( dev-util/gtk-doc )"
+	sys-devel/gettext
+	>=dev-util/intltool-0.35
+	>=dev-util/pkgconfig-0.9
+	doc? ( dev-util/gtk-doc )"
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
 src_unpack() {
 	gnome2_src_unpack
 
-	echo gkr-pk-object-storage.c >> po/POTFILES.in
-	echo gkr-ask-tool.c >> po/POTFILES.in
+	echo "gkr-pk-object-storage.c" >> po/POTFILES.in
+	echo "gkr-ask-tool.c" >> po/POTFILES.in
 }
 
 pkg_setup() {
-	G2CONF="$(use_enable debug) \
-			$(use_enable hal) \
-			$(use_enable test tests) \
-			$(use_enable pam) \
-			$(use_with pam pam-dir $(getpam_mod_dir))
-			--with-root-certs=/usr/share/ca-certificates/"
+	G2CONF="${G2CONF}
+		$(use_enable debug)
+		$(use_enable hal)
+		$(use_enable test tests)
+		$(use_enable pam)
+		$(use_with pam pam-dir $(getpam_mod_dir))
+		--with-root-certs=/usr/share/ca-certificates/"
 }
