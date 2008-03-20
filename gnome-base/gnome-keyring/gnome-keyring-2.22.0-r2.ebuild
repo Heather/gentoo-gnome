@@ -31,9 +31,6 @@ DOCS="AUTHORS ChangeLog NEWS README TODO"
 src_unpack() {
 	gnome2_src_unpack
 
-	# fix bug #213578
-	epatch "${FILESDIR}/${PN}-2.22.0-fix-pam.patch"
-
 	echo gkr-pk-object-storage.c >> po/POTFILES.in
 	echo gkr-ask-tool.c >> po/POTFILES.in
 }
