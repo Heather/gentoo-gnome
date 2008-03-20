@@ -52,9 +52,10 @@ pkg_setup() {
 		die "need python bindings to app-admin/gamin"
 	fi
 
-	G2CONF="--with-distro=gentoo \
-		--with-prototype-user=${PN}-admin \
-		--enable-console-helper=no \
+	G2CONF="${G2CONF}
+		--with-distro=gentoo
+		--with-prototype-user=${PN}-admin
+		--enable-console-helper=no
 		--with-pam-prefix=$(getpam_mod_dir)"
 
 	einfo "Adding user '${PN}-admin' as the prototype user"
