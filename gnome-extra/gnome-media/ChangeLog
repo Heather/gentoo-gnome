@@ -1,0 +1,10 @@
+# ChangeLog for gnome-extra/gnome-media
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+*gnome-media-2.22.0 (20 Mar 2008)
+
+  20 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org>
+  +files/gnome-media-2.18.0-noesd.patch, +gnome-media-2.22.0.ebuild:
+  bump to 2.22, use gst-plugins-meta
+
