@@ -2,6 +2,11 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  22 Mar 2008; Daniel Gryniewicz <dang@gentoo.org>
+  +files/evolution-2.22.0-e_profile_event_emit.patch,
+  evolution-2.22.0.ebuild:
+  Fix build with USE=profile. Bug #213516
+
   22 Mar 2008; Daniel Gryniewicz <dang@gentoo.org> evolution-2.22.0.ebuild:
   Fix libsoup dep; bug #213120
 

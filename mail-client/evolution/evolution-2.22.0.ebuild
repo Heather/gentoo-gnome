@@ -107,6 +107,9 @@ src_unpack() {
 
 	# Fix timezone offsets on fbsd.  bug #183708
 	epatch "${FILESDIR}"/${PN}-2.21.3-fbsd.patch
+
+	# Fix build with USE=profile.  Bug #213516
+	epatch "${FILESDIR}"/${P}-e_profile_event_emit.patch
 }
 
 src_compile() {
