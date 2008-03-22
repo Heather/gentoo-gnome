@@ -44,10 +44,26 @@ RESTRICT="test"
 src_unpack() {
 	gnome2_src_unpack
 
+	# disable pyc compiling
+	mv py-compile py-compile.orig
+	ln -s $(type -P true) py-compile
+
 	# should fix tests
 	epatch "${FILESDIR}"/${PN}-1.22.0-tests.patch
 }
 
 src_test() {
 	Xemake check || die "Testing phase failed"
+}
+
+pkg_postinst() {
+	gnome2_pkg_postinst
+	python_version
+	python_mod_optimize "${ROOT}"/usr/$(get_libdir)/python${PYVER}/site-packages/pyatspi
+}
+
+pkg_postrm() {
+	gnome2_pkg_postrm
+	python_version
+	python_mod_cleanup /usr/$(get_libdir)/python${PYVER}/site-packages/pyatspi
 }
