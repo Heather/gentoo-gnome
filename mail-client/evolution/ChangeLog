@@ -2,6 +2,9 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  22 Mar 2008; Daniel Gryniewicz <dang@gentoo.org> evolution-2.22.0.ebuild:
+  Fix libsoup dep; bug #213120
+
   10 Mar 2008; Daniel Gryniewicz <dang@gentoo.org>
   -evolution-2.21.92.ebuild, +evolution-2.22.0.ebuild:
   Bump to 2.22.0

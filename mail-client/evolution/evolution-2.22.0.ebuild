@@ -39,7 +39,7 @@ RDEPEND=">=dev-libs/glib-2.15.3
 		>=dev-libs/nspr-4.6.1
 		>=dev-libs/nss-3.11 )
 	networkmanager? ( net-misc/networkmanager )
-	>=net-libs/libsoup-2.2.96:2.2
+	net-libs/libsoup:2.4
 	kerberos? ( virtual/krb5 )
 	krb4? ( virtual/krb5 )
 	>=gnome-base/orbit-2.9.8
