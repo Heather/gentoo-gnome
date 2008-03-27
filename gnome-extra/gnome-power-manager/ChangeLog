@@ -1,8 +1,0 @@
-# ChangeLog for gnome-extra/gnome-power-manager
-# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
-# $Header: $
-
-  12 Mar 2008; Gilles Dartiguelongue <eva@gentoo.org>
-  -gnome-power-manager-2.21.92.ebuild, +gnome-power-manager-2.22.0.ebuild:
-  bump to 2.22.0, small fixes and translations updates
-
