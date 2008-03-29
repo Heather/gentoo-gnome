@@ -15,8 +15,9 @@ LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~amd64 ~ppc ~x86"
 
-IUSE="ffmpeg gstreamer mad oss alsa pulseaudio soup"
+IUSE="alsa doc ffmpeg gstreamer mad oss pulseaudio soup"
 
+# fails tests, double check on next bump
 RESTRICT="test"
 
 RDEPEND=">=dev-libs/glib-2.12
@@ -27,18 +28,18 @@ RDEPEND=">=dev-libs/glib-2.12
 		net-libs/libsoup:2.4
 		)
 	>=x11-libs/cairo-1.2
-	>=media-libs/alsa-lib-1.0.12
 	ffmpeg? ( >=media-video/ffmpeg-0.4.9_p20070330 )
 	mad? ( >=media-libs/libmad-0.15.1b )
 	gstreamer? (
 		>=media-libs/gstreamer-0.10.11
 		>=media-libs/gst-plugins-base-0.10.15
 		)
-	alsa? ( >=media-libs/alsa-lib-1.0 )
+	alsa? ( >=media-libs/alsa-lib-1.0.12 )
 	pulseaudio? ( media-sound/pulseaudio )"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconfig
+	doc? ( >=dev-util/gtk-doc-1.6 )"
 
 pkg_setup() {
 	if use ppc && use ffmpeg ; then
@@ -67,6 +68,7 @@ src_compile() {
 	myconf=" --with-audio=$myaudio"
 
 	econf \
+		$(use_enable doc gtk-doc) \
 		$(use_enable gstreamer) \
 		$(use_enable ffmpeg) \
 		$(use_enable mad) \
