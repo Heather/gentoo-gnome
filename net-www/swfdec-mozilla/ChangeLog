@@ -2,6 +2,10 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  02 Apr 2008; Daniel Gryniewicz <dang@gentoo.org>
+  -swfdec-mozilla-0.6.0.ebuild:
+  In portage
+
   05 Mar 2008; Daniel Gryniewicz <dang@gentoo.org> swfdec-mozilla-0.6.0:
   Bump to 0.6.0
   And here's the first long-term release of Swfdec-mozilla.
