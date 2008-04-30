@@ -34,6 +34,7 @@ RDEPEND="x11-libs/libXrender
 		 tiff? ( >=media-libs/tiff-3.5.7 )
 		 xinerama? ( x11-libs/libXinerama )"
 DEPEND="${RDEPEND}
+		!gnome-base/gail
 		sys-devel/autoconf
 		>=dev-util/pkgconfig-0.9
 		x11-proto/xextproto
@@ -82,8 +83,7 @@ src_unpack() {
 		epatch "${FILESDIR}/${PN}-2.8.0-multilib.patch"
 		# remember, eautoreconf applies elibtoolize.
 		# if you remove this, you should manually run elibtoolize
-		cp aclocal.m4 old_macros.m4
-		AT_M4DIR="." eautoreconf
+		eautoreconf
 	fi
 
 	epunt_cxx
