@@ -10,37 +10,41 @@ HOMEPAGE="http://www.gtk.org/"
 LICENSE="LGPL-2"
 SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="cups debug doc jpeg tiff vim-syntax xinerama"
+IUSE="X cups debug doc jpeg tiff vim-syntax xinerama"
 
-RDEPEND="x11-libs/libXrender
-		 x11-libs/libX11
-		 x11-libs/libXi
-		 x11-libs/libXt
-		 x11-libs/libXext
-		 x11-libs/libXrandr
-		 x11-libs/libXcursor
-		 x11-libs/libXfixes
-		 x11-libs/libXcomposite
-		 x11-libs/libXdamage
-		 >=dev-libs/glib-2.13.5
+RDEPEND=">=dev-libs/glib-2.13.5
 		 >=x11-libs/pango-1.17.3
 		 >=dev-libs/atk-1.10.1
 		 >=x11-libs/cairo-1.2.0
 		 media-libs/fontconfig
 		 x11-misc/shared-mime-info
 		 >=media-libs/libpng-1.2.1
+		 X? (
+				x11-libs/libXrender
+				x11-libs/libX11
+				x11-libs/libXi
+				x11-libs/libXt
+				x11-libs/libXext
+				x11-libs/libXrandr
+				x11-libs/libXcursor
+				x11-libs/libXfixes
+				x11-libs/libXcomposite
+				x11-libs/libXdamage
+		 		xinerama? ( x11-libs/libXinerama )
+			)
+		 !X? ( dev-libs/DirectFB )
 		 cups? ( net-print/cups )
 		 jpeg? ( >=media-libs/jpeg-6b-r2 media-libs/jasper )
-		 tiff? ( >=media-libs/tiff-3.5.7 )
-		 xinerama? ( x11-libs/libXinerama )"
+		 tiff? ( >=media-libs/tiff-3.5.7 )"
 DEPEND="${RDEPEND}
-		sys-devel/autoconf
 		>=dev-util/pkgconfig-0.9
-		x11-proto/xextproto
-		x11-proto/xproto
-		x11-proto/inputproto
-		x11-proto/damageproto
-		xinerama? ( x11-proto/xineramaproto )
+		X?  (
+				x11-proto/xextproto
+				x11-proto/xproto
+				x11-proto/inputproto
+				x11-proto/damageproto
+				xinerama? ( x11-proto/xineramaproto )
+			)
 		doc? (
 				>=dev-util/gtk-doc-1.6
 				~app-text/docbook-xml-dtd-4.1.2
@@ -48,9 +52,16 @@ DEPEND="${RDEPEND}
 PDEPEND="vim-syntax? ( app-vim/gtk-syntax )"
 
 pkg_setup() {
-	if ! built_with_use x11-libs/cairo X; then
-		eerror "Please re-emerge x11-libs/cairo with the X USE flag set"
-		die "cairo needs the X flag set"
+	if use X ; then
+		if ! built_with_use x11-libs/cairo X; then
+			eerror "Please re-emerge x11-libs/cairo with the X USE flag set"
+			die "cairo needs the X flag set"
+		fi
+	else
+		if ! built_with_use x11-libs/cairo directfb ; then
+			eerror "Please re-emerge x11-libs/cairo with the directfb USE flag set"
+			die "cairo needs the directfb flag set"
+		fi
 	fi
 }
 
@@ -76,29 +87,36 @@ src_unpack() {
 
 	use ppc64 && append-flags -mminimal-toc
 
-	# use an arch-specific config directory so that 32bit and 64bit versions
-	# dont clash on multilib systems
 	if has_multilib_profile ; then
+		# use an arch-specific config directory so that 32bit and 64bit versions
+		# dont clash on multilib systems
 		epatch "${FILESDIR}/${PN}-2.8.0-multilib.patch"
-		# remember, eautoreconf applies elibtoolize.
-		# if you remove this, you should manually run elibtoolize
-		cp aclocal.m4 old_macros.m4
-		AT_M4DIR="." eautoreconf
+
+		export WANT_AUTOMAKE=1.7
+		eautoreconf
 	fi
 
 	epunt_cxx
 }
 
 src_compile() {
+	local myconf= gdk_target=
+
+	if use X ; then
+		gdk_target=x11
+	else
+		gdk_target=directfb
+	fi
+
 	# png always on to display icons (foser)
-	local myconf="$(use_enable doc gtk-doc) \
-		$(use_with jpeg libjpeg) \
-		$(use_with jpeg libjasper) \
-		$(use_with tiff libtiff) \
-		$(use_enable xinerama) \
-		--with-libpng \
-		--with-gdktarget=x11 \
-		--with-xinput"
+	myconf="$(use_enable doc gtk-doc) \
+			$(use_with jpeg libjpeg) \
+			$(use_with jpeg libjasper) \
+			$(use_with tiff libtiff) \
+			$(use_enable xinerama) \
+			--with-libpng \
+			--with-gdktarget=${gdk_target} \
+			--with-xinput"
 
 	# Passing --disable-debug is not recommended for production use
 	use debug && myconf="${myconf} --enable-debug=yes"
