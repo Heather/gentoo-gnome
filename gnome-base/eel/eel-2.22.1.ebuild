@@ -13,8 +13,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE=""
 
 RDEPEND=">=dev-libs/glib-2.15
-		 >=x11-libs/gtk+-2.10
-		 >=gnome-base/gail-0.16
+		 >=x11-libs/gtk+-2.13
 		 >=gnome-base/gconf-2.0
 		 >=dev-libs/libxml2-2.4.7
 		 >=gnome-base/libglade-2.0
