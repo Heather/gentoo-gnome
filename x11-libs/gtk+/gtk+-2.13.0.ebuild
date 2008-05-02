@@ -34,7 +34,7 @@ RDEPEND="x11-libs/libXrender
 		 tiff? ( >=media-libs/tiff-3.5.7 )
 		 xinerama? ( x11-libs/libXinerama )"
 DEPEND="${RDEPEND}
-		!gnome-base/gail
+		!<gnome-base/gail-1000
 		sys-devel/autoconf
 		>=dev-util/pkgconfig-0.9
 		x11-proto/xextproto
