@@ -27,12 +27,7 @@ RDEPEND=">=gnome-base/libbonobo-2.1
 		 >=media-libs/libexif-0.5.12
 		 >=gnome-base/gconf-2.0
 		 >=gnome-base/gvfs-0.1.2
-		 beagle?	(
-						||	(
-								dev-libs/libbeagle
-								=app-misc/beagle-0.2*
-							)
-					)
+		 beagle? ( >=dev-libs/libbeagle-0.0.12 )
 		 tracker? ( >=app-misc/tracker-0.6.4 )"
 DEPEND="${RDEPEND}
 		  sys-devel/gettext
@@ -44,15 +39,6 @@ DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS README THANKS TODO"
 
 pkg_setup() {
 	G2CONF="--disable-update-mimedb $(use_enable beagle) $(use_enable tracker)"
-}
-
-src_unpack() {
-	gnome2_src_unpack
-
-	# Disable compilation with esound
-	epatch "${FILESDIR}/${PN}-2.23.1-no-esound.patch"
-
-	eautoreconf
 }
 
 src_test() {
