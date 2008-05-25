@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/nautilus/nautilus-2.22.2.ebuild,v 1.3 2008/04/12 13:48:12 leio Exp $
 
-inherit virtualx eutils gnome2 autotools
+inherit virtualx gnome2
 
 DESCRIPTION="A file manager for the GNOME desktop"
 HOMEPAGE="http://www.gnome.org/projects/nautilus/"
@@ -44,15 +44,6 @@ DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS README THANKS TODO"
 
 pkg_setup() {
 	G2CONF="--disable-update-mimedb $(use_enable beagle) $(use_enable tracker)"
-}
-
-src_unpack() {
-	gnome2_src_unpack
-
-	# Disable compilation with esound
-	epatch "${FILESDIR}/${PN}-2.23.1-no-esound.patch"
-
-	eautoreconf
 }
 
 src_test() {
