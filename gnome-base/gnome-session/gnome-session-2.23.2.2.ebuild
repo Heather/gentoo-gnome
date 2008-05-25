@@ -17,6 +17,7 @@ IUSE="branding ipv6"
 RDEPEND=">=dev-libs/glib-2.16
 		 >=gnome-base/libgnomeui-2.2
 		 >=x11-libs/gtk+-2.11.1
+		 >=gnome-base/libglade-2.3.6
 		 >=dev-libs/dbus-glib-0.71
 		 >=gnome-base/gnome-keyring-2.21.92
 		 >=gnome-base/gconf-2
