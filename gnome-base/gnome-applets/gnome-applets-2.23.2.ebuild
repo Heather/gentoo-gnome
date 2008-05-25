@@ -1,6 +1,6 @@
 # Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-applets/gnome-applets-2.22.1.ebuild,v 1.2 2008/04/12 14:35:49 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-applets/gnome-applets-2.22.1.ebuild,v 1.3 2008/05/08 19:13:40 dang Exp $
 
 inherit eutils gnome2 autotools python
 
@@ -12,13 +12,16 @@ SLOT="2"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="acpi apm doc gnome gstreamer hal ipv6 test"
 
-RDEPEND=">=x11-libs/gtk+-2.13
+# TODO: configure says python stuff is optional
+# my secret script says cpufrequtils might be needed in RDEPEND
+
+RDEPEND=">=x11-libs/gtk+-2.12
 		>=dev-libs/glib-2.15.6
 		>=gnome-base/libgnome-2.8
 		>=gnome-base/libgnomeui-2.8
 		>=gnome-base/gconf-2.8
 		>=gnome-base/gnome-panel-2.13.4
-		>=gnome-base/libglade-2.4
+		>=gnome-base/gail-1.1
 		>=x11-libs/libxklavier-2.91
 		>=x11-libs/libwnck-2.9.3
 		>=gnome-base/gnome-desktop-2.11.1
@@ -32,7 +35,7 @@ RDEPEND=">=x11-libs/gtk+-2.13
 		x11-apps/xrdb x11-libs/libX11
 		gnome?	(
 					>=gnome-base/libgnomekbd-2.21.4.1
-					gnome-base/control-center
+					gnome-base/gnome-settings-daemon
 
 					>=gnome-extra/gucharmap-1.4
 					>=gnome-base/libgtop-2.11.92
@@ -45,6 +48,12 @@ RDEPEND=">=x11-libs/gtk+-2.13
 						>=media-libs/gstreamer-0.10.2
 						>=media-libs/gst-plugins-base-0.10.14
 					)"
+
+# Remove gnome-system-tools 2.14 from RDEPEND to all because it is starting
+# to cause more headache to keep it than to mask it. Supports only s-t-b-1
+# anyway.
+#   >=app-admin/system-tools-backends-1.1.3
+
 DEPEND="${RDEPEND}
 		>=app-text/scrollkeeper-0.1.4
 		>=app-text/gnome-doc-utils-0.3.2
