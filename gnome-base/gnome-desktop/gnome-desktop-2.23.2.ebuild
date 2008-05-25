@@ -4,7 +4,7 @@
 
 inherit gnome2 eutils
 
-DESCRIPTION="Libraries for the gnome desktop that is not part of the UI"
+DESCRIPTION="Libraries for the gnome desktop that are not part of the UI"
 HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2 FDL-1.1 LGPL-2"
@@ -19,8 +19,7 @@ RDEPEND=">=dev-libs/libxml2-2.4.20
 		 >=gnome-base/libgnomeui-2.6
 		 >=x11-libs/startup-notification-0.5"
 DEPEND="${RDEPEND}
-		app-text/scrollkeeper
-		sys-devel/gettext
+		app-text/rarian
 		>=dev-util/intltool-0.35
 		>=dev-util/pkgconfig-0.9
 		>=app-text/gnome-doc-utils-0.3.2
@@ -29,5 +28,5 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
 pkg_setup() {
-	G2CONF="${G2CONF} --with-gnome-distributor=Gentoo --disable-scrollkeeper"
+	G2CONF="${G2CONF} --with-gnome-distributor=Gentoo"
 }
