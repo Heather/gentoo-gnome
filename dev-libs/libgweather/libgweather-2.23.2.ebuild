@@ -28,5 +28,6 @@ pkg_setup() {
 
 pkg_postinst() {
 	gnome2_pkg_postinst
+
 	ewarn "Please run revdep-rebuild after upgrading this package."
 }
