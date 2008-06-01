@@ -44,6 +44,6 @@ DEPEND="${RDEPEND}
 		x11-proto/inputproto
 		x11-proto/xproto"
 
-pkg_config() {
+pkg_setup() {
 	G2CONF="${G2CONF} $(use_enable alsa) $(use_enable debug) $(use_enable esd) $(use_enable gstreamer)"
 }
