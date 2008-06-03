@@ -105,6 +105,8 @@ src_unpack() {
 
 	# Fix timezone offsets on fbsd.  bug #183708
 	epatch "${FILESDIR}"/${PN}-2.21.3-fbsd.patch
+	# Fix delete keyboard shortcut
+	epatch "${FILESDIR}"/${P}-delete-key.patch
 }
 
 src_compile() {
