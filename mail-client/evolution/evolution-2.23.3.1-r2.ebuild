@@ -107,6 +107,10 @@ src_unpack() {
 	epatch "${FILESDIR}"/${PN}-2.21.3-fbsd.patch
 	# Fix delete keyboard shortcut
 	epatch "${FILESDIR}"/${P}-delete-key.patch
+	# Fix security issues, bug #223963
+	epatch "${FILESDIR}"/${PN}-2.22.2-CVE-2008-1108.patch
+	epatch "${FILESDIR}"/${PN}-2.22.2-CVE-2008-1109.patch
+
 }
 
 src_compile() {
