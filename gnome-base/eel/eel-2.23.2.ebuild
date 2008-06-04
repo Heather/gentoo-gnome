@@ -17,10 +17,10 @@ RDEPEND=">=dev-libs/glib-2.15
 		 >=gnome-base/gconf-2.0
 		 >=dev-libs/libxml2-2.4.7
 		 >=gnome-base/libglade-2.0
-		 >=gnome-base/gnome-desktop-2.21.3
+		 >=gnome-base/gnome-desktop-2.23.3
 		 >=x11-libs/startup-notification-0.8
 
-		 >=gnome-base/libgnome-2.0
+		 >=gnome-base/libgnome-2.23.0
 		 >=gnome-base/libgnomeui-2.8"
 DEPEND="${RDEPEND}
 		  sys-devel/gettext
