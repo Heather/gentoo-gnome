@@ -36,7 +36,7 @@ RDEPEND=">=dev-libs/dbus-glib-0.74
 						>=media-libs/gstreamer-0.10.1.2
 						>=media-libs/gst-plugins-base-0.10.1.2
 					)
-		!<gnome-base/control-center-2.22"
+		!<gnome-base/gnome-control-center-2.22"
 DEPEND="${RDEPEND}
 		  sys-devel/gettext
 		>=dev-util/intltool-0.35.0

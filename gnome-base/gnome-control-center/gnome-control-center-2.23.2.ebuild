@@ -1,6 +1,6 @@
 # Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/control-center/control-center-2.22.1.ebuild,v 1.3 2008/05/24 15:45:27 mr_bones_ Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-control-center/gnome-control-center-2.22.1.ebuild,v 1.3 2008/05/24 15:45:27 mr_bones_ Exp $
 
 EAPI="1"
 
@@ -8,7 +8,6 @@ inherit gnome2
 
 DESCRIPTION="The gnome2 Desktop configuration tool"
 HOMEPAGE="http://www.gnome.org/"
-SRC_URI="mirror://gnome/sources/gnome-${PN}/${PVP[0]}.${PVP[1]}/gnome-${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="2"
@@ -81,7 +80,6 @@ DEPEND="${RDEPEND}
 #		gnome-base/gnome-common
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
-S="${WORKDIR}/gnome-${P}"
 
 pkg_setup() {
 	G2CONF="${G2CONF}
