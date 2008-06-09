@@ -31,10 +31,10 @@ pkg_setup() {
 	G2CONF="${G2CONF} --with-gnome-distributor=Gentoo"
 }
 
-#src_unpack() {
-#	gnome2_src_unpack
-#
-#	epatch "${FILESDIR}"/${P}-xsltproc-nonet.patch
-#
-#	eautoreconf
-#}
+src_unpack() {
+	gnome2_src_unpack
+
+	epatch "${FILESDIR}"/${P}-xsltproc-nonet.patch
+
+	eautoreconf
+}

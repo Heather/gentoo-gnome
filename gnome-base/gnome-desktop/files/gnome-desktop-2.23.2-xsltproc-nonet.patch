@@ -1,0 +1,11 @@
+diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN gnome-desktop-2.23.2.orig/gnome-doc-utils.make gnome-desktop-2.23.2/gnome-doc-utils.make
+--- gnome-desktop-2.23.2.orig/gnome-doc-utils.make	2008-05-14 05:10:01.000000000 -0400
++++ gnome-desktop-2.23.2/gnome-doc-utils.make	2008-05-28 12:01:40.000000000 -0400
+@@ -142,6 +142,7 @@ endif
+ ## @@ Rules for OMF Files
+ 
+ db2omf_args =									\
++	--nonet									\
+ 	--stringparam db2omf.basename $(DOC_MODULE)				\
+ 	--stringparam db2omf.format $(3)					\
+ 	--stringparam db2omf.dtd						\
