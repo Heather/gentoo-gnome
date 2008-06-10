@@ -34,7 +34,7 @@ pkg_setup() {
 src_unpack() {
 	gnome2_src_unpack
 
-	epatch "${FILESDIR}"/${P}-xsltproc-nonet.patch
+	epatch "${FILESDIR}"/${PN}-2.23.2-xsltproc-nonet.patch
 
 	eautoreconf
 }
