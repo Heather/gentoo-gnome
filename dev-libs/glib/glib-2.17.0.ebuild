@@ -49,6 +49,9 @@ src_unpack() {
 	# Fix gmodule issues on fbsd; bug #184301
 	epatch "${FILESDIR}"/${PN}-2.12.12-fbsd.patch
 
+	# Turn off building tests by default. Bug #226209
+	epatch "${FILESDIR}"/${P}-notests.patch
+
 	[[ ${CHOST} == *-freebsd* ]] && elibtoolize
 }
 
@@ -74,6 +77,18 @@ src_compile() {
 		  --with-threads=posix || die "configure failed"
 
 	emake || die "make failed"
+}
+
+src_test() {
+	make -C tests
+	make -C glib/tests
+	make -C gobject/tests
+	make -C gio/tests
+	make test
+	make -C tests test
+	make -C glib/tests test
+	make -C gobject/tests test
+	make -C gio/tests test
 }
 
 src_install() {

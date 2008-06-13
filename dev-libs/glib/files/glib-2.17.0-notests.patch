@@ -1,0 +1,110 @@
+diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN glib-2.17.0.orig/gio/Makefile.am glib-2.17.0/gio/Makefile.am
+--- glib-2.17.0.orig/gio/Makefile.am	2008-05-27 10:29:34.000000000 -0400
++++ glib-2.17.0/gio/Makefile.am	2008-06-13 09:18:03.000000000 -0400
+@@ -151,8 +151,6 @@ appinfo_sources += gwin32appinfo.c gwin3
+ platform_libadd += -lshlwapi
+ endif
+ 
+-SUBDIRS += tests
+-
+ libgio_2_0_la_SOURCES =		\
+ 	gappinfo.c 		\
+ 	gasynchelper.c 		\
+diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN glib-2.17.0.orig/gio/Makefile.in glib-2.17.0/gio/Makefile.in
+--- glib-2.17.0.orig/gio/Makefile.in	2008-05-27 15:57:12.000000000 -0400
++++ glib-2.17.0/gio/Makefile.in	2008-06-13 09:18:11.000000000 -0400
+@@ -170,7 +170,7 @@ RECURSIVE_CLEAN_TARGETS = mostlyclean-re
+   distclean-recursive maintainer-clean-recursive
+ ETAGS = etags
+ CTAGS = ctags
+-DIST_SUBDIRS = xdgmime inotify fen win32 . fam tests
++DIST_SUBDIRS = xdgmime inotify fen win32 . fam
+ DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+ ACLOCAL = @ACLOCAL@
+ ALLOCA = @ALLOCA@
+@@ -382,7 +382,7 @@ EXTRA_DIST = gio-marshal.list gio.symbol
+ TEST_PROGS = 
+ NULL = 
+ SUBDIRS = $(am__append_1) $(am__append_2) $(am__append_5) \
+-	$(am__append_7) . $(am__append_9) tests
++	$(am__append_7) . $(am__append_9)
+ @MS_LIB_AVAILABLE_TRUE@@OS_WIN32_AND_DLL_COMPILATION_TRUE@noinst_DATA = gio-2.0.lib
+ @MS_LIB_AVAILABLE_TRUE@@OS_WIN32_AND_DLL_COMPILATION_TRUE@install_ms_lib_cmd = $(INSTALL) gio-2.0.lib $(DESTDIR)$(libdir)
+ @MS_LIB_AVAILABLE_TRUE@@OS_WIN32_AND_DLL_COMPILATION_TRUE@uninstall_ms_lib_cmd = -rm $(DESTDIR)$(libdir)/gio-2.0.lib
+diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN glib-2.17.0.orig/glib/Makefile.am glib-2.17.0/glib/Makefile.am
+--- glib-2.17.0.orig/glib/Makefile.am	2008-05-27 11:39:45.000000000 -0400
++++ glib-2.17.0/glib/Makefile.am	2008-06-13 09:17:08.000000000 -0400
+@@ -19,9 +19,9 @@ gregex_c =
+ gregex_h =
+ endif
+ 
+-SUBDIRS = libcharset $(PRINTF_SUBDIR) $(MAYBE_PCRE) update-pcre . tests
++SUBDIRS = libcharset $(PRINTF_SUBDIR) $(MAYBE_PCRE) update-pcre .
+ 
+-DIST_SUBDIRS = libcharset gnulib pcre update-pcre tests
++DIST_SUBDIRS = libcharset gnulib pcre update-pcre
+ 
+ AM_CPPFLAGS = 				\
+ 	-I$(top_srcdir) 		\
+diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN glib-2.17.0.orig/glib/Makefile.in glib-2.17.0/glib/Makefile.in
+--- glib-2.17.0.orig/glib/Makefile.in	2008-05-27 15:57:14.000000000 -0400
++++ glib-2.17.0/glib/Makefile.in	2008-06-13 09:17:31.000000000 -0400
+@@ -392,8 +392,8 @@ TEST_PROGS = 
+ @ENABLE_REGEX_TRUE@gregex_c = gregex.c
+ @ENABLE_REGEX_FALSE@gregex_h = 
+ @ENABLE_REGEX_TRUE@gregex_h = gregex.h
+-SUBDIRS = libcharset $(PRINTF_SUBDIR) $(MAYBE_PCRE) update-pcre . tests
+-DIST_SUBDIRS = libcharset gnulib pcre update-pcre tests
++SUBDIRS = libcharset $(PRINTF_SUBDIR) $(MAYBE_PCRE) update-pcre .
++DIST_SUBDIRS = libcharset gnulib pcre update-pcre
+ AM_CPPFLAGS = \
+ 	-I$(top_srcdir) 		\
+ 	$(pcre_inc) 			\
+diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN glib-2.17.0.orig/gobject/Makefile.am glib-2.17.0/gobject/Makefile.am
+--- glib-2.17.0.orig/gobject/Makefile.am	2008-05-27 10:29:37.000000000 -0400
++++ glib-2.17.0/gobject/Makefile.am	2008-06-13 09:19:19.000000000 -0400
+@@ -4,7 +4,7 @@
+ ## Process this file with automake to produce Makefile.in
+ include $(top_srcdir)/Makefile.decl
+ 
+-SUBDIRS = . tests
++SUBDIRS = .
+ 
+ AM_CPPFLAGS = 					\
+ 	-DG_LOG_DOMAIN=\"GLib-GObject\"		\
+diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN glib-2.17.0.orig/gobject/Makefile.in glib-2.17.0/gobject/Makefile.in
+--- glib-2.17.0.orig/gobject/Makefile.in	2008-05-27 15:57:15.000000000 -0400
++++ glib-2.17.0/gobject/Makefile.in	2008-06-13 09:19:25.000000000 -0400
+@@ -339,7 +339,7 @@ TEST_PROGS = 
+ # GObject - GLib Type, Object, Parameter and Signal Library
+ # Copyright (C) 1997,98,99,2000 Tim Janik and Red Hat, Inc.
+ #
+-SUBDIRS = . tests
++SUBDIRS = .
+ AM_CPPFLAGS = \
+ 	-DG_LOG_DOMAIN=\"GLib-GObject\"		\
+ 	-I$(top_srcdir)				\
+diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN glib-2.17.0.orig/Makefile.am glib-2.17.0/Makefile.am
+--- glib-2.17.0.orig/Makefile.am	2008-05-27 10:29:41.000000000 -0400
++++ glib-2.17.0/Makefile.am	2008-06-13 09:08:02.000000000 -0400
+@@ -3,7 +3,7 @@ include $(top_srcdir)/Makefile.decl
+ 
+ AUTOMAKE_OPTIONS = 1.7
+ 
+-SUBDIRS = . m4macros glib gmodule gthread gobject gio tests po docs
++SUBDIRS = . m4macros glib gmodule gthread gobject gio po docs
+ DIST_SUBDIRS = $(SUBDIRS) build
+ 
+ bin_SCRIPTS = glib-gettextize
+diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN glib-2.17.0.orig/Makefile.in glib-2.17.0/Makefile.in
+--- glib-2.17.0.orig/Makefile.in	2008-05-27 15:57:16.000000000 -0400
++++ glib-2.17.0/Makefile.in	2008-06-13 09:08:00.000000000 -0400
+@@ -338,7 +338,7 @@ EXTRA_DIST = ChangeLog.pre-2-14 ChangeLo
+ 	gio-2.0-uninstalled.pc.in gio-unix-2.0-uninstalled.pc.in
+ TEST_PROGS = 
+ AUTOMAKE_OPTIONS = 1.7
+-SUBDIRS = . m4macros glib gmodule gthread gobject gio tests po docs
++SUBDIRS = . m4macros glib gmodule gthread gobject gio po docs
+ DIST_SUBDIRS = $(SUBDIRS) build
+ bin_SCRIPTS = glib-gettextize
+ AM_CPPFLAGS = \
