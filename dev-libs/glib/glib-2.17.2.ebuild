@@ -50,7 +50,7 @@ src_unpack() {
 	epatch "${FILESDIR}"/${PN}-2.12.12-fbsd.patch
 
 	# Turn off building tests by default. Bug #226209
-	epatch "${FILESDIR}"/${P}-notests.patch
+	epatch "${FILESDIR}"/${PN}-2.17.0-notests.patch
 
 	[[ ${CHOST} == *-freebsd* ]] && elibtoolize
 }
