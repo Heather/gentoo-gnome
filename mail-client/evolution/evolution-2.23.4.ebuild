@@ -106,11 +106,9 @@ src_unpack() {
 	# Fix timezone offsets on fbsd.  bug #183708
 	epatch "${FILESDIR}"/${PN}-2.21.3-fbsd.patch
 	# Fix delete keyboard shortcut
-	epatch "${FILESDIR}"/${P}-delete-key.patch
-	# Fix security issues, bug #223963
-	epatch "${FILESDIR}"/${PN}-2.22.2-CVE-2008-1108.patch
-	epatch "${FILESDIR}"/${PN}-2.22.2-CVE-2008-1109.patch
+	epatch "${FILESDIR}"/${PN}-2.23.3.1-delete-key.patch
 
+	echo "plugins/python/org-gnome-evolution-python.eplug.xml" >> po/POTFILES.in
 }
 
 src_compile() {
