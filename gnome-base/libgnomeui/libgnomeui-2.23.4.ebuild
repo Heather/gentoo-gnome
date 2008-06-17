@@ -28,7 +28,7 @@ RDEPEND=">=dev-libs/libxml2-2.4.20
 DEPEND="${RDEPEND}
 		sys-devel/gettext
 		>=dev-util/pkgconfig-0.9
-		>=dev-util/intltool-0.35
+		>=dev-util/intltool-0.40
 		doc? ( >=dev-util/gtk-doc-1 )"
 
 PDEPEND="x11-themes/gnome-icon-theme"
