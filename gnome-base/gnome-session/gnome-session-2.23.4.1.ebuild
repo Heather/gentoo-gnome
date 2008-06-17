@@ -29,7 +29,7 @@ RDEPEND=">=dev-libs/glib-2.16
 DEPEND="${RDEPEND}
 		>=sys-devel/gettext-0.10.40
 		>=dev-util/pkgconfig-0.17
-		>=dev-util/intltool-0.35
+		>=dev-util/intltool-0.40
 		!<gnome-base/gdm-2.20.4"
 
 # gnome-base/gdm does not provide gnome.desktop anymore
