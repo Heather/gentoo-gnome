@@ -17,6 +17,7 @@ RDEPEND=">=x11-libs/gtk+-2.10
 		 >=gnome-base/gconf-2
 		 >=dev-libs/glib-2.6
 		 >=x11-libs/libXcomposite-0.2
+		 x11-libs/libXcursor
 		 >=x11-libs/startup-notification-0.7
 		 !x11-misc/expocity"
 DEPEND="${RDEPEND}
