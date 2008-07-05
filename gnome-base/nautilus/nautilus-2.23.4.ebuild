@@ -13,7 +13,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="beagle gnome tracker"
 
 RDEPEND=">=gnome-base/libbonobo-2.1
-		 >=gnome-base/eel-2.21.90
+		 >=gnome-base/eel-2.23.2
 		 >=dev-libs/glib-2.15.6
 		 >=gnome-base/gnome-desktop-2.10
 		 >=gnome-base/libgnome-2.14
