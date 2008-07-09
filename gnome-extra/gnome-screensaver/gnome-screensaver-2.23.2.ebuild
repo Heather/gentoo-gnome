@@ -55,6 +55,12 @@ pkg_setup() {
 			--with-xscreensaverhackdir=/usr/lib/misc/xscreensaver"
 }
 
+src_unpack() {
+	gnome2_src_unpack
+
+	epatch "${FILESDIR}/${PN}-2.23.2-fix-glibc-2.8.patch"
+}
+
 src_install() {
 	gnome2_src_install
 
