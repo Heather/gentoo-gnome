@@ -92,8 +92,8 @@ src_unpack() {
 		# dont clash on multilib systems
 		epatch "${FILESDIR}/${PN}-2.8.0-multilib.patch"
 
-		export WANT_AUTOMAKE=1.7
-		eautoreconf
+		# Seems to break the build
+		#eautoreconf
 	fi
 
 	epunt_cxx
