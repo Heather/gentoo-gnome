@@ -52,10 +52,6 @@ src_unpack() {
 	# Turn off building tests by default. Bug #226209
 	epatch "${FILESDIR}"/${PN}-2.17.0-notests.patch
 
-	# Fix nautilus crasher bug, see bug #231375
-	# Patch is in trunk, should be removed for 2.17.4
-	epatch "${FILESDIR}/${PN}-2.17.3-fix-nautilus-crash.patch"
-
 	[[ ${CHOST} == *-freebsd* ]] && elibtoolize
 }
 
