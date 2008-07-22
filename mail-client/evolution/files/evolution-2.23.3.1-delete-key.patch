@@ -17,20 +17,6 @@ diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN evolution-2.23.3.1.orig/
  	BONOBO_UI_UNSAFE_VERB ("MessageForward", emfv_message_forward),
  	BONOBO_UI_UNSAFE_VERB ("MessageForwardAttached", emfv_message_forward_attached),
  	BONOBO_UI_UNSAFE_VERB ("MessageForwardInline", emfv_message_forward_inline),
-diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN evolution-2.23.3.1.orig/ui/ChangeLog evolution-2.23.3.1/ui/ChangeLog
---- evolution-2.23.3.1.orig/ui/ChangeLog	2008-06-02 03:51:43.000000000 -0400
-+++ evolution-2.23.3.1/ui/ChangeLog	2008-06-03 11:16:19.000000000 -0400
-@@ -1,10 +1,3 @@
--2008-06-02  Srinivasa Ragavan  <sragavan@novell.com>
--
--	** Fix for bug #531836
--
--	* evolution-mail-message.xml: Added bonobo accel key for Ctrl+D, Del to 
--	keep working on deleted mails, but not the toolbar/menu
--
- 2008-05-19  Matthew Barnes  <mbarnes@redhat.com>
- 
- 	* Makefile.am:
 diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN evolution-2.23.3.1.orig/ui/evolution-mail-message.xml evolution-2.23.3.1/ui/evolution-mail-message.xml
 --- evolution-2.23.3.1.orig/ui/evolution-mail-message.xml	2008-06-02 03:51:43.000000000 -0400
 +++ evolution-2.23.3.1/ui/evolution-mail-message.xml	2008-06-03 11:16:19.000000000 -0400
