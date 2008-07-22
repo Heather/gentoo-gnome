@@ -38,13 +38,10 @@ PDEPEND="gnome? ( >=x11-themes/gnome-icon-theme-1.1.91 )"
 DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS README THANKS TODO"
 
 pkg_setup() {
-	G2CONF="--disable-update-mimedb $(use_enable beagle) $(use_enable tracker)"
-}
-
-src_unpack() {
-	gnome2_src_unpack
-
-	epatch "${FILESDIR}"/${P}-glibc-2.8.patch
+	G2CONF="--disable-update-mimedb
+		--disable-xmp
+		$(use_enable beagle)
+		$(use_enable tracker)"
 }
 
 src_test() {
