@@ -22,6 +22,7 @@ RDEPEND=">=dev-libs/glib-2.16.1
 	>=dev-libs/libxml2-2
 	>=net-libs/libsoup-2.4
 	gnome-keyring? ( >=gnome-base/gnome-keyring-2.20.1 )
+	>=dev-db/sqlite-3.5
 	ssl? (
 		>=dev-libs/nspr-4.4
 		>=dev-libs/nss-3.9 )
