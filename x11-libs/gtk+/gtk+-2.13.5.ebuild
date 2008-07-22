@@ -12,7 +12,7 @@ SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="X cups debug doc jpeg tiff vim-syntax xinerama"
 
-RDEPEND=">=dev-libs/glib-2.17.3
+RDEPEND=">=dev-libs/glib-2.17.4
 		 >=x11-libs/pango-1.20
 		 >=dev-libs/atk-1.13
 		 >=x11-libs/cairo-1.6
@@ -46,7 +46,7 @@ DEPEND="${RDEPEND}
 				xinerama? ( x11-proto/xineramaproto )
 			)
 		doc? (
-				>=dev-util/gtk-doc-1.6
+				>=dev-util/gtk-doc-1.8
 				~app-text/docbook-xml-dtd-4.1.2
 			 )"
 PDEPEND="vim-syntax? ( app-vim/gtk-syntax )"
@@ -96,7 +96,8 @@ src_unpack() {
 		#eautoreconf
 	fi
 
-	epunt_cxx
+	# doesn't work
+	#epunt_cxx
 }
 
 src_compile() {
