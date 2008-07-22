@@ -17,7 +17,6 @@ RDEPEND=">=dev-libs/glib-2.16
 	>=x11-libs/libwnck-2.5
 	>=gnome-base/libgtop-2.23.1
 	>=x11-libs/gtk+-2.12
-	>=gnome-base/gnome-vfs-2.6
 	>=x11-themes/gnome-icon-theme-2.15.3
 	>=dev-cpp/gtkmm-2.8
 	>=dev-cpp/glibmm-2.16
