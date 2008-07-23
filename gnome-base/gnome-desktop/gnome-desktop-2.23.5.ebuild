@@ -20,7 +20,7 @@ RDEPEND=">=dev-libs/libxml2-2.4.20
 		 >=x11-libs/startup-notification-0.5"
 DEPEND="${RDEPEND}
 		app-text/rarian
-		>=dev-util/intltool-0.35
+		>=dev-util/intltool-0.40
 		>=dev-util/pkgconfig-0.9
 		>=app-text/gnome-doc-utils-0.3.2
 		doc? ( >=dev-util/gtk-doc-1.4 )"
