@@ -37,7 +37,7 @@ DEPEND="${RDEPEND}
 		app-text/scrollkeeper
 		>=app-text/gnome-doc-utils-0.3.2
 		>=dev-util/pkgconfig-0.9
-		>=dev-util/intltool-0.35
+		>=dev-util/intltool-0.40
 		~app-text/docbook-xml-dtd-4.1.2
 		doc? ( >=dev-util/gtk-doc-1 )"
 
