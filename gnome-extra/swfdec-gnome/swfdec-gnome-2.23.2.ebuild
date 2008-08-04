@@ -14,7 +14,7 @@ IUSE=""
 
 RDEPEND=">=x11-libs/gtk+-2.12.0
 		gnome-base/gconf
-		>=media-libs/swfdec-0.6"
+		>=media-libs/swfdec-0.7.4"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35.0
 	sys-devel/gettext"
@@ -27,12 +27,4 @@ pkg_setup() {
 		einfo "swfdec-gtk, which is required by ${PN}"
 		die "Please re-emerge media-libs/swfdec with the gtk USE flag"
 	fi
-}
-
-src_unpack() {
-	gnome2_src_unpack
-
-	epatch "${FILESDIR}"/${P}-0.7.patch
-
-	eautoreconf
 }
