@@ -87,7 +87,7 @@ src_unpack() {
 	epatch "${FILESDIR}"/${PN}-2.21.4-gtkdoc-rebase.patch
 
 	# Fix building evo-exchange with --as-needed
-	epatch "${FILESDIR}"/${PN}-2.23.5-as-needed.patch
+	epatch "${FILESDIR}"/${PN}-2.23.6-as-needed.patch
 
 	# gtk-doc-am and gnome-common needed for this
 	eautoreconf
