@@ -15,7 +15,7 @@ IUSE="doc eds networkmanager"
 RDEPEND=">=gnome-base/gnome-desktop-2.12
 		 >=x11-libs/pango-1.15.4
 		 >=dev-libs/glib-2.15.6
-		 >=x11-libs/gtk+-2.11.3
+		 >=x11-libs/gtk+-2.13.1
 		 >=dev-libs/libgweather-2.22.1
 		 dev-libs/libxml2
 		 >=gnome-base/libglade-2.5
