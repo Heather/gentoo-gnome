@@ -36,7 +36,7 @@ RDEPEND=">=x11-libs/gtk+-2.11.6
 DEPEND="${RDEPEND}
 		sys-devel/gettext
 		app-text/gnome-doc-utils
-		>=dev-util/intltool-0.35
+		>=dev-util/intltool-0.40
 		>=dev-util/pkgconfig-0.17"
 
 DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README THANKS TODO"
