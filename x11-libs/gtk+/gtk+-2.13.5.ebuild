@@ -35,7 +35,8 @@ RDEPEND=">=dev-libs/glib-2.17.4
 		 !X? ( dev-libs/DirectFB )
 		 cups? ( net-print/cups )
 		 jpeg? ( >=media-libs/jpeg-6b-r2 media-libs/jasper )
-		 tiff? ( >=media-libs/tiff-3.5.7 )"
+		 tiff? ( >=media-libs/tiff-3.5.7 )
+		 !<gnome-base/gail-1000"
 DEPEND="${RDEPEND}
 		>=dev-util/pkgconfig-0.9
 		X?  (
