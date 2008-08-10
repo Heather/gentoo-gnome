@@ -27,17 +27,18 @@ RDEPEND=">=x11-libs/gtk+-2.12
 		>=gnome-base/gnome-desktop-2.11.1
 		>=x11-libs/libnotify-0.3.2
 		hal? ( >=sys-apps/hal-0.5.3 )
-		>=dev-libs/dbus-glib-0.71
+		>=sys-apps/dbus-1.1.2
+		>=dev-libs/dbus-glib-0.74
 		>=x11-themes/gnome-icon-theme-2.15.91
 		>=dev-libs/libgweather-2.22.1
 		>=virtual/python-2.4
 		apm? ( sys-apps/apmd )
-		x11-apps/xrdb x11-libs/libX11
+		x11-libs/libX11
 		gnome?	(
 					>=gnome-base/libgnomekbd-2.21.4.1
 					gnome-base/gnome-settings-daemon
 
-					>=gnome-extra/gucharmap-1.4
+					>=gnome-extra/gucharmap-2.23
 					>=gnome-base/libgtop-2.11.92
 					>=gnome-base/gnome-vfs-2.15.4
 
