@@ -20,7 +20,6 @@ RDEPEND=">=gnome-base/libgnomecanvas-1.116
 	>=gnome-base/gconf-2
 	>=x11-libs/gtk+-2.8.12
 	>=dev-libs/glib-2.6.0
-	>=gnome-base/gnome-vfs-2.8
 	>=gnome-base/libglade-1.99.11
 	>=dev-libs/popt-1.5"
 
