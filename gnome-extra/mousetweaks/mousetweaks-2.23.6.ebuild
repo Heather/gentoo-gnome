@@ -18,6 +18,12 @@ RDEPEND=">=x11-libs/gtk+-2.10
 	>=dev-libs/dbus-glib-0.72
 	>=gnome-base/gnome-panel-2
 	>=gnome-base/libgnome-2
+	>=gnome-base/libgnomeui-2
 	gnome-extra/at-spi
-	x11-libs/libXfixes"
-DEPEND="${RDEPEND}"
+
+	x11-libs/libXfixes
+	x11-libs/libXcursor"
+DEPEND="${RDEPEND}
+	  gnome-base/gnome-common
+	>=dev-util/intltool-0.40
+	>=dev-util/pkgconfig-0.17"
