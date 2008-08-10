@@ -45,7 +45,7 @@ src_unpack() {
 
 	# use a local rpm2cpio script to avoid the dep
 	sed -e "s/rpm2cdio/rpm2cdio-file-roller/g" \
-		-i src/fr-command-rpc.c || die "sed failed"
+		-i src/fr-command-rpm.c || die "sed failed"
 }
 
 src_install() {
