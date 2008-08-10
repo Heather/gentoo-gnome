@@ -12,7 +12,7 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc64 ~sparc ~x86"
 IUSE="avahi bluetooth cdda doc fuse gnome gphoto2 hal gnome-keyring samba"
 
-RDEPEND=">=dev-libs/glib-2.17.4
+RDEPEND=">=dev-libs/glib-2.17.6
 		 >=sys-apps/dbus-1.0
 		 >=net-libs/libsoup-2.4
 		 dev-libs/libxml2
@@ -43,6 +43,7 @@ DOCS="AUTHORS ChangeLog NEWS README TODO"
 pkg_setup() {
 	G2CONF="${G2CONF}
 			--enable-http
+			--disable-archive
 			$(use_enable avahi)
 			$(use_enable bluetooth obexftp)
 			$(use_enable cdda)
