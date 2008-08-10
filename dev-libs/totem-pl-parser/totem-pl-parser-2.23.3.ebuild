@@ -15,19 +15,13 @@ IUSE="doc hal"
 RDEPEND=">=x11-libs/gtk+-2.12
 		 >=dev-libs/glib-2.16.3
 		 >=gnome-extra/evolution-data-server-1.12
-		 hal? ( =sys-apps/hal-0.5* >=sys-apps/dbus-1.0 )"
+		 hal? (
+		 	=sys-apps/hal-0.5*
+			>=sys-apps/dbus-1.0 )"
 DEPEND="${RDEPEND}
 		!<media-video/totem-2.21
 		>=dev-util/intltool-0.35
 		doc? ( dev-util/gtk-doc )"
-
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
-
-	epatch "${FILESDIR}/totem-pl-parser-svn-127-gnome-vfs-removal.patch"
-	eautoconf
-}
 
 src_compile() {
 	econf $(use_with hal) || die "configure failed"
