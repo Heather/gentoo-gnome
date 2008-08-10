@@ -18,7 +18,7 @@ IUSE="cjk gnome python"
 # once libgnome can truely die (gnome 2.24 material)
 RDEPEND=">=dev-libs/glib-2.16.3
 	>=x11-libs/pango-1.2.1
-	>=x11-libs/gtk+-2.12
+	>=x11-libs/gtk+-2.13
 	gnome? ( gnome-base/gconf )
 	python? ( >=dev-python/pygtk-2.7.1 )"
 DEPEND="${RDEPEND}
