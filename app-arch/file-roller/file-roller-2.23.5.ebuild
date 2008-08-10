@@ -20,6 +20,7 @@ RDEPEND=">=dev-libs/glib-2.16.0
 		 >=gnome-base/gconf-2
 		 nautilus? ( >=gnome-base/nautilus-2.22.2 )"
 DEPEND="${RDEPEND}
+		gnome-base/gnome-common
 		sys-devel/gettext
 		>=dev-util/intltool-0.35
 		>=dev-util/pkgconfig-0.19
@@ -43,7 +44,8 @@ src_unpack() {
 	epatch "${FILESDIR}"/${PN}-2.10.3-use_bin_tar.patch
 
 	# use a local rpm2cpio script to avoid the dep
-	epatch "${FILESDIR}"/${PN}-2.10-use_fr_rpm2cpio.patch
+	sed -e "s/rpm2cdio/rpm2cdio-file-roller/g" \
+		-i src/fr-command-rpc.c || die "sed failed"
 }
 
 src_install() {
