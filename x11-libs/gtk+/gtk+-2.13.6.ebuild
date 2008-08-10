@@ -12,7 +12,7 @@ SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="X cups debug doc jpeg tiff vim-syntax xinerama"
 
-RDEPEND=">=dev-libs/glib-2.17.4
+RDEPEND=">=dev-libs/glib-2.17.6
 		 >=x11-libs/pango-1.20
 		 >=dev-libs/atk-1.13
 		 >=x11-libs/cairo-1.6

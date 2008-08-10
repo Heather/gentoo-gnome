@@ -38,7 +38,7 @@ RDEPEND=">=x11-libs/gtk+-2.12
 					>=gnome-base/libgnomekbd-2.21.4.1
 					gnome-base/gnome-settings-daemon
 
-					>=gnome-extra/gucharmap-2.23
+					>=gnome-extra/gucharmap-1.4
 					>=gnome-base/libgtop-2.11.92
 					>=gnome-base/gnome-vfs-2.15.4
 
