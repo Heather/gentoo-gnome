@@ -22,10 +22,8 @@ RDEPEND=">=dev-libs/glib-2.16
 		 >=gnome-base/gnome-keyring-2.21.92
 		 >=gnome-base/gconf-2
 		 >=x11-libs/startup-notification-0.9
-
-		  x11-apps/xrdb
-		  x11-apps/xdpyinfo
-		  x11-apps/setxkbmap"
+		  
+		  x11-apps/xdpyinfo"
 DEPEND="${RDEPEND}
 		>=sys-devel/gettext-0.10.40
 		>=dev-util/pkgconfig-0.17
