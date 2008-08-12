@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/gnome-power-manager/gnome-power-manager-2.22.1.ebuild,v 1.8 2008/08/10 12:44:55 maekke Exp $
 
-inherit gnome2 eutils virtualx
+inherit autotools eutils gnome2 virtualx
 
 DESCRIPTION="Gnome Power Manager"
 HOMEPAGE="http://www.gnome.org/projects/gnome-power-manager/"
@@ -63,7 +63,8 @@ pkg_setup() {
 		--disable-policykit
 		--enable-xevents
 		--enable-applets
-		--enable-gconf-defaults"
+		--disable-gconf-defaults"
+		# Disable gconf default because it requires polkit
 }
 
 src_unpack() {
@@ -72,12 +73,19 @@ src_unpack() {
 	if use doc; then
 		# Actually install all html files, not just the index
 		sed -i -e 's:\(htmldoc_DATA = \).*:\1$(SPEC_HTML_FILES):' \
-			"${S}/docs/Makefile.in"
+			"${S}/docs/Makefile.am"
 	else
 		# Remove the docbook2man rules here since it's not handled by a proper
 		# parameter in configure.in.
-		sed -i -e 's:@HAVE_DOCBOOK2MAN_TRUE@.*::' "${S}/man/Makefile.in"
+		sed -i -e 's:@HAVE_DOCBOOK2MAN_TRUE@.*::' "${S}/man/Makefile.am"
 	fi
+
+	mkdir m4
+
+	# Fix configure
+	epatch "${FILESDIR}/${P}-autofoo.patch"
+
+	eautoreconf
 
 	# glibc splits this out, whereas other libc's do not tend to
 	use elibc_glibc || sed -i -e 's/-lresolv//' configure
