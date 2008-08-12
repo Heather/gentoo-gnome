@@ -13,7 +13,7 @@ KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 KERNEL_IUSE="kernel_linux"
 IUSE="debug doc libnotify opengl pam $KERNEL_IUSE"
 
-RDEPEND=">=x11-libs/gtk+-2.11.5
+RDEPEND=">=x11-libs/gtk+-2.13
 		 >=dev-libs/dbus-glib-0.71
 		 >=gnome-base/gconf-2.6.1
 		 >=gnome-base/gnome-desktop-2.23.2
