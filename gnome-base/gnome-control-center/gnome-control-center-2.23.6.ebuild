@@ -4,7 +4,7 @@
 
 EAPI="1"
 
-inherit gnome2
+inherit eutils gnome2
 
 DESCRIPTION="The gnome2 Desktop configuration tool"
 HOMEPAGE="http://www.gnome.org/"
@@ -90,4 +90,11 @@ pkg_setup() {
 		$(use_enable eds aboutme)
 		$(use_enable esd)
 		$(use_enable hal)"
+}
+
+src_unpack() {
+	gnome2_src_unpack
+
+	# Fix a crash on changing theme, from bug #547448
+	epatch "${FILESDIR}/${P}-change-theme.patch"
 }
