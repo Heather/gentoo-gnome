@@ -11,12 +11,11 @@ LICENSE="GPL-2 LGPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc64 ~sparc ~x86"
 
-IUSE="bluetooth debug galago gnome lirc nautilus nsplugin nvtv python seamonkey tracker xulrunner"
+IUSE="bluetooth debug galago gnome lirc nautilus nsplugin nvtv python tracker"
 
 RDEPEND=">=dev-libs/glib-2.15
 		 >=x11-libs/gtk+-2.12.6
 		 >=gnome-base/gconf-2.0
-		 >=gnome-base/gnome-vfs-2.16
 		 >=dev-libs/totem-pl-parser-2.21.90
 		 >=x11-themes/gnome-icon-theme-2.16
 		   app-text/iso-codes
@@ -46,9 +45,10 @@ RDEPEND=">=dev-libs/glib-2.15
 		 lirc? ( app-misc/lirc )
 		 nautilus? ( >=gnome-base/nautilus-2.10 )
 		 nsplugin?	(
-						xulrunner? ( =net-libs/xulrunner-1.8* )
-						!xulrunner? ( seamonkey? ( =www-client/seamonkey-1* ) )
-						!xulrunner? ( !seamonkey? ( =www-client/mozilla-firefox-2* ) )
+						|| (
+							net-libs/xulrunner
+							www-client/seamonkey
+							www-client/mozilla-firefox )
 						>=x11-misc/shared-mime-info-0.22
 						>=x11-libs/startup-notification-0.8
 					)
@@ -75,34 +75,26 @@ pkg_setup() {
 		fi
 	fi
 
-	# use global mozilla plugin dir
-	G2CONF="${G2CONF} MOZILLA_PLUGINDIR=/usr/$(get_libdir)/nsbrowser/plugins"
 
-	G2CONF="${G2CONF} --disable-vala --with-dbus"
-	G2CONF="${G2CONF} --enable-easy-codec-installation"
+	G2CONF="${G2CONF}
+		--disable-vala
+		--with-dbus
+		--enable-easy-codec-installation
+		$(use_enable nsplugin browser-plugins)"
 
-	if use nsplugin ; then
-		G2CONF="${G2CONF} --enable-browser-plugins"
-
-		if use xulrunner ; then
-			G2CONF="${G2CONF} --with-gecko=xulrunner"
-		elif use seamonkey ; then
-			G2CONF="${G2CONF} --with-gecko=seamonkey"
-		else
-			G2CONF="${G2CONF} --with-gecko=firefox"
-		fi
-	else
-		G2CONF="${G2CONF} --disable-browser-plugins"
-	fi
-
-	# Plugin Configuration
-	G2CONF="${G2CONF} PLUGINDIR=/usr/$(get_libdir)/totem/plugins"
+	# plugins configuration
+	G2CONF="${G2CONF}
+		BROWSER_PLUGIN_DIR=/usr/$(get_libdir)/nsbrowser/plugins
+	    PLUGINDIR=/usr/$(get_libdir)/totem/plugins"
 
 	local plugins="properties,thumbnail,screensaver,ontop,gromit,media-player-keys,skipto"
 	use bluetooth && plugins="${plugins},bemused"
 	use galago && plugins="${plugins},galago"
 	use lirc && plugins="${plugins},lirc"
-	#use python && plugins="${plugins},youtube"
+
+	# Test again before pushing to the tree.
+	use python && plugins="${plugins},youtube"
+
 	use tracker && plugins="${plugins},tracker"
 
 	G2CONF="${G2CONF} --with-plugins=${plugins}"
@@ -117,11 +109,10 @@ pkg_setup() {
 src_unpack() {
 	gnome2_src_unpack
 
-	if use nsplugin && ! use xulrunner && ! use seamonkey ; then
-		epatch "${FILESDIR}/${PN}-2.20.1-xpcom-hack.patch"
-	fi
-
 	epatch "${FILESDIR}/${PN}-2.22.2-fix-python-and-libtool-2.2.patch"
+
+	# Fix nsplugin installation location, gnome bug #547688
+	epatch "${FILESDIR}/${P}-nsplugins-location.patch"
 
 	eautoreconf
 }
