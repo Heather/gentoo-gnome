@@ -10,7 +10,7 @@ HOMEPAGE="http://www.gnome.org/"
 LICENSE="GPL-2 FDL-1.1 LGPL-2"
 SLOT="2"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
-IUSE="acpi apm doc gnome gstreamer hal ipv6 test"
+IUSE="acpi apm doc gnome gstreamer hal ipv6"
 
 # TODO: configure says python stuff is optional
 # my secret script says cpufrequtils might be needed in RDEPEND
@@ -61,11 +61,10 @@ DEPEND="${RDEPEND}
 		>=dev-util/pkgconfig-0.19
 		>=dev-util/intltool-0.35
 		dev-libs/libxslt
+		~app-text/docbook-xml-dtd-4.3
 		doc? (
 				app-text/docbook-sgml-utils
-				~app-text/docbook-xml-dtd-4.3
-			)
-		test? ( ~app-text/docbook-xml-dtd-4.3 )"
+			)"
 
 DOCS="AUTHORS ChangeLog NEWS README"
 
