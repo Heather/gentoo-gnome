@@ -82,8 +82,11 @@ src_unpack() {
 
 	mkdir m4
 
-	# Fix configure
+	# Fix configure, upstream bug #547502
 	epatch "${FILESDIR}/${P}-autofoo.patch"
+
+	# Fix crash on update, upstream bug #547766
+	epatch "${FILESDIR}/${P}-fix-update-crash.patch"
 
 	eautoreconf
 
