@@ -37,7 +37,7 @@ RDEPEND=">=gnome-base/libgnome-2.14
 			epiphany? ( >=www-client/epiphany-2.14 )
 			gedit? ( >=app-editors/gedit-2.16 )
 		 )
-		 gnome-keyring? ( >=gnome-base/gnome-keyring-2.21.3.2 )
+		 gnome-keyring? ( >=gnome-base/gnome-keyring-2.23.6 )
 		 ldap? ( net-nds/openldap )
 		 libnotify? ( >=x11-libs/libnotify-0.3.2 )
 		 nautilus? ( >=gnome-base/nautilus-2.12 )"
