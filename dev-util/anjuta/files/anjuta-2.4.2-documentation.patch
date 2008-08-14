@@ -1,0 +1,39 @@
+diff -urNp anjuta-2.4.2-orig/manuals/anjuta-manual/C/debugger.xml anjuta-2.4.2/manuals/anjuta-manual/C/debugger.xml
+--- anjuta-2.4.2-orig/manuals/anjuta-manual/C/debugger.xml	2008-06-06 11:16:35.000000000 +0530
++++ anjuta-2.4.2/manuals/anjuta-manual/C/debugger.xml	2008-06-06 11:18:18.000000000 +0530
+@@ -49,10 +49,10 @@
+     <menuchoice><guisubmenu>Debug</guisubmenu><guimenuitem>Run Target&hellip;</guimenuitem></menuchoice>
+     to display a dialog box where you can select:
+     <itemizedlist>
+-     <listitem>The program that you want to debug</listitem>
+-     <listitem>The command line parameters</listitem>
+-     <listitem>If you want a terminal or not (the Anjuta terminal plugin is used)</listitem>
+-     <listitem>If you want to stop the program at the beginning or not</listitem>
++     <listitem><para>The program that you want to debug</para></listitem>
++     <listitem><para>The command line parameters</para></listitem>
++     <listitem><para>If you want a terminal or not (the Anjuta terminal plugin is used)</para></listitem>
++     <listitem><para>If you want to stop the program at the beginning or not</para></listitem>
+     </itemizedlist>
+    </para>
+    <para>
+@@ -403,13 +403,13 @@
+        <para>
+         Enter the location at which to set the breakpoint. It has to be specified in one of
+         the following formats:
+-        <para>
+-         <orderedlist>
+-          <listitem><para>File_name:Line_number</para></listitem>
+-          <listitem><para>Function_name</para></listitem>
+-          <listitem><para>File:Function_name</para></listitem>
+-         </orderedlist>
+-        </para>
++       </para>
++       <para>
++        <orderedlist>
++         <listitem><para>File_name:Line_number</para></listitem>
++         <listitem><para>Function_name</para></listitem>
++         <listitem><para>File:Function_name</para></listitem>
++        </orderedlist>
+        </para>
+        <para>
+         The first one is obvious &mdash; The location refers to the line number 
