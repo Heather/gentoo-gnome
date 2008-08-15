@@ -1,0 +1,229 @@
+---
+At revision 2079, fixes parallel build
+
+ Tomboy/Addins/Backlinks/Makefile.am             |    2 ++
+ Tomboy/Addins/Bugzilla/Makefile.am              |    2 ++
+ Tomboy/Addins/Evolution/Makefile.am             |    2 ++
+ Tomboy/Addins/ExportToHtml/Makefile.am          |    2 ++
+ Tomboy/Addins/FileSystemSyncService/Makefile.am |    2 ++
+ Tomboy/Addins/FixedWidth/Makefile.am            |    2 ++
+ Tomboy/Addins/GalagoPresence/Makefile.am        |    2 ++
+ Tomboy/Addins/InsertTimestamp/Makefile.am       |    2 ++
+ Tomboy/Addins/NoteOfTheDay/Makefile.am          |    2 ++
+ Tomboy/Addins/PrintNotes/Makefile.am            |    2 ++
+ Tomboy/Addins/Sketching/Makefile.am             |    2 ++
+ Tomboy/Addins/SshSyncService/Makefile.am        |    2 ++
+ Tomboy/Addins/StickyNoteImport/Makefile.am      |    2 ++
+ Tomboy/Addins/Tasque/Makefile.am                |    2 ++
+ Tomboy/Addins/WebDavSyncService/Makefile.am     |    2 ++
+ Tomboy/Makefile.am                              |    2 ++
+ 19 files changed, 60 insertions(+), 1 deletion(-)
+
+Index: Tomboy/Addins/Sketching/Makefile.am
+===================================================================
+--- Tomboy/Addins/Sketching/Makefile.am	(révision 2078)
++++ Tomboy/Addins/Sketching/Makefile.am	(révision 2079)
+@@ -26,6 +26,8 @@
+ RESOURCES = \
+ 	-resource:$(srcdir)/$(ADDIN_NAME).addin.xml
+ 
++$(TARGET).mdb: $(TARGET)
++
+ $(TARGET): $(CSFILES) $(top_builddir)/Tomboy/Tomboy.exe
+ 	$(CSC) -out:$@ $(CSFLAGS) $(ASSEMBLIES) $(CSFILES) $(RESOURCES)
+ 
+Index: Tomboy/Addins/GalagoPresence/Makefile.am
+===================================================================
+--- Tomboy/Addins/GalagoPresence/Makefile.am	(révision 2078)
++++ Tomboy/Addins/GalagoPresence/Makefile.am	(révision 2079)
+@@ -22,6 +22,8 @@
+ RESOURCES = \
+ 	-resource:$(srcdir)/$(ADDIN_NAME).addin.xml
+ 
++$(TARGET).mdb: $(TARGET)
++
+ $(TARGET): $(CSFILES) $(top_builddir)/Tomboy/Tomboy.exe
+ 	$(CSC) -out:$@ $(CSFLAGS) $(ASSEMBLIES) $(CSFILES) $(RESOURCES)
+ 
+Index: Tomboy/Addins/Evolution/Makefile.am
+===================================================================
+--- Tomboy/Addins/Evolution/Makefile.am	(révision 2078)
++++ Tomboy/Addins/Evolution/Makefile.am	(révision 2079)
+@@ -23,6 +23,8 @@
+ 	-resource:$(srcdir)/$(ADDIN_NAME).addin.xml \
+ 	-resource:$(srcdir)/mail.png,mail.png
+ 
++$(TARGET).mdb: $(TARGET)
++
+ $(TARGET): $(CSFILES) $(top_builddir)/Tomboy/Tomboy.exe
+ 	$(CSC) -out:$@ $(CSFLAGS) $(ASSEMBLIES) $(CSFILES) $(RESOURCES)
+ 
+Index: Tomboy/Addins/WebDavSyncService/Makefile.am
+===================================================================
+--- Tomboy/Addins/WebDavSyncService/Makefile.am	(révision 2078)
++++ Tomboy/Addins/WebDavSyncService/Makefile.am	(révision 2079)
+@@ -21,6 +21,8 @@
+ RESOURCES = \
+ 	-resource:$(srcdir)/WebDavSyncService.addin.xml
+ 
++$(TARGET).mdb: $(TARGET)
++
+ $(TARGET): $(CSFILES) $(top_builddir)/Tomboy/Tomboy.exe
+ 	$(CSC) -out:$@ $(CSFLAGS) $(ASSEMBLIES) $(CSFILES) $(RESOURCES)
+ 
+Index: Tomboy/Addins/StickyNoteImport/Makefile.am
+===================================================================
+--- Tomboy/Addins/StickyNoteImport/Makefile.am	(révision 2078)
++++ Tomboy/Addins/StickyNoteImport/Makefile.am	(révision 2079)
+@@ -18,6 +18,8 @@
+ RESOURCES = \
+ 	-resource:$(srcdir)/$(ADDIN_NAME).addin.xml
+ 
++$(TARGET).mdb: $(TARGET)
++
+ $(TARGET): $(CSFILES) $(top_builddir)/Tomboy/Tomboy.exe
+ 	$(CSC) -out:$@ $(CSFLAGS) $(ASSEMBLIES) $(CSFILES) $(RESOURCES)
+ 
+Index: Tomboy/Addins/InsertTimestamp/Makefile.am
+===================================================================
+--- Tomboy/Addins/InsertTimestamp/Makefile.am	(révision 2078)
++++ Tomboy/Addins/InsertTimestamp/Makefile.am	(révision 2079)
+@@ -20,6 +20,8 @@
+ RESOURCES = \
+ 	-resource:$(srcdir)/$(ADDIN_NAME).addin.xml
+ 
++$(TARGET).mdb: $(TARGET)
++
+ $(TARGET): $(CSFILES) $(top_builddir)/Tomboy/Tomboy.exe
+ 	$(CSC) -out:$@ $(CSFLAGS) $(ASSEMBLIES) $(CSFILES) $(RESOURCES)
+ 
+Index: Tomboy/Addins/NoteOfTheDay/Makefile.am
+===================================================================
+--- Tomboy/Addins/NoteOfTheDay/Makefile.am	(révision 2078)
++++ Tomboy/Addins/NoteOfTheDay/Makefile.am	(révision 2079)
+@@ -21,6 +21,8 @@
+ RESOURCES = \
+ 	-resource:$(srcdir)/$(ADDIN_NAME).addin.xml
+ 
++$(TARGET).mdb: $(TARGET)
++
+ $(TARGET): $(CSFILES) $(top_builddir)/Tomboy/Tomboy.exe
+ 	$(CSC) -out:$@ $(CSFLAGS) $(ASSEMBLIES) $(CSFILES) $(RESOURCES)
+ 
+Index: Tomboy/Addins/FixedWidth/Makefile.am
+===================================================================
+--- Tomboy/Addins/FixedWidth/Makefile.am	(révision 2078)
++++ Tomboy/Addins/FixedWidth/Makefile.am	(révision 2079)
+@@ -20,6 +20,8 @@
+ RESOURCES = \
+ 	-resource:$(srcdir)/$(ADDIN_NAME).addin.xml
+ 
++$(TARGET).mdb: $(TARGET)
++
+ $(TARGET): $(CSFILES) $(top_builddir)/Tomboy/Tomboy.exe
+ 	$(CSC) -out:$@ $(CSFLAGS) $(ASSEMBLIES) $(CSFILES) $(RESOURCES)
+ 
+Index: Tomboy/Addins/Backlinks/Makefile.am
+===================================================================
+--- Tomboy/Addins/Backlinks/Makefile.am	(révision 2078)
++++ Tomboy/Addins/Backlinks/Makefile.am	(révision 2079)
+@@ -19,6 +19,8 @@
+ RESOURCES = \
+ 	-resource:$(srcdir)/$(ADDIN_NAME).addin.xml
+ 
++$(TARGET).mdb: $(TARGET)
++
+ $(TARGET): $(CSFILES) $(top_builddir)/Tomboy/Tomboy.exe
+ 	$(CSC) -out:$@ $(CSFLAGS) $(ASSEMBLIES) $(CSFILES) $(RESOURCES)
+ 
+Index: Tomboy/Addins/Tasque/Makefile.am
+===================================================================
+--- Tomboy/Addins/Tasque/Makefile.am	(révision 2078)
++++ Tomboy/Addins/Tasque/Makefile.am	(révision 2079)
+@@ -23,6 +23,8 @@
+ 	-resource:$(srcdir)/$(ADDIN_NAME).addin.xml \
+ 	-resource:$(srcdir)/tasque-22.png,tasque.png
+ 
++$(TARGET).mdb: $(TARGET)
++
+ $(TARGET): $(CSFILES) $(top_builddir)/Tomboy/Tomboy.exe
+ 	$(CSC) -out:$@ $(CSFLAGS) $(ASSEMBLIES) $(CSFILES) $(RESOURCES)
+ 
+Index: Tomboy/Addins/FileSystemSyncService/Makefile.am
+===================================================================
+--- Tomboy/Addins/FileSystemSyncService/Makefile.am	(révision 2078)
++++ Tomboy/Addins/FileSystemSyncService/Makefile.am	(révision 2079)
+@@ -21,6 +21,8 @@
+ RESOURCES = \
+ 	-resource:$(srcdir)/FileSystemSyncService.addin.xml
+ 
++$(TARGET).mdb: $(TARGET)
++
+ $(TARGET): $(CSFILES) $(top_builddir)/Tomboy/Tomboy.exe
+ 	$(CSC) -out:$@ $(CSFLAGS) $(ASSEMBLIES) $(CSFILES) $(RESOURCES)
+ 
+Index: Tomboy/Addins/PrintNotes/Makefile.am
+===================================================================
+--- Tomboy/Addins/PrintNotes/Makefile.am	(révision 2078)
++++ Tomboy/Addins/PrintNotes/Makefile.am	(révision 2079)
+@@ -19,6 +19,8 @@
+ RESOURCES = \
+ 	-resource:$(srcdir)/$(ADDIN_NAME).addin.xml
+ 
++$(TARGET).mdb: $(TARGET)
++
+ $(TARGET): $(CSFILES) $(top_builddir)/Tomboy/Tomboy.exe
+ 	$(CSC) -out:$@ $(CSFLAGS) $(ASSEMBLIES) $(CSFILES) $(RESOURCES)
+ 
+Index: Tomboy/Addins/ExportToHtml/Makefile.am
+===================================================================
+--- Tomboy/Addins/ExportToHtml/Makefile.am	(révision 2078)
++++ Tomboy/Addins/ExportToHtml/Makefile.am	(révision 2079)
+@@ -22,6 +22,8 @@
+ 	-resource:$(srcdir)/ExportToHtml.xsl
+ 
+ 
++$(TARGET).mdb: $(TARGET)
++
+ $(TARGET): $(CSFILES) $(top_builddir)/Tomboy/Tomboy.exe
+ 	$(CSC) -out:$@ $(CSFLAGS) $(ASSEMBLIES) $(CSFILES) $(RESOURCES)
+ 
+Index: Tomboy/Addins/Bugzilla/Makefile.am
+===================================================================
+--- Tomboy/Addins/Bugzilla/Makefile.am	(révision 2078)
++++ Tomboy/Addins/Bugzilla/Makefile.am	(révision 2079)
+@@ -24,6 +24,8 @@
+ 	-resource:$(srcdir)/bug.png,bug.png
+ 
+ 
++$(TARGET).mdb: $(TARGET)
++
+ $(TARGET): $(CSFILES) $(top_builddir)/Tomboy/Tomboy.exe
+ 	$(CSC) -out:$@ $(CSFLAGS) $(ASSEMBLIES) $(CSFILES) $(RESOURCES)
+ 
+Index: Tomboy/Addins/SshSyncService/Makefile.am
+===================================================================
+--- Tomboy/Addins/SshSyncService/Makefile.am	(révision 2078)
++++ Tomboy/Addins/SshSyncService/Makefile.am	(révision 2079)
+@@ -21,6 +21,8 @@
+ RESOURCES = \
+ 	-resource:$(srcdir)/SshSyncService.addin.xml
+ 
++$(TARGET).mdb: $(TARGET)
++
+ $(TARGET): $(CSFILES) $(top_builddir)/Tomboy/Tomboy.exe
+ 	$(CSC) -out:$@ $(CSFLAGS) $(ASSEMBLIES) $(CSFILES) $(RESOURCES)
+ 
+Index: Tomboy/Makefile.am
+===================================================================
+--- Tomboy/Makefile.am	(révision 2078)
++++ Tomboy/Makefile.am	(révision 2079)
+@@ -91,6 +91,8 @@
+ 	-resource:$(srcdir)/Tomboy.addin.xml
+ 
+ 
++$(TARGET).mdb: $(TARGET)
++
+ $(TARGET): $(CSFILES) Defines.cs
+ 	$(CSC) -out:$@ $(CSFLAGS) $^ $(ASSEMBLIES) $(RESOURCES)
+ 

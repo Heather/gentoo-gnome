@@ -1,0 +1,41 @@
+---
+ From revision 2083 and 2084
+ Fix compilation with older gtk-sharp and pango-sharp
+
+ Addins/PrintNotes/PrintNotesNoteAddin.cs |    2 +-
+ Tomboy.cs                                |    8 +++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
+   
+Index: Tomboy/Tomboy.cs
+===================================================================
+--- Tomboy/Tomboy.cs	(révision 2082)
++++ Tomboy/Tomboy.cs	(révision 2084)
+@@ -240,8 +240,14 @@
+ 
+ 		static void OnShowHelpAction (object sender, EventArgs args)
+ 		{
++			Gdk.Screen screen = null;
++			if (tray_icon != null) {
++				Gdk.Rectangle area;
++				Gtk.Orientation orientation;
++				tray_icon.GetGeometry (out screen, out area, out orientation);
++			}
+ 			GuiUtils.ShowHelp("tomboy.xml", null,
+-			                  tray_icon == null ? null : tray_icon.Screen,
++			                  screen,
+ 			                  null);
+ 
+ 		}
+Index: Tomboy/Addins/PrintNotes/PrintNotesNoteAddin.cs
+===================================================================
+--- Tomboy/Addins/PrintNotes/PrintNotesNoteAddin.cs	(révision 2082)
++++ Tomboy/Addins/PrintNotes/PrintNotesNoteAddin.cs	(révision 2084)
+@@ -61,7 +61,7 @@
+ 				                                  font_size);
+ 			layout.FontDescription = desc;
+ 			
+-			layout.Width = Pango.Units.FromDouble (context.Width);
++			layout.Width = Pango.Units.FromPixels ((int)context.Width);
+ 			
+ 			Gtk.TextIter start_iter, end_iter;
+ 			Buffer.GetBounds (out start_iter, out end_iter);
