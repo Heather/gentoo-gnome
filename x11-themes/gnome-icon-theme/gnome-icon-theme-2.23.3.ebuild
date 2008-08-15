@@ -23,3 +23,7 @@ DOCS="AUTHORS ChangeLog NEWS TODO"
 
 # This ebuild does not install any binaries
 RESTRICT="binchecks strip"
+
+pkg_setup() {
+	G2CONF="${G2CONF} --enable-icon-mapping"
+}
