@@ -16,7 +16,7 @@ IUSE="doc examples libffi"
 
 RDEPEND=">=dev-lang/python-2.4.4-r5
 	>=dev-libs/glib-2.16
-	!<dev-python/pygtk-2.13"
+	!<dev-python/pygtk-2.9"
 DEPEND="${RDEPEND}
 	doc? ( dev-libs/libxslt >=app-text/docbook-xsl-stylesheets-1.70.1 )
 	>=dev-util/pkgconfig-0.12.0"

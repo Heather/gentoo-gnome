@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-themes/gnome-backgrounds/gnome-backgrounds-2.22.0.ebuild,v 1.4 2008/08/10 10:19:05 maekke Exp $
 
+GCONF_DEBUG="no"
+
 inherit gnome2
 
 DESCRIPTION="A set of backgrounds packaged with the GNOME desktop"

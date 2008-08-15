@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-themes/gnome-themes/gnome-themes-2.22.2.ebuild,v 1.4 2008/08/10 11:07:01 maekke Exp $
 
+GCONF_DEBUG="no"
+
 inherit gnome2
 
 DESCRIPTION="A set of GNOME themes, with sets for users with limited or low vision"
