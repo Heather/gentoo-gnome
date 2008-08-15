@@ -6,13 +6,13 @@ inherit autotools bash-completion eutils multilib pam
 
 MY_PN="PolicyKit"
 
-DESCRIPTION="Policy framework for setting user allowed actions with priviledge"
+DESCRIPTION="Policy framework for controlling privileges for system-wide services"
 HOMEPAGE="http://hal.freedesktop.org/docs/PolicyKit"
 SRC_URI="http://hal.freedesktop.org/releases/${MY_PN}-${PV}.tar.gz"
 
-LICENSE="GPL-2"
+LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc64 ~sparc ~x86"
 IUSE="bash-completion doc pam selinux zsh-completion"
 
 RDEPEND=">=dev-libs/glib-2.6
@@ -70,6 +70,8 @@ src_compile() {
 src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 
+	dodoc NEWS README AUTHORS ChangeLog
+
 	if use bash-completion; then
 		dobashcompletion "${S}/tools/polkit-bash-completion.sh"
 	fi
@@ -81,18 +83,12 @@ src_install() {
 		doins "${S}/tools/_polkit_action" || die
 	fi
 
-	# Need to keep a few directories around...
-	keepdir /var/run/PolicyKit
-	keepdir /var/lib/PolicyKit
-
 	einfo "Installing basic PolicyKit.conf"
 	insinto /etc/PolicyKit
 	doins "${FILESDIR}"/PolicyKit.conf
-}
+	# Need to keep a few directories around...
 
-pkg_postinst() {
-	einfo "Fixing permissions..."
-	chmod 770 "${ROOT}"var/run/PolicyKit
-	chmod 770 "${ROOT}"var/lib/PolicyKit
-	chmod 755 "${ROOT}"var/lib/PolicyKit-public
+	diropts -m0770
+	keepdir /var/run/PolicyKit
+	keepdir /var/lib/PolicyKit
 }

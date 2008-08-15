@@ -10,7 +10,7 @@ DESCRIPTION="PolicyKit policies and configurations for the GNOME desktop"
 HOMEPAGE="http://hal.freedesktop.org/docs/PolicyKit"
 SRC_URI="http://hal.freedesktop.org/releases/${MY_PN}-${PV}.tar.bz2"
 
-LICENSE="|| ( LGPL-2 GPL-2 )"
+LICENSE="LGPL-2 GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="doc examples"
