@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/net-misc/vino/vino-2.22.2.ebuild,v 1.5 2008/08/12 13:44:41 armin76 Exp $
 
-inherit eutils gnome2
+inherit autotools eutils gnome2
 
 DESCRIPTION="An integrated VNC server for GNOME"
 HOMEPAGE="http://www.gnome.org/"
@@ -51,4 +51,13 @@ pkg_setup() {
 		$(use_with zlib)
 		$(use_with zlib libz)
 		--enable-session-support"
+}
+
+src_unpack() {
+	gnome2_src_unpack
+
+	# Fix build issue and use a correct icon name, picked up from svn
+	epatch "${FILESDIR}/${P}-build-fixes-n-icon.patch"
+
+	eautoreconf
 }
