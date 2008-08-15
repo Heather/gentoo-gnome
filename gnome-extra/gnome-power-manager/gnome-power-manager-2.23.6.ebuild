@@ -9,8 +9,8 @@ HOMEPAGE="http://www.gnome.org/projects/gnome-power-manager/"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha amd64 hppa ~ia64 ppc ~sparc x86"
-IUSE="doc test"
+KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~sparc ~x86"
+IUSE="doc policykit test"
 
 # See bug #196490
 RESTRICT="test"
@@ -59,12 +59,11 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_enable test tests)
 		$(use_enable doc docbook-docs)
+		$(use_enable policykit)
+		$(use_enable policykit gconf-defaults)
 		--with-dpms-ext
-		--disable-policykit
 		--enable-xevents
-		--enable-applets
-		--disable-gconf-defaults"
-		# Disable gconf default because it requires polkit
+		--enable-applets"
 }
 
 src_unpack() {
