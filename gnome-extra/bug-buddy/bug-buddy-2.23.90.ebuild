@@ -14,7 +14,6 @@ IUSE="eds"
 
 RDEPEND=">=gnome-base/libbonobo-2
 	>=dev-libs/glib-2.16.0
-	>=gnome-base/gnome-desktop-2
 	>=gnome-base/libgnome-2
 	>=gnome-base/gnome-menus-2.11.1
 	>=gnome-base/libgnomeui-2.5.92
