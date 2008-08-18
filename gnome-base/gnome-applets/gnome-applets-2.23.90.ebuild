@@ -74,9 +74,6 @@ DOCS="AUTHORS ChangeLog NEWS README"
 src_unpack() {
 	gnome2_src_unpack
 
-	# Fix automagic dependency on policykit
-	epatch "${FILESDIR}/${PN}-2.23.3-polkit-automagic.patch"
-
 	# disable pyc compiling
 	mv py-compile py-compile.orig
 	ln -s $(type -P true) py-compile
