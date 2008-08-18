@@ -10,7 +10,7 @@ HOMEPAGE="http://www.gnome.org/"
 LICENSE="GPL-2 FDL-1.1 LGPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="doc eds networkmanager"
+IUSE="doc eds networkmanager policykit"
 
 RDEPEND=">=gnome-base/gnome-desktop-2.12
 		 >=x11-libs/pango-1.15.4
@@ -32,7 +32,10 @@ RDEPEND=">=gnome-base/gnome-desktop-2.12
 		 >=sys-apps/dbus-1.1.2
 		 >=x11-libs/cairo-1.0.0
 		 eds? ( >=gnome-extra/evolution-data-server-1.6 )
-		 networkmanager? ( >=net-misc/networkmanager-0.6 )"
+		 networkmanager? ( >=net-misc/networkmanager-0.6 )
+		 policykit? (
+			>=sys-auth/policykit-0.7
+			>=gnome-extra/policykit-gnome-0.7 )"
 DEPEND="${RDEPEND}
 		app-text/scrollkeeper
 		>=app-text/gnome-doc-utils-0.3.2
@@ -46,8 +49,8 @@ DOCS="AUTHORS ChangeLog HACKING NEWS README"
 pkg_setup() {
 	G2CONF="${G2CONF}
 			--disable-scrollkeeper
-			--disable-polkit
 			--with-in-process-applets=clock,notification-area,wncklet
+			$(use_enable policykit polkit)
 			$(use_enable networkmanager network-manager)
 			$(use_enable eds)"
 }
