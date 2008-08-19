@@ -7,9 +7,9 @@
 #
 
 # Daniel Gryniewicz <dang@gentoo.org> (22 Jul 2008)
-# Masking because the db summary work makes it not really usable yet
-=gnome-extra/evolution-data-server-2.23.5
-=mail-client/evolution-2.23.5
+# It ate my email.  danger, Will Robinson
+>=gnome-extra/evolution-data-server-2.23.5
+>=mail-client/evolution-2.23.5
 
 # Gilles Dartiguelongue <gdartiguelongue> (16 Aug 2008)
 # Masking because it's experimental, not sure it'll make it for 2.24
