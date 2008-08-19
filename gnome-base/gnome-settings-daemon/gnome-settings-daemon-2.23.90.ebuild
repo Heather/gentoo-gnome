@@ -20,7 +20,7 @@ RDEPEND=">=dev-libs/dbus-glib-0.74
 
 		 >=gnome-base/libglade-2
 		 >=gnome-base/libgnome-2.0
-		 >=gnome-base/gnome-desktop-2.23.5
+		 >=gnome-base/gnome-desktop-2.23.90
 
 		 x11-libs/libX11
 		 x11-libs/libXi

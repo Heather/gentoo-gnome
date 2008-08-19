@@ -43,14 +43,11 @@ src_unpack() {
 		fi
 	fi
 
-	sed -e "s/MATCH_LIMIT_RECURSION=10000000/MATCH_LIMIT_RECURSION=8192/g" \
-		-i "${S}/glib/pcre/Makefile.in" "${S}/glib/pcre/Makefile.am"
-
 	# Fix gmodule issues on fbsd; bug #184301
 	epatch "${FILESDIR}"/${PN}-2.12.12-fbsd.patch
 
 	# Turn off building tests by default. Bug #226209
-	epatch "${FILESDIR}"/${PN}-2.17.0-notests.patch
+	epatch "${FILESDIR}"/${PN}-2.17.7-notests.patch
 
 	[[ ${CHOST} == *-freebsd* ]] && elibtoolize
 }
