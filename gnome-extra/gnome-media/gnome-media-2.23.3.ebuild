@@ -4,7 +4,7 @@
 
 EAPI="1"
 
-inherit gnome2 eutils autotools
+inherit eutils gnome2
 
 DESCRIPTION="Multimedia related programs for the GNOME desktop"
 HOMEPAGE="http://ronald.bitfreak.net/gnome-media.php"

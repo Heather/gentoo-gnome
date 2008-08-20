@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-text/evince/evince-2.22.2-r1.ebuild,v 1.1 2008/07/07 15:15:36 dang Exp $
 
-inherit eutils gnome2 autotools
+inherit eutils gnome2
 
 DESCRIPTION="Simple document viewer for GNOME"
 HOMEPAGE="http://www.gnome.org/projects/evince/"

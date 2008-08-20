@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/mousetweaks/mousetweaks-2.22.2.ebuild,v 1.2 2008/06/01 11:03:26 nixnut Exp $
 
-inherit gnome2 autotools
+inherit gnome2
 
 DESCRIPTION="Mouse accessibility enhancements for the GNOME desktop"
 HOMEPAGE="http://live.gnome.org/Mousetweaks/Home"

@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/deskbar-applet/deskbar-applet-2.22.3.1.ebuild,v 1.1 2008/08/04 21:43:15 eva Exp $
 
-inherit gnome2 eutils autotools python
+inherit gnome2 python
 
 DESCRIPTION="An Omnipresent Versatile Search Interface"
 HOMEPAGE="http://raphael.slinckx.net/deskbar/"
@@ -11,8 +11,6 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="eds spell test"
-
-# TODO: check if gnome-doc-utils doesn't imply scrollkeeper
 
 RDEPEND=">=dev-lang/python-2.4
 		 >=x11-libs/gtk+-2.12
@@ -45,15 +43,9 @@ pkg_setup() {
 src_unpack() {
 	gnome2_src_unpack
 
-	# Fix installing libs into pythondir
-	# 
-	#epatch "${FILESDIR}"/${PN}-2.19.5-multilib.patch
-
 	# disable pyc compiling
 	mv py-compile py-compile.orig
 	ln -s $(type -P true) py-compile
-
-	#AT_M4DIR="m4" eautoreconf
 }
 
 pkg_postinst() {
@@ -72,6 +64,6 @@ pkg_postinst() {
 
 pkg_postrm() {
 	gnome2_pkg_postrm
-	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages/deskbar
+	python_mod_cleanup /usr/$(get_libdir)/python${PYVER}/site-packages/deskbar
 	python_mod_cleanup /usr/$(get_libdir)/deskbar-applet/modules-2.20-compatible
 }

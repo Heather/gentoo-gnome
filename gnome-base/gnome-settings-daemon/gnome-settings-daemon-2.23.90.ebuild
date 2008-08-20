@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-settings-daemon/gnome-settings-daemon-2.22.1.ebuild,v 1.1 2008/04/07 21:39:13 eva Exp $
 
-inherit autotools eutils gnome2
+inherit gnome2
 
 DESCRIPTION="Gnome Settings Daemon"
 HOMEPAGE="http://www.gnome.org"
@@ -34,9 +34,9 @@ RDEPEND=">=dev-libs/dbus-glib-0.74
 		 gstreamer? (
 						>=media-libs/gstreamer-0.10.1.2
 						>=media-libs/gst-plugins-base-0.10.1.2
-					)
-		!<gnome-base/gnome-control-center-2.22"
+					)"
 DEPEND="${RDEPEND}
+		!<gnome-base/gnome-control-center-2.22
 		  sys-devel/gettext
 		>=dev-util/intltool-0.35.0
 		>=dev-util/pkgconfig-0.19

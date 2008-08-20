@@ -2,14 +2,14 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-applets/gnome-applets-2.22.1.ebuild,v 1.3 2008/05/08 19:13:40 dang Exp $
 
-inherit eutils gnome2 autotools python
+inherit gnome2 python
 
 DESCRIPTION="Applets for the GNOME Desktop and Panel"
 HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2 FDL-1.1 LGPL-2"
 SLOT="2"
-KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc64 ~sparc ~x86"
 IUSE="acpi apm doc gnome gstreamer hal ipv6 policykit"
 
 # TODO: configure says python stuff is optional
@@ -102,7 +102,7 @@ pkg_setup() {
 src_install() {
 	gnome2_src_install
 
-	APPLETS="accessx-status battstat charpick cpufreq drivemount geyes \
+	local APPLETS="accessx-status battstat charpick cpufreq drivemount geyes \
 			 gkb-new gswitchit gweather invest-applet mini-commander \
 			 mixer modemlights multiload null_applet stickynotes trashapplet"
 

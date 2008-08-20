@@ -7,11 +7,12 @@ inherit autotools eutils gnome2
 DESCRIPTION="Gnome session manager"
 HOMEPAGE="http://www.gnome.org/"
 SRC_URI="${SRC_URI}
-		 branding? ( mirror://gentoo/gentoo-splash.png )"
+		branding? ( mirror://gentoo/gentoo-splash.png )"
 
 LICENSE="GPL-2 LGPL-2 FDL-1.1"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc64 ~sparc ~x86"
+
 IUSE="branding ipv6 policykit"
 
 RDEPEND=">=dev-libs/glib-2.16
@@ -23,8 +24,8 @@ RDEPEND=">=dev-libs/glib-2.16
 		 >=gnome-base/gconf-2
 		 >=x11-libs/startup-notification-0.9
 		 policykit? ( >=gnome-extra/policykit-gnome-0.7 )
-		  
-		  x11-apps/xdpyinfo"
+
+		 x11-apps/xdpyinfo"
 DEPEND="${RDEPEND}
 		>=sys-devel/gettext-0.10.40
 		>=dev-util/pkgconfig-0.17

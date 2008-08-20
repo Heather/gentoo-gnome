@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/totem-pl-parser/totem-pl-parser-2.22.3.ebuild,v 1.1 2008/05/10 14:33:23 eva Exp $
 
-inherit autotools eutils gnome.org
+inherit gnome.org
 
 DESCRIPTION="Playlist parsing library"
 HOMEPAGE="http://www.gnome.org/projects/totem/"

@@ -2,14 +2,14 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-panel/gnome-panel-2.22.1.3.ebuild,v 1.1 2008/04/19 20:47:13 eva Exp $
 
-inherit autotools eutils gnome2
+inherit gnome2
 
 DESCRIPTION="The GNOME panel"
 HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2 FDL-1.1 LGPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc64 ~sparc ~x86"
 IUSE="doc eds networkmanager policykit"
 
 RDEPEND=">=gnome-base/gnome-desktop-2.12
