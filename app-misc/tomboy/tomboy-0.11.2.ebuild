@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-misc/tomboy/tomboy-0.10.2.ebuild,v 1.3 2008/08/10 19:11:47 maekke Exp $
 
-inherit autotools eutils gnome2 mono
+inherit eutils gnome2 mono
 
 DESCRIPTION="Desktop note-taking application"
 HOMEPAGE="http://www.beatniksoftware.com/tomboy/"
@@ -48,16 +48,4 @@ pkg_setup() {
 	fi
 
 	G2CONF="${G2CONF} $(use_enable galago) $(use_enable eds evolution) --with-mono-addins=system"
-}
-
-src_unpack() {
-	gnome2_src_unpack
-
-	# Fix parallel build, cherry-picked patch from upstream repo
-	epatch "${FILESDIR}/${P}-parallel-build.patch"
-
-	# Fix build with older libs, cherry-picked patch from upstream repo
-	epatch "${FILESDIR}/${P}-fix-build.patch"
-
-	eautoreconf
 }
