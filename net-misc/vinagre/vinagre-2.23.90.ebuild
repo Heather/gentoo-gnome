@@ -12,8 +12,8 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="test"
 
-RDEPEND=">=dev-libs/glib-2.15.3
-	>=x11-libs/gtk+-2.12
+RDEPEND=">=dev-libs/glib-2.17.0
+	>=x11-libs/gtk+-2.13.1
 	>=gnome-base/libglade-2.6
 	>=gnome-base/gconf-2.16
 	>=net-libs/gtk-vnc-0.3.6
