@@ -42,7 +42,7 @@ RDEPEND=">=dev-libs/glib-2.16.0
 DEPEND="${RDEPEND}
 	app-text/scrollkeeper
 	>=dev-util/pkgconfig-0.9
-	>=dev-util/intltool-0.35
+	>=dev-util/intltool-0.40
 	>=app-text/gnome-doc-utils-0.3.2
 	doc? ( >=dev-util/gtk-doc-1 )"
 
