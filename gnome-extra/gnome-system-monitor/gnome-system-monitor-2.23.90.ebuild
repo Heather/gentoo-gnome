@@ -21,7 +21,8 @@ RDEPEND=">=dev-libs/glib-2.16
 	>=dev-cpp/gtkmm-2.8
 	>=dev-cpp/glibmm-2.16
 	dev-libs/libxml2
-	>=gnome-base/librsvg-2.12"
+	>=gnome-base/librsvg-2.12
+	>=dev-libs/dbus-glib-0.70"
 
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.19
