@@ -10,9 +10,9 @@ HOMEPAGE="http://www.gnome.org/projects/eog/"
 LICENSE="GPL-2"
 SLOT="1"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
-IUSE="dbus jpeg lcms python"
+IUSE="dbus doc jpeg lcms python"
 
-RDEPEND=">=x11-libs/gtk+-2.11.6
+RDEPEND=">=x11-libs/gtk+-2.13.1
 		 >=dev-libs/glib-2.15.3
 		 >=gnome-base/libgnomeui-2.10
 		 >=gnome-base/libglade-2.3.6
@@ -37,7 +37,8 @@ DEPEND="${RDEPEND}
 		sys-devel/gettext
 		app-text/gnome-doc-utils
 		>=dev-util/intltool-0.40
-		>=dev-util/pkgconfig-0.17"
+		>=dev-util/pkgconfig-0.17
+		doc? ( >=dev-util/gtk-doc-1.10 )"
 
 DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README THANKS TODO"
 
@@ -47,7 +48,8 @@ pkg_setup() {
 			$(use_with jpeg libexif)
 			$(use_with dbus dbus-glib-1)
 			$(use_with lcms cms)
-			$(use_with python)
-			--disable-xmp
-			--disable-scrollkeeper"
+			$(use_enable python)
+			--without-xmp
+			--disable-scrollkeeper
+			--disable-schemas-install"
 }
