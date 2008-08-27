@@ -28,6 +28,13 @@ pkg_setup() {
 	G2CONF="$(use_enable doc docs)"
 }
 
+src_unpack() {
+	gnome2_src_unpack
+
+	# FIXME: report stupid usage of pkg-config
+	sed -e "s/\(--variable=codegendir py\)gtk/\1gobject/" -i configure
+}
+
 pkg_postinst() {
 	python_version
 	python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages/
