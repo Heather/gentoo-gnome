@@ -25,7 +25,7 @@ RDEPEND=">=dev-libs/glib-2.10
 	>=app-accessibility/gnome-mag-0.12.5"
 
 DEPEND="${RDEPEND}
-	>=dev-util/intltool-0.35
+	>=dev-util/intltool-0.40
 	>=dev-util/pkgconfig-0.9"
 
 DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README TODO"
