@@ -10,7 +10,7 @@ HOMEPAGE="http://www.gnome.org/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
-IUSE="beagle lzma xulrunner"
+IUSE="beagle lzma"
 
 RDEPEND=">=gnome-base/gconf-2
 	>=app-text/gnome-doc-utils-0.11.1
@@ -24,8 +24,7 @@ RDEPEND=">=gnome-base/gconf-2
 	>=x11-libs/startup-notification-0.8
 	>=dev-libs/dbus-glib-0.71
 	beagle? ( || ( >=dev-libs/libbeagle-0.3.0 =app-misc/beagle-0.2* ) )
-	!xulrunner? ( =www-client/mozilla-firefox-2* )
-	xulrunner? ( =net-libs/xulrunner-1.8* )
+	net-libs/xulrunner:1.9
 	sys-libs/zlib
 	app-arch/bzip2
 	lzma? ( app-arch/lzma-utils )
@@ -47,17 +46,11 @@ src_unpack() {
 
 pkg_setup() {
 	# FIXME: Add patch to make lzma-utils not automagic and use_enable here
-	G2CONF="${G2CONF} --enable-man --enable-info"
+	G2CONF="${G2CONF} --enable-man --enable-info --with-gecko=libxul-embedding"
 
 	if use beagle; then
 		G2CONF="${G2CONF} --with-search=beagle"
 	else
 		G2CONF="${G2CONF} --with-search=basic"
-	fi
-
-	if use xulrunner; then
-		G2CONF="${G2CONF} --with-gecko=xulrunner"
-	else
-		G2CONF="${G2CONF} --with-gecko=firefox"
 	fi
 }
