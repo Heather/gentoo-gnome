@@ -30,6 +30,9 @@ src_unpack() {
 	unpack ${A}
 	cd "${S}"
 
+	# Fix declaration of codegen in .pc
+	epatch "${FILESDIR}/${P}-fix-codegen-location.patch"
+
 	# disable pyc compiling
 	mv "${S}"/py-compile "${S}"/py-compile.orig
 	ln -s $(type -P true) "${S}"/py-compile
