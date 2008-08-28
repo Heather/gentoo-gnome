@@ -50,15 +50,8 @@ pkg_setup() {
 			--enable-locking
 			--with-xf86gamma-ext
 			--with-kbd-layout-indicator
-			--with-gdm-config=/usr/share/gdm/defaults.conf
 			--with-xscreensaverdir=/usr/share/xscreensaver/config
 			--with-xscreensaverhackdir=/usr/lib/misc/xscreensaver"
-}
-
-src_unpack() {
-	gnome2_src_unpack
-
-	epatch "${FILESDIR}/${PN}-2.23.2-fix-glibc-2.8.patch"
 }
 
 src_install() {
