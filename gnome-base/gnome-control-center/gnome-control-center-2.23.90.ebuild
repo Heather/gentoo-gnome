@@ -4,15 +4,15 @@
 
 EAPI="1"
 
-inherit eutils gnome2
+inherit autotools eutils gnome2
 
 DESCRIPTION="The gnome2 Desktop configuration tool"
 HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2"
 SLOT="2"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="alsa eds hal"
+KEYWORDS="~amd64 ~x86"
+IUSE="alsa eds hal sound"
 
 # FIXME: eel is still needed for now?! ChangeLog and configure.in say different
 # things
@@ -47,6 +47,7 @@ RDEPEND=">=virtual/xft-2.1.2
 		!arm? ( alsa? ( >=media-libs/alsa-lib-0.9.0 ) )
 		eds? ( >=gnome-extra/evolution-data-server-1.7.90 )
 		hal? ( >=sys-apps/hal-0.5.6 )
+		sound? ( >=media-libs/libcanberra-0.4 )
 
 		>=gnome-base/libbonobo-2
 		>=gnome-base/libgnome-2.2
@@ -83,11 +84,26 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
 pkg_setup() {
+	if use sound && ! built_with_use media-libs/libcanberra gtk; then
+		eerror "You need to rebuild media-libs/libcanberra with gtk support."
+		die "Rebuild media-libs/libcanberra with USE='gtk'"
+	fi
+
 	G2CONF="${G2CONF}
 		--disable-update-mimedb
 		--enable-vfs-methods
 		--enable-gstreamer=0.10
 		$(use_enable alsa)
 		$(use_enable eds aboutme)
-		$(use_enable hal)"
+		$(use_enable hal)
+		$(use_enable sound)"
+}
+
+src_unpack() {
+	gnome2_src_unpack
+
+	# Fix libcanberra automagic dep
+	epatch "${FILESDIR}/${P}-libcanberra-automagic.patch"
+
+	eautoreconf
 }
