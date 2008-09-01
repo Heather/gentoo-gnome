@@ -5,8 +5,8 @@
 EAPI="1"
 
 DESCRIPTION="Portable Sound Event API"
-HOMEPAGE="https://tango.0pointer.de/pipermail/libcanberra-discuss/"
-SRC_URI="http://0pointer.de/public/${P}.tar.gz"
+HOMEPAGE="http://0pointer.de/lennart/projects/libcanberra/"
+SRC_URI="http://0pointer.de/lennart/projects/${PN}/${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
@@ -15,7 +15,7 @@ IUSE="alsa doc gtk pulseaudio"
 
 RDEPEND="media-libs/libvorbis
 	alsa? ( media-libs/alsa-lib )
-	gtk? ( x11-libs/gtk+:2 )
+	gtk? ( >=x11-libs/gtk+-2.13.4:2 )
 	pulseaudio? ( >=media-sound/pulseaudio-0.9.11 )"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.17
@@ -27,7 +27,8 @@ src_compile() {
 		$(use_enable alsa) \
 		$(use_enable gtk) \
 		$(use_enable pulseaudio pulse) \
-		$(use_enable doc gtk-doc)
+		$(use_enable doc gtk-doc) \
+		--disable-lynx
 
 	emake || die "emake failed."
 }
