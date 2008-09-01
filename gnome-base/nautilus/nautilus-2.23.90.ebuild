@@ -10,7 +10,7 @@ HOMEPAGE="http://www.gnome.org/projects/nautilus/"
 LICENSE="GPL-2 LGPL-2 FDL-1.1"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="beagle gnome tracker"
+IUSE="beagle gnome tracker xmp"
 
 RDEPEND=">=gnome-base/libbonobo-2.1
 		 >=gnome-base/eel-2.23.2
@@ -28,20 +28,25 @@ RDEPEND=">=gnome-base/libbonobo-2.1
 		 >=gnome-base/gconf-2.0
 		 >=gnome-base/gvfs-0.1.2
 		 beagle? ( >=dev-libs/libbeagle-0.0.12 )
-		 tracker? ( >=app-misc/tracker-0.6.4 )"
+		 tracker? ( >=app-misc/tracker-0.6.4 )
+		 xmp? ( >=media-libs/exempi-2 )"
+
 DEPEND="${RDEPEND}
 		  sys-devel/gettext
 		>=dev-util/pkgconfig-0.9
-		>=dev-util/intltool-0.35"
+		>=dev-util/intltool-0.35
+		doc? ( >=dev-util/gtk-doc-1.4 )"
+
 PDEPEND="gnome? ( >=x11-themes/gnome-icon-theme-1.1.91 )"
 
 DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS README THANKS TODO"
 
 pkg_setup() {
-	G2CONF="--disable-update-mimedb
-		--disable-xmp
+	G2CONF="${G2CONF}
+		--disable-update-mimedb
 		$(use_enable beagle)
-		$(use_enable tracker)"
+		$(use_enable tracker)
+		$(use_enable xmp)"
 }
 
 src_test() {

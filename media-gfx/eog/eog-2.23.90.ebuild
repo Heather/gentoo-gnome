@@ -10,7 +10,7 @@ HOMEPAGE="http://www.gnome.org/projects/eog/"
 LICENSE="GPL-2"
 SLOT="1"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
-IUSE="dbus doc jpeg lcms python"
+IUSE="dbus doc jpeg lcms python xmp"
 
 RDEPEND=">=x11-libs/gtk+-2.13.1
 		 >=dev-libs/glib-2.15.3
@@ -22,17 +22,17 @@ RDEPEND=">=x11-libs/gtk+-2.13.1
 		 >=x11-themes/gnome-icon-theme-2.19.1
 		 >=x11-misc/shared-mime-info-0.20
 		 dbus? ( >=dev-libs/dbus-glib-0.71 )
-		 jpeg?	(
-					>=media-libs/libexif-0.6.14
-					media-libs/jpeg
-				)
+		 jpeg? (
+			>=media-libs/libexif-0.6.14
+			media-libs/jpeg	)
 		 lcms? ( media-libs/lcms )
-		 python?	(
-						>=dev-lang/python-2.3
-						>=dev-python/pygobject-2.11.5
-						>=dev-python/pygtk-2.9.7
-						>=dev-python/gnome-python-2.18.2
-					)"
+		 python? (
+			>=dev-lang/python-2.3
+			>=dev-python/pygobject-2.11.5
+			>=dev-python/pygtk-2.9.7
+			>=dev-python/gnome-python-2.18.2 )
+		xmp? ( >=media-libs/exempi-2 )"
+
 DEPEND="${RDEPEND}
 		sys-devel/gettext
 		app-text/gnome-doc-utils
@@ -49,7 +49,14 @@ pkg_setup() {
 			$(use_with dbus dbus-glib-1)
 			$(use_with lcms cms)
 			$(use_enable python)
-			--without-xmp
+			$(use_with xmp)
 			--disable-scrollkeeper
 			--disable-schemas-install"
+}
+
+src_unpack() {
+	gnome2_src_unpack
+
+	# Fix ?, bug #?, picked upstream
+	epatch "${FILESDIR}/${P}-fix-smp-dialog.patch"
 }

@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/deskbar-applet/deskbar-applet-2.22.3.1.ebuild,v 1.1 2008/08/04 21:43:15 eva Exp $
 
-inherit gnome2 python
+inherit eutils gnome2 python
 
 DESCRIPTION="An Omnipresent Versatile Search Interface"
 HOMEPAGE="http://raphael.slinckx.net/deskbar/"
