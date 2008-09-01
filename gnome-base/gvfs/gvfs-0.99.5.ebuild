@@ -10,7 +10,7 @@ HOMEPAGE="http://www.gnome.org"
 LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc64 ~sparc ~x86"
-IUSE="archive avahi bash-completion bluetooth cdda doc fuse gnome gphoto2 hal gnome-keyring samba"
+IUSE="archive avahi bluetooth cdda doc fuse gnome gphoto2 hal gnome-keyring samba"
 
 RDEPEND=">=dev-libs/glib-2.17.6
 		 >=sys-apps/dbus-1.0
@@ -65,18 +65,12 @@ pkg_setup() {
 }
 
 src_install() {
-	if use bash-completion; then
-		dobashcompletion programs/gvfs-bash-completion.sh ${PN}
-		rm -f programs/gvfs-bash-completion.sh
-	fi
-
 	gnome2_src_install
+	use bash-completion && \
+		dobashcompletion programs/gvfs-bash-completion.sh ${PN}
 }
 
 pkg_postinst() {
 	gnome2_pkg_postinst
-
-	if use bash-completion; then
-		bash-completion_pkg_postinst
-	fi
+	use bash-completion && bash-completion_pkg_postinst
 }
