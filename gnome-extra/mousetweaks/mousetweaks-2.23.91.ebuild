@@ -12,15 +12,14 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 IUSE=""
 
-RDEPEND=">=x11-libs/gtk+-2.10
+RDEPEND=">=x11-libs/gtk+-2.13.1
 	>=gnome-base/libglade-2.4
 	>=gnome-base/gconf-2.16
 	>=dev-libs/dbus-glib-0.72
 	>=gnome-base/gnome-panel-2
-	>=gnome-base/libgnome-2
-	>=gnome-base/libgnomeui-2
 	gnome-extra/at-spi
 
+	x11-libs/libXtst
 	x11-libs/libXfixes
 	x11-libs/libXcursor"
 DEPEND="${RDEPEND}
