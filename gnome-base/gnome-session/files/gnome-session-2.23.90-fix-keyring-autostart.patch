@@ -1,0 +1,25 @@
+Index: compat/gnome-keyring-daemon-wrapper.c
+===================================================================
+--- compat/gnome-keyring-daemon-wrapper.c	(revision 5027)
++++ compat/gnome-keyring-daemon-wrapper.c	(working copy)
+@@ -80,11 +80,7 @@
+         old_keyring = g_getenv ("GNOME_KEYRING_SOCKET");
+         if (old_keyring != NULL &&
+             access (old_keyring, R_OK | W_OK) == 0) {
+-                display = g_getenv ("DISPLAY");
+-                if (display != NULL) {
+-                        gnome_keyring_daemon_set_display_sync (display);
+-                }
+-
++                gnome_keyring_daemon_prepare_environment_sync ();
+                 return;
+         }
+ 
+@@ -149,6 +145,7 @@
+                         }
+ 
+                         g_strfreev (lines);
++                        gnome_keyring_daemon_prepare_environment_sync ();
+                 } else {
+                         /* daemon failed for some reason */
+                         g_printerr ("gnome-keyring-daemon failed to start correctly, exit code: %d\n",

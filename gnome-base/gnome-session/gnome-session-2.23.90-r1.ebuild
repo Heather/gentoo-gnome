@@ -34,7 +34,7 @@ DEPEND="${RDEPEND}
 
 # gnome-base/gdm does not provide gnome.desktop anymore
 
-DOCS="AUTHORS ChangeLog HACKING NEWS README"
+DOCS="AUTHORS ChangeLog NEWS README"
 
 pkg_setup() {
 	# TODO: convert libnotify to a configure option
@@ -49,6 +49,9 @@ src_unpack() {
 
 	# Fix automagic dependency on policykit
 	epatch "${FILESDIR}/${PN}-2.23.5-polkit-automagic.patch"
+
+	# Fix automagic keyring unlocking
+	epatch "${FILESDIR}/${P}-fix-keyring-autostart.patch"
 
 	eautoreconf
 }
