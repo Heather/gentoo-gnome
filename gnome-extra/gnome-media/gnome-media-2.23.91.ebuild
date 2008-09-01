@@ -4,7 +4,7 @@
 
 EAPI="1"
 
-inherit eutils gnome2
+inherit autotools eutils gnome2
 
 DESCRIPTION="Multimedia related programs for the GNOME desktop"
 HOMEPAGE="http://ronald.bitfreak.net/gnome-media.php"
@@ -14,7 +14,7 @@ SLOT="2"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="esd gnomecd ipv6"
 
-RDEPEND=">=dev-libs/glib-1.3.7
+RDEPEND=">=dev-libs/glib-2.16.0
 	>=gnome-base/libgnome-2.13.7
 	>=gnome-base/libgnomeui-2.13.2
 	esd? ( >=media-sound/esound-0.2.23 )
@@ -23,7 +23,6 @@ RDEPEND=">=dev-libs/glib-1.3.7
 	>=media-libs/gstreamer-0.10.3
 	>=media-libs/gst-plugins-base-0.10.3
 	>=media-libs/gst-plugins-good-0.10
-	>=gnome-base/gnome-vfs-2
 	>=gnome-base/orbit-2
 	gnomecd? (
 		>=gnome-extra/nautilus-cd-burner-2.12
@@ -58,8 +57,10 @@ pkg_setup() {
 src_unpack() {
 	gnome2_src_unpack
 
-	# Allow building without esound
-	epatch "${FILESDIR}"/${PN}-2.18.0-noesd.patch
+	# Allow building without esound, upstream bug #550307
+	epatch "${FILESDIR}/${PN}-2.23.91-noesd.patch"
+
+	eautoreconf
 }
 
 src_compile() {
