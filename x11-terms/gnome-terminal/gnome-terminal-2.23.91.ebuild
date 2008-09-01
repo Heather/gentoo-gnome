@@ -14,10 +14,10 @@ IUSE=""
 
 RDEPEND="virtual/xft
 	>=dev-libs/glib-2.16.0
-	>=x11-libs/gtk+-2.12
+	>=x11-libs/gtk+-2.13.6
 	>=gnome-base/gconf-2.14
 	>=x11-libs/startup-notification-0.8
-	>=x11-libs/vte-0.15.3
+	>=x11-libs/vte-0.17.0
 	>=gnome-base/libgnome-2.14
 	>=gnome-base/libgnomeui-2"
 DEPEND="${RDEPEND}
@@ -36,14 +36,10 @@ src_unpack() {
 	# Use login shell by default (#12900)
 	epatch "${FILESDIR}"/${PN}-2.22.0-default_shell.patch
 
-	# terminal enhancement, inserts a space after a DND URL
-	# patch by Zach Bagnall <yem@y3m.net> in #13801
-	#epatch "${FILESDIR}"/${PN}-2-dnd_url_add_space.patch
-
 	# Fix deprecated API disabling in used libraries - this is not future-proof, bug 213340
 	# Upstream bug: http://bugzilla.gnome.org/show_bug.cgi?id=523737
 	sed -i -e '/DISABLE_DEPRECATED/d' \
-		src/Makefile.am src/Makefile.in
+		src/Makefile.am src/Makefile.in || die "sed failed"
 
 	# patch gnome terminal to report as GNOME rather than xterm
 	# This needs to resolve a few bugs (#120294,)
