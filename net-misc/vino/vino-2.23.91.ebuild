@@ -15,11 +15,11 @@ IUSE="avahi crypt gnutls ipv6 jpeg gnome-keyring libnotify zlib"
 # FIXME: add support for libunique
 RDEPEND=">=dev-libs/glib-2.17
 	>=x11-libs/gtk+-2.13.1
+	  gnome-base/libgnomeui
 	>=gnome-base/gconf-2
 	>=gnome-base/libglade-2
+	>=sys-apps/dbus-1.2.3
 	dev-libs/dbus-glib
-	>=gnome-base/orbit-2
-	>=gnome-base/libbonobo-2
 	x11-libs/libXtst
 	libnotify? ( >=x11-libs/libnotify-0.4.4 )
 	gnome-keyring? ( gnome-base/gnome-keyring )
@@ -49,6 +49,5 @@ pkg_setup() {
 		$(use_enable gnome-keyring)
 		$(use_enable libnotify)
 		$(use_with zlib)
-		$(use_with zlib libz)
-		--enable-session-support"
+		$(use_with zlib libz)"
 }
