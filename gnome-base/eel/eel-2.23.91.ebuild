@@ -10,7 +10,10 @@ HOMEPAGE="http://www.gnome.org/"
 LICENSE="LGPL-2"
 SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE=""
+IUSE="test"
+
+# FIXME: needs a running at-spi-registryd (setup a virtual session ?)
+RESTRICT="test"
 
 RDEPEND=">=dev-libs/glib-2.15
 		 >=x11-libs/gtk+-2.13
@@ -25,7 +28,8 @@ RDEPEND=">=dev-libs/glib-2.15
 DEPEND="${RDEPEND}
 		  sys-devel/gettext
 		>=dev-util/intltool-0.35
-		>=dev-util/pkgconfig-0.19"
+		>=dev-util/pkgconfig-0.19
+		test? ( gnome-extra/libgail-gnome )"
 
 DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README THANKS TODO"
 
