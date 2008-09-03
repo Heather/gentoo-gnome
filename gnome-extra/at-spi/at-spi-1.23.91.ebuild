@@ -27,7 +27,7 @@ RDEPEND=">=dev-libs/atk-1.17
 
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9
-	>=dev-util/intltool-0.35
+	>=dev-util/intltool-0.40
 	doc? ( >=dev-util/gtk-doc-1 )
 
 	x11-libs/libXt
