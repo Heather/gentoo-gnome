@@ -10,7 +10,7 @@ HOMEPAGE="http://www.gnome.org/projects/evince/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="dbus djvu doc dvi gnome gnome-keyring t1lib tiff"
+IUSE="dbus djvu doc dvi gnome-keyring nautilus t1lib tiff"
 
 RDEPEND="
 	dbus? ( >=dev-libs/dbus-glib-0.71 )
@@ -21,11 +21,7 @@ RDEPEND="
 	>=dev-libs/libxml2-2.5
 	>=gnome-base/libglade-2
 	>=gnome-base/gconf-2
-	gnome? (
-		>=gnome-base/nautilus-2.10
-		>=gnome-base/libgnomeui-2.14
-		>=gnome-base/libgnome-2.14
-	)
+	nautilus? ( >=gnome-base/nautilus-2.10 )
 	>=app-text/poppler-bindings-0.8
 	dvi? (
 		virtual/tex-base
@@ -59,9 +55,8 @@ pkg_setup() {
 		$(use_with gnome-keyring keyring)
 		$(use_enable t1lib)
 		$(use_enable tiff)
-		$(use_enable gnome nautilus)
-		$(use_with gnome libgnome)"
-
+		$(use_enable nautilus)"
+	
 	if ! built_with_use app-text/poppler-bindings gtk; then
 		einfo "Please re-emerge app-text/poppler-bindings with the gtk USE flag set"
 		die "poppler-bindings needs gtk flag set"
