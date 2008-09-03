@@ -53,10 +53,3 @@ pkg_setup() {
 			--disable-scrollkeeper
 			--disable-schemas-install"
 }
-
-src_unpack() {
-	gnome2_src_unpack
-
-	# Fix ?, bug #?, picked upstream
-	epatch "${FILESDIR}/${P}-fix-smp-dialog.patch"
-}
