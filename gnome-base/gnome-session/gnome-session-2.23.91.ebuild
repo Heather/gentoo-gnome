@@ -50,9 +50,6 @@ src_unpack() {
 	# Fix automagic dependency on policykit
 	epatch "${FILESDIR}/${PN}-2.23.5-polkit-automagic.patch"
 
-	# Fix automagic keyring unlocking
-	epatch "${FILESDIR}/${P}-fix-keyring-autostart.patch"
-
 	eautoreconf
 }
 
