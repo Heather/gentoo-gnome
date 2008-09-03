@@ -14,7 +14,7 @@ IUSE="archive avahi bluetooth cdda doc fuse gnome gphoto2 hal gnome-keyring samb
 
 RDEPEND=">=dev-libs/glib-2.17.6
 		 >=sys-apps/dbus-1.0
-		 >=net-libs/libsoup-2.4
+		 >=net-libs/libsoup-2.23.91
 		 dev-libs/libxml2
 		 net-misc/openssh
 		 archive? ( app-arch/libarchive )
