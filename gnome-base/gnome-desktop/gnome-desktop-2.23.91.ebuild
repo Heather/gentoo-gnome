@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-desktop/gnome-desktop-2.22.1.ebuild,v 1.1 2008/04/09 21:53:55 eva Exp $
 
-inherit gnome2 eutils autotools
+inherit gnome2
 
 DESCRIPTION="Libraries for the gnome desktop that are not part of the UI"
 HOMEPAGE="http://www.gnome.org/"
@@ -15,6 +15,7 @@ IUSE="doc"
 RDEPEND=">=dev-libs/libxml2-2.4.20
 		 >=x11-libs/gtk+-2.11.3
 		 >=dev-libs/glib-2.15.4
+		 >=x11-libs/libXrandr-1.2
 		 >=gnome-base/gconf-2
 		 >=gnome-base/libgnomeui-2.6
 		 >=x11-libs/startup-notification-0.5"
@@ -31,10 +32,3 @@ pkg_setup() {
 	G2CONF="${G2CONF} --with-gnome-distributor=Gentoo"
 }
 
-src_unpack() {
-	gnome2_src_unpack
-
-	epatch "${FILESDIR}"/${PN}-2.23.2-xsltproc-nonet.patch
-
-	eautoreconf
-}
