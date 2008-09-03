@@ -4,17 +4,14 @@
 
 EAPI="1"
 
-inherit autotools eutils gnome2 subversion
-
-ESVN_REPO_URI="http://svn.gnome.org/svn/${PN}/trunk"
+inherit eutils gnome2
 
 DESCRIPTION="A GNOME application for managing encryption keys"
 HOMEPAGE="http://www.gnome.org/projects/seahorse/index.html"
-SRC_URI=""
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="avahi debug ldap libnotify"
 
 RDEPEND=">=gnome-base/libglade-2.0
@@ -54,14 +51,6 @@ pkg_setup() {
 		$(use_enable debug)
 		$(use_enable ldap)
 		$(use_enable libnotify)"
-}
-
-src_unpack() {
-	subversion_src_unpack
-	gnome2_omf_fix
-	gnome-doc-prepare --force || "gnome-doc-prepare failed"
-	intltoolize --force || die "intltoolize failed"
-	eautoreconf
 }
 
 src_install() {
