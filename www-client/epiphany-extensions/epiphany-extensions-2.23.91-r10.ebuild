@@ -66,8 +66,7 @@ src_unpack() {
 	# Don't remove sessionsaver, please.  -dang
 	epatch "${FILESDIR}"/${PN}-2.21.92-sessionsaver-v4.patch.gz
 	echo "extensions/sessionsaver/ephy-sessionsaver-extension.c" >> po/POTFILES.in
-	# Make it build against epiphany-2.23
-	epatch "${FILESDIR}"/${P}-2.23-api.patch
+
 	eautoreconf
 }
 
