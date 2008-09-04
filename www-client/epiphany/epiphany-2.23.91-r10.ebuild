@@ -25,6 +25,7 @@ RDEPEND=">=dev-libs/glib-2.16.0
 	>=gnome-base/gnome-desktop-2.9.91
 	>=x11-libs/startup-notification-0.5
 	>=x11-libs/libnotify-0.4
+	>=media-libs/libcanberra-0.3
 	>=dev-libs/dbus-glib-0.71
 	>=gnome-base/gconf-2
 	>=app-text/iso-codes-0.35
@@ -49,6 +50,12 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS README TODO"
 
 pkg_setup() {
+	# FIXME: I'm automagic
+	if ! built_with_use media-libs/libcanberra gtk; then
+		eerror "You need to rebuild media-libs/libcanberra with gtk	support."
+		die "Rebuild media-libs/libcanberra with USE='gtk'"
+	fi
+
 	G2CONF="${G2CONF}
 		--disable-scrollkeeper
 		--enable-certificate-manager
