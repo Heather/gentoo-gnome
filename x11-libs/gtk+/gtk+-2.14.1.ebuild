@@ -82,9 +82,6 @@ src_unpack() {
 	# OpenOffice.org might hang at startup (on non-gnome env) without this workaround, bug #193513
 	epatch "${FILESDIR}/${PN}-2.12.0-openoffice-freeze-workaround.patch"
 
-	# swfdec gets floating windows.
-	epatch "${FILESDIR}"/${P}-window-leak.patch
-
 	# -O3 and company cause random crashes in applications. Bug #133469
 	replace-flags -O3 -O2
 	strip-flags
