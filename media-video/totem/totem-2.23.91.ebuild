@@ -106,17 +106,6 @@ pkg_setup() {
 			$(use_enable python)"
 }
 
-src_unpack() {
-	gnome2_src_unpack
-
-	epatch "${FILESDIR}/${PN}-2.22.2-fix-python-and-libtool-2.2.patch"
-
-	# Fix nsplugin installation location, gnome bug #547688
-	epatch "${FILESDIR}/${P}-nsplugins-location.patch"
-
-	eautoreconf
-}
-
 src_compile() {
 	#fixme: why does it need write access here, probably need to set up a fake
 	#home in /var/tmp like other pkgs do
