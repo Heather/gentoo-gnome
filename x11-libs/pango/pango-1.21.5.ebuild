@@ -16,7 +16,7 @@ IUSE="X debug doc"
 RDEPEND=">=dev-libs/glib-2.16.3
 		 >=media-libs/fontconfig-1.0.1
 		 >=media-libs/freetype-2
-		 >=x11-libs/cairo-1.6.4
+		 >=x11-libs/cairo-1.7.4
 		 X? (
 				x11-libs/libXrender
 				x11-libs/libX11
