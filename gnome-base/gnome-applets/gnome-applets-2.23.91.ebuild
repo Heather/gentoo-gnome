@@ -16,7 +16,7 @@ IUSE="acpi apm doc gnome gstreamer hal ipv6 policykit"
 # my secret script says cpufrequtils might be needed in RDEPEND
 
 RDEPEND=">=x11-libs/gtk+-2.12
-		>=dev-libs/glib-2.15.6
+		>=dev-libs/glib-2.18.0
 		>=gnome-base/libgnome-2.8
 		>=gnome-base/libgnomeui-2.8
 		>=gnome-base/gconf-2.8
