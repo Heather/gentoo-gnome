@@ -12,14 +12,12 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE=""
 
-RDEPEND=">=dev-libs/glib-2.6
+RDEPEND=">=dev-libs/glib-2.16
 		 >=sys-apps/dbus-0.92
 		 >=dev-libs/dbus-glib-0.34
 		 >=gnome-base/gconf-2.14
 		 >=x11-libs/gtk+-2.10.3
 		 >=gnome-base/libglade-2.6
-		 >=gnome-base/libgnome-2.16
-		 >=gnome-base/libgnomeui-2.16
 		 >=x11-libs/libxklavier-3.2"
 DEPEND="${RDEPEND}
 		>=dev-util/intltool-0.35
