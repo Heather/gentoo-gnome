@@ -12,10 +12,14 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
+DOCS="AUTHORS COPYING ChangeLog NEWS README"
+
 RDEPEND=">=dev-lang/python-2.4
 	>=dev-python/pygtk-2.8
-	>=dev-python/gnome-python-2.14
-	>=dev-python/gnome-python-2.12
+	|| ( 
+		>=dev-python/libbonobo-python-2.14
+		>=dev-python/gnome-python-2.14 )
+	>=dev-python/gnome-python-desktop-2.12
 	>=dev-python/pyorbit-2.14
 	>=gnome-extra/at-spi-1.7
 	>=dev-libs/glib-2
