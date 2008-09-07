@@ -21,6 +21,8 @@ RDEPEND=">=x11-libs/gtk+-2.12
 	>=gnome-base/libglade-2
 	>=gnome-base/libgnomeui-2
 	>=gnome-base/orbit-2
+	app-text/enchant
+	app-text/iso-codes
 	net-libs/libsoup:2.4"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
