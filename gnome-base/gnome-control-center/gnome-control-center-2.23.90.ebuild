@@ -12,7 +12,7 @@ HOMEPAGE="http://www.gnome.org/"
 LICENSE="GPL-2"
 SLOT="2"
 KEYWORDS="~amd64 ~x86"
-IUSE="alsa eds hal sound"
+IUSE="eds hal sound"
 
 # FIXME: eel is still needed for now?! ChangeLog and configure.in say different
 # things
@@ -25,7 +25,6 @@ RDEPEND=">=virtual/xft-2.1.2
 		 >=gnome-base/nautilus-2.6
 		 >=media-libs/fontconfig-1
 		 >=dev-libs/dbus-glib-0.73
-		 >=gnome-base/gnome-vfs-2.2
 		 >=x11-libs/libxklavier-3.6
 		 >=x11-wm/metacity-2.23.1
 		 >=gnome-base/gnome-panel-2.0
@@ -44,7 +43,6 @@ RDEPEND=">=virtual/xft-2.1.2
 		dev-libs/libxml2
 		media-libs/freetype
 
-		!arm? ( alsa? ( >=media-libs/alsa-lib-0.9.0 ) )
 		eds? ( >=gnome-extra/evolution-data-server-1.7.90 )
 		hal? ( >=sys-apps/hal-0.5.6 )
 		sound? ( >=media-libs/libcanberra-0.4 )
@@ -91,9 +89,7 @@ pkg_setup() {
 
 	G2CONF="${G2CONF}
 		--disable-update-mimedb
-		--enable-vfs-methods
 		--enable-gstreamer=0.10
-		$(use_enable alsa)
 		$(use_enable eds aboutme)
 		$(use_enable hal)
 		$(use_enable sound)"
