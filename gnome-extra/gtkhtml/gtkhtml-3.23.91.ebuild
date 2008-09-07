@@ -24,7 +24,7 @@ RDEPEND=">=x11-libs/gtk+-2.12
 	net-libs/libsoup:2.4"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
-	>=dev-util/intltool-0.35.5
+	>=dev-util/intltool-0.36.3
 	>=dev-util/pkgconfig-0.9"
 
 DOCS="AUTHORS BUGS ChangeLog NEWS README TODO"
