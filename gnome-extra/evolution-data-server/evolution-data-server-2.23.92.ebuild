@@ -81,9 +81,6 @@ src_unpack() {
 	# upstream bug #551246
 	epatch "${FILESDIR}"/${PN}-2.21.90-icaltz-util.patch
 
-	# Don't error out if gtkdoc-rebase doesn't exist, upstream bug #551245
-	epatch "${FILESDIR}"/${PN}-2.21.4-gtkdoc-rebase.patch
-
 	# Fix building evo-exchange with --as-needed, upstream bug #342830
 	epatch "${FILESDIR}"/${PN}-2.23.6-as-needed.patch
 
