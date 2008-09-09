@@ -21,7 +21,6 @@ RDEPEND=">=x11-libs/gtk+-2.12
 		>=gnome-base/libgnomeui-2.8
 		>=gnome-base/gconf-2.8
 		>=gnome-base/gnome-panel-2.13.4
-		>=gnome-base/gail-1.1
 		>=x11-libs/libxklavier-2.91
 		>=x11-libs/libwnck-2.9.3
 		>=gnome-base/gnome-desktop-2.11.1
