@@ -20,7 +20,7 @@ RDEPEND=">=x11-libs/gtk+-2.11
 		 >=dev-libs/libxml2-2.6.0
 		 !<gnome-base/gnome-applets-2.22.0"
 DEPEND="${RDEPEND}
-		>=dev-util/intltool-0.35
+		>=dev-util/intltool-0.40
 		>=dev-util/pkgconfig-0.19"
 
 pkg_setup() {
