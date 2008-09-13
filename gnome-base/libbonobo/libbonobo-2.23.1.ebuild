@@ -15,6 +15,8 @@ IUSE="debug doc"
 RDEPEND=">=dev-libs/glib-2.8
 	>=gnome-base/orbit-2.14.0
 	>=dev-libs/libxml2-2.4.20
+	>=sys-apps/dbus-1.0.0
+	>=dev-libs/dbus-glib-0.74
 	>=dev-libs/popt-1.5
 	sys-devel/flex
 	!gnome-base/bonobo-activation"
