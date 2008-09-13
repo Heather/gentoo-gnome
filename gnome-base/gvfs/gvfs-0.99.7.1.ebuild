@@ -53,7 +53,7 @@ pkg_setup() {
 			$(use_enable gnome gconf)
 			$(use_enable gphoto2)
 			$(use_enable hal)
-			$(use_enable gnome-keyring keyring)
+			$(use_enable gnome-keyring KEYRING)
 			$(use_enable samba)"
 
 	if use cdda && built_with_use dev-libs/libcdio minimal; then
