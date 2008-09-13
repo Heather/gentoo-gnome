@@ -18,9 +18,9 @@ RDEPEND=">=dev-libs/glib-2.8
 	>=sys-apps/dbus-1.0.0
 	>=dev-libs/dbus-glib-0.74
 	>=dev-libs/popt-1.5
-	sys-devel/flex
 	!gnome-base/bonobo-activation"
 DEPEND="${RDEPEND}
+	  sys-devel/flex
 	  x11-apps/xrdb
 	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.35
