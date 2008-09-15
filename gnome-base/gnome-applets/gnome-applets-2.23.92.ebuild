@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-applets/gnome-applets-2.22.1.ebuild,v 1.3 2008/05/08 19:13:40 dang Exp $
 
-inherit gnome2 python
+inherit gnome2 python eutils autotools
 
 DESCRIPTION="Applets for the GNOME Desktop and Panel"
 HOMEPAGE="http://www.gnome.org/"
@@ -72,6 +72,9 @@ DOCS="AUTHORS ChangeLog NEWS README"
 src_unpack() {
 	gnome2_src_unpack
 
+	epatch "${FILESDIR}"/${PN}-2.23.3-polkit-automagic.patch
+	eautoreconf
+
 	# disable pyc compiling
 	mv py-compile py-compile.orig
 	ln -s $(type -P true) py-compile
@@ -81,7 +84,7 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-scrollkeeper --enable-flags
 		$(use_with hal)
-		$(use_enable ipv6)i
+		$(use_enable ipv6)
 		$(use_enable policykit polkit)"
 
 	if use gstreamer; then
