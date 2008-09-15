@@ -39,7 +39,6 @@ RDEPEND=">=x11-libs/gtk+-2.12
 
 					>=gnome-extra/gucharmap-1.4
 					>=gnome-base/libgtop-2.11.92
-					>=gnome-base/gnome-vfs-2.15.4
 
 					>=dev-python/pygtk-2.6
 					>=dev-python/gnome-python-2.10
