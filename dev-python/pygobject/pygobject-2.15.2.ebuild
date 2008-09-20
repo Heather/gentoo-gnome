@@ -28,7 +28,7 @@ pkg_setup() {
 		eerror "libffi support not found in sys-devel/gcc." && die
 	fi
 
-	G2CONF="${G2CONF} $(use_enable doc docs) $(use_with libffi ffi)"
+	G2CONF="${G2CONF} $(use_enable doc docs) $(use_with libffi)"
 }
 
 src_unpack() {
