@@ -12,7 +12,7 @@ SLOT="2.4"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc"
 
-RDEPEND=">=x11-libs/pango-1.21.3
+RDEPEND=">=x11-libs/pango-1.21.4
 	>=dev-cpp/glibmm-2.14.1
 	>=dev-cpp/cairomm-1.2.2
 	!<dev-cpp/gtkmm-2.13"
