@@ -4,7 +4,7 @@
 
 EAPI="1"
 
-inherit autotools eutils gnome2
+inherit eutils gnome2
 
 DESCRIPTION="Multimedia related programs for the GNOME desktop"
 HOMEPAGE="http://ronald.bitfreak.net/gnome-media.php"
@@ -52,15 +52,6 @@ pkg_setup() {
 		--disable-esdtest
 		--disable-scrollkeeper
 		--disable-schemas-install"
-}
-
-src_unpack() {
-	gnome2_src_unpack
-
-	# Allow building without esound, upstream bug #550307
-	epatch "${FILESDIR}/${PN}-2.23.91-noesd.patch"
-
-	eautoreconf
 }
 
 src_compile() {
