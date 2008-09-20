@@ -128,7 +128,7 @@ src_compile() {
 }
 
 src_test() {
-	Xemake check || die
+	Xemake check || die "tests failed"
 }
 
 src_install() {
