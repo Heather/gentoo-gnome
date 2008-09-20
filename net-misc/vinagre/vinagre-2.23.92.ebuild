@@ -16,7 +16,7 @@ RDEPEND=">=dev-libs/glib-2.17.0
 	>=x11-libs/gtk+-2.13.1
 	>=gnome-base/libglade-2.6
 	>=gnome-base/gconf-2.16
-	>=net-libs/gtk-vnc-0.3.6
+	>=net-libs/gtk-vnc-0.3.7
 	>=gnome-base/gnome-keyring-1
 	>=gnome-base/gnome-panel-2
 	>=net-dns/avahi-0.6.22"
