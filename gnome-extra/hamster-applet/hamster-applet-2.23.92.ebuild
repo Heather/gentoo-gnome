@@ -16,10 +16,11 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-RDEPEND=">=dev-lang/python-2.5
+RDEPEND=">=dev-lang/python-2.4
 	>=dev-python/gnome-python-2.10
-	>=dev-python/pygobject-2.6
-	>=dev-python/pygtk-2.6
+	>=dev-python/pygobject-2.14
+	>=dev-python/pygtk-2.12
+	>=x11-libs/gtk+-2.12
 	=dev-python/pysqlite-2*
 	x11-libs/libXScrnSaver"
 
