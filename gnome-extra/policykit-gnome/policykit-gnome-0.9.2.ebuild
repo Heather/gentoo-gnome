@@ -15,20 +15,19 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="doc examples"
 
-RDEPEND=">=dev-libs/dbus-glib-0.71
-		 >=x11-libs/gtk+-2.12
-		 >=x11-libs/libsexy-0.1.11
-		 >=gnome-base/gconf-2
-		 >=gnome-base/gnome-vfs-2.4
-		 >=gnome-base/libgnome-2.14
-		 >=gnome-base/libgnomeui-2.14
-		 >=sys-auth/policykit-0.7"
+RDEPEND=">=x11-libs/gtk+-2.13.6
+		 >=gnome-base/gconf-2.8
+		 >=dev-libs/dbus-glib-0.71
+		 >=sys-auth/policykit-0.9"
 DEPEND="${RDEPEND}
 		  sys-devel/gettext
 		>=dev-util/pkgconfig-0.19
 		>=dev-util/intltool-0.35.0
 		>=app-text/scrollkeeper-0.3.14
+		>=app-text/gnome-doc-utils-0.12
 		doc? ( >=dev-util/gtk-doc-1.3 )"
+
+DOCS="AUTHORS ChangeLog HACKING NEWS TODO"
 
 S="${WORKDIR}/${MY_PN}-${PV}"
 
