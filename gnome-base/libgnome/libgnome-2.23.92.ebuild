@@ -13,7 +13,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-
 IUSE="doc esd"
 
 RDEPEND=">=gnome-base/gconf-2
-	>=dev-libs/glib-2.8
+	>=dev-libs/glib-2.16
 	>=gnome-base/gnome-vfs-2.5.3
 	>=gnome-base/libbonobo-2.13
 	>=dev-libs/popt-1.7
