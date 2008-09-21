@@ -29,7 +29,7 @@ RDEPEND="
 		>=dev-libs/libxml2-2.6.0 )
 	gedit? ( >=app-editors/gedit-2.16 )
 	applet? ( >=gnome-base/gnome-panel-2.10 )
-	app-crypt/seahorse
+	>=app-crypt/seahorse-2.23.92
 	libnotify? ( >=x11-libs/libnotify-0.3.2 )
 	>=gnome-extra/evolution-data-server-1.8"
 DEPEND="${RDEPEND}
