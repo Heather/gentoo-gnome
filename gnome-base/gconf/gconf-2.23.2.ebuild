@@ -47,6 +47,9 @@ src_unpack() {
 	# fix bug #193442, GNOME bug #498934
 	epatch "${FILESDIR}/${PN}-HEAD-autofoo.patch"
 
+	# fix bug #238276
+	epatch "${FILESDIR}/${P}-no-gconfd.patch"
+
 	eautoreconf
 }
 
