@@ -10,46 +10,47 @@ HOMEPAGE="http://www.gtk.org/"
 LICENSE="LGPL-2"
 SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="X cups debug doc jpeg tiff vim-syntax xinerama"
+IUSE="X cups debug doc jpeg jpeg2k tiff vim-syntax xinerama"
 
 RDEPEND=">=dev-libs/glib-2.17.6
-		 >=x11-libs/pango-1.20
-		 >=dev-libs/atk-1.13
-		 >=x11-libs/cairo-1.6
-		 media-libs/fontconfig
-		 x11-misc/shared-mime-info
-		 >=media-libs/libpng-1.2.1
-		 X? (
-				x11-libs/libXrender
-				x11-libs/libX11
-				x11-libs/libXi
-				x11-libs/libXt
-				x11-libs/libXext
-				x11-libs/libXrandr
-				x11-libs/libXcursor
-				x11-libs/libXfixes
-				x11-libs/libXcomposite
-				x11-libs/libXdamage
-		 		xinerama? ( x11-libs/libXinerama )
-			)
-		 !X? ( dev-libs/DirectFB )
-		 cups? ( net-print/cups )
-		 jpeg? ( >=media-libs/jpeg-6b-r2 media-libs/jasper )
-		 tiff? ( >=media-libs/tiff-3.5.7 )
-		 !<gnome-base/gail-1000"
+	>=x11-libs/pango-1.20
+	>=dev-libs/atk-1.13
+	>=x11-libs/cairo-1.6
+	media-libs/fontconfig
+	x11-misc/shared-mime-info
+	>=media-libs/libpng-1.2.1
+	X? (
+		x11-libs/libXrender
+		x11-libs/libX11
+		x11-libs/libXi
+		x11-libs/libXt
+		x11-libs/libXext
+		>=x11-libs/libXrandr-1.2
+		x11-libs/libXcursor
+		x11-libs/libXfixes
+		x11-libs/libXcomposite
+		x11-libs/libXdamage
+		xinerama? ( x11-libs/libXinerama )
+	)
+	 !X? ( dev-libs/DirectFB )
+	cups? ( net-print/cups )
+	jpeg? ( >=media-libs/jpeg-6b-r2 )
+	jpeg2k? ( media-libs/jasper )
+	tiff? ( >=media-libs/tiff-3.5.7 )
+	!<gnome-base/gail-1000"
 DEPEND="${RDEPEND}
-		>=dev-util/pkgconfig-0.9
-		X?  (
-				x11-proto/xextproto
-				x11-proto/xproto
-				x11-proto/inputproto
-				x11-proto/damageproto
-				xinerama? ( x11-proto/xineramaproto )
-			)
-		doc? (
-				>=dev-util/gtk-doc-1.8
-				~app-text/docbook-xml-dtd-4.1.2
-			 )"
+	>=dev-util/pkgconfig-0.9
+	X?  (
+		x11-proto/xextproto
+		x11-proto/xproto
+		x11-proto/inputproto
+		x11-proto/damageproto
+		xinerama? ( x11-proto/xineramaproto )
+	)
+	doc? (
+		>=dev-util/gtk-doc-1.8
+		~app-text/docbook-xml-dtd-4.1.2
+	)"
 PDEPEND="vim-syntax? ( app-vim/gtk-syntax )"
 
 pkg_setup() {
@@ -79,9 +80,6 @@ src_unpack() {
 	# Workaround adobe flash infinite loop. Patch from http://bugzilla.gnome.org/show_bug.cgi?id=463773#c11
 	epatch "${FILESDIR}/${PN}-2.12.0-flash-workaround.patch"
 
-	# OpenOffice.org might hang at startup (on non-gnome env) without this workaround, bug #193513
-	epatch "${FILESDIR}/${PN}-2.12.0-openoffice-freeze-workaround.patch"
-
 	# -O3 and company cause random crashes in applications. Bug #133469
 	replace-flags -O3 -O2
 	strip-flags
@@ -97,8 +95,7 @@ src_unpack() {
 		#eautoreconf
 	fi
 
-	# doesn't work
-	#epunt_cxx
+	elibtoolize
 }
 
 src_compile() {
@@ -113,7 +110,7 @@ src_compile() {
 	# png always on to display icons (foser)
 	myconf="$(use_enable doc gtk-doc) \
 			$(use_with jpeg libjpeg) \
-			$(use_with jpeg libjasper) \
+			$(use_with jpeg2k libjasper) \
 			$(use_with tiff libtiff) \
 			$(use_enable xinerama) \
 			--with-libpng \
