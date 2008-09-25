@@ -16,7 +16,7 @@ RDEPEND=">=dev-libs/glib-2.16
 		 >=sys-apps/dbus-0.92
 		 >=dev-libs/dbus-glib-0.34
 		 >=gnome-base/gconf-2.14
-		 >=x11-libs/gtk+-2.10.3
+		 >=x11-libs/gtk+-2.13
 		 >=gnome-base/libglade-2.6
 		 >=x11-libs/libxklavier-3.2"
 DEPEND="${RDEPEND}
