@@ -92,14 +92,5 @@ pkg_setup() {
 		--enable-gstreamer=0.10
 		$(use_enable eds aboutme)
 		$(use_enable hal)
-		$(use_enable sound)"
-}
-
-src_unpack() {
-	gnome2_src_unpack
-
-	# Fix libcanberra automagic dep
-	epatch "${FILESDIR}/${P}-libcanberra-automagic.patch"
-
-	eautoreconf
+		$(use_with sound libcanberra)"
 }
