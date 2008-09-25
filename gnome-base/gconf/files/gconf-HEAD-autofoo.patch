@@ -1,7 +1,7 @@
 --- configure.in.old	2008-09-20 23:56:00.000000000 +0200
 +++ configure.in	2008-09-20 23:56:44.000000000 +0200
 @@ -1,11 +1,16 @@
--AC_INIT([GConf],[2.23.2],[http://bugzilla.gnome.org/enter_bug.cgi?product=GConf],[GConf])
+-AC_INIT([GConf],[2.24.0],[http://bugzilla.gnome.org/enter_bug.cgi?product=GConf],[GConf])
 +AC_PREREQ(2.60)
 +
 +AC_INIT([GConf],
@@ -188,23 +188,6 @@
      fi
    else
      enable_defaults_service=yes
-@@ -187,12 +199,12 @@
- 
- if test "x$enable_defaults_service" != "xno" ; then
-   AC_DEFINE(ENABLE_DEFAULTS_SERVICE, 1, [enable defaults DBus service])
--fi
- 
--AC_CHECK_PROG([POLKIT_POLICY_FILE_VALIDATE],
--              [polkit-policy-file-validate], [polkit-policy-file-validate])
--if test -z "$POLKIT_POLICY_FILE_VALIDATE"; then
-+  AC_CHECK_PROG([POLKIT_POLICY_FILE_VALIDATE],
-+    [polkit-policy-file-validate], [polkit-policy-file-validate])
-+  if test -z "$POLKIT_POLICY_FILE_VALIDATE"; then
-     AC_MSG_ERROR([polkit-policy-file-validate not found])
-+  fi
- fi
- 
- AM_CONDITIONAL(ENABLE_DEFAULTS_SERVICE, [test "x$enable_defaults_service" != "xno"])
 @@ -201,42 +213,63 @@
  AC_SUBST(ORBIT_IDL)
  
