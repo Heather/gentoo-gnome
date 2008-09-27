@@ -17,6 +17,7 @@ RDEPEND=">=dev-libs/atk-1.17
 	>=gnome-base/gail-1.9.0
 	>=gnome-base/libbonobo-1.107
 	>=gnome-base/orbit-2
+	>=gnome-base/gconf-2
 	dev-libs/popt
 
 	x11-libs/libICE
