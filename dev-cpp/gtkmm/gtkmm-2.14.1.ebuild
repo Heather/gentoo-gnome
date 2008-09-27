@@ -12,10 +12,10 @@ SLOT="2.4"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="accessibility doc examples test"
 
-RDEPEND=">=dev-cpp/glibmm-2.16
+RDEPEND=">=dev-cpp/glibmm-2.18
 	>=x11-libs/gtk+-2.14.0
 	>=dev-cpp/cairomm-1.2.2
-	>=dev-cpp/pangomm-2.13.5
+	>=dev-cpp/pangomm-2.14.0
 	accessibility? ( >=dev-libs/atk-1.9.1 )"
 
 DEPEND="${RDEPEND}
