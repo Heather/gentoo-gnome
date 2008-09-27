@@ -5,7 +5,7 @@
 GCONF_DEBUG="no"
 SCROLLKEEPER_UPDATE="no"
 
-inherit gnome2
+inherit gnome2 python
 
 DESCRIPTION="Time tracking for the masses, in a GNOME applet"
 HOMEPAGE="http://projecthamster.wordpress.com/"
@@ -30,3 +30,24 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext"
 
 DOCS="AUTHORS ChangeLog NEWS README"
+
+src_unpack() {
+	gnome2_src_unpack
+
+	# disable pyc compiling
+	mv py-compile py-compile.orig
+	ln -s $(type -P true) py-compile
+}
+
+pkg_postinst() {
+	gnome2_pkg_postinst
+
+	python_version
+	python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages/hamster
+}
+
+pkg_postrm() {
+	gnome2_pkg_postrm
+	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages/hamster
+}
+
