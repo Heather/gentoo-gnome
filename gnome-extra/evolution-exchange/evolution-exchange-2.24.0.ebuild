@@ -24,7 +24,7 @@ RDEPEND="
 	>=gnome-base/libgnomeui-2.0
 	dev-libs/libxml2
 	net-libs/libsoup:2.4
-	>=gnome-extra/evolution-data-server-2.23.5
+	>=gnome-extra/evolution-data-server-2.23.90
 	>=net-nds/openldap-2.1.30-r2"
 
 DEPEND="${RDEPEND}
