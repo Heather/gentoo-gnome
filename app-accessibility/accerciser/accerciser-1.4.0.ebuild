@@ -32,3 +32,22 @@ DEPEND="${RDEPEND}
 pkg_setup() {
 	G2CONF="--without-pyreqs"
 }
+
+src_unpack() {
+	gnome2_src_unpack
+
+	# disable pyc compiling
+	mv "${S}"/py-compile "${S}"/py-compile.orig
+	ln -s $(type -P true) "${S}"/py-compile
+}
+
+pkg_postinst() {
+	gnome2_pkg_postinst
+	python_version
+	python_mod_optimize	/usr/$(get_libdir)/python${PYVER}/site-packages/accerciser
+}
+
+pkg_postrm() {
+	gnome2_pkg_postrm
+	python_mod_cleanup	/usr/$(get_libdir)/python*/site-packages/accerciser
+}
