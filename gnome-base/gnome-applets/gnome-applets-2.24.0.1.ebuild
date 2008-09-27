@@ -51,11 +51,6 @@ RDEPEND=">=x11-libs/gtk+-2.12
 			>=sys-auth/policykit-0.7
 			>=gnome-extra/policykit-gnome-0.7 )"
 
-# Remove gnome-system-tools 2.14 from RDEPEND to all because it is starting
-# to cause more headache to keep it than to mask it. Supports only s-t-b-1
-# anyway.
-#   >=app-admin/system-tools-backends-1.1.3
-
 DEPEND="${RDEPEND}
 		>=app-text/scrollkeeper-0.1.4
 		>=app-text/gnome-doc-utils-0.3.2
@@ -71,9 +66,6 @@ DOCS="AUTHORS ChangeLog NEWS README"
 
 src_unpack() {
 	gnome2_src_unpack
-
-	epatch "${FILESDIR}"/${PN}-2.23.3-polkit-automagic.patch
-	eautoreconf
 
 	# disable pyc compiling
 	mv py-compile py-compile.orig
@@ -134,6 +126,5 @@ pkg_postinst() {
 
 pkg_postrm() {
 	gnome2_pkg_postrm
-	python_version
-	python_mod_cleanup /usr/$(get_libdir)/python${PYVER}/site-packages/invest
+	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages/invest
 }
