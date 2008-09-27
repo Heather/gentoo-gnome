@@ -41,9 +41,7 @@
  
  # you can use the --variable=pygtkincludedir argument to
  # pkg-config to get this value.  You might want to use this to
-@@ -12,7 +12,7 @@ pygobjectincludedir=${includedir}/pygobject-2.0
- 
- # same here.  Useful when calling the code generator in addon packages.
+@@ -12,5 +12,5 @@
  defsdir=${datadir}/pygobject/2.0/defs
 -codegendir=${datadir}/pygobject/2.0/codegen
 +codegendir=${pyexecdir}/gtk-2.0/codegen
