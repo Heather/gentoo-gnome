@@ -33,11 +33,12 @@ src_unpack() {
 }
 
 pkg_postinst() {
+	gnome2_pkg_postinst
 	python_version
 	python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages/Pessulus
 }
 
 pkg_postrm() {
-	python_version
+	gnome2_pkg_postrm
 	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages/Pessulus
 }
