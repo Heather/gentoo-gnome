@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/totem/totem-2.22.2-r1.ebuild,v 1.1 2008/05/09 17:09:33 remi Exp $
 
-inherit gnome2 multilib
+inherit gnome2 multilib python
 
 DESCRIPTION="Media player for GNOME"
 HOMEPAGE="http://gnome.org/projects/totem/"
@@ -75,7 +75,6 @@ pkg_setup() {
 		fi
 	fi
 
-
 	G2CONF="${G2CONF}
 		--disable-vala
 		--with-dbus
@@ -106,12 +105,20 @@ pkg_setup() {
 			$(use_enable python)"
 }
 
-src_compile() {
-	#fixme: why does it need write access here, probably need to set up a fake
-	#home in /var/tmp like other pkgs do
+src_unpack() {
+	gnome2_src_unpack
 
-	addpredict "/root/.gconfd"
-	addpredict "/root/.gconf"
+	# disable pyc compiling
+	mv py-compile py-compile.orig
+	ln -s $(type -P true) py-compile
+}
+
+src_compile() {
+	# FIXME: why does it need write access here, probably need to set up a fake
+	# home in /var/tmp like other pkgs do
+
+	#addpredict "/root/.gconfd"
+	#addpredict "/root/.gconf"
 	addpredict "/root/.gnome2"
 
 	gnome2_src_compile
@@ -119,9 +126,14 @@ src_compile() {
 
 pkg_postinst() {
 	gnome2_pkg_postinst
+	use python && python_mod_optimize /usr/$(get_libdir)/totem/plugins
 
 	ewarn
 	ewarn "If totem doesn't play some video format, please check your"
 	ewarn "USE flags on media-plugins/gst-plugins-meta"
 	ewarn
+}
+
+pkg_postrm() {
+	use python && python_mod_cleanup /usr/$(get_libdir)/totem/plugins
 }
