@@ -45,7 +45,9 @@ RDEPEND=">=virtual/xft-2.1.2
 
 		eds? ( >=gnome-extra/evolution-data-server-1.7.90 )
 		hal? ( >=sys-apps/hal-0.5.6 )
-		sound? ( >=media-libs/libcanberra-0.4 )
+		sound? (
+			>=media-libs/libcanberra-0.4
+			x11-themes/sound-theme-freedesktop )
 
 		>=gnome-base/libbonobo-2
 		>=gnome-base/libgnome-2.2
