@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/totem/totem-2.22.2-r1.ebuild,v 1.1 2008/05/09 17:09:33 remi Exp $
 
-inherit autotools eutils gnome2 multilib
+inherit gnome2 multilib
 
 DESCRIPTION="Media player for GNOME"
 HOMEPAGE="http://gnome.org/projects/totem/"
@@ -14,9 +14,9 @@ KEYWORDS="~alpha ~amd64 ~ia64 ~ppc64 ~sparc ~x86"
 IUSE="bluetooth debug galago gnome lirc nautilus nsplugin nvtv python tracker"
 
 RDEPEND=">=dev-libs/glib-2.15
-		 >=x11-libs/gtk+-2.12.6
+		 >=x11-libs/gtk+-2.13.0
 		 >=gnome-base/gconf-2.0
-		 >=dev-libs/totem-pl-parser-2.21.90
+		 >=dev-libs/totem-pl-parser-2.23.91
 		 >=x11-themes/gnome-icon-theme-2.16
 		   app-text/iso-codes
 		   dev-libs/libxml2
