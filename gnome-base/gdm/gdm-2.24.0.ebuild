@@ -55,7 +55,8 @@ RDEPEND=">=dev-libs/dbus-glib-0.74
 		 !pam? ( elibc_glibc? ( sys-apps/shadow ) )
 		 remote? ( gnome-extra/zenity )
 		 selinux? ( sys-libs/libselinux )
-		 tcpd? ( >=sys-apps/tcp-wrappers-7.6 )"
+		 tcpd? ( >=sys-apps/tcp-wrappers-7.6 )
+		 !gnome-extra/fast-user-switch-applet"
 DEPEND="${RDEPEND}
 		dmx? ( x11-proto/dmxproto )
 		test? ( >=dev-libs/check-0.9.4 )
