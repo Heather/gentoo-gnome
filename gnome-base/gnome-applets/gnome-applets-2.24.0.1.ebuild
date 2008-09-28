@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-applets/gnome-applets-2.22.1.ebuild,v 1.3 2008/05/08 19:13:40 dang Exp $
 
-inherit gnome2 python eutils autotools
+inherit gnome2 python eutils
 
 DESCRIPTION="Applets for the GNOME Desktop and Panel"
 HOMEPAGE="http://www.gnome.org/"
@@ -66,6 +66,9 @@ DOCS="AUTHORS ChangeLog NEWS README"
 
 src_unpack() {
 	gnome2_src_unpack
+
+	# see bug #238747
+	epatch "${FILESDIR}/${PN}-2.24.0.1-fix-gconf-sandbox.patch"
 
 	# disable pyc compiling
 	mv py-compile py-compile.orig
