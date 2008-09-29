@@ -1,11 +1,12 @@
 # Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
+EAPI=1
 
 GCONF_DEBUG="no"
 SCROLLKEEPER_UPDATE="no"
 
-inherit gnome2 python
+inherit autotools eutils gnome2 python
 
 DESCRIPTION="Time tracking for the masses, in a GNOME applet"
 HOMEPAGE="http://projecthamster.wordpress.com/"
@@ -14,14 +15,19 @@ HOMEPAGE="http://projecthamster.wordpress.com/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
+IUSE="eds"
 
-RDEPEND=">=dev-lang/python-2.4
-	>=dev-python/gnome-python-2.10
+RDEPEND="
+	|| ( dev-lang/python:2.5 
+		 ( dev-lang/python:2.4 
+		   dev-python/pysqlite:2 ) )
+	dev-python/gnome-applets-python
+	dev-python/gconf-python
+	dev-python/dbus-python
+	eds? ( dev-python/evolution-python )
 	>=dev-python/pygobject-2.14
 	>=dev-python/pygtk-2.12
 	>=x11-libs/gtk+-2.12
-	=dev-python/pysqlite-2*
 	x11-libs/libXScrnSaver"
 
 DEPEND="${RDEPEND}
@@ -31,8 +37,23 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS README"
 
+pkg_setup() {
+	local msg="Rebuild dev-lang/python-2.5 with the sqlite USE flag"
+	if has_version dev-lang/python 2.5; then
+		if ! built_with_use dev-lang/python sqlite; then
+			eerror "${msg}"
+			die "${msg}"
+		fi
+	fi
+}
+
 src_unpack() {
 	gnome2_src_unpack
+
+	epatch "${FILESDIR}/${PN}-python-2.5.patch"
+	epatch "${FILESDIR}/${PN}-remove-gnomevfs.patch"
+
+	AT_M4DIR="m4" eautoreconf
 
 	# disable pyc compiling
 	mv py-compile py-compile.orig
@@ -50,4 +71,3 @@ pkg_postrm() {
 	gnome2_pkg_postrm
 	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages/hamster
 }
-
