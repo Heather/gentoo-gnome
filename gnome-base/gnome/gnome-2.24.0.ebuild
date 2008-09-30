@@ -166,7 +166,7 @@ RDEPEND="
 		>=app-accessibility/accerciser-1.4.0 )
 	cups? ( >=net-print/gnome-cups-manager-0.31-r2 )
 
-	mono? ( >=app-misc/tomboy-0.12.0 )"
+	mono? ( >=app-misc/tomboy-0.11.2 )"
 # Broken from assumptions of gnome-vfs headers being included in nautilus headers,
 # which isn't the case with nautilus-2.22, bug #216019
 #	>=app-admin/gnome-system-tools-2.22.1
