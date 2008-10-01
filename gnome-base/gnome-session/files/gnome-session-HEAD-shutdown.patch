@@ -1,0 +1,73 @@
+---
+ Straight forward fix to allow shutdown on systems not using policykit.
+
+ If the system really don't have policykit, it will make things work
+ as in 2.22.
+ 
+ If pk is in gsm but not in ck, it'll still work as in 2.22.
+
+ If pk is present in both, you just have to fix the logic to make
+ gsm ask pk if the user has the permission to shutdown _before_ showing
+ buttons and in case this is not possible, just damn fix pk.
+
+ gnome-session/gsm-consolekit.c |   14 ++------------
+ 1 file changed, 2 insertions(+), 12 deletions(-)
+
+Index: b/gnome-session/gsm-consolekit.c
+===================================================================
+--- a/gnome-session/gsm-consolekit.c
++++ b/gnome-session/gsm-consolekit.c
+@@ -528,7 +528,7 @@ request_restart_priv (GsmConsolekit *man
+                 g_free (error_message);
+         }
+ #else
+-        g_assert_not_reached ();
++        g_warning ("Failed to restart and Policykit support not enabled");
+ #endif /* HAVE POLKIT */
+ }
+ 
+@@ -568,7 +568,7 @@ request_stop_priv (GsmConsolekit *manage
+                 }
+         }
+ #else
+-        g_assert_not_reached ();
++        g_warning ("Failed to shutdown and Policykit support not enabled");
+ #endif /* HAVE POLKIT */
+ }
+ 
+@@ -828,7 +828,6 @@ gsm_consolekit_can_switch_user (GsmConso
+ gboolean
+ gsm_consolekit_can_restart (GsmConsolekit *manager)
+ {
+-#ifdef HAVE_POLKIT_GNOME
+         gboolean res;
+         GError  *error;
+         error = NULL;
+@@ -839,16 +838,11 @@ gsm_consolekit_can_restart (GsmConsoleki
+                 g_error_free (error);
+         }
+         return res;
+-#else
+-        g_debug ("GsmConsolekit: built without PolicyKit-gnome support - cannot restart system");
+-        return FALSE;
+-#endif
+ }
+ 
+ gboolean
+ gsm_consolekit_can_stop (GsmConsolekit *manager)
+ {
+-#ifdef HAVE_POLKIT_GNOME
+         gboolean res;
+         GError  *error;
+         error = NULL;
+@@ -859,10 +853,6 @@ gsm_consolekit_can_stop (GsmConsolekit *
+                 g_error_free (error);
+         }
+         return res;
+-#else
+-        g_debug ("GsmConsolekit: built without PolicyKit-gnome support - cannot stop system");
+-        return FALSE;
+-#endif
+ }
+ 
+ GsmConsolekit *
