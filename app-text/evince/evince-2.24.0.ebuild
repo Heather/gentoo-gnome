@@ -57,8 +57,8 @@ pkg_setup() {
 		$(use_enable tiff)
 		$(use_enable nautilus)"
 	
-	if ! built_with_use app-text/poppler-bindings gtk; then
-		einfo "Please re-emerge app-text/poppler-bindings with the gtk USE flag set"
+	if ! built_with_use app-text/poppler-bindings gtk cairo; then
+		eerror "Please re-emerge app-text/poppler-bindings with the gtk and cairo USE flag set"
 		die "poppler-bindings needs gtk flag set"
 	fi
 }
