@@ -88,7 +88,27 @@ src_install() {
 	doins "${FILESDIR}"/PolicyKit.conf
 	# Need to keep a few directories around...
 
-	diropts -m0770
+	diropts -m0770 -o root -g polkituser
 	keepdir /var/run/PolicyKit
 	keepdir /var/lib/PolicyKit
+}
+
+pkg_preinst() {
+	has_version "<${CATEGORY}/${PN}-0.9"
+	fix_var_dir_perms=$?
+}
+
+pkg_postinst() {
+	# bug #239231
+	if [[ $fix_var_dir_perms = 0 ]] ; then
+		echo
+		ewarn "Previous version of PolicyKit handled /var/run and /var/lib"
+		ewarn "with different permissions. Proper permissions are"
+		ewarn "now being set on ${ROOT}var/lib/PolicyKit and ${ROOT}var/lib/PolicyKit"
+		ewarn "Look at these directories if you have a specific configuration"
+		ewarn "that needs special ownerships or permissions."
+		echo
+		chmod 0770 "${ROOT}var/{lib,run}/PolicyKit" || die "chmod failed"
+		chgrp -R polkituser "${ROOT}var/{lib,run}/PolicyKit" || die "chgrp failed"
+	fi
 }
