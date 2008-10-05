@@ -51,8 +51,8 @@ src_compile() {
 		$(use_enable policykit polkit) \
 		$(use_enable pam pam-module) \
 		--with-pam-module-dir=/$(getpam_mod_dir) \
-		--with-pid-file=/var/run/consolekit.pid \
-		--with-dbus-services=/usr/share/dbus-1/services/
+		--with-dbus-services=/usr/share/dbus-1/services/ \
+		--localstatedir=/var
 	emake || die "emake failed"
 }
 
