@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/totem/totem-2.22.2-r1.ebuild,v 1.1 2008/05/09 17:09:33 remi Exp $
 
-inherit gnome2 multilib python
+inherit eutils gnome2 multilib python
 
 DESCRIPTION="Media player for GNOME"
 HOMEPAGE="http://gnome.org/projects/totem/"
@@ -59,7 +59,7 @@ DEPEND="${RDEPEND}
 		  app-text/scrollkeeper
 		  gnome-base/gnome-common
 		  app-text/gnome-doc-utils
-		>=dev-util/intltool-0.35
+		>=dev-util/intltool-0.40
 		>=dev-util/pkgconfig-0.20"
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
