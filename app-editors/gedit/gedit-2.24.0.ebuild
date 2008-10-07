@@ -24,7 +24,7 @@ RDEPEND=">=gnome-base/gconf-2
 		app-text/iso-codes
 	)
 	python? (
-		>=dev-python/pygobject-2.13
+		>=dev-python/pygobject-2.15
 		>=dev-python/pygtk-2.12
 		>=dev-python/pygtksourceview-2.2
 	)"
