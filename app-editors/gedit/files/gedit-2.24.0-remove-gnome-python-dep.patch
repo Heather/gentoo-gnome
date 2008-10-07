@@ -1,0 +1,24 @@
+--- data/gedit-bugreport.sh.in.orig	2008-10-07 15:02:29.575750696 +0300
++++ data/gedit-bugreport.sh.in	2008-10-07 15:03:23.902308541 +0300
+@@ -3,7 +3,7 @@
+ ENABLE_PYTHON=@enable_python@
+ 
+ PKG_CONFIG_MODULES="glib-2.0 gtk+-2.0 gtksourceview-2.0 \
+-		    pygobject-2.0 pygtk-2.0 gnome-python-2.0 \
++		    pygobject-2.0 pygtk-2.0 \
+ 		    pygtksourceview-2.0 enchant iso-codes"
+ 
+ echo_padded ()
+@@ -66,12 +66,6 @@
+ 		   sys.stdout.write('(GTK+ %d.%d.%d)' % gtk.gtk_version)" \
+ 		   2>/dev/null
+ 	echo
+-
+-	echo_padded "gnome-python"
+-	python -c "import gnome, sys; \
+-		   sys.stdout.write('%d.%d.%d' % gnome.gnome_python_version)" \
+-		   2>/dev/null
+-	echo
+ else
+ 	echo "  Python support was not enabled at compile time."
+ fi

@@ -69,6 +69,9 @@ src_unpack() {
 	# fixes failing python test due to libtool 2.2, bug #216110
 	epatch "${FILESDIR}/${PN}-2.22.1-fix-libtool-2.2.patch"
 
+	# Remove unnecessary gnome-python dep (libgnome bindings), upstream bug 555381
+	epatch "${FILESDIR}/${P}-remove-gnome-python-dep.patch"
+
 	# disable pyc compiling
 	mv "${S}"/py-compile "${S}"/py-compile.orig
 	ln -s $(type -P true) "${S}"/py-compile
