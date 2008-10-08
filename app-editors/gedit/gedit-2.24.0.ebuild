@@ -14,20 +14,20 @@ IUSE="doc python spell xattr"
 
 RDEPEND=">=gnome-base/gconf-2
 	xattr? ( sys-apps/attr )
+	>=x11-libs/libSM-1.0
 	>=dev-libs/libxml2-2.5.0
-	>=dev-libs/glib-2.14
-	>=x11-libs/gtk+-2.12
+	>=dev-libs/glib-2.16
+	>=x11-libs/gtk+-2.13
 	>=x11-libs/gtksourceview-2.2
 	spell? (
 		>=app-text/enchant-1.2
 		app-text/iso-codes
 	)
 	python? (
-		>=dev-python/pygobject-2.13
+		>=dev-python/pygobject-2.15
 		>=dev-python/pygtk-2.12
 		>=dev-python/pygtksourceview-2.2
-	)
-	>=x11-libs/libSM-1.0"
+	)"
 
 DEPEND="${RDEPEND}
 	sys-devel/gettext
@@ -68,6 +68,9 @@ src_unpack() {
 
 	# fixes failing python test due to libtool 2.2, bug #216110
 	epatch "${FILESDIR}/${PN}-2.22.1-fix-libtool-2.2.patch"
+
+	# Remove unnecessary gnome-python dep (libgnome bindings), upstream bug 555381
+	epatch "${FILESDIR}/${P}-remove-gnome-python-dep.patch"
 
 	# disable pyc compiling
 	mv "${S}"/py-compile "${S}"/py-compile.orig
