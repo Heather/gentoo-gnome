@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-terms/gnome-terminal/gnome-terminal-2.22.3-r1.ebuild,v 1.1 2008/08/03 17:57:39 eva Exp $
 
-inherit eutils gnome2 autotools
+inherit eutils gnome2
 
 DESCRIPTION="The Gnome Terminal"
 HOMEPAGE="http://www.gnome.org/"
@@ -36,15 +36,8 @@ src_unpack() {
 	# Use login shell by default (#12900)
 	epatch "${FILESDIR}"/${PN}-2.22.0-default_shell.patch
 
-	# Fix deprecated API disabling in used libraries - this is not future-proof, bug 213340
-	# Upstream bug: http://bugzilla.gnome.org/show_bug.cgi?id=523737
-	sed -i -e '/DISABLE_DEPRECATED/d' \
-		src/Makefile.am src/Makefile.in || die "sed failed"
-
 	# patch gnome terminal to report as GNOME rather than xterm
 	# This needs to resolve a few bugs (#120294,)
 	# Leave out for now; causing too many problems
 	#epatch ${FILESDIR}/${PN}-2.13.90-TERM-gnome.patch
-
-	eautomake
 }
