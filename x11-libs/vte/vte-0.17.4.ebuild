@@ -45,13 +45,3 @@ pkg_setup() {
 		$(use_with opengl glX)
 		--with-xft2 --with-pangox"
 }
-
-src_unpack() {
-	gnome2_src_unpack
-
-	epatch "${FILESDIR}/${PN}-0.13.2-no-lazy-bindings.patch"
-	cd "${S}/gnome-pty-helper"
-
-	# eautoreconf will break on systems without gtk-doc
-	eautomake
-}
