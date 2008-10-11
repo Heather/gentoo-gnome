@@ -20,7 +20,7 @@ RDEPEND=">=x11-libs/gtk+-2.12
 			>=sys-apps/dbus-1.0 )"
 DEPEND="${RDEPEND}
 		!<media-video/totem-2.21
-		>=dev-util/intltool-0.35
+		>=dev-util/intltool-0.40
 		doc? ( dev-util/gtk-doc )"
 
 src_compile() {
