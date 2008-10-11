@@ -53,15 +53,11 @@ pkg_setup() {
 		$(use_enable libnotify)"
 }
 
-src_install() {
-	gnome2_src_install
-
+#src_install() {
+#	gnome2_src_install
+#
 	# remove conflicts with x11-misc/shared-mime-info
-	rm -rf "${D}/usr/share/mime/"{application,magic,globs,XMLnamespaces}
-
-	chmod -s "${D}/usr/bin/seahorse-agent"
-	chmod -s "${D}/usr/bin/seahorse-daemon"
-
-	exeinto /etc/X11/xinit/xinitrc.d/
-	doexe "${FILESDIR}/70-seahorse-agent"
-}
+#	rm -rf "${D}/usr/share/mime/"{application,magic,globs,XMLnamespaces}
+#
+#	chmod -s "${D}/usr/bin/seahorse-daemon"
+#}
