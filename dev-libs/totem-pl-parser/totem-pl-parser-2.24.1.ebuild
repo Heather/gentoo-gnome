@@ -12,8 +12,8 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc64 ~sparc ~x86"
 IUSE="doc hal"
 
-RDEPEND=">=x11-libs/gtk+-2.12
-		 >=dev-libs/glib-2.16.3
+RDEPEND=">=dev-libs/glib-2.16.3
+		 >=x11-libs/gtk+-2.12
 		 >=gnome-extra/evolution-data-server-1.12
 		 hal? (
 		 	=sys-apps/hal-0.5*
@@ -24,7 +24,7 @@ DEPEND="${RDEPEND}
 		doc? ( dev-util/gtk-doc )"
 
 src_compile() {
-	econf $(use_with hal) || die "configure failed"
+	econf $(use_with hal)
 	emake || die "build failed"
 }
 

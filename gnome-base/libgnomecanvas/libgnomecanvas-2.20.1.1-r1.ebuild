@@ -9,18 +9,20 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc"
 
+# gtk+ raised to fix gail dependency
 RDEPEND=">=x11-libs/gtk+-2.13
-		 >=media-libs/libart_lgpl-2.3.8
-		 >=x11-libs/pango-1.0.1
-		 >=gnome-base/libglade-2"
+	>=media-libs/libart_lgpl-2.3.8
+	>=x11-libs/pango-1.0.1
+	>=gnome-base/libglade-2"
+
 DEPEND="${RDEPEND}
-		sys-devel/gettext
-		>=dev-util/intltool-0.35
-		>=dev-util/pkgconfig-0.18
-		doc? ( >=dev-util/gtk-doc-1 )"
+	sys-devel/gettext
+	>=dev-util/intltool-0.35
+	>=dev-util/pkgconfig-0.18
+	doc? ( >=dev-util/gtk-doc-1 )"
 
 DOCS="AUTHORS ChangeLog NEWS README"
 

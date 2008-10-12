@@ -13,6 +13,10 @@ KEYWORDS="~alpha ~amd64 ~ia64 ~ppc64 ~sparc ~x86"
 
 IUSE="bluetooth debug galago gnome lirc nautilus nsplugin nvtv python tracker"
 
+# TODO:
+# easy-publish-and-consume is not in tree (epc)
+# Cone (VLC) plugin needs someone with the right setup (remi ?)
+
 RDEPEND=">=dev-libs/glib-2.15
 		 >=x11-libs/gtk+-2.13.0
 		 >=gnome-base/gconf-2.0
@@ -81,7 +85,7 @@ pkg_setup() {
 		--enable-easy-codec-installation
 		$(use_enable nsplugin browser-plugins)"
 
-	# plugins configuration
+	# Plugin configuration
 	G2CONF="${G2CONF}
 		BROWSER_PLUGIN_DIR=/usr/$(get_libdir)/nsbrowser/plugins
 	    PLUGINDIR=/usr/$(get_libdir)/totem/plugins"
