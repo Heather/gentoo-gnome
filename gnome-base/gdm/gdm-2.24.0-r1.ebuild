@@ -9,19 +9,18 @@ HOMEPAGE="http://www.gnome.org/projects/gdm/"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~x86"
 
 IUSE_LIBC="elibc_glibc"
-IUSE="accessibility afs branding dmx debug ipv6 gnome-keyring pam policykit remote selinux tcpd xinerama $IUSE_LIBC"
+IUSE="accessibility afs debug ipv6 gnome-keyring pam policykit selinux tcpd xinerama $IUSE_LIBC"
 
 # Name of the tarball with gentoo specific files
 GDM_EXTRA="${PN}-2.20.5-gentoo-files"
 
 SRC_URI="${SRC_URI}
-		 mirror://gentoo/${GDM_EXTRA}.tar.bz2
-		 branding? ( mirror://gentoo/gentoo-gdm-theme-r3.tar.bz2 )"
+		 mirror://gentoo/${GDM_EXTRA}.tar.bz2"
 
-# FIXME: automagic polkit libxklavier check
+# FIXME: automagic libxklavier check
 
 RDEPEND=">=dev-libs/dbus-glib-0.74
 		 >=dev-libs/glib-2.15.4
@@ -53,12 +52,10 @@ RDEPEND=">=dev-libs/dbus-glib-0.74
 			>=sys-auth/pambase-20080318
 		 )
 		 !pam? ( elibc_glibc? ( sys-apps/shadow ) )
-		 remote? ( gnome-extra/zenity )
 		 selinux? ( sys-libs/libselinux )
 		 tcpd? ( >=sys-apps/tcp-wrappers-7.6 )
 		 !gnome-extra/fast-user-switch-applet"
 DEPEND="${RDEPEND}
-		dmx? ( x11-proto/dmxproto )
 		test? ( >=dev-libs/check-0.9.4 )
 		sys-devel/gettext
 		x11-proto/inputproto
@@ -70,19 +67,16 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
 pkg_setup() {
-	# --with-prefetch
 	G2CONF="${G2CONF}
 		--disable-schemas-install
 		--localstatedir=/var
 		--with-xdmcp=yes
 		--with-pam-prefix=/etc
 		--with-console-kit=yes
-		$(use_enable accessibility xevie)
+		$(use_with accessibility xevie)
 		$(use_enable debug)
-		$(use_with dmx)
 		$(use_enable ipv6)
 		$(use_enable policykit polkit)
-		$(use_enable remote secureremote)
 		$(use_with selinux)
 		$(use_with tcpd tcp-wrappers)
 		$(use_with xinerama)"
@@ -117,6 +111,7 @@ src_unpack() {
 
 	# remove unneeded linker directive for selinux (#41022)
 	epatch "${FILESDIR}/${PN}-2.13.0.1-selinux-remove-attr.patch"
+	epatch "${FILESDIR}/${P}-fix-daemonize-regression.patch"
 }
 
 src_install() {
@@ -158,11 +153,6 @@ src_install() {
 
 		dopamd "${gentoodir}"/pam.d/*
 		dopamsecurity console.apps "${gentoodir}/security/console.apps/gdmsetup"
-	fi
-
-	# Move Gentoo theme in
-	if use branding ; then
-		mv "${WORKDIR}"/gentoo-*  "${D}/usr/share/gdm/themes"
 	fi
 }
 
