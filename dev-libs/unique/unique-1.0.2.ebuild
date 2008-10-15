@@ -15,6 +15,7 @@ IUSE="dbus debug doc"
 
 RDEPEND=">=dev-libs/glib-2.12.0
 		>=x11-libs/gtk+-2.11.0
+		x11-libs/libX11
 		dbus? ( >=dev-libs/dbus-glib-0.70 )"
 DEPEND="${RDEPEND}
 		sys-devel/gettext
