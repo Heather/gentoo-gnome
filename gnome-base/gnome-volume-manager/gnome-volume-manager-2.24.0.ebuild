@@ -10,7 +10,7 @@ HOMEPAGE="http://www.gnome.org/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~sh ~sparc ~x86" # ~x86-fbsd"
-IUSE="automount debug"
+IUSE="automount debug consolekit"
 
 # TODO: libnotify support is optional but doesn't have a configure switch
 
@@ -23,7 +23,9 @@ RDEPEND=">=gnome-base/libgnomeui-2.1.5
 	>=gnome-base/gconf-2
 
 	  gnome-base/nautilus
-	>=gnome-base/gnome-mount-0.6"
+	>=gnome-base/gnome-mount-0.6
+
+	consolekit? ( >=sys-auth/consolekit-0.2 )"
 DEPEND="${RDEPEND}
 	  sys-devel/gettext
 	>=dev-util/pkgconfig-0.20
@@ -32,13 +34,12 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog README HACKING NEWS TODO"
 
 pkg_setup() {
-	G2CONF="${G2CONF} $(use_enable debug) $(use_enable automount)"
-
-	# FIXME: We should be more intelligent about disabling multiuser support
-	# (like enable it when pam_console is available?). For now, this is a
-	# slightly nicer solution than applying ${PN}-1.5.9-no-pam_console.patch
-	# FIXME: now that we have pambase, find time to check if we can do this
-	G2CONF="${G2CONF} --disable-multiuser"
+	# if consolekit is absent, g-v-m will fall back to the old
+	# behavior of the pam_console time.
+	G2CONF="${G2CONF}
+		$(use_enable debug)
+		$(use_enable automount)
+		$(use_enable consolekit multiuser)"
 }
 
 src_unpack() {
