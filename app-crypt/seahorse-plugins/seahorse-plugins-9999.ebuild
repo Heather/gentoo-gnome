@@ -13,7 +13,7 @@ SRC_URI=""
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS=""
-IUSE="applet debug epiphany gedit libnotify nautilus test"
+IUSE="applet debug epiphany gedit libnotify nautilus test xulrunner"
 
 RDEPEND="
 	>=gnome-base/libglade-2.0
@@ -29,10 +29,12 @@ RDEPEND="
 	>=dev-libs/dbus-glib-0.72
 	epiphany? (
 		>=www-client/epiphany-2.22
+		xulrunner? ( =net-libs/xulrunner-1.8* )
+		!xulrunner? ( =www-client/mozilla-firefox-2* )
 		>=dev-libs/libxml2-2.6.0 )
 	gedit? ( >=app-editors/gedit-2.16 )
 	applet? ( >=gnome-base/gnome-panel-2.10 )
-	app-crypt/seahorse
+	>=app-crypt/seahorse-2.24.0
 	libnotify? ( >=x11-libs/libnotify-0.3.2 )
 	>=gnome-extra/evolution-data-server-1.8"
 DEPEND="${RDEPEND}
@@ -43,6 +45,14 @@ DEPEND="${RDEPEND}
 		>=dev-util/intltool-0.35"
 
 pkg_setup() {
+	if use epiphany ; then
+		if use xulrunner ; then
+			G2CONF="${G2CONF} --with-gecko=xulrunner"
+		else
+			G2CONF="${G2CONF} --with-gecko=firefox"
+		fi
+	fi
+
 	G2CONF="${G2CONF}
 		--enable-agent
 		--disable-update-mime-database
@@ -61,4 +71,11 @@ src_unpack() {
 	gnome-doc-prepare --force || "gnome-doc-prepare failed"
 	intltoolize --force || die "intltoolize failed"
 	eautoreconf
+}
+
+src_install() {
+	gnome2_src_install
+
+	exeinto /etc/X11/xinit/xinitrc.d/
+	doexe "${FILESDIR}/70-seahorse-agent" || die "doexe failed"
 }
