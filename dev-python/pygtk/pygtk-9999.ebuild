@@ -22,7 +22,7 @@ RDEPEND=">=dev-libs/glib-2.8.0
 	>=gnome-base/libglade-2.5.0
 	>=dev-lang/python-2.4.4-r5
 	>=dev-python/pycairo-1.0.2
-	>=dev-python/pygobject-2.15.2
+	>=dev-python/pygobject-2.15.3
 	!arm? ( dev-python/numeric )"
 
 DEPEND="${RDEPEND}
@@ -34,6 +34,9 @@ src_unpack() {
 
 	AT_M4DIR="m4" eautoreconf
 
+	# Fix declaration of codegen in .pc
+	epatch "${FILESDIR}/${PN}-2.13.0-fix-codegen-location.patch"
+
 	# disable pyc compiling
 	mv "${S}"/py-compile "${S}"/py-compile.orig
 	ln -s $(type -P true) "${S}"/py-compile
@@ -43,11 +46,11 @@ src_compile() {
 	use hppa && append-flags -ffunction-sections
 	econf $(use_enable doc docs) --enable-thread
 
-	emake || die
+	emake || die "emake failed"
 }
 
 src_install() {
-	emake DESTDIR="${D}" install || die
+	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc AUTHORS ChangeLog INSTALL MAPPING NEWS README THREADS TODO
 
 	if use examples; then
