@@ -79,7 +79,6 @@ RDEPEND="
 	>=gnome-extra/gcalctool-5.24.0
 
 	>=gnome-extra/gconf-editor-2.24.0.1
-	>=gnome-base/gdm-2.20.8
 	>=x11-libs/gtksourceview-2.4.0:2.0
 	>=app-editors/gedit-2.24.0
 
@@ -132,9 +131,9 @@ RDEPEND="
 	>=gnome-extra/evolution-data-server-2.24.0
 	>=gnome-extra/evolution-webcal-2.24.0
 
-
-
-	>=gnome-extra/fast-user-switch-applet-2.22.0
+	|| (
+		>=gnome-base/gdm-2.20.8
+		>=gnome-extra/fast-user-switch-applet-2.22.0 )
 
 	>=app-admin/pessulus-2.24.0
 	ldap? (
