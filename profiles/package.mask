@@ -21,5 +21,6 @@
 ->=net-irc/xchat-gnome-0.24.0
 ->=gnome-base/gnome-desktop-2.24.0
 ->=gnome-base/eel-2.24.0
+->=gnome-base/nautilus-2.24.0
 # GNOME 2.24 mask end
 
