@@ -11,18 +11,16 @@ HOMEPAGE="http://www.gnome.org/"
 LICENSE="GPL-2 LGPL-2"
 SLOT="3.14"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="static"
+IUSE=""
 
 RDEPEND=">=x11-libs/gtk+-2.12
 	>=gnome-base/gail-1.1
 	>=x11-themes/gnome-icon-theme-1.2
-	>=gnome-base/libbonobo-2.20.3
-	>=gnome-base/libbonoboui-2.2.4
 	>=gnome-base/libglade-2
 	>=gnome-base/libgnomeui-2
-	>=gnome-base/orbit-2
 	app-text/enchant
-	app-text/iso-codes
+	gnome-base/gconf:2
+	>=app-text/iso-codes-0.49
 	net-libs/libsoup:2.4"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
@@ -33,7 +31,7 @@ DOCS="AUTHORS BUGS ChangeLog NEWS README TODO"
 
 pkg_setup() {
 	ELTCONF="--reverse-deps"
-	G2CONF="$(use_enable static) --enable-file-chooser"
+	G2CONF="--disable-static"
 }
 
 src_unpack() {
