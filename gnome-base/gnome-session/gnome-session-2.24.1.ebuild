@@ -47,8 +47,14 @@ src_unpack() {
 	# Patch for Gentoo Branding (bug #42687)
 	use branding && epatch "${FILESDIR}/${PN}-2.17.90.1-gentoo-branding.patch"
 
-	# Fix automagic dependency on policykit
+	# Fix automagic dependency on policykit, upstream bug #551766
 	epatch "${FILESDIR}/${PN}-2.23.5-polkit-automagic.patch"
+
+	# Fix shutdown/restart capability, upstream bug #549150
+	epatch "${FILESDIR}/${P}-shutdown.patch"
+
+	# Fix gnome-session-properties resize capability, upstream bug #554628
+	epatch "${FILESDIR}/${P}-resize.patch"
 
 	eautoreconf
 }
