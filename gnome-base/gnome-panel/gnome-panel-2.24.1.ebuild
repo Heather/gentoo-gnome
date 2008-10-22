@@ -16,7 +16,7 @@ RDEPEND=">=gnome-base/gnome-desktop-2.12
 		 >=x11-libs/pango-1.15.4
 		 >=dev-libs/glib-2.15.6
 		 >=x11-libs/gtk+-2.13.1
-		 >=dev-libs/libgweather-2.23.6
+		 >=dev-libs/libgweather-2.24.1
 		 dev-libs/libxml2
 		 >=gnome-base/libglade-2.5
 		 >=gnome-base/libgnome-2.13
