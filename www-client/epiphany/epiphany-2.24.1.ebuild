@@ -52,7 +52,7 @@ DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS README TODO"
 pkg_setup() {
 	# FIXME: I'm automagic
 	if ! built_with_use media-libs/libcanberra gtk; then
-		eerror "You need to rebuild media-libs/libcanberra with gtk	support."
+		eerror "You need to rebuild media-libs/libcanberra with gtk support."
 		die "Rebuild media-libs/libcanberra with USE='gtk'"
 	fi
 
