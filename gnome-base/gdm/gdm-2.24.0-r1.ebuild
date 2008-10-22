@@ -1,6 +1,7 @@
 # Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gdm/gdm-2.20.7.ebuild,v 1.5 2008/08/12 13:54:55 armin76 Exp $
+EAPI=2
 
 inherit eutils pam gnome2
 
@@ -12,7 +13,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
 IUSE_LIBC="elibc_glibc"
-IUSE="accessibility afs debug ipv6 gnome-keyring pam policykit selinux tcpd xinerama $IUSE_LIBC"
+IUSE="accessibility afs debug ipv6 gnome-keyring policykit selinux tcpd xinerama $IUSE_LIBC"
 
 # Name of the tarball with gentoo specific files
 GDM_EXTRA="${PN}-2.20.5-gentoo-files"
@@ -28,7 +29,6 @@ RDEPEND=">=dev-libs/dbus-glib-0.74
 		 >=x11-libs/pango-1.3
 		 >=gnome-base/libglade-2
 		 >=gnome-base/gconf-2.6.1
-		 policykit? ( >=sys-auth/policykit-0.8 )
 		 >=gnome-base/gnome-panel-2
 		 >=x11-libs/libxklavier-3.5
 		 virtual/xft
@@ -41,19 +41,18 @@ RDEPEND=">=dev-libs/dbus-glib-0.74
 		 x11-libs/libXext
 		 x11-apps/sessreg
 		 x11-libs/libXdmcp
-		 xinerama? ( x11-libs/libXinerama )
+		 virtual/pam
+		 sys-auth/pambase[gnome-keyring?]
 		 sys-auth/consolekit
+
 		 accessibility? ( x11-libs/libXevie )
 		 afs? ( net-fs/openafs sys-libs/lwp )
-		 dmx? ( x11-libs/libdmx )
-		 gnome-keyring? ( >=gnome-base/gnome-keyring-2.22 )
-		 pam? (
-			virtual/pam
-			>=sys-auth/pambase-20080318
-		 )
-		 !pam? ( elibc_glibc? ( sys-apps/shadow ) )
+		 gnome-keyring? ( >=gnome-base/gnome-keyring-2.22[pam] )
+		 policykit? ( >=sys-auth/policykit-0.8 )
 		 selinux? ( sys-libs/libselinux )
 		 tcpd? ( >=sys-apps/tcp-wrappers-7.6 )
+		 xinerama? ( x11-libs/libXinerama )
+
 		 !gnome-extra/fast-user-switch-applet"
 DEPEND="${RDEPEND}
 		test? ( >=dev-libs/check-0.9.4 )
@@ -71,6 +70,7 @@ pkg_setup() {
 		--disable-schemas-install
 		--localstatedir=/var
 		--with-xdmcp=yes
+		--enable-authentication-scheme=pam
 		--with-pam-prefix=/etc
 		--with-console-kit=yes
 		$(use_with accessibility xevie)
@@ -80,27 +80,6 @@ pkg_setup() {
 		$(use_with selinux)
 		$(use_with tcpd tcp-wrappers)
 		$(use_with xinerama)"
-
-	if use gnome-keyring && ! built_with_use gnome-base/gnome-keyring pam; then
-		eerror "You need to build gnome-base/gnome-keyring with USE=\"pam\""
-		eerror "for USE=\"gnome-keyring\" to have any effect on this package."
-	fi
-
-	if use pam; then
-		G2CONF="${G2CONF} --enable-authentication-scheme=pam"
-
-		if use gnome-keyring && ! built_with_use sys-auth/pambase gnome-keyring; then
-			eerror "You need USE=\"gnome\" in sys-auth/pambase for proper keyring"
-			eerror "unlocking at login time. It will not work properly otherwise."
-		fi
-	else
-		G2CONF="${G2CONF} --enable-console-helper=no"
-		if use elibc_glibc ; then
-			G2CONF="${G2CONF} --enable-authentication-scheme=shadow"
-		else
-			G2CONF="${G2CONF} --enable-authentication-scheme=crypt"
-		fi
-	fi
 
 	enewgroup gdm
 	enewuser gdm -1 -1 /var/lib/gdm gdm
@@ -148,12 +127,10 @@ src_install() {
 	# We replace the pam stuff by our own
 	rm -rf "${D}/etc/pam.d"
 
-	if use pam ; then
-		use gnome-keyring && sed -i "s:#Keyring=::g" "${gentoodir}"/pam.d/*
+	use gnome-keyring && sed -i "s:#Keyring=::g" "${gentoodir}"/pam.d/*
 
-		dopamd "${gentoodir}"/pam.d/*
-		dopamsecurity console.apps "${gentoodir}/security/console.apps/gdmsetup"
-	fi
+	dopamd "${gentoodir}"/pam.d/*
+	dopamsecurity console.apps "${gentoodir}/security/console.apps/gdmsetup"
 }
 
 pkg_postinst() {
