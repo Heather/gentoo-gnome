@@ -28,6 +28,9 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
+# upstream bug: http://bugzilla.gnome.org/show_bug.cgi?id=553164
+RESTRICT="test"
+
 pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_enable debug)
