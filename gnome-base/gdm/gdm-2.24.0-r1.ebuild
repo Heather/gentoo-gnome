@@ -90,6 +90,7 @@ src_unpack() {
 
 	# remove unneeded linker directive for selinux (#41022)
 	epatch "${FILESDIR}/${PN}-2.13.0.1-selinux-remove-attr.patch"
+	# Make it daemonize so that the boot process can continue (#236701)
 	epatch "${FILESDIR}/${P}-fix-daemonize-regression.patch"
 }
 

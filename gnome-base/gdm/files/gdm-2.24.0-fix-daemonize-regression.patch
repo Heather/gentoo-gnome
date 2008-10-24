@@ -1,8 +1,7 @@
-diff --git a/daemon/main.c b/daemon/main.c
-index 9d7ab5e..aef3adf 100644
---- a/daemon/main.c
-+++ b/daemon/main.c
-@@ -495,6 +495,63 @@ signal_cb (int      signo,
+diff -Naur gdm.orig/daemon/main.c gdm.trunk/daemon/main.c
+--- gdm.orig/daemon/main.c	2008-08-15 22:43:36.000000000 +0530
++++ gdm.trunk/daemon/main.c	2008-10-24 21:25:19.000000000 +0530
+@@ -495,6 +495,63 @@
          return ret;
  }
  
@@ -66,7 +65,7 @@ index 9d7ab5e..aef3adf 100644
  int
  main (int    argc,
        char **argv)
-@@ -505,6 +562,7 @@ main (int    argc,
+@@ -505,6 +562,7 @@
          DBusGConnection    *connection;
          GError             *error;
          int                 ret;
@@ -74,7 +73,7 @@ index 9d7ab5e..aef3adf 100644
          gboolean            res;
          gboolean            xdmcp_enabled;
          GdmSignalHandler   *signal_handler;
-@@ -512,9 +570,11 @@ main (int    argc,
+@@ -512,9 +570,11 @@
          static gboolean     do_timed_exit    = FALSE;
          static gboolean     print_version    = FALSE;
          static gboolean     fatal_warnings   = FALSE;
@@ -86,7 +85,7 @@ index 9d7ab5e..aef3adf 100644
                  { "timed-exit", 0, 0, G_OPTION_ARG_NONE, &do_timed_exit, N_("Exit after a time - for debugging"), NULL },
                  { "version", 0, 0, G_OPTION_ARG_NONE, &print_version, N_("Print GDM version"), NULL },
  
-@@ -531,6 +591,14 @@ main (int    argc,
+@@ -531,6 +591,14 @@
  
          g_type_init ();
  
@@ -101,19 +100,15 @@ index 9d7ab5e..aef3adf 100644
          context = g_option_context_new (_("GNOME Display Manager"));
          g_option_context_add_main_entries (context, entries, NULL);
          g_option_context_set_ignore_unknown_options (context, TRUE);
-@@ -600,6 +668,12 @@ main (int    argc,
-         delete_pid ();
-         write_pid ();
+@@ -596,6 +664,11 @@
+                 exit (-1);
+         }
  
 +        if (!no_daemon) {
-+                /* fork and write pid file with child's pid */
++                /* fork */
 +                gdm_daemonify ();
-+                write_pid ();
 +        }
 +
-         g_chdir (AUTHDIR);
- 
-         manager = gdm_manager_new ();
--- 
-1.5.5.1
-
+         /* pid file */
+         delete_pid ();
+         write_pid ();
