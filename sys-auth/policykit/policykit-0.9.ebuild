@@ -108,7 +108,7 @@ pkg_postinst() {
 		ewarn "Look at these directories if you have a specific configuration"
 		ewarn "that needs special ownerships or permissions."
 		echo
-		chmod 0770 "${ROOT}var/{lib,run}/PolicyKit" || die "chmod failed"
-		chgrp -R polkituser "${ROOT}var/{lib,run}/PolicyKit" || die "chgrp failed"
+		chmod 0770 "${ROOT}"var/{lib,run}/PolicyKit || die "chmod failed"
+		chgrp -R polkituser "${ROOT}"var/{lib,run}/PolicyKit || die "chgrp failed"
 	fi
 }
