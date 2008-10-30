@@ -53,6 +53,11 @@ pkg_setup() {
 		$(use_enable libnotify)"
 }
 
+pkg_postinst() {
+	einfo "The seahorse-agent tool has been moved to app-crypt/seahorse-plugins"
+	einfo "Use that if you want seahorse to manage your terminal SSH keys"
+}
+
 #src_install() {
 #	gnome2_src_install
 #
