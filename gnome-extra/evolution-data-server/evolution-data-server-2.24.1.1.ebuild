@@ -85,6 +85,7 @@ src_unpack() {
 	epatch "${FILESDIR}"/${PN}-2.23.6-as-needed.patch
 
 	# gtk-doc-am and gnome-common needed for this
+	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
 }
 
