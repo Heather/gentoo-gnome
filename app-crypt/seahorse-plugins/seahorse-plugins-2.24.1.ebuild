@@ -9,7 +9,7 @@ HOMEPAGE="http://www.gnome.org/projects/seahorse/index.html"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~x86"
 IUSE="applet debug epiphany gedit libnotify nautilus test xulrunner"
 
 RDEPEND="
