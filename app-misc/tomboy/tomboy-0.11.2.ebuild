@@ -13,7 +13,7 @@ KEYWORDS="~amd64 -ppc ~x86"
 IUSE="doc eds galago"
 
 RDEPEND=">=dev-lang/mono-1.9
-		 >=dev-dotnet/gtk-sharp-2
+		 >=dev-dotnet/gtk-sharp-2.10.2
 		 >=dev-dotnet/gconf-sharp-2
 		 >=dev-dotnet/gnome-sharp-2
 		 >=dev-dotnet/dbus-sharp-0.4
