@@ -6,6 +6,11 @@
 # NOTE: Please add your entry at the top!
 #
 
+# Nirbheek Chauhan <nirbheek.chauhan@gmail.com> (28 Nov 2008)
+# 2.24 hasn't all been moved to tree yet, but 2.25 stuff has started
+# dropping in. glib-2.19 is the first of many to come
+>=dev-libs/glib-2.19
+
 # Mart Raudsepp <leio@gentoo.org> (20 Oct 2008)
 # Does not work well compared to 2.22, at least not without
 # gnome-settings-daemon-2.24. Revert for overlay users
