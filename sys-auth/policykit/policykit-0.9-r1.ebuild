@@ -31,15 +31,26 @@ DEPEND="${RDEPEND}
 S="${WORKDIR}/${MY_PN}-${PV}"
 
 pkg_setup() {
-	enewgroup polkituser || die "failed to create group"
-	enewuser polkituser -1 "-1" /dev/null polkituser || die "failed to create user"
+	enewgroup polkituser
+	enewuser polkituser -1 "-1" /dev/null polkituser
 }
 
 src_unpack() {
 	unpack ${A}
 	cd "${S}"
 
+	# Add zsh/bash completion
 	epatch "${FILESDIR}/${PN}-0.7-completions.patch"
+
+	# Fix use of undefined _pk_debug, bug #239573
+	epatch "${FILESDIR}/${P}-pk-debug.patch"
+
+	# Fix useless pam header inclusion, bug #239554
+	epatch "${FILESDIR}/${P}-pam-headers.patch"
+
+	# Fix API change in consolekit 0.3
+	epatch "${FILESDIR}/${P}-consolekit03.patch"
+
 	eautoreconf
 }
 
