@@ -53,9 +53,6 @@ src_unpack() {
 	# Fix shutdown/restart capability, upstream bug #549150
 	epatch "${FILESDIR}/${P}-shutdown.patch"
 
-	# Fix gnome-session-properties resize capability, upstream bug #554628
-	epatch "${FILESDIR}/${P}-resize.patch"
-
 	eautoreconf
 }
 

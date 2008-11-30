@@ -12,8 +12,8 @@
 
  reported as http://bugzilla.gnome.org/show_bug.cgi?id=549150
 
- gnome-session/gsm-consolekit.c |   14 ++------------
- 1 file changed, 2 insertions(+), 12 deletions(-)
+ gnome-session/gsm-consolekit.c |   22 ++++++++++------------
+ 1 file changed, 10 insertions(+), 12 deletions(-)
 
 Index: b/gnome-session/gsm-consolekit.c
 ===================================================================
@@ -37,18 +37,31 @@ Index: b/gnome-session/gsm-consolekit.c
  #endif /* HAVE POLKIT */
  }
  
-@@ -828,7 +828,6 @@ gsm_consolekit_can_switch_user (GsmConso
+@@ -877,12 +877,19 @@ gsm_consolekit_can_do_action (GsmConsole
+ 
+         return result != POLKIT_RESULT_NO && result != POLKIT_RESULT_UNKNOWN;
+ }
++#else
++static gboolean
++gsm_consolekit_can_do_action (GsmConsolekit *manager,
++                              const char    *action_id)
++{
++        /* if we got here, res was true */
++        return TRUE;
++}
+ #endif
+ 
  gboolean
  gsm_consolekit_can_restart (GsmConsolekit *manager)
  {
 -#ifdef HAVE_POLKIT_GNOME
          gboolean res;
          GError  *error;
-         error = NULL;
-@@ -839,16 +838,11 @@ gsm_consolekit_can_restart (GsmConsoleki
-                 g_error_free (error);
-         }
-         return res;
+ 
+@@ -897,16 +904,11 @@ gsm_consolekit_can_restart (GsmConsoleki
+ 
+         return gsm_consolekit_can_do_action (manager, "org.freedesktop.consolekit.system.restart") ||
+                gsm_consolekit_can_do_action (manager, "org.freedesktop.consolekit.system.restart-multiple-users");
 -#else
 -        g_debug ("GsmConsolekit: built without PolicyKit-gnome support - cannot restart system");
 -        return FALSE;
@@ -62,10 +75,10 @@ Index: b/gnome-session/gsm-consolekit.c
          gboolean res;
          GError  *error;
          error = NULL;
-@@ -859,10 +853,6 @@ gsm_consolekit_can_stop (GsmConsolekit *
-                 g_error_free (error);
-         }
-         return res;
+@@ -920,10 +922,6 @@ gsm_consolekit_can_stop (GsmConsolekit *
+ 
+         return gsm_consolekit_can_do_action (manager, "org.freedesktop.consolekit.system.stop") ||
+                gsm_consolekit_can_do_action (manager, "org.freedesktop.consolekit.system.stop-multiple-users");
 -#else
 -        g_debug ("GsmConsolekit: built without PolicyKit-gnome support - cannot stop system");
 -        return FALSE;
