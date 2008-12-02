@@ -1,0 +1,17 @@
+--- a/gucharmap/gucharmap-settings.c	2008-12-02 00:55:20.000000000 +0100
++++ b/gucharmap/gucharmap-settings.c	2008-12-02 00:57:50.000000000 +0100
+@@ -238,13 +238,7 @@
+   return FALSE;
+ }
+ 
+-void
+-gucharmap_settings_set_chapter (gchar *chapter)
+-{
+-  return;
+-}
+-
+-ChaptersMode
++GucharmapChaptersMode
+ gucharmap_settings_get_chapters_mode (void)
+ {
+   return get_default_chapters_mode();

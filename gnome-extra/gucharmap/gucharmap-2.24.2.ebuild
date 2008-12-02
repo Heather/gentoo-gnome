@@ -36,3 +36,10 @@ pkg_setup() {
 		$(use_enable cjk unihan)
 		$(use_enable python python-bindings)"
 }
+
+src_unpack() {
+	gnome2_src_unpack
+
+	# Fix compilation with USE="-gnome", bug #248289
+	epatch "${FILESDIR}/${P}-nogconf.patch"
+}
