@@ -83,6 +83,15 @@ src_test() {
 	Xemake check || die "Test phase failed"
 }
 
+src_install() {
+	gnome2_src_install
+
+	if use policykit; then
+		insinto /usr/share/PolicyKit/policy
+		doins "${FILESDIR}/org.freedesktop.hal.power-management.policy"
+	fi
+}
+
 pkg_postinst() {
 	gnome2_pkg_postinst
 	elog
