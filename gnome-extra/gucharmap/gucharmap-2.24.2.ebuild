@@ -10,7 +10,7 @@ HOMEPAGE="http://gucharmap.sourceforge.net/"
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="cjk gnome python"
+IUSE="cjk doc gnome python"
 
 # gnome-base/libgnome is still used as "exec gnome-open", but our non-GNOME friends
 # would probably prefer non-working help button over a libgnome dependency, while
@@ -25,7 +25,8 @@ DEPEND="${RDEPEND}
 	app-text/scrollkeeper
 	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.40
-	>=app-text/gnome-doc-utils-0.9.0"
+	>=app-text/gnome-doc-utils-0.9.0
+	doc? ( >=dev-util/gtk-doc-1.0 )"
 
 DOCS="ChangeLog NEWS README TODO"
 
