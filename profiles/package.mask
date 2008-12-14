@@ -6,6 +6,10 @@
 # NOTE: Please add your entry at the top!
 #
 
+# Gilles Dartiguelongue <eva@gentoo.org> (14 Dec 2008)
+# Masked for testing until tree is fixed, see bug #243160.
+->=gnome-extra/gucharmap-2.24
+
 # Nirbheek Chauhan <nirbheek.chauhan@gmail.com> (28 Nov 2008)
 # 2.24 hasn't all been moved to tree yet, but 2.25 stuff has started
 # dropping in. glib-2.19 is the first of many to come
