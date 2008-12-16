@@ -21,7 +21,7 @@ DEPEND="${RDEPEND}
 		>=sys-devel/gettext-0.11
 		doc?	(
 					>=dev-libs/libxslt-1.0
-					>=dev-util/gtk-doc-1.8
+					>=dev-util/gtk-doc-1.11
 					~app-text/docbook-xml-dtd-4.1.2
 				)"
 
