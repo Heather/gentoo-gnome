@@ -6,14 +6,16 @@
 # NOTE: Please add your entry at the top!
 #
 
+# Nirbheek Chauhan <nirbheek.chauhan@gmail.com> (16 Dec 2008)
+# 2.24 hasn't all been moved to tree yet, but 2.25 stuff has started
+# dropping in. Mask 2.25 cycle releases till resolved.
+>=dev-libs/glib-2.19
+>=dev-util/gtk-doc-1.11
+>=dev-util/gtk-doc-am-1.11
+
 # Gilles Dartiguelongue <eva@gentoo.org> (14 Dec 2008)
 # Masked for testing until tree is fixed, see bug #243160.
 ->=gnome-extra/gucharmap-2.24
-
-# Nirbheek Chauhan <nirbheek.chauhan@gmail.com> (28 Nov 2008)
-# 2.24 hasn't all been moved to tree yet, but 2.25 stuff has started
-# dropping in. glib-2.19 is the first of many to come
->=dev-libs/glib-2.19
 
 # Mart Raudsepp <leio@gentoo.org> (20 Oct 2008)
 # Does not work well compared to 2.22, at least not without
