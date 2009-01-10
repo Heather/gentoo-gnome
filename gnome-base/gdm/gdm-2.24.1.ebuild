@@ -31,7 +31,7 @@ RDEPEND=">=dev-libs/dbus-glib-0.74
 		 >=gnome-base/gconf-2.6.1
 		 >=gnome-base/gnome-panel-2
 		 >=x11-libs/libxklavier-3.5
-		 virtual/xft
+		 x11-libs/libXft
 		 app-text/iso-codes
 
 		 x11-libs/gksu
