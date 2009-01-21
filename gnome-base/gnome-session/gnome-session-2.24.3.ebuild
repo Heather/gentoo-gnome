@@ -16,22 +16,21 @@ KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc64 ~sparc ~x86"
 IUSE="branding ipv6 policykit"
 
 RDEPEND=">=dev-libs/glib-2.16
-		 >=gnome-base/libgnomeui-2.2
-		 >=x11-libs/gtk+-2.11.1
-		 >=gnome-base/libglade-2.3.6
-		 >=dev-libs/dbus-glib-0.76
-		 >=gnome-base/gnome-keyring-2.21.92
-		 >=gnome-base/gconf-2
-		 >=x11-libs/startup-notification-0.9
-		 policykit? ( >=gnome-extra/policykit-gnome-0.7 )
+	>=gnome-base/libgnomeui-2.2
+	>=x11-libs/gtk+-2.11.1
+	>=gnome-base/libglade-2.3.6
+	>=dev-libs/dbus-glib-0.76
+	>=gnome-base/gnome-keyring-2.21.92
+	>=gnome-base/gconf-2
+	>=x11-libs/startup-notification-0.9
+	policykit? ( >=gnome-extra/policykit-gnome-0.7 )
 
-		 x11-apps/xdpyinfo"
+	x11-apps/xdpyinfo"
 DEPEND="${RDEPEND}
-		>=sys-devel/gettext-0.10.40
-		>=dev-util/pkgconfig-0.17
-		>=dev-util/intltool-0.40
-		!<gnome-base/gdm-2.20.4"
-
+	>=sys-devel/gettext-0.10.40
+	>=dev-util/pkgconfig-0.17
+	>=dev-util/intltool-0.40
+	!<gnome-base/gdm-2.20.4"
 # gnome-base/gdm does not provide gnome.desktop anymore
 
 DOCS="AUTHORS ChangeLog NEWS README"
@@ -51,8 +50,9 @@ src_unpack() {
 	epatch "${FILESDIR}/${PN}-2.23.5-polkit-automagic.patch"
 
 	# Fix shutdown/restart capability, upstream bug #549150
-	epatch "${FILESDIR}/${P}-shutdown.patch"
+	epatch "${FILESDIR}/${PN}-2.24.2-shutdown.patch"
 
+	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
 }
 
