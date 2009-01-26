@@ -3,7 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gdm/gdm-2.20.7.ebuild,v 1.5 2008/08/12 13:54:55 armin76 Exp $
 EAPI=2
 
-inherit eutils pam gnome2 gnome2-eapi-fixes
+inherit eutils pam gnome2
 
 DESCRIPTION="GNOME Display Manager"
 HOMEPAGE="http://www.gnome.org/projects/gdm/"
@@ -85,9 +85,7 @@ pkg_setup() {
 	enewuser gdm -1 -1 /var/lib/gdm gdm
 }
 
-src_unpack() {
-	gnome2_src_unpack
-
+src_prepare() {
 	# remove unneeded linker directive for selinux (#41022)
 	epatch "${FILESDIR}/${PN}-2.13.0.1-selinux-remove-attr.patch"
 	# Make it daemonize so that the boot process can continue (#236701)
