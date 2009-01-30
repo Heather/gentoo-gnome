@@ -30,8 +30,12 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 
 src_prepare() {
-	epatch "${FILESDIR}/${PN}-fix-python-automagic.patch"
-	epatch "${FILESDIR}/${PN}-fix-dbus-includes.patch"
+	# http://code.google.com/p/libproxy/issues/detail?id=23
+	epatch "${FILESDIR}/${P}-fix-dbus-includes.patch"
+	# http://code.google.com/p/libproxy/issues/detail?id=24
+	epatch "${FILESDIR}/${P}-fix-python-automagic.patch"
+	# http://code.google.com/p/libproxy/issues/detail?id=25
+	epatch "${FILESDIR}/${P}-fix-as-needed-problem.patch"
 	eautoreconf
 	elibtoolize
 }
