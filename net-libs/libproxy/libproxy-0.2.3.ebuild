@@ -1,9 +1,10 @@
 # Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
-EAPI=2
 
-inherit autotools eutils
+EAPI="2"
+
+inherit autotools eutils python
 
 DESCRIPTION="Library for automatic proxy configuration management"
 HOMEPAGE="http://code.google.com/p/libproxy/"
@@ -11,7 +12,7 @@ SRC_URI="http://${PN}.googlecode.com/files/${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~amd64 ~x86"
 IUSE="gnome kde networkmanager python webkit xulrunner"
 
 RDEPEND="
@@ -27,7 +28,8 @@ RDEPEND="
 	webkit? ( net-libs/webkit-gtk )
 	xulrunner? ( net-libs/xulrunner:1.9 )
 "
-DEPEND="${RDEPEND}"
+DEPEND="${RDEPEND}
+	>=dev-util/pkgconfig-0.19"
 
 src_prepare() {
 	# http://code.google.com/p/libproxy/issues/detail?id=23
@@ -36,13 +38,14 @@ src_prepare() {
 	epatch "${FILESDIR}/${P}-fix-python-automagic.patch"
 	# http://code.google.com/p/libproxy/issues/detail?id=25
 	epatch "${FILESDIR}/${P}-fix-as-needed-problem.patch"
+
 	eautoreconf
-	elibtoolize
 }
 
 src_configure() {
 	econf --with-envvar \
 		--with-file \
+		--disable-static \
 		$(use_with gnome) \
 		$(use_with kde) \
 		$(use_with webkit) \
@@ -54,4 +57,16 @@ src_configure() {
 src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed!"
 	dodoc AUTHORS NEWS README ChangeLog || die "dodoc failed"
+}
+
+pkg_postinst() {
+	if use python; then
+		python_version
+		python_need_rebuild
+		python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages
+	fi
+}
+
+pkg_postrm() {
+	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages
 }
