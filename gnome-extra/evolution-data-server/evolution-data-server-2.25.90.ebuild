@@ -22,6 +22,7 @@ RDEPEND=">=dev-libs/glib-2.16.1
 	>=dev-libs/libxml2-2
 	>=net-libs/libsoup-2.4
 	>=dev-libs/libgweather-2.25.4
+	>=dev-libs/libical-0.43
 	gnome-keyring? ( >=gnome-base/gnome-keyring-2.20.1 )
 	>=dev-db/sqlite-3.5
 	ssl? (
@@ -75,7 +76,7 @@ src_unpack() {
 	epatch "${FILESDIR}"/${PN}-1.2.0-gentoo_etc_services.patch
 
 	# Fix broken libdb build
-	epatch "${FILESDIR}"/${PN}-1.11.3-no-libdb.patch
+	epatch "${FILESDIR}"/${PN}-2.25.90-no-libdb.patch
 
 	# Rewind in camel-disco-diary to fix a crash
 	epatch "${FILESDIR}"/${PN}-1.8.0-camel-rewind.patch
