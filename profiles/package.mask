@@ -24,6 +24,7 @@
 >=app-text/evince-2.25
 >=dev-python/evince-python-2.25
 >=dev-python/gnome-desktop-python-base-2.25
+>=x11-libs/gtk+-2.15
 
 # Gilles Dartiguelongue <eva@gentoo.org> (14 Dec 2008)
 # Masked for testing until tree is fixed, see bug #243160.
