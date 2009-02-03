@@ -1,6 +1,7 @@
 # Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/glib/glib-2.18.3.ebuild,v 1.1 2008/11/27 01:51:33 leio Exp $
+EAPI=2
 
 inherit gnome.org libtool eutils flag-o-matic
 
@@ -10,12 +11,13 @@ HOMEPAGE="http://www.gtk.org/"
 LICENSE="LGPL-2"
 SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
-IUSE="debug doc fam hardened selinux xattr"
+IUSE="debug doc fam hardened pcre selinux xattr"
 
 RDEPEND="virtual/libc
 		 virtual/libiconv
 		 xattr? ( sys-apps/attr )
-		 fam? ( virtual/fam )"
+		 fam? ( virtual/fam )
+		 pcre? ( dev-libs/libpcre[unicode] )"
 DEPEND="${RDEPEND}
 		>=dev-util/pkgconfig-0.16
 		>=sys-devel/gettext-0.11
@@ -25,10 +27,7 @@ DEPEND="${RDEPEND}
 					~app-text/docbook-xml-dtd-4.1.2
 				)"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
-
+src_prepare() {
 	if use ppc64 && use hardened ; then
 		replace-flags -O[2-3] -O1
 		epatch "${FILESDIR}/glib-2.6.3-testglib-ssp.patch"
@@ -53,7 +52,7 @@ src_unpack() {
 	[[ ${CHOST} == *-freebsd* ]] && elibtoolize
 }
 
-src_compile() {
+src_configure() {
 	local myconf
 
 	epunt_cxx
@@ -70,11 +69,11 @@ src_compile() {
 		  $(use_enable doc man)     \
 		  $(use_enable doc gtk-doc) \
 		  $(use_enable fam)         \
+		  $(use_enable pcre regex)	\
 		  $(use_enable selinux)     \
 		  --enable-static           \
+		  --with-pcre=system		\
 		  --with-threads=posix || die "configure failed"
-
-	emake || die "make failed"
 }
 
 src_install() {
