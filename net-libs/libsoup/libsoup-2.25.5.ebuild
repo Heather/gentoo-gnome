@@ -1,6 +1,6 @@
 # Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/libsoup/libsoup-2.24.3.ebuild,v 1.1 2009/01/19 03:40:38 leio Exp $
 EAPI=2
 
 inherit autotools gnome2
@@ -11,6 +11,7 @@ HOMEPAGE="http://www.gnome.org/"
 LICENSE="LGPL-2"
 SLOT="2.4"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+# Do NOT build with --disable-debug/--enable-debug=no - gnome2.eclass takes care of that
 IUSE="debug doc gnome ssl"
 
 RDEPEND="
@@ -36,18 +37,7 @@ DOCS="AUTHORS ChangeLog NEWS README"
 # forms-test: 1 error(s).
 
 pkg_setup() {
-	# Do NOT build with --disable-debug/--enable-debug=no
-	if use debug ; then
-		G2CONF="${G2CONF} --enable-debug=yes"
-	fi
-
 	G2CONF="${G2CONF}
 		$(use_with gnome)
-		$(use_with gnome libproxy)
 		$(use_enable ssl)"
-}
-
-src_prepare() {
-	epatch "${FILESDIR}/${PN}-fix-libproxy-automagic.patch"
-	eautoreconf
 }
