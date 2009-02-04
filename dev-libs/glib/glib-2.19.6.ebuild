@@ -11,13 +11,12 @@ HOMEPAGE="http://www.gtk.org/"
 LICENSE="LGPL-2"
 SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
-IUSE="debug doc fam hardened pcre selinux xattr"
+IUSE="debug doc fam hardened selinux xattr"
 
 RDEPEND="virtual/libc
 		 virtual/libiconv
 		 xattr? ( sys-apps/attr )
-		 fam? ( virtual/fam )
-		 pcre? ( dev-libs/libpcre[unicode] )"
+		 fam? ( virtual/fam )"
 DEPEND="${RDEPEND}
 		>=dev-util/pkgconfig-0.16
 		>=sys-devel/gettext-0.11
@@ -64,15 +63,16 @@ src_configure() {
 	use debug && myconf="--enable-debug"
 
 	# always build static libs, see #153807
+	# Always use internal libpcre, bug #254659
 	econf ${myconf}                 \
 		  $(use_enable xattr)       \
 		  $(use_enable doc man)     \
 		  $(use_enable doc gtk-doc) \
 		  $(use_enable fam)         \
-		  $(use_enable pcre regex)	\
 		  $(use_enable selinux)     \
 		  --enable-static           \
-		  --with-pcre=system		\
+		  --enable-regex			\
+		  --with-pcre=internal		\
 		  --with-threads=posix || die "configure failed"
 }
 
