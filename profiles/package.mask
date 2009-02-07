@@ -40,6 +40,7 @@
 >=dev-python/nautilus-cd-burner-python-2.25
 >=dev-python/totem-python-2.25
 >=gnome-base/gnome-desktop-2.25
+>=gnome-base/gnome-settings-daemon-2.25
 
 # Gilles Dartiguelongue <eva@gentoo.org> (14 Dec 2008)
 # Masked for testing until tree is fixed, see bug #243160.
