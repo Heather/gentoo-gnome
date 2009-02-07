@@ -21,10 +21,24 @@
 >=dev-libs/libical-0.43
 >=mail-client/evolution-2.25
 >=gnome-base/gvfs-1.1.5
->=app-text/evince-2.25
->=dev-python/evince-python-2.25
->=dev-python/gnome-desktop-python-base-2.25
 >=x11-libs/gtk+-2.15
+>=app-text/evince-2.25
+>=dev-python/gnome-desktop-python-base-2.25
+>=dev-python/bug-buddy-python-2.25
+>=dev-python/evince-python-2.25
+>=dev-python/evolution-python-2.25
+>=dev-python/gnome-applets-python-2.25
+>=dev-python/gnome-desktop-python-2.25
+>=dev-python/gnome-keyring-python-2.25
+>=dev-python/gnome-media-python-2.25
+>=dev-python/gtksourceview-python-2.25
+>=dev-python/libgnomeprint-python-2.25
+>=dev-python/libgtop-python-2.25
+>=dev-python/librsvg-python-2.25
+>=dev-python/libwnck-python-2.25
+>=dev-python/metacity-python-2.25
+>=dev-python/nautilus-cd-burner-python-2.25
+>=dev-python/totem-python-2.25
 
 # Gilles Dartiguelongue <eva@gentoo.org> (14 Dec 2008)
 # Masked for testing until tree is fixed, see bug #243160.
