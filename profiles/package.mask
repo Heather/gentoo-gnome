@@ -46,6 +46,7 @@
 >=dev-util/glade-3.5.7
 >=x11-libs/pango-1.23
 >=gnome-extra/gnome-power-manager-2.25
+>=gnome-extra/gnome-media-2.25
 
 # Gilles Dartiguelongue <eva@gentoo.org> (14 Dec 2008)
 # Masked for testing until tree is fixed, see bug #243160.
