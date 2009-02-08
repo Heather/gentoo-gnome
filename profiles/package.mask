@@ -44,6 +44,7 @@
 >=gnome-base/gnome-control-center-2.25
 >=x11-libs/vte-0.19
 >=dev-util/glade-3.5.7
+>=x11-libs/pango-1.23
 
 # Gilles Dartiguelongue <eva@gentoo.org> (14 Dec 2008)
 # Masked for testing until tree is fixed, see bug #243160.
