@@ -10,7 +10,7 @@ SRC_URI="http://www.gnome.org/~ebassi/source/${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~x86"
 IUSE="dbus debug doc"
 
 RDEPEND=">=dev-libs/glib-2.12.0
