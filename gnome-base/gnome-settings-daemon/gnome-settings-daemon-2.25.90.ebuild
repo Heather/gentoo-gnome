@@ -79,7 +79,7 @@ src_unpack() {
 	# Fix libnotify automagic dependencies (GNOME bug #570885)
 	epatch "${FILESDIR}/${P}-libnotify-automagic.patch"
 
-	# Re-add non-pulse AcmeVolume control support
+	# Re-add non-pulse AcmeVolume control support (GNOME bug #571145)
 	epatch "${FILESDIR}/${P}-readd-AcmeVolume-support.patch"
 
 	# Fix background loading (GNOME bug #564909)
