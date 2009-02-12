@@ -54,6 +54,7 @@
 >=x11-themes/gnome-icon-theme-2.25
 >=x11-themes/gnome-theme-2.25
 >=media-video/totem-2.25
+>=gnome-base/gnome-session-2.25
 
 # Gilles Dartiguelongue <eva@gentoo.org> (14 Dec 2008)
 # Masked for testing until tree is fixed, see bug #243160.
