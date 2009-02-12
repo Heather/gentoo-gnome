@@ -64,6 +64,7 @@ pkg_setup() {
 
 src_unpack() {
 	gnome2_src_unpack
+	# GNOME bug #571396
 	epatch "${FILESDIR}/${P}-pulseaudio-automagic.patch"
 	eautoreconf
 }

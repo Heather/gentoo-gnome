@@ -1,30 +1,12 @@
-diff -Naur gnome-media-2.25.5.orig/configure.ac gnome-media-2.25.5/configure.ac
---- gnome-media-2.25.5.orig/configure.ac	2009-01-21 01:32:53.000000000 +0530
-+++ gnome-media-2.25.5/configure.ac	2009-02-08 18:17:54.728422480 +0530
-@@ -118,7 +118,7 @@
+diff -Naur gnome-media-2.25.5/configure.ac gnome-media-2.25.5.new/configure.ac
+--- gnome-media-2.25.5/configure.ac	2009-01-21 01:32:53.000000000 +0530
++++ gnome-media-2.25.5.new/configure.ac	2009-02-12 11:04:13.336933629 +0530
+@@ -117,6 +117,8 @@
+   if test "x$have_pulseaudio" = "xyes" ; then
      AC_DEFINE(HAVE_PULSEAUDIO, [], [Define if we have pulseaudio])
    fi
++else
++  have_pulseaudio=no
  fi
--AM_CONDITIONAL(HAVE_PULSEAUDIO, test x$have_pulseaudio = xyes)
-+AM_CONDITIONAL(HAVE_PULSEAUDIO, test x$enable_pulseaudio != xno)
+ AM_CONDITIONAL(HAVE_PULSEAUDIO, test x$have_pulseaudio = xyes)
  AC_SUBST(HAVE_PULSEAUDIO)
- AC_SUBST(PULSEAUDIO_CFLAGS)
- AC_SUBST(PULSEAUDIO_LIBS)
-@@ -552,7 +552,7 @@
-   AS_HELP_STRING([--enable-gstmix], [enable gstreamer mixer]),
-   ,enable_gstmix=yes)
- 
--if test "x$have_pulseaudio" = "xno" && test "x$have_gst" = "xyes" && test "x$enable_gstmix" = "xyes";
-+if test "x$enable_pulseaudio" = "xno" && test "x$have_gst" = "xyes" && test "x$enable_gstmix" = "xyes";
- then
-   PKG_CHECK_MODULES(GSTMIXER, [
-     libgnomeui-2.0
-@@ -713,7 +713,7 @@
-         Compiler:               ${CC}
-         CFLAGS:                 ${CFLAGS}
- 
--        Volume Control          $have_pulseaudio
-+        Volume Control          $enable_pulseaudio
-         GStreamer properties:   $have_gstprops
-         GStreamer profiles:     $have_profiles
-         Sound recorder:         $have_grecord$grecord_reason
