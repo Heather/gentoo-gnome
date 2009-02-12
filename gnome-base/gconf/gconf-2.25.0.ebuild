@@ -49,10 +49,10 @@ src_unpack() {
 	gnome2_src_unpack
 
 	# fix bug #193442, GNOME bug #498934
-	epatch "${FILESDIR}/${P}-automagic-ldap.patch"
+	epatch "${FILESDIR}/${PN}-2.24.0-automagic-ldap.patch"
 
 	# fix bug #238276
-	epatch "${FILESDIR}/${P}-no-gconfd.patch"
+	epatch "${FILESDIR}/${PN}-2.24.0-no-gconfd.patch"
 
 	eautoreconf
 }
