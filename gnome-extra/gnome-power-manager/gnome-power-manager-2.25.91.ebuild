@@ -63,8 +63,9 @@ pkg_setup() {
 		$(use_enable policykit)
 		$(use_enable policykit gconf-defaults)
 		--with-dpms-ext
-		--enable-xevents
+		--disable-legacy-buttons
 		--enable-applets"
+	# XXX: --disable-legacy-buttons => only xevents => newer Xorg
 }
 
 src_unpack() {
