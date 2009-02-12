@@ -60,6 +60,7 @@
 >=gnome-base/gnome-panel-2.25
 >=gnome-extra/gnome-utils-2.25
 >=gnome-base/gconf-2.25
+>=net-misc/vinagre-2.25
 
 # Gilles Dartiguelongue <eva@gentoo.org> (14 Dec 2008)
 # Masked for testing until tree is fixed, see bug #243160.
