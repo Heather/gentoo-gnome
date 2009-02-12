@@ -1,7 +1,7 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-wm/metacity/metacity-2.24.0-r1.ebuild,v 1.1 2009/02/08 21:31:50 eva Exp $
-EAPI=1
+EAPI=2
 
 inherit eutils gnome2
 
@@ -14,7 +14,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="test xinerama"
 
 RDEPEND=">=x11-libs/gtk+-2.10
-	>=x11-libs/pango-1.2
+	>=x11-libs/pango-1.2[X]
 	>=gnome-base/gconf-2
 	>=dev-libs/glib-2.6
 	>=x11-libs/startup-notification-0.7
@@ -46,5 +46,10 @@ DOCS="AUTHORS ChangeLog HACKING NEWS README *.txt doc/*.txt"
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--enable-compositor
+		--enable-render
+		--enable-shape
+		--enable-sm
+		--enable-startup-notification
+		--enable-xsync
 		$(use_enable xinerama)"
 }
