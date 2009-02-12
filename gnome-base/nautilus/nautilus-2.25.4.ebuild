@@ -12,6 +12,7 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="beagle doc gnome tracker xmp"
 
+# FIXME: dev-libs/unique needs KEYWORDS
 RDEPEND="
 	>=dev-libs/glib-2.19.0
 	>=gnome-base/gnome-desktop-2.25.5
@@ -21,6 +22,7 @@ RDEPEND="
 	>=media-libs/libexif-0.5.12
 	>=gnome-base/gconf-2.0
 	>=gnome-base/gvfs-0.1.2
+	dev-libs/unique
 	x11-libs/libXft
 	x11-libs/libXrender
 	beagle? ( || (
