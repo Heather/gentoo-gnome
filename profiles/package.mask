@@ -52,7 +52,7 @@
 >=x11-wm/metacity-2.25
 >=gnome-base/nautilus-2.25
 >=x11-themes/gnome-icon-theme-2.25
->=x11-themes/gnome-theme-2.25
+>=x11-themes/gnome-themes-2.25
 >=media-video/totem-2.25
 >=gnome-base/gnome-session-2.25
 >=gnome-base/gnome-menus-2.25
