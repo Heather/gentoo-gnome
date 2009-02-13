@@ -65,6 +65,7 @@
 >=dev-libs/totem-pl-parser-2.25
 >=gnome-base/gnome-keyring-2.25
 >=app-arch/file-roller-2.25
+>=app-text/gnome-doc-utils-0.15
 
 # Gilles Dartiguelongue <eva@gentoo.org> (14 Dec 2008)
 # Masked for testing until tree is fixed, see bug #243160.
