@@ -66,6 +66,7 @@
 >=gnome-base/gnome-keyring-2.25
 >=app-arch/file-roller-2.25
 >=dev-python/gnome-python-base-2.25
+>=dev-python/gconf-python-2.25
 
 # Gilles Dartiguelongue <eva@gentoo.org> (14 Dec 2008)
 # Masked for testing until tree is fixed, see bug #243160.
