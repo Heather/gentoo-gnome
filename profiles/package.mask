@@ -66,6 +66,16 @@
 >=gnome-base/gnome-keyring-2.25
 >=app-arch/file-roller-2.25
 >=app-text/gnome-doc-utils-0.15
+>=dev-python/gnome-python-base-2.25
+>=dev-python/gconf-python-2.25
+>=dev-python/libgnomecanvas-python-2.25
+>=dev-python/gnome-vfs-python-2.25
+>=dev-python/libbonobo-python-2.25
+>=dev-python/libgnome-python-2.25
+>=dev-python/gnome-python-2.25
+>=x11-libs/gtksourceview-2.5
+>=x11-themes/gtk-engines-2.17
+>=gnome-extra/gcalctool-5.25
 
 # Gilles Dartiguelongue <eva@gentoo.org> (14 Dec 2008)
 # Masked for testing until tree is fixed, see bug #243160.
