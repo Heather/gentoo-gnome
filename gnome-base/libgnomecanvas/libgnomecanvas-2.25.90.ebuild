@@ -26,6 +26,10 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS README"
 
+pkg_setup() {
+	G2CONF="${G2CONF} --disable-rebuilds"
+}
+
 src_test() {
 	Xmake check || die "Test phase failed"
 }
