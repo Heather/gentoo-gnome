@@ -6,6 +6,11 @@
 # NOTE: Please add your entry at the top!
 #
 
+# Nirbheek Chauhan <nirbheek@gentoo.org> (22 Feb 2009)
+# Epiphany-trunk which uses webkit (bug #239112)
+# Several feature regressions
+=www-client/epiphany-9999
+
 # Nirbheek Chauhan <nirbheek.chauhan@gmail.com> (16 Dec 2008) to (8th Feb 2009)
 # 2.24 hasn't all been moved to tree yet, but 2.25 stuff has started
 # dropping in. Mask 2.25 cycle releases till resolved.
