@@ -84,6 +84,7 @@
 >=dev-util/devhelp-0.23
 >=gnome-base/libgnomecanvas-2.25
 >=app-editors/gedit-2.25
+>=app-misc/tracker-0.6.90
 
 # Gilles Dartiguelongue <eva@gentoo.org> (14 Dec 2008)
 # Masked for testing until tree is fixed, see bug #243160.
