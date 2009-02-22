@@ -14,13 +14,14 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc python spell xattr"
 
+# Dep on gtksourceview is 2.4, bug #259917
 RDEPEND=">=gnome-base/gconf-2
 	xattr? ( sys-apps/attr )
 	>=x11-libs/libSM-1.0
 	>=dev-libs/libxml2-2.5.0
 	>=dev-libs/glib-2.18
 	>=x11-libs/gtk+-2.13
-	>=x11-libs/gtksourceview-2.2
+	>=x11-libs/gtksourceview-2.4
 	spell? (
 		>=app-text/enchant-1.2
 		>=app-text/iso-codes-0.35
