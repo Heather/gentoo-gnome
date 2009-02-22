@@ -62,6 +62,12 @@ src_install() {
 	gnome2_src_install
 	use bash-completion && \
 		dobashcompletion programs/gvfs-bash-completion.sh ${PN}
+	
+	if use archive; then
+		# Fix bug #249829
+		insinto /usr/share/applications
+		newins "${FILESDIR}/archive-mounter-2.25.91.desktop" archive-mounter.desktop
+	fi
 }
 
 pkg_postinst() {
