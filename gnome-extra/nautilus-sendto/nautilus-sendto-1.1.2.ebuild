@@ -1,4 +1,4 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/nautilus-sendto/nautilus-sendto-0.14.0.ebuild,v 1.1 2008/03/29 20:46:08 compnerd Exp $
 
@@ -59,12 +59,6 @@ pkg_setup() {
 src_unpack() {
 	unpack ${A}
 	cd "${S}"
-	
-	# Add support for x11-plugins/pidgin-msn-pecan (bug #259875)
-	epatch "${FILESDIR}"/${P}-msn-pecan.patch
-	
-	# Fix for gnome bug #572715
-	epatch "${FILESDIR}"/${P}-filename.patch
 
 	# Fix plugin versioning for pidgin plugin
 	epatch "${FILESDIR}"/${P}-pidgin-plugin-versioning.patch
