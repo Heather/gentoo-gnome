@@ -1,8 +1,7 @@
 # Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
-
-EAPI="2"
+EAPI=2
 
 inherit autotools eutils python
 
@@ -61,12 +60,11 @@ src_install() {
 
 pkg_postinst() {
 	if use python; then
-		python_version
 		python_need_rebuild
-		python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages
+		python_mod_optimize "$(python_get_sitedir)/${PN}.py"
 	fi
 }
 
 pkg_postrm() {
-	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages
+	python_mod_cleanup "$(python_get_sitedir)/${PN}.py"
 }
