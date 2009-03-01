@@ -32,7 +32,10 @@ DEPEND="${RDEPEND}
 	>=sys-devel/gettext-0.10.40
 	>=dev-util/pkgconfig-0.17
 	>=dev-util/intltool-0.40
-	!<gnome-base/gdm-2.20.4"
+	!<gnome-base/gdm-2.20.4
+	doc? (
+		app-text/xmlto
+		dev-libs/libxslt )"
 # gnome-base/gdm does not provide gnome.desktop anymore
 
 DOCS="AUTHORS ChangeLog NEWS README"
@@ -40,6 +43,7 @@ DOCS="AUTHORS ChangeLog NEWS README"
 pkg_setup() {
 	# TODO: convert libnotify to a configure option
 	G2CONF="${G2CONF}
+		$(use_enable doc docbook-docs)
 		$(use_enable ipv6)
 		$(use_enable policykit polkit)"
 }
