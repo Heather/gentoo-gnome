@@ -4,7 +4,7 @@
 
 GCONF_DEBUG="no"
 
-inherit gnome2 python eutils autotools
+inherit gnome2 python eutils
 
 DESCRIPTION="A text editor for the GNOME desktop"
 HOMEPAGE="http://www.gnome.org/"
@@ -14,7 +14,6 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc python spell xattr"
 
-# Dep on gtksourceview is 2.4, bug #259917
 RDEPEND=">=gnome-base/gconf-2
 	xattr? ( sys-apps/attr )
 	>=x11-libs/libSM-1.0
@@ -39,8 +38,6 @@ DEPEND="${RDEPEND}
 	>=app-text/scrollkeeper-0.3.11
 	>=app-text/gnome-doc-utils-0.3.2
 	~app-text/docbook-xml-dtd-4.1.2
-	gnome-base/gnome-common
-	>=dev-util/gtk-doc-am-1
 	doc? ( >=dev-util/gtk-doc-1 )"
 # gnome-common and gtk-doc-am needed to eautoreconf
 
@@ -57,6 +54,12 @@ pkg_setup() {
 		$(use_enable python)
 		$(use_enable spell)
 		$(use_enable xattr attr)"
+}
+
+src_unpack() {
+	gnome2_src_unpack
+
+	ln -sfn $(type -P true) py-compile
 }
 
 pkg_postinst() {
