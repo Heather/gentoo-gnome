@@ -20,13 +20,13 @@ RDEPEND="x11-libs/libXrender
 	x11-libs/libXi
 	x11-libs/libXt
 	x11-libs/libXext
-	>=x11-libs/libXrandr-1.2
+	>=x11-libs/libXrandr-1.2.99
 	x11-libs/libXcursor
 	x11-libs/libXfixes
 	x11-libs/libXcomposite
 	x11-libs/libXdamage
 	xinerama? ( x11-libs/libXinerama )
-	>=dev-libs/glib-2.17.6
+	>=dev-libs/glib-2.19.7
 	>=x11-libs/pango-1.20
 	>=dev-libs/atk-1.13
 	>=x11-libs/cairo-1.6[X]

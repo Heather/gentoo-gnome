@@ -6,12 +6,17 @@
 # NOTE: Please add your entry at the top!
 #
 
+# Nirbheek Chauhan <nirbheek@gentoo.org> (1 Mar 2009)
+# Deps of (masked) gtk+-2.15.4 (taken from x11 overlay)
+>=x11-libs/libXrandr-1.2.99
+>=x11-proto/randrproto-1.2.99
+
 # Nirbheek Chauhan <nirbheek@gentoo.org> (22 Feb 2009)
 # Epiphany-trunk which uses webkit (bug #239112)
 # Several feature regressions
 =www-client/epiphany-9999
 
-# Nirbheek Chauhan <nirbheek.chauhan@gmail.com> (16 Dec 2008) to (1st Mar 2009)
+# Nirbheek Chauhan <nirbheek.chauhan@gmail.com> (16 Dec 2008) to (1 Mar 2009)
 # 2.24 hasn't all been moved to tree yet, but 2.25 stuff has started
 # dropping in. Mask 2.25 cycle releases till resolved.
 >=dev-libs/glib-2.19
