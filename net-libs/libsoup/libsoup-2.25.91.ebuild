@@ -27,15 +27,6 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS README"
 
-# FIXME: test fails in "forms-test"; nothing wrong with libsoup?
-# ./forms-test -d
-# MD5 tests (POST, multipart/form-data)
-#   via curl: WRONG!
-#   expected '0507f7de0b4f20cbab3f7a18d01912ec', got ''
-#   via libsoup: OK!
-#
-# forms-test: 1 error(s).
-
 pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_with gnome)
