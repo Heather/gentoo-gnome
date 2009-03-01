@@ -1,6 +1,7 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.24.2-r2.ebuild,v 1.1 2008/12/27 19:22:51 ford_prefect Exp $
+EAPI=2
 
 inherit autotools gnome2 flag-o-matic libtool
 
@@ -17,7 +18,7 @@ IUSE="crypt dbus hal kerberos krb4 ldap mono networkmanager nntp pda profile ssl
 # Pango dependency required to avoid font rendering problems
 RDEPEND=">=dev-libs/glib-2.18
 	>=x11-libs/gtk+-2.14
-	>=gnome-extra/evolution-data-server-2.23.91
+	>=gnome-extra/evolution-data-server-2.25.91
 	>=x11-themes/gnome-icon-theme-2.20
 	>=gnome-base/libbonobo-2.20.3
 	>=gnome-base/libbonoboui-2.4.2
@@ -42,7 +43,7 @@ RDEPEND=">=dev-libs/glib-2.18
 	networkmanager? ( net-misc/networkmanager )
 	>=net-libs/libsoup-2.4
 	kerberos? ( virtual/krb5 )
-	krb4? ( virtual/krb5 )
+	krb4? ( virtual/krb5[krb4] )
 	>=gnome-base/orbit-2.9.8
 	crypt? ( || ( >=app-crypt/gnupg-2.0.1-r2 =app-crypt/gnupg-1.4* ) )
 	ldap? ( >=net-nds/openldap-2 )
@@ -75,7 +76,8 @@ pkg_setup() {
 		$(use_enable pda pilot-conduits)
 		$(use_enable profile profiling)
 		$(use_with ldap openldap)
-		$(use_with kerberos krb5 /usr)"
+		$(use_with kerberos krb5 /usr)
+		$(use_with krb4 krb4 /usr)"
 
 	# We need a graphical pinentry frontend to be able to ask for the GPG
 	# password from inside evolution, bug 160302
@@ -85,27 +87,13 @@ pkg_setup() {
 		fi
 	fi
 
-	if use krb4 && ! built_with_use virtual/krb5 krb4; then
-		ewarn
-		ewarn "In order to add kerberos 4 support, you have to emerge"
-		ewarn "virtual/krb5 with the 'krb4' USE flag enabled as well."
-		ewarn
-		ewarn "Skipping for now."
-		ewarn
-		G2CONF="${G2CONF} --without-krb4"
-	else
-		G2CONF="${G2CONF} $(use_with krb4 krb4 /usr)"
-	fi
-
 	# dang - I've changed this to do --enable-plugins=experimental.  This will
 	# autodetect new-mail-notify and exchange, but that cannot be helped for the
 	# moment.  They should be changed to depend on a --enable-<foo> like mono
 	# is.  This cleans up a ton of crap from this ebuild.
 }
 
-src_unpack() {
-	gnome2_src_unpack
-
+src_prepare() {
 	# Fix timezone offsets on fbsd.  bug #183708
 	epatch "${FILESDIR}"/${PN}-2.21.3-fbsd.patch
 
@@ -118,9 +106,7 @@ src_unpack() {
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
-}
 
-src_compile() {
 	# Use NSS/NSPR only if 'ssl' is enabled.
 	if use ssl ; then
 		sed -i -e "s|mozilla-nss|nss|
@@ -139,8 +125,6 @@ src_compile() {
 		append-flags "-fPIC -ffunction-sections"
 		export LDFLAGS="-ffunction-sections -Wl,--stub-group-size=25000"
 	fi
-
-	gnome2_src_compile
 }
 
 pkg_postinst() {

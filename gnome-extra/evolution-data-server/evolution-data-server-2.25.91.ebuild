@@ -1,6 +1,7 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/evolution-data-server/evolution-data-server-2.24.3.ebuild,v 1.1 2009/01/18 06:48:42 ford_prefect Exp $
+EAPI=2
 
 inherit db-use eutils flag-o-matic gnome2 autotools versionator
 
@@ -33,7 +34,7 @@ RDEPEND=">=dev-libs/glib-2.16.1
 	=sys-libs/db-4*
 	ldap? ( >=net-nds/openldap-2.0 )
 	kerberos? ( virtual/krb5 )
-	krb4? ( virtual/krb5 )"
+	krb4? ( virtual/krb5[krb4] )"
 
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9
@@ -47,6 +48,7 @@ DOCS="ChangeLog MAINTAINERS NEWS TODO"
 pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_with ldap openldap)
+		$(use_with krb4 krb4 /usr)
 		$(use_with kerberos krb5 /usr)
 		$(use_enable ssl nss)
 		$(use_enable ssl smime)
@@ -54,24 +56,9 @@ pkg_setup() {
 		$(use_enable gnome-keyring)
 		--with-weather
 		--with-libdb=/usr/$(get_libdir)"
-
-	if use krb4 && ! built_with_use virtual/krb5 krb4; then
-		ewarn
-		ewarn "In order to add kerberos 4 support, you have to emerge"
-		ewarn "virtual/krb5 with the 'krb4' USE flag enabled as well."
-		ewarn
-		ewarn "Skipping for now."
-		ewarn
-		G2CONF="${G2CONF} --without-krb4"
-	else
-		G2CONF="${G2CONF} $(use_with krb4 krb4 /usr)"
-	fi
-
 }
 
-src_unpack() {
-	gnome2_src_unpack
-
+src_prepare() {
 	# Adjust to gentoo's /etc/service
 	epatch "${FILESDIR}"/${PN}-1.2.0-gentoo_etc_services.patch
 
@@ -93,9 +80,7 @@ src_unpack() {
 	# gtk-doc-am and gnome-common needed for this
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
-}
 
-src_compile() {
 	# Use NSS/NSPR only if 'ssl' is enabled.
 	if use ssl ; then
 		sed -i -e "s|mozilla-nss|nss|
@@ -109,9 +94,6 @@ src_compile() {
 	# /usr/include/db.h is always db-1 on FreeBSD
 	# so include the right dir in CPPFLAGS
 	append-cppflags "-I$(db_includedir)"
-
-	cd "${S}"
-	gnome2_src_compile
 }
 
 src_install() {
