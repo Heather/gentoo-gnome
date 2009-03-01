@@ -34,7 +34,7 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.9
-	>=dev-util/intltool-0.35
+	>=dev-util/intltool-0.40.1
 	doc? ( >=dev-util/gtk-doc-1.4 )"
 
 PDEPEND="gnome? ( >=x11-themes/gnome-icon-theme-1.1.91 )"
