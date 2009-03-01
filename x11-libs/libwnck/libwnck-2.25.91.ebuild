@@ -13,7 +13,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-
 IUSE="doc"
 
 RDEPEND=">=x11-libs/gtk+-2.11.3
-		 >=dev-libs/glib-2.13.0
+		 >=dev-libs/glib-2.16.0
 		 >=x11-libs/startup-notification-0.4
 		 x11-libs/libX11
 		 x11-libs/libXres
