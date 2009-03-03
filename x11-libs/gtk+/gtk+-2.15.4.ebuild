@@ -20,7 +20,7 @@ RDEPEND="x11-libs/libXrender
 	x11-libs/libXi
 	x11-libs/libXt
 	x11-libs/libXext
-	>=x11-libs/libXrandr-1.2.99
+	x11-libs/libXrandr
 	x11-libs/libXcursor
 	x11-libs/libXfixes
 	x11-libs/libXcomposite
