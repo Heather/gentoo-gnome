@@ -56,16 +56,15 @@ DOCS="AUTHORS NEWS ChangeLog MAINTAINERS"
 pkg_setup() {
 	G2CONF="${G2CONF} --disable-pulse
 		$(use_enable debug)
-		$(use_with libnotify)"
+		$(use_with libnotify)
+		$(use_enable alsa)
+		$(use_enable gstreamer)"
 
 	if use pulseaudio; then
 		if use alsa || use gstreamer; then
 			ewarn "You have alsa or gstreamer enabled with pulseaudio"
 			ewarn "If you wish to have pulseaudio support,"
 			ewarn "You need to enable only USE=pulseaudio"
-			G2CONF="${G2CONF}
-				$(use_enable alsa)
-				$(use_enable gstreamer)"
 		else
 			einfo "Only pulseaudio selected"
 			G2CONF="${G2CONF} --enable-pulse"
