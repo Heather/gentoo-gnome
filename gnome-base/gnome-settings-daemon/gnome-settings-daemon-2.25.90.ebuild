@@ -78,8 +78,10 @@ src_unpack() {
 	# Fix libnotify automagic dependencies (GNOME bug #570885)
 	epatch "${FILESDIR}/${P}-libnotify-automagic.patch"
 
+	if use alsa || use gstreamer; then
 	# Re-add non-pulse AcmeVolume control support (GNOME bug #571145)
-	epatch "${FILESDIR}/${P}-readd-AcmeVolume-support.patch"
+		epatch "${FILESDIR}/${P}-readd-AcmeVolume-support.patch"
+	fi
 
 	# Fix background loading (GNOME bug #564909)
 	# This patch needs to be verified, I couldn't reproduce the original bug
