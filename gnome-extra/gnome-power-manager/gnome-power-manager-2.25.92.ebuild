@@ -1,6 +1,7 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/gnome-power-manager/gnome-power-manager-2.22.1.ebuild,v 1.8 2008/08/10 12:44:55 maekke Exp $
+EAPI=2
 
 inherit eutils gnome2 virtualx
 
@@ -17,38 +18,38 @@ RESTRICT="test"
 
 # dev-libs/unique needs KEYWORDS
 RDEPEND=">=dev-libs/glib-2.6.0
-		 >=x11-libs/gtk+-2.11.0
-		 >=gnome-base/gnome-keyring-0.6.0
-		 >=sys-apps/hal-0.5.9
-		 >=dev-libs/dbus-glib-0.71
-		 >=gnome-base/libglade-2.5.0
-		 >=x11-libs/libnotify-0.4.3
-		 >=x11-libs/libwnck-2.10.0
-		 >=x11-libs/cairo-1.0.0
-		 >=gnome-base/gnome-panel-2
-		 >=gnome-base/gconf-2
-		 >=media-libs/libcanberra-0.10
-		 >=sys-apps/devicekit-power-005
-		 >=dev-libs/unique-0.9.4
+	>=x11-libs/gtk+-2.11.0
+	>=gnome-base/gnome-keyring-0.6.0
+	>=sys-apps/hal-0.5.9
+	>=dev-libs/dbus-glib-0.71
+	>=gnome-base/libglade-2.5.0
+	>=x11-libs/libnotify-0.4.3
+	>=x11-libs/libwnck-2.10.0
+	>=x11-libs/cairo-1.0.0
+	>=gnome-base/gnome-panel-2
+	>=gnome-base/gconf-2
+	>=media-libs/libcanberra-0.10
+	>=sys-apps/devicekit-power-005
+	>=dev-libs/unique-0.9.4
 
-		 >=x11-apps/xrandr-1.2
+	>=x11-apps/xrandr-1.2
+	x11-libs/libX11
+	x11-libs/libXext
 
-		   x11-libs/libX11
-		   x11-libs/libXext"
+	policykit? ( >=sys-auth/policykit-0.8 )"
 DEPEND="${RDEPEND}
-		  sys-devel/gettext
-		 ~app-text/docbook-xml-dtd-4.3
-		>=dev-util/pkgconfig-0.9
-		>=dev-util/intltool-0.35
-		  app-text/scrollkeeper
-		>=app-text/gnome-doc-utils-0.3.2
-		doc?	(
-					 app-text/xmlto
-					 app-text/docbook-sgml-utils
-					~app-text/docbook-xml-dtd-4.4
-					~app-text/docbook-sgml-dtd-4.1
-					~app-text/docbook-xml-dtd-4.1.2
-				)"
+	sys-devel/gettext
+	app-text/scrollkeeper
+	app-text/docbook-xml-dtd:4.3
+	>=dev-util/pkgconfig-0.9
+	>=dev-util/intltool-0.35
+	>=app-text/gnome-doc-utils-0.3.2
+	doc? (
+		app-text/xmlto
+		app-text/docbook-sgml-utils
+		app-text/docbook-xml-dtd:4.4
+		app-text/docbook-sgml-dtd:4.1
+		app-text/docbook-xml-dtd:4.1.2 )"
 
 # docbook-sgml-utils and docbook-sgml-dtd-4.1 used for creating man pages
 # (files under ${S}/man).
@@ -68,8 +69,8 @@ pkg_setup() {
 	# XXX: --disable-legacy-buttons => only xevents => newer Xorg
 }
 
-src_unpack() {
-	gnome2_src_unpack
+src_prepare() {
+	gnome2_src_prepare
 
 	if ! use doc; then
 		# Remove the docbook2man rules here since it's not handled by a proper
