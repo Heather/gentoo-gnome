@@ -62,13 +62,6 @@ pkg_setup() {
 		--disable-schemas-install"
 }
 
-src_unpack() {
-	gnome2_src_unpack
-	# GNOME bug #571396
-	epatch "${FILESDIR}/${P}-pulseaudio-automagic.patch"
-	eautoreconf
-}
-
 src_compile() {
 	addpredict "$(unset HOME; echo ~)/.gconf"
 	addpredict "$(unset HOME; echo ~)/.gconfd"
