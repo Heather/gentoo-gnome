@@ -18,15 +18,17 @@ RDEPEND=">=x11-libs/gtk+-2.4
 	>=gnome-base/nautilus-2.14
 	>=gnome-base/gconf-2.13.0
 	balsa? ( mail-client/balsa )
-	bluetooth? ( >=dev-libs/dbus-glib-0.60 )
+	bluetooth? (
+		>=net-wireless/bluez-gnome-1.8
+		>=dev-libs/dbus-glib-0.60 )
 	eds? ( >=gnome-extra/evolution-data-server-1.5.3 )
 	gajim? ( net-im/gajim
 			 >=dev-libs/dbus-glib-0.60 )
 	pidgin? ( >=net-im/pidgin-2.0.0 )
 	sylpheed?  ( mail-client/sylpheed )
 	claws? ( mail-client/claws-mail	)
-	thunderbird? ( 
-		|| ( mail-client/mozilla-thunderbird 
+	thunderbird? (
+		|| ( mail-client/mozilla-thunderbird
 			 mail-client/mozilla-thunderbird-bin ) )
 	upnp? ( >=net-libs/gupnp-av-0.2.1 )
 "
@@ -39,7 +41,7 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog NEWS README"
 
 _use_plugin() {
-	if use ${1}; then 
+	if use ${1}; then
 		G2CONF="${G2CONF}${2:-"${1}"},"
 	fi
 }
