@@ -91,6 +91,7 @@
 >=gnome-extra/gucharmap-2.25
 >=gnome-extra/gnome-games-2.25
 >=gnome-base/libgnome-2.25
+>=x11-terms/gnome-terminal-2.25
 
 # Gilles Dartiguelongue <gdartiguelongue> (16 Aug 2008)
 # Masking because it's experimental, not sure it'll make it for 2.24
