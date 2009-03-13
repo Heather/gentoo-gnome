@@ -17,21 +17,13 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="artworkextra guile opengl"
 
-RDEPEND=">=gnome-base/libgnomeui-2.16.0
-	>=gnome-base/libgnome-2.16.0
+RDEPEND="
 	>=dev-python/pygtk-2.10
 	>=x11-libs/gtk+-2.12
 
 	>=dev-python/gconf-python-2.17.3
 	>=dev-python/bug-buddy-python-2.17.3
-	>=dev-python/libgnome-python-2.17.3
 	>=dev-python/libgnomeprint-python-2.17.3
-	>=dev-python/gnome-applets-python-2.17.3
-	>=dev-python/gnome-desktop-python-2.17.3
-	>=dev-python/gnome-keyring-python-2.17.3
-	>=dev-python/gnome-media-python-2.17.3
-	>=dev-python/gnome-vfs-python-2.17.3
-	>=dev-python/libgnomecanvas-python-2.17.3
 
 	>=x11-libs/cairo-1
 	>=dev-python/pycairo-1
@@ -43,6 +35,7 @@ RDEPEND=">=gnome-base/libgnomeui-2.16.0
 	>=dev-libs/glib-2.6.3
 	>=dev-games/libggz-0.0.14
 	>=dev-games/ggz-client-libs-0.0.14
+
 	guile? ( >=dev-scheme/guile-1.6.5[deprecated,regex] )
 	artworkextra? ( gnome-extra/gnome-games-extra-data )
 	opengl? ( dev-python/pygtkglext )
@@ -55,7 +48,7 @@ DEPEND="${RDEPEND}
 	>=sys-devel/gettext-0.10.40
 	>=gnome-base/gnome-common-2.12.0
 	>=app-text/scrollkeeper-0.3.8
-	  app-text/gnome-doc-utils"
+	app-text/gnome-doc-utils"
 
 # Others are installed below; multiples in this package.
 DOCS="AUTHORS HACKING MAINTAINERS TODO"
@@ -64,20 +57,39 @@ DOCS="AUTHORS HACKING MAINTAINERS TODO"
 # it can be chased down.
 RESTRICT="test"
 
+_omitgame() {
+	G2CONF="${G2CONF},${1}"
+}
+
 pkg_setup() {
 	# create the games user / group
 	games_pkg_setup
 
+	# Needs "seed", which needs gobject-introspection, libffi, etc.
+	#$(use_enable clutter)
+	#$(use_enable clutter staging)
 	G2CONF="${G2CONF}
+		--disable-card-themes-installer
 		--with-scores-group=${GAMES_GROUP}
 		--enable-noregistry=\"${GGZ_MODDIR}\"
 		--with-platform=gnome
 		--with-sound=gstreamer
-		--enable-scalable"
+		--with-card-theme-formats=all
+		--enable-omitgames=none" # This line should be last for _omitgame
+
+	# Needs clutter, always disable till we can have that
+	#if ! use clutter; then
+		_omitgame lightsoff
+	#fi
 
 	if ! use guile; then
 		ewarn "USE='-guile' implies that Aisleriot won't be installed"
-		G2CONF="${G2CONF} --enable-omitgames=aisleriot"
+		_omitgame aisleriot
+	fi
+
+	if ! use opengl; then
+		ewarn "USE=-opengl implies that glchess won't be installed"
+		_omitgame glchess
 	fi
 }
 
@@ -123,7 +135,10 @@ pkg_postinst() {
 	gnome2_pkg_postinst
 
 	python_need_rebuild
-	python_mod_optimize $(python_get_sitedir)/{gnome_sudoku,glchess}
+	python_mod_optimize $(python_get_sitedir)/gnome_sudoku
+	if use opengl; then
+		python_mod_optimize $(python_get_sitedir)/glchess
+	fi
 }
 
 pkg_postrm() {
@@ -131,4 +146,7 @@ pkg_postrm() {
 	gnome2_pkg_postrm
 
 	python_mod_cleanup $(python_get_sitedir)/{gnome_sudoku,glchess}
+	if use opengl; then
+		python_mod_cleanup $(python_get_sitedir)/glchess
+	fi
 }
