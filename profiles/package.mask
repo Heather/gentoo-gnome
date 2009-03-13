@@ -53,6 +53,7 @@
 >=gnome-extra/gnome-power-manager-2.25
 >=gnome-extra/gnome-media-2.25
 >=media-gfx/eog-2.25
+>=dev-python/gnome-python-desktop-base-2.25
 >=dev-python/gnome-python-desktop-2.25
 >=x11-wm/metacity-2.25
 >=gnome-base/nautilus-2.25
