@@ -17,10 +17,13 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc eds networkmanager"
 
+# GNOME Bug #575243
+RESTRICT="test"
+
 RDEPEND=">=gnome-base/gnome-desktop-2.12
 	>=x11-libs/pango-1.15.4
 	>=dev-libs/glib-2.16.0
-	>=x11-libs/gtk+-2.13.1
+	>=x11-libs/gtk+-2.15.1
 	>=dev-libs/libgweather-2.24.1
 	dev-libs/libxml2
 	>=gnome-base/libglade-2.5
@@ -69,6 +72,9 @@ src_unpack() {
 	#epatch "${WORKDIR}/${MY_P}-po.patch"
 	# Fixes build on BSD, bug #256859
 	epatch "${FILESDIR}/${PN}-2.24.3-daylight.patch"
+
+	# Fixes shutdown without gdm, bug #259138
+	epatch "${FILESDIR}/${PN}-2.24.3-shutdown.patch"
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautomake
