@@ -29,7 +29,8 @@ RESTRICT="binchecks strip"
 pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_enable accessibility all-themes)
-		--enable-legacy-icon-mapping"
+		--disable-test-themes
+		--enable-mapping"
 }
 
 src_unpack() {
