@@ -1,4 +1,4 @@
-# Copyright 2008-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-settings-daemon/gnome-settings-daemon-2.24.1-r1.ebuild,v 1.1 2008/12/02 15:02:18 remi Exp $
 
@@ -75,18 +75,14 @@ pkg_setup() {
 src_unpack() {
 	gnome2_src_unpack
 
-	# Fix libnotify automagic dependencies (GNOME bug #570885)
-	epatch "${FILESDIR}/${P}-libnotify-automagic.patch"
-
 	if use alsa || use gstreamer; then
 	# Re-add non-pulse AcmeVolume control support (GNOME bug #571145)
 		epatch "${FILESDIR}/${P}-readd-AcmeVolume-support.patch"
+		eautoreconf
 	fi
 
 	# Fix background loading (GNOME bug #564909)
 	# This patch needs to be verified, I couldn't reproduce the original bug
 	# ~nirbheek
 	#epatch "${FILESDIR}/${P}-background.patch"
-
-	eautoreconf
 }
