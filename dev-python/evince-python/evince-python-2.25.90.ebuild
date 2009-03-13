@@ -9,7 +9,7 @@ inherit gnome-python-common
 DESCRIPTION="Python bindings for the libwnck library"
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 RDEPEND=">=app-text/evince-2.25

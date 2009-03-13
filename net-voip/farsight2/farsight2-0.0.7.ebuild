@@ -8,7 +8,7 @@ HOMEPAGE="http://farsight.freedesktop.org/"
 SRC_URI="http://farsight.freedesktop.org/releases/${PN}/${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
-KEYWORDS="~x86"
+KEYWORDS="~amd64 ~x86"
 IUSE="python"
 SLOT="0"
 
