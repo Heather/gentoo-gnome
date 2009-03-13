@@ -106,6 +106,7 @@
 >=app-accessibility/gok-2.25
 >=gnome-extra/yelp-2.25
 >=app-accessibility/orca-2.25
+>=dev-libs/atk-1.25
 
 # Gilles Dartiguelongue <gdartiguelongue> (16 Aug 2008)
 # Masking because it's experimental, not sure it'll make it for 2.24
