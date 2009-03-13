@@ -97,6 +97,7 @@
 >=app-crypt/seahorse-2.25
 >=app-crypt/seahorse-plugins-2.25
 >=gnome-extra/hamster-applet-2.25
+>=dev-python/pygtksourceview-2.5
 
 # Gilles Dartiguelongue <gdartiguelongue> (16 Aug 2008)
 # Masking because it's experimental, not sure it'll make it for 2.24
