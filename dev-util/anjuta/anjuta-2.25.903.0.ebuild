@@ -68,7 +68,12 @@ pkg_setup() {
 src_unpack() {
 	gnome2_src_unpack
 
+	# Make Symbol DB optional
 	epatch "${FILESDIR}/${P}-symbol-db-optional.patch"
+	# Fix collision with gnome-build
+	# Don't build gbf-{am,mkfile}-parse
+	sed -i -e ':/gbf:d' configure.in
+	sed -i -e '/gbf/d' plugins/Makefile.am
 
 	eautoreconf
 }
