@@ -122,6 +122,7 @@
 >=net-analyzer/gnome-netstatus-2.25
 >=net-analyzer/gnome-nettool-2.25
 >=app-admin/pessulus-2.25
+>=dev-util/anjuta-2.25
 
 # Gilles Dartiguelongue <gdartiguelongue> (16 Aug 2008)
 # Masking because it's experimental, not sure it'll make it for 2.24
