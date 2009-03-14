@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-util/anjuta/anjuta-2.24.2.ebuild,v 1.1 2008/11/29 19:18:45 eva Exp $
 
-inherit eutils gnome2
+inherit autotools eutils gnome2
 
 DESCRIPTION="A versatile IDE for GNOME"
 HOMEPAGE="http://www.anjuta.org"
@@ -10,9 +10,8 @@ HOMEPAGE="http://www.anjuta.org"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~hppa ~ppc ~sparc ~x86"
-IUSE="debug devhelp doc glade inherit-graph sourceview subversion valgrind"
+IUSE="debug devhelp doc glade graphviz sourceview subversion valgrind"
 
-# symbol-db plugin depends on libgda-4
 RDEPEND=">=dev-libs/glib-2.16.0
 	>=x11-libs/gtk+-2.12.10
 	>=gnome-base/orbit-2.6.0
@@ -54,8 +53,8 @@ DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1.0 )"
 
 pkg_setup() {
-	# gtk-doc is handled by eclass
-	G2CONF="${G2CONF}
+	# symbol-db plugin depends on libgda-4
+	G2CONF="${G2CONF} --disable-plugin-symbol-db
 		$(use_enable debug)
 		$(use_enable devhelp plugin-devhelp)
 		$(use_enable glade plugin-glade)
@@ -63,7 +62,15 @@ pkg_setup() {
 		$(use_enable sourceview plugin-sourceview)
 		$(use_enable !sourceview plugin-scintilla)
 		$(use_enable subversion plugin-subversion)
-		$(use_enable inherit-graph plugin-class-inheritance)"
+		$(use_enable graphviz)" # Toggles inherit-plugin and performance-plugin
+}
+
+src_unpack() {
+	gnome2_src_unpack
+
+	epatch "${FILESDIR}/${P}-symbol-db-optional.patch"
+
+	eautoreconf
 }
 
 src_install() {
