@@ -114,6 +114,7 @@
 >=gnome-extra/deskbar-applet-2.25
 >=gnome-extra/mousetweaks-2.25
 >=media-video/cheese-2.25
+>=gnome-extra/gnome-user-docs-2.25
 
 # Gilles Dartiguelongue <gdartiguelongue> (16 Aug 2008)
 # Masking because it's experimental, not sure it'll make it for 2.24

@@ -1,0 +1,33 @@
+--- a/gnome2-accessibility-guide/Makefile.am	2009-01-11 22:50:31.000000000 +0100
++++ b/gnome2-accessibility-guide/Makefile.am	2009-01-11 22:51:27.000000000 +0100
+@@ -14,7 +14,7 @@
+ 
+ DOC_LINGUAS = de el en_GB es fi fr hu it oc pt sv
+ 
+-install-data-local: install-doc-pdf
++install-data-hook: install-doc-pdf
+ install-doc-pdf:
+ 	for lc in C $(DOC_LINGUAS); do \
+ 	  pdf="$$lc/$(DOC_MODULE).pdf"; \
+--- a/gnome2-user-guide/Makefile.am	2009-01-11 22:50:27.000000000 +0100
++++ b/gnome2-user-guide/Makefile.am	2009-01-11 22:51:49.000000000 +0100
+@@ -17,7 +17,7 @@
+ 
+ DOC_LINGUAS = ar bg de el es fi fr hu it ja ko oc pa pt pt_BR ru sv th zh_CN
+ 
+-install-data-local: install-doc-pdf
++install-data-hook: install-doc-pdf
+ install-doc-pdf:
+ 	for lc in C $(DOC_LINGUAS); do \
+ 	  pdf="$$lc/$(DOC_MODULE).pdf"; \
+--- a/gnome2-system-admin-guide/Makefile.am	2009-01-11 22:45:28.000000000 +0100
++++ b/gnome2-system-admin-guide/Makefile.am	2009-01-11 22:50:16.000000000 +0100
+@@ -20,7 +20,7 @@
+ 
+ DOC_LINGUAS = ca de el es fi fr it ja ko oc pa pt sv zh_CN
+ 
+-install-data-local: install-doc-pdf
++install-data-hook: install-doc-pdf
+ install-doc-pdf:
+ 	for lc in C $(DOC_LINGUAS); do \
+ 	  pdf="$$lc/$(DOC_MODULE).pdf"; \
