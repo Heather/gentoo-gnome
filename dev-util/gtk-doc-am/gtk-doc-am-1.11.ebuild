@@ -6,7 +6,7 @@ MY_PN="gtk-doc"
 MY_P=${MY_PN}-${PV}
 DESCRIPTION="Automake files from gtk-doc"
 HOMEPAGE="http://www.gtk.org/gtk-doc/"
-SRC_URI="mirror://gnome/sources/${MY_PN}/${MY_P}.tar.bz2"
+SRC_URI="mirror://gnome/sources/${MY_PN}/${PV}/${MY_P}.tar.bz2"
 
 LICENSE="GPL-2 FDL-1.1"
 SLOT="0"
