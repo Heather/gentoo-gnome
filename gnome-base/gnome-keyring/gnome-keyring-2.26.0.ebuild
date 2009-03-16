@@ -1,4 +1,4 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-keyring/gnome-keyring-2.22.3.ebuild,v 1.1 2008/07/02 21:32:43 eva Exp $
 
@@ -10,7 +10,7 @@ HOMEPAGE="http://www.gnome.org/"
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="debug doc hal pam test"
+IUSE="debug doc hal pam valgrind test"
 
 RDEPEND=">=dev-libs/glib-2.16
 	 >=x11-libs/gtk+-2.6
@@ -28,9 +28,6 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
-# upstream bug: http://bugzilla.gnome.org/show_bug.cgi?id=553164
-RESTRICT="test"
-
 pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_enable debug)
@@ -38,7 +35,14 @@ pkg_setup() {
 		$(use_enable test tests)
 		$(use_enable pam)
 		$(use_with pam pam-dir $(getpam_mod_dir))
+		$(use_enable valgrind)
 		--with-root-certs=/usr/share/ca-certificates/
 		--enable-acl-prompts
 		--enable-ssh-agent"
+}
+
+src_test() {
+	emake check || die "emake check failed!"
+
+	emake -C tests run || die "running tests failed!"
 }
