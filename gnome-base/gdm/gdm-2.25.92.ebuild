@@ -10,6 +10,7 @@ HOMEPAGE="http://www.gnome.org/projects/gdm/"
 
 LICENSE="GPL-2"
 SLOT="0"
+# No workie => No Keywords
 KEYWORDS=""
 
 IUSE_LIBC="elibc_glibc"
