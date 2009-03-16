@@ -13,7 +13,7 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~sparc ~x86"
 IUSE="doc policykit test"
 
-# See bug #196490
+# See bug #196490 & bug #575500
 RESTRICT="test"
 
 # dev-libs/unique needs KEYWORDS
