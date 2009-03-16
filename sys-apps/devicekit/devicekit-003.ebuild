@@ -29,6 +29,7 @@ S="${WORKDIR}/${MY_PN}-${PV}"
 
 pkg_setup() {
 	G2CONF="${G2CONF}
+		--localstatedir=/var
 		--enable-ansi
 		--enable-man-pages"
 }

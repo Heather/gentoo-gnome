@@ -34,6 +34,7 @@ S="${WORKDIR}/${MY_PN}-${PV}"
 pkg_setup() {
 	# Pedantic is currently broken
 	G2CONF="${G2CONF}
+		--localstatedir=/var
 		--disable-ansi
 		--enable-man-pages
 		$(use_enable debug verbose-mode)
