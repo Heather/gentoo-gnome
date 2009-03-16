@@ -15,7 +15,7 @@
 # Several feature regressions
 =www-client/epiphany-9999
 
-# Nirbheek Chauhan <nirbheek.chauhan@gmail.com> (16 Dec 2008) to (13 Mar 2009)
+# Nirbheek Chauhan <nirbheek.chauhan@gmail.com> (16 Dec 2008) to (16 Mar 2009)
 # 2.24 hasn't all been moved to tree yet, but 2.25 stuff has started
 # dropping in. Mask 2.25 cycle releases till resolved.
 >=dev-libs/glib-2.19
@@ -123,6 +123,7 @@
 >=net-analyzer/gnome-nettool-2.25
 >=app-admin/pessulus-2.25
 >=dev-util/anjuta-2.25
+>=gnome-extra/gnome-games-extra-data-2.25
 
 # Gilles Dartiguelongue <gdartiguelongue> (16 Aug 2008)
 # Masking because it's experimental, not sure it'll make it for 2.24
