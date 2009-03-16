@@ -17,9 +17,6 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc eds networkmanager"
 
-# GNOME Bug #575243
-RESTRICT="test"
-
 RDEPEND=">=gnome-base/gnome-desktop-2.12
 	>=x11-libs/pango-1.15.4
 	>=dev-libs/glib-2.16.0
@@ -70,6 +67,8 @@ src_unpack() {
 	epatch "${WORKDIR}/${MY_P}-logout.patch"
 	# FIXME FIXME FIXME: This patch doesn't apply.
 	#epatch "${WORKDIR}/${MY_P}-po.patch"
+	# Above patch doesn't apply => workaround for now
+	echo "gnome-panel/panel-logout.c" >> po/POTFILES.in
 	# Fixes build on BSD, bug #256859
 	epatch "${FILESDIR}/${PN}-2.24.3-daylight.patch"
 
