@@ -1,21 +1,20 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/www-client/epiphany/epiphany-2.22.3-r10.ebuild,v 1.1 2008/07/06 11:19:35 eva Exp $
+EAPI=2
 
-inherit autotools gnome2 subversion
+inherit gnome2
 
-DESCRIPTION="GNOME webbrowser based on the mozilla rendering engine"
+DESCRIPTION="GNOME webbrowser based on Webkit"
 HOMEPAGE="http://www.gnome.org/projects/epiphany/"
-ESVN_REPO_URI="http://svn.gnome.org/svn/${PN}/trunk/"
-SRC_URI=""
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="avahi doc networkmanager python test"
 
-RDEPEND=">=dev-libs/glib-2.18.0
-	>=x11-libs/gtk+-2.15.0
+RDEPEND=">=dev-libs/glib-2.19.7
+	>=x11-libs/gtk+-2.16.0
 	>=dev-libs/libxml2-2.6.12
 	>=dev-libs/libxslt-1.1.7
 	>=x11-libs/startup-notification-0.5
@@ -23,15 +22,15 @@ RDEPEND=">=dev-libs/glib-2.18.0
 	>=dev-libs/dbus-glib-0.71
 	>=gnome-base/gconf-2
 	>=app-text/iso-codes-0.35
+	>=net-libs/webkit-gtk-1.1.3
+	>=net-libs/libsoup-2.26.0[gnome]
 	x11-libs/libSM
-	net-libs/webkit-gtk
 	avahi? ( >=net-dns/avahi-0.6.22 )
 	networkmanager? ( net-misc/networkmanager )
 	python? (
 		>=dev-lang/python-2.3
 		>=dev-python/pygtk-2.7.1
-		>=dev-python/gnome-python-2.6
-	)
+		>=dev-python/gnome-python-2.6 )
 	x11-themes/gnome-icon-theme"
 DEPEND="${RDEPEND}
 	app-text/scrollkeeper
@@ -45,19 +44,10 @@ DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS README TODO"
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-scrollkeeper
-		--enable-certificate-manager
+		--disable-maintainer-mode
 		--with-distributor-name=Gentoo
 		$(use_enable avahi zeroconf)
 		$(use_enable networkmanager network-manager)
 		$(use_enable python)
 		$(use_enable test tests)"
-}
-
-src_unpack() {
-	subversion_src_unpack
-
-	intltoolize --force --copy --automake || die "intltoolize failed"
-	gnome-doc-common || die "gnome-doc-common failed"
-	gnome-doc-prepare --automake || die "gnome-doc-prepare failed"
-	eautoreconf
 }
