@@ -1,7 +1,8 @@
 # Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/glib/glib-2.18.3.ebuild,v 1.1 2008/11/27 01:51:33 leio Exp $
-EAPI=2
+
+EAPI="2"
 
 inherit gnome.org libtool eutils flag-o-matic
 
@@ -14,17 +15,16 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~spar
 IUSE="debug doc fam hardened selinux xattr"
 
 RDEPEND="virtual/libc
-		 virtual/libiconv
-		 xattr? ( sys-apps/attr )
-		 fam? ( virtual/fam )"
+	virtual/libiconv
+	xattr? ( sys-apps/attr )
+	fam? ( virtual/fam )"
 DEPEND="${RDEPEND}
-		>=dev-util/pkgconfig-0.16
-		>=sys-devel/gettext-0.11
-		doc?	(
-					>=dev-libs/libxslt-1.0
-					>=dev-util/gtk-doc-1.11
-					~app-text/docbook-xml-dtd-4.1.2
-				)"
+	>=dev-util/pkgconfig-0.16
+	>=sys-devel/gettext-0.11
+	doc? (
+		>=dev-libs/libxslt-1.0
+		>=dev-util/gtk-doc-1.11
+		~app-text/docbook-xml-dtd-4.1.2 )"
 
 src_prepare() {
 	if use ppc64 && use hardened ; then
@@ -73,7 +73,7 @@ src_configure() {
 		  --enable-static           \
 		  --enable-regex			\
 		  --with-pcre=internal		\
-		  --with-threads=posix || die "configure failed"
+		  --with-threads=posix
 }
 
 src_install() {
@@ -82,5 +82,10 @@ src_install() {
 	# Do not install charset.alias even if generated, leave it to libiconv
 	rm -f "${D}/usr/lib/charset.alias"
 
-	dodoc AUTHORS ChangeLog* NEWS* README
+	dodoc AUTHORS ChangeLog* NEWS* README || die "dodoc failed"
+}
+
+src_test() {
+	unset DBUS_SESSION_BUS_ADDRESS
+	emake check || die "tests failed"
 }
