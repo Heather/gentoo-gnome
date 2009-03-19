@@ -6,6 +6,11 @@
 # NOTE: Please add your entry at the top!
 #
 
+# Nirbheek Chauhan <nirbheek@gentoo.org> (20 Mar 2009)
+# pango-1.23 breaks firefox, and possibly other apps
+=x11-libs/pango-1.23*
+=dev-cpp/pangomm-2.24*
+
 # Nirbheek Chauhan <nirbheek@gentoo.org> (17 Mar 2009)
 # Epiphany which uses webkit (bug #239112)
 # Several feature regressions
