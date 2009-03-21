@@ -1,0 +1,11 @@
+--- ../DeviceKit-power-006_orig/src/dkp-history.c	2009-02-09 16:05:26.000000000 +0100
++++ src/dkp-history.c	2009-03-18 20:52:36.037354380 +0100
+@@ -142,7 +142,7 @@
+ 	DkpDeviceState state = DKP_DEVICE_STATE_UNKNOWN;
+ 	guint64 time = 0;
+ 	gdouble value = 0;
+-	guint64 count;
++	guint64 count = 0;
+ 	guint step = 1;
+ 	gfloat preset;
+ 

@@ -40,3 +40,9 @@ pkg_setup() {
 		$(use_enable debug verbose-mode)
 	"
 }
+
+src_unpack() {
+	gnome2_src_unpack
+
+	epatch "${FILESDIR}/${P}-fix-uninitialized-count.patch"
+}
