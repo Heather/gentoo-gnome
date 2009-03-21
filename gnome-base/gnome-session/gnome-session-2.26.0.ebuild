@@ -57,6 +57,9 @@ src_unpack() {
 	# Fix shutdown/restart capability, upstream bug #549150
 	epatch "${FILESDIR}/${PN}-2.24.2-shutdown.patch"
 
+	# Session saving support (GNOME bug #552387)
+	epatch "${FILESDIR}/${P}-session-saving.patch"
+
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
 }
