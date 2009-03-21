@@ -56,6 +56,10 @@ pkg_setup() {
 src_unpack() {
 	gnome2_src_unpack
 
+	# FIXME: This needs to be upstreamed before moving to tree
+	cp "${FILESDIR}/empathy-new-account.png" "${S}/help/C/figures/" \
+		|| die "Copying empathy-new-account.png failed"
+
 	# Remove hard enabled -Werror (see AM_MAINTAINER_MODE), bug 218687
 	sed -i "s:-Werror::g" configure || die "sed failed"
 }
