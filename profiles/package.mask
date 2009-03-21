@@ -6,6 +6,10 @@
 # NOTE: Please add your entry at the top!
 #
 
+# Nirbheek Chauhan <nirbheek@gentoo.org> (21 Mar 2009)
+# Unmask in-tree gnome-desktop-sharp for gnome-desktop-2.26
+-=dev-dotnet/gnome-desktop-sharp-2.26*
+
 # Nirbheek Chauhan <nirbheek@gentoo.org> (20 Mar 2009)
 # pango-1.23 breaks firefox, and possibly other apps
 =x11-libs/pango-1.23*
