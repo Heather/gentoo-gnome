@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit gnome2
+inherit eutils gnome2
 
 MY_PN="DeviceKit-power"
 
