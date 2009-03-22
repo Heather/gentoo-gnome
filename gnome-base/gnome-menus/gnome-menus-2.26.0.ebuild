@@ -30,7 +30,7 @@ pkg_setup() {
 		G2CONF="${G2CONF} --enable-debug=yes"
 	fi
 
-	G2CONF="${G2CONF} $(use_enable python)"
+	G2CONF="${G2CONF} $(use_enable python) --disable-static"
 }
 
 src_unpack() {
@@ -55,7 +55,5 @@ pkg_postinst() {
 
 pkg_postrm() {
 	gnome2_pkg_postrm
-	if use python; then
-		python_mod_cleanup $(python_get_sitedir)/GMenuSimpleEditor
-	fi
+	python_mod_cleanup $(python_get_sitedir)/GMenuSimpleEditor
 }
