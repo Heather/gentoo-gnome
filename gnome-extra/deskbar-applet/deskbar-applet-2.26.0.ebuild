@@ -23,12 +23,13 @@ RDEPEND=">=dev-lang/python-2.4
 	>=dev-python/pygobject-2.15.3
 	>=dev-python/dbus-python-0.80.2
 
-	dev-python/gnome-desktop-python
-	dev-python/gnome-keyring-python
-	dev-python/gconf-python
-	dev-python/libgnome-python
-	dev-python/gnome-applets-python
-	dev-python/libwnck-python
+	>=dev-python/gconf-python-2.22.1
+	>=dev-python/libgnome-python-2.22.1
+	>=dev-python/gnome-applets-python-2.22.0
+	>=dev-python/gnome-desktop-python-2.22.0
+	>=dev-python/gnome-keyring-python-2.22.0
+	>=dev-python/gnome-vfs-python-2.22.1
+	>=dev-python/libwnck-python-2.22.0
 
 	eds? ( >=gnome-extra/evolution-data-server-1.7.92 )
 	spell? ( >=gnome-extra/gnome-utils-2.16.2 )"
