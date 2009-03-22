@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/gnome-screensaver/gnome-screensaver-2.24.1.ebuild,v 1.2 2008/11/30 12:10:01 eva Exp $
 
-inherit eutils gnome2
+inherit eutils gnome2 multilib
 
 DESCRIPTION="Replaces xscreensaver, integrating with the desktop."
 HOMEPAGE="http://live.gnome.org/GnomeScreensaver"
@@ -30,16 +30,14 @@ RDEPEND=">=gnome-base/gconf-2.6.1
 	x11-libs/libXrandr
 	x11-libs/libXScrnSaver
 	x11-libs/libXxf86misc
-	x11-libs/libXxf86vm
-	x11-libs/libXtst"
+	x11-libs/libXxf86vm"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9
-	>=dev-util/intltool-0.35
+	>=dev-util/intltool-0.40
 	doc? (
 		app-text/xmlto
 		~app-text/docbook-xml-dtd-4.1.2
-		~app-text/docbook-xml-dtd-4.4
-	)
+		~app-text/docbook-xml-dtd-4.4 )
 	x11-proto/xextproto
 	x11-proto/randrproto
 	x11-proto/scrnsaverproto
@@ -58,7 +56,7 @@ pkg_setup() {
 		--with-xf86gamma-ext
 		--with-kbd-layout-indicator
 		--with-xscreensaverdir=/usr/share/xscreensaver/config
-		--with-xscreensaverhackdir=/usr/lib/misc/xscreensaver"
+		--with-xscreensaverhackdir=/usr/$(get_libdir)/misc/xscreensaver"
 }
 
 src_install() {
