@@ -14,18 +14,15 @@ IUSE="doc"
 
 # FIXME: Python deps are needed for gnome-about but not
 # listed in configure.ac
-RDEPEND=">=dev-libs/libxml2-2.4.20
-	>=x11-libs/gtk+-2.11.3
-	>=dev-libs/glib-2.15.4
+RDEPEND=">=x11-libs/gtk+-2.14.0
+	>=dev-libs/glib-2.19.1
 	>=x11-libs/libXrandr-1.2
 	>=gnome-base/gconf-2
-	>=gnome-base/libgnomeui-2.6
 	>=x11-libs/startup-notification-0.5
 	>=dev-python/pygtk-2.8
 	>=dev-python/pygobject-2.14
 	>=dev-python/libgnome-python-2.22"
 DEPEND="${RDEPEND}
-	app-text/scrollkeeper
 	>=dev-util/intltool-0.40
 	>=dev-util/pkgconfig-0.9
 	>=app-text/gnome-doc-utils-0.3.2
