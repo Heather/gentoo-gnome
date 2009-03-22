@@ -1,8 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/hamster-applet/hamster-applet-2.24.3.ebuild,v 1.2 2009/03/11 02:18:24 dang Exp $
-EAPI=2
 
+EAPI="2"
 GCONF_DEBUG="no"
 SCROLLKEEPER_UPDATE="no"
 
@@ -21,8 +21,9 @@ RDEPEND="
 	|| ( >=dev-lang/python-2.5[sqlite]
 		 ( dev-lang/python:2.4
 		   dev-python/pysqlite:2 ) )
-	dev-python/gnome-applets-python
 	dev-python/gconf-python
+	dev-python/libgnome-python
+	dev-python/gnome-applets-python
 	dev-python/dbus-python
 	eds? ( dev-python/evolution-python )
 	libnotify? ( dev-python/notify-python )
@@ -33,7 +34,7 @@ RDEPEND="
 
 DEPEND="${RDEPEND}
 	x11-proto/scrnsaverproto
-	>=dev-util/intltool-0.37.1
+	>=dev-util/intltool-0.40
 	dev-util/pkgconfig
 	sys-devel/gettext"
 
