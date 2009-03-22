@@ -36,10 +36,13 @@ src_unpack() {
 	gnome2_src_unpack
 
 	# Remove global Emacs keybindings.
-	epatch "${FILESDIR}"/${PN}-1.8-emacs-keybindings.patch
+	epatch "${FILESDIR}/${PN}-1.8-emacs-keybindings.patch"
 
 	# Don't install gtk-doc.m4; it's in gtk-doc-am now
-	epatch "${FILESDIR}"/${PN}-1.10-no-m4.patch
+	epatch "${FILESDIR}/${PN}-1.10-no-m4.patch"
+
+	# Upstream patch for fixing quoting of filenames with spaces, bug 263372
+	epatch "${FILESDIR}/${P}-quote-filenames-with-space.patch"
 
 	# Don't install the gnome/yelp help files (bug #224519)
 	sed -e "s/SUBDIRS = manual//" -i help/Makefile.in

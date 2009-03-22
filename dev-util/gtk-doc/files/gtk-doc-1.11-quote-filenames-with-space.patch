@@ -1,0 +1,11 @@
+--- trunk/gtkdoc-common.pl.in	2008/09/04 15:26:15	597
++++ trunk/gtkdoc-common.pl.in	2009/03/17 11:20:01	705
+@@ -51,7 +51,7 @@
+     my $exit_code = 1;
+ 
+     if (-e $old_file) {
+-	`cmp -s $old_file $new_file`;
++	`cmp -s "$old_file" "$new_file"`;
+ 	$exit_code = $? >> 8;
+ #	print "   cmp exit code: $exit_code ($?)\n";
+     }
