@@ -1,6 +1,7 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
+EAPI=2
 
 inherit gnome2
 
@@ -17,6 +18,7 @@ RDEPEND=">=dev-libs/glib-2.12.0
 	x11-libs/libX11
 	dbus? ( >=dev-libs/dbus-glib-0.70 )"
 DEPEND="${RDEPEND}
+	!!dev-libs/unique
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.17
 	doc? ( >=dev-util/gtk-doc-1.6 )"
