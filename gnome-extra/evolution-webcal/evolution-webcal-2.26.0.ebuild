@@ -18,7 +18,6 @@ RDEPEND=">=gnome-base/gconf-2
 	>=dev-libs/glib-2.8
 	>=x11-libs/gtk+-2.4
 	>=gnome-base/libgnome-2.14
-	>=gnome-base/libgnomeui-2
 	>=gnome-extra/evolution-data-server-1.2"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9
