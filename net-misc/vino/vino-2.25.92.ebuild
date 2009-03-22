@@ -13,7 +13,7 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="avahi crypt gnutls ipv6 jpeg gnome-keyring libnotify zlib"
 
-# FIXME: dev-libs/unique needs KEYWORDS
+# FIXME: dev-libs/libunique needs KEYWORDS
 RDEPEND=">=dev-libs/glib-2.17
 	>=x11-libs/gtk+-2.13.1
 	>=gnome-base/libgnomeui-2
@@ -21,7 +21,7 @@ RDEPEND=">=dev-libs/glib-2.17
 	>=gnome-base/libglade-2
 	>=sys-apps/dbus-1.2.3
 	>=net-libs/libsoup-2.24.0
-	>=dev-libs/unique-1.0.0
+	>=dev-libs/libunique-1.0.0
 	dev-libs/dbus-glib
 	x11-libs/libXext
 	x11-libs/libXtst

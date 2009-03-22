@@ -26,7 +26,7 @@ RDEPEND=">=dev-libs/glib-2.16.0
 	>=dev-libs/gnome-build-0.3.0
 	>=x11-libs/libwnck-2.12
 	>=sys-devel/binutils-2.15.92
-	>=dev-libs/unique-1.0.0
+	>=dev-libs/libunique-1.0.0
 
 	dev-libs/libxslt
 	dev-lang/perl

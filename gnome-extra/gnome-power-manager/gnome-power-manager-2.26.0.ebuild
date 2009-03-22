@@ -16,7 +16,7 @@ IUSE="doc policykit test"
 # See bug #196490 & bug #575500
 RESTRICT="test"
 
-# dev-libs/unique needs KEYWORDS
+# dev-libs/libunique needs KEYWORDS
 RDEPEND=">=dev-libs/glib-2.6.0
 	>=x11-libs/gtk+-2.11.0
 	>=gnome-base/gnome-keyring-0.6.0
@@ -30,7 +30,7 @@ RDEPEND=">=dev-libs/glib-2.6.0
 	>=gnome-base/gconf-2
 	>=media-libs/libcanberra-0.10
 	>=sys-apps/devicekit-power-005
-	>=dev-libs/unique-0.9.4
+	>=dev-libs/libunique-0.9.4
 
 	>=x11-apps/xrandr-1.2
 	x11-libs/libX11

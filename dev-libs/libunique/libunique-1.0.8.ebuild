@@ -6,7 +6,6 @@ inherit gnome2
 
 DESCRIPTION="a library for writing single instance application"
 HOMEPAGE="http://live.gnome.org/LibUnique"
-SRC_URI="http://www.gnome.org/~ebassi/source/${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
