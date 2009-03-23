@@ -12,7 +12,7 @@ HOMEPAGE="http://ronald.bitfreak.net/gnome-media.php"
 LICENSE="LGPL-2 GPL-2 FDL-1.1"
 SLOT="2"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
-IUSE="alsa esd gnomecd ipv6"
+IUSE="esd gnomecd ipv6 pulseaudio"
 
 RDEPEND=">=dev-libs/glib-2.18.2:2
 	>=gnome-base/libgnomeui-2.13.2
@@ -29,7 +29,7 @@ RDEPEND=">=dev-libs/glib-2.18.2:2
 		|| (
 			>=media-plugins/gst-plugins-cdio-0.10
 			>=media-plugins/gst-plugins-cdparanoia-0.10 ) )
-	!alsa? (
+	pulseaudio? (
 		>=media-libs/libcanberra-0.4
 		>=media-sound/pulseaudio-0.9.12 )
 	>=gnome-base/libglade-2
@@ -45,21 +45,19 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
 pkg_setup() {
-	# !alsa instead of pulseaudio because pulseaudio sucks :p
-	# Also, if pulseaudio is enabled, the gst mixer won't be built
 	G2CONF="${G2CONF}
+		--enable-gstmix
+		--enable-gstprops
+		--disable-esdtest
+		--disable-scrollkeeper
+		--disable-schemas-install
 		$(use_enable esd esound)
 		$(use_enable esd vumeter)
 		$(use_enable gnomecd cddbslave)
 		$(use_enable gnomecd)
 		$(use_enable ipv6)
 		$(use_enable debug more-warnings)
-		$(use_enable !alsa pulseaudio)
-		--enable-gstmix
-		--enable-gstprops
-		--disable-esdtest
-		--disable-scrollkeeper
-		--disable-schemas-install"
+		$(use_enable pulseaudio)"
 }
 
 src_compile() {
@@ -74,4 +72,8 @@ pkg_postinst() {
 	ewarn "If you cannot play some music format, please check your"
 	ewarn "USE flags on media-plugins/gst-plugins-meta"
 	ewarn
+	if use pulseaudio; then
+		ewarn "You have enabled pulseaudio support, gstmixer will not be built"
+		ewarn "If you do not use pulseaudio, you do not want this"
+	fi
 }
