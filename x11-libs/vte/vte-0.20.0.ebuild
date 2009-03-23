@@ -1,7 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/vte/vte-0.17.4-r3.ebuild,v 1.2 2009/01/05 13:29:29 remi Exp $
-EAPI=1
+
+EAPI="1"
 
 inherit gnome2 eutils
 
@@ -24,7 +25,6 @@ RDEPEND=">=dev-libs/glib-2.18.0
 
 DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1.0 )
-	gnome-base/gnome-common
 	>=dev-util/intltool-0.35
 	>=dev-util/pkgconfig-0.9
 	sys-devel/gettext"
