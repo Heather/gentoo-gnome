@@ -4,7 +4,7 @@
 
 GCONF_DEBUG="no"
 
-inherit gnome2
+inherit eutils gnome2
 
 DESCRIPTION="A set of GNOME themes, with sets for users with limited or low vision"
 HOMEPAGE="http://www.gnome.org/"
@@ -17,7 +17,7 @@ IUSE="accessibility"
 RDEPEND=">=x11-libs/gtk+-2
 	 >=x11-themes/gtk-engines-2.15.3"
 DEPEND="${RDEPEND}
-	>=x11-misc/icon-naming-utils-0.8.0
+	>=x11-misc/icon-naming-utils-0.8.7
 	>=dev-util/pkgconfig-0.19
 	>=dev-util/intltool-0.35"
 
@@ -30,7 +30,7 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_enable accessibility all-themes)
 		--disable-test-themes
-		--enable-mapping"
+		--enable-icon-mapping"
 }
 
 src_unpack() {
