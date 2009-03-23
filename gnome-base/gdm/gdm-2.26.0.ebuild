@@ -10,8 +10,7 @@ HOMEPAGE="http://www.gnome.org/projects/gdm/"
 
 LICENSE="GPL-2"
 SLOT="0"
-# No workie => No Keywords
-KEYWORDS=""
+KEYWORDS="~amd64 ~x86"
 
 IUSE_LIBC="elibc_glibc"
 IUSE="accessibility debug ipv6 gnome-keyring policykit selinux tcpd xinerama $IUSE_LIBC"
@@ -86,9 +85,11 @@ pkg_setup() {
 
 src_prepare() {
 	# remove unneeded linker directive for selinux (#41022)
-	epatch "${FILESDIR}/${P}-selinux-remove-attr.patch"
+	epatch "${FILESDIR}/${PN}-2.25.92-selinux-remove-attr.patch"
 	# Make it daemonize so that the boot process can continue (#236701)
 	epatch "${FILESDIR}/${PN}-2.24.1-fix-daemonize-regression.patch"
+	# Fix VT grab problem causing GDM to grab VT2 instead of 7 (#261339)
+	#epatch "${FILESDIR}/${P}-fix-vt-grab-problem.patch"
 }
 
 src_install() {
