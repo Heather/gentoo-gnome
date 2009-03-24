@@ -12,20 +12,17 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE=""
 
-RDEPEND="
-	>=dev-libs/glib-2.16.0
+RDEPEND=">=dev-libs/glib-2.16.0
 	>=x11-libs/gtk+-2.13.6
 	>=gnome-base/gconf-2.14
 	>=x11-libs/startup-notification-0.8
-	>=x11-libs/vte-0.19.0
+	>=x11-libs/vte-0.19.1
 	>=dev-libs/dbus-glib-0.6
-	>=gnome-base/libgnomeui-2
-	>=gnome-base/gnome-session-2.25.90"
+	x11-libs/libSM"
 DEPEND="${RDEPEND}
 	  sys-devel/gettext
 	>=dev-util/intltool-0.40
 	>=dev-util/pkgconfig-0.9
-	  gnome-base/gnome-common
 	>=app-text/gnome-doc-utils-0.3.2
 	>=app-text/scrollkeeper-0.3.11"
 
