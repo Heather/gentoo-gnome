@@ -26,7 +26,6 @@ RDEPEND=">=gnome-base/libbonobo-2
 	>=sys-devel/gdb-5.1"
 
 DEPEND=${RDEPEND}"
-	>=app-text/scrollkeeper-0.3.9
 	>=app-text/gnome-doc-utils-0.3.2
 	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.40"
@@ -34,9 +33,9 @@ DEPEND=${RDEPEND}"
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
 pkg_setup() {
-	# Google-breakpad seems to support only x86. Disable for now.
+	# Google-breakpad seems to support only x86.
+	# It is mostly useless for a distro like gentoo. Disable for now.
 	G2CONF="${G2CONF}
-		--disable-scrollkeeper
 		--disable-google-breakpad
 		$(use_enable eds)"
 }
