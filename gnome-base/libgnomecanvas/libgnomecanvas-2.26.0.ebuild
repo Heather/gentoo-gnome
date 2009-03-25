@@ -19,16 +19,13 @@ RDEPEND=">=x11-libs/gtk+-2.13
 	>=gnome-base/libglade-2"
 
 DEPEND="${RDEPEND}
+	>=dev-lang/perl-5
 	sys-devel/gettext
 	>=dev-util/intltool-0.35
 	>=dev-util/pkgconfig-0.18
 	doc? ( >=dev-util/gtk-doc-1 )"
 
 DOCS="AUTHORS ChangeLog NEWS README"
-
-pkg_setup() {
-	G2CONF="${G2CONF} --disable-rebuilds"
-}
 
 src_test() {
 	Xmake check || die "Test phase failed"
