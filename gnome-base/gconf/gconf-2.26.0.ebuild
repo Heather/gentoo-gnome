@@ -39,6 +39,7 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--enable-gtk
 		--disable-defaults-service
+		--disable-static
 		$(use_enable debug)
 		$(use_with ldap openldap)"
 	#$(use_enable policykit defaults-service)
