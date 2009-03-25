@@ -1,7 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
-EAPI=2
+
+EAPI="2"
 
 DESCRIPTION="An implementation of the Interactice Connectivity Establishment standard (ICE)"
 HOMEPAGE="http://nice.freedesktop.org/wiki/"
@@ -19,6 +20,9 @@ RDEPEND=">=dev-libs/glib-2.10
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
 
+# https://bugs.freedesktop.org/show_bug.cgi?id=20868
+RESTRICT="test"
+
 src_configure() {
 	econf --disable-coverage \
 		$(use_with gstreamer) \
@@ -26,6 +30,6 @@ src_configure() {
 }
 
 src_install() {
-	emake DESTDIR="${D}" install || die "emake install failed!"
-	dodoc AUTHORS COPYING* README NEWS
+	emake DESTDIR="${D}" install || die "emake install failed."
+	dodoc AUTHORS COPYING* README NEWS || die "dodoc failed."
 }
