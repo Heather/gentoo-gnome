@@ -22,6 +22,7 @@ RDEPEND=">=dev-libs/glib-2.18.2:2
 	>=media-libs/gst-plugins-base-0.10.3
 	>=media-libs/gst-plugins-good-0.10
 	>=gnome-base/orbit-2
+	>=media-libs/libcanberra-0.4
 	gnomecd? (
 		>=gnome-extra/nautilus-cd-burner-2.12
 		>=gnome-base/gail-0.0.3
@@ -30,7 +31,6 @@ RDEPEND=">=dev-libs/glib-2.18.2:2
 			>=media-plugins/gst-plugins-cdio-0.10
 			>=media-plugins/gst-plugins-cdparanoia-0.10 ) )
 	pulseaudio? (
-		>=media-libs/libcanberra-0.4
 		>=media-sound/pulseaudio-0.9.12 )
 	>=gnome-base/libglade-2
 	dev-libs/libxml2
@@ -46,7 +46,6 @@ DOCS="AUTHORS ChangeLog NEWS README TODO"
 
 pkg_setup() {
 	G2CONF="${G2CONF}
-		--enable-gstmix
 		--enable-gstprops
 		--disable-esdtest
 		--disable-scrollkeeper
@@ -57,7 +56,8 @@ pkg_setup() {
 		$(use_enable gnomecd)
 		$(use_enable ipv6)
 		$(use_enable debug more-warnings)
-		$(use_enable pulseaudio)"
+		$(use_enable pulseaudio)
+		$(use_enable !pulseaudio gstmix)"
 }
 
 src_compile() {
