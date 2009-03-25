@@ -42,6 +42,10 @@ DOCS="AUTHORS ChangeLog NEWS README TODO"
 # an ebuild restricted environment
 RESTRICT="test"
 
+pkg_setup() {
+	G2CONF="${G2CONF} --disable-xevie"
+}
+
 src_unpack() {
 	gnome2_src_unpack
 
