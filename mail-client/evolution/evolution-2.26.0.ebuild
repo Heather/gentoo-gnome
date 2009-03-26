@@ -1,9 +1,10 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.24.2-r2.ebuild,v 1.1 2008/12/27 19:22:51 ford_prefect Exp $
-EAPI=2
 
-inherit autotools gnome2 flag-o-matic libtool
+EAPI="2"
+
+inherit autotools gnome2 flag-o-matic libtool python
 
 DESCRIPTION="Integrated mail, addressbook and calendaring functionality"
 HOMEPAGE="http://www.gnome.org/projects/evolution/"
@@ -13,12 +14,13 @@ HOMEPAGE="http://www.gnome.org/projects/evolution/"
 LICENSE="GPL-2 FDL-1.1"
 SLOT="2.0"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
-IUSE="crypt dbus hal kerberos krb4 ldap mono networkmanager nntp pda profile ssl"
+IUSE="crypt dbus hal kerberos krb4 ldap mono networkmanager nntp pda profile python ssl"
 
 # Pango dependency required to avoid font rendering problems
+# FIXME: libpst automagic dep
 RDEPEND=">=dev-libs/glib-2.18
 	>=x11-libs/gtk+-2.14
-	>=gnome-extra/evolution-data-server-2.25.91
+	>=gnome-extra/evolution-data-server-2.26.0
 	>=x11-themes/gnome-icon-theme-2.20
 	>=gnome-base/libbonobo-2.20.3
 	>=gnome-base/libbonoboui-2.4.2
@@ -47,7 +49,8 @@ RDEPEND=">=dev-libs/glib-2.18
 	>=gnome-base/orbit-2.9.8
 	crypt? ( || ( >=app-crypt/gnupg-2.0.1-r2 =app-crypt/gnupg-1.4* ) )
 	ldap? ( >=net-nds/openldap-2 )
-	mono? ( >=dev-lang/mono-1 )"
+	mono? ( >=dev-lang/mono-1 )
+	python? ( >=dev-lang/python-2.4 )"
 #	gstreamer? (
 #		>=media-libs/gstreamer-0.10
 #		>=media-libs/gst-plugins-base-0.10 )
@@ -75,6 +78,7 @@ pkg_setup() {
 		$(use_enable nntp)
 		$(use_enable pda pilot-conduits)
 		$(use_enable profile profiling)
+		$(use_enable python)
 		$(use_with ldap openldap)
 		$(use_with kerberos krb5 /usr)
 		$(use_with krb4 krb4 /usr)"
@@ -94,6 +98,8 @@ pkg_setup() {
 }
 
 src_prepare() {
+	gnome2_src_prepare
+
 	# Fix timezone offsets on fbsd.  bug #183708
 	epatch "${FILESDIR}"/${PN}-2.21.3-fbsd.patch
 
@@ -110,7 +116,7 @@ src_prepare() {
 	# Use NSS/NSPR only if 'ssl' is enabled.
 	if use ssl ; then
 		sed -i -e "s|mozilla-nss|nss|
-			s|mozilla-nspr|nspr|" "${S}"/configure
+			s|mozilla-nspr|nspr|" "${S}"/configure || die "sed 1 failed"
 		G2CONF="${G2CONF} --enable-nss=yes"
 	else
 		G2CONF="${G2CONF} --without-nspr-libs --without-nspr-includes \
