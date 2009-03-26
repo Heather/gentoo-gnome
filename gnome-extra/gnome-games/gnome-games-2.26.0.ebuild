@@ -1,7 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/gnome-games/gnome-games-2.24.3.ebuild,v 1.3 2009/01/31 21:48:30 eva Exp $
-EAPI=2
+
+EAPI="2"
 
 GCONF_DEBUG="no"
 
@@ -15,11 +16,12 @@ HOMEPAGE="http://live.gnome.org/GnomeGames/"
 LICENSE="GPL-2 FDL-1.1"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="artworkextra guile opengl"
+IUSE="artworkextra guile opengl test"
 
-RDEPEND="
-	>=dev-python/pygtk-2.10
-	>=x11-libs/gtk+-2.12
+RDEPEND=">=dev-python/pygtk-2.10
+	dev-python/pygobject
+	>=x11-libs/gtk+-2.14
+	>=dev-libs/dbus-glib-0.75
 
 	>=dev-python/gconf-python-2.17.3
 	>=dev-python/bug-buddy-python-2.17.3
@@ -39,16 +41,18 @@ RDEPEND="
 	guile? ( >=dev-scheme/guile-1.6.5[deprecated,regex] )
 	artworkextra? ( gnome-extra/gnome-games-extra-data )
 	opengl? ( dev-python/pygtkglext )
-	!games-board/glchess"
+	!games-board/glchess
+	x11-libs/libSM"
 
 DEPEND="${RDEPEND}
 	>=sys-devel/autoconf-2.53
 	>=dev-util/pkgconfig-0.15
-	>=dev-util/intltool-0.35
+	>=dev-util/intltool-0.40.4
 	>=sys-devel/gettext-0.10.40
 	>=gnome-base/gnome-common-2.12.0
 	>=app-text/scrollkeeper-0.3.8
-	app-text/gnome-doc-utils"
+	>=app-text/gnome-doc-utils-0.10
+	test? ( >=dev-libs/check-0.9.4 )"
 
 # Others are installed below; multiples in this package.
 DOCS="AUTHORS HACKING MAINTAINERS TODO"
@@ -75,6 +79,7 @@ pkg_setup() {
 		--with-platform=gnome
 		--with-sound=gstreamer
 		--with-card-theme-formats=all
+		--with-smclient
 		--enable-omitgames=none" # This line should be last for _omitgame
 
 	# Needs clutter, always disable till we can have that
@@ -94,6 +99,8 @@ pkg_setup() {
 }
 
 src_prepare() {
+	gnome2_src_prepare
+
 	# disable pyc compiling
 	mv py-compile py-compile.orig
 	ln -s $(type -P true) py-compile
@@ -146,7 +153,5 @@ pkg_postrm() {
 	gnome2_pkg_postrm
 
 	python_mod_cleanup $(python_get_sitedir)/{gnome_sudoku,glchess}
-	if use opengl; then
-		python_mod_cleanup $(python_get_sitedir)/glchess
-	fi
+	python_mod_cleanup $(python_get_sitedir)/glchess
 }
