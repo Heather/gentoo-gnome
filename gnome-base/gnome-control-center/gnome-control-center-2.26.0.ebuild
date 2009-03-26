@@ -11,9 +11,11 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2"
 SLOT="2"
-KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~sh ~sparc ~x86"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="eds hal"
 
+# FIXME: libcanberra is automagic.
+# FIXME: policykit-gnome is automagic for about-me capplet.
 RDEPEND="x11-libs/libXft
 	>=x11-libs/gtk+-2.13.1
 	>=dev-libs/glib-2.17.4
@@ -80,8 +82,8 @@ pkg_setup() {
 		$(use_enable hal)"
 }
 
-src_unpack() {
-	gnome2_src_unpack
+src_prepare() {
+	gnome2_src_prepare
 
 	# Fix compilation on fbsd, bug #256958
 	epatch "${FILESDIR}/${PN}-2.24.0.1-fbsd.patch"
