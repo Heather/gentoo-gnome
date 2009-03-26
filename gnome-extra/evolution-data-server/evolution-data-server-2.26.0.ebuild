@@ -1,7 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/evolution-data-server/evolution-data-server-2.24.3.ebuild,v 1.1 2009/01/18 06:48:42 ford_prefect Exp $
-EAPI=2
+
+EAPI="2"
 
 inherit db-use eutils flag-o-matic gnome2 autotools versionator
 
@@ -71,10 +72,11 @@ src_prepare() {
 	# Fix building evo-exchange with --as-needed, upstream bug #342830
 	epatch "${FILESDIR}"/${PN}-2.25.5-as-needed.patch
 
+	# FIXME: tarball generated with broken gtk-doc, revisit me.
 	if use doc; then
-		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/usr/bin/gtkdoc-rebase" -i gtk-doc.make
+		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/usr/bin/gtkdoc-rebase" -i gtk-doc.make || die "sed 1 failed"
 	else
-		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/bin/true" -i gtk-doc.make
+		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/bin/true" -i gtk-doc.make || die "sed 2 failed"
 	fi
 
 	# gtk-doc-am and gnome-common needed for this
@@ -84,7 +86,7 @@ src_prepare() {
 	# Use NSS/NSPR only if 'ssl' is enabled.
 	if use ssl ; then
 		sed -i -e "s|mozilla-nss|nss|
-		s|mozilla-nspr|nspr|" "${S}"/configure
+			s|mozilla-nspr|nspr|" "${S}"/configure || die "sed 3 failed"
 		G2CONF="${G2CONF} --enable-nss=yes"
 	else
 		G2CONF="${G2CONF} --without-nspr-libs --without-nspr-includes \
