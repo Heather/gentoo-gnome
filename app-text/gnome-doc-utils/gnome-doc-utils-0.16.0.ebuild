@@ -15,7 +15,7 @@ IUSE=""
 
 RDEPEND=">=dev-libs/libxml2-2.6.12[python]
 	 >=dev-libs/libxslt-1.1.8
-	 dev-lang/python"
+	 >=dev-lang/python-2"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/intltool-0.35
@@ -36,7 +36,7 @@ src_unpack() {
 }
 
 pkg_setup() {
-	G2CONF="--disable-scrollkeeper"
+	G2CONF="${G2CONF} --disable-scrollkeeper"
 }
 
 pkg_postinst() {
