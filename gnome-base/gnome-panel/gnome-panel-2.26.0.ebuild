@@ -19,7 +19,7 @@ IUSE="doc eds networkmanager"
 
 RDEPEND=">=gnome-base/gnome-desktop-2.12
 	>=x11-libs/pango-1.15.4
-	>=dev-libs/glib-2.16.0
+	>=dev-libs/glib-2.18.0
 	>=x11-libs/gtk+-2.15.1
 	>=dev-libs/libgweather-2.24.1
 	dev-libs/libxml2
@@ -40,7 +40,7 @@ RDEPEND=">=gnome-base/gnome-desktop-2.12
 	eds? ( >=gnome-extra/evolution-data-server-1.6 )
 	networkmanager? ( >=net-misc/networkmanager-0.6 )"
 DEPEND="${RDEPEND}
-	app-text/scrollkeeper
+	>=dev-lang/perl-5
 	>=app-text/gnome-doc-utils-0.3.2
 	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.40
@@ -74,6 +74,15 @@ src_unpack() {
 
 	# Fixes shutdown without gdm, bug #259138
 	epatch "${FILESDIR}/${PN}-2.24.3-shutdown.patch"
+
+	# FIXME: tarball generated with broken gtk-doc, revisit me.
+	if use doc; then
+		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/usr/bin/gtkdoc-rebase" \
+			-i gtk-doc.make || die "sed 1 failed"
+	else
+		sed "/^TARGET_DIR/i \GTKDOC_REBASE=$(type -P true)" \
+			-i gtk-doc.make || die "sed 2 failed"
+	fi
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautomake
