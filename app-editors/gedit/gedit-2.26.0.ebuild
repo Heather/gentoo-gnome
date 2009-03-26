@@ -4,7 +4,7 @@
 
 GCONF_DEBUG="no"
 
-inherit gnome2 python eutils
+inherit gnome2 python
 
 DESCRIPTION="A text editor for the GNOME desktop"
 HOMEPAGE="http://www.gnome.org/"
@@ -19,7 +19,7 @@ RDEPEND=">=gnome-base/gconf-2
 	>=x11-libs/libSM-1.0
 	>=dev-libs/libxml2-2.5.0
 	>=dev-libs/glib-2.18
-	>=x11-libs/gtk+-2.13
+	>=x11-libs/gtk+-2.15
 	>=x11-libs/gtksourceview-2.5
 	spell? (
 		>=app-text/enchant-1.2
@@ -59,7 +59,9 @@ pkg_setup() {
 src_unpack() {
 	gnome2_src_unpack
 
-	ln -sfn $(type -P true) py-compile
+	# disable pyc compiling
+	mv "${S}"/py-compile "${S}"/py-compile.orig
+	ln -s $(type -P true) "${S}"/py-compile
 }
 
 pkg_postinst() {
