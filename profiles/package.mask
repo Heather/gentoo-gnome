@@ -8,6 +8,7 @@
 
 # Nirbheek Chauhan <nirbheek@gentoo.org> (28 Mar 2009)
 # >=pango-1.23 breaks firefox, and possibly other apps
+# Gentoo bug 264048
 =x11-libs/pango-1.24*
 =dev-cpp/pangomm-2.24*
 
