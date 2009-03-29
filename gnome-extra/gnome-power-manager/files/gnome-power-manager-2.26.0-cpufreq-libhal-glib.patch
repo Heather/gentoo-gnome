@@ -1,0 +1,748 @@
+---
+ Author: Romain Perier <mrpouet@tuxfamily.org>
+
+ Restore cpufreq in gnome-power-manager caplet.
+
+ https://bugs.gentoo.org/show_bug.cgi?id=263891
+
+ libhal-glib/Makefile.am   |    4 
+ libhal-glib/hal-cpufreq.c |  618 ++++++++++++++++++++++++++++++++++++++++++++++
+ libhal-glib/hal-cpufreq.h |   93 ++++++
+ 3 files changed, 714 insertions(+), 1 deletion(-)
+
+Index: b/libhal-glib/hal-cpufreq.c
+===================================================================
+--- /dev/null
++++ b/libhal-glib/hal-cpufreq.c
+@@ -0,0 +1,618 @@
++/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
++ *
++ * Copyright (C) 2006-2007 Richard Hughes <richard@hughsie.com>
++ * Licensed under the GNU General Public License Version 2
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
++ */
++
++#ifdef HAVE_CONFIG_H
++#  include <config.h>
++#endif
++
++#include <string.h>
++#include <glib.h>
++#include <dbus/dbus-glib.h>
++#include <glib/gi18n.h>
++
++#include "egg-dbus-proxy.h"
++#include "egg-debug.h"
++#include "hal-marshal.h"
++#include "hal-device.h"
++#include "hal-cpufreq.h"
++#include "hal-manager.h"
++
++static void     hal_cpufreq_class_init (HalCpufreqClass *klass);
++static void     hal_cpufreq_init       (HalCpufreq      *hal);
++static void     hal_cpufreq_finalize   (GObject	  *object);
++
++#define LIBHAL_CPUFREQ_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), LIBHAL_TYPE_CPUFREQ, HalCpufreqPrivate))
++
++struct HalCpufreqPrivate
++{
++	DBusGConnection         *connection;
++	EggDbusProxy		*proxy;
++	guint			 available_governors;
++	HalCpufreqType		 current_governor;
++};
++
++G_DEFINE_TYPE (HalCpufreq, hal_cpufreq, G_TYPE_OBJECT)
++
++static gpointer hal_cpufreq_object = NULL;
++
++/**
++ * hal_cpufreq_string_to_enum:
++ * @governor: The cpufreq kernel governor, e.g. "powersave"
++ * Return value: The HalCpufreqType value, e.g. LIBHAL_CPUFREQ_POWERSAVE
++ **/
++HalCpufreqType
++hal_cpufreq_string_to_enum (const gchar *governor)
++{
++	HalCpufreqType cpufreq_type = LIBHAL_CPUFREQ_UNKNOWN;
++	if (governor == NULL) {
++		cpufreq_type = LIBHAL_CPUFREQ_NOTHING;
++	} else if (strcmp (governor, CODE_CPUFREQ_ONDEMAND) == 0) {
++		cpufreq_type = LIBHAL_CPUFREQ_ONDEMAND;
++	} else if (strcmp (governor, CODE_CPUFREQ_CONSERVATIVE) == 0) {
++		cpufreq_type = LIBHAL_CPUFREQ_CONSERVATIVE;
++	} else if (strcmp (governor, CODE_CPUFREQ_POWERSAVE) == 0) {
++		cpufreq_type = LIBHAL_CPUFREQ_POWERSAVE;
++	} else if (strcmp (governor, CODE_CPUFREQ_USERSPACE) == 0) {
++		cpufreq_type = LIBHAL_CPUFREQ_USERSPACE;
++	} else if (strcmp (governor, CODE_CPUFREQ_PERFORMANCE) == 0) {
++		cpufreq_type = LIBHAL_CPUFREQ_PERFORMANCE;
++	} else if (strcmp (governor, CODE_CPUFREQ_NOTHING) == 0) {
++		cpufreq_type = LIBHAL_CPUFREQ_NOTHING;
++	}
++	return cpufreq_type;
++}
++
++/**
++ * hal_cpufreq_string_to_enum:
++ * @cpufreq_type: The HalCpufreqType value, e.g. LIBHAL_CPUFREQ_POWERSAVE
++ * Return value: The cpufreq kernel governor, e.g. "powersave"
++ **/
++const gchar *
++hal_cpufreq_enum_to_string (HalCpufreqType cpufreq_type)
++{
++	const char *governor;
++	if (cpufreq_type == LIBHAL_CPUFREQ_ONDEMAND) {
++		governor = CODE_CPUFREQ_ONDEMAND;
++	} else if (cpufreq_type == LIBHAL_CPUFREQ_CONSERVATIVE) {
++		governor = CODE_CPUFREQ_CONSERVATIVE;
++	} else if (cpufreq_type == LIBHAL_CPUFREQ_POWERSAVE) {
++		governor = CODE_CPUFREQ_POWERSAVE;
++	} else if (cpufreq_type == LIBHAL_CPUFREQ_USERSPACE) {
++		governor = CODE_CPUFREQ_USERSPACE;
++	} else if (cpufreq_type == LIBHAL_CPUFREQ_PERFORMANCE) {
++		governor = CODE_CPUFREQ_PERFORMANCE;
++	} else if (cpufreq_type == LIBHAL_CPUFREQ_NOTHING) {
++		governor = CODE_CPUFREQ_NOTHING;
++	} else {
++		governor = "unknown";
++	}
++	return governor;
++}
++
++/**
++ * hal_cpufreq_set_performance:
++ *
++ * @cpufreq: This class instance
++ * @performance: The percentage perfomance figure
++ * Return value: If the method succeeded
++ **/
++gboolean
++hal_cpufreq_set_performance (HalCpufreq *cpufreq, guint performance)
++{
++	GError *error = NULL;
++	gboolean ret;
++	HalCpufreqType cpufreq_type;
++	DBusGProxy *proxy;
++
++	g_return_val_if_fail (cpufreq != NULL, FALSE);
++	g_return_val_if_fail (LIBHAL_IS_CPUFREQ (cpufreq), FALSE);
++	g_return_val_if_fail (performance >= 0, FALSE);
++	g_return_val_if_fail (performance <= 100, FALSE);
++
++	/* we need to find the current governor to see if it's sane */
++	if (cpufreq->priv->current_governor == LIBHAL_CPUFREQ_UNKNOWN) {
++		hal_cpufreq_get_governor (cpufreq, &cpufreq_type);
++	}
++
++	/* only applies to some governors */
++	if (cpufreq->priv->current_governor == LIBHAL_CPUFREQ_PERFORMANCE ||
++	    cpufreq->priv->current_governor == LIBHAL_CPUFREQ_POWERSAVE) {
++		return FALSE;
++	}
++
++	proxy = egg_dbus_proxy_get_proxy (cpufreq->priv->proxy);
++	if (proxy == NULL) {
++		g_warning ("not connected");
++		return FALSE;
++	}
++
++	ret = dbus_g_proxy_call (proxy, "SetCPUFreqPerformance", &error,
++				 G_TYPE_INT, performance,
++				 G_TYPE_INVALID,
++				 G_TYPE_INVALID);
++	if (error) {
++		g_warning ("ERROR: %s", error->message);
++		g_error_free (error);
++	}
++	if (ret == FALSE) {
++		/* abort as the DBUS method failed */
++		return FALSE;
++	}
++	return TRUE;
++}
++
++/**
++ * hal_cpufreq_set_governor:
++ *
++ * @cpufreq: This class instance
++ * @cpufreq_type: The CPU governor type, e.g. LIBHAL_CPUFREQ_CONSERVATIVE
++ * Return value: If the method succeeded
++ **/
++gboolean
++hal_cpufreq_set_governor (HalCpufreq    *cpufreq,
++			   HalCpufreqType cpufreq_type)
++{
++	GError *error = NULL;
++	gboolean ret;
++	const gchar *governor;
++	DBusGProxy *proxy;
++
++	g_return_val_if_fail (cpufreq != NULL, FALSE);
++	g_return_val_if_fail (LIBHAL_IS_CPUFREQ (cpufreq), FALSE);
++	g_return_val_if_fail (cpufreq_type != LIBHAL_CPUFREQ_UNKNOWN, FALSE);
++
++	governor = hal_cpufreq_enum_to_string (cpufreq_type);
++	g_return_val_if_fail (governor != NULL, FALSE);
++
++	proxy = egg_dbus_proxy_get_proxy (cpufreq->priv->proxy);
++	if (proxy == NULL) {
++		g_warning ("not connected");
++		return FALSE;
++	}
++
++	ret = dbus_g_proxy_call (proxy, "SetCPUFreqGovernor", &error,
++				 G_TYPE_STRING, governor,
++				 G_TYPE_INVALID,
++				 G_TYPE_INVALID);
++	if (error) {
++		g_warning ("ERROR: %s", error->message);
++		g_error_free (error);
++	}
++	if (ret == FALSE) {
++		/* abort as the DBUS method failed */
++		return FALSE;
++	}
++
++	/* save the cache */
++	cpufreq->priv->current_governor = cpufreq_type;
++	return TRUE;
++}
++
++/**
++ * hal_cpufreq_get_governors:
++ *
++ * @cpufreq: This class instance
++ * @cpufreq_type: Return variable, The CPU governor type as an combined bitwise type
++ * Return value: If the method succeeded
++ **/
++gboolean
++hal_cpufreq_get_governors (HalCpufreq     *cpufreq,
++			    HalCpufreqType *cpufreq_type)
++{
++	GError *error = NULL;
++	gboolean ret;
++	char **strlist;
++	int i = 0;
++	DBusGProxy *proxy;
++	HalCpufreqType types = LIBHAL_CPUFREQ_UNKNOWN;
++
++	g_return_val_if_fail (cpufreq != NULL, FALSE);
++	g_return_val_if_fail (LIBHAL_IS_CPUFREQ (cpufreq), FALSE);
++	g_return_val_if_fail (cpufreq_type != NULL, FALSE);
++
++	proxy = egg_dbus_proxy_get_proxy (cpufreq->priv->proxy);
++	if (proxy == NULL) {
++		g_warning ("not connected");
++		*cpufreq_type = LIBHAL_CPUFREQ_UNKNOWN;
++		return FALSE;
++	}
++
++	ret = dbus_g_proxy_call (proxy, "GetCPUFreqAvailableGovernors", &error,
++				 G_TYPE_INVALID,
++				 G_TYPE_STRV, &strlist,
++				 G_TYPE_INVALID);
++	if (error) {
++		g_warning ("ERROR: %s", error->message);
++		g_error_free (error);
++	}
++	if (ret == FALSE) {
++		/* abort as the DBUS method failed */
++		*cpufreq_type = LIBHAL_CPUFREQ_UNKNOWN;
++		return FALSE;
++	}
++
++	/* treat as binary flags */
++	while (strlist && strlist[i]) {
++		types += hal_cpufreq_string_to_enum (strlist[i]);
++		++i;
++	}
++
++	/* when we have conservative and ondemand available, only expose
++	   ondemand in the UI. They are too similar and ondemand is better. */
++	if (types & LIBHAL_CPUFREQ_ONDEMAND && types & LIBHAL_CPUFREQ_CONSERVATIVE) {
++		types -= LIBHAL_CPUFREQ_CONSERVATIVE;
++	}
++
++	/* We never allow the user to use userspace. */
++	if (types & LIBHAL_CPUFREQ_USERSPACE) {
++		types -= LIBHAL_CPUFREQ_USERSPACE;
++	}
++
++	*cpufreq_type = types;
++	cpufreq->priv->available_governors = i;
++	return TRUE;
++}
++
++/**
++ * hal_cpufreq_get_number_governors:
++ *
++ * @cpufreq: This class instance
++ * @use_cache: if we should force a cache update
++ * Return value: the number of available governors
++ **/
++guint
++hal_cpufreq_get_number_governors (HalCpufreq *cpufreq,
++				   gboolean    use_cache)
++{
++	HalCpufreqType cpufreq_type;
++
++	g_return_val_if_fail (cpufreq != NULL, FALSE);
++	g_return_val_if_fail (LIBHAL_IS_CPUFREQ (cpufreq), FALSE);
++
++	if (use_cache == FALSE || cpufreq->priv->available_governors == -1) {
++		hal_cpufreq_get_governors (cpufreq, &cpufreq_type);
++	}
++	return cpufreq->priv->available_governors;
++}
++
++/**
++ * hal_cpufreq_get_consider_nice:
++ *
++ * @cpufreq: This class instance
++ * @consider_nice: Return variable, if consider niced processes
++ * Return value: If the method succeeded
++ **/
++gboolean
++hal_cpufreq_get_consider_nice (HalCpufreq *cpufreq,
++			        gboolean      *consider_nice)
++{
++	GError *error = NULL;
++	gboolean ret;
++	HalCpufreqType cpufreq_type;
++	DBusGProxy *proxy;
++
++	g_return_val_if_fail (cpufreq != NULL, FALSE);
++	g_return_val_if_fail (LIBHAL_IS_CPUFREQ (cpufreq), FALSE);
++	g_return_val_if_fail (consider_nice != NULL, FALSE);
++
++	/* we need to find the current governor to see if it's sane */
++	if (cpufreq->priv->current_governor == LIBHAL_CPUFREQ_UNKNOWN) {
++		hal_cpufreq_get_governor (cpufreq, &cpufreq_type);
++	}
++
++	/* only applies to some governors */
++	if (cpufreq->priv->current_governor != LIBHAL_CPUFREQ_ONDEMAND &&
++	    cpufreq->priv->current_governor != LIBHAL_CPUFREQ_CONSERVATIVE) {
++		*consider_nice = FALSE;
++		return FALSE;
++	}
++
++	proxy = egg_dbus_proxy_get_proxy (cpufreq->priv->proxy);
++	if (proxy == NULL) {
++		g_warning ("not connected");
++		return FALSE;
++	}
++
++	ret = dbus_g_proxy_call (proxy, "GetCPUFreqConsiderNice", &error,
++				 G_TYPE_INVALID,
++				 G_TYPE_BOOLEAN, consider_nice,
++				 G_TYPE_INVALID);
++	if (error) {
++		g_warning ("ERROR: %s", error->message);
++		g_error_free (error);
++	}
++	if (ret == FALSE) {
++		/* abort as the DBUS method failed */
++		return FALSE;
++	}
++	return TRUE;
++}
++
++/**
++ * hal_cpufreq_get_performance:
++ *
++ * @cpufreq: This class instance
++ * @performance: Return variable, the percentage performance
++ * Return value: If the method succeeded
++ **/
++gboolean
++hal_cpufreq_get_performance (HalCpufreq *cpufreq,
++		              guint         *performance)
++{
++	GError *error = NULL;
++	gboolean ret;
++	HalCpufreqType cpufreq_type;
++	DBusGProxy *proxy;
++
++	g_return_val_if_fail (cpufreq != NULL, FALSE);
++	g_return_val_if_fail (LIBHAL_IS_CPUFREQ (cpufreq), FALSE);
++	g_return_val_if_fail (performance != NULL, FALSE);
++
++	/* we need to find the current governor to see if it's sane */
++	if (cpufreq->priv->current_governor == LIBHAL_CPUFREQ_UNKNOWN) {
++		hal_cpufreq_get_governor (cpufreq, &cpufreq_type);
++	}
++
++	/* only applies to some governors */
++	if (cpufreq->priv->current_governor != LIBHAL_CPUFREQ_USERSPACE) {
++		*performance = -1;
++		return FALSE;
++	}
++
++	proxy = egg_dbus_proxy_get_proxy (cpufreq->priv->proxy);
++	if (proxy == NULL) {
++		g_warning ("not connected");
++		return FALSE;
++	}
++
++	ret = dbus_g_proxy_call (proxy, "GetCPUFreqPerformance", &error,
++				 G_TYPE_INVALID,
++				 G_TYPE_INT, performance,
++				 G_TYPE_INVALID);
++	if (error) {
++		g_warning ("ERROR: %s", error->message);
++		g_error_free (error);
++	}
++	if (ret == FALSE) {
++		/* abort as the DBUS method failed */
++		return FALSE;
++	}
++	return TRUE;
++}
++
++/**
++ * hal_cpufreq_get_governor:
++ *
++ * @cpufreq: This class instance
++ * @cpufreq_type: Return variable, the governor type, e.g. LIBHAL_CPUFREQ_POWERSAVE
++ * Return value: If the method succeeded
++ **/
++gboolean
++hal_cpufreq_get_governor (HalCpufreq     *cpufreq,
++			   HalCpufreqType *cpufreq_type)
++{
++	GError *error = NULL;
++	gboolean ret;
++	gchar *governor;
++	DBusGProxy *proxy;
++
++	g_return_val_if_fail (cpufreq != NULL, FALSE);
++	g_return_val_if_fail (LIBHAL_IS_CPUFREQ (cpufreq), FALSE);
++	g_return_val_if_fail (cpufreq_type, FALSE);
++
++	*cpufreq_type = LIBHAL_CPUFREQ_UNKNOWN;
++
++	/* use the cache */
++	if (cpufreq->priv->current_governor != LIBHAL_CPUFREQ_UNKNOWN) {
++		return cpufreq->priv->current_governor;
++	}
++
++	proxy = egg_dbus_proxy_get_proxy (cpufreq->priv->proxy);
++	if (proxy == NULL) {
++		g_warning ("not connected");
++		return FALSE;
++	}
++
++	ret = dbus_g_proxy_call (proxy, "GetCPUFreqGovernor", &error,
++				 G_TYPE_INVALID,
++				 G_TYPE_STRING, &governor,
++				 G_TYPE_INVALID);
++	if (error) {
++		g_warning ("ERROR: %s", error->message);
++		g_error_free (error);
++	}
++	if (ret == FALSE) {
++		/* abort as the DBUS method failed */
++		return FALSE;
++	}
++
++	/* convert to enumerated type */
++	if (governor != NULL) {
++		*cpufreq_type = hal_cpufreq_string_to_enum (governor);
++		cpufreq->priv->current_governor = *cpufreq_type;
++		g_free (governor);
++	}
++
++	return TRUE;
++}
++
++/**
++ * hal_cpufreq_set_consider_nice:
++ *
++ * @cpufreq: This class instance
++ * @enable: True to consider nice processes
++ * Return value: If the method succeeded
++ **/
++gboolean
++hal_cpufreq_set_consider_nice (HalCpufreq *cpufreq,
++			        gboolean    consider_nice)
++{
++	GError *error = NULL;
++	gboolean ret;
++	HalCpufreqType cpufreq_type;
++	DBusGProxy *proxy;
++
++	g_return_val_if_fail (cpufreq != NULL, FALSE);
++	g_return_val_if_fail (LIBHAL_IS_CPUFREQ (cpufreq), FALSE);
++
++	/* we need to find the current governor to see if it's sane */
++	if (cpufreq->priv->current_governor == LIBHAL_CPUFREQ_UNKNOWN) {
++		hal_cpufreq_get_governor (cpufreq, &cpufreq_type);
++	}
++
++	/* only applies to some governors */
++	if (cpufreq->priv->current_governor != LIBHAL_CPUFREQ_ONDEMAND &&
++	    cpufreq->priv->current_governor != LIBHAL_CPUFREQ_CONSERVATIVE) {
++		return FALSE;
++	}
++
++	proxy = egg_dbus_proxy_get_proxy (cpufreq->priv->proxy);
++	if (proxy == NULL) {
++		g_warning ("not connected");
++		return FALSE;
++	}
++
++	ret = dbus_g_proxy_call (proxy, "SetCPUFreqConsiderNice", &error,
++				 G_TYPE_BOOLEAN, consider_nice,
++				 G_TYPE_INVALID,
++				 G_TYPE_INVALID);
++	if (error) {
++		g_warning ("ERROR: %s", error->message);
++		g_error_free (error);
++	}
++	if (ret == FALSE) {
++		/* abort as the DBUS method failed */
++		return FALSE;
++	}
++	return TRUE;
++}
++
++/**
++ * hal_cpufreq_class_init:
++ * @klass: This class instance
++ **/
++static void
++hal_cpufreq_class_init (HalCpufreqClass *klass)
++{
++	GObjectClass *object_class = G_OBJECT_CLASS (klass);
++	object_class->finalize = hal_cpufreq_finalize;
++	g_type_class_add_private (klass, sizeof (HalCpufreqPrivate));
++}
++
++/**
++ * hal_cpufreq_init:
++ *
++ * @cpufreq: This class instance
++ **/
++static void
++hal_cpufreq_init (HalCpufreq *cpufreq)
++{
++	GError *error = NULL;
++
++	cpufreq->priv = LIBHAL_CPUFREQ_GET_PRIVATE (cpufreq);
++
++	cpufreq->priv->connection = dbus_g_bus_get(DBUS_BUS_SYSTEM, &error);
++
++	if (cpufreq->priv->connection == NULL) {
++		egg_warning("ERROR: %s\n", error->message);
++		g_error_free(error);
++		return ;
++	}
++
++	cpufreq->priv->proxy = egg_dbus_proxy_new ();
++	egg_dbus_proxy_assign (cpufreq->priv->proxy,
++			       cpufreq->priv->connection,
++			       HAL_DBUS_SERVICE,
++			       HAL_ROOT_COMPUTER,
++			       HAL_DBUS_INTERFACE_CPUFREQ);
++
++	/* set defaults */
++	cpufreq->priv->available_governors = -1;
++	cpufreq->priv->current_governor = LIBHAL_CPUFREQ_UNKNOWN;
++}
++
++/**
++ * hal_cpufreq_finalize:
++ * @object: This class instance
++ **/
++static void
++hal_cpufreq_finalize (GObject *object)
++{
++	HalCpufreq *cpufreq;
++	g_return_if_fail (object != NULL);
++	g_return_if_fail (LIBHAL_IS_CPUFREQ (object));
++
++	cpufreq = LIBHAL_CPUFREQ (object);
++	cpufreq->priv = LIBHAL_CPUFREQ_GET_PRIVATE (cpufreq);
++
++	if (cpufreq->priv->proxy != NULL) {
++		g_object_unref (cpufreq->priv->proxy);
++	}
++
++	G_OBJECT_CLASS (hal_cpufreq_parent_class)->finalize (object);
++}
++
++/**
++ * hal_cpufreq_has_hw:
++ *
++ * Self contained function that works out if we have the hardware.
++ * If not, we return FALSE and the module is unloaded.
++ **/
++gboolean
++hal_cpufreq_has_hw (void)
++{
++	HalManager *hal_manager;
++	gchar **names;
++	gboolean ret = TRUE;
++
++	/* okay, as singleton */
++	hal_manager = hal_manager_new ();
++	ret = hal_manager_find_capability (hal_manager, "cpufreq_control", &names, NULL);
++
++	/* nothing found */
++	if (names == NULL || names[0] == NULL) {
++		ret = FALSE;
++	}
++	hal_manager_free_capability (names);
++	g_object_unref (hal_manager);
++
++	return ret;
++}
++
++/**
++ * hal_cpufreq_new:
++ * Return value: new HalCpufreq instance.
++ **/
++HalCpufreq *
++hal_cpufreq_new (void)
++{
++	if (hal_cpufreq_object != NULL) {
++		g_object_ref (hal_cpufreq_object);
++	} else {
++		/* only load an instance of this module if we have the hardware */
++		if (hal_cpufreq_has_hw () == FALSE) {
++			return NULL;
++		}
++		hal_cpufreq_object = g_object_new (LIBHAL_TYPE_CPUFREQ, NULL);
++		g_object_add_weak_pointer (hal_cpufreq_object, &hal_cpufreq_object);
++	}
++	return LIBHAL_CPUFREQ (hal_cpufreq_object);
++}
++
+Index: b/libhal-glib/hal-cpufreq.h
+===================================================================
+--- /dev/null
++++ b/libhal-glib/hal-cpufreq.h
+@@ -0,0 +1,93 @@
++/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
++ *
++ * Copyright (C) 2006-2007 Richard Hughes <richard@hughsie.com>
++ *
++ * Licensed under the GNU General Public License Version 2
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
++ */
++
++#ifndef __LIBHAL_GCPUFREQ_H
++#define __LIBHAL_GCPUFREQ_H
++
++#include <glib-object.h>
++
++G_BEGIN_DECLS
++
++#define LIBHAL_TYPE_CPUFREQ		(hal_cpufreq_get_type ())
++#define LIBHAL_CPUFREQ(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), LIBHAL_TYPE_CPUFREQ, HalCpufreq))
++#define LIBHAL_CPUFREQ_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), LIBHAL_TYPE_CPUFREQ, HalCpufreqClass))
++#define LIBHAL_IS_CPUFREQ(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), LIBHAL_TYPE_CPUFREQ))
++#define LIBHAL_IS_CPUFREQ_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), LIBHAL_TYPE_CPUFREQ))
++#define LIBHAL_CPUFREQ_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), LIBHAL_TYPE_CPUFREQ, HalCpufreqClass))
++
++typedef struct HalCpufreqPrivate HalCpufreqPrivate;
++
++typedef struct
++{
++	GObject			 parent;
++	HalCpufreqPrivate	*priv;
++} HalCpufreq;
++
++
++typedef struct
++{
++	GObjectClass	parent_class;
++} HalCpufreqClass;
++
++/* types of governor */
++typedef enum {
++	LIBHAL_CPUFREQ_UNKNOWN = 0,
++	LIBHAL_CPUFREQ_ONDEMAND = 1,
++	LIBHAL_CPUFREQ_CONSERVATIVE = 2,
++	LIBHAL_CPUFREQ_POWERSAVE = 4,
++	LIBHAL_CPUFREQ_USERSPACE = 8,
++	LIBHAL_CPUFREQ_PERFORMANCE = 16,
++	LIBHAL_CPUFREQ_NOTHING = 32,
++} HalCpufreqType;
++
++#define CODE_CPUFREQ_ONDEMAND		"ondemand"
++#define CODE_CPUFREQ_CONSERVATIVE	"conservative"
++#define CODE_CPUFREQ_POWERSAVE		"powersave"
++#define CODE_CPUFREQ_USERSPACE		"userspace"
++#define CODE_CPUFREQ_PERFORMANCE	"performance"
++#define CODE_CPUFREQ_NOTHING		"nothing"
++
++GType		 hal_cpufreq_get_type			(void);
++HalCpufreq	*hal_cpufreq_new			(void);
++gboolean	 hal_cpufreq_has_hw			(void);
++
++const gchar	*hal_cpufreq_enum_to_string		(HalCpufreqType  cpufreq_type);
++HalCpufreqType	 hal_cpufreq_string_to_enum		(const gchar	*governor);
++gboolean	 hal_cpufreq_get_governors		(HalCpufreq	*cpufreq,
++							 HalCpufreqType *cpufreq_type);
++gboolean	 hal_cpufreq_get_governor		(HalCpufreq	*cpufreq,
++							 HalCpufreqType *cpufreq_type);
++gboolean	 hal_cpufreq_set_governor		(HalCpufreq	*cpufreq,
++							 HalCpufreqType  governor_enum);
++gboolean	 hal_cpufreq_get_consider_nice		(HalCpufreq	*cpufreq,
++							 gboolean	*consider_nice);
++gboolean	 hal_cpufreq_set_consider_nice		(HalCpufreq	*cpufreq,
++							 gboolean	 consider_nice);
++gboolean	 hal_cpufreq_get_performance		(HalCpufreq	*cpufreq,
++							 guint		*performance);
++gboolean	 hal_cpufreq_set_performance		(HalCpufreq	*cpufreq,
++							 guint		 performance);
++guint		 hal_cpufreq_get_number_governors	(HalCpufreq	*cpufreq,
++							 gboolean	 use_cache);
++
++G_END_DECLS
++
++#endif	/* __LIBHAL_CPUFREQ_H */
+Index: b/libhal-glib/Makefile.am
+===================================================================
+--- a/libhal-glib/Makefile.am
++++ b/libhal-glib/Makefile.am
+@@ -27,7 +27,9 @@ libhal_la_SOURCES =						\
+ 	hal-device-store.c					\
+ 	hal-device-store.h					\
+ 	hal-device-power.c					\
+-	hal-device-power.h
++	hal-device-power.h					\
++	hal-cpufreq.c						\
++	hal-cpufreq.h
+ 
+ libhal_la_LIBADD =						\
+ 	$(DBUS_LIBS)						\

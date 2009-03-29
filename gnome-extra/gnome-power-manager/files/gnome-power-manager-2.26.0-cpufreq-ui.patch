@@ -1,0 +1,70 @@
+--- ../gnome-power-manager-2.24.4_orig/data/gpm-prefs.glade	2008-09-04 12:05:18.000000000 +0200
++++ data/gpm-prefs.glade	2009-03-12 16:38:24.924915212 +0100
+@@ -111,6 +111,33 @@
+                                 <property name="position">1</property>
+                               </packing>
+                             </child>
++                            <child>
++                              <widget class="GtkHBox" id="hbox_ac_cpu">
++                                <property name="visible">True</property>
++                                <property name="spacing">12</property>
++                                <property name="homogeneous">True</property>
++                                <child>
++                                  <widget class="GtkLabel" id="label_ac_cpu">
++                                    <property name="visible">True</property>
++                                    <property name="xalign">0</property>
++                                    <property name="label" translatable="yes">Computer sp_eed policy:</property>
++                                    <property name="use_underline">True</property>
++                                  </widget>
++                                </child>
++                                <child>
++                                  <widget class="GtkComboBox" id="combobox_ac_cpu">
++                                    <property name="visible">True</property>
++				    <property name="items" translatable="yes"></property>
++                                  </widget>
++                                  <packing>
++                                    <property name="position">1</property>
++                                  </packing>
++                                </child>
++                              </widget>
++                              <packing>
++                                <property name="position">2</property>
++                              </packing>
++                            </child>
+                           </widget>
+                         </child>
+                       </widget>
+@@ -378,6 +405,33 @@
+                                 <property name="position">2</property>
+                               </packing>
+                             </child>
++                            <child>
++                              <widget class="GtkHBox" id="hbox_battery_cpu">
++                                <property name="visible">True</property>
++                                <property name="spacing">12</property>
++                                <property name="homogeneous">True</property>
++                                <child>
++                                  <widget class="GtkLabel" id="label_battery_cpu">
++                                    <property name="visible">True</property>
++                                    <property name="xalign">0</property>
++                                    <property name="label" translatable="yes">Computer sp_eed policy:</property>
++                                    <property name="use_underline">True</property>
++                                  </widget>
++                                </child>
++                                <child>
++                                  <widget class="GtkComboBox" id="combobox_battery_cpu">
++                                    <property name="visible">True</property>
++				    <property name="items" translatable="yes"></property>
++                                  </widget>
++                                  <packing>
++                                    <property name="position">1</property>
++                                  </packing>
++                                </child>
++                              </widget>
++                              <packing>
++                                <property name="position">3</property>
++                              </packing>
++                            </child>
+                           </widget>
+                         </child>
+                       </widget>

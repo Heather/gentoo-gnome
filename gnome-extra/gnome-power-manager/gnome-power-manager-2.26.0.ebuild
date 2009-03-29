@@ -1,9 +1,10 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/gnome-power-manager/gnome-power-manager-2.22.1.ebuild,v 1.8 2008/08/10 12:44:55 maekke Exp $
-EAPI=2
 
-inherit eutils gnome2 virtualx
+EAPI="2"
+
+inherit autotools eutils gnome2 virtualx
 
 DESCRIPTION="Gnome Power Manager"
 HOMEPAGE="http://www.gnome.org/projects/gnome-power-manager/"
@@ -28,9 +29,10 @@ RDEPEND=">=dev-libs/glib-2.6.0
 	>=x11-libs/cairo-1.0.0
 	>=gnome-base/gnome-panel-2
 	>=gnome-base/gconf-2
-	>=media-libs/libcanberra-0.10
+	>=media-libs/libcanberra-0.10[gtk]
+	>=sys-apps/devicekit-001
 	>=sys-apps/devicekit-power-005
-	>=dev-libs/libunique-0.9.4
+	>=dev-libs/libunique-1
 
 	>=x11-apps/xrandr-1.2
 	x11-libs/libX11
@@ -63,6 +65,7 @@ pkg_setup() {
 		$(use_enable doc docbook-docs)
 		$(use_enable policykit)
 		$(use_enable policykit gconf-defaults)
+		--enable-compile-warnings=minimum
 		--with-dpms-ext
 		--disable-legacy-buttons
 		--enable-applets"
@@ -75,11 +78,23 @@ src_prepare() {
 	if ! use doc; then
 		# Remove the docbook2man rules here since it's not handled by a proper
 		# parameter in configure.in.
-		sed -i -e 's:@HAVE_DOCBOOK2MAN_TRUE@.*::' "${S}/man/Makefile.in"
+		sed -e 's:@HAVE_DOCBOOK2MAN_TRUE@.*::' -i "${S}/man/Makefile.in" || die "sed 1 failed"
 	fi
 
+	# Skip crazy compilation warnings, bug #263078
+	epatch "${FILESDIR}/${P}-gcc44-options.patch"
+
+	# Resurrect cpufreq in capplet, bug #263891
+	epatch "${FILESDIR}/${P}-cpufreq-libhal-glib.patch"
+	epatch "${FILESDIR}/${P}-cpufreq-support.patch"
+	epatch "${FILESDIR}/${P}-cpufreq-ui.patch"
+	epatch "${FILESDIR}/${P}-cpufreq-po.patch"
+
+	intltoolize --force --copy --automake || die "intltoolize failed"
+	eautoreconf
+
 	# glibc splits this out, whereas other libc's do not tend to
-	use elibc_glibc || sed -i -e 's/-lresolv//' configure
+	use elibc_glibc || sed -e 's/-lresolv//' -i configure || die "sed 2 failed"
 }
 
 src_test() {
