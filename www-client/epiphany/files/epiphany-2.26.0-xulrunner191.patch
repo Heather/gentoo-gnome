@@ -1,0 +1,17 @@
+---
+https://bugs.gentoo.org/show_bug.cgi?id=263990
+
+Fix compilation against xulrunner 1.9.1_beta3
+
+diff --git a/embed/mozilla/MozRegisterComponents.cpp b/embed/mozilla/MozRegisterComponents.cpp
+index 81cd2fa..dfdef4e 100644
+--- a/embed/mozilla/MozRegisterComponents.cpp
++++ b/embed/mozilla/MozRegisterComponents.cpp
+@@ -46,6 +46,7 @@
+ #include <nsIClassInfoImpl.h>
+ #include <nsXULAppAPI.h>
+ #include <nsToolkitCompsCID.h>
++#include <nsXPCOMCIDInternal.h>
+ #endif
+ 
+ #ifdef HAVE_MOZILLA_PSM
