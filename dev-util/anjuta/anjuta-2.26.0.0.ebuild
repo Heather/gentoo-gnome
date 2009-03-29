@@ -21,7 +21,7 @@ RDEPEND=">=dev-libs/glib-2.16.0
 	>=gnome-base/gconf-2.12.0
 	>=x11-libs/vte-0.13.1
 	>=dev-libs/libxml2-2.4.23
-	>=dev-libs/gdl-0.7.5
+	>=dev-libs/gdl-2.26
 	>=app-text/gnome-doc-utils-0.3.2
 	>=dev-libs/gnome-build-0.3.0
 	>=x11-libs/libwnck-2.12
@@ -33,7 +33,7 @@ RDEPEND=">=dev-libs/glib-2.16.0
 	sys-devel/autogen
 
 	devhelp? ( >=dev-util/devhelp-0.22 )
-	glade? ( >=dev-util/glade-3.5.7 )
+	glade? ( >=dev-util/glade-3.6.0 )
 	inherit-graph? ( >=media-gfx/graphviz-2.6.0 )
 	sourceview? (
 		>=x11-libs/gtk+-2.10.0
