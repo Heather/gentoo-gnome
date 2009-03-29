@@ -2,6 +2,11 @@ GNOME 2.26 Bugs and other problems
 
 Last updated: Mar 29th 2009
 
+Bug Lists:
+==========
+* Gentoo bugzilla: http://tinyurl.com/gnome-overlay-bugs
+* GNOME bugzilla: http://tinyurl.com/gentoo-gnome-bugzilla
+
 Blockers:
 =========
 * gnome-settings-daemon: Media-keys no longer support gstreamer[1]
@@ -10,13 +15,13 @@ Blockers:
 * gnome-panel: Logout problem, translations patch no longer applies (downstream problem)
 * gdm:
   * Occupied VT problem[3]
+    * Temporary workaround: Press F2 during boot, before gdm gets loaded
   * Daemonization regression[4]
 
 PolicyKit:
 ==========
 * gconf-editor needs to make PK support optional
   * Should be easy, only 4 functions need it
-*
 
 Tests:
 ======
