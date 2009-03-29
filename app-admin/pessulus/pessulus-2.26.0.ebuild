@@ -13,10 +13,9 @@ KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE=""
 
 RDEPEND=">=dev-python/pygtk-2.6.0
-	>=dev-python/gnome-python-2.6.0
-	|| (
-		>=dev-python/bug-buddy-python-2.22
-		>=dev-python/gnome-python-desktop-2.17.2 )
+	>=dev-python/libgnome-python-2.6.0
+	>=dev-python/gconf-python-2.6.0
+	>=dev-python/bug-buddy-python-2.22
 	>=gnome-base/gconf-2"
 
 DEPEND="${RDEPEND}
