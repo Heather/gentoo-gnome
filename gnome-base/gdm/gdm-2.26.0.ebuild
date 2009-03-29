@@ -1,7 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gdm/gdm-2.20.7.ebuild,v 1.5 2008/08/12 13:54:55 armin76 Exp $
-EAPI=2
+
+EAPI="2"
 
 inherit eutils pam gnome2
 
@@ -16,7 +17,7 @@ IUSE_LIBC="elibc_glibc"
 IUSE="accessibility debug ipv6 gnome-keyring policykit selinux tcpd xinerama $IUSE_LIBC"
 
 # Name of the tarball with gentoo specific files
-GDM_EXTRA="${PN}-2.20.5-gentoo-files"
+GDM_EXTRA="${PN}-2.20.9-gentoo-files-r1"
 
 SRC_URI="${SRC_URI}
 		 mirror://gentoo/${GDM_EXTRA}.tar.bz2"
@@ -84,10 +85,14 @@ pkg_setup() {
 }
 
 src_prepare() {
+	gnome2_src_prepare
+
 	# remove unneeded linker directive for selinux (#41022)
 	epatch "${FILESDIR}/${PN}-2.25.92-selinux-remove-attr.patch"
+
 	# Make it daemonize so that the boot process can continue (#236701)
 	epatch "${FILESDIR}/${PN}-2.24.1-fix-daemonize-regression.patch"
+
 	# Fix VT grab problem causing GDM to grab VT2 instead of 7 (#261339)
 	#epatch "${FILESDIR}/${P}-fix-vt-grab-problem.patch"
 }
@@ -119,6 +124,9 @@ src_install() {
 	# add a custom xsession .desktop by default (#44537)
 	exeinto /etc/X11/dm/Sessions
 	doexe "${gentoodir}/custom.desktop"
+
+	# add a custom sound playing script (#248253)
+	dobin "${gentoodir}/gdmplay"
 
 	# avoid file collision, bug #213118
 	rm -f "${D}/usr/share/xsessions/gnome.desktop"
