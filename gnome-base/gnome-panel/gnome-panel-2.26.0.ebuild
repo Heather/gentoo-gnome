@@ -65,9 +65,8 @@ src_unpack() {
 
 	# Allow logout/shutdown without gnome-session 2.24, bug #246170
 	epatch "${WORKDIR}/${MY_P}-logout.patch"
-	# FIXME FIXME FIXME: This patch doesn't apply.
-	#epatch "${WORKDIR}/${MY_P}-po.patch"
-	# Above patch doesn't apply => workaround for now
+	epatch "${FILESDIR}/${P}-po.patch"
+
 	echo "gnome-panel/panel-logout.c" >> po/POTFILES.in
 	# Fixes build on BSD, bug #256859
 	epatch "${FILESDIR}/${PN}-2.24.3-daylight.patch"
