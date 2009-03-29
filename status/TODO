@@ -13,7 +13,6 @@ gnome-base/gnome-control-center/gnome-control-center-2.26.0.ebuild:# FIXME: libc
 gnome-base/gnome-control-center/gnome-control-center-2.26.0.ebuild:# FIXME: policykit-gnome is automagic for about-me capplet.
 gnome-base/gnome-desktop/gnome-desktop-2.26.0.ebuild:# FIXME: Python deps are needed for gnome-about but not
 gnome-base/gnome-menus/gnome-menus-2.26.0.ebuild:	# FIXME: fix autofoo and report upstream
-gnome-base/gnome-panel/gnome-panel-2.26.0.ebuild:	# FIXME FIXME FIXME: This patch doesn't apply.
 gnome-base/gnome-panel/gnome-panel-2.26.0.ebuild:	# FIXME: tarball generated with broken gtk-doc, revisit me.
 gnome-base/gnome-session/gnome-session-2.26.0.ebuild:	# TODO: convert libnotify to a configure option
 gnome-base/librsvg/librsvg-2.26.0.ebuild:	# FIXME: USEify mozilla support (?)

@@ -1,6 +1,6 @@
 GNOME 2.26 Bugs and other problems
 
-Last updated: Mar 29th 2009
+Last updated: Mar 30th 2009
 
 Bug Lists:
 ==========
@@ -12,7 +12,6 @@ Blockers:
 * gnome-settings-daemon: Media-keys no longer support gstreamer[1]
 * gnome-session: Session-saving support (relegated to 2.26.1[2])
 * gnome-applets: (deprecated) gstreamer mixer_applet constantly crashes for me (No GNOME bug yet)
-* gnome-panel: Logout problem, translations patch no longer applies (downstream problem)
 * gdm:
   * Occupied VT problem[3]
     * Temporary workaround: Press F2 during boot, before gdm gets loaded
