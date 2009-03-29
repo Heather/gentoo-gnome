@@ -1,22 +1,12 @@
- * Report and fix broken testsuite:
-   * testsuite gtk+ does not pass for me (xrandr 1.2.99 ?)
-   * stupid error in gnome-applets-2.26 tests (broken module ?)
- * gnome-panel needs an update to the localization patch
- * gnome-settings-daemon patches need updating
-
-PolicyKit
-========
- * gconf-editor needs a patch to make policykit optional, should be fairly easy, only 4 functions need to be rewritten.
-
-Ebuilds notice
-==============
-$ egrep "FIXME" */*/*.ebuild -r
+Ebuild Notices:
+===============
 app-text/evince/evince-2.26.0.ebuild:# FIXME: enable gobject-introspection when we have an ebuild for it.
 dev-libs/libunique/libunique-1.0.8.ebuild:# FIXME: automagic dbus dependency
 gnome-base/gconf/gconf-2.26.0.ebuild:# FIXME: add policykit support
 gnome-base/gdm/gdm-2.24.1.ebuild:# FIXME: automagic libxklavier check
 gnome-base/gdm/gdm-2.25.2.ebuild:# FIXME: automagic libxklavier check
 gnome-base/gdm/gdm-2.26.0.ebuild:# FIXME: automagic libxklavier check
+gnome-base/gnome-applets/gnome-applets-2.26.0.ebuild:# TODO: configure says python stuff is optional
 gnome-base/gnome-applets/gnome-applets-2.26.0.ebuild:# FIXME: Check for polkit
 gnome-base/gnome-applets/gnome-applets-2.26.0.ebuild:# FIXME: networkmanager-0.7 is automagic
 gnome-base/gnome-control-center/gnome-control-center-2.26.0.ebuild:# FIXME: libcanberra is automagic.
@@ -25,20 +15,23 @@ gnome-base/gnome-desktop/gnome-desktop-2.26.0.ebuild:# FIXME: Python deps are ne
 gnome-base/gnome-menus/gnome-menus-2.26.0.ebuild:	# FIXME: fix autofoo and report upstream
 gnome-base/gnome-panel/gnome-panel-2.26.0.ebuild:	# FIXME FIXME FIXME: This patch doesn't apply.
 gnome-base/gnome-panel/gnome-panel-2.26.0.ebuild:	# FIXME: tarball generated with broken gtk-doc, revisit me.
+gnome-base/gnome-session/gnome-session-2.26.0.ebuild:	# TODO: convert libnotify to a configure option
 gnome-base/librsvg/librsvg-2.26.0.ebuild:	# FIXME: USEify mozilla support (?)
 gnome-base/nautilus/nautilus-2.26.0.ebuild:# FIXME: dev-libs/libunique needs KEYWORDS
 gnome-extra/evolution-data-server/evolution-data-server-2.26.0.ebuild:	# FIXME: tarball generated with broken gtk-doc, revisit me.
 gnome-extra/gnome-media/gnome-media-2.26.0.ebuild:# FIXME: libcanberra is automagic
 gnome-extra/gnome-media/gnome-media-2.26.0.ebuild:# FIXME: dep on pulseaudio-0.9.15 when it is out.
+gnome-extra/gnome-user-share/gnome-user-share-2.25.91.ebuild:# FIXME: could libnotify be made optional ?
 gnome-extra/yelp/yelp-2.26.0.ebuild:	# FIXME: Add patch to make lzma-utils not automagic and use_enable here
 mail-client/evolution/evolution-2.26.0.ebuild:# FIXME: libpst automagic dep
+media-video/totem/totem-2.26.0.ebuild:# TODO:
 media-video/totem/totem-2.26.0.ebuild:	# FIXME: why does it need write access here, probably need to set up a fake
 net-analyzer/gnome-nettool/gnome-nettool-2.26.0.ebuild:# FIXME: Dropped ~x86-fbsd (see epatch below)
 net-im/empathy/empathy-2.26.0.ebuild:# FIXME: libnotify & libcanberra hard deps
 net-im/empathy/empathy-2.26.0.ebuild:	# FIXME: This needs to be upstreamed before moving to tree
+net-libs/gtk-vnc/gtk-vnc-0.3.8.ebuild:# TODO: review nsplugin when it will be considered less experimental
 net-misc/vinagre/vinagre-2.26.0.ebuild:# FIXME: make gnome-panel applet option ?
 net-misc/vino/vino-2.26.0.ebuild:# FIXME: dev-libs/libunique needs KEYWORDS
 www-client/epiphany/epiphany-2.26.0.ebuild:# FIXME: libcanberra is automagic
 x11-libs/gtk+/gtk+-2.16.0.ebuild:# FIXME: configure says >=xrandr-1.2.99 but remi tells me it's broken
 x11-libs/pango/pango-1.24.0.ebuild:# FIXME: add gobject-introspection dependency when it is available
-

@@ -1,0 +1,36 @@
+GNOME 2.26 Bugs and other problems
+
+Last updated: Mar 29th 2009
+
+Blockers:
+=========
+* gnome-settings-daemon: Media-keys no longer support gstreamer[1]
+* gnome-session: Session-saving support (relegated to 2.26.1[2])
+* gnome-applets: (deprecated) gstreamer mixer_applet constantly crashes for me (No GNOME bug yet)
+* gnome-panel: Logout problem, translations patch no longer applies (downstream problem)
+* gdm:
+  * Occupied VT problem[3]
+  * Daemonization regression[4]
+
+PolicyKit:
+==========
+* gconf-editor needs to make PK support optional
+  * Should be easy, only 4 functions need it
+*
+
+Tests:
+======
+* gnome-power-manager: Tests fail[5]
+* gtk+: fails tests (xrandr 1.2.99?)
+* gnome-applets: fails tests at invest-applet (stupidity?)
+
+Enhancements:
+=============
+* empathy: The fraking icons suck :p
+  * Steal pidgin's icons!
+
+1. http://bugzilla.gnome.org/show_bug.cgi?id=571145
+2. http://bugzilla.gnome.org/show_bug.cgi?id=552387
+3. http://bugs.gentoo.org/show_bug.cgi?id=261339
+4. http://bugzilla.gnome.org/show_bug.cgi?id=550170
+5. http://bugzilla.gnome.org/show_bug.cgi?id=575500
