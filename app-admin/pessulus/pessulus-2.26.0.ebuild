@@ -9,8 +9,8 @@ HOMEPAGE="http://live.gnome.org/Pessulus"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~hppa ~ia64 ppc ppc64 ~sparc ~x86 ~x86-fbsd"
-IUSE="doc"
+KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+IUSE=""
 
 RDEPEND=">=dev-python/pygtk-2.6.0
 	>=dev-python/gnome-python-2.6.0
@@ -21,8 +21,7 @@ RDEPEND=">=dev-python/pygtk-2.6.0
 
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9
-	>=dev-util/intltool-0.35
-	doc? ( >=dev-util/gtk-doc-1 )"
+	>=dev-util/intltool-0.35"
 
 DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README TODO"
 
