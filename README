@@ -1,0 +1,9 @@
+This is the gnome overlay, using it is at your own risk.
+This is no warranty that anything herein will work or not wreck your system.
+If you find a bug, please visit us at #gentoo-desktop on freenode or fill a bug report at https://bugs.gentoo.org/
+
+If you are looking for what you can do to help, checkout the TODO file and bugzilla reports starting with [gnome overlay]
+
+Some of the scripts used by the gnome team are available in the scripts/ folder.
+
+If you plan on forking the overlay to work on some gnome stuff and make sure we can follow it, don't hesitate to send us a mail at gnome gentoo org to inform us or ask to a merge of your work.
