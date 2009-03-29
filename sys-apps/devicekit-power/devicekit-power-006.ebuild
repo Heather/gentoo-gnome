@@ -15,7 +15,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="debug doc"
 
-RDEPEND=">=dev-libs/glib-2.12
+# FIXME: crazy cflags by default, kill them out behind --enable-maintainer-mode
+RDEPEND=">=dev-libs/glib-2.16.1
 	>=dev-libs/dbus-glib-0.76
 	>=sys-apps/devicekit-002
 	>=sys-auth/policykit-0.7
