@@ -1,6 +1,18 @@
---- ../gnome-power-manager-2.24.4_orig/data/gpm-prefs.glade	2008-09-04 12:05:18.000000000 +0200
-+++ data/gpm-prefs.glade	2009-03-12 16:38:24.924915212 +0100
-@@ -111,6 +111,33 @@
+---
+ Author: Romain Perier <mrpouet@tuxfamily.org>
+
+ Restore cpufreq in gnome-power-manager caplet.
+
+ https://bugs.gentoo.org/show_bug.cgi?id=263891
+
+ data/gpm-prefs.glade |   54 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+
+Index: b/data/gpm-prefs.glade
+===================================================================
+--- a/data/gpm-prefs.glade
++++ b/data/gpm-prefs.glade
+@@ -113,6 +113,33 @@
                                  <property name="position">1</property>
                                </packing>
                              </child>
@@ -34,7 +46,7 @@
                            </widget>
                          </child>
                        </widget>
-@@ -378,6 +405,33 @@
+@@ -380,6 +407,33 @@
                                  <property name="position">2</property>
                                </packing>
                              </child>

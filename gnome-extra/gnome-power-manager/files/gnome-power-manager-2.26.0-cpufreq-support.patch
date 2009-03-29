@@ -1,6 +1,24 @@
-diff -ruN ../gnome-power-manager-2.26.0_orig/src/egg-gconf.c src/egg-gconf.c
---- ../gnome-power-manager-2.26.0_orig/src/egg-gconf.c	1970-01-01 01:00:00.000000000 +0100
-+++ src/egg-gconf.c	2009-03-26 11:53:49.573129208 +0100
+---
+ Author: Romain Perier <mrpouet@tuxfamily.org>
+
+ Restore cpufreq in gnome-power-manager caplet.
+
+ https://bugs.gentoo.org/show_bug.cgi?id=263891
+
+ src/Makefile.am      |    6 +
+ src/egg-gconf.c      |  111 ++++++++++++++++++++++++++
+ src/egg-gconf.h      |   42 +++++++++
+ src/gpm-common.h     |    7 +
+ src/gpm-cpufreq.c    |  217 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ src/gpm-cpufreq.h    |   55 ++++++++++++
+ src/gpm-manager.c    |    5 +
+ src/gpm-prefs-core.c |  174 ++++++++++++++++++++++++++++++++++++++++
+ 8 files changed, 617 insertions(+)
+
+Index: b/src/egg-gconf.c
+===================================================================
+--- /dev/null
++++ b/src/egg-gconf.c
 @@ -0,0 +1,111 @@
 +/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
 + *
@@ -86,7 +104,7 @@ diff -ruN ../gnome-power-manager-2.26.0_orig/src/egg-gconf.c src/egg-gconf.c
 +	}
 +}
 +
-+void egg_gconf_set_string (GConfClient *conf, const gchar *key, 
++void egg_gconf_set_string (GConfClient *conf, const gchar *key,
 +			   const gchar *value)
 +{
 +	GError *error = NULL;
@@ -100,7 +118,7 @@ diff -ruN ../gnome-power-manager-2.26.0_orig/src/egg-gconf.c src/egg-gconf.c
 +	}
 +}
 +
-+void egg_gconf_is_writable (GConfClient *conf, const gchar *key, 
++void egg_gconf_is_writable (GConfClient *conf, const gchar *key,
 +			    gboolean *is_writable)
 +{
 +	GError *error = NULL;
@@ -113,9 +131,10 @@ diff -ruN ../gnome-power-manager-2.26.0_orig/src/egg-gconf.c src/egg-gconf.c
 +		return;
 +	}
 +}
-diff -ruN ../gnome-power-manager-2.26.0_orig/src/egg-gconf.h src/egg-gconf.h
---- ../gnome-power-manager-2.26.0_orig/src/egg-gconf.h	1970-01-01 01:00:00.000000000 +0100
-+++ src/egg-gconf.h	2009-03-25 20:19:01.269736834 +0100
+Index: b/src/egg-gconf.h
+===================================================================
+--- /dev/null
++++ b/src/egg-gconf.h
 @@ -0,0 +1,42 @@
 +/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
 + *
@@ -159,10 +178,11 @@ diff -ruN ../gnome-power-manager-2.26.0_orig/src/egg-gconf.h src/egg-gconf.h
 +G_END_DECLS
 +
 +#endif /* __EGG_GCONF_H */
-diff -ruN ../gnome-power-manager-2.26.0_orig/src/gpm-common.h src/gpm-common.h
---- ../gnome-power-manager-2.26.0_orig/src/gpm-common.h	2009-02-18 17:45:39.000000000 +0100
-+++ src/gpm-common.h	2009-03-26 11:57:05.206803185 +0100
-@@ -87,6 +87,13 @@
+Index: b/src/gpm-common.h
+===================================================================
+--- a/src/gpm-common.h
++++ b/src/gpm-common.h
+@@ -87,6 +87,13 @@ G_BEGIN_DECLS
  #define GPM_CONF_BUTTON_HIBERNATE		GPM_CONF_DIR "/buttons/hibernate"
  #define GPM_CONF_BUTTON_POWER			GPM_CONF_DIR "/buttons/power"
  
@@ -176,9 +196,10 @@ diff -ruN ../gnome-power-manager-2.26.0_orig/src/gpm-common.h src/gpm-common.h
  /* general */
  #define GPM_CONF_DEBUG				GPM_CONF_DIR "/general/debug"
  #define GPM_CONF_SCHEMA_VERSION			GPM_CONF_DIR "/general/installed_schema"
-diff -ruN ../gnome-power-manager-2.26.0_orig/src/gpm-cpufreq.c src/gpm-cpufreq.c
---- ../gnome-power-manager-2.26.0_orig/src/gpm-cpufreq.c	1970-01-01 01:00:00.000000000 +0100
-+++ src/gpm-cpufreq.c	2009-03-26 11:57:11.943272804 +0100
+Index: b/src/gpm-cpufreq.c
+===================================================================
+--- /dev/null
++++ b/src/gpm-cpufreq.c
 @@ -0,0 +1,217 @@
 +/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
 + *
@@ -338,11 +359,11 @@ diff -ruN ../gnome-power-manager-2.26.0_orig/src/gpm-cpufreq.c src/gpm-cpufreq.c
 +	cpufreq->priv->conf = gconf_client_get_default ();
 +
 +	/* watch gnome-power-manager keys */
-+	gconf_client_add_dir(cpufreq->priv->conf, GPM_CONF_DIR, 
++	gconf_client_add_dir(cpufreq->priv->conf, GPM_CONF_DIR,
 +			     GCONF_CLIENT_PRELOAD_NONE, NULL);
 +
-+	gconf_client_notify_add (cpufreq->priv->conf, GPM_CONF_DIR, 
-+				 (GConfClientNotifyFunc)gpm_conf_gconf_key_changed_cb, 
++	gconf_client_notify_add (cpufreq->priv->conf, GPM_CONF_DIR,
++				 (GConfClientNotifyFunc)gpm_conf_gconf_key_changed_cb,
 +				 cpufreq, NULL, NULL);
 +
 +	/* we use ac_adapter for the ac-adapter-changed signal */
@@ -397,9 +418,10 @@ diff -ruN ../gnome-power-manager-2.26.0_orig/src/gpm-cpufreq.c src/gpm-cpufreq.c
 +	return cpufreq;
 +}
 +
-diff -ruN ../gnome-power-manager-2.26.0_orig/src/gpm-cpufreq.h src/gpm-cpufreq.h
---- ../gnome-power-manager-2.26.0_orig/src/gpm-cpufreq.h	1970-01-01 01:00:00.000000000 +0100
-+++ src/gpm-cpufreq.h	2009-03-25 12:48:18.998731946 +0100
+Index: b/src/gpm-cpufreq.h
+===================================================================
+--- /dev/null
++++ b/src/gpm-cpufreq.h
 @@ -0,0 +1,55 @@
 +/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
 + *
@@ -456,9 +478,10 @@ diff -ruN ../gnome-power-manager-2.26.0_orig/src/gpm-cpufreq.h src/gpm-cpufreq.h
 +
 +#endif	/* __GPMCPUFREQ_H */
 +
-diff -ruN ../gnome-power-manager-2.26.0_orig/src/gpm-manager.c src/gpm-manager.c
---- ../gnome-power-manager-2.26.0_orig/src/gpm-manager.c	2009-02-11 12:08:46.000000000 +0100
-+++ src/gpm-manager.c	2009-03-25 15:30:28.382209247 +0100
+Index: b/src/gpm-manager.c
+===================================================================
+--- a/src/gpm-manager.c
++++ b/src/gpm-manager.c
 @@ -57,6 +57,7 @@
  #include "gpm-prefs.h"
  #include "gpm-screensaver.h"
@@ -467,7 +490,7 @@ diff -ruN ../gnome-power-manager-2.26.0_orig/src/gpm-manager.c src/gpm-manager.c
  #include "gpm-brightness-kbd.h"
  #include "gpm-screensaver.h"
  #include "gpm-session.h"
-@@ -93,6 +94,7 @@
+@@ -93,6 +94,7 @@ struct GpmManagerPrivate
  	GpmBrightnessKbd	*brightness_kbd;
  	GpmFeedback		*feedback_kbd;
  	GpmBacklight		*backlight;
@@ -475,7 +498,7 @@ diff -ruN ../gnome-power-manager-2.26.0_orig/src/gpm-manager.c src/gpm-manager.c
  	EggConsoleKit		*console;
  	guint32         	 screensaver_ac_throttle_id;
  	guint32         	 screensaver_dpms_throttle_id;
-@@ -1629,6 +1631,8 @@
+@@ -1629,6 +1631,8 @@ gpm_manager_init (GpmManager *manager)
  						     G_OBJECT (manager->priv->backlight));
  	}
  
@@ -484,7 +507,7 @@ diff -ruN ../gnome-power-manager-2.26.0_orig/src/gpm-manager.c src/gpm-manager.c
  	/* use a visual widget */
  	manager->priv->feedback_kbd = gpm_feedback_new ();
  	gpm_feedback_set_icon_name (manager->priv->feedback_kbd, GPM_STOCK_BRIGHTNESS_KBD);
-@@ -1733,6 +1737,7 @@
+@@ -1733,6 +1737,7 @@ gpm_manager_finalize (GObject *object)
  	g_object_unref (manager->priv->button);
  	g_object_unref (manager->priv->brightness_kbd);
  	g_object_unref (manager->priv->backlight);
@@ -492,9 +515,10 @@ diff -ruN ../gnome-power-manager-2.26.0_orig/src/gpm-manager.c src/gpm-manager.c
  	g_object_unref (manager->priv->console);
  
  	G_OBJECT_CLASS (gpm_manager_parent_class)->finalize (object);
-diff -ruN ../gnome-power-manager-2.26.0_orig/src/gpm-prefs-core.c src/gpm-prefs-core.c
---- ../gnome-power-manager-2.26.0_orig/src/gpm-prefs-core.c	2009-03-02 11:06:48.000000000 +0100
-+++ src/gpm-prefs-core.c	2009-03-26 11:59:28.628807376 +0100
+Index: b/src/gpm-prefs-core.c
+===================================================================
+--- a/src/gpm-prefs-core.c
++++ b/src/gpm-prefs-core.c
 @@ -34,12 +34,14 @@
  #include <gconf/gconf-client.h>
  
@@ -519,7 +543,7 @@ diff -ruN ../gnome-power-manager-2.26.0_orig/src/gpm-prefs-core.c src/gpm-prefs-
  static void     gpm_prefs_finalize   (GObject	    *object);
  
  #define GPM_PREFS_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_PREFS, GpmPrefsPrivate))
-@@ -65,6 +69,8 @@
+@@ -65,6 +69,8 @@ struct GpmPrefsPrivate
  	gboolean		 can_hibernate;
  	guint			 idle_delay;
  	GConfClient		*conf;
@@ -528,7 +552,7 @@ diff -ruN ../gnome-power-manager-2.26.0_orig/src/gpm-prefs-core.c src/gpm-prefs-
  #ifdef HAVE_GCONF_DEFAULTS
  	PolKitGnomeAction	*default_action;
  #endif
-@@ -88,6 +94,13 @@
+@@ -88,6 +94,13 @@ G_DEFINE_TYPE (GpmPrefs, gpm_prefs, G_TY
  #define ACTION_BLANK_TEXT		_("Blank screen")
  #define ACTION_NOTHING_TEXT		_("Do nothing")
  
@@ -542,7 +566,7 @@ diff -ruN ../gnome-power-manager-2.26.0_orig/src/gpm-prefs-core.c src/gpm-prefs-
  /* If sleep time in a slider is set to 122 it is considered as never.
   * We use 122 because gnome-screensaver's idle delay can be pushed to 120.
   * We leave ourselves an extra minute past that (because our slider is always
-@@ -461,6 +474,45 @@
+@@ -461,6 +474,45 @@ gpm_prefs_action_combo_changed_cb (GtkWi
  }
  
  /**
@@ -579,7 +603,7 @@ diff -ruN ../gnome-power-manager-2.26.0_orig/src/gpm-prefs-core.c src/gpm-prefs-
 +
 +	g_free (value);
 +	gpm_pref_key = (char *) g_object_get_data (G_OBJECT (widget), "conf_key");
-+	egg_debug ("Changing %s to %s", gpm_pref_key, policy); 
++	egg_debug ("Changing %s to %s", gpm_pref_key, policy);
 +
 +	egg_gconf_set_string (prefs->priv->conf, gpm_pref_key, policy);
 +}
@@ -588,7 +612,7 @@ diff -ruN ../gnome-power-manager-2.26.0_orig/src/gpm-prefs-core.c src/gpm-prefs-
   * gpm_prefs_setup_action_combo:
   * @prefs: This prefs class instance
   * @widget_name: The GtkWidget name
-@@ -540,6 +592,95 @@
+@@ -540,6 +592,95 @@ gpm_prefs_setup_action_combo (GpmPrefs  
  }
  
  /**
@@ -684,7 +708,7 @@ diff -ruN ../gnome-power-manager-2.26.0_orig/src/gpm-prefs-core.c src/gpm-prefs-
   * gpm_prefs_checkbox_lock_cb:
   * @widget: The GtkWidget object
   * @gpm_pref_key: The GConf key for this preference setting.
-@@ -780,10 +921,16 @@
+@@ -780,10 +921,16 @@ prefs_setup_ac (GpmPrefs *prefs)
  				 ACTION_HIBERNATE,
  				 ACTION_SHUTDOWN,
  				 NULL};
@@ -695,13 +719,13 @@ diff -ruN ../gnome-power-manager-2.26.0_orig/src/gpm-prefs-core.c src/gpm-prefs-
  				      button_lid_actions);
 +
 +	if (prefs->priv->hal_cpufreq) {
-+		gpm_prefs_setup_processor_combo (prefs, "combobox_ac_cpu", 
++		gpm_prefs_setup_processor_combo (prefs, "combobox_ac_cpu",
 +						 GPM_CONF_CPUFREQ_POLICY_AC);
 +	}
  	gpm_prefs_setup_sleep_slider (prefs, "hscale_ac_computer",
  				      GPM_CONF_TIMEOUT_SLEEP_COMPUTER_AC);
  	gpm_prefs_setup_sleep_slider (prefs, "hscale_ac_display",
-@@ -797,6 +944,12 @@
+@@ -797,6 +944,12 @@ prefs_setup_ac (GpmPrefs *prefs)
  	set_idle_hscale_stops (prefs, "hscale_ac_computer", prefs->priv->idle_delay);
  	set_idle_hscale_stops (prefs, "hscale_ac_display", prefs->priv->idle_delay);
  
@@ -714,7 +738,7 @@ diff -ruN ../gnome-power-manager-2.26.0_orig/src/gpm-prefs-core.c src/gpm-prefs-
  	if (prefs->priv->has_button_lid == FALSE) {
  		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_ac_lid");
  		gtk_widget_hide_all (widget);
-@@ -815,6 +968,7 @@
+@@ -815,6 +968,7 @@ prefs_setup_battery (GpmPrefs *prefs)
  	GtkWidget *widget;
  	GtkWidget *notebook;
  	gint page;
@@ -722,18 +746,18 @@ diff -ruN ../gnome-power-manager-2.26.0_orig/src/gpm-prefs-core.c src/gpm-prefs-
  
  	const gchar  *button_lid_actions[] =
  				{ACTION_NOTHING,
-@@ -844,6 +998,10 @@
+@@ -844,6 +998,10 @@ prefs_setup_battery (GpmPrefs *prefs)
  	gpm_prefs_setup_action_combo (prefs, "combobox_battery_critical",
  				      GPM_CONF_ACTIONS_CRITICAL_BATT,
  				      battery_critical_actions);
 +	if (prefs->priv->hal_cpufreq) {
-+		gpm_prefs_setup_processor_combo (prefs, "combobox_battery_cpu", 
++		gpm_prefs_setup_processor_combo (prefs, "combobox_battery_cpu",
 +						 GPM_CONF_CPUFREQ_POLICY_BATT);
 +	}
  	gpm_prefs_setup_sleep_slider (prefs, "hscale_battery_computer",
  				      GPM_CONF_TIMEOUT_SLEEP_COMPUTER_BATT);
  	gpm_prefs_setup_sleep_slider (prefs, "hscale_battery_display",
-@@ -864,6 +1022,12 @@
+@@ -864,6 +1022,12 @@ prefs_setup_battery (GpmPrefs *prefs)
  	set_idle_hscale_stops (prefs, "hscale_battery_computer", prefs->priv->idle_delay);
  	set_idle_hscale_stops (prefs, "hscale_battery_display", prefs->priv->idle_delay);
  
@@ -746,7 +770,7 @@ diff -ruN ../gnome-power-manager-2.26.0_orig/src/gpm-prefs-core.c src/gpm-prefs-
  	if (prefs->priv->has_button_lid == FALSE) {
  		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_battery_lid");
  		gtk_widget_hide_all (widget);
-@@ -1039,6 +1203,8 @@
+@@ -1039,6 +1203,8 @@ gpm_prefs_init (GpmPrefs *prefs)
  
  	prefs->priv = GPM_PREFS_GET_PRIVATE (prefs);
  
@@ -755,7 +779,7 @@ diff -ruN ../gnome-power-manager-2.26.0_orig/src/gpm-prefs-core.c src/gpm-prefs-
  	prefs->priv->conf = gconf_client_get_default ();
  	/* watch gnome-power-manager keys */
  	gconf_client_add_dir (prefs->priv->conf, GPM_CONF_DIR,
-@@ -1063,6 +1229,10 @@
+@@ -1063,6 +1229,10 @@ gpm_prefs_init (GpmPrefs *prefs)
  	prefs->priv->can_hibernate = gpm_dbus_method_bool ("CanHibernate");
  	egg_debug ("caps=%i", caps);
  
@@ -766,7 +790,7 @@ diff -ruN ../gnome-power-manager-2.26.0_orig/src/gpm-prefs-core.c src/gpm-prefs-
  #ifdef HAVE_GCONF_DEFAULTS
  	/* use custom widgets */
  	glade_set_custom_handler (gpk_prefs_create_custom_widget, prefs);
-@@ -1124,6 +1294,10 @@
+@@ -1124,6 +1294,10 @@ gpm_prefs_finalize (GObject *object)
  
  	g_object_unref (prefs->priv->conf);
  
@@ -777,10 +801,11 @@ diff -ruN ../gnome-power-manager-2.26.0_orig/src/gpm-prefs-core.c src/gpm-prefs-
  	G_OBJECT_CLASS (gpm_prefs_parent_class)->finalize (object);
  }
  
-diff -ruN ../gnome-power-manager-2.26.0_orig/src/Makefile.am src/Makefile.am
---- ../gnome-power-manager-2.26.0_orig/src/Makefile.am	2009-02-05 12:33:00.000000000 +0100
-+++ src/Makefile.am	2009-03-26 11:51:41.524186060 +0100
-@@ -95,6 +95,8 @@
+Index: b/src/Makefile.am
+===================================================================
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -95,6 +95,8 @@ gnome_power_statistics_CFLAGS =				\
  gnome_power_preferences_SOURCES =			\
  	egg-debug.h					\
  	egg-debug.c					\
@@ -789,7 +814,7 @@ diff -ruN ../gnome-power-manager-2.26.0_orig/src/Makefile.am src/Makefile.am
  	egg-unique.h					\
  	egg-unique.c					\
  	egg-dbus-proxy.h				\
-@@ -141,6 +143,8 @@
+@@ -141,6 +143,8 @@ gnome_power_preferences_CFLAGS =			\
  gnome_power_manager_SOURCES =				\
  	egg-debug.h					\
  	egg-debug.c					\
@@ -798,7 +823,7 @@ diff -ruN ../gnome-power-manager-2.26.0_orig/src/Makefile.am src/Makefile.am
  	egg-dbus-monitor.h				\
  	egg-dbus-monitor.c				\
  	egg-dbus-proxy.h				\
-@@ -159,6 +163,8 @@
+@@ -159,6 +163,8 @@ gnome_power_manager_SOURCES =				\
  	gpm-notify.c					\
  	gpm-phone.h					\
  	gpm-phone.c					\
