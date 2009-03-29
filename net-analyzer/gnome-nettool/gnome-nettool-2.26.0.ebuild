@@ -1,7 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/net-analyzer/gnome-nettool/gnome-nettool-2.22.1.ebuild,v 1.5 2009/03/11 02:24:20 dang Exp $
-EAPI=1
+
+EAPI="1"
 
 inherit gnome2 eutils
 
@@ -10,13 +11,13 @@ HOMEPAGE="http://www.gnome.org/projects/gnome-network/"
 
 LICENSE="GPL-2"
 SLOT="0"
-# Dropped ~x86-fbsd (see epatch below)
+# FIXME: Dropped ~x86-fbsd (see epatch below)
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86"
-IUSE=""
+IUSE="debug"
 
 COMMON_DEPEND=">=x11-libs/gtk+-2.6.0:2
-	>=gnome-base/libglade-2:2.0
-	>=gnome-base/gconf-1.1.1:2
+	>=gnome-base/libglade-2
+	>=gnome-base/gconf-2
 	gnome-base/libgtop:2"
 RDEPEND="${COMMON_DEPEND}
 	|| ( net-analyzer/traceroute sys-freebsd/freebsd-usbin )
