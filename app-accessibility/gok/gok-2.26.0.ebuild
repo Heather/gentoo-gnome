@@ -10,8 +10,9 @@ HOMEPAGE="http://www.gok.ca/"
 LICENSE="LGPL-2"
 SLOT="1"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
-IUSE="doc usb"
+IUSE="accessibility doc usb"
 
+# accessibility will disappear with new xorg-server (1.6)
 RDEPEND=">=dev-libs/glib-2.17.4
 	>=gnome-base/libgnomeui-2
 	>=gnome-extra/at-spi-1.5.2
@@ -28,7 +29,7 @@ RDEPEND=">=dev-libs/glib-2.17.4
 	usb? ( >=dev-libs/libusb-0.1.11 )
 	x11-libs/libXi
 	x11-libs/libX11
-	x11-libs/libXevie"
+	accessibility? ( x11-libs/libXevie )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40.1
 	>=dev-util/pkgconfig-0.9
@@ -40,13 +41,10 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS README"
 
-# So it doesn't break when building kbd files
-#MAKEOPTS="${MAKEOPTS} -j1"
-
 pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_enable usb libusb-input)
-		--enable-xevie"
+		$(use_enable accessibility xevie)"
 }
 
 src_test() {
