@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils gnome2
+inherit autotools eutils gnome2
 
 DESCRIPTION="Multimedia related programs for the GNOME desktop"
 HOMEPAGE="http://ronald.bitfreak.net/gnome-media.php"
@@ -60,6 +60,15 @@ pkg_setup() {
 		$(use_enable ipv6)
 		$(use_enable pulseaudio)
 		$(use_enable !pulseaudio gstmix)"
+}
+
+src_prepare() {
+	gnome2_src_prepare
+
+	if use gnomecd; then
+		epatch "${FILESDIR}/${P}-missing-cddbslave-cflags.patch"
+		eautoreconf
+	fi
 }
 
 src_compile() {

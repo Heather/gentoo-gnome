@@ -1,0 +1,22 @@
+--- ../gnome-media-2.26.0_orig/gnome-cd/access/Makefile.am	2008-09-07 20:54:07.000000000 +0200
++++ gnome-cd/access/Makefile.am	2009-03-23 15:19:45.952339992 +0100
+@@ -3,7 +3,8 @@
+ 	$(MEDIA_CFLAGS)	\
+ 	-I$(top_srcdir)/cddb-slave2	\
+ 	$(GAILUTIL_CFLAGS) \
+-	$(LIBXML2_CFLAGS)
++	$(LIBXML2_CFLAGS)		\
++	$(CDDBSLAVE_CFLAGS)
+ 
+ noinst_LTLIBRARIES = libgnomecdaccess.la
+ 
+--- ../gnome-media-2.26.0_orig/gnome-cd/Makefile.am	2008-09-07 20:54:07.000000000 +0200
++++ gnome-cd/Makefile.am	2009-03-23 15:20:23.923000140 +0100
+@@ -15,6 +15,7 @@
+ 	$(GNOMECD_CFLAGS)			\
+ 	$(GAILUTIL_CFLAGS)			\
+ 	$(GST_CFLAGS)				\
++	$(CDDBSLAVE_CFLAGS)			\
+ 	-DGNOMELOCALEDIR=\""$(prefix)/$(DATADIRNAME)/locale"\"	\
+ 	-DDATADIR=\""$(datadir)"\"		\
+ 	-DGNOME_ICONDIR=\""$(datadir)/pixmaps"\"	\
