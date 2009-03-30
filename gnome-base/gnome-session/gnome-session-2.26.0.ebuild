@@ -11,7 +11,7 @@ SRC_URI="${SRC_URI}
 
 LICENSE="GPL-2 LGPL-2 FDL-1.1"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc64 ~sparc ~x86"
+KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 
 IUSE="branding doc ipv6 policykit"
 
@@ -29,6 +29,7 @@ RDEPEND=">=dev-libs/glib-2.16
 	x11-libs/libXtst
 	x11-apps/xdpyinfo"
 DEPEND="${RDEPEND}
+	>=dev-lang/perl-5
 	>=sys-devel/gettext-0.10.40
 	>=dev-util/pkgconfig-0.17
 	>=dev-util/intltool-0.40
