@@ -56,7 +56,8 @@ RDEPEND=">=dev-libs/glib-2.15
 	python? (
 		dev-lang/python[threads]
 		>=dev-python/pygtk-2.12
-		>=dev-python/gdata-1 )
+		dev-python/pyxdg
+		dev-python/gdata )
 	tracker? (
 		>=app-misc/tracker-0.5.3
 		>=gnome-base/libgnomeui-2 )"
@@ -93,7 +94,7 @@ pkg_setup() {
 	use lirc && plugins="${plugins},lirc"
 
 	# Test again before pushing to the tree.
-	use python && plugins="${plugins},youtube"
+	use python && plugins="${plugins},youtube,opensubtitles"
 	use python && plugins="${plugins},pythonconsole"
 
 	use tracker && plugins="${plugins},tracker"
@@ -106,8 +107,11 @@ pkg_setup() {
 		$(use_enable python)"
 }
 
-src_unpack() {
-	gnome2_src_unpack
+src_prepare() {
+	gnome2_src_prepare
+
+	# http://svn.gnome.org/viewvc/totem?view=revision&revision=6177
+	epatch "${FILESDIR}/${P}-upstream-brown-bag-revert-opensubtitles.patch"
 
 	# disable pyc compiling
 	mv py-compile py-compile.orig
@@ -127,7 +131,10 @@ src_compile() {
 
 pkg_postinst() {
 	gnome2_pkg_postinst
-	use python && python_mod_optimize /usr/$(get_libdir)/totem/plugins
+	if use python; then
+		python_need_rebuild
+		python_mod_optimize /usr/$(get_libdir)/totem/plugins
+	fi
 
 	ewarn
 	ewarn "If totem doesn't play some video format, please check your"

@@ -1,0 +1,15 @@
+--- branches/gnome-2-26/src/plugins/opensubtitles/opensubtitles.py	2009/03/18 19:56:08	6176
++++ branches/gnome-2-26/src/plugins/opensubtitles/opensubtitles.py	2009/03/18 22:16:59	6177
+@@ -5,9 +5,12 @@
+ import threading
+ import xdg.BaseDirectory
+ from os import sep
++import gettext
+ 
+ from hash import hashFile
+ 
++D_ = gettext.dgettext
++
+ USER_AGENT = 'Totem'
+ OK200 = '200 OK'
+ TOTEM_REMOTE_COMMAND_REPLACE = 14
