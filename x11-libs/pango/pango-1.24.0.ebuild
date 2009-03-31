@@ -3,7 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/pango/pango-1.22.4.ebuild,v 1.2 2009/01/18 21:02:37 eva Exp $
 
 inherit eutils gnome2 multilib
-
+# FIXME: test
 DESCRIPTION="Text rendering and layout library"
 HOMEPAGE="http://www.pango.org/"
 
