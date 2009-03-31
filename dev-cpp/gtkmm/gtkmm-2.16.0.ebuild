@@ -10,13 +10,13 @@ HOMEPAGE="http://www.gtkmm.org"
 LICENSE="LGPL-2.1"
 SLOT="2.4"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="accessibility doc examples test"
+IUSE="doc examples test"
 
 RDEPEND=">=dev-cpp/glibmm-2.19
 	>=x11-libs/gtk+-2.15.5
 	>=dev-cpp/cairomm-1.2.2
 	>=dev-cpp/pangomm-2.14.0
-	accessibility? ( >=dev-libs/atk-1.9.1 )"
+	>=dev-libs/atk-1.9.1"
 
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
@@ -25,7 +25,7 @@ DOCS="AUTHORS CHANGES ChangeLog PORTING NEWS README"
 
 pkg_setup() {
 	G2CONF="${G2CONF}
-		$(use_enable accessibility api-atkmm)
+		--enable-api-atkmm
 		$(use_enable doc docs)
 		$(use_enable examples demos)"
 }
