@@ -27,6 +27,7 @@ Tests:
 * gnome-power-manager: Tests fail[5]
 * gtk+: fails tests (xrandr 1.2.99?)
 * gnome-applets: fails tests at invest-applet (stupidity?)
+* gnome-keyring: tests fail in various[6] ways[7] for different people[8]
 
 Enhancements:
 =============
@@ -38,3 +39,6 @@ Enhancements:
 3. http://bugs.gentoo.org/show_bug.cgi?id=261339
 4. http://bugzilla.gnome.org/show_bug.cgi?id=550170
 5. http://bugzilla.gnome.org/show_bug.cgi?id=575500
+6. http://bugzilla.gnome.org/show_bug.cgi?id=576496
+7. http://bugzilla.gnome.org/show_bug.cgi?id=553164
+8. http://bugzilla.gnome.org/show_bug.cgi?id=577397

@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-keyring/gnome-keyring-2.22.3.ebuild,v 1.1 2008/07/02 21:32:43 eva Exp $
 
-inherit gnome2 pam
+inherit gnome2 pam virtualx
 
 DESCRIPTION="Password and keyring managing daemon"
 HOMEPAGE="http://www.gnome.org/"
@@ -42,7 +42,7 @@ pkg_setup() {
 }
 
 src_test() {
-	emake check || die "emake check failed!"
+	Xemake check || die "emake check failed!"
 
-	emake -C tests run || die "running tests failed!"
+	Xemake -C tests run || die "running tests failed!"
 }
