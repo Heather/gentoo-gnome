@@ -20,6 +20,11 @@ DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
 	doc? ( dev-util/gtk-doc )"
 
+# FIXME: upstream bug #577774
+RESTRICT="test"
+
+G2CONF="${G2CONF} --disable-static"
+
 src_install() {
 	emake DESTDIR="${D}" install || die "install failed"
 }
