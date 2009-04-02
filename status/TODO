@@ -30,7 +30,7 @@ gnome-base/gnome-panel-2.26.0
  * tarball generated with broken gtk-doc, revisit me.
 gnome-base/librsvg-2.26.0
  * USEify mozilla support (?)
-gnome-base/nautilus-2.26.0
+gnome-base/nautilus-2.26.1
  * dev-libs/libunique needs KEYWORDS
 gnome-extra/evolution-data-server-2.26.0
  * tarball generated with broken gtk-doc, revisit me.

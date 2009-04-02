@@ -13,16 +13,17 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="beagle doc gnome tracker xmp"
 
 # FIXME: dev-libs/libunique needs KEYWORDS
-RDEPEND="
-	>=dev-libs/glib-2.19.0
+# not adding gnome-base/gail because it is in gtk+
+RDEPEND=">=dev-libs/glib-2.19.0
 	>=gnome-base/gnome-desktop-2.25.5
 	>=x11-libs/pango-1.1.2
-	>=x11-libs/gtk+-2.13.0
+	>=x11-libs/gtk+-2.16.0
 	>=dev-libs/libxml2-2.4.7
 	>=media-libs/libexif-0.5.12
 	>=gnome-base/gconf-2.0
 	>=gnome-base/gvfs-0.1.2
 	dev-libs/libunique
+	dev-libs/dbus-glib
 	x11-libs/libXft
 	x11-libs/libXrender
 	beagle? ( || (
@@ -32,6 +33,7 @@ RDEPEND="
 	xmp? ( >=media-libs/exempi-2 )"
 
 DEPEND="${RDEPEND}
+	>=dev-lang/perl-5
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.40.1
