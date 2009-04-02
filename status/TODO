@@ -45,6 +45,7 @@ net-analyzer/gnome-nettool-2.26.0
  * Dropped ~x86-fbsd (see epatch below)
 net-im/empathy-2.26.0.1
  * libnotify & libcanberra hard deps
+ * Tests are broken, upstream bug #576785
  * This needs to be upstreamed before moving to tree
 net-misc/vinagre-2.26.0
  * make gnome-panel applet option ?
