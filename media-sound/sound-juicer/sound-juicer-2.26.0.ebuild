@@ -1,7 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-sound/sound-juicer/sound-juicer-2.24.0.ebuild,v 1.7 2009/03/11 02:23:02 dang Exp $
-EAPI=2
+
+EAPI="2"
 
 inherit eutils gnome2
 
@@ -13,15 +14,16 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="test"
 
+# FIXME: possibly automagic dual slot dep on musicbrainz
 COMMON_DEPEND=">=dev-libs/glib-2.16
-	>=x11-libs/gtk+-2.12
+	>=x11-libs/gtk+-2.14
 
-	gnome-base/libglade:2.0
-	gnome-base/gconf:2
+	>=gnome-base/libglade-2
+	>=gnome-base/gconf-2
 	media-libs/libcanberra[gtk]
 	dev-libs/dbus-glib
 
-	>=media-libs/musicbrainz-2.1.3:1
+	>=media-libs/musicbrainz-3:3
 	>=dev-libs/libcdio-0.70
 	>=gnome-extra/gnome-media-2.11.91
 	>=app-cdr/brasero-0.9.1

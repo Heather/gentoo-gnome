@@ -47,6 +47,8 @@ gnome-extra/yelp-2.26.0
  * Add patch to make lzma-utils not automagic and use_enable here
 mail-client/evolution-2.26.0
  * libpst automagic dep
+media-sound/sound-juicer-2.26.0
+ * possibly automagic dual slot dep on musicbrainz
 media-video/totem-2.26.0-r1
  * why does it need write access here, probably need to set up a fake
 net-analyzer/gnome-nettool-2.26.0
