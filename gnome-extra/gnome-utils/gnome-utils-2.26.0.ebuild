@@ -13,7 +13,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc hal ipv6 zlib"
 
 RDEPEND=">=dev-libs/glib-2.16.0
-	>=x11-libs/gtk+-2.13
+	>=x11-libs/gtk+-2.14
 	>=gnome-base/gnome-desktop-2.9.91
 	>=gnome-base/libgnome-2.13.2
 	>=gnome-base/libgnomeui-2.13.7
@@ -24,7 +24,8 @@ RDEPEND=">=dev-libs/glib-2.16.0
 	>=gnome-base/gconf-2
 	sys-fs/e2fsprogs
 	hal? ( >=sys-apps/hal-0.5 )
-	x11-libs/libXext"
+	x11-libs/libXext
+	zlib? ( sys-libs/zlib )"
 
 DEPEND="${RDEPEND}
 	x11-proto/xextproto
@@ -42,7 +43,6 @@ pkg_setup() {
 		$(use_enable hal)
 		$(use_enable hal gfloppy)
 		$(use_enable zlib)
-		--enable-console-helper=no
 		--disable-schemas-install
 		--disable-scrollkeeper"
 }
