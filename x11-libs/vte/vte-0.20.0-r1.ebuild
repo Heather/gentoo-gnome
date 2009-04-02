@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/vte/vte-0.17.4-r3.ebuild,v 1.2 2009/01/05 13:29:29 remi Exp $
 
-EAPI="1"
+EAPI="2"
 
 inherit gnome2 eutils
 
@@ -39,8 +39,12 @@ pkg_setup() {
 		$(use_enable python)"
 }
 
-src_unpack() {
-	gnome2_src_unpack
-	# Bug #249618
+src_prepare() {
+	gnome2_src_prepare
+
+	# backspace broken within screen, bug #249618
 	epatch "${FILESDIR}/${PN}-0.17.4-no-null-backspace.patch"
+
+	# Fix tests, upstream bug #576504
+	epatch "${FILESDIR}/${P}-tests.patch"
 }
