@@ -35,6 +35,8 @@ gnome-extra/evolution-data-server-2.26.0
 gnome-extra/gnome-media-2.26.0
  * libcanberra is automagic
  * dep on pulseaudio-0.9.15 when it is out.
+gnome-extra/gnome-user-docs-2.26.0
+ * fails tests, upstream bug #577778
 gnome-extra/yelp-2.26.0
  * Add patch to make lzma-utils not automagic and use_enable here
 mail-client/evolution-2.26.0
