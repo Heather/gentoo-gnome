@@ -17,7 +17,7 @@ IUSE="python"
 RDEPEND=">=x11-libs/gtk+-2.11
 	>=dev-libs/glib-2.13
 	>=gnome-base/gconf-2.8
-	>=net-libs/libsoup-2.25.1:2.4
+	>=net-libs/libsoup-2.25.1:2.4[gnome]
 	>=dev-libs/libxml2-2.6.0
 	python? (
 		>=dev-python/pygobject-2
@@ -30,12 +30,10 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog MAINTAINERS NEWS"
 
-# 2.25.5. fails its test, please check on bump
-RESTRICT="test"
-
 pkg_setup() {
-	# --enable-locations-compression
+	# FIXME: decide what to do with --enable-locations-compression
 	G2CONF="${G2CONF}
-		--disable-all-translations-in-one-xml --disable-static
+		--disable-all-translations-in-one-xml
+		--disable-static
 		$(use_enable python)"
 }

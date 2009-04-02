@@ -2,6 +2,8 @@ Ebuild Notices:
 ===============
 app-text/evince-2.26.0
  * enable gobject-introspection when we have an ebuild for it.
+dev-libs/libgweather-2.26.0
+ * decide what to do with --enable-locations-compression
 dev-libs/libunique-1.0.8
  * automagic dbus dependency
 dev-libs/totem-pl-parser-2.26.1
