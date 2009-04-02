@@ -9,7 +9,7 @@ HOMEPAGE="http://www.gnome.org/projects/eog/"
 
 LICENSE="GPL-2"
 SLOT="1"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~pp64 ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~pp64 ~ppc ~sparc ~x86 ~x86-fbsd"
 IUSE="dbus doc exif lcms python xmp"
 
 RDEPEND=">=x11-libs/gtk+-2.13.1
