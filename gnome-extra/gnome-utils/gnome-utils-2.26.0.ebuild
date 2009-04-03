@@ -10,7 +10,7 @@ HOMEPAGE="http://www.gnome.org/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="doc hal ipv6 zlib"
+IUSE="doc hal ipv6 test"
 
 RDEPEND=">=dev-libs/glib-2.16.0
 	>=x11-libs/gtk+-2.14
@@ -24,8 +24,7 @@ RDEPEND=">=dev-libs/glib-2.16.0
 	>=gnome-base/gconf-2
 	sys-fs/e2fsprogs
 	hal? ( >=sys-apps/hal-0.5 )
-	x11-libs/libXext
-	zlib? ( sys-libs/zlib )"
+	x11-libs/libXext"
 
 DEPEND="${RDEPEND}
 	x11-proto/xextproto
@@ -42,7 +41,13 @@ pkg_setup() {
 		$(use_enable ipv6)
 		$(use_enable hal)
 		$(use_enable hal gfloppy)
-		$(use_enable zlib)
+		--enable-zlib
 		--disable-schemas-install
 		--disable-scrollkeeper"
+}
+
+src_unpack() {
+	gnome2_src_unpack
+
+	use test || { sed -ie 's/ tests//' logview/Makefile* || die "sed failed"; }
 }
