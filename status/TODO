@@ -26,6 +26,10 @@ gnome-base/gnome-control-center-2.26.0
  * policykit-gnome is automagic for about-me capplet.
 gnome-base/gnome-desktop-2.26.0
  * Python deps are needed for gnome-about but not
+gnome-base/gnome-2.26.0
+ * Rephrase to teach about using different WMs instead, as metacity is the default anyway
+ * but first check WINDOW_MANAGER is still honored in 2.24. gnome-session-2.24 might have lost
+ * support for it, but we don't ship with gnome-session-2.24 yet
 gnome-base/gnome-menus-2.26.0
  * fix autofoo and report upstream
 gnome-base/gnome-panel-2.26.0
@@ -41,6 +45,8 @@ gnome-extra/gnome-media-2.26.0
  * dep on pulseaudio-0.9.15 when it is out.
 gnome-extra/gnome-user-docs-2.26.0
  * fails tests, upstream bug #577778
+gnome-extra/gnome-user-share-2.26.0
+ * could libnotify be made optional ?
 gnome-extra/gucharmap-2.26.0
  * add gobject-introspection support once available
 gnome-extra/yelp-2.26.0
