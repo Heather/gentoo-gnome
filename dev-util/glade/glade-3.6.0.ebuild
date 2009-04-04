@@ -29,7 +29,7 @@ DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.19
 	sys-devel/gettext
 	app-text/scrollkeeper
-	app-text/gnome-doc-utils
+	>=app-text/gnome-doc-utils-0.9
 	doc? ( >=dev-util/gtk-doc-1.9 )
 "
 
