@@ -14,7 +14,7 @@ IUSE="doc examples"
 
 RDEPEND="=x11-libs/gtksourceview-1.8*
 	>=dev-python/libgnomeprint-python-2.25.90
-	!<dev-python/gnome-python-desktop-2.25"
+	!<dev-python/gnome-python-desktop-2.22.0-r10"
 DEPEND="${RDEPEND}"
 
 EXAMPLES="examples/gtksourceview/*"

@@ -14,7 +14,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="examples"
 
 RDEPEND=">=x11-libs/libwnck-2.19.3
-	!<dev-python/gnome-python-desktop-2.25"
+	!<dev-python/gnome-python-desktop-2.22.0-r10"
 DEPEND="${RDEPEND}"
 
 EXAMPLES="examples/wnck_example.py"

@@ -15,5 +15,5 @@ IUSE=""
 
 RDEPEND=">=gnome-base/gnome-desktop-2.10.0
 	>=dev-python/gnome-vfs-python-2.22
-	!<dev-python/gnome-python-desktop-2.25"
+	!<dev-python/gnome-python-desktop-2.22.0-r10"
 DEPEND="${RDEPEND}"

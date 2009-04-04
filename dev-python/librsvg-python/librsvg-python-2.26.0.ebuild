@@ -15,7 +15,7 @@ IUSE="examples"
 
 RDEPEND=">=gnome-base/librsvg-2.13.93
 	dev-python/pycairo
-	!<dev-python/gnome-python-desktop-2.25"
+	!<dev-python/gnome-python-desktop-2.22.0-r10"
 DEPEND="${RDEPEND}"
 
 EXAMPLES="examples/rsvg/*"

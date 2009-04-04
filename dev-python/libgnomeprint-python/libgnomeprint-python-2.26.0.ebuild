@@ -16,7 +16,7 @@ IUSE="doc examples"
 RDEPEND=">=gnome-base/libgnomeprint-2.2.0
 	>=gnome-base/libgnomeprintui-2.2.0
 	>=dev-python/libgnomecanvas-python-2.25.90
-	!<dev-python/gnome-python-desktop-2.25"
+	!<dev-python/gnome-python-desktop-2.22.0-r10"
 DEPEND="${RDEPEND}"
 
 EXAMPLES="examples/gnomeprint/*"
