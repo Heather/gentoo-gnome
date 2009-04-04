@@ -37,7 +37,7 @@ RDEPEND="
 	>=x11-libs/libwnck-2.26.0
 	>=x11-wm/metacity-2.26.0
 
-	>=gnome-base/gnome-keyring-2.26.0-r1
+	>=gnome-base/gnome-keyring-2.26.0
 	>=app-crypt/seahorse-2.26.0
 
 	>=gnome-base/gnome-vfs-2.24.1
@@ -56,7 +56,7 @@ RDEPEND="
 
 	>=gnome-extra/bug-buddy-2.26.0
 	>=gnome-base/libgnomekbd-2.26.0
-	>=gnome-base/gnome-settings-daemon-2.26.0
+	>=gnome-base/gnome-settings-daemon-2.25.92
 	>=gnome-base/gnome-control-center-2.26.0
 
 	>=gnome-base/gvfs-1.2.0
@@ -127,7 +127,7 @@ RDEPEND="
 
 	>=gnome-extra/gtkhtml-3.26.0
 	>=mail-client/evolution-2.26.0
-	>=gnome-extra/evolution-data-server-2.26.0-r1
+	>=gnome-extra/evolution-data-server-2.26.0
 	>=gnome-extra/evolution-webcal-2.26.0
 
 	>=net-misc/vino-2.26.0
@@ -135,7 +135,7 @@ RDEPEND="
 	>=app-admin/pessulus-2.26.0
 	ldap? (
 		>=app-admin/sabayon-2.25.0
-		>=net-im/ekiga-3.2.0 )
+		>=net-im/ekiga-2.0.12 )
 
 	>=gnome-extra/gnome-screensaver-2.26.0
 	>=x11-misc/alacarte-0.11.10
