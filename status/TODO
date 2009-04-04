@@ -9,7 +9,7 @@ dev-libs/libgweather-2.26.0
 dev-libs/libunique-1.0.8
  * automagic dbus dependency
 dev-libs/totem-pl-parser-2.26.1
- * upstream bug #577774
+ * tests broken with USE="-doc" upstream bug #577774
 gnome-base/gconf-2.26.0
  * add policykit support
 gnome-base/gdm-2.24.1
@@ -50,6 +50,8 @@ mail-client/evolution-2.26.0
 media-sound/sound-juicer-2.26.0
  * possibly automagic dual slot dep on musicbrainz
 media-video/totem-2.26.0-r1
+ * why does it need write access here, probably need to set up a fake
+media-video/totem-2.26.1
  * why does it need write access here, probably need to set up a fake
 net-analyzer/gnome-nettool-2.26.0
  * Dropped ~x86-fbsd (see epatch below)

@@ -2,7 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/totem-pl-parser/totem-pl-parser-2.24.3.ebuild,v 1.1 2008/12/21 15:52:20 eva Exp $
 
-inherit gnome.org
+GCONF_DEBUG="no"
+
+inherit gnome2
 
 DESCRIPTION="Playlist parsing library"
 HOMEPAGE="http://www.gnome.org/projects/totem/"
@@ -20,7 +22,7 @@ DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
 	doc? ( dev-util/gtk-doc )"
 
-# FIXME: upstream bug #577774
+# FIXME: tests broken with USE="-doc" upstream bug #577774
 RESTRICT="test"
 
 G2CONF="${G2CONF} --disable-static"
