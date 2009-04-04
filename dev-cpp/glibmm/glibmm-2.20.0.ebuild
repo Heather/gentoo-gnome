@@ -13,10 +13,10 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc examples test"
 
 RDEPEND=">=dev-libs/libsigc++-2.2
-		 >=dev-libs/glib-2.19.8"
+	>=dev-libs/glib-2.19.8"
 DEPEND="${RDEPEND}
-		dev-util/pkgconfig
-		doc? ( app-doc/doxygen )"
+	dev-util/pkgconfig
+	doc? ( app-doc/doxygen )"
 
 DOCS="AUTHORS ChangeLog NEWS README"
 
@@ -25,12 +25,14 @@ src_unpack() {
 
 	if ! use test; then
 		# don't waste time building tests
-		sed -i 's/^\(SUBDIRS =.*\)tests\(.*\)$/\1\2/' Makefile.in || die "sed failed"
+		sed 's/^\(SUBDIRS =.*\)tests\(.*\)$/\1\2/' \
+			-i Makefile.am Makefile.in || die "sed 1 failed"
 	fi
 
 	if ! use examples; then
 		# don't waste time building examples
-		sed -i 's/^\(SUBDIRS =.*\)examples\(.*\)$/\1\2/' Makefile.in || die "sed failed"
+		sed 's/^\(SUBDIRS =.*\)examples\(.*\)$/\1\2/' \
+			-i Makefile.am Makefile.in || die "sed 2 failed"
 	fi
 }
 
