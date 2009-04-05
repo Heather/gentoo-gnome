@@ -31,7 +31,7 @@ RDEPEND=">=dev-libs/glib-2.19
 	fuse? ( sys-fs/fuse )
 	gnome? ( >=gnome-base/gconf-2.0 )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-1.0 )
-	gphoto2? ( >=media-libs/libgphoto2-2.4[exif] )
+	gphoto2? ( >=media-libs/libgphoto2-2.4 )
 	hal? ( >=sys-apps/hal-0.5.10 )
 	samba? ( >=net-fs/samba-3 )"
 DEPEND="${RDEPEND}
