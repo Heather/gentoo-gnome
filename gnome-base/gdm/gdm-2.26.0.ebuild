@@ -20,47 +20,49 @@ IUSE="accessibility debug ipv6 gnome-keyring policykit selinux tcpd xinerama $IU
 GDM_EXTRA="${PN}-2.20.9-gentoo-files-r1"
 
 SRC_URI="${SRC_URI}
-		 mirror://gentoo/${GDM_EXTRA}.tar.bz2"
+	mirror://gentoo/${GDM_EXTRA}.tar.bz2"
 
 # FIXME: automagic libxklavier check
 RDEPEND=">=dev-libs/dbus-glib-0.74
-		 >=dev-libs/glib-2.15.4
-		 >=x11-libs/gtk+-2.10.0
-		 >=x11-libs/pango-1.3
-		 >=gnome-base/libglade-2
-		 >=gnome-base/gconf-2.6.1
-		 >=gnome-base/gnome-panel-2
-		 >=x11-libs/libxklavier-3.5
-		 x11-libs/libXft
-		 app-text/iso-codes
+	>=dev-libs/glib-2.15.4
+	>=x11-libs/gtk+-2.10.0
+	>=x11-libs/pango-1.3
+	>=gnome-base/libglade-2
+	>=gnome-base/gconf-2.6.1
+	>=gnome-base/gnome-panel-2
+	>=x11-libs/libxklavier-3.5
+	x11-libs/libXft
+	app-text/iso-codes
 
-		 x11-libs/gksu
-		 x11-libs/libXi
-		 x11-libs/libXau
-		 x11-libs/libX11
-		 x11-libs/libXext
-		 x11-apps/sessreg
-		 x11-libs/libXdmcp
-		 virtual/pam
-		 sys-auth/pambase[gnome-keyring?]
-		 sys-auth/consolekit
+	x11-libs/gksu
+	x11-libs/libXi
+	x11-libs/libXau
+	x11-libs/libX11
+	x11-libs/libXext
+	x11-apps/sessreg
+	x11-libs/libXdmcp
+	virtual/pam
+	sys-auth/pambase[gnome-keyring?]
+	sys-auth/consolekit
 
-		 accessibility? ( x11-libs/libXevie )
-		 gnome-keyring? ( >=gnome-base/gnome-keyring-2.22[pam] )
-		 policykit? ( >=sys-auth/policykit-0.8 )
-		 selinux? ( sys-libs/libselinux )
-		 tcpd? ( >=sys-apps/tcp-wrappers-7.6 )
-		 xinerama? ( x11-libs/libXinerama )
+	accessibility? ( x11-libs/libXevie )
+	gnome-keyring? ( >=gnome-base/gnome-keyring-2.22[pam] )
+	policykit? (
+		>=sys-auth/policykit-0.8
+		>=gnome-extra/policykit-gnome-0.8 )
+	selinux? ( sys-libs/libselinux )
+	tcpd? ( >=sys-apps/tcp-wrappers-7.6 )
+	xinerama? ( x11-libs/libXinerama )
 
-		 !gnome-extra/fast-user-switch-applet"
+	!gnome-extra/fast-user-switch-applet"
 DEPEND="${RDEPEND}
-		test? ( >=dev-libs/check-0.9.4 )
-		sys-devel/gettext
-		x11-proto/inputproto
-		>=dev-util/intltool-0.40
-		>=dev-util/pkgconfig-0.19
-		>=app-text/scrollkeeper-0.1.4
-		>=app-text/gnome-doc-utils-0.3.2"
+	test? ( >=dev-libs/check-0.9.4 )
+	sys-devel/gettext
+	x11-proto/inputproto
+	>=dev-util/intltool-0.40
+	>=dev-util/pkgconfig-0.19
+	>=app-text/scrollkeeper-0.1.4
+	>=app-text/gnome-doc-utils-0.3.2"
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
