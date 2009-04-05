@@ -12,10 +12,10 @@ KEYWORDS="~amd64 ~x86"
 IUSE="python"
 SLOT="0"
 
-COMMONDEPEND=">=media-libs/gstreamer-0.10.20
-	>=media-libs/gst-plugins-base-0.10.20
-	>=dev-libs/glib-2.14
-	>=net-libs/libnice-0.0.3
+COMMONDEPEND=">=media-libs/gstreamer-0.10.22
+	>=media-libs/gst-plugins-base-0.10.22
+	>=dev-libs/glib-2.16
+	>=net-libs/libnice-0.0.3[gstreamer]
 	python? (
 		>=dev-python/pygobject-2.12
 		>=dev-python/pygtk-2.10
@@ -23,21 +23,14 @@ COMMONDEPEND=">=media-libs/gstreamer-0.10.20
 
 RDEPEND="${COMMONDEPEND}
 	>=media-libs/gst-plugins-good-0.10.11
-	|| (
-		(	<media-libs/gst-plugins-bad-0.10.11
-			~media-plugins/gst-plugins-farsight-0.12.10 )
-		(	>=media-libs/gst-plugins-bad-0.10.11
-			>=media-plugins/gst-plugins-farsight-0.12.11 ) )"
+	<media-libs/gst-plugins-bad-0.10.11
+	~media-plugins/gst-plugins-farsight-0.12.10"
 
 DEPEND="${COMMONDEPEND}
-	dev-util/pkgconfig
-	doc? ( >=dev-util/gtk-doc-1.8 )"
+	dev-util/pkgconfig"
 
 src_configure() {
-	econf \
-		$(use_enable python) \
-		--with-plugins=fsrtpconference,funnel,videoanyrate \
-		--with-transmitter-plugins=nice,multicast,rawudp
+	econf $(use_enable python)
 }
 
 src_install() {
