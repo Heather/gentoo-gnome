@@ -2,7 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/nautilus/nautilus-2.24.2.ebuild,v 1.6 2009/01/31 08:23:21 aballier Exp $
 
-inherit gnome2 eutils virtualx
+EAPI="2"
+
+inherit autotools gnome2 eutils virtualx
 
 DESCRIPTION="A file manager for the GNOME desktop"
 HOMEPAGE="http://www.gnome.org/projects/nautilus/"
@@ -37,7 +39,9 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.40.1
-	doc? ( >=dev-util/gtk-doc-1.4 )"
+	doc? ( >=dev-util/gtk-doc-1.4 )
+	gnome-base/gnome-common
+	dev-util/gtk-doc-am"
 
 PDEPEND="gnome? ( >=x11-themes/gnome-icon-theme-1.1.91 )"
 
@@ -50,6 +54,23 @@ pkg_setup() {
 		$(use_enable beagle)
 		$(use_enable tracker)
 		$(use_enable xmp)"
+}
+
+src_prepare() {
+	gnome2_src_prepare
+
+	# FIXME: tarball generated with broken gtk-doc, revisit me.
+	if use doc; then
+		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/usr/bin/gtkdoc-rebase" \
+			-i gtk-doc.make || die "sed 1 failed"
+	else
+		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/bin/true" \
+			-i gtk-doc.make || die "sed 2 failed"
+	fi
+
+	# gtk-doc-am and gnome-common needed for this
+	intltoolize --force --copy --automake || die "intltoolize failed"
+	eautoreconf
 }
 
 src_test() {
