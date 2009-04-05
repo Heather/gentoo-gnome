@@ -28,7 +28,7 @@ RDEPEND=">=dev-libs/glib-2.16.0
 
 	media-libs/gstreamer:0.10
 	media-libs/gst-plugins-base:0.10
-	net-voip/telepathy-farsight
+	net-libs/telepathy-farsight
 	dev-libs/libxml2
 
 	applet? ( >=gnome-base/gnome-panel-2.10 )
