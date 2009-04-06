@@ -1,0 +1,30 @@
+---
+Fix tests.
+
+Upstream bug: https://bugzilla.gnome.org/show_bug.cgi?id=576504
+
+ vte.c     |    2 +-
+ vtedraw.h |    1 -
+ 2 files changed, 1 insertion(+), 2 deletions(-)
+
+--- a/src/vtedraw.h	(révision 2390)
++++ b/src/vtedraw.h	(révision 2391)
+@@ -48,7 +48,6 @@
+ #define VTE_DRAW_OPAQUE 0xff
+ #define VTE_DRAW_MAX_LENGTH 1024
+ 
+-/* The _vte_draw structure. */
+ struct _vte_draw;
+ 
+ /* A request to draw a particular character spanning a given number of columns
+--- a/src/vte.c	(révision 2390)
++++ b/src/vte.c	(révision 2391)
+@@ -3442,7 +3442,7 @@
+ 	}
+ }
+ 
+-/* Basic wrapper around _vte_pty_open, which handles the pipefitting. */
++/* Basic wrapper around _vte_pty_open(), which handles the pipefitting. */
+ static pid_t
+ _vte_terminal_fork_basic(VteTerminal *terminal, const char *command,
+ 			 char **argv, char **envv,

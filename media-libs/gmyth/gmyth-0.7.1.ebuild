@@ -10,7 +10,7 @@ LICENSE="LGPL-2"
 DESCRIPTION="GObject based library to access mythtv backends"
 HOMEPAGE="http://gmyth.sourceforge.net/"
 SRC_URI="mirror://sourceforge/gmyth/${P}.tar.gz"
-KEYWORDS="amd64 x86"
+KEYWORDS="~amd64 ~x86"
 SLOT="0"
 RDEPEND="net-misc/curl
 	dev-libs/glib

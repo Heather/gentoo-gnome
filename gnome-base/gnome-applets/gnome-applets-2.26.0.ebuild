@@ -9,7 +9,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2 FDL-1.1 LGPL-2"
 SLOT="2"
-KEYWORDS="alpha amd64 ~hppa ia64 ~ppc ppc64 ~sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="acpi apm doc gnome gstreamer hal ipv6"
 
 # TODO: configure says python stuff is optional

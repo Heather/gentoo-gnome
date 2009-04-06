@@ -15,7 +15,7 @@ IUSE="examples"
 
 RDEPEND=">=gnome-base/gnome-panel-2.13.4
 	>=dev-python/libbonobo-python-2.22.0
-	!<dev-python/gnome-python-desktop-2.25"
+	!<dev-python/gnome-python-desktop-2.22.0-r10"
 DEPEND="${RDEPEND}"
 
 EXAMPLES="examples/applet/*"

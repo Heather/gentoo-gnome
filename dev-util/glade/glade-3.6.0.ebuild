@@ -13,7 +13,7 @@ SRC_URI="mirror://gnome/sources/${MY_PN}/${PVP[0]}.${PVP[1]}/${MY_P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="3"
-KEYWORDS="alpha amd64 hppa ia64 ppc ppc64 sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="doc gnome python"
 
 RDEPEND=">=dev-libs/glib-2.8.0
@@ -29,7 +29,7 @@ DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.19
 	sys-devel/gettext
 	app-text/scrollkeeper
-	app-text/gnome-doc-utils
+	>=app-text/gnome-doc-utils-0.9
 	doc? ( >=dev-util/gtk-doc-1.9 )
 "
 

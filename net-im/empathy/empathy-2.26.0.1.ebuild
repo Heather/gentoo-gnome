@@ -49,8 +49,12 @@ DEPEND="${RDEPEND}
 
 DOCS="CONTRIBUTORS AUTHORS ChangeLog NEWS README"
 
+# FIXME: Tests are broken, upstream bug #576785
+RESTRICT="test"
+
 pkg_setup() {
 	G2CONF="${G2CONF}
+		--disable-static
 		$(use_enable debug)
 		$(use_enable spell)
 		$(use_enable python)

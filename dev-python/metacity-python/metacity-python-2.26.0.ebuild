@@ -13,5 +13,5 @@ KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~sparc ~x86"
 IUSE=""
 
 RDEPEND=">=x11-wm/metacity-2.21.5
-	!<dev-python/gnome-python-desktop-2.25"
+	!<dev-python/gnome-python-desktop-2.22.0-r10"
 DEPEND="${RDEPEND}"

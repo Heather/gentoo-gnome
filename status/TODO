@@ -1,9 +1,15 @@
 Ebuild Notices:
 ===============
+app-accessibility/dasher-4.10.0
+ * bashism in configure is utterly broken !
 app-text/evince-2.26.0
  * enable gobject-introspection when we have an ebuild for it.
+dev-libs/libgweather-2.26.0
+ * decide what to do with --enable-locations-compression
 dev-libs/libunique-1.0.8
  * automagic dbus dependency
+dev-libs/totem-pl-parser-2.26.1
+ * tests broken with USE="-doc" upstream bug #577774
 gnome-base/gconf-2.26.0
  * add policykit support
 gnome-base/gdm-2.24.1
@@ -20,32 +26,47 @@ gnome-base/gnome-control-center-2.26.0
  * policykit-gnome is automagic for about-me capplet.
 gnome-base/gnome-desktop-2.26.0
  * Python deps are needed for gnome-about but not
+gnome-base/gnome-2.26.0
+ * Rephrase to teach about using different WMs instead, as metacity is the default anyway
+ * but first check WINDOW_MANAGER is still honored in 2.24. gnome-session-2.24 might have lost
+ * support for it, but we don't ship with gnome-session-2.24 yet
 gnome-base/gnome-menus-2.26.0
  * fix autofoo and report upstream
 gnome-base/gnome-panel-2.26.0
  * tarball generated with broken gtk-doc, revisit me.
 gnome-base/librsvg-2.26.0
  * USEify mozilla support (?)
-gnome-base/nautilus-2.26.0
+gnome-base/nautilus-2.26.1
  * dev-libs/libunique needs KEYWORDS
 gnome-extra/evolution-data-server-2.26.0
  * tarball generated with broken gtk-doc, revisit me.
 gnome-extra/gnome-media-2.26.0
  * libcanberra is automagic
  * dep on pulseaudio-0.9.15 when it is out.
+gnome-extra/gnome-user-docs-2.26.0
+ * fails tests, upstream bug #577778
+gnome-extra/gnome-user-share-2.26.0
+ * could libnotify be made optional ?
+gnome-extra/gucharmap-2.26.0
+ * add gobject-introspection support once available
 gnome-extra/yelp-2.26.0
  * Add patch to make lzma-utils not automagic and use_enable here
 mail-client/evolution-2.26.0
  * libpst automagic dep
-media-video/totem-2.26.0-r1
+media-sound/sound-juicer-2.26.0
+ * possibly automagic dual slot dep on musicbrainz
+media-video/totem-2.26.1
+ * tests broken with USE="-doc" upstream bug #577774
+ * tarball generated with broken gtk-doc, revisit me.
  * why does it need write access here, probably need to set up a fake
 net-analyzer/gnome-nettool-2.26.0
  * Dropped ~x86-fbsd (see epatch below)
-net-im/empathy-2.26.0
+net-im/empathy-2.26.0.1
  * libnotify & libcanberra hard deps
+ * Tests are broken, upstream bug #576785
  * This needs to be upstreamed before moving to tree
 net-misc/vinagre-2.26.0
- * make gnome-panel applet option ?
+ * make gnome-panel applet optional ?
 net-misc/vino-2.26.0
  * dev-libs/libunique needs KEYWORDS
 sys-apps/devicekit-power-006

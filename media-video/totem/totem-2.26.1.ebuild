@@ -1,9 +1,10 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/totem/totem-2.24.3-r1.ebuild,v 1.1 2009/01/18 22:51:46 eva Exp $
-EAPI=2
 
-inherit eutils gnome2 multilib python
+EAPI="2"
+
+inherit autotools eutils gnome2 multilib python
 
 DESCRIPTION="Media player for GNOME"
 HOMEPAGE="http://gnome.org/projects/totem/"
@@ -12,7 +13,7 @@ LICENSE="GPL-2 LGPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc64 ~sparc ~x86 ~x86-fbsd"
 
-IUSE="bluetooth debug galago mythtv lirc nautilus nsplugin python tracker"
+IUSE="bluetooth debug doc galago mythtv lirc nautilus nsplugin python tracker"
 
 # TODO:
 # easy-publish-and-consume is not in tree (epc)
@@ -26,7 +27,7 @@ RDEPEND=">=dev-libs/glib-2.15
 	>=x11-themes/gnome-icon-theme-2.16
 	x11-libs/cairo
 	app-text/iso-codes
-	dev-libs/libxml2
+	>=dev-libs/libxml2-2.6
 	>=dev-libs/dbus-glib-0.71
 	>=media-libs/gstreamer-0.10.16
 	>=media-libs/gst-plugins-good-0.10
@@ -57,10 +58,10 @@ RDEPEND=">=dev-libs/glib-2.15
 		dev-lang/python[threads]
 		>=dev-python/pygtk-2.12
 		dev-python/pyxdg
-		dev-python/gdata )
-	tracker? (
-		>=app-misc/tracker-0.5.3
-		>=gnome-base/libgnomeui-2 )"
+		dev-python/gdata
+		dev-python/gst-python
+		dev-python/gconf-python )
+	tracker? ( >=app-misc/tracker-0.5.3 )"
 DEPEND="${RDEPEND}
 	x11-proto/xproto
 	x11-proto/xextproto
@@ -69,9 +70,13 @@ DEPEND="${RDEPEND}
 	gnome-base/gnome-common
 	app-text/gnome-doc-utils
 	>=dev-util/intltool-0.40
-	>=dev-util/pkgconfig-0.20"
+	>=dev-util/pkgconfig-0.20
+	doc? ( >=dev-util/gtk-doc-1.11 )"
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
+
+# FIXME: tests broken with USE="-doc" upstream bug #577774
+RESTRICT="test"
 
 pkg_setup() {
 	G2CONF="${G2CONF}
@@ -79,6 +84,7 @@ pkg_setup() {
 		--disable-schemas-install
 		--disable-vala
 		--with-dbus
+		--with-smclient
 		--enable-easy-codec-installation
 		$(use_enable nsplugin browser-plugins)"
 
@@ -110,15 +116,27 @@ pkg_setup() {
 src_prepare() {
 	gnome2_src_prepare
 
-	# http://svn.gnome.org/viewvc/totem?view=revision&revision=6177
-	epatch "${FILESDIR}/${P}-upstream-brown-bag-revert-opensubtitles.patch"
+	# Fix broken smclient option passing
+	epatch "${FILESDIR}/${P}-smclient-target-detection.patch"
+
+	# FIXME: tarball generated with broken gtk-doc, revisit me.
+	if use doc; then
+		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/usr/bin/gtkdoc-rebase" \
+			-i gtk-doc.make || die "sed 1 failed"
+	else
+		sed "/^TARGET_DIR/i \GTKDOC_REBASE=$(type -P true)" \
+			-i gtk-doc.make || die "sed 2 failed"
+	fi
+
+	intltoolize --force --copy --automake || die "intltoolize failed"
+	eautoreconf
 
 	# disable pyc compiling
 	mv py-compile py-compile.orig
 	ln -s $(type -P true) py-compile
 }
 
-src_compile() {
+src_configure() {
 	# FIXME: why does it need write access here, probably need to set up a fake
 	# home in /var/tmp like other pkgs do
 
@@ -126,7 +144,7 @@ src_compile() {
 	addpredict "$(unset HOME; echo ~)/.gconfd"
 	addpredict "$(unset HOME; echo ~)/.gnome2"
 
-	gnome2_src_compile
+	gnome2_src_configure
 }
 
 pkg_postinst() {

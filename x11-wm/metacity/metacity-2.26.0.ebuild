@@ -1,7 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-wm/metacity/metacity-2.24.0-r1.ebuild,v 1.1 2009/02/08 21:31:50 eva Exp $
-EAPI=2
+
+EAPI="2"
 
 inherit eutils gnome2
 
@@ -46,6 +47,7 @@ DOCS="AUTHORS ChangeLog HACKING NEWS README *.txt doc/*.txt"
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--enable-compositor
+		--enable-gconf
 		--enable-render
 		--enable-shape
 		--enable-sm

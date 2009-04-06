@@ -9,7 +9,7 @@ HOMEPAGE="http://www.gnome.org/projects/orca/"
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~hppa ~ia64 ppc ppc64 ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE=""
 
 # liblouis is not in portage yet
@@ -45,11 +45,10 @@ src_unpack() {
 
 pkg_postinst() {
 	gnome2_pkg_postinst
-	python_version
-	python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages/orca
+	python_mod_optimize $(python_get_sitedir)/orca
 }
 
 pkg_postrm() {
 	gnome2_pkg_postrm
-	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages/orca
+	python_mod_cleanup $(python_get_sitedir)/orca
 }

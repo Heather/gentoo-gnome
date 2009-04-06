@@ -24,6 +24,9 @@ DEPEND="app-text/scrollkeeper
 
 DOCS="AUTHORS ChangeLog NEWS README"
 
+# FIXME: fails tests, upstream bug #577778
+RESTRICT="test"
+
 pkg_setup() {
 	G2CONF="${G2CONF} --disable-scrollkeeper"
 }
@@ -38,7 +41,7 @@ src_unpack() {
 	# Ugly ugly hack but gnome-doc-utils isn't actually
 	# parallel make safe.
 	sed "s/install-data-local/install-data-hook/" \
-		-i gnome-doc-utils.make || die "sed failed"
+		-i gnome-doc-utils.make || die "sed failed"
 
 	eautoreconf
 }

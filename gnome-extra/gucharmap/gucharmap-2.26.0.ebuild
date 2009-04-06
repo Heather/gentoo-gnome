@@ -12,6 +12,7 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="cjk doc gnome python test"
 
+# FIXME: add gobject-introspection support once available
 RDEPEND=">=dev-libs/glib-2.16.3
 	>=x11-libs/pango-1.2.1
 	>=x11-libs/gtk+-2.13.6
@@ -30,6 +31,7 @@ DOCS="ChangeLog NEWS README TODO"
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-scrollkeeper
+		--disable-maintainer-mode
 		$(use_enable gnome gconf)
 		$(use_enable cjk unihan)
 		$(use_enable python python-bindings)"
