@@ -19,7 +19,8 @@ RDEPEND=">=dev-libs/glib-2.16
 	 hal? ( >=sys-apps/hal-0.5.7 )
 	 pam? ( virtual/pam )
 	 >=dev-libs/libgcrypt-1.2.2
-	 >=dev-libs/libtasn1-0.3.4"
+	 >=dev-libs/libtasn1-0.3.4
+	 valgrind? ( dev-util/valgrind )"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/intltool-0.35
