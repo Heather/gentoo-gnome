@@ -3,6 +3,8 @@
 # $Header: /var/cvsroot/gentoo-x86/media-libs/farsight/farsight-0.1.18.ebuild,v 1.1 2007/04/30 22:08:59 tester Exp $
 EAPI=2
 
+inherit virtualx
+
 DESCRIPTION="Farsight2 is an audio/video conferencing framework specifically designed for Instant Messengers."
 HOMEPAGE="http://farsight.freedesktop.org/"
 SRC_URI="http://farsight.freedesktop.org/releases/${PN}/${P}.tar.gz"
@@ -23,14 +25,18 @@ COMMONDEPEND=">=media-libs/gstreamer-0.10.22
 
 RDEPEND="${COMMONDEPEND}
 	>=media-libs/gst-plugins-good-0.10.11
-	<media-libs/gst-plugins-bad-0.10.11
-	~media-plugins/gst-plugins-farsight-0.12.10"
+	>=media-libs/gst-plugins-bad-0.10.11
+	>=media-plugins/gst-plugins-farsight-0.12.10"
 
 DEPEND="${COMMONDEPEND}
 	dev-util/pkgconfig"
 
 src_configure() {
 	econf $(use_enable python)
+}
+
+src_test() {
+	Xemake check || die "emake check failed!"
 }
 
 src_install() {
