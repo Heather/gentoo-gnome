@@ -6,6 +6,10 @@
 # NOTE: Please add your entry at the top!
 #
 
+# Nirbheek Chauhan <nirbheek@gentoo.org> (8 Apr 2009)
+# Doesn't compile.
+=net-libs/telepathy-farsight-0.0.6
+
 # Nirbheek Chauhan <nirbheek@gentoo.org> (21 Mar 2009)
 # Unmask in-tree gnome-desktop-sharp for gnome-desktop-2.26
 -=dev-dotnet/gnome-desktop-sharp-2.26*

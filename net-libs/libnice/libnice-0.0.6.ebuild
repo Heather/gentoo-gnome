@@ -11,7 +11,7 @@ SRC_URI="http://nice.freedesktop.org/releases/${P}.tar.gz"
 LICENSE="LGPL-2.1 MPL-1.1"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="doc +gstreamer"
+IUSE="+gstreamer"
 
 RDEPEND=">=dev-libs/glib-2.10
 	gstreamer? (
@@ -20,13 +20,8 @@ RDEPEND=">=dev-libs/glib-2.10
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
 
-# https://bugs.freedesktop.org/show_bug.cgi?id=20868
-RESTRICT="test"
-
 src_configure() {
-	econf --disable-coverage \
-		$(use_with gstreamer) \
-		$(use_enable doc gtk-doc)
+	econf $(use_with gstreamer)
 }
 
 src_install() {
