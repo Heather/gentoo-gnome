@@ -20,9 +20,6 @@ RDEPEND=">=dev-libs/glib-2.10
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
 
-# https://bugs.freedesktop.org/show_bug.cgi?id=20868
-RESTRICT="test"
-
 src_configure() {
 	econf $(use_with gstreamer)
 }
