@@ -60,7 +60,7 @@ media-video/totem-2.26.1
  * tests broken with USE="-doc" upstream bug #577774
  * tarball generated with broken gtk-doc, revisit me.
  * why does it need write access here, probably need to set up a fake
-net-analyzer/gnome-nettool-2.26.0
+net-analyzer/gnome-nettool-2.26.1
  * Dropped ~x86-fbsd (see epatch below)
 net-im/empathy-2.26.0.1
  * libnotify & libcanberra hard deps
