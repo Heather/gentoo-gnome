@@ -26,7 +26,7 @@ RDEPEND="
 	>=gnome-base/libglade-2
 	>=gnome-base/gconf-2
 	nautilus? ( >=gnome-base/nautilus-2.10 )
-	>=app-text/poppler-bindings-0.8[gtk,cairo]
+	>=virtual/poppler-glib-0.8[cairo]
 	dvi? (
 		virtual/tex-base
 		t1lib? ( >=media-libs/t1lib-5.0.0 )
