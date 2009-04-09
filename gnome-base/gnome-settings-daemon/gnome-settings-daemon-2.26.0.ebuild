@@ -10,7 +10,7 @@ HOMEPAGE="http://www.gnome.org"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="debug gstreamer libnotify pulseaudio"
+IUSE="debug libnotify pulseaudio"
 
 RDEPEND=">=dev-libs/dbus-glib-0.74
 	>=dev-libs/glib-2.18.0
@@ -32,11 +32,10 @@ RDEPEND=">=dev-libs/dbus-glib-0.74
 	>=x11-libs/libxklavier-3.8
 	media-libs/fontconfig
 
-    gstreamer? (
+	pulseaudio? ( >=media-sound/pulseaudio-0.9.12 )
+    !pulseaudio? (
         >=media-libs/gstreamer-0.10.1.2
         >=media-libs/gst-plugins-base-0.10.1.2 )
-    !gstreamer? (
-		pulseaudio? ( >=media-sound/pulseaudio-0.9.12 ) )
 "
 
 # Pulseaudio cannot be enabled unless gstreamer is disabled
@@ -54,35 +53,25 @@ DOCS="AUTHORS NEWS ChangeLog MAINTAINERS"
 
 pkg_setup() {
 	G2CONF="${G2CONF}
-		--disable-pulse
-		--disable-gstreamer
 		$(use_enable debug)
 		$(use_with libnotify)"
 
 	if use pulseaudio; then
-		if use gstreamer; then
-			ewarn "You have gstreamer enabled with pulseaudio"
-			ewarn "If you wish to have pulseaudio support,"
-			ewarn "You need to enable *only* USE=pulseaudio"
-			G2CONF="${G2CONF} --enable-gstreamer"
-		else
-			einfo "Only pulseaudio selected"
 			G2CONF="${G2CONF} --enable-pulse"
-		fi
+	else
+			G2CONF="${G2CONF} --enable-gstreamer"
 	fi
 }
 
 src_unpack() {
 	gnome2_src_unpack
 
-	if use gstreamer; then
-	# Re-add non-pulse AcmeVolume control support (GNOME bug #571145)
-		epatch "${FILESDIR}/${P}-readd-gst-vol-control-support.patch"
-		eautoreconf
-	fi
+	epatch "${FILESDIR}/${P}-readd-gst-vol-control-support.patch"
 
 	# Fix background loading (GNOME bug #564909)
 	# This patch needs to be verified, I couldn't reproduce the original bug
 	# ~nirbheek
 	#epatch "${FILESDIR}/${P}-background.patch"
+
+	eautoreconf
 }

@@ -12,7 +12,7 @@ HOMEPAGE="http://ronald.bitfreak.net/gnome-media.php"
 LICENSE="LGPL-2 GPL-2 FDL-1.1"
 SLOT="2"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
-IUSE="esd gnomecd ipv6 +pulseaudio"
+IUSE="esd gnomecd ipv6 pulseaudio"
 
 # FIXME: libcanberra is automagic
 # FIXME: dep on pulseaudio-0.9.15 when it is out.

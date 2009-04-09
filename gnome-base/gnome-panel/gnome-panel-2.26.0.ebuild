@@ -17,7 +17,7 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc eds networkmanager"
 
-RDEPEND=">=gnome-base/gnome-desktop-2.12
+RDEPEND=">=gnome-base/gnome-desktop-2.24.0
 	>=x11-libs/pango-1.15.4
 	>=dev-libs/glib-2.18.0
 	>=x11-libs/gtk+-2.15.1
@@ -77,7 +77,7 @@ src_unpack() {
 	# FIXME: tarball generated with broken gtk-doc, revisit me.
 	if use doc; then
 		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/usr/bin/gtkdoc-rebase" \
-			-i gtk-doc.make || die "sed 1 failed"
+			-i gtk-doc.make || die "sed 1 failed"
 	else
 		sed "/^TARGET_DIR/i \GTKDOC_REBASE=$(type -P true)" \
 			-i gtk-doc.make || die "sed 2 failed"

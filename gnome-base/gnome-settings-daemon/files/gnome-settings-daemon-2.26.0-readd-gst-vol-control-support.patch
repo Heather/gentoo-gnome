@@ -1,16 +1,7 @@
- configure.ac                                |   40 +++
- plugins/media-keys/Makefile.am              |   23 ++-
- plugins/media-keys/actions/Makefile.am      |   44 +++
- plugins/media-keys/actions/acme-volume.c    |  402 +++++++++++++++++++++++++++
- plugins/media-keys/actions/acme-volume.h    |   56 ++++
- plugins/media-keys/gsd-media-keys-manager.c |   98 ++++++--
- 6 files changed, 640 insertions(+), 23 deletions(-)
-
-diff --git a/configure.ac b/configure.ac
-index 9cff33f..4b69370 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -253,11 +253,49 @@ if test x$WANT_PULSE = xyes ; then
+diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN gnome-settings-daemon-2.26.0.orig/configure.ac gnome-settings-daemon-2.26.0/configure.ac
+--- gnome-settings-daemon-2.26.0.orig/configure.ac	2009-03-16 10:52:06.000000000 -0400
++++ gnome-settings-daemon-2.26.0/configure.ac	2009-04-09 13:35:50.000000000 -0400
+@@ -253,11 +253,50 @@ if test x$WANT_PULSE = xyes ; then
                AC_DEFINE(HAVE_PULSE, 1, [Define if PULSE sound server should be used])],
               [have_pulse=false])
  fi
@@ -49,6 +40,7 @@ index 9cff33f..4b69370 100644
 +
 +   if test "x$have_gstreamer" = "xyes"; then
 +      GST_LIBS="$GST_LIBS -lgstinterfaces-0.10 -lgstaudio-0.10"
++      AC_DEFINE(HAVE_GSTREAMER,1,[enable gstreamer])
 +   fi
 +else
 +   AC_MSG_NOTICE([*** GStreamer support disabled ***])
@@ -60,7 +52,7 @@ index 9cff33f..4b69370 100644
  # ---------------------------------------------------------------------------
  # Enable Profiling
  # ---------------------------------------------------------------------------
-@@ -355,6 +393,7 @@ plugins/housekeeping/Makefile
+@@ -355,6 +394,7 @@ plugins/housekeeping/Makefile
  plugins/keybindings/Makefile
  plugins/keyboard/Makefile
  plugins/media-keys/Makefile
@@ -68,7 +60,7 @@ index 9cff33f..4b69370 100644
  plugins/media-keys/cut-n-paste/Makefile
  plugins/mouse/Makefile
  plugins/screensaver/Makefile
-@@ -397,6 +436,7 @@ echo "
+@@ -397,6 +437,7 @@ echo "
          dbus-1 system.d dir:      ${DBUS_SYS_DIR}
  
          Libnotify support:        ${have_libnotify}
@@ -76,142 +68,9 @@ index 9cff33f..4b69370 100644
          PulseAudio support:       ${have_pulse}
          Profiling support:        ${enable_profiling}
  "
-diff --git a/plugins/media-keys/Makefile.am b/plugins/media-keys/Makefile.am
-index b308edb..34aa464 100644
---- a/plugins/media-keys/Makefile.am
-+++ b/plugins/media-keys/Makefile.am
-@@ -1,11 +1,12 @@
- NULL =
- 
- SUBDIRS =
--plugin_LTLIBRARIES =
-+plugin_LTLIBRARIES = libmedia-keys.la
- 
- if HAVE_PULSE
- SUBDIRS += cut-n-paste
--plugin_LTLIBRARIES += libmedia-keys.la
-+else
-+SUBDIRS += actions
- endif
- 
- BUILT_SOURCES = 			\
-@@ -39,7 +40,6 @@ libmedia_keys_la_SOURCES = 		\
- libmedia_keys_la_CPPFLAGS = \
- 	-I$(top_srcdir)/gnome-settings-daemon			\
- 	-I$(top_srcdir)/plugins/common				\
--	-I$(top_srcdir)/plugins/media-keys/cut-n-paste		\
- 	-DPIXMAPDIR=\""$(pkgdatadir)"\"				\
- 	-DGLADEDIR=\""$(pkgdatadir)"\"				\
- 	-DGNOME_SETTINGS_LOCALEDIR=\""$(datadir)/locale"\"	\
-@@ -55,7 +55,6 @@ libmedia_keys_la_LDFLAGS = 		\
- libmedia_keys_la_LIBADD  = 		\
- 	$(top_builddir)/gnome-settings-daemon/libgsd-plugins.la		\
- 	$(top_builddir)/plugins/common/libcommon.la			\
--	$(top_builddir)/plugins/media-keys/cut-n-paste/libgvc.la	\
- 	$(SETTINGS_PLUGIN_LIBS)						\
- 	$(XF86MISC_LIBS)
- 
-@@ -77,7 +76,6 @@ test_media_window_SOURCES =			\
- 
- test_media_window_CPPFLAGS = \
- 	-I$(top_srcdir)/gnome-settings-daemon			\
--	-I$(top_srcdir)/plugins/media-keys/cut-n-paste		\
- 	-DPIXMAPDIR=\""$(pkgdatadir)"\"				\
- 	-DGLADEDIR=\""$(pkgdatadir)"\"				\
- 	-DGNOME_SETTINGS_LOCALEDIR=\""$(datadir)/locale"\"	\
-@@ -105,7 +103,6 @@ test_media_keys_SOURCES =			\
- test_media_keys_CPPFLAGS = \
- 	-I$(top_srcdir)/gnome-settings-daemon			\
- 	-I$(top_srcdir)/plugins/common				\
--	-I$(top_srcdir)/plugins/media-keys/cut-n-paste		\
- 	-DPIXMAPDIR=\""$(pkgdatadir)"\"				\
- 	-DGLADEDIR=\""$(pkgdatadir)"\"				\
- 	-DGNOME_SETTINGS_LOCALEDIR=\""$(datadir)/locale"\"	\
-@@ -124,7 +121,17 @@ test_media_keys_LDADD = \
- 	$(GST_LIBS)
- 
- if HAVE_PULSE
-+libmedia_keys_la_CPPFLAGS += -I$(top_builddir)/plugins/media-keys/cut-n-paste
-+libmedia_keys_la_LIBADD += $(top_builddir)/plugins/media-keys/cut-n-paste/libgvc.la
-+test_media_window_CPPFLAGS += -I$(top_builddir)/plugins/media-keys/cut-n-paste
-+test_media_keys_CPPFLAGS += -I$(top_builddir)/plugins/media-keys/cut-n-paste
- test_media_keys_LDADD += $(top_builddir)/plugins/media-keys/cut-n-paste/libgvc.la
-+else
-+libmedia_keys_la_CPPFLAGS += -I$(top_builddir)/plugins/media-keys/actions
-+libmedia_keys_la_LIBADD += $(top_builddir)/plugins/media-keys/actions/libacme.la
-+test_media_window_CPPFLAGS += -I$(top_builddir)/plugins/media-keys/actions
-+test_media_keys_CPPFLAGS += -I$(top_builddir)/plugins/media-keys/actions
-+test_media_keys_LDADD += $(top_builddir)/plugins/media-keys/actions/libacme.la
- endif
- 
- gladedir = $(pkgdatadir)
-@@ -137,7 +144,11 @@ pixmaps_DATA = 		\
- 	acme-eject.png	\
- 	$(NULL)
- 
-+if HAVE_PULSE
- DIST_SUBDIRS = cut-n-paste
-+else
-+DIST_SUBDIRS = actions
-+endif
- 
- EXTRA_DIST = 				\
- 	gsd-media-keys-manager.xml	\
-diff --git a/plugins/media-keys/actions/Makefile.am b/plugins/media-keys/actions/Makefile.am
-new file mode 100644
-index 0000000..4bf215a
---- /dev/null
-+++ b/plugins/media-keys/actions/Makefile.am
-@@ -0,0 +1,44 @@
-+NULL =
-+
-+noinst_LTLIBRARIES = libacme.la
-+
-+libacme_la_SOURCES = 		\
-+	../acme.h		\
-+	$(NULL)
-+
-+libacme_la_CPPFLAGS = \
-+	-I$(top_srcdir)/gnome-settings-daemon		\
-+	-I$(top_srcdir)/plugins/common			\
-+	-DGNOME_SETTINGS_LOCALEDIR=\""$(datadir)/locale"\" \
-+	$(AM_CPPFLAGS)
-+
-+libacme_la_CFLAGS = 			\
-+	$(SETTINGS_PLUGIN_CFLAGS)	\
-+	$(AM_CFLAGS)
-+
-+libacme_la_LIBADD =			\
-+	$(NULL)
-+
-+if HAVE_GSTREAMER
-+libacme_la_SOURCES += \
-+	acme-volume.c \
-+	acme-volume.h \
-+	$(NULL)
-+libacme_la_CFLAGS += $(GST_CFLAGS)
-+libacme_la_LIBADD += $(GST_LIBS)
-+endif
-+
-+gladedir = $(pkgdatadir)
-+glade_DATA = 		\
-+	../acme.glade	\
-+	$(NULL)
-+
-+pixmapsdir = $(pkgdatadir)
-+pixmaps_DATA = 		\
-+	../acme-eject.png	\
-+	$(NULL)
-+
-+EXTRA_DIST =			\
-+	$(glade_DATA)		\
-+	$(pixmaps_DATA)		\
-+	$(NULL)
-diff --git a/plugins/media-keys/actions/acme-volume.c b/plugins/media-keys/actions/acme-volume.c
-new file mode 100644
-index 0000000..e468669
---- /dev/null
-+++ b/plugins/media-keys/actions/acme-volume.c
+diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN gnome-settings-daemon-2.26.0.orig/plugins/media-keys/actions/acme-volume.c gnome-settings-daemon-2.26.0/plugins/media-keys/actions/acme-volume.c
+--- gnome-settings-daemon-2.26.0.orig/plugins/media-keys/actions/acme-volume.c	1969-12-31 19:00:00.000000000 -0500
++++ gnome-settings-daemon-2.26.0/plugins/media-keys/actions/acme-volume.c	2009-04-09 13:34:52.000000000 -0400
 @@ -0,0 +1,402 @@
 +/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 +
@@ -615,11 +474,9 @@ index 0000000..e468669
 +	return ACME_VOLUME(acme_volume_object);
 +}
 +
-diff --git a/plugins/media-keys/actions/acme-volume.h b/plugins/media-keys/actions/acme-volume.h
-new file mode 100644
-index 0000000..c14ebc8
---- /dev/null
-+++ b/plugins/media-keys/actions/acme-volume.h
+diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN gnome-settings-daemon-2.26.0.orig/plugins/media-keys/actions/acme-volume.h gnome-settings-daemon-2.26.0/plugins/media-keys/actions/acme-volume.h
+--- gnome-settings-daemon-2.26.0.orig/plugins/media-keys/actions/acme-volume.h	1969-12-31 19:00:00.000000000 -0500
++++ gnome-settings-daemon-2.26.0/plugins/media-keys/actions/acme-volume.h	2009-04-09 13:34:52.000000000 -0400
 @@ -0,0 +1,56 @@
 +/* acme-volume.h
 +
@@ -677,10 +534,57 @@ index 0000000..c14ebc8
 +gint        acme_volume_get_threshold (AcmeVolume *self);
 +
 +
-diff --git a/plugins/media-keys/gsd-media-keys-manager.c b/plugins/media-keys/gsd-media-keys-manager.c
-index d35048c..affa602 100644
---- a/plugins/media-keys/gsd-media-keys-manager.c
-+++ b/plugins/media-keys/gsd-media-keys-manager.c
+diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN gnome-settings-daemon-2.26.0.orig/plugins/media-keys/actions/Makefile.am gnome-settings-daemon-2.26.0/plugins/media-keys/actions/Makefile.am
+--- gnome-settings-daemon-2.26.0.orig/plugins/media-keys/actions/Makefile.am	1969-12-31 19:00:00.000000000 -0500
++++ gnome-settings-daemon-2.26.0/plugins/media-keys/actions/Makefile.am	2009-04-09 13:34:52.000000000 -0400
+@@ -0,0 +1,44 @@
++NULL =
++
++noinst_LTLIBRARIES = libacme.la
++
++libacme_la_SOURCES = 		\
++	../acme.h		\
++	$(NULL)
++
++libacme_la_CPPFLAGS = \
++	-I$(top_srcdir)/gnome-settings-daemon		\
++	-I$(top_srcdir)/plugins/common			\
++	-DGNOME_SETTINGS_LOCALEDIR=\""$(datadir)/locale"\" \
++	$(AM_CPPFLAGS)
++
++libacme_la_CFLAGS = 			\
++	$(SETTINGS_PLUGIN_CFLAGS)	\
++	$(AM_CFLAGS)
++
++libacme_la_LIBADD =			\
++	$(NULL)
++
++if HAVE_GSTREAMER
++libacme_la_SOURCES += \
++	acme-volume.c \
++	acme-volume.h \
++	$(NULL)
++libacme_la_CFLAGS += $(GST_CFLAGS)
++libacme_la_LIBADD += $(GST_LIBS)
++endif
++
++gladedir = $(pkgdatadir)
++glade_DATA = 		\
++	../acme.glade	\
++	$(NULL)
++
++pixmapsdir = $(pkgdatadir)
++pixmaps_DATA = 		\
++	../acme-eject.png	\
++	$(NULL)
++
++EXTRA_DIST =			\
++	$(glade_DATA)		\
++	$(pixmaps_DATA)		\
++	$(NULL)
+diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN gnome-settings-daemon-2.26.0.orig/plugins/media-keys/gsd-media-keys-manager.c gnome-settings-daemon-2.26.0/plugins/media-keys/gsd-media-keys-manager.c
+--- gnome-settings-daemon-2.26.0.orig/plugins/media-keys/gsd-media-keys-manager.c	2009-01-22 07:08:29.000000000 -0500
++++ gnome-settings-daemon-2.26.0/plugins/media-keys/gsd-media-keys-manager.c	2009-04-09 13:34:52.000000000 -0400
 @@ -48,11 +48,12 @@
  
  #include "eggaccelerators.h"
@@ -689,7 +593,7 @@ index d35048c..affa602 100644
 -
  #ifdef HAVE_PULSE
  #include "gvc-mixer-control.h"
-+#else
++#elif defined(HAVE_GSTREAMER)
 +#include "actions/acme-volume.h"
  #endif /* HAVE_PULSE */
 +#include "gsd-media-keys-window.h"
@@ -700,12 +604,12 @@ index d35048c..affa602 100644
          /* Number of expected update signals, zero meaning we
           * shouldn't be showing any update dialogues */
          guint            num_expected_update_signals;
-+#else
++#elif defined(HAVE_GSTREAMER)
 +        AcmeVolume      *volume;
  #endif /* HAVE_PULSE */
          GtkWidget       *dialog;
          GConfClient     *conf_client;
-@@ -131,9 +134,8 @@ init_screens (GsdMediaKeysManager *manager)
+@@ -131,9 +134,8 @@ init_screens (GsdMediaKeysManager *manag
                  GdkScreen *screen;
  
                  screen = gdk_display_get_screen (display, i);
@@ -716,12 +620,13 @@ index d35048c..affa602 100644
                  manager->priv->screens = g_slist_append (manager->priv->screens, screen);
          }
  
-@@ -650,40 +652,66 @@ on_stream_event_notify (GObject             *object,
+@@ -650,40 +652,68 @@ on_stream_event_notify (GObject         
  {
          update_dialog (manager);
  }
--
 +#endif /* HAVE_PULSE */
+ 
++#if defined(HAVE_PULSE) || defined(HAVE_GSTREAMER)
  static void
  do_sound_action (GsdMediaKeysManager *manager,
                   int                  type)
@@ -790,7 +695,7 @@ index d35048c..affa602 100644
                  if (!muted && (vol <= norm_vol_step)) {
                          manager->priv->num_expected_update_signals = 2;
                          gvc_mixer_stream_change_is_muted (manager->priv->stream, !muted);
-@@ -692,18 +720,31 @@ do_sound_action (GsdMediaKeysManager *manager,
+@@ -692,18 +722,31 @@ do_sound_action (GsdMediaKeysManager *ma
                          manager->priv->num_expected_update_signals = 1;
                          gvc_mixer_stream_change_volume (manager->priv->stream, vol - norm_vol_step);
                  }
@@ -823,7 +728,7 @@ index d35048c..affa602 100644
                          if (vol < MAX_VOLUME) {
                                  manager->priv->num_expected_update_signals = 1;
                                  if (vol + norm_vol_step >= MAX_VOLUME) {
-@@ -712,17 +753,38 @@ do_sound_action (GsdMediaKeysManager *manager,
+@@ -712,17 +755,39 @@ do_sound_action (GsdMediaKeysManager *ma
                                          gvc_mixer_stream_change_volume (manager->priv->stream, vol + norm_vol_step);
                                  }
                          }
@@ -858,22 +763,25 @@ index d35048c..affa602 100644
 +#endif
 +        }
 +
++#endif /* defined(HAVE_PULSE) || defined(HAVE_GSTREAMER) */
 +
 +#ifdef HAVE_PULSE
  static void
  update_default_sink (GsdMediaKeysManager *manager)
  {
-@@ -887,9 +949,7 @@ do_action (GsdMediaKeysManager *manager,
+@@ -887,9 +952,9 @@ do_action (GsdMediaKeysManager *manager,
          case MUTE_KEY:
          case VOLUME_DOWN_KEY:
          case VOLUME_UP_KEY:
 -#ifdef HAVE_PULSE
++#if defined(HAVE_PULSE) || defined(HAVE_GSTREAMER)
                  do_sound_action (manager, type);
 -#endif /* HAVE_PULSE */
++#endif
                  break;
          case POWER_KEY:
                  do_exit_action (manager);
-@@ -1069,13 +1129,13 @@ gsd_media_keys_manager_start (GsdMediaKeysManager *manager,
+@@ -1069,13 +1134,13 @@ gsd_media_keys_manager_start (GsdMediaKe
  {
          gnome_settings_profile_start (NULL);
  
@@ -888,28 +796,109 @@ index d35048c..affa602 100644
          gnome_settings_profile_start ("gvc_mixer_control_new");
  
          manager->priv->volume = gvc_mixer_control_new ();
-@@ -1092,6 +1152,10 @@ gsd_media_keys_manager_start (GsdMediaKeysManager *manager,
+@@ -1092,6 +1157,10 @@ gsd_media_keys_manager_start (GsdMediaKe
          gvc_mixer_control_open (manager->priv->volume);
  
          gnome_settings_profile_end ("gvc_mixer_control_new");
-+#else
++#elif defined(HAVE_GSTREAMER)
 +        gnome_settings_profile_start ("acme_volume_new");
 +        manager->priv->volume = acme_volume_new ();
 +        gnome_settings_profile_end ("acme_volume_new");
  #endif /* HAVE_PULSE */
          g_idle_add ((GSourceFunc) start_media_keys_idle_cb, manager);
  
-@@ -1164,12 +1228,12 @@ gsd_media_keys_manager_stop (GsdMediaKeysManager *manager)
+@@ -1164,13 +1233,13 @@ gsd_media_keys_manager_stop (GsdMediaKey
                  g_object_unref (priv->stream);
                  priv->stream = NULL;
          }
-+#endif /* HAVE_PULSE */
++#elif defined(HAVE_GSTREAMER)
  
          if (priv->volume) {
                  g_object_unref (priv->volume);
                  priv->volume = NULL;
          }
--#endif /* HAVE_PULSE */
- 
+ #endif /* HAVE_PULSE */
+-
          if (priv->dialog != NULL) {
                  gtk_widget_destroy (priv->dialog);
+                 priv->dialog = NULL;
+diff --exclude-from=/home/dang/.scripts/diffrc -up -ruN gnome-settings-daemon-2.26.0.orig/plugins/media-keys/Makefile.am gnome-settings-daemon-2.26.0/plugins/media-keys/Makefile.am
+--- gnome-settings-daemon-2.26.0.orig/plugins/media-keys/Makefile.am	2009-03-16 10:35:38.000000000 -0400
++++ gnome-settings-daemon-2.26.0/plugins/media-keys/Makefile.am	2009-04-09 13:34:52.000000000 -0400
+@@ -1,11 +1,12 @@
+ NULL =
+ 
+ SUBDIRS =
+-plugin_LTLIBRARIES =
++plugin_LTLIBRARIES = libmedia-keys.la
+ 
+ if HAVE_PULSE
+ SUBDIRS += cut-n-paste
+-plugin_LTLIBRARIES += libmedia-keys.la
++else
++SUBDIRS += actions
+ endif
+ 
+ BUILT_SOURCES = 			\
+@@ -39,7 +40,6 @@ libmedia_keys_la_SOURCES = 		\
+ libmedia_keys_la_CPPFLAGS = \
+ 	-I$(top_srcdir)/gnome-settings-daemon			\
+ 	-I$(top_srcdir)/plugins/common				\
+-	-I$(top_srcdir)/plugins/media-keys/cut-n-paste		\
+ 	-DPIXMAPDIR=\""$(pkgdatadir)"\"				\
+ 	-DGLADEDIR=\""$(pkgdatadir)"\"				\
+ 	-DGNOME_SETTINGS_LOCALEDIR=\""$(datadir)/locale"\"	\
+@@ -55,7 +55,6 @@ libmedia_keys_la_LDFLAGS = 		\
+ libmedia_keys_la_LIBADD  = 		\
+ 	$(top_builddir)/gnome-settings-daemon/libgsd-plugins.la		\
+ 	$(top_builddir)/plugins/common/libcommon.la			\
+-	$(top_builddir)/plugins/media-keys/cut-n-paste/libgvc.la	\
+ 	$(SETTINGS_PLUGIN_LIBS)						\
+ 	$(XF86MISC_LIBS)
+ 
+@@ -77,7 +76,6 @@ test_media_window_SOURCES =			\
+ 
+ test_media_window_CPPFLAGS = \
+ 	-I$(top_srcdir)/gnome-settings-daemon			\
+-	-I$(top_srcdir)/plugins/media-keys/cut-n-paste		\
+ 	-DPIXMAPDIR=\""$(pkgdatadir)"\"				\
+ 	-DGLADEDIR=\""$(pkgdatadir)"\"				\
+ 	-DGNOME_SETTINGS_LOCALEDIR=\""$(datadir)/locale"\"	\
+@@ -105,7 +103,6 @@ test_media_keys_SOURCES =			\
+ test_media_keys_CPPFLAGS = \
+ 	-I$(top_srcdir)/gnome-settings-daemon			\
+ 	-I$(top_srcdir)/plugins/common				\
+-	-I$(top_srcdir)/plugins/media-keys/cut-n-paste		\
+ 	-DPIXMAPDIR=\""$(pkgdatadir)"\"				\
+ 	-DGLADEDIR=\""$(pkgdatadir)"\"				\
+ 	-DGNOME_SETTINGS_LOCALEDIR=\""$(datadir)/locale"\"	\
+@@ -124,7 +121,17 @@ test_media_keys_LDADD = \
+ 	$(GST_LIBS)
+ 
+ if HAVE_PULSE
++libmedia_keys_la_CPPFLAGS += -I$(top_builddir)/plugins/media-keys/cut-n-paste
++libmedia_keys_la_LIBADD += $(top_builddir)/plugins/media-keys/cut-n-paste/libgvc.la
++test_media_window_CPPFLAGS += -I$(top_builddir)/plugins/media-keys/cut-n-paste
++test_media_keys_CPPFLAGS += -I$(top_builddir)/plugins/media-keys/cut-n-paste
+ test_media_keys_LDADD += $(top_builddir)/plugins/media-keys/cut-n-paste/libgvc.la
++else
++libmedia_keys_la_CPPFLAGS += -I$(top_builddir)/plugins/media-keys/actions
++libmedia_keys_la_LIBADD += $(top_builddir)/plugins/media-keys/actions/libacme.la
++test_media_window_CPPFLAGS += -I$(top_builddir)/plugins/media-keys/actions
++test_media_keys_CPPFLAGS += -I$(top_builddir)/plugins/media-keys/actions
++test_media_keys_LDADD += $(top_builddir)/plugins/media-keys/actions/libacme.la
+ endif
+ 
+ gladedir = $(pkgdatadir)
+@@ -137,7 +144,11 @@ pixmaps_DATA = 		\
+ 	acme-eject.png	\
+ 	$(NULL)
+ 
++if HAVE_PULSE
+ DIST_SUBDIRS = cut-n-paste
++else
++DIST_SUBDIRS = actions
++endif
+ 
+ EXTRA_DIST = 				\
+ 	gsd-media-keys-manager.xml	\
