@@ -91,6 +91,9 @@ src_prepare() {
 	epatch "${FILESDIR}/${P}-cpufreq-po.patch"
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
+
+	# Make it libtool-1 compatible
+	rm -v m4/lt* m4/libtool.m4 || die "removing libtool macros failed"
 	eautoreconf
 
 	# glibc splits this out, whereas other libc's do not tend to
