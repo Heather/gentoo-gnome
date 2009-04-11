@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/libgweather/libgweather-2.24.3.ebuild,v 1.2 2009/01/24 11:18:52 armin76 Exp $
 
-EAPI="1"
+EAPI="2"
 
 inherit gnome2
 
