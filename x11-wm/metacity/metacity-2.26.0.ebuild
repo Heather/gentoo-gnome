@@ -55,3 +55,10 @@ pkg_setup() {
 		--enable-xsync
 		$(use_enable xinerama)"
 }
+
+src_prepare() {
+	gnome2_src_prepare
+
+	# Remove stupid CFLAGS, bug #259179
+	sed "s:-Werror::g" -i configure.in configure || die "sed failed"
+}

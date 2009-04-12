@@ -6,8 +6,6 @@ app-text/evince-2.26.0
  * enable gobject-introspection when we have an ebuild for it.
 dev-libs/libgweather-2.26.0
  * decide what to do with --enable-locations-compression
-dev-libs/libunique-1.0.8
- * automagic dbus dependency
 dev-libs/totem-pl-parser-2.26.1
  * tests broken with USE="-doc" upstream bug #577774
 gnome-base/gconf-2.26.0
@@ -70,6 +68,8 @@ net-misc/vinagre-2.26.0
  * make gnome-panel applet optional ?
 net-misc/vino-2.26.0
  * dev-libs/libunique needs KEYWORDS
+net-wireless/gnome-bluetooth-2.27.2
+ * KEYWORDS for libunique
 sys-apps/devicekit-power-006
  * crazy cflags by default, kill them out behind --enable-maintainer-mode
 www-client/epiphany-2.26.0
