@@ -19,17 +19,18 @@ RDEPEND=">=dev-libs/glib-2.12.0
 	x11-libs/libX11
 	dbus? ( >=dev-libs/dbus-glib-0.70 )"
 DEPEND="${RDEPEND}
-	!!dev-libs/unique
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.17
 	doc? ( >=dev-util/gtk-doc-1.6 )"
 
 DOCS="AUTHORS NEWS ChangeLog README TODO"
 
-src_unpack() {
-	     gnome2_src_unpack
-	     epatch "${FILESDIR}/${P}-automagic-dbus.patch"
-	     eautoreconf
+src_prepare() {
+	gnome2_src_prepare
+
+	# http://bugs.gentoo.org/show_bug.cgi?id=265828
+	epatch "${FILESDIR}/${P}-automagic-dbus.patch"
+	eautoreconf
 }
 
 pkg_setup() {

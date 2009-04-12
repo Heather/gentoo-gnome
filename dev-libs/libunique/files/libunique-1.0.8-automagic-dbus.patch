@@ -1,24 +1,20 @@
- configure.ac |   33 ++++++++++++++++++++-------------
- 1 files changed, 20 insertions(+), 13 deletions(-)
-
-diff --git a/configure.ac b/configure.ac
-index 3a56a03..b8948b3 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -77,16 +77,22 @@ PKG_CHECK_MODULES(UNIQUE, x11 dnl
+diff -Naur libunique-1.0.8/configure.ac libunique-1.0.8.new/configure.ac
+--- libunique-1.0.8/configure.ac	2009-03-22 05:42:31.000000000 +0530
++++ libunique-1.0.8.new/configure.ac	2009-04-12 16:27:06.816454299 +0530
+@@ -76,16 +76,24 @@
+                           glib-2.0 >= $GLIB_REQUIRED dnl
                            gtk+-2.0 >= $GTK_REQUIRED)
  
- dnl D-Bus backend dependencies
+-dnl D-Bus backend dependencies
 -if $PKG_CONFIG --atleast-version $DBUS_GLIB_REQUIRED dbus-glib-1; then
 -  have_dbus=yes
 -  PKG_CHECK_MODULES(DBUS, dbus-glib-1 >= $DBUS_GLIB_REQUIRED)
 -  AC_SUBST(DBUS_CFLAGS)
 -  AC_SUBST(DBUS_LIBS)
--  AC_DEFINE([HAVE_DBUS], [1], [Building with D-Bus support])
+-  AC_DEFINE([HAVE_DBUS], [1], [Building with D-Bus support]) 
 -  AC_PATH_PROG(DBUS_BINDING_TOOL, dbus-binding-tool)
 -else
 -  have_dbus=no
--fi
 +AC_ARG_ENABLE([dbus],
 +	[AC_HELP_STRING([--enable-dbus],
 +	[Enable with D-Bus support @<:@default=yes@:>@])],
@@ -26,19 +22,21 @@ index 3a56a03..b8948b3 100644
 +	[have_dbus=yes])
 +
 +if test x$have_dbus == xyes; then
-+   PKG_CHECK_MODULES(DBUS, dbus-glib-1 >= $DBUS_GLIB_REQUIRED, have_dbus=yes,
-+   have_dbus=no)
-+   if test x$have_dbus == xyes; then
-+      AC_SUBST(DBUS_CFLAGS)
-+      AC_SUBST(DBUS_LIBS)
-+      AC_DEFINE([HAVE_DBUS], [1], [Building with D-Bus support])
-+      AC_PATH_PROG(DBUS_BINDING_TOOL, dbus-binding-tool)
-+   fi
-+fi
++  dnl D-Bus backend dependencies
++  if $PKG_CONFIG --atleast-version $DBUS_GLIB_REQUIRED dbus-glib-1; then
++    have_dbus=yes
++    PKG_CHECK_MODULES(DBUS, dbus-glib-1 >= $DBUS_GLIB_REQUIRED)
++    AC_SUBST(DBUS_CFLAGS)
++    AC_SUBST(DBUS_LIBS)
++    AC_DEFINE([HAVE_DBUS], [1], [Building with D-Bus support]) 
++    AC_PATH_PROG(DBUS_BINDING_TOOL, dbus-binding-tool)
++  else
++    have_dbus=no
++  fi
+ fi
  
  AM_CONDITIONAL([HAVE_DBUS], [test x$have_dbus = xyes])
- 
-@@ -171,7 +177,8 @@ AC_OUTPUT
+@@ -171,7 +179,8 @@
  
  echo "
  Configuration:
