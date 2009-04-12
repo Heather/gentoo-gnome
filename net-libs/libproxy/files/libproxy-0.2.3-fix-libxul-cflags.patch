@@ -1,0 +1,26 @@
+ configure.ac |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index bfea453..844896b 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -23,6 +23,7 @@ PKG_CHECK_MODULES(mozjs, xulrunner-js, have_mozjs=yes,
+ PKG_CHECK_MODULES(NetworkManager, NetworkManager, 
+ 					have_networkmanager=yes, have_networkmanager=no)
+ PKG_CHECK_MODULES(dbus, dbus-1, have_dbus=yes, have_dbus=no)
++PKG_CHECK_MODULES(libxul_unstable, libxul-unstable, have_mozjs=yes, have_mozjs=no)
+ 
+ # Environmental Variable
+ AC_ARG_WITH([envvar],
+@@ -117,8 +118,8 @@ AC_ARG_WITH([mozjs],
+             [test x$have_mozjs == xyes && with_mozjs=yes])
+ if test x$with_mozjs = xyes; then
+ 	if test x$have_mozjs == xyes; then
+-		MOZJS_CFLAGS="$mozjs_CFLAGS"
+-		MOZJS_LIBS="$mozjs_LIBS"
++		MOZJS_CFLAGS="$mozjs_CFLAGS $libxul_unstable_CFLAGS"
++		MOZJS_LIBS="$mozjs_LIBS $libxul_unstable_LIBS"
+ 		AC_SUBST(MOZJS_CFLAGS)
+ 		AC_SUBST(MOZJS_LIBS)
+ 	else

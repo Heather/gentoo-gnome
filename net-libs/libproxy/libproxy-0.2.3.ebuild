@@ -12,7 +12,7 @@ SRC_URI="http://${PN}.googlecode.com/files/${P}.tar.gz"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="gnome kde networkmanager python webkit"
+IUSE="gnome kde networkmanager python webkit xulrunner"
 
 RDEPEND="
 	gnome? ( 
@@ -25,12 +25,11 @@ RDEPEND="
 	networkmanager? ( net-misc/networkmanager )
 	python? ( >=dev-lang/python-2.5 )
 	webkit? ( net-libs/webkit-gtk )
+	xulrunner? ( net-libs/xulrunner )
 "
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.19"
 
-# dang: disable xulrunner until someone has time to figure out how to make it
-# actually build.
 src_prepare() {
 	# http://code.google.com/p/libproxy/issues/detail?id=23
 	epatch "${FILESDIR}/${P}-fix-dbus-includes.patch"
@@ -38,6 +37,8 @@ src_prepare() {
 	epatch "${FILESDIR}/${P}-fix-python-automagic.patch"
 	# http://code.google.com/p/libproxy/issues/detail?id=25
 	epatch "${FILESDIR}/${P}-fix-as-needed-problem.patch"
+	# http://bugs.gentoo.org/show_bug.cgi?id=259178
+	epatch "${FILESDIR}/${P}-fix-libxul-cflags.patch"
 
 	eautoreconf
 }
@@ -46,10 +47,10 @@ src_configure() {
 	econf --with-envvar \
 		--with-file \
 		--disable-static \
-		--without-mozjs \
 		$(use_with gnome) \
 		$(use_with kde) \
 		$(use_with webkit) \
+		$(use_with xulrunner mozjs) \
 		$(use_with networkmanager) \
 		$(use_with python)
 }
