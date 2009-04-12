@@ -27,5 +27,5 @@ src_install() {
 	gnome2_src_install
 
 	insinto /usr/share/${PN}-2.0/language-specs
-	doins "${FILESDIR}"/2.0/gentoo.lang
+	doins "${FILESDIR}"/2.0/gentoo.lang || die "doins failed"
 }
