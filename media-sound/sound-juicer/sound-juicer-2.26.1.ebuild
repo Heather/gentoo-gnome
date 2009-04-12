@@ -23,7 +23,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.16
 	media-libs/libcanberra[gtk]
 	dev-libs/dbus-glib
 
-	>=media-libs/musicbrainz-3:3
+	>=media-libs/musicbrainz-3.0.2:3
 	>=dev-libs/libcdio-0.70
 	>=gnome-extra/gnome-media-2.11.91
 	>=app-cdr/brasero-0.9.1

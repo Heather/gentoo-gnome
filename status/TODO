@@ -52,7 +52,7 @@ gnome-extra/yelp-2.26.0
  * Add patch to make lzma-utils not automagic and use_enable here
 mail-client/evolution-2.26.0
  * libpst automagic dep
-media-sound/sound-juicer-2.26.0
+media-sound/sound-juicer-2.26.1
  * possibly automagic dual slot dep on musicbrainz
 media-video/totem-2.26.1
  * tests broken with USE="-doc" upstream bug #577774
