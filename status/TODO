@@ -64,6 +64,8 @@ net-im/empathy-2.26.0.1
  * libnotify & libcanberra hard deps
  * Tests are broken, upstream bug #576785
  * This needs to be upstreamed before moving to tree
+net-libs/libepc-0.3.9
+ * 2 out of 16 tests fail, upstream bug #578792
 net-misc/vinagre-2.26.0
  * make gnome-panel applet optional ?
 net-misc/vino-2.26.0
