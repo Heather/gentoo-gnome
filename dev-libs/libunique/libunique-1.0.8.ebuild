@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit gnome2
+inherit gnome2 autotools
 
 DESCRIPTION="a library for writing single instance application"
 HOMEPAGE="http://live.gnome.org/LibUnique"
@@ -26,7 +26,12 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS NEWS ChangeLog README TODO"
 
-# FIXME: automagic dbus dependency
+src_unpack() {
+	     gnome2_src_unpack
+	     epatch "${FILESDIR}/${P}-automagic-dbus.patch"
+	     eautoreconf
+}
+
 pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_enable dbus)
