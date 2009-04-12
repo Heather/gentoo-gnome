@@ -15,7 +15,7 @@ IUSE="python"
 RDEPEND=">=dev-libs/glib-2.16
 	>=sys-apps/dbus-0.60
 	>=dev-libs/dbus-glib-0.60
-	>=net-libs/telepathy-glib-0.7.23
+	>=net-libs/telepathy-glib-0.7.29
 	>=net-libs/farsight2-0.0.8
 	python? (
 		>=dev-python/pygobject-2.12.0
