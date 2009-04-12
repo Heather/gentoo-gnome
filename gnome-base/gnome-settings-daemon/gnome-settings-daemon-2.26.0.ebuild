@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-settings-daemon/gnome-settings-daemon-2.24.1-r1.ebuild,v 1.1 2008/12/02 15:02:18 remi Exp $
 
-inherit autotools eutils gnome2
+inherit autotools confutils eutils gnome2
 
 DESCRIPTION="Gnome Settings Daemon"
 HOMEPAGE="http://www.gnome.org"
@@ -38,8 +38,6 @@ RDEPEND=">=dev-libs/dbus-glib-0.74
         >=media-libs/gst-plugins-base-0.10.1.2 )
 "
 
-# Pulseaudio cannot be enabled unless gstreamer is disabled
-
 DEPEND="${RDEPEND}
 	!<gnome-base/gnome-control-center-2.22
 	sys-devel/gettext
@@ -54,12 +52,14 @@ DOCS="AUTHORS NEWS ChangeLog MAINTAINERS"
 pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_enable debug)
-		$(use_with libnotify)"
+		$(use_with libnotify)
+		$(use_enable pulseaudio pulse)
+		$(use_enable !pulseaudio gstreamer)"
 
 	if use pulseaudio; then
-			G2CONF="${G2CONF} --enable-pulse"
+		elog "Building volume media keys using Pulseaudio"
 	else
-			G2CONF="${G2CONF} --enable-gstreamer"
+		elog "Building volume media keys using GStreamer"
 	fi
 }
 
