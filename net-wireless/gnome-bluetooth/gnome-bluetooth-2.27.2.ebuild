@@ -29,7 +29,6 @@ RDEPEND="${COMMON_DEPEND}
 	net-wireless/bluez
 	>=app-mobilephone/obex-data-server-0.4"
 
-G2CONF="--disable-desktop-update
-		--disable-icon-update"
-
 DOCS="AUTHORS README NEWS ChangeLog"
+G2CONF="${G2CONF} --disable-desktop-update --disable-icon-update"
+

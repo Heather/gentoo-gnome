@@ -39,7 +39,7 @@ DOCS="AUTHORS BUGS ChangeLog NEWS README TODO"
 
 pkg_setup() {
 	ELTCONF="--reverse-deps"
-	G2CONF="--disable-static --with-bonobo-editor"
+	G2CONF="${G2CONF} --disable-static --with-bonobo-editor"
 }
 
 src_unpack() {
@@ -54,5 +54,5 @@ src_unpack() {
 		"${S}/a11y/Makefile.am" "${S}/a11y/Makefile.in"
 
 	# For some reason, won't install translations otherwise.
-	intltoolize --force --copy --automake || die "intltoolize failed"
+	intltoolize --force --copy --automake || die "intltoolize failed"
 }

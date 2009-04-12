@@ -20,6 +20,6 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog NEWS README"
 
 pkg_setup() {
-	G2CONF="--enable-animation --enable-lua"
+	G2CONF="${G2CONF} --enable-animation --enable-lua"
 	use accessibility || G2CONF="${G2CONF} --disable-hc"
 }

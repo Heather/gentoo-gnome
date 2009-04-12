@@ -69,7 +69,8 @@ ELTCONF="--reverse-deps"
 GCONF_DEBUG="no"
 
 pkg_setup() {
-	G2CONF="--without-kde-applnk-path
+	G2CONF="${G2CONF}
+		--without-kde-applnk-path
 		--enable-plugins=experimental
 		--with-weather
 		$(use_enable ssl nss)

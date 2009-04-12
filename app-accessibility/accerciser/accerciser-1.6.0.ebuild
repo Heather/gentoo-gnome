@@ -31,7 +31,7 @@ DEPEND="${RDEPEND}
 	>=app-text/gnome-doc-utils-0.12"
 
 pkg_setup() {
-	G2CONF="--without-pyreqs"
+	G2CONF="${G2CONF} --without-pyreqs"
 }
 
 src_unpack() {
