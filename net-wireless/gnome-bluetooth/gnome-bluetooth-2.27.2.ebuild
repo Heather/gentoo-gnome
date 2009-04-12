@@ -10,8 +10,10 @@ DESCRIPTION="Fork of bluez-gnome focused on integration with GNOME"
 HOMEPAGE="http://live.gnome.org/GnomeBluetooth"
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="2"
+IUSE=""
 KEYWORDS="~amd64 ~hppa ~sparc ~x86"
 
+# FIXME: KEYWORDS for libunique
 COMMON_DEPEND=">=dev-libs/glib-2.16
 	>=x11-libs/gtk+-2.15
 	>=x11-libs/libnotify-0.4.3
