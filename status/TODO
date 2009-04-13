@@ -74,7 +74,7 @@ net-wireless/gnome-bluetooth-2.27.2
  * KEYWORDS for libunique
 sys-apps/devicekit-power-006
  * crazy cflags by default, kill them out behind --enable-maintainer-mode
-www-client/epiphany-2.26.0
+www-client/epiphany-2.26.1
  * libcanberra is automagic
 x11-libs/gtk+-2.16.1
  * configure says >=xrandr-1.2.99 but remi tells me it's broken
