@@ -16,7 +16,7 @@ gnome-base/gdm-2.25.2
  * automagic libxklavier check
 gnome-base/gdm-2.26.0
  * automagic libxklavier check
-gnome-base/gnome-applets-2.26.0
+gnome-base/gnome-applets-2.26.1
  * Check for polkit
  * networkmanager-0.7 is automagic
 gnome-base/gnome-control-center-2.26.0
