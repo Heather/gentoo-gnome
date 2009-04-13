@@ -16,9 +16,6 @@ gnome-base/gdm-2.25.2
  * automagic libxklavier check
 gnome-base/gdm-2.26.0
  * automagic libxklavier check
-gnome-base/gnome-applets-2.26.1
- * Check for polkit
- * networkmanager-0.7 is automagic
 gnome-base/gnome-control-center-2.26.0
  * libcanberra is automagic.
  * policykit-gnome is automagic for about-me capplet.
@@ -66,7 +63,7 @@ net-im/empathy-2.26.1
  * This needs to be upstreamed before moving to tree
 net-libs/libepc-0.3.9
  * 2 out of 16 tests fail, upstream bug #578792
-net-misc/vinagre-2.26.0
+net-misc/vinagre-2.26.1
  * make gnome-panel applet optional ?
 net-misc/vino-2.26.0
  * dev-libs/libunique needs KEYWORDS

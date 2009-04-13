@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-applets/gnome-applets-2.24.3.1.ebuild,v 1.7 2009/03/19 15:56:06 josejx Exp $
 
-inherit gnome2 python
+inherit autotools eutils gnome2 python
 
 DESCRIPTION="Applets for the GNOME Desktop and Panel"
 HOMEPAGE="http://www.gnome.org/"
@@ -10,7 +10,7 @@ HOMEPAGE="http://www.gnome.org/"
 LICENSE="GPL-2 FDL-1.1 LGPL-2"
 SLOT="2"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
-IUSE="acpi apm doc gnome gstreamer hal ipv6"
+IUSE="acpi apm doc gnome gstreamer hal ipv6 networkmanager policykit"
 
 # TODO: configure says python stuff is optional
 # my secret script says cpufrequtils might be needed in RDEPEND
@@ -43,7 +43,9 @@ RDEPEND=">=x11-libs/gtk+-2.13
 		>=dev-python/gnome-python-2.10 )
 	gstreamer?	(
 		>=media-libs/gstreamer-0.10.2
-		>=media-libs/gst-plugins-base-0.10.14 )"
+		>=media-libs/gst-plugins-base-0.10.14 )
+	networkmanager? ( >=net-misc/networkmanager-0.7.0 )
+	policykit? ( >=sys-auth/policykit-0.7 )"
 
 DEPEND="${RDEPEND}
 	>=app-text/scrollkeeper-0.1.4
@@ -62,10 +64,13 @@ src_unpack() {
 	# disable pyc compiling
 	mv py-compile py-compile.orig
 	ln -s $(type -P true) py-compile
+
+	# Networmanager is automagic, bug #266056
+	epatch "${FILESDIR}/${P}-automagic-networkmanager.patch"
+
+	eautoreconf
 }
 
-# FIXME: Check for polkit
-# FIXME: networkmanager-0.7 is automagic
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-scrollkeeper
@@ -74,7 +79,8 @@ pkg_setup() {
 		$(use_enable gstreamer mixer-applet)
 		$(use_with hal)
 		$(use_enable ipv6)
-		--disable-polkit"
+		$(use_enable networkmanager)
+		$(use_enable policykit polkit)"
 
 	if use gstreamer; then
 		G2CONF="${G2CONF} --with-gstreamer=0.10"
@@ -87,6 +93,11 @@ pkg_setup() {
 	if use ppc && ! use apm; then
 		G2CONF="${G2CONF} --disable-battstat"
 	fi
+}
+
+src_test() {
+	unset DBUS_SESSION_BUS_ADDRESS
+	emake check || die "emake check failed"
 }
 
 src_install() {
