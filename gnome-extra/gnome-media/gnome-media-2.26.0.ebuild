@@ -42,6 +42,7 @@ RDEPEND=">=dev-libs/glib-2.18.2:2
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9
 	>=app-text/scrollkeeper-0.3.11
+	>=app-text/gnome-doc-utils-0.3.2
 	>=dev-util/intltool-0.35.0"
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
