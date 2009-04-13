@@ -68,5 +68,5 @@ src_install() {
 	gnome2_src_install
 
 	exeinto /etc/X11/xinit/xinitrc.d/
-	doexe "${FILESDIR}/70-seahorse-agent" || die "doexe failed"
+	doexe "${FILESDIR}/70-seahorse-agent" || die "doexe failed"
 }
