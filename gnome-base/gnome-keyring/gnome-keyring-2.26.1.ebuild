@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-keyring/gnome-keyring-2.22.3.ebuild,v 1.1 2008/07/02 21:32:43 eva Exp $
 
+EAPI="2"
+
 inherit gnome2 pam virtualx
 
 DESCRIPTION="Password and keyring managing daemon"
@@ -42,7 +44,16 @@ pkg_setup() {
 		--enable-ssh-agent"
 }
 
+src_prepare() {
+	gnome2_src_prepare
+
+	# Remove silly CFLAGS
+	sed 's:CFLAGS="$CFLAGS -Werror:CFLAGS="$CFLAGS:' \
+		-i configure.in configure || die "sed failed"
+}
+
 src_test() {
+	unset DBUS_SESSION_BUS_ADDRESS
 	Xemake check || die "emake check failed!"
 
 	Xemake -C tests run || die "running tests failed!"
