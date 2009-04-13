@@ -16,7 +16,7 @@ IUSE="avahi doc networkmanager python spell"
 
 # FIXME: libcanberra is automagic
 RDEPEND=">=dev-libs/glib-2.18.0
-	>=x11-libs/gtk+-2.15.1
+	>=x11-libs/gtk+-2.16.0
 	>=dev-libs/libxml2-2.6.12
 	>=dev-libs/libxslt-1.1.7
 	>=gnome-base/libglade-2.3.1
@@ -64,7 +64,7 @@ src_prepare() {
 	gnome2_src_prepare
 
 	# Fix compilation with xulrunner 1.9.1, bug #263990
-	epatch "${FILESDIR}/${P}-xulrunner191.patch"
+	epatch "${FILESDIR}/${PN}-2.26.0-xulrunner191.patch"
 }
 
 src_configure() {
