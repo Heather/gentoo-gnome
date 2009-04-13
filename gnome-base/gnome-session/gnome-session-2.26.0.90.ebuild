@@ -2,12 +2,14 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-session/gnome-session-2.22.1.1.ebuild,v 1.1 2008/04/10 22:53:29 eva Exp $
 
-inherit autotools eutils gnome2
+EAPI="2"
+
+inherit eutils gnome2
 
 DESCRIPTION="Gnome session manager"
 HOMEPAGE="http://www.gnome.org/"
 SRC_URI="${SRC_URI}
-		branding? ( mirror://gentoo/gentoo-splash.png )"
+	branding? ( mirror://gentoo/gentoo-splash.png )"
 
 LICENSE="GPL-2 LGPL-2 FDL-1.1"
 SLOT="0"
@@ -49,20 +51,14 @@ pkg_setup() {
 		$(use_enable policykit polkit)"
 }
 
-src_unpack() {
-	gnome2_src_unpack
+src_prepare() {
+	gnome2_src_prepare
 
 	# Patch for Gentoo Branding (bug #42687)
 	use branding && epatch "${FILESDIR}/${PN}-2.17.90.1-gentoo-branding.patch"
 
 	# Fix shutdown/restart capability, upstream bug #549150
-	epatch "${FILESDIR}/${PN}-2.24.2-shutdown.patch"
-
-	# Session saving support (GNOME bug #552387)
-	epatch "${FILESDIR}/${P}-session-saving.patch"
-
-	intltoolize --force --copy --automake || die "intltoolize failed"
-	eautoreconf
+	epatch "${FILESDIR}/${PN}-2.26.0-shutdown.patch"
 }
 
 src_install() {
