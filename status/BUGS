@@ -24,7 +24,6 @@ Tests:
 ======
 * gnome-power-manager: Tests fail[5]
 * gtk+: fails tests (xrandr 1.2.99?)[1]
-* gnome-applets: fails tests at invest-applet (stupidity?)
 * gnome-keyring: tests fail in various[6] ways[7] for different people[8]
 
 Enhancements:
