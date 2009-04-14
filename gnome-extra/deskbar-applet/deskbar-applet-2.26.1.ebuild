@@ -53,17 +53,9 @@ pkg_setup() {
 src_unpack() {
 	gnome2_src_unpack
 
-	# Fix installing libs into pythondir
-	epatch "${FILESDIR}/${PN}-2.24.1-multilib.patch"
-
 	# disable pyc compiling
 	mv py-compile py-compile.orig
 	ln -s $(type -P true) py-compile
-
-	# needed to build on a libtool-1 system, bug #243822
-	rm m4/lt* m4/libtool.m4 ltmain.sh
-
-	AT_M4DIR="m4" eautoreconf
 }
 
 pkg_postinst() {
