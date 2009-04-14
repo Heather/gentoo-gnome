@@ -73,10 +73,8 @@ src_prepare() {
 	epatch "${FILESDIR}"/${PN}-2.25.5-as-needed.patch
 
 	# FIXME: tarball generated with broken gtk-doc, revisit me.
-	if use doc; then
-		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/usr/bin/gtkdoc-rebase" -i gtk-doc.make || die "sed 1 failed"
-	else
-		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/bin/true" -i gtk-doc.make || die "sed 2 failed"
+	if ! use doc; then
+		sed "s/gtkdoc-rebase/true/" -i gtk-doc.make || die "sed 2 failed"
 	fi
 
 	# gtk-doc-am and gnome-common needed for this
