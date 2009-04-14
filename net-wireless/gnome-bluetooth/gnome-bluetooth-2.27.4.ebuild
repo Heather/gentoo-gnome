@@ -10,7 +10,7 @@ DESCRIPTION="Fork of bluez-gnome focused on integration with GNOME"
 HOMEPAGE="http://live.gnome.org/GnomeBluetooth"
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="2"
-IUSE=""
+IUSE="doc"
 KEYWORDS="~amd64 ~hppa ~sparc ~x86"
 
 # FIXME: KEYWORDS for libunique
@@ -24,7 +24,8 @@ COMMON_DEPEND=">=dev-libs/glib-2.16
 DEPEND="${COMMON_DEPEND}
 	!!net-wireless/bluez-gnome
 	dev-util/pkgconfig
-	x11-proto/xproto"
+	x11-proto/xproto
+	doc? ( app-text/gnome-doc-utils )"
 RDEPEND="${COMMON_DEPEND}
 	net-wireless/bluez
 	>=app-mobilephone/obex-data-server-0.4"
