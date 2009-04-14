@@ -20,7 +20,7 @@ IUSE="crypt dbus hal kerberos krb4 ldap mono networkmanager nntp pda profile pyt
 # FIXME: libpst automagic dep
 RDEPEND=">=dev-libs/glib-2.18
 	>=x11-libs/gtk+-2.14
-	>=gnome-extra/evolution-data-server-2.26.0
+	>=gnome-extra/evolution-data-server-2.26.1
 	>=x11-themes/gnome-icon-theme-2.20
 	>=gnome-base/libbonobo-2.20.3
 	>=gnome-base/libbonoboui-2.4.2
