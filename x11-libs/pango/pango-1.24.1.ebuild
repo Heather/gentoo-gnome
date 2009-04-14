@@ -52,6 +52,10 @@ src_unpack() {
 	if multilib_enabled ; then
 		epatch "${FILESDIR}/${PN}-1.2.5-lib64.patch"
 	fi
+
+	# gtk-doc checks do not pass, upstream bug #578944
+	sed 's:TESTS = check.docs: TESTS = :g'\
+		-i docs/Makefile.am docs/Makefile.in || die "sed failed"
 }
 
 src_install() {

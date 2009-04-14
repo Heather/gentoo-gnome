@@ -67,7 +67,7 @@ net-misc/vinagre-2.26.1
  * make gnome-panel applet optional ?
 net-misc/vino-2.26.1
  * dev-libs/libunique needs KEYWORDS
-net-wireless/gnome-bluetooth-2.27.2
+net-wireless/gnome-bluetooth-2.27.4
  * KEYWORDS for libunique
 sys-apps/devicekit-power-006
  * crazy cflags by default, kill them out behind --enable-maintainer-mode
@@ -75,6 +75,6 @@ www-client/epiphany-2.26.1
  * libcanberra is automagic
 x11-libs/gtk+-2.16.1
  * configure says >=xrandr-1.2.99 but remi tells me it's broken
-x11-libs/pango-1.24.0
+x11-libs/pango-1.24.1
  * test
  * add gobject-introspection dependency when it is available
