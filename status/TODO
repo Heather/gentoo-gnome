@@ -12,9 +12,7 @@ gnome-base/gconf-2.26.0
  * add policykit support
 gnome-base/gdm-2.24.1
  * automagic libxklavier check
-gnome-base/gdm-2.25.2
- * automagic libxklavier check
-gnome-base/gdm-2.26.0
+gnome-base/gdm-2.26.1
  * automagic libxklavier check
 gnome-base/gnome-control-center-2.26.0
  * libcanberra is automagic.

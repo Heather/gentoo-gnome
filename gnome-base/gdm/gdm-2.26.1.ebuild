@@ -1,7 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gdm/gdm-2.20.7.ebuild,v 1.5 2008/08/12 13:54:55 armin76 Exp $
-EAPI=2
+
+EAPI="2"
 
 inherit eutils pam gnome2
 
@@ -16,50 +17,52 @@ IUSE_LIBC="elibc_glibc"
 IUSE="accessibility debug ipv6 gnome-keyring policykit selinux tcpd xinerama $IUSE_LIBC"
 
 # Name of the tarball with gentoo specific files
-GDM_EXTRA="${PN}-2.20.5-gentoo-files"
+GDM_EXTRA="${PN}-2.20.9-gentoo-files-r1"
 
 SRC_URI="${SRC_URI}
-		 mirror://gentoo/${GDM_EXTRA}.tar.bz2"
+	mirror://gentoo/${GDM_EXTRA}.tar.bz2"
 
 # FIXME: automagic libxklavier check
 RDEPEND=">=dev-libs/dbus-glib-0.74
-		 >=dev-libs/glib-2.15.4
-		 >=x11-libs/gtk+-2.10.0
-		 >=x11-libs/pango-1.3
-		 >=gnome-base/libglade-2
-		 >=gnome-base/gconf-2.6.1
-		 >=gnome-base/gnome-panel-2
-		 >=x11-libs/libxklavier-3.5
-		 x11-libs/libXft
-		 app-text/iso-codes
+	>=dev-libs/glib-2.15.4
+	>=x11-libs/gtk+-2.10.0
+	>=x11-libs/pango-1.3
+	>=gnome-base/libglade-2
+	>=gnome-base/gconf-2.6.1
+	>=gnome-base/gnome-panel-2
+	>=x11-libs/libxklavier-3.5
+	x11-libs/libXft
+	app-text/iso-codes
 
-		 x11-libs/gksu
-		 x11-libs/libXi
-		 x11-libs/libXau
-		 x11-libs/libX11
-		 x11-libs/libXext
-		 x11-apps/sessreg
-		 x11-libs/libXdmcp
-		 virtual/pam
-		 sys-auth/pambase[gnome-keyring?]
-		 sys-auth/consolekit
+	x11-libs/gksu
+	x11-libs/libXi
+	x11-libs/libXau
+	x11-libs/libX11
+	x11-libs/libXext
+	x11-apps/sessreg
+	x11-libs/libXdmcp
+	virtual/pam
+	sys-auth/pambase[gnome-keyring?]
+	sys-auth/consolekit
 
-		 accessibility? ( x11-libs/libXevie )
-		 gnome-keyring? ( >=gnome-base/gnome-keyring-2.22[pam] )
-		 policykit? ( >=sys-auth/policykit-0.8 )
-		 selinux? ( sys-libs/libselinux )
-		 tcpd? ( >=sys-apps/tcp-wrappers-7.6 )
-		 xinerama? ( x11-libs/libXinerama )
+	accessibility? ( x11-libs/libXevie )
+	gnome-keyring? ( >=gnome-base/gnome-keyring-2.22[pam] )
+	policykit? (
+		>=sys-auth/policykit-0.8
+		>=gnome-extra/policykit-gnome-0.8 )
+	selinux? ( sys-libs/libselinux )
+	tcpd? ( >=sys-apps/tcp-wrappers-7.6 )
+	xinerama? ( x11-libs/libXinerama )
 
-		 !gnome-extra/fast-user-switch-applet"
+	!gnome-extra/fast-user-switch-applet"
 DEPEND="${RDEPEND}
-		test? ( >=dev-libs/check-0.9.4 )
-		sys-devel/gettext
-		x11-proto/inputproto
-		>=dev-util/intltool-0.40
-		>=dev-util/pkgconfig-0.19
-		>=app-text/scrollkeeper-0.1.4
-		>=app-text/gnome-doc-utils-0.3.2"
+	test? ( >=dev-libs/check-0.9.4 )
+	sys-devel/gettext
+	x11-proto/inputproto
+	>=dev-util/intltool-0.40
+	>=dev-util/pkgconfig-0.19
+	>=app-text/scrollkeeper-0.1.4
+	>=app-text/gnome-doc-utils-0.3.2"
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
@@ -84,10 +87,22 @@ pkg_setup() {
 }
 
 src_prepare() {
+	gnome2_src_prepare
+
 	# remove unneeded linker directive for selinux (#41022)
 	epatch "${FILESDIR}/${PN}-2.25.92-selinux-remove-attr.patch"
+
 	# Make it daemonize so that the boot process can continue (#236701)
 	epatch "${FILESDIR}/${PN}-2.24.1-fix-daemonize-regression.patch"
+
+	# Fix VT grab problem causing GDM to grab VT2 instead of 7 (#261339)
+	#epatch "${FILESDIR}/${P}-fix-vt-grab-problem.patch"
+
+	# Make custom session work, bug #.
+	epatch "${FILESDIR}/${PN}-2.26.1-custom-session.patch"
+
+	# ssh-agent handling must be done at xinitrc.d
+	epatch "${FILESDIR}/${PN}-2.26.1-xinitrc-ssh-agent.patch"
 }
 
 src_install() {
@@ -109,14 +124,21 @@ src_install() {
 	fowners root:gdm /var/gdm
 	fperms 1770 /var/gdm
 
-	# use our own session script
-	rm -f "${D}/etc/X11/gdm/Xsession"
-	exeinto /etc/X11/gdm
-	doexe "${gentoodir}/Xsession"
-
 	# add a custom xsession .desktop by default (#44537)
 	exeinto /etc/X11/dm/Sessions
-	doexe "${gentoodir}/custom.desktop"
+	doexe "${gentoodir}/custom.desktop" || die "doexe 1 failed"
+
+	# add xinitrc.d scripts
+	exeinto /etc/X11/xinit/xinitrc.d
+	doexe "${FILESDIR}/49-keychain" || die "doexe 2 failed"
+	doexe "${FILESDIR}/50-ssh-agent" || die "doexe 3 failed"
+
+	# install XDG_DATA_DIRS gdm changes
+	echo 'XDG_DATA_DIRS="/usr/share/gdm"' > 99xdg-gdm
+	doenvd 99xdg-gdm || die "doenvd failed"
+
+	# add a custom sound playing script (#248253)
+	dobin "${gentoodir}/gdmplay"
 
 	# avoid file collision, bug #213118
 	rm -f "${D}/usr/share/xsessions/gnome.desktop"
