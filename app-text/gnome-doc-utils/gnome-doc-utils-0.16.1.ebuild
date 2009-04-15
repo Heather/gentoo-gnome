@@ -1,7 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-text/gnome-doc-utils/gnome-doc-utils-0.14.2.ebuild,v 1.2 2009/01/26 23:00:17 eva Exp $
-EAPI=2
+
+EAPI="2"
 
 inherit eutils python gnome2
 
@@ -29,7 +30,7 @@ src_unpack() {
 	gnome2_src_unpack
 
 	# Make xml2po FHS compliant, bug #190798
-	epatch "${FILESDIR}/${P}-fhs.patch"
+	epatch "${FILESDIR}/${PN}-0.16.0-fhs.patch"
 
 	# If there is a need to reintroduce eautomake or eautoreconf, make sure
 	# to AT_M4DIR="tools m4", bug #224609 (m4 removes glib build time dep)
