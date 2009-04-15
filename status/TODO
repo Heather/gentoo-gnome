@@ -37,7 +37,7 @@ gnome-extra/evolution-data-server-2.26.1
 gnome-extra/gnome-media-2.26.0
  * libcanberra is automagic
  * dep on pulseaudio-0.9.15 when it is out.
-gnome-extra/gnome-user-docs-2.26.0
+gnome-extra/gnome-user-docs-2.26.1
  * fails tests, upstream bug #577778
 gnome-extra/gnome-user-share-2.26.0
  * could libnotify be made optional ?
