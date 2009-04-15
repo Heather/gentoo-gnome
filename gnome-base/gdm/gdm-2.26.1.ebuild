@@ -14,7 +14,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
 IUSE_LIBC="elibc_glibc"
-IUSE="accessibility debug ipv6 gnome-keyring policykit selinux tcpd xinerama $IUSE_LIBC"
+IUSE="accessibility debug ipv6 gnome-keyring policykit selinux tcpd test xinerama $IUSE_LIBC"
 
 # Name of the tarball with gentoo specific files
 GDM_EXTRA="${PN}-2.20.9-gentoo-files-r1"
