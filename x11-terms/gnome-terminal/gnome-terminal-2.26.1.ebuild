@@ -13,10 +13,10 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE=""
 
 RDEPEND=">=dev-libs/glib-2.16.0
-	>=x11-libs/gtk+-2.13.6
+	>=x11-libs/gtk+-2.14.0
 	>=gnome-base/gconf-2.14
 	>=x11-libs/startup-notification-0.8
-	>=x11-libs/vte-0.19.1
+	>=x11-libs/vte-0.20.0
 	>=dev-libs/dbus-glib-0.6
 	x11-libs/libSM"
 DEPEND="${RDEPEND}
