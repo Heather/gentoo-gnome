@@ -12,7 +12,7 @@ HOMEPAGE="http://www.gnome.org/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86"
-IUSE="python"
+IUSE="python doc"
 
 RDEPEND=">=x11-libs/gtk+-2.11
 	>=dev-libs/glib-2.13
