@@ -2,7 +2,7 @@ Ebuild Notices:
 ===============
 app-accessibility/dasher-4.10.0
  * bashism in configure is utterly broken !
-app-text/evince-2.26.0
+app-text/evince-2.26.1
  * enable gobject-introspection when we have an ebuild for it.
 dev-libs/libgweather-2.26.1
  * decide what to do with --enable-locations-compression
