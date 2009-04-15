@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/gconf-editor/gconf-editor-2.24.1.ebuild,v 1.2 2009/01/29 22:44:19 eva Exp $
 
-inherit gnome2
+inherit autotools eutils gnome2
 
 DESCRIPTION="An editor to the GNOME 2 config system"
 HOMEPAGE="http://www.gnome.org/"
@@ -10,12 +10,13 @@ HOMEPAGE="http://www.gnome.org/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="test"
+IUSE="policykit test"
 
 RDEPEND=">=x11-libs/gtk+-2.6
 	>=gnome-base/gconf-2.12.0
-	>=sys-auth/policykit-0.7
-	>=dev-libs/dbus-glib-0.71"
+	policykit? (
+		>=sys-auth/policykit-0.7
+		>=dev-libs/dbus-glib-0.71 )"
 DEPEND="${RDEPEND}
 	app-text/scrollkeeper
 	sys-devel/gettext
@@ -27,5 +28,15 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog NEWS README"
 
 pkg_setup() {
-	G2CONF="${G2CONF} --disable-scrollkeeper"
+	G2CONF="${G2CONF}
+		--disable-scrollkeeper
+		$(use_with policykit)"
+}
+
+src_unpack() {
+	gnome2_src_unpack
+
+	# Fix automagic policykit, bug #266031
+	epatch "${FILESDIR}/${P}-optional-policykit.patch"
+	eautoreconf
 }
