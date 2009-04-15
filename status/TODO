@@ -19,8 +19,8 @@ gnome-base/gdm-2.26.0
 gnome-base/gnome-control-center-2.26.0
  * libcanberra is automagic.
  * policykit-gnome is automagic for about-me capplet.
-gnome-base/gnome-desktop-2.26.0
- * Python deps are needed for gnome-about but not
+gnome-base/gnome-desktop-2.26.1
+ * Python deps are needed for gnome-about but not listed in configure.ac
 gnome-base/gnome-2.26.0
  * Rephrase to teach about using different WMs instead, as metacity is the default anyway
  * but first check WINDOW_MANAGER is still honored in 2.24. gnome-session-2.24 might have lost

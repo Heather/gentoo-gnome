@@ -12,8 +12,7 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc"
 
-# FIXME: Python deps are needed for gnome-about but not
-# listed in configure.ac
+# FIXME: Python deps are needed for gnome-about but not listed in configure.ac
 RDEPEND=">=x11-libs/gtk+-2.14.0
 	>=dev-libs/glib-2.19.1
 	>=x11-libs/libXrandr-1.2
@@ -37,7 +36,10 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
 pkg_setup() {
-	G2CONF="${G2CONF} --with-gnome-distributor=Gentoo --disable-scrollkeeper"
+	G2CONF="${G2CONF}
+		--with-gnome-distributor=Gentoo
+		--disable-scrollkeeper
+		--disable-static"
 }
 
 pkg_postinst() {
