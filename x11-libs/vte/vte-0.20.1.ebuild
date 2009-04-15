@@ -34,6 +34,7 @@ DOCS="AUTHORS ChangeLog HACKING NEWS README"
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-deprecation
+		--disable-static
 		$(use_enable debug)
 		$(use_enable glade glade-catalogue)
 		$(use_enable python)"
@@ -44,7 +45,4 @@ src_prepare() {
 
 	# backspace broken within screen, bug #249618
 	epatch "${FILESDIR}/${PN}-0.17.4-no-null-backspace.patch"
-
-	# Fix tests, upstream bug #576504
-	epatch "${FILESDIR}/${P}-tests.patch"
 }
