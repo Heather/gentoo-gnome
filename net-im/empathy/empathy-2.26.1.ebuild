@@ -50,7 +50,7 @@ DEPEND="${RDEPEND}
 DOCS="CONTRIBUTORS AUTHORS ChangeLog NEWS README"
 
 # FIXME: Tests are broken, upstream bug #576785
-#RESTRICT="test"
+RESTRICT="test"
 
 pkg_setup() {
 	G2CONF="${G2CONF}
@@ -71,6 +71,10 @@ src_unpack() {
 
 	# Remove hard enabled -Werror (see AM_MAINTAINER_MODE), bug 218687
 	sed -i "s:-Werror::g" configure || die "sed failed"
+
+	# FIXME: report upstream their package is broken
+	intltoolize --force --copy --automake || die "intltoolize failed"
+	eautoreconf
 }
 
 src_test() {
