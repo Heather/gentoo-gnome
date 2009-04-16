@@ -17,10 +17,11 @@ IUSE=""
 RDEPEND=""
 DEPEND="app-text/scrollkeeper
 	>=app-text/gnome-doc-utils-0.5.6
-	>=dev-util/pkgconfig-0.9
-	test? (
-		~app-text/docbook-xml-dtd-4.1.2
-		~app-text/docbook-xml-dtd-4.3 )"
+	>=dev-util/pkgconfig-0.9"
+# Tests restricted
+#	test? (
+#		~app-text/docbook-xml-dtd-4.1.2
+#		~app-text/docbook-xml-dtd-4.3 )"
 
 DOCS="AUTHORS ChangeLog NEWS README"
 
