@@ -68,6 +68,9 @@ src_unpack() {
 	# Networmanager is automagic, bug #266056
 	epatch "${FILESDIR}/${P}-automagic-networkmanager.patch"
 
+	# Make it libtool-1 compatible, bug #266248
+	rm -v m4/lt* m4/libtool.m4 || die "removing libtool macros failed"
+
 	eautoreconf
 }
 
