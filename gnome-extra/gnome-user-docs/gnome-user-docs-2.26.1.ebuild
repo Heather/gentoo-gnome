@@ -12,21 +12,17 @@ HOMEPAGE="http://www.gnome.org/"
 LICENSE="FDL-1.1"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
-IUSE=""
+IUSE="test"
 
 RDEPEND=""
 DEPEND="app-text/scrollkeeper
 	>=app-text/gnome-doc-utils-0.5.6
-	>=dev-util/pkgconfig-0.9"
-# Tests restricted
-#	test? (
-#		~app-text/docbook-xml-dtd-4.1.2
-#		~app-text/docbook-xml-dtd-4.3 )"
+	>=dev-util/pkgconfig-0.9
+	test? (
+		~app-text/docbook-xml-dtd-4.1.2
+		~app-text/docbook-xml-dtd-4.3 )"
 
 DOCS="AUTHORS ChangeLog NEWS README"
-
-# FIXME: fails tests, upstream bug #577778
-RESTRICT="test"
 
 pkg_setup() {
 	G2CONF="${G2CONF} --disable-scrollkeeper"
