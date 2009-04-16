@@ -37,12 +37,8 @@ DOCS="AUTHORS ChangeLog NEWS README"
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--with-openldap
+		--disable-static
 		$(use_with debug e2k-debug)
 		$(use_with static static-ldap)"
 }
 
-#src_prepare() {
-	# intltoolize because e-e won't install locales otherwise
-	# thanks to recent intltool, no need to eautoreconf/eautomake
-	#intltoolize --force --copy --automake || die "intltoolize failed"
-#}
