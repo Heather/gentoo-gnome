@@ -33,9 +33,9 @@ RDEPEND=">=dev-libs/dbus-glib-0.74
 	media-libs/fontconfig
 
 	pulseaudio? ( >=media-sound/pulseaudio-0.9.12 )
-    !pulseaudio? (
-        >=media-libs/gstreamer-0.10.1.2
-        >=media-libs/gst-plugins-base-0.10.1.2 )
+	!pulseaudio? (
+		>=media-libs/gstreamer-0.10.1.2
+		>=media-libs/gst-plugins-base-0.10.1.2 )
 "
 
 DEPEND="${RDEPEND}
@@ -66,6 +66,7 @@ pkg_setup() {
 src_unpack() {
 	gnome2_src_unpack
 
+	# Restore gstreamer volume control support, upstream bug #571145
 	epatch "${FILESDIR}/${P}-readd-gst-vol-control-support.patch"
 
 	# Fix background loading (GNOME bug #564909)
