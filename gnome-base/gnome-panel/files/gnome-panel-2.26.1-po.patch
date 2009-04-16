@@ -7,7 +7,7 @@
  po/bn_IN.po    |   57 
  po/ca.po       | 6529 ++++++++++++++++++++++++++++-----------------------------
  po/cs.po       |   69 
- po/da.po       | 2953 +++++++++++++------------
+ po/da.po       | 1497 -------------
  po/de.po       |   63 
  po/el.po       |   63 
  po/en_GB.po    |  575 ++---
@@ -46,7 +46,7 @@
  po/sk.po       |  457 ++-
  po/sl.po       |  299 +-
  po/sq.po       |   63 
- po/sr.po       | 1033 ++++-----
+ po/sr.po       | 1121 +++++----
  po/sv.po       |   63 
  po/ta.po       |   63 
  po/te.po       |   63 
@@ -56,16 +56,16 @@
  po/zh_CN.po    |   57 
  po/zh_HK.po    |  337 +-
  po/zh_TW.po    |  339 +-
- 56 files changed, 12406 insertions(+), 8888 deletions(-)
+ 56 files changed, 11018 insertions(+), 8908 deletions(-)
 
 Index: b/po/ar.po
 ===================================================================
 --- a/po/ar.po
 +++ b/po/ar.po
-@@ -2876,3 +2876,78 @@ msgstr "د_ليل التفضيلات:"
+@@ -3260,3 +3260,78 @@ msgstr "د_ليل التفضيلات:"
+ 
  #~ msgid "Could not find a suitable application."
  #~ msgstr "لا يمكن إيجاد تطبيق مناسب."
- 
 +
 +#: ../gnome-panel/panel-logout.c:242
 +#, c-format
@@ -9213,7 +9213,7 @@ Index: b/po/da.po
 ===================================================================
 --- a/po/da.po
 +++ b/po/da.po
-@@ -3170,1981 +3170,2044 @@ msgstr "_Panelprogram:"
+@@ -3170,1981 +3170,636 @@ msgstr "_Panelprogram:"
  msgid "_Prefs Dir:"
  msgstr "_Indstillingsmappe:"
  
@@ -9221,107 +9221,103 @@ Index: b/po/da.po
 -#~ msgctxt "Desktop Folder"
 -#~ msgid "Desktop"
 -#~ msgstr "Skrivebord"
-+
-+
-+
-+
  
- # Hm, så vidt jeg kan se skal den stå på 1 for at den danske oversættelse nedenfor bliver brugt
+-# Hm, så vidt jeg kan se skal den stå på 1 for at den danske oversættelse nedenfor bliver brugt
 -#~ msgctxt "panel:showusername"
 -#~ msgid "1"
 -#~ msgstr "1"
--
+ 
 -#~| msgid "Top"
 -#~ msgctxt "Orientation"
 -#~ msgid "Top"
 -#~ msgstr "Top"
--
+ 
 -#~| msgid "Bottom"
 -#~ msgctxt "Orientation"
 -#~ msgid "Bottom"
 -#~ msgstr "Bund"
--
+ 
 -#~| msgid "Left"
 -#~ msgctxt "Orientation"
 -#~ msgid "Left"
 -#~ msgstr "Venstre"
--
+ 
 -#~| msgid "Right"
 -#~ msgctxt "Orientation"
 -#~ msgid "Right"
 -#~ msgstr "Højre"
--
+ 
 -#~| msgid "Size|XX Small"
 -#~ msgctxt "Size"
 -#~ msgid "XX Small"
 -#~ msgstr "Mikroskopisk"
--
+ 
 -#~| msgid "Size|X Small"
 -#~ msgctxt "Size"
 -#~ msgid "X Small"
 -#~ msgstr "Meget lille"
--
+ 
 -#~| msgid "Size|Small"
 -#~ msgctxt "Size"
 -#~ msgid "Small"
 -#~ msgstr "Lille"
--
+ 
 -#~| msgid "Size|Medium"
 -#~ msgctxt "Size"
 -#~ msgid "Medium"
 -#~ msgstr "Mellem"
--
+ 
 -#~| msgid "Size|Large"
 -#~ msgctxt "Size"
 -#~ msgid "Large"
 -#~ msgstr "Stor"
--
+ 
 -#~| msgid "Size|X Large"
 -#~ msgctxt "Size"
 -#~ msgid "X Large"
 -#~ msgstr "Meget stor"
--
+ 
 -#~| msgid "Size|XX Large"
 -#~ msgctxt "Size"
 -#~ msgid "XX Large"
 -#~ msgstr "Enorm"
--
+ 
 -#~ msgid "There was an error displaying help: %s"
 -#~ msgstr "Der opstod en fejl ved visning af hjælp: %s"
--
+ 
 -#~ msgid "GNOME Panel Shell"
 -#~ msgstr "Gnome-panelskal"
--
+ 
 -#~ msgid "Error watching gconf key '%s': %s"
 -#~ msgstr "Fejl ved overvågning af GConf-nøglen \"%s\": %s"
--
+ 
 -#~ msgid "Error loading gconf directory '%s': %s"
 -#~ msgstr "Fejl ved indlæsning af Gconf-mappen \"%s\": %s"
--
+ 
 -#~ msgid "Error getting value for '%s': %s"
 -#~ msgstr "Fejl ved hentning af værdien for \"%s\": %s"
--
+ 
 -#~ msgid "Desktop Folder|Desktop"
 -#~ msgstr "Skrivebord"
--
+ 
 -#~ msgid "panel:showusername|1"
 -#~ msgstr "1"
--
+ 
 -#~ msgid "Could not launch menu item"
 -#~ msgstr "Kunne ikke starte menupunkt"
--
+ 
 -#~ msgid "Orientation|Top"
 -#~ msgstr "Øverst"
--
+ 
 -#~ msgid "Orientation|Bottom"
 -#~ msgstr "Nederst"
--
+ 
 -#~ msgid "Orientation|Left"
 -#~ msgstr "Venstre"
--
+ 
 -#~ msgid "Orientation|Right"
 -#~ msgstr "Højre"
--
+ 
 -#~ msgid ""
 -#~ "The panel could not register with the bonobo-activation server (error "
 -#~ "code: %d) and will exit.\n"
@@ -9330,13 +9326,13 @@ Index: b/po/da.po
 -#~ "Panelet kunne ikke registrere hos Bonobo-aktiveringsserveren (fejlkode: %"
 -#~ "d) og vil afslutte.\n"
 -#~ "Det vil måske blive genstartet automatisk."
--
+ 
 -#~ msgid "The panel has encountered a fatal error"
 -#~ msgstr "Panelet stødte ind i en fatal fejl"
--
+ 
 -#~ msgid "Force the panel to not be automatically restarted"
 -#~ msgstr "Tving panelet til, ikke automatisk at blive genstartet"
--
+ 
 -#~ msgid "Incomplete '%s' background type received"
 -#~ msgstr "Ufuldstændig baggrundstype \"%s\" modtaget"
  
@@ -9348,126 +9344,8 @@ Index: b/po/da.po
  
 -#~ msgid "Unknown background type received"
 -#~ msgstr "Ukendt baggrundstype modtaget"
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
  
- # lidt kryptisk, men dette skulle være betydningen
+-# lidt kryptisk, men dette skulle være betydningen
 -#~ msgid "The Applet's containing Panel's orientation"
 -#~ msgstr "Orienteringen af det panel som indeholder panelprogrammet"
  
@@ -9611,115 +9489,8 @@ Index: b/po/da.po
  
 -#~ msgid "Could not find a suitable application."
 -#~ msgstr "Kunne ikke finde et passende program."
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
  
- # det er god plads her til et 'den' fordi det er et værktøjstip
+-# det er god plads her til et 'den' fordi det er et værktøjstip
 -#~ msgid "%A %B %d"
 -#~ msgstr "%A den %d. %B"
  
@@ -11438,1209 +11209,6 @@ Index: b/po/da.po
 +
 +
 +
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
 +#: ../gnome-panel/panel-logout.c:242
 +#, c-format
 +msgid ""
@@ -12707,7 +11275,7 @@ Index: b/po/de.po
 ===================================================================
 --- a/po/de.po
 +++ b/po/de.po
-@@ -3355,3 +3355,66 @@ msgstr "_Einstellungsverzeichnis:"
+@@ -3358,3 +3358,66 @@ msgstr "_Einstellungsverzeichnis:"
  
  #~ msgid "Error getting value for '%s': %s"
  #~ msgstr "Fehler beim Ermitteln des Wertes von »%s«: %s"
@@ -12778,10 +11346,10 @@ Index: b/po/el.po
 ===================================================================
 --- a/po/el.po
 +++ b/po/el.po
-@@ -3325,3 +3325,66 @@ msgstr "Μικροε_φαρμογή:"
+@@ -3342,3 +3342,66 @@ msgstr "Μικροε_φαρμογή:"
+ #: ../libpanel-applet/panel-test-applets.glade.h:5
  msgid "_Prefs Dir:"
  msgstr "Κατάλογος π_ροτιμήσεων:"
- 
 +
 +#: ../gnome-panel/panel-logout.c:242
 +#, c-format
@@ -15815,7 +14383,7 @@ Index: b/po/kn.po
 ===================================================================
 --- a/po/kn.po
 +++ b/po/kn.po
-@@ -3096,3 +3096,58 @@ msgstr "ಆಪ್ಲೆಟ್(_A):"
+@@ -3149,3 +3149,58 @@ msgstr "ಆಪ್ಲೆಟ್(_A):"
  msgid "_Prefs Dir:"
  msgstr "ಆದ್ಯತೆಗಳ ಕೋಶ(_P):"
  
@@ -21991,22 +20559,109 @@ Index: b/po/sr.po
 ===================================================================
 --- a/po/sr.po
 +++ b/po/sr.po
-@@ -2883,486 +2883,555 @@ msgstr "_Програмче:"
+@@ -3253,723 +3253,792 @@ msgstr "_Програмче:"
  msgid "_Prefs Dir:"
  msgstr "_Поставке:"
  
+-#~ msgid "There was an error displaying help: %s"
+-#~ msgstr "Дошло је до грешке при приказивању помоћи: %s"
+ 
+-#~ msgid "GNOME Panel Shell"
+-#~ msgstr "Гномова љуска панела"
+ 
+-#~ msgid "Error watching gconf key '%s': %s"
+-#~ msgstr "Грешка при праћењу ГКонф кључа „%s“: %s"
+ 
+-#~ msgid "Error loading gconf directory '%s': %s"
+-#~ msgstr "Грешка при учитавању ГКонф директоријума „%s“: %s"
+ 
+-#~ msgid "Error getting value for '%s': %s"
+-#~ msgstr "Грешка при учитавању вредности за „%s“: %s"
+ 
+-#~ msgid "Desktop Folder|Desktop"
+-#~ msgstr "Радна површ"
+ 
+-#~ msgid "panel:showusername|1"
+-#~ msgstr "0"
+ 
+-#~ msgid "Could not launch menu item"
+-#~ msgstr "Не могу да покренем ставку менија"
+ 
+-#~ msgid "Orientation|Top"
+-#~ msgstr "Врх"
+ 
+-#~ msgid "Orientation|Bottom"
+-#~ msgstr "Дно"
+ 
+-#~ msgid "Orientation|Left"
+-#~ msgstr "Лево"
+ 
+-#~ msgid "Orientation|Right"
+-#~ msgstr "Десно"
+ 
+-#~ msgid ""
+-#~ "The panel could not register with the bonobo-activation server (error "
+-#~ "code: %d) and will exit.\n"
+-#~ "It may be automatically restarted."
+-#~ msgstr ""
+-#~ "Дошло је до неприлика при пријављивању панела на bonobo-activation сервер "
+-#~ "(код грешке: %d) и панел се затвара.\n"
+-#~ "Можда ће се сам изнова покренути."
+ 
+-#~ msgid "The panel has encountered a fatal error"
+-#~ msgstr "Овај панел је наишао на кобну грешку"
+ 
+-#~ msgid "Force the panel to not be automatically restarted"
+-#~ msgstr "Приморај панел да се не покреће сам изнова"
+ 
+-#~ msgid "Incomplete '%s' background type received"
+-#~ msgstr "Непотпуна врста позадине: „%s“"
+ 
+-#~ msgid "Incomplete '%s' background type received: %s"
+-#~ msgstr "Примљена непотпуна врста позадине „%s“: %s"
+ 
+-#~ msgid "Failed to get pixmap %s"
+-#~ msgstr "Неуспешно учитавање слике %s"
+ 
+-#~ msgid "Unknown background type received"
+-#~ msgstr "Примљена непозната врста позадине"
+ 
+-#~ msgid "The Applet's containing Panel's orientation"
+-#~ msgstr "Програмче садржи и оријентацију панела"
+ 
+-#~ msgid "The Applet's containing Panel's size in pixels"
+-#~ msgstr "Програмче садржи и величину панела у тачкама"
+ 
+-#~ msgid "The Applet's containing Panel's background color or pixmap"
+-#~ msgstr "Програмче садржи и боју или слику позадине панела"
+ 
+-#~ msgid "The Applet's flags"
+-#~ msgstr "Особине програмчета"
+ 
+-#~ msgid "Ranges that hint what sizes are acceptable for the applet"
+-#~ msgstr "Опсег који означава које су величине прихватљиве за програмче"
+ 
+-#~ msgid "The Applet's containing Panel is locked down"
+-#~ msgstr "Панел који садржи програмче је привезан"
+ 
 -#~ msgid "%A %B %d"
 -#~ msgstr "%A, %d. %B"
+ 
 -#~ msgid "Click to view time in other timezones"
 -#~ msgstr "Кликните да прикажете време у другим временским зонама"
+ 
 -#~ msgid "Clock _type:"
 -#~ msgstr "_Врста часовника:"
+ 
 -#~ msgid "12 hour"
 -#~ msgstr "12-точасовни"
+ 
 -#~ msgid "Use _UTC"
 -#~ msgstr "Користи _УТ"
+ 
 -#~ msgid "Show multiple _timezones"
 -#~ msgstr "Прикажи више _временских зона"
+ 
 -#~ msgid ""
 -#~ "A list of timezone IDs. Each ID identifies an individual timezone. The "
 -#~ "settings of these timezones are stored in the $(id)_name and $(id)_zone "
@@ -22014,57 +20669,73 @@ Index: b/po/sr.po
 -#~ msgstr ""
 -#~ "Списак ИД-ова временских зона. Сваки ИД одређује једну зону. Подешавања "
 -#~ "ових зона се чувају у кључевима $(id)_name и $(id_zone."
+ 
 -#~ msgid ""
 -#~ "If true, display the timezone button in the clock, in addition to time."
 -#~ msgstr ""
 -#~ "Уколико је постављено, прикажи и дугме за временске зоне у часовнику, "
 -#~ "поред времена."
+ 
 -#~ msgid "Show the timezone button"
 -#~ msgstr "Прикажи дугме за временске оне"
+ 
 -#~ msgid ""
 -#~ "This key specifies the name of the timezone as can be used in the TZ "
 -#~ "environment variable."
 -#~ msgstr ""
 -#~ "Овај кључ наводи име временске зоне какво се може користити у променљивој "
 -#~ "окружења „TZ“."
+ 
 -#~ msgid "This key specifies the user-visible name of the timezone."
 -#~ msgstr "Овај кључ наводи кориснику видљиво име временске зоне."
+ 
 -#~ msgid "Timezone ID list"
 -#~ msgstr "Списак ИД-ова временских зона"
+ 
 -#~ msgid "User-visible name of the timezone"
 -#~ msgstr "Корисницима видљиво име временске зоне"
+ 
 -#~ msgid "<b>Active timezones</b>"
 -#~ msgstr "<b>Активне зоне</b>"
+ 
 -#~ msgid "<b>Add timezone</b>"
 -#~ msgstr "<b>Додај зону</b>"
+ 
 -#~ msgid "<small><b>Location:</b></small>"
 -#~ msgstr "<small><b>Место:</b></small>"
+ 
 -#~ msgid ""
 -#~ "<small><i>Click on the map to zoom and select the timezone of a city, or "
 -#~ "right click to zoom out.</i></small>"
 -#~ msgstr ""
 -#~ "<small><i>Кликните на карту да увећате и изаберете временску зону гроада, "
 -#~ "или десно-кликните да умањите.</i></small>"
+ 
 -#~ msgid "move the mouse on the map"
 -#~ msgstr "померите миша на карти"
+ 
 -#~ msgid "<b>Location:</b> %s"
 -#~ msgstr "<b>Место:</b> %s"
+ 
 -#~ msgid "%s with daylight saving (UTC %s%.2ld:%.2ld)"
 -#~ msgstr "%s са летњим рачунањем времена (УВ %s%.2ld:%.2ld)"
+ 
 -#~ msgid "%s (UTC %s%.2ld:%.2ld)"
 -#~ msgstr "%s (УВ %s%.2ld:%.2ld)"
+ 
 -#~ msgid ""
 -#~ "%s - %s\n"
 -#~ "%s"
 -#~ msgstr ""
 -#~ "%s — %s\n"
 -#~ "%s"
+ 
 -#~ msgid "_Edit timezones..."
 -#~ msgstr "_Уреди временске зоне..."
+ 
 -#~ msgid "Timezones"
 -#~ msgstr "Временске зоне"
--#~ msgid "Could not show '%s'"
--#~ msgstr "Не може да прикаже „%s“"
+ 
 -#~ msgid ""
 -#~ "You are currently logged in as \"%s\".\n"
 -#~ "You will be automatically logged out in %d second."
@@ -22080,6 +20751,7 @@ Index: b/po/sr.po
 -#~ msgstr[2] ""
 -#~ "Тренутно сте пријављени као „%s“.\n"
 -#~ "Бићете одјављени у року од %d секунди."
+ 
 -#~ msgid ""
 -#~ "You are currently logged in as \"%s\".\n"
 -#~ "This system will be automatically shut down in %d second."
@@ -22095,50 +20767,73 @@ Index: b/po/sr.po
 -#~ msgstr[2] ""
 -#~ "Тренутно сте пријављени као „%s“.\n"
 -#~ "Овај рачунар ће бити угашен у року од %d секунди."
+ 
 -#~ msgid "Log out of this system now?"
 -#~ msgstr "Одјављујете се сада са система?"
+ 
 -#~ msgid "_Switch User"
 -#~ msgstr "Про_мени корисника"
+ 
 -#~ msgid "_Log Out"
 -#~ msgstr "О_дјави се"
+ 
 -#~ msgid "Shut down this system now?"
 -#~ msgstr "Да ли сте сигурни да сада желите да угасите рачунар?"
+ 
 -#~ msgid "S_uspend"
 -#~ msgstr "Привремено _заустави"
+ 
 -#~ msgid "_Hibernate"
 -#~ msgstr "З_амрзни"
+ 
 -#~ msgid "_Restart"
 -#~ msgstr "Поново пок_рени"
+ 
 -#~ msgid "_Shut Down"
 -#~ msgstr "_Угаси"
+ 
 -#~ msgid "Could not find a suitable application."
 -#~ msgstr "Не могу пронаћи одговарајући програм."
+ 
 -#~ msgid "Computer"
 -#~ msgstr "Рачунар"
+ 
 -#~ msgid "Network"
 -#~ msgstr "Мрежа"
+ 
 -#~ msgid "Themes"
 -#~ msgstr "Теме"
+ 
 -#~ msgid "CD/DVD Creator"
 -#~ msgstr "Прављење CD/DVD-а"
+ 
 -#~ msgid "Windows Network"
 -#~ msgstr "Windows мрежа"
+ 
 -#~ msgid "Services in"
 -#~ msgstr "Услуге на"
+ 
 -#~ msgid "Trash"
 -#~ msgstr "Смеће"
+ 
 -#~ msgid "%1$s on %2$s"
 -#~ msgstr "%1$s на %2$s"
+ 
 -#~ msgid "<b>Window List Size</b>"
 -#~ msgstr "<b>Величина списка прозора</b>"
+ 
 -#~ msgid "Behavior"
 -#~ msgstr "Понашање"
+ 
 -#~ msgid "M_inimum size:"
 -#~ msgstr "Нај_мања величина:"
+ 
 -#~ msgid "Ma_ximum size:"
 -#~ msgstr "Нај_већа величина:"
+ 
 -#~ msgid "Size"
 -#~ msgstr "Величина"
+ 
 -#~ msgid ""
 -#~ "This key specifies the maximum width that the window list requests. The "
 -#~ "maximum width setting is useful to limit the size of the window list in "
@@ -22148,155 +20843,208 @@ Index: b/po/sr.po
 -#~ "Поставка највеће ширине је корисна за ограничавање величине списка "
 -#~ "прозора у великим панелима као што су ивични, где списак може заузети сво "
 -#~ "расположиво место."
+ 
 -#~ msgid "This key specifies the minimum width that the window list requests."
 -#~ msgstr "Овај кључ наводи најмању величину коју захтева списак прозора."
+ 
 -#~ msgid "File"
 -#~ msgstr "Датотека:"
+ 
 -#~ msgid ""
 -#~ "I've detected a panel already running,\n"
 -#~ "and will now exit."
 -#~ msgstr ""
 -#~ "Већ је покренут панел, \n"
 -#~ "и зато завршавам."
+ 
 -#~ msgid "Delete Drawer"
 -#~ msgstr "Уклони фиоку"
+ 
 -#~ msgid "Delete Panel"
 -#~ msgstr "Уклони панел"
+ 
 -#~ msgid "Orientation"
 -#~ msgstr "Пружање"
+ 
 -#~ msgid "The orientation of the tray."
 -#~ msgstr "Пружање обавештајне зоне."
+ 
 -#~ msgid "Could not load icon"
 -#~ msgstr "Не могу да учитам икону"
+ 
 -#~ msgid "Find files, folders, and documents on your computer"
 -#~ msgstr "Пронађите датотеке, директоријуме и документе на вашем рачунару"
+ 
 -#~ msgid "Empty"
 -#~ msgstr "Празно"
+ 
 -#~ msgid "Could not save launcher to disk"
 -#~ msgstr "Не могу да сачувам покретач на диск"
+ 
 -#~ msgid "You have to specify a name."
 -#~ msgstr "Морате навести име."
+ 
 -#~ msgid "You have to specify a valid URL or command."
 -#~ msgstr "Морате навести исправну адресу (URL) или наредбу."
+ 
 -#~ msgid "Could not save changes to launcher"
 -#~ msgstr "Не могу да сачувам измене покретача"
+ 
 -#~ msgid "Menu"
 -#~ msgstr "Мени"
+ 
 -#~ msgid "You do not have permission to write to this location."
 -#~ msgstr "Немате дозволу за упис на овом месту."
+ 
 -#~ msgid "_Delete This Panel..."
 -#~ msgstr "_Уклони овај панел..."
+ 
 -#~ msgid "Desktop Environment|Desktop"
 -#~ msgstr "Окружење"
+ 
 -#~ msgid "Could not load menu item"
 -#~ msgstr "Не могу да учитам ставку менија"
+ 
 -#~ msgid "*"
 -#~ msgstr "*"
+ 
 -#~ msgid "Details: %s"
 -#~ msgstr "Детаљи: %s"
+ 
 -#~ msgid "_Reboot"
 -#~ msgstr "Поново пок_рени"
+ 
 -#~ msgid "Take Screenshot..."
 -#~ msgstr "Снимак екрана..."
+ 
 -#~ msgid "Take a screenshot of your desktop"
 -#~ msgstr "Сачувајте снимак екрана ваше радне површине"
+ 
 -#~ msgid "Launch a program that is already in the GNOME menu"
 -#~ msgstr "Покрени програм који је већ у менију Гнома"
+ 
 -#~ msgid "Are you sure you want to log out now?"
 -#~ msgstr "Да ли сте сигурни да сада желите да се одјавите?"
+ 
 -#~ msgid ""
 -#~ "Open and search local, remote and recently-used documents and folders"
 -#~ msgstr ""
 -#~ "Отвори и тражи локално, удаљено и међу скоро коришћеним документима и "
 -#~ "фасциклама"
--#~ msgid "Top"
--#~ msgstr "Горе"
--#~ msgid "Bottom"
--#~ msgstr "Доле"
--#~ msgid "Left"
--#~ msgstr "Лево"
--#~ msgid "Right"
--#~ msgstr "Десно"
+ 
 -#~ msgid "24"
 -#~ msgstr "24"
+ 
 -#~ msgid "This launch icon does not specify a url to show."
 -#~ msgstr "Овај покретач не наводи адресу коју треба приказати."
+ 
 -#~ msgid "Cannot save menu item to disk"
 -#~ msgstr "Не могу да сачувам ставку менија на диск"
+ 
 -#~ msgid ""
 -#~ "You can not create a new launcher at this location since the location is "
 -#~ "not writable."
 -#~ msgstr ""
 -#~ "Не можете направити нови покретач на овом месту пошто је овде снимање "
 -#~ "забрањено."
+ 
 -#~ msgid "_Kill Screensaver Daemon"
 -#~ msgstr "_Угаси услугу чувања екрана"
+ 
 -#~ msgid "Restart _Screensaver Daemon"
 -#~ msgstr "Изнова покрени услугу _чувања екрана"
+ 
 -#~ msgid "You cannot remove your last panel."
 -#~ msgstr "Не можете уклонити једини преостали панел."
+ 
 -#~ msgid "Cannot load entry"
 -#~ msgstr "Не могу да учитам ставку"
+ 
 -#~ msgid "Display \"Run Application\" dialog keybinding"
 -#~ msgstr "Прикажи пречицу са тастатуре за „Покрени“ прозорче"
+ 
 -#~ msgid "Enable keybindings"
 -#~ msgstr "Укључи пречице"
+ 
 -#~ msgid "FIXME - is this resolved with the new menu stuff"
 -#~ msgstr "ПОПРАВИ — да ли је ово решено помоћу нових менија?"
+ 
 -#~ msgid "FIXME - need to define limits"
 -#~ msgstr "ПОПРАВИ — обавезно је поставити ограничења"
+ 
 -#~ msgid "If true, panel-specific keybindings are enabled."
 -#~ msgstr ""
 -#~ "Уколико је постављено, укључене су пречице са тастатуре за појединачни "
 -#~ "панел."
+ 
 -#~ msgid "Popup panel menu keybinding"
 -#~ msgstr "Пречица за приручни мени панела"
+ 
 -#~ msgid "Take screenshot"
 -#~ msgstr "Снимак екрана"
+ 
 -#~ msgid "Take window screenshot"
 -#~ msgstr "Снимак прозора"
+ 
 -#~ msgid "File not found"
 -#~ msgstr "Датотека није нађена"
+ 
 -#~ msgid "No Windows Open"
 -#~ msgstr "Нема отворених прозора"
+ 
 -#~ msgid "Tool to switch between windows"
 -#~ msgstr "Алат за пребацивање између прозора"
+ 
 -#~ msgid "none"
 -#~ msgstr "ниједан"
+ 
 -#~ msgid "file not found"
 -#~ msgstr "датотека није нађена"
--#~ msgid "Desktop"
--#~ msgstr "Радна површина"
+ 
 -#~ msgid "_Lock"
 -#~ msgstr "Прив_ежи"
+ 
 -#~ msgid "Un_lock"
 -#~ msgstr "Одв_ежи"
+ 
 -#~ msgid "Lock screen"
 -#~ msgstr "Закључај екран"
+ 
 -#~ msgid "Add to %s"
 -#~ msgstr "Додај на %s"
+ 
 -#~ msgid "Add to the panel"
 -#~ msgstr "Додај на панел"
+ 
 -#~ msgid "About GNOME"
 -#~ msgstr "О Гному"
+ 
 -#~ msgid "About _GNOME"
 -#~ msgstr "О _Гному"
+ 
 -#~ msgid "Actions"
 -#~ msgstr "Акције"
+ 
 -#~ msgid "Specify a profile name to load"
 -#~ msgstr "Наведите име профила који учитавате"
+ 
 -#~ msgid "Could not get file name from path: %s"
 -#~ msgstr "Не могу одредити име датотеке из путање „%s“"
+ 
 -#~ msgid "Remove this item"
 -#~ msgstr "Уклони ову ставку"
+ 
 -#~ msgid "Add new item to this menu"
 -#~ msgstr "Додај нову ставку у овај мени"
+ 
 -#~ msgid ""
 -#~ "The default application for this type of file cannot handle remote files"
 -#~ msgstr ""
 -#~ "Подразумевани програм за ову врсту датотека не прихвата мрежне адресе"
+ 
 -#~ msgid "Unable to get the name of the command to execute"
 -#~ msgstr "Не могу да сазнам име наредбе коју треба извршити"
+ 
 -#~ msgid ""
 -#~ "You do not have fortune installed or you have not specified a program to "
 -#~ "run.\n"
@@ -22307,44 +21055,56 @@ Index: b/po/sr.po
 -#~ "покретање.\n"
 -#~ "\n"
 -#~ "Проверите прозорче за особине рибе."
+ 
 -#~ msgid "Debian GNU/Linux"
 -#~ msgstr "Дебијан ГНУ/Линукс"
+ 
 -#~ msgid "Debian Menu"
 -#~ msgstr "Дебијан мени"
+ 
 -#~ msgid "SuSE Linux"
 -#~ msgstr "СуСЕ Линукс"
+ 
 -#~ msgid "SuSE Menu"
 -#~ msgstr "СуСЕ мени"
+ 
 -#~ msgid "Solaris"
 -#~ msgstr "Соларис"
+ 
 -#~ msgid "CDE Menu"
 -#~ msgstr "CDE мени"
+ 
 -#~ msgid ""
 -#~ "Unable to initialize png structure.\n"
 -#~ "You probably have a bad version of libpng on your system"
 -#~ msgstr ""
 -#~ "Не могу да иницијализујем PNG структуру.\n"
 -#~ "Вероватно имате неодговарајуће издање libpng-а на вашем систему"
+ 
 -#~ msgid ""
 -#~ "Unable to create png info.\n"
 -#~ "You probably have a bad version of libpng on your system"
 -#~ msgstr ""
 -#~ "Не могу да направим податке о PNG-у.\n"
 -#~ "Вероватно имате неодговарајуће издање libpng-а на вашем систему"
+ 
 -#~ msgid ""
 -#~ "Unable to set png info.\n"
 -#~ "You probably have a bad version of libpng on your system"
 -#~ msgstr ""
 -#~ "Не могу да поставим PNG податке.\n"
 -#~ "Вероватно имате неодговарајуће издање libpng-а на вашем систему"
+ 
 -#~ msgid ""
 -#~ "Insufficient memory to save the screenshot.\n"
 -#~ "Please free up some resources and try again."
 -#~ msgstr ""
 -#~ "Недовољно меморије за снимање екрана.\n"
 -#~ "Ослободите нешто меморије и пробајте поново."
+ 
 -#~ msgid "File %s already exists. Overwrite?"
 -#~ msgstr "Датотека „%s“ већ постоји. Преснимити преко ње?"
+ 
 -#~ msgid ""
 -#~ "Unable to create the file:\n"
 -#~ "\"%s\"\n"
@@ -22353,52 +21113,70 @@ Index: b/po/sr.po
 -#~ "Не могу да направим датотеку:\n"
 -#~ "„%s“\n"
 -#~ "Проверите овлашћења и дозволе за текући директоријум"
+ 
 -#~ msgid "Screenshot-%s.png"
 -#~ msgstr "snimak-ekrana-%s.png"
+ 
 -#~ msgid "Screenshot.png"
 -#~ msgstr "snimak-ekrana.png"
+ 
 -#~ msgid "Screenshot-%s-%d.png"
 -#~ msgstr "snimak-ekrana-%s-%d.png"
+ 
 -#~ msgid "Screenshot-%d.png"
 -#~ msgstr "snimak-ekrana-%d.png"
+ 
 -#~ msgid "Not enough room to write file %s"
 -#~ msgstr "Недовољно места за упис датотеке „%s“"
+ 
 -#~ msgid ""
 -#~ "There was an error displaying help: \n"
 -#~ "%s"
 -#~ msgstr ""
 -#~ "Дошло је до грешке при приказивању помоћи: \n"
 -#~ "%s"
+ 
 -#~ msgid ""
 -#~ "Glade file for the screenshot program is missing.\n"
 -#~ "Please check your installation of gnome-panel"
 -#~ msgstr ""
 -#~ "Glade датотека за снимање екрана недостаје.\n"
 -#~ "Проверите инсталацију (пакет „gnome-panel“)"
+ 
 -#~ msgid "Unable to take a screenshot of the current desktop."
 -#~ msgstr "Не могу да снимим екран текуће радне површине."
+ 
 -#~ msgid "Save screenshot to _web page (save in %s)"
 -#~ msgstr "Сачувај снимак екрана на веб страницу (сними у %s)"
+ 
 -#~ msgid "Grab a window instead of the entire screen"
 -#~ msgstr "Сними прозор уместо целог екрана"
+ 
 -#~ msgid "Take screenshot after specified delay [in seconds]"
 -#~ msgstr "Сними екран након одређеног времена (у секундама)"
+ 
 -#~ msgid "<b>Preview</b>"
 -#~ msgstr "<b>Преглед</b>"
+ 
 -#~ msgid "Save Screenshot"
 -#~ msgstr "Сачувај снимак екрана"
+ 
 -#~ msgid "Save screenshot to _desktop"
 -#~ msgstr "Постави снимак екрана на _радну површину"
+ 
 -#~ msgid "Save screenshot to _file:"
 -#~ msgstr "Сачувај снимак екрана у _датотеку:"
+ 
 -#~ msgid "Save screenshot to _web page (save in ~/public__html)"
 -#~ msgstr "Постави снимак екрана на веб страницу (сними у ~/public__html)"
+ 
 -#~ msgid ""
 -#~ "The user's directory in which screenshots should be saved so as to appear "
 -#~ "on the web."
 -#~ msgstr ""
 -#~ "Директоријум корисника у којем треба сачувати снимке екрана како би се "
 -#~ "појавили на вебу."
+ 
 -#~ msgid ""
 -#~ "The \"%s\" applet appears to have died unexpectedly.\n"
 -#~ "\n"
@@ -22407,6 +21185,7 @@ Index: b/po/sr.po
 -#~ "Чини се да је програмче „%s“ неочекивано угашено.\n"
 -#~ "\n"
 -#~ "Поново учитати ово програмче?"
+ 
 -#~ msgid ""
 -#~ "\n"
 -#~ "\n"
@@ -22417,66 +21196,136 @@ Index: b/po/sr.po
 -#~ "\n"
 -#~ "(Ако се одлучите да га не учитате поново, можете га свакако додати десним "
 -#~ "кликом на панел, и избором подменија „Додај на панел“)"
+ 
 -#~ msgid "Unable to load panel stock icon '%s'\n"
 -#~ msgstr "Не могу учитати испоручену икону „%s“ за панел\n"
+ 
 -#~ msgid "Orientation:"
 -#~ msgstr "Усмерење:"
+ 
 -#~ msgid "Size:"
 -#~ msgstr "Величина:"
+ 
 -#~ msgid ""
 -#~ "The system administrator has disallowed\n"
 -#~ "modification of the panel configuration"
 -#~ msgstr ""
 -#~ "Администратор система је онемогућио\n"
 -#~ "измене поставки панела"
+ 
 -#~ msgid "Error loading glade file %s"
 -#~ msgstr "Грешка при учитавању glade датотеке „%s“"
+ 
 -#~ msgid "Select preferences for all your panels"
 -#~ msgstr "Изабери поставке за све панеле"
+ 
 -#~ msgid "Animation _speed:"
 -#~ msgstr "_Брзина анимације"
+ 
 -#~ msgid "Close _drawer when launcher is clicked"
 -#~ msgstr "Затвори _фиоку по клику на покретач"
+ 
 -#~ msgid "Drawer and panel _animation"
 -#~ msgstr "_Анимација фиоке и панела"
+ 
 -#~ msgid "Fast"
 -#~ msgstr "Брзо"
+ 
 -#~ msgid "Panel Preferences"
 -#~ msgstr "Поставке панела"
+ 
 -#~ msgid "Slow"
 -#~ msgstr "Споро"
+ 
 -#~ msgid "Lock the screen so that you can temporarily leave your computer"
 -#~ msgstr ""
 -#~ "Закључајте екран како бисте могли да се привремено удаљите од рачунара"
+ 
 -#~ msgid "Log out of GNOME"
 -#~ msgstr "Напуштање Гнома"
+ 
 -#~ msgid "Search for Files"
 -#~ msgstr "Потражи датотеке"
+ 
 -#~ msgid "Screenshot"
 -#~ msgstr "Снимак екрана"
+ 
 -#~ msgid "Lock"
 -#~ msgstr "Закључај"
+ 
 -#~ msgid "Lock the screen so you can temporarily leave your computer"
 -#~ msgstr ""
 -#~ "Закључај екран како бисте могли да се привремено удаљите од рачунара"
+ 
 -#~ msgid "Run"
 -#~ msgstr "Покрени"
+ 
 -#~ msgid "Run a command"
 -#~ msgstr "Покрени наредбу"
+ 
 -#~ msgid "Accessories"
 -#~ msgstr "Допунски програми"
+ 
 -#~ msgid "Amusements"
 -#~ msgstr "Занимљивости"
+ 
 -#~ msgid "Utility"
 -#~ msgstr "Алати"
+ 
 -#~ msgid "Launcher from menu"
 -#~ msgstr "Покретач из менија"
+ 
 -#~ msgid "Cannot add to run box"
 -#~ msgstr "Не могу да додам у прозорче за покретање"
+ 
 -#~ msgid "No 'Exec' or 'URL' field in entry"
 -#~ msgstr "Нема „Exec“ нити „URL“ поља у уносу"
+ 
 -#~ msgid "Error reading GConf list value '%s': %s"
 -#~ msgstr "Грешка при читању Гконф списка „%s“: %s"
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
 +
 +
 +
@@ -23028,7 +21877,7 @@ Index: b/po/sr.po
 +#: ../gnome-panel/panel-logout.c:371
 +msgid "_Shut Down"
 +msgstr "_Угаси"
- 
++
 Index: b/po/sv.po
 ===================================================================
 --- a/po/sv.po

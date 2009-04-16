@@ -27,7 +27,7 @@ gnome-base/gnome-2.26.0
  * support for it, but we don't ship with gnome-session-2.24 yet
 gnome-base/gnome-menus-2.26.1
  * fix autofoo and report upstream
-gnome-base/gnome-panel-2.26.0
+gnome-base/gnome-panel-2.26.1
  * tarball generated with broken gtk-doc, revisit me.
 gnome-base/librsvg-2.26.0
  * USEify mozilla support (?)

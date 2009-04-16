@@ -39,7 +39,9 @@ RDEPEND=">=gnome-base/gnome-desktop-2.24.0
 	>=x11-libs/cairo-1.0.0
 	eds? ( >=gnome-extra/evolution-data-server-1.6 )
 	networkmanager? ( >=net-misc/networkmanager-0.6 )
-	policykit? ( >=sys-auth/policykit-0.7 )"
+	policykit? (
+		>=sys-auth/policykit-0.7
+		>=gnome-extra/policykit-gnome-0.7 )"
 DEPEND="${RDEPEND}
 	>=dev-lang/perl-5
 	>=app-text/gnome-doc-utils-0.3.2
@@ -66,14 +68,16 @@ src_unpack() {
 
 	# Allow logout/shutdown without gnome-session 2.24, bug #246170
 	epatch "${WORKDIR}/${MY_P}-logout.patch"
-	epatch "${FILESDIR}/${P}-po.patch"
-
+	epatch "${FILESDIR}/${PN}-2.26.1-po.patch"
 	echo "gnome-panel/panel-logout.c" >> po/POTFILES.in
+
 	# Fixes build on BSD, bug #256859
 	epatch "${FILESDIR}/${PN}-2.24.3-daylight.patch"
 
 	# Fixes shutdown without gdm, bug #259138
 	epatch "${FILESDIR}/${PN}-2.24.3-shutdown.patch"
+
+	intltoolize --force --copy --automake || die "intltoolize failed"
 
 	# FIXME: tarball generated with broken gtk-doc, revisit me.
 	if use doc; then
@@ -84,7 +88,6 @@ src_unpack() {
 			-i gtk-doc.make || die "sed 2 failed"
 	fi
 
-	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautomake
 }
 
