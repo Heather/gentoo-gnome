@@ -45,7 +45,7 @@ gnome-extra/gucharmap-2.26.1
  * add gobject-introspection support once available
 gnome-extra/yelp-2.26.0
  * Add patch to make lzma-utils not automagic and use_enable here
-mail-client/evolution-2.26.1
+mail-client/evolution-2.26.1.1
  * libpst automagic dep
 media-sound/sound-juicer-2.26.1
  * possibly automagic dual slot dep on musicbrainz
