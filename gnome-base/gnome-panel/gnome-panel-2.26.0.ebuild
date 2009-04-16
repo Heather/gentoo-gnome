@@ -38,7 +38,8 @@ RDEPEND=">=gnome-base/gnome-desktop-2.24.0
 	x11-libs/libXau
 	>=x11-libs/cairo-1.0.0
 	eds? ( >=gnome-extra/evolution-data-server-1.6 )
-	networkmanager? ( >=net-misc/networkmanager-0.6 )"
+	networkmanager? ( >=net-misc/networkmanager-0.6 )
+	policykit? ( >=sys-auth/policykit-0.7 )"
 DEPEND="${RDEPEND}
 	>=dev-lang/perl-5
 	>=app-text/gnome-doc-utils-0.3.2
