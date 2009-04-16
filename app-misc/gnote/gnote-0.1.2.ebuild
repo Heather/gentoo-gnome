@@ -25,15 +25,14 @@ RDEPEND=">=dev-cpp/glibmm-2
 #	dbus? ( >=dev-libs/dbus-glib-0.70 )"
 DEPEND="${DEPEND}
 	dev-util/pkgconfig
-	>=dev-util/intltool-0.35.0"
+	>=dev-util/intltool-0.35.0
+	app-text/gnome-doc-utils"
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
+# FIXME: boost macros sucks, hence can't configure with as-needed
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-dbus
 		$(use_enable debug)"
-
-	# Because boost macros sucks
-	filter-ldflags -Wl,--as-needed
 }
