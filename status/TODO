@@ -32,7 +32,7 @@ gnome-base/librsvg-2.26.0
 gnome-base/nautilus-2.26.2
  * dev-libs/libunique needs KEYWORDS
  * tarball generated with broken gtk-doc, revisit me.
-gnome-extra/evolution-data-server-2.26.1
+gnome-extra/evolution-data-server-2.26.1.1
  * tarball generated with broken gtk-doc, revisit me.
 gnome-extra/gnome-media-2.26.0
  * libcanberra is automagic
