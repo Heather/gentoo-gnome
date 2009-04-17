@@ -64,6 +64,12 @@ pkg_setup() {
 		$(use_enable test tests)"
 }
 
+src_unpack() {
+	gnome2_src_unpack
+	intltoolize --force --copy --automake || die "intltoolize failed"
+	eautomake
+}
+
 src_install() {
 	gnome2_src_install
 
