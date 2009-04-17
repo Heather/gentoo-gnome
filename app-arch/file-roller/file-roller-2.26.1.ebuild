@@ -4,7 +4,7 @@
 
 GCONF_DEBUG="no"
 
-inherit eutils gnome2
+inherit eutils gnome2 autotools
 
 DESCRIPTION="archive manager for GNOME"
 HOMEPAGE="http://fileroller.sourceforge.net/"
@@ -48,6 +48,10 @@ src_unpack() {
 	# use a local rpm2cpio script to avoid the dep
 	sed -e "s/rpm2cpio/rpm2cpio-file-roller/g" \
 		-i src/fr-command-rpm.c || die "sed failed"
+
+	# FIXME: report upstream their package is broken
+	intltoolize --force --copy --automake || die "intltoolize failed"
+	eautoreconf
 }
 
 src_install() {
