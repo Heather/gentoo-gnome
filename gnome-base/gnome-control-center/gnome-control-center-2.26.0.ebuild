@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils gnome2
+inherit eutils gnome2 autotools
 
 DESCRIPTION="The gnome2 Desktop configuration tool"
 HOMEPAGE="http://www.gnome.org/"
@@ -12,10 +12,8 @@ HOMEPAGE="http://www.gnome.org/"
 LICENSE="GPL-2"
 SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="eds hal"
+IUSE="eds hal policykit"
 
-# FIXME: libcanberra is automagic.
-# FIXME: policykit-gnome is automagic for about-me capplet.
 RDEPEND="x11-libs/libXft
 	>=x11-libs/gtk+-2.13.1
 	>=dev-libs/glib-2.17.4
@@ -36,10 +34,11 @@ RDEPEND="x11-libs/libXft
 	x11-libs/pango
 	dev-libs/libxml2
 	media-libs/freetype
+	>=media-libs/libcanberra-0.4[gtk]
 
 	eds? ( >=gnome-extra/evolution-data-server-1.7.90 )
 	hal? ( >=sys-apps/hal-0.5.6 )
-	>=media-libs/libcanberra-0.4[gtk]
+	policykit? ( gnome-extra/policykit-gnome )
 
 	>=gnome-base/libbonobo-2
 	>=gnome-base/libgnome-2.2
@@ -78,8 +77,10 @@ DOCS="AUTHORS ChangeLog NEWS README TODO"
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-update-mimedb
+		--enable-canberra
 		$(use_enable eds aboutme)
-		$(use_enable hal)"
+		$(use_enable hal)
+		$(use_enable policykit)"
 }
 
 src_prepare() {
@@ -87,4 +88,9 @@ src_prepare() {
 
 	# Fix compilation on fbsd, bug #256958
 	epatch "${FILESDIR}/${PN}-2.24.0.1-fbsd.patch"
+	# Fix libcanberra and policykit-gnome for about-me capplet
+	# automagics support
+	epatch "${FILESDIR}/${P}-automagics-canberra+polkit.patch"
+	
+	eautoreconf
 }
