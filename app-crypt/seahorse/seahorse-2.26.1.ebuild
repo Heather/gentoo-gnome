@@ -4,7 +4,7 @@
 
 EAPI="1"
 
-inherit eutils gnome2
+inherit eutils gnome2 autotools
 
 DESCRIPTION="A GNOME application for managing encryption keys"
 HOMEPAGE="http://www.gnome.org/projects/seahorse/index.html"
@@ -55,6 +55,12 @@ pkg_setup() {
 		$(use_enable ldap)
 		$(use_enable libnotify)
 		$(use_enable test tests)"
+}
+
+src_unpack() {
+	gnome2_src_unpack
+	intltoolize --force --copy --automake || die "intltoolize failed"
+	eautomake
 }
 
 pkg_postinst() {
