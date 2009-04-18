@@ -40,6 +40,9 @@ gnome-extra/gnome-user-share-2.26.0
  * could libnotify be made optional ?
 gnome-extra/gucharmap-2.26.1
  * add gobject-introspection support once available
+gnome-extra/libgda-4.0.2
+ * sqlite is automagic, but maybe it is a hard-dep
+ * autoconf is a hell of inconsistencies
 mail-client/evolution-2.26.1.1
  * libpst automagic dep
 media-sound/sound-juicer-2.26.1
