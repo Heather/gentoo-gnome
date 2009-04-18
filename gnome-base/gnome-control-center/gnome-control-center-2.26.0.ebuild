@@ -68,9 +68,9 @@ DEPEND="${RDEPEND}
 	dev-util/desktop-file-utils
 
 	app-text/scrollkeeper
-	>=app-text/gnome-doc-utils-0.10.1"
+	>=app-text/gnome-doc-utils-0.10.1
+	gnome-base/gnome-common"
 # Needed for autoreconf
-#	gnome-base/gnome-common
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
@@ -88,9 +88,10 @@ src_prepare() {
 
 	# Fix compilation on fbsd, bug #256958
 	epatch "${FILESDIR}/${PN}-2.24.0.1-fbsd.patch"
+
 	# Fix libcanberra and policykit-gnome for about-me capplet
-	# automagics support
+	# automagics support, bug #266110
 	epatch "${FILESDIR}/${P}-automagics-canberra+polkit.patch"
-	
+
 	eautoreconf
 }
