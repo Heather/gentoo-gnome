@@ -2,6 +2,8 @@ Ebuild Notices:
 ===============
 app-accessibility/dasher-4.10.0
  * bashism in configure is utterly broken !
+app-arch/file-roller-2.26.1
+ * report upstream their package is broken
 app-misc/gnote-0.1.2
  * boost macros sucks, hence can't configure with as-needed
 app-text/evince-2.26.1
@@ -10,15 +12,10 @@ dev-libs/libgweather-2.26.1
  * decide what to do with --enable-locations-compression
 dev-libs/totem-pl-parser-2.26.1
  * tests broken with USE="-doc" upstream bug #577774
-gnome-base/gconf-2.26.0
- * add policykit support
 gnome-base/gdm-2.24.1
  * automagic libxklavier check
 gnome-base/gdm-2.26.1
  * automagic libxklavier check
-gnome-base/gnome-control-center-2.26.0
- * libcanberra is automagic.
- * policykit-gnome is automagic for about-me capplet.
 gnome-base/gnome-desktop-2.26.1
  * Python deps are needed for gnome-about but not listed in configure.ac
 gnome-base/gnome-2.26.0

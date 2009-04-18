@@ -15,16 +15,16 @@ SRC_URI="mirror://gnome/sources/${MY_PN}/${PVP[0]}.${PVP[1]}/${MY_P}.tar.bz2"
 LICENSE="LGPL-2"
 SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="debug doc ldap"
+IUSE="debug doc ldap policykit"
 
-# FIXME: add policykit support
 RDEPEND=">=dev-libs/glib-2.14
 	>=x11-libs/gtk+-2.8.16
 	>=dev-libs/dbus-glib-0.74
 	>=sys-apps/dbus-1
 	>=gnome-base/orbit-2.4
 	>=dev-libs/libxml2-2
-	ldap? ( net-nds/openldap )"
+	ldap? ( net-nds/openldap )
+	policykit? ( >=sys-auth/policykit-0.7 )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
 	>=dev-util/pkgconfig-0.9
@@ -42,7 +42,7 @@ pkg_setup() {
 		--disable-static
 		$(use_enable debug)
 		$(use_with ldap openldap)"
-	#$(use_enable policykit defaults-service)
+		$(use_enable policykit defaults-service)
 	kill_gconf
 }
 
@@ -61,7 +61,7 @@ src_unpack() {
 # Can't run tests, missing script.
 #src_test() {
 #	emake -C tests || die "make tests failed"
-#	sh "${S}"/tests/runtests.sh || die "running tests failed"
+#	sh "${S}"/tests/runtests.sh || die "running tests failed"
 #}
 
 src_install() {
@@ -82,7 +82,7 @@ pkg_preinst() {
 pkg_postinst() {
 	kill_gconf
 
-	#change the permissions to avoid some gconf bugs
+	# change the permissions to avoid some gconf bugs
 	einfo "changing permissions for gconf dirs"
 	find  /etc/gconf/ -type d -exec chmod ugo+rx "{}" \;
 
