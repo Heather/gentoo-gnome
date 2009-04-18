@@ -12,7 +12,7 @@ HOMEPAGE="http://www.anjuta.org"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~hppa ~ppc ~sparc ~x86"
-IUSE="debug devhelp doc glade graphviz sourceview subversion valgrind"
+IUSE="debug devhelp doc glade graphviz sourceview subversion +symbol-db valgrind"
 
 RDEPEND=">=dev-libs/glib-2.16.0
 	>=x11-libs/gtk+-2.12.10
@@ -28,6 +28,7 @@ RDEPEND=">=dev-libs/glib-2.16.0
 	>=x11-libs/libwnck-2.12
 	>=sys-devel/binutils-2.15.92
 	>=dev-libs/libunique-1.0.0
+	symbol-db? ( gnome-extra/libgda:4 )
 
 	dev-libs/libxslt
 	>=dev-lang/perl-5
@@ -57,10 +58,8 @@ DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1.4 )"
 
 pkg_setup() {
-	# symbol-db plugin depends on libgda-4
 	G2CONF="${G2CONF}
 		--docdir=/usr/share/doc/${PF}
-		--disable-plugin-symbol-db
 		$(use_enable debug)
 		$(use_enable devhelp plugin-devhelp)
 		$(use_enable glade plugin-glade)
@@ -68,6 +67,7 @@ pkg_setup() {
 		$(use_enable sourceview plugin-sourceview)
 		$(use_enable !sourceview plugin-scintilla)
 		$(use_enable subversion plugin-subversion)
+		$(use_enable symbol-db plugin-symbol-db)
 		$(use_enable graphviz)" # Toggles inherit-plugin and performance-plugin
 }
 
@@ -84,7 +84,12 @@ src_prepare() {
 pkg_postinst() {
 	gnome2_pkg_postinst
 
+	if ! use symbol-db; then
+		elog "You disabled symbol-db which will disallow using projects."
+	fi
+
 	ebeep 1
+	elog ""
 	elog "Some project templates may require additional development"
 	elog "libraries to function correctly. It goes beyond the scope"
 	elog "of this ebuild to provide them."
