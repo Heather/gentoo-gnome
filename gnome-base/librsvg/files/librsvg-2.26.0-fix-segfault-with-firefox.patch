@@ -1,0 +1,19 @@
+From: Xu Li <xu.li@intel.com>
+Date: Thu, 16 Apr 2009 22:52:32
+Subject: [PATCH] A temporal patch to fix the crash issue when parse path element
+
+Index: librsvg-2.26.0/rsvg-path.c
+===================================================================
+--- librsvg-2.26.0.orig/rsvg-path.c
++++ librsvg-2.26.0/rsvg-path.c
+@@ -142,8 +142,8 @@ rsvg_path_arc (RSVGParsePathCtx * ctx,
+         return;
+       }
+ 
+-    if(rx < 0)rx = -rx;
+-    if(ry < 0)ry = -ry;
++    rx = fabs(rx);
++    ry = fabs(ry);
+ 
+     k1 = (x1 - x2)/2;
+     k2 = (y1 - y2)/2;

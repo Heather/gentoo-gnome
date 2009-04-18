@@ -38,6 +38,12 @@ pkg_setup() {
 		--enable-gtk-theme"
 }
 
+src_unpack() {
+	gnome2_src_unpack
+
+	epatch "${FILESDIR}/${P}-fix-segfault-with-firefox.patch"
+}
+
 set_gtk_confdir() {
 	# An arch specific config directory is used on multilib systems
 	has_multilib_profile && GTK2_CONFDIR="${ROOT}etc/gtk-2.0/${CHOST}"
