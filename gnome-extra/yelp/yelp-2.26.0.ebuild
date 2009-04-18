@@ -4,7 +4,7 @@
 
 EAPI="1"
 
-inherit gnome2
+inherit gnome2 autotools
 
 DESCRIPTION="Help browser for GNOME"
 HOMEPAGE="http://www.gnome.org/"
@@ -25,7 +25,9 @@ RDEPEND=">=gnome-base/gconf-2
 	>=dev-libs/libxslt-1.1.4
 	>=x11-libs/startup-notification-0.8
 	>=dev-libs/dbus-glib-0.71
-	beagle? ( || ( >=dev-libs/libbeagle-0.3.0 =app-misc/beagle-0.2* ) )
+	beagle? ( || (
+		>=dev-libs/libbeagle-0.3.0
+		=app-misc/beagle-0.2* ) )
 	net-libs/xulrunner:1.9
 	sys-libs/zlib
 	app-arch/bzip2
@@ -35,7 +37,8 @@ RDEPEND=">=gnome-base/gconf-2
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/intltool-0.35
-	>=dev-util/pkgconfig-0.9"
+	>=dev-util/pkgconfig-0.9
+	gnome-base/gnome-common"
 # If eautoreconf:
 #	gnome-base/gnome-common
 
@@ -44,13 +47,21 @@ DOCS="AUTHORS ChangeLog NEWS README TODO"
 src_unpack() {
 	gnome2_src_unpack
 
+	# Fix automagic lzma support, bug #266128
+	epatch "${FILESDIR}/${P}-automagic-lzma.patch"
+
+	eautoreconf
+
 	# strip stupid options in configure, see bug #196621
 	sed -i 's|$AM_CFLAGS -pedantic -ansi|$AM_CFLAGS|' configure || die "sed	failed"
 }
 
 pkg_setup() {
-	# FIXME: Add patch to make lzma-utils not automagic and use_enable here
-	G2CONF="${G2CONF} --enable-man --enable-info --with-gecko=libxul-embedding"
+	G2CONF="${G2CONF}
+		--enable-man
+		--enable-info
+		--with-gecko=libxul-embedding
+		$(use_enable lzma)"
 
 	if use beagle; then
 		G2CONF="${G2CONF} --with-search=beagle"
