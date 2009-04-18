@@ -26,7 +26,7 @@ gnome-base/gnome-menus-2.26.1
  * fix autofoo and report upstream
 gnome-base/gnome-panel-2.26.1
  * tarball generated with broken gtk-doc, revisit me.
-gnome-base/librsvg-2.26.0
+gnome-base/librsvg-2.26.0-r1
  * USEify mozilla support (?)
 gnome-base/nautilus-2.26.2
  * dev-libs/libunique needs KEYWORDS

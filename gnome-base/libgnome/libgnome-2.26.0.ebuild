@@ -15,12 +15,12 @@ IUSE="doc esd"
 RDEPEND=">=gnome-base/gconf-2
 	>=dev-libs/glib-2.16
 	>=gnome-base/gnome-vfs-2.5.3
+	gnome-base/gvfs
 	>=gnome-base/libbonobo-2.13
 	>=dev-libs/popt-1.7
 	esd? (
 		>=media-sound/esound-0.2.26
-		>=media-libs/audiofile-0.2.3
-	)"
+		>=media-libs/audiofile-0.2.3 )"
 
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
