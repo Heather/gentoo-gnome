@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit gnome2 eutils multilib
+inherit gnome2 eutils multilib autotools
 
 DESCRIPTION="GNOME webbrowser based on the mozilla rendering engine"
 HOMEPAGE="http://www.gnome.org/projects/epiphany/"
@@ -14,7 +14,6 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 -sparc ~x86"
 IUSE="avahi doc networkmanager python spell"
 
-# FIXME: libcanberra is automagic
 RDEPEND=">=dev-libs/glib-2.18.0
 	>=x11-libs/gtk+-2.16.0
 	>=dev-libs/libxml2-2.6.12
@@ -35,8 +34,7 @@ RDEPEND=">=dev-libs/glib-2.18.0
 	python? (
 		>=dev-lang/python-2.3
 		>=dev-python/pygtk-2.7.1
-		>=dev-python/gnome-python-2.6
-	)
+		>=dev-python/gnome-python-2.6 )
 	spell? ( app-text/enchant )
 	x11-themes/gnome-icon-theme"
 DEPEND="${RDEPEND}
@@ -54,6 +52,7 @@ pkg_setup() {
 		--with-gecko=libxul-embedding
 		--enable-certificate-manager
 		--with-distributor-name=Gentoo
+		--enable-canberra
 		$(use_enable avahi zeroconf)
 		$(use_enable networkmanager network-manager)
 		$(use_enable spell spell-checker)
@@ -65,6 +64,11 @@ src_prepare() {
 
 	# Fix compilation with xulrunner 1.9.1, bug #263990
 	epatch "${FILESDIR}/${PN}-2.26.0-xulrunner191.patch"
+
+	# Fix libcanberra automagic support, bug #266232
+	epatch "${FILESDIR}/${P}-automagic-libcanberra.patch"
+
+	eautoreconf
 }
 
 src_configure() {
