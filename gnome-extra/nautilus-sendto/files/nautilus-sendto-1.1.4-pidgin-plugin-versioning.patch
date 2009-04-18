@@ -1,0 +1,23 @@
+diff -Naur nautilus-sendto-1.1.4/pidgin_plugin/Makefile.am nautilus-sendto-1.1.4.new/pidgin_plugin/Makefile.am
+--- nautilus-sendto-1.1.4/pidgin_plugin/Makefile.am	2009-04-17 19:42:47.000000000 +0530
++++ nautilus-sendto-1.1.4.new/pidgin_plugin/Makefile.am	2009-04-18 20:08:18.504012965 +0530
+@@ -6,6 +6,7 @@
+ nautilus_la_LDFLAGS = -module -avoid-version -no-undefined
+ 
+ AM_CPPFLAGS = 					\
++	-DVERSION=\"$(VERSION)\"		\
+ 	-DLIBDIR=\"$(PIDGIN_LIBDIR)/pidgin/\" 	\
+ 	-DDATADIR=\"$(PIDGIN_DATADIR)\" 	\
+ 	$(NAUTILUS_SENDTO_CFLAGS)		\
+diff -Naur nautilus-sendto-1.1.4/pidgin_plugin/nautilus-sendto-plugin.c nautilus-sendto-1.1.4.new/pidgin_plugin/nautilus-sendto-plugin.c
+--- nautilus-sendto-1.1.4/pidgin_plugin/nautilus-sendto-plugin.c	2009-04-17 19:42:47.000000000 +0530
++++ nautilus-sendto-1.1.4.new/pidgin_plugin/nautilus-sendto-plugin.c	2009-04-18 20:08:33.827013571 +0530
+@@ -338,7 +338,7 @@
+ 
+ 	"gtk-nautilus",			/* id */
+ 	N_("Nautilus Integration"),		/* name */
+-	"0.8",				/* version */
++	VERSION,				/* version */
+ 	N_("Provides integration with Nautilus"),		/* summary */ 
+ 	N_("Provides integration with Nautilus"),		/* description */
+ 
