@@ -68,7 +68,6 @@ src_unpack() {
 
 	# Restore gstreamer volume control support, upstream bug #571145
 	epatch "${FILESDIR}/${P}-readd-gst-vol-control-support.patch"
-	epatch "${FILESDIR}/${P}-volume-keys.patch"
 
 	# Fix background loading (GNOME bug #564909)
 	# This patch needs to be verified, I couldn't reproduce the original bug
