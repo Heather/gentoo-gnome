@@ -58,7 +58,7 @@ src_prepare() {
 	use branding && epatch "${FILESDIR}/${PN}-2.17.90.1-gentoo-branding.patch"
 
 	# Fix shutdown/restart capability, upstream bug #549150
-	epatch "${FILESDIR}/${PN}-2.26.0-shutdown.patch"
+	epatch "${FILESDIR}/${PN}-2.26.1-shutdown.patch"
 }
 
 src_install() {
@@ -66,11 +66,11 @@ src_install() {
 
 	dodir /etc/X11/Sessions
 	exeinto /etc/X11/Sessions
-	doexe "${FILESDIR}/Gnome"
+	doexe "${FILESDIR}/Gnome" || die "doexe failed"
 
 	# Our own splash for world domination
 	if use branding ; then
 		insinto /usr/share/pixmaps/splash/
-		doins "${DISTDIR}/gentoo-splash.png"
+		doins "${DISTDIR}/gentoo-splash.png" || die "doins failed"
 	fi
 }
