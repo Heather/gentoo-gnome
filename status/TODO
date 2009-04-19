@@ -43,6 +43,9 @@ gnome-extra/gucharmap-2.26.1
 gnome-extra/libgda-4.0.2
  * sqlite is automagic, but maybe it is a hard-dep
  * autoconf is a hell of inconsistencies
+gnome-extra/libgda-4.1.0
+ * sqlite is automagic, but maybe it is a hard-dep
+ * autoconf is a hell of inconsistencies
 mail-client/evolution-2.26.1.1
  * libpst automagic dep
 media-sound/sound-juicer-2.26.1
