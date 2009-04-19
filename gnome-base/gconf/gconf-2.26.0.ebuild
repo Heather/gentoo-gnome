@@ -41,8 +41,8 @@ pkg_setup() {
 		--disable-defaults-service
 		--disable-static
 		$(use_enable debug)
-		$(use_with ldap openldap)"
-		$(use_enable policykit defaults-service)
+		$(use_with ldap openldap)
+		$(use_enable policykit defaults-service)"
 	kill_gconf
 }
 
