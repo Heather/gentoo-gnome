@@ -1,13 +1,13 @@
  configure.ac                                |   45 +++
- plugins/media-keys/Makefile.am              |   23 ++-
+ plugins/media-keys/Makefile.am              |   25 ++-
  plugins/media-keys/actions/Makefile.am      |   44 +++
  plugins/media-keys/actions/acme-volume.c    |  402 +++++++++++++++++++++++++++
  plugins/media-keys/actions/acme-volume.h    |   56 ++++
  plugins/media-keys/gsd-media-keys-manager.c |  106 ++++++--
- 6 files changed, 651 insertions(+), 25 deletions(-)
+ 6 files changed, 651 insertions(+), 27 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index 9cff33f..2811702 100644
+index 135f2ce..201df79 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -253,11 +253,54 @@ if test x$WANT_PULSE = xyes ; then
@@ -82,7 +82,7 @@ index 9cff33f..2811702 100644
          Profiling support:        ${enable_profiling}
  "
 diff --git a/plugins/media-keys/Makefile.am b/plugins/media-keys/Makefile.am
-index b308edb..34aa464 100644
+index 54a3340..1dc08f3 100644
 --- a/plugins/media-keys/Makefile.am
 +++ b/plugins/media-keys/Makefile.am
 @@ -1,11 +1,12 @@
@@ -108,15 +108,24 @@ index b308edb..34aa464 100644
  	-DPIXMAPDIR=\""$(pkgdatadir)"\"				\
  	-DGLADEDIR=\""$(pkgdatadir)"\"				\
  	-DGNOME_SETTINGS_LOCALEDIR=\""$(datadir)/locale"\"	\
-@@ -55,7 +55,6 @@ libmedia_keys_la_LDFLAGS = 		\
+@@ -54,16 +54,13 @@ libmedia_keys_la_LDFLAGS = 		\
+ 
  libmedia_keys_la_LIBADD  = 		\
- 	$(top_builddir)/gnome-settings-daemon/libgsd-plugins.la		\
  	$(top_builddir)/plugins/common/libcommon.la			\
 -	$(top_builddir)/plugins/media-keys/cut-n-paste/libgvc.la	\
  	$(SETTINGS_PLUGIN_LIBS)						\
  	$(XF86MISC_LIBS)
  
-@@ -77,7 +76,6 @@ test_media_window_SOURCES =			\
+ plugin_in_files = 		\
+ 	media-keys.gnome-settings-plugin.in
+ 
+-if HAVE_PULSE
+ plugin_DATA = $(plugin_in_files:.gnome-settings-plugin.in=.gnome-settings-plugin)
+-endif
+ 
+ noinst_PROGRAMS =				\
+ 	test-media-keys				\
+@@ -78,7 +75,6 @@ test_media_window_SOURCES =			\
  
  test_media_window_CPPFLAGS = \
  	-I$(top_srcdir)/gnome-settings-daemon			\
@@ -124,7 +133,7 @@ index b308edb..34aa464 100644
  	-DPIXMAPDIR=\""$(pkgdatadir)"\"				\
  	-DGLADEDIR=\""$(pkgdatadir)"\"				\
  	-DGNOME_SETTINGS_LOCALEDIR=\""$(datadir)/locale"\"	\
-@@ -105,7 +103,6 @@ test_media_keys_SOURCES =			\
+@@ -106,7 +102,6 @@ test_media_keys_SOURCES =			\
  test_media_keys_CPPFLAGS = \
  	-I$(top_srcdir)/gnome-settings-daemon			\
  	-I$(top_srcdir)/plugins/common				\
@@ -132,7 +141,7 @@ index b308edb..34aa464 100644
  	-DPIXMAPDIR=\""$(pkgdatadir)"\"				\
  	-DGLADEDIR=\""$(pkgdatadir)"\"				\
  	-DGNOME_SETTINGS_LOCALEDIR=\""$(datadir)/locale"\"	\
-@@ -124,7 +121,17 @@ test_media_keys_LDADD = \
+@@ -125,7 +120,17 @@ test_media_keys_LDADD = \
  	$(GST_LIBS)
  
  if HAVE_PULSE
@@ -150,7 +159,7 @@ index b308edb..34aa464 100644
  endif
  
  gladedir = $(pkgdatadir)
-@@ -137,7 +144,11 @@ pixmaps_DATA = 		\
+@@ -138,7 +143,11 @@ pixmaps_DATA = 		\
  	acme-eject.png	\
  	$(NULL)
  
