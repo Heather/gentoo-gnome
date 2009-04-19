@@ -26,8 +26,12 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS README"
 
-src_unpack() {
-	gnome2_src_unpack
+pkg_setup() {
+	G2CONF="${G2CONF} --disable-scrollkeeper"
+}
+
+src_prepare() {
+	gnome2_src_prepare
 
 	# Make xml2po FHS compliant, bug #190798
 	epatch "${FILESDIR}/${PN}-0.16.0-fhs.patch"
@@ -36,12 +40,7 @@ src_unpack() {
 	# to AT_M4DIR="tools m4", bug #224609 (m4 removes glib build time dep)
 }
 
-pkg_setup() {
-	G2CONF="${G2CONF} --disable-scrollkeeper"
-}
-
 pkg_postinst() {
-	python_version
 	python_need_rebuild
 	python_mod_optimize $(python_get_sitedir)/xml2po
 	gnome2_pkg_postinst
