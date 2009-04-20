@@ -62,7 +62,7 @@ src_unpack() {
 	cd "${S}"
 
 	# Fix plugin versioning for pidgin plugin
-	epatch "${FILESDIR}"/${P}-pidgin-plugin-versioning.patch
+	epatch "${FILESDIR}"/${PN}-1.1.4-pidgin-plugin-versioning.patch
 	eautoreconf
 }
 
