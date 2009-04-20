@@ -129,7 +129,7 @@ RDEPEND="
 	dvdr? (
 		|| (
 			>=app-cdr/brasero-2.26.0
-			>=gnome-extra/nautilus-cd-burner-2.24.0 ))
+			>=gnome-extra/nautilus-cd-burner-2.24.0 ) )
 
 	>=gnome-extra/gtkhtml-3.26.0
 	>=mail-client/evolution-2.26.0
