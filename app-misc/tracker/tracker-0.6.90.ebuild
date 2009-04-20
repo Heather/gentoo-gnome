@@ -50,7 +50,8 @@ RDEPEND=">=dev-libs/dbus-glib-0.71
 	!kernel_linux? ( >=app-admin/gamin-0.1.7 )
 	pdf? (
 		>=x11-libs/cairo-1.0
-		>=app-text/poppler-bindings-0.5.0[gtk] )
+		>=virtual/poppler-glib-0.5[cairo]
+		>=virtual/poppler-utils-0.5 )
 	eds? (
 		>=mail-client/evolution-2.25.5
 		>=gnome-extra/evolution-data-server-2.25.5 )
