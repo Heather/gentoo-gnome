@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit gnome2 autotools
+inherit gnome2 autotools virtualx
 
 DESCRIPTION="a library for writing single instance application"
 HOMEPAGE="http://live.gnome.org/LibUnique"
@@ -31,6 +31,13 @@ src_prepare() {
 	# http://bugs.gentoo.org/show_bug.cgi?id=265828
 	epatch "${FILESDIR}/${P}-automagic-dbus.patch"
 	eautoreconf
+}
+
+src_test() {
+	cd "${S}/tests"
+
+	cp "${FILESDIR}/run-tests" .
+	Xemake -f run-tests || die "Tests failed"
 }
 
 pkg_setup() {
