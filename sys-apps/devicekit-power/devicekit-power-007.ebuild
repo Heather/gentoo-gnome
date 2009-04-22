@@ -41,3 +41,10 @@ pkg_setup() {
 		$(use_enable debug verbose-mode)
 	"
 }
+
+src_unpack() {
+	gnome2_src_unpack
+
+	# Gentoo bug 266987
+	epatch "${FILESDIR}/${P}-build-gcc-4.1.2.patch"
+}
