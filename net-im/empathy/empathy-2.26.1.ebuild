@@ -4,7 +4,7 @@
 
 EAPI="1"
 
-inherit gnome2
+inherit autotools gnome2
 
 DESCRIPTION="Telepathy client and library using GTK+"
 HOMEPAGE="http://live.gnome.org/Empathy"
