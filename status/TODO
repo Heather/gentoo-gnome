@@ -4,7 +4,7 @@ app-accessibility/dasher-4.10.0
  * bashism in configure is utterly broken !
 app-arch/file-roller-2.26.1
  * report upstream their package is broken
-app-misc/gnote-0.1.2
+app-misc/gnote-0.2.0
  * boost macros sucks, hence can't configure with as-needed
 app-text/evince-2.26.1
  * enable gobject-introspection when we have an ebuild for it.

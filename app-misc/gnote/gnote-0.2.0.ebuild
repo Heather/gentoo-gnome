@@ -12,8 +12,10 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="debug" # dbus
 
-RDEPEND=">=dev-cpp/glibmm-2
+RDEPEND=">=x11-libs/gtk+-2.14
+	>=dev-cpp/glibmm-2
 	>=dev-cpp/gtkmm-2.12
+	>=dev-libs/libxml2-2
 	>=dev-cpp/libxmlpp-2.6
 	>=gnome-base/gconf-2
 	>=gnome-base/libgnomeui-2
