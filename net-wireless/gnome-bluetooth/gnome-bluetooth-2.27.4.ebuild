@@ -27,9 +27,8 @@ DEPEND="${COMMON_DEPEND}
 	x11-proto/xproto
 	doc? ( app-text/gnome-doc-utils )"
 RDEPEND="${COMMON_DEPEND}
-	net-wireless/bluez
+	>=net-wireless/bluez-4.34
 	>=app-mobilephone/obex-data-server-0.4"
 
 DOCS="AUTHORS README NEWS ChangeLog"
 G2CONF="${G2CONF} --disable-desktop-update --disable-icon-update"
-
