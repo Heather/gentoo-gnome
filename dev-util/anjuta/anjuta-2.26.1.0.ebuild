@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit autotools eutils gnome2
+inherit autotools eutils gnome2 flag-o-matic
 
 DESCRIPTION="A versatile IDE for GNOME"
 HOMEPAGE="http://www.anjuta.org"
@@ -69,6 +69,9 @@ pkg_setup() {
 		$(use_enable subversion plugin-subversion)
 		$(use_enable symbol-db plugin-symbol-db)
 		$(use_enable graphviz)" # Toggles inherit-plugin and performance-plugin
+
+	# Conflics wiht -pg in a plugin, bug #266777
+	filter-flags -fomit-frame-pointer
 }
 
 src_prepare() {
