@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit gnome2
+inherit gnome2 autotools
 
 DESCRIPTION="VNC Client for the GNOME Desktop"
 HOMEPAGE="http://www.gnome.org/projects/vinagre/"
@@ -12,9 +12,7 @@ HOMEPAGE="http://www.gnome.org/projects/vinagre/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
-IUSE="avahi test"
-
-# FIXME: make gnome-panel applet optional ?
+IUSE="applet avahi test"
 
 RDEPEND=">=dev-libs/glib-2.17.0
 	>=x11-libs/gtk+-2.13.1
@@ -22,7 +20,7 @@ RDEPEND=">=dev-libs/glib-2.17.0
 	>=gnome-base/gconf-2.16
 	>=net-libs/gtk-vnc-0.3.8
 	>=gnome-base/gnome-keyring-1
-	>=gnome-base/gnome-panel-2
+	applet? ( >=gnome-base/gnome-panel-2 )
 	avahi? ( >=net-dns/avahi-0.6.22[dbus,gtk] )"
 
 DEPEND="${RDEPEND}
@@ -38,7 +36,18 @@ DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README"
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-scrollkeeper
-		$(use_enable avahi)"
+		$(use_enable avahi)
+		$(use_enable applet)"
+}
+
+src_prepare()  {
+	gnome2_src_prepare
+
+	# Make applet optional, bug #267279 
+	epatch "${FILESDIR}/${P}-optional-applet.patch"
+
+	intltoolize --force --copy --automake || die "intltoolize failed"
+	eautoreconf
 }
 
 src_install() {

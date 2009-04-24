@@ -63,8 +63,6 @@ net-im/empathy-2.26.1
  * report upstream their package is broken
 net-libs/libepc-0.3.9
  * 2 out of 16 tests fail, upstream bug #578792
-net-misc/vinagre-2.26.1
- * make gnome-panel applet optional ?
 net-misc/vino-2.26.1
  * dev-libs/libunique needs KEYWORDS
 net-wireless/gnome-bluetooth-2.27.4
