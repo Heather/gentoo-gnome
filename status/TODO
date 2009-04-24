@@ -69,8 +69,6 @@ net-misc/vino-2.26.1
  * dev-libs/libunique needs KEYWORDS
 net-wireless/gnome-bluetooth-2.27.4
  * KEYWORDS for libunique
-sys-apps/devicekit-power-007
- * crazy cflags by default, kill them out behind --enable-maintainer-mode
 x11-libs/gtk+-2.16.1
  * configure says >=xrandr-1.2.99 but remi tells me it's broken
 x11-libs/pango-1.24.1
