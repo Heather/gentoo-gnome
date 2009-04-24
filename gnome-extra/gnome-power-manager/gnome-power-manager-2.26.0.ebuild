@@ -90,6 +90,9 @@ src_prepare() {
 	epatch "${FILESDIR}/${P}-cpufreq-ui.patch"
 	epatch "${FILESDIR}/${P}-cpufreq-po.patch"
 
+	# Fix uninstalled cpufreq schemas, bug #266995
+	epatch "${FILESDIR}/${P}-cpufreq-schemas.patch"
+
 	intltoolize --force --copy --automake || die "intltoolize failed"
 
 	# Make it libtool-1 compatible

@@ -1,0 +1,95 @@
+ data/gnome-power-manager.schemas.in |   74 +++++++++++++++++++++++++++++++++++
+ 1 files changed, 74 insertions(+), 0 deletions(-)
+
+diff --git a/data/gnome-power-manager.schemas.in b/data/gnome-power-manager.schemas.in
+index 0239021..5ba6af1 100644
+--- a/data/gnome-power-manager.schemas.in
++++ b/data/gnome-power-manager.schemas.in
+@@ -300,6 +300,68 @@
+     </schema>
+ 
+     <schema>
++      <key>/schemas/apps/gnome-power-manager/cpufreq/consider_nice</key>
++      <applyto>/apps/gnome-power-manager/cpufreq/consider_nice</applyto>
++      <owner>gnome-power-manager</owner>
++      <type>bool</type>
++      <default>false</default>
++      <locale name="C">
++        <short>Whether or not niced processes should be considered on processor load calculation</short>
++        <long>If niced processes are considered, they can cause a frequency increment even though their absolute load percentage wouldn't trigger the scaling mechanism to switch up the frequency.</long>
++      </locale>
++    </schema>
++
++    <schema>
++      <key>/schemas/apps/gnome-power-manager/cpufreq/policy_ac</key>
++      <applyto>/apps/gnome-power-manager/cpufreq/policy_ac</applyto>
++      <owner>gnome-power-manager</owner>
++      <type>string</type>
++      <default>ondemand</default>
++      <locale name="C">
++        <short>The cpufreq policy to use when on AC power</short>
++        <long>The cpufreq policy used to scale the processor when on AC power. Possible values are ondemand, conservative, powersave, userspace, performance, nothing.</long>
++      </locale>
++    </schema>
++
++    <schema>
++      <key>/schemas/apps/gnome-power-manager/cpufreq/performance_ac</key>
++      <applyto>/apps/gnome-power-manager/cpufreq/performance_ac</applyto>
++      <owner>gnome-power-manager</owner>
++      <type>int</type>
++      <default>85</default>
++      <locale name="C">
++        <short>The cpufreq performance value to use when on AC power</short>
++        <long>The cpufreq performance value used to scale the processor when on AC power.</long>
++      </locale>
++    </schema>
++
++    <schema>
++      <key>/schemas/apps/gnome-power-manager/cpufreq/policy_battery</key>
++      <applyto>/apps/gnome-power-manager/cpufreq/policy_battery</applyto>
++      <owner>gnome-power-manager</owner>
++      <type>string</type>
++      <default>ondemand</default>
++      <locale name="C">
++        <short>The cpufreq policy to use when on battery power</short>
++        <long>The cpufreq policy used to scale the processor when on battery power. Possible values are ondemand, conservative, powersave, userspace, performance, nothing.</long>
++      </locale>
++    </schema>
++
++    <schema>
++      <key>/schemas/apps/gnome-power-manager/cpufreq/performance_battery</key>
++      <applyto>/apps/gnome-power-manager/cpufreq/performance_battery</applyto>
++      <owner>gnome-power-manager</owner>
++      <type>int</type>
++      <default>25</default>
++      <locale name="C">
++        <short>The cpufreq performance value to use when on battery power</short>
++        <long>The cpufreq performance value used to scale the processor when on battery power.</long>
++      </locale>
++    </schema>
++
++    
++
++    <schema>
+       <key>/schemas/apps/gnome-power-manager/general/installed_schema</key>
+       <applyto>/apps/gnome-power-manager/general/installed_schema</applyto>
+       <owner>gnome-power-manager</owner>
+@@ -833,6 +895,18 @@
+     </schema>
+ 
+     <schema>
++      <key>/schemas/apps/gnome-power-manager/ui/cpufreq_show</key>
++      <applyto>/apps/gnome-power-manager/ui/cpufreq_show</applyto>
++      <owner>gnome-power-manager</owner>
++      <type>bool</type>
++      <default>false</default>
++      <locale name="C">
++        <short>If we should show the CPU frequency scaling in the UI</short>
++        <long>If we should show the CPU frequency scaling in the UI. Some people need to configure this for specific systems.</long>
++      </locale>
++    </schema>
++
++    <schema>
+       <key>/schemas/apps/gnome-power-manager/ui/enable_sound</key>
+       <applyto>/apps/gnome-power-manager/ui/enable_sound</applyto>
+       <owner>gnome-power-manager</owner>
