@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-util/glade/glade-3.4.5.ebuild,v 1.8 2008/09/12 14:55:37 jer Exp $
 
+EAPI="2"
+
 inherit eutils gnome2
 
 MY_PN="glade3"
@@ -42,4 +44,11 @@ pkg_setup() {
 		$(use_enable gnome)
 		$(use_enable python)
 	"
+}
+
+src_prepare() {
+	gnome2_src_prepare
+
+	# Fix intltoolize broken file, see upstream #577133
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
 }
