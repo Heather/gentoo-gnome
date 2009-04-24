@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit autotools gnome2 eutils virtualx
+inherit gnome2 eutils virtualx
 
 DESCRIPTION="A file manager for the GNOME desktop"
 HOMEPAGE="http://www.gnome.org/projects/nautilus/"
@@ -69,8 +69,9 @@ src_prepare() {
 	fi
 
 	# gtk-doc-am and gnome-common needed for this
-	intltoolize --force --copy --automake || die "intltoolize failed"
-	eautoreconf
+
+	# Fix intltoolize broken file, see upstream #577133
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
 }
 
 src_test() {
