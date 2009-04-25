@@ -93,5 +93,19 @@ src_prepare() {
 	# automagics support, bug #266110
 	epatch "${FILESDIR}/${P}-automagics-canberra+polkit.patch"
 
+	# Policykit-based soltion to setting the default background.  Must be
+	# applied *after* teh automagics patch
+	epatch "${FILESDIR}"/${P}-default-background.patch
+
 	eautoreconf
+}
+
+src_install() {
+	gnome2_src_install
+
+	if use policykit ; then
+		# Install the policy for default backgrounds
+		insinto /usr/share/PolicyKit/policy/
+		doins "${FILESDIR}"/org.gnome.control-center.defaultbackground.policy
+	fi
 }
