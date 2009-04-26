@@ -59,6 +59,9 @@ src_prepare() {
 
 	# Fix shutdown/restart capability, upstream bug #549150
 	epatch "${FILESDIR}/${PN}-2.26.1-shutdown.patch"
+
+	# Add "session saving" button back, upstream bug #575544
+	epatch "${FILESDIR}/${PN}-2.26.1-session-saving-button.patch"
 }
 
 src_install() {
