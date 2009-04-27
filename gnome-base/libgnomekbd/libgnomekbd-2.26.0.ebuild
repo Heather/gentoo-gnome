@@ -5,7 +5,7 @@
 EAPI="2"
 GCONF_DEBUG="no"
 
-inherit gnome2
+inherit autotools eutils gnome2
 
 DESCRIPTION="Gnome keyboard configuration library"
 HOMEPAGE="http://www.gnome.org"
@@ -37,7 +37,11 @@ src_prepare() {
 	# Fix linking to system's library, bug #265428
 	epatch "${FILESDIR}/${PN}-2.22.0-system-relink.patch"
 
-	eautomake
+	# Make it libtool-1 compatible
+	rm -v m4/lt* m4/libtool.m4 || die "removing libtool macros failed"
+
+	intltoolize --force --copy --automake || die "intltoolize failed"
+	eautoreconf
 }
 
 src_compile() {
