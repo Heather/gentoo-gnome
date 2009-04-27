@@ -12,7 +12,7 @@ HOMEPAGE="http://www.tracker-project.org/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
-IUSE="applet debug deskbar exif gnome gsf gstreamer gtk hal +jpeg pdf xine kernel_linux +tiff xml"
+IUSE="applet debug deskbar eds exif gnome gsf gstreamer gtk hal +jpeg pdf xine kernel_linux +tiff xml xmp"
 
 # Automagic, gconf, raptor
 RDEPEND=">=dev-libs/dbus-glib-0.71
@@ -119,5 +119,5 @@ pkg_setup() {
 		$(use_enable exif libexif)
 		$(use_enable pdf)
 		$(use_enable xmp exempi)
-		$(use_enable eds evolution-plugin)"	
+		$(use_enable eds evolution-push-module)"	
 }
