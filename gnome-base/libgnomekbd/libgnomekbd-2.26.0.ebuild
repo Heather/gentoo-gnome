@@ -2,6 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/libgnomekbd/libgnomekbd-2.24.0.ebuild,v 1.4 2009/03/11 02:09:50 dang Exp $
 
+EAPI="2"
 GCONF_DEBUG="no"
 
 inherit gnome2
@@ -29,7 +30,14 @@ DOCS="AUTHORS ChangeLog NEWS README"
 
 pkg_setup() {
 	# Only user interaction required graphical tests at the time of 2.22.0 - not useful for us
-	G2CONF="${G2CONF} --disable-tests"
+	G2CONF="${G2CONF} --disable-tests --disable-static"
+}
+
+src_prepare() {
+	# Fix linking to system's library, bug #265428
+	epatch "${FILESDIR}/${PN}-2.22.0-system-relink.patch"
+
+	eautomake
 }
 
 src_compile() {
