@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils pam gnome2
+inherit eutils pam gnome2 autotools
 
 DESCRIPTION="GNOME Display Manager"
 HOMEPAGE="http://www.gnome.org/projects/gdm/"
@@ -14,7 +14,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
 IUSE_LIBC="elibc_glibc"
-IUSE="accessibility debug ipv6 gnome-keyring policykit selinux tcpd test xinerama $IUSE_LIBC"
+IUSE="accessibility debug ipv6 gnome-keyring policykit selinux tcpd test xinerama xklavier $IUSE_LIBC"
 
 # Name of the tarball with gentoo specific files
 GDM_EXTRA="${PN}-2.20.9-gentoo-files-r1"
@@ -22,7 +22,6 @@ GDM_EXTRA="${PN}-2.20.9-gentoo-files-r1"
 SRC_URI="${SRC_URI}
 	mirror://gentoo/${GDM_EXTRA}.tar.bz2"
 
-# FIXME: automagic libxklavier check
 RDEPEND=">=dev-libs/dbus-glib-0.74
 	>=dev-libs/glib-2.15.4
 	>=x11-libs/gtk+-2.10.0
@@ -30,7 +29,7 @@ RDEPEND=">=dev-libs/dbus-glib-0.74
 	>=gnome-base/libglade-2
 	>=gnome-base/gconf-2.6.1
 	>=gnome-base/gnome-panel-2
-	>=x11-libs/libxklavier-3.5
+	xklavier? ( >=x11-libs/libxklavier-3.5 )
 	x11-libs/libXft
 	app-text/iso-codes
 
@@ -77,6 +76,7 @@ pkg_setup() {
 		$(use_with accessibility xevie)
 		$(use_enable debug)
 		$(use_enable ipv6)
+		$(use_enable xklavier libxklavier)
 		$(use_enable policykit polkit)
 		$(use_with selinux)
 		$(use_with tcpd tcp-wrappers)
@@ -103,6 +103,11 @@ src_prepare() {
 
 	# ssh-agent handling must be done at xinitrc.d
 	epatch "${FILESDIR}/${PN}-2.26.1-xinitrc-ssh-agent.patch"
+
+	# Fix libxklavier automagic support
+	epatch "${FILESDIR}/${PN}-2.24.1-automagic-libxklavier-support.patch"
+
+	eautoreconf
 }
 
 src_install() {

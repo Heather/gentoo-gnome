@@ -3,7 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gdm/gdm-2.20.7.ebuild,v 1.5 2008/08/12 13:54:55 armin76 Exp $
 EAPI=2
 
-inherit eutils pam gnome2
+inherit eutils pam gnome2 autotools
 
 DESCRIPTION="GNOME Display Manager"
 HOMEPAGE="http://www.gnome.org/projects/gdm/"
@@ -13,15 +13,13 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
 IUSE_LIBC="elibc_glibc"
-IUSE="accessibility afs debug ipv6 gnome-keyring policykit selinux tcpd xinerama $IUSE_LIBC"
+IUSE="accessibility afs debug ipv6 gnome-keyring policykit selinux tcpd xinerama xklavier $IUSE_LIBC"
 
 # Name of the tarball with gentoo specific files
 GDM_EXTRA="${PN}-2.20.5-gentoo-files"
 
 SRC_URI="${SRC_URI}
 		 mirror://gentoo/${GDM_EXTRA}.tar.bz2"
-
-# FIXME: automagic libxklavier check
 
 RDEPEND=">=dev-libs/dbus-glib-0.74
 		 >=dev-libs/glib-2.15.4
@@ -30,7 +28,7 @@ RDEPEND=">=dev-libs/dbus-glib-0.74
 		 >=gnome-base/libglade-2
 		 >=gnome-base/gconf-2.6.1
 		 >=gnome-base/gnome-panel-2
-		 >=x11-libs/libxklavier-3.5
+		 xklavier? ( >=x11-libs/libxklavier-3.5 )
 		 x11-libs/libXft
 		 app-text/iso-codes
 
@@ -77,6 +75,7 @@ pkg_setup() {
 		$(use_enable debug)
 		$(use_enable ipv6)
 		$(use_enable policykit polkit)
+		$(use_enable xklavier libxklavier)
 		$(use_with selinux)
 		$(use_with tcpd tcp-wrappers)
 		$(use_with xinerama)"
@@ -90,6 +89,10 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-2.13.0.1-selinux-remove-attr.patch"
 	# Make it daemonize so that the boot process can continue (#236701)
 	epatch "${FILESDIR}/${P}-fix-daemonize-regression.patch"
+	# Fix libxklavier automagic support
+	epatch "${FILESDIR}/${P}-automagic-libxklavier-support.patch"
+
+	eautoreconf
 }
 
 src_install() {
