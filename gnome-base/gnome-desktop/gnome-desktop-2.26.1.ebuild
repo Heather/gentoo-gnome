@@ -12,15 +12,11 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc"
 
-# FIXME: Python deps are needed for gnome-about but not listed in configure.ac
 RDEPEND=">=x11-libs/gtk+-2.14.0
 	>=dev-libs/glib-2.19.1
 	>=x11-libs/libXrandr-1.2
 	>=gnome-base/gconf-2
-	>=x11-libs/startup-notification-0.5
-	>=dev-python/pygtk-2.8
-	>=dev-python/pygobject-2.14
-	>=dev-python/libgnome-python-2.22"
+	>=x11-libs/startup-notification-0.5"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
 	>=dev-util/pkgconfig-0.9
@@ -29,6 +25,10 @@ DEPEND="${RDEPEND}
 	~app-text/docbook-xml-dtd-4.1.2
 	x11-proto/xproto
 	>=x11-proto/randrproto-1.2"
+PDEPEND=">=dev-python/pygtk-2.8
+	>=dev-python/pygobject-2.14
+	>=dev-python/libgnome-python-2.22"
+
 # Includes X11/Xatom.h in libgnome-desktop/gnome-bg.c which comes from xproto
 # Includes X11/extensions/Xrandr.h that includes randr.h from randrproto (and
 # eventually libXrandr shouldn't RDEPEND on randrproto)
