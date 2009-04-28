@@ -141,7 +141,7 @@ RDEPEND="
 	>=app-admin/pessulus-2.26.0
 	ldap? (
 		>=app-admin/sabayon-2.25.0
-		>=net-im/ekiga-2.0.12 )
+		>=net-voip/ekiga-2.0.12 )
 
 	>=gnome-extra/gnome-screensaver-2.26.0
 	>=x11-misc/alacarte-0.11.10
