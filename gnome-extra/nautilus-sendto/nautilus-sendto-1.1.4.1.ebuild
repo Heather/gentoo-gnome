@@ -11,7 +11,7 @@ HOMEPAGE="http://www.gnome.org"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~ppc ~x86"
 IUSE="bluetooth +mail empathy gajim cdr pidgin upnp"
 
 RDEPEND=">=x11-libs/gtk+-2.12
