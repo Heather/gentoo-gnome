@@ -19,12 +19,14 @@ RDEPEND="
 	media-libs/jpeg
 	media-libs/libpng
 	dev-libs/libxml2
+	x11-libs/cairo
 	x11-libs/pango
 
 	>=x11-libs/gtk+-2.10
 	>=dev-libs/icu-3.8.1-r1
 	>=net-libs/libsoup-2.25
 	>=dev-db/sqlite-3
+	>=app-text/enchant-0.22
 
 	gnome-keyring? ( >=gnome-base/gnome-keyring-2.26.0 )
 	gstreamer? ( >=media-libs/gst-plugins-base-0.10 )"
