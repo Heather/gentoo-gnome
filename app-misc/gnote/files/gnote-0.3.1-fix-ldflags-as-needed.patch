@@ -1,0 +1,28 @@
+From 369d1772621be67db37175144e45353c96c077d6 Mon Sep 17 00:00:00 2001
+From: Priit Laes <plaes@plaes.org>
+Date: Wed, 6 May 2009 10:05:06 +0300
+Subject: [PATCH 2/2] Fix build with LDFLAGS="-Wl,--as-needed"
+
+---
+ src/Makefile.am |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 28d02e9..4096e48 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -13,9 +13,9 @@ AM_CPPFLAGS=@LIBGTKMM_CFLAGS@ @LIBGLIBMM_CFLAGS@ \
+ 
+ AM_LDFLAGS=-Wl,--export-dynamic
+ 
+-GNOTE_LIBS = @LIBGLIBMM_LIBS@ @LIBGTKMM_LIBS@ @LIBXMLPP_LIBS@ \
++GNOTE_LIBS = libgnote.a @LIBGLIBMM_LIBS@ @LIBGTKMM_LIBS@ @LIBXMLPP_LIBS@ \
+ 	@GCONF_LIBS@ @BOOST_FILESYSTEM_LIBS@ @BOOST_REGEX_LIBS@ \
+-	@GTKSPELL_LIBS@ @GTK_LIBS@ libgnote.a \
++	@GTKSPELL_LIBS@ @GTK_LIBS@ \
+ 	-luuid -L$(top_builddir)/libtomboy -ltomboy
+ 
+ noinst_LIBRARIES = libgnote.a
+-- 
+1.6.2.5
+

@@ -1,7 +1,5 @@
 Ebuild Notices:
 ===============
-app-misc/gnote-0.2.0
- * boost macros sucks, hence can't configure with as-needed
 dev-libs/libgweather-2.26.1
  * decide what to do with --enable-locations-compression
 gnome-base/gnome-2.26.0
