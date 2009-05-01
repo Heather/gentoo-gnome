@@ -14,7 +14,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
 IUSE_LIBC="elibc_glibc"
-IUSE="accessibility debug ipv6 gnome-keyring policykit selinux tcpd test xinerama xklavier $IUSE_LIBC"
+IUSE="accessibility +consolekit debug ipv6 gnome-keyring policykit selinux tcpd test xinerama +xklavier $IUSE_LIBC"
 
 # Name of the tarball with gentoo specific files
 GDM_EXTRA="${PN}-2.20.9-gentoo-files-r1"
@@ -41,8 +41,9 @@ RDEPEND=">=dev-libs/dbus-glib-0.74
 	x11-apps/sessreg
 	x11-libs/libXdmcp
 	virtual/pam
-	sys-auth/pambase[gnome-keyring?]
-	sys-auth/consolekit
+	consolekit? (
+		sys-auth/consolekit
+		>=sys-apps/hal-0.5.12_rc1-r1[consolekit] )
 
 	accessibility? ( x11-libs/libXevie )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-2.22[pam] )
@@ -56,12 +57,14 @@ RDEPEND=">=dev-libs/dbus-glib-0.74
 	!gnome-extra/fast-user-switch-applet"
 DEPEND="${RDEPEND}
 	test? ( >=dev-libs/check-0.9.4 )
+	xinerama? ( x11-proto/xineramaproto )
 	sys-devel/gettext
 	x11-proto/inputproto
 	>=dev-util/intltool-0.40
 	>=dev-util/pkgconfig-0.19
 	>=app-text/scrollkeeper-0.1.4
 	>=app-text/gnome-doc-utils-0.3.2"
+PDEPEND=">=sys-auth/pambase-20090430[consolekit=,gnome-keyring=]"
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
@@ -72,12 +75,13 @@ pkg_setup() {
 		--with-xdmcp=yes
 		--enable-authentication-scheme=pam
 		--with-pam-prefix=/etc
-		--with-console-kit=yes
+		SOUND_PROGRAM=/usr/bin/gdmplay
 		$(use_with accessibility xevie)
 		$(use_enable debug)
 		$(use_enable ipv6)
 		$(use_enable xklavier libxklavier)
 		$(use_enable policykit polkit)
+		$(use_with consolekit console-kit)
 		$(use_with selinux)
 		$(use_with tcpd tcp-wrappers)
 		$(use_with xinerama)"
