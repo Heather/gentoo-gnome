@@ -21,7 +21,7 @@ RESTRICT="test"
 RDEPEND=">=dev-libs/glib-2.6.0
 	>=x11-libs/gtk+-2.11.0
 	>=gnome-base/gnome-keyring-0.6.0
-	>=sys-apps/hal-0.5.9
+	>=sys-apps/hal-0.5.9[policykit?]
 	>=dev-libs/dbus-glib-0.71
 	>=gnome-base/libglade-2.5.0
 	>=x11-libs/libnotify-0.4.3
@@ -105,15 +105,6 @@ src_prepare() {
 
 src_test() {
 	Xemake check || die "Test phase failed"
-}
-
-src_install() {
-	gnome2_src_install
-
-	if use policykit; then
-		insinto /usr/share/PolicyKit/policy
-		doins "${FILESDIR}/org.freedesktop.hal.power-management.policy"
-	fi
 }
 
 pkg_postinst() {
