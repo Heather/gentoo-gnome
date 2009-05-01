@@ -1,7 +1,5 @@
 Ebuild Notices:
 ===============
-app-accessibility/dasher-4.10.0
- * bashism in configure is utterly broken !
 app-arch/file-roller-2.26.1
  * report upstream their package is broken
 app-misc/gnote-0.2.0

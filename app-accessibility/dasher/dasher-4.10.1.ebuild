@@ -2,8 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-accessibility/dasher/dasher-4.9.0.ebuild,v 1.6 2009/03/18 15:52:38 armin76 Exp $
 
-EAPI="2"
-
 inherit gnome2
 
 DESCRIPTION="A text entry interface, driven by continuous pointing gestures"
@@ -60,12 +58,4 @@ pkg_setup() {
 		$(use_enable accessibility speech)
 		$(use_with cairo)
 		$(use_with gnome)"
-}
-
-src_prepare() {
-	gnome2_src_prepare
-
-	# FIXME: bashism in configure is utterly broken !
-	sed 's:if [[ x"$glade_LIBS" != x ]]; then:if [ -n "$glade_LIBS" ]; then:' \
-		-i configure.in configure || die "sed failed"
 }
