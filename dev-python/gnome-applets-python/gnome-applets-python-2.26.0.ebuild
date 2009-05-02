@@ -19,3 +19,11 @@ RDEPEND=">=gnome-base/gnome-panel-2.13.4
 DEPEND="${RDEPEND}"
 
 EXAMPLES="examples/applet/*"
+
+src_unpack() {
+	gnome-python-common_src_unpack
+
+	# Fix session management of python applets, upstream bug #579390.
+	epatch "${FILESDIR}/${P}-session-mgmt.patch"
+}
+
