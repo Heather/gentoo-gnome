@@ -48,11 +48,11 @@ DEPEND="${COMMON_DEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
-# needed to get around some sandboxing checks
-export GST_INSPECT=/bin/true
-
 pkg_setup() {
 	G2CONF="${G2CONF} --disable-scrollkeeper"
+
+	# needed to get around some sandboxing checks
+	export GST_INSPECT=/bin/true
 }
 
 pkg_postinst() {
