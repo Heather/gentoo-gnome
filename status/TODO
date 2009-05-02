@@ -1,7 +1,5 @@
 Ebuild Notices:
 ===============
-app-arch/file-roller-2.26.1
- * report upstream their package is broken
 app-misc/gnote-0.2.0
  * boost macros sucks, hence can't configure with as-needed
 app-text/evince-2.26.1

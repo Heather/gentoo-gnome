@@ -42,21 +42,20 @@ src_unpack() {
 	gnome2_src_unpack
 
 	# Use absolute path to GNU tar since star doesn't have the same
-	# options.  On Gentoo, star is /usr/bin/tar, GNU tar is /bin/tar
+	# options. On Gentoo, star is /usr/bin/tar, GNU tar is /bin/tar
 	epatch "${FILESDIR}"/${PN}-2.10.3-use_bin_tar.patch
 
 	# use a local rpm2cpio script to avoid the dep
 	sed -e "s/rpm2cpio/rpm2cpio-file-roller/g" \
 		-i src/fr-command-rpm.c || die "sed failed"
 
-	# FIXME: report upstream their package is broken
-	intltoolize --force --copy --automake || die "intltoolize failed"
-	eautoreconf
+	# Fix intltoolize broken file, see upstream #577133 and #579464
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
 }
 
 src_install() {
 	gnome2_src_install
-	dobin "${FILESDIR}/rpm2cpio-file-roller"
+	dobin "${FILESDIR}/rpm2cpio-file-roller" || die "dobin failed"
 }
 
 pkg_postinst() {
