@@ -17,6 +17,7 @@ IUSE=""
 DOCS="AUTHORS COPYING ChangeLog NEWS README"
 
 RDEPEND=">=dev-lang/python-2.4
+	dev-python/ipython
 	dev-python/pygtk
 	dev-python/pygobject
 	dev-python/pycairo
