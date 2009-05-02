@@ -20,7 +20,7 @@ RESTRICT="test"
 src_prepare() {
 	# Do not waste time building examples
 	sed 's/^\(SUBDIRS =.*\)examples\(.*\)$/\1\2/' \
-		-i Makefile.in || die "sed failed"
+		-i Makefile.am Makefile.in || die "sed failed"
 
 	# Fix bug #66377
 	append-ldflags -lpthread
