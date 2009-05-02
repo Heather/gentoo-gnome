@@ -15,13 +15,21 @@ IUSE=""
 # liblouis is not in portage yet
 # it is used to provide contracted braille support
 RDEPEND=">=dev-libs/glib-2.10
-	>=gnome-base/orbit-2
 	>=gnome-extra/at-spi-1.7.6
-	>=gnome-base/libbonobo-2.14
-	>=dev-lang/python-2.4
-	>=dev-python/pygtk-2.12
-	>=dev-python/gnome-python-2.14
+	>=gnome-base/orbit-2
 	>=dev-python/pyorbit-2.14
+	>=gnome-base/libbonobo-2.14
+	>=dev-python/libbonobo-python-2.14
+
+	>=dev-lang/python-2.4
+	dev-python/pygobject
+	dev-python/pycairo
+	>=dev-python/pygtk-2.12
+
+	>=dev-python/libwnck-python-2.14
+	>=dev-python/gconf-python-2.14
+	>=dev-python/libgnome-python-2.14
+
 	>=app-accessibility/gnome-speech-0.3.10
 	>=app-accessibility/gnome-mag-0.12.5"
 
@@ -50,5 +58,5 @@ pkg_postinst() {
 
 pkg_postrm() {
 	gnome2_pkg_postrm
-	python_mod_cleanup $(python_get_sitedir)/orca
+	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages/orca
 }
