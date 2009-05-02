@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+GCONF_DEBUG="no"
+
 inherit gnome2 python
 
 DESCRIPTION="Interactive Python accessibility explorer"
@@ -16,13 +18,13 @@ DOCS="AUTHORS COPYING ChangeLog NEWS README"
 
 RDEPEND=">=dev-lang/python-2.4
 	dev-python/pygtk
+	dev-python/pygobject
 	dev-python/pycairo
 	dev-python/libgnome-python
 	dev-python/libwnck-python
 	dev-python/gtksourceview-python
 	dev-python/gconf-python
 	dev-python/librsvg-python
-	>=dev-python/pyorbit-2.14
 	>=gnome-extra/at-spi-1.7
 	>=dev-libs/glib-2"
 DEPEND="${RDEPEND}
@@ -40,6 +42,9 @@ src_unpack() {
 	# disable pyc compiling
 	mv "${S}"/py-compile "${S}"/py-compile.orig
 	ln -s $(type -P true) "${S}"/py-compile
+
+	# Fix intltoolize broken file, see upstream #577133
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
 }
 
 pkg_postinst() {
@@ -50,5 +55,5 @@ pkg_postinst() {
 
 pkg_postrm() {
 	gnome2_pkg_postrm
-	python_mod_cleanup	"$(python_get_sitedir)/accerciser"
+	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages/accerciser
 }
