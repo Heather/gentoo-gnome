@@ -36,8 +36,6 @@ gnome-extra/libgda-4.1.0
  * autoconf is a hell of inconsistencies
 mail-client/evolution-2.26.1.1
  * libpst automagic dep
-media-sound/sound-juicer-2.26.1
- * possibly automagic dual slot dep on musicbrainz
 media-video/totem-2.26.1
  * tests broken with USE="-doc" upstream bug #577774
  * tarball generated with broken gtk-doc, revisit me.
