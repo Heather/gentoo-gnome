@@ -24,8 +24,6 @@ gnome-extra/evolution-data-server-2.26.1.1
 gnome-extra/gnome-media-2.26.0
  * libcanberra is automagic
  * dep on pulseaudio-0.9.15 when it is out.
-gnome-extra/gnome-user-share-2.26.0
- * could libnotify be made optional ?
 gnome-extra/gucharmap-2.26.1
  * add gobject-introspection support once available
 gnome-extra/libgda-4.0.2
