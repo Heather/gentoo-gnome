@@ -55,6 +55,8 @@ src_install() {
 
 	# remove gdk-pixbuf loaders (#47766)
 	rm -fr "${D}/etc"
+	# Remove empty "mozilla plugins" directory
+	rm -rf "${D}/usr/$(get_libdir)/mozilla"
 }
 
 pkg_postinst() {
