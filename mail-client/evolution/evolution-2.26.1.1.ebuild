@@ -14,10 +14,9 @@ HOMEPAGE="http://www.gnome.org/projects/evolution/"
 LICENSE="GPL-2 FDL-1.1"
 SLOT="2.0"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
-IUSE="crypt dbus hal kerberos krb4 ldap mono networkmanager nntp pda profile python ssl"
+IUSE="crypt dbus hal kerberos krb4 ldap mono networkmanager nntp pda profile python ssl gstreamer exchange pst"
 
 # Pango dependency required to avoid font rendering problems
-# FIXME: libpst automagic dep
 RDEPEND=">=dev-libs/glib-2.18
 	>=x11-libs/gtk+-2.14
 	>=gnome-extra/evolution-data-server-2.26.1
@@ -34,6 +33,8 @@ RDEPEND=">=dev-libs/glib-2.18
 	>=x11-misc/shared-mime-info-0.22
 	dbus? ( dev-libs/dbus-glib )
 	hal? ( >=sys-apps/hal-0.5.4 )
+	pst? ( net-mail/libpst )
+	exchange? ( >=gnome-extra/evolution-exchange-2.26.1 )
 	x11-libs/libnotify
 	pda? (
 		>=app-pda/gnome-pilot-2.0.15
@@ -50,10 +51,9 @@ RDEPEND=">=dev-libs/glib-2.18
 	crypt? ( || ( >=app-crypt/gnupg-2.0.1-r2 =app-crypt/gnupg-1.4* ) )
 	ldap? ( >=net-nds/openldap-2 )
 	mono? ( >=dev-lang/mono-1 )
-	python? ( >=dev-lang/python-2.4 )"
-#	gstreamer? (
-#		>=media-libs/gstreamer-0.10
-#		>=media-libs/gst-plugins-base-0.10 )
+	python? ( >=dev-lang/python-2.4 )
+	gstreamer? ( >=media-libs/gstreamer-0.10
+		     >=media-libs/gst-plugins-base-0.10 )"
 
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.16
@@ -77,6 +77,10 @@ pkg_setup() {
 		$(use_enable ssl smime)
 		$(use_enable mono)
 		$(use_enable nntp)
+		$(use_enable dbus)
+		$(use_enable gstreamer audio-inline)
+		$(use_enable exchange exchange-operations)
+		$(use_enable pst pst-import)
 		$(use_enable pda pilot-conduits)
 		$(use_enable profile profiling)
 		$(use_enable python)
@@ -110,6 +114,9 @@ src_prepare() {
 	# Ugly hack, bug #235154
 	#epatch "${WORKDIR}/${P}-libtool-hack.patch"
 	rm ltmain.sh
+	
+	# Fix multiple automagics plugins
+	epatch "${FILESDIR}/${P}-automagics-plugins.patch"
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
