@@ -2,7 +2,7 @@
  1 files changed, 26 insertions(+), 16 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index 229ab88..1d1dc33 100644
+index 229ab88..c2c5031 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -63,7 +63,7 @@ GLIB_REQUIRED_VERSION=2.18.2
@@ -10,7 +10,7 @@ index 229ab88..1d1dc33 100644
  LIBGLADE_REQUIRED_VERSION=1.99.2
  GCONF_REQUIRED_VERSION=2.6.1
 -PA_REQUIRED_VERSION=0.9.12 # FIXME remove extra checks below when we have PA 0.9.15
-+PA_REQUIRED_VERSION=0.9.15
++PA_REQUIRED_VERSION=0.9.12
  CANBERRA_REQUIRED_VERSION=0.4
  
  PKG_CHECK_MODULES(MEDIA, [

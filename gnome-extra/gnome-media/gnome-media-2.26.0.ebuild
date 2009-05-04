@@ -33,7 +33,7 @@ RDEPEND=">=dev-libs/glib-2.18.2:2
 		|| (
 			>=media-plugins/gst-plugins-cdio-0.10
 			>=media-plugins/gst-plugins-cdparanoia-0.10 ) )
-	pulseaudio? ( >=media-sound/pulseaudio-0.9.12 )
+	pulseaudio? ( >=media-sound/pulseaudio-0.9.15 )
 	dev-libs/libxml2
 	>=media-plugins/gst-plugins-meta-0.10-r2:0.10
 	>=media-plugins/gst-plugins-gconf-0.10.1"
