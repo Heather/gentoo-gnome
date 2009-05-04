@@ -12,10 +12,8 @@ HOMEPAGE="http://ronald.bitfreak.net/gnome-media.php"
 LICENSE="LGPL-2 GPL-2 FDL-1.1"
 SLOT="2"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
-IUSE="esd gnomecd ipv6 pulseaudio"
+IUSE="canberra esd gnomecd ipv6 pulseaudio"
 
-# FIXME: libcanberra is automagic
-# FIXME: dep on pulseaudio-0.9.15 when it is out.
 RDEPEND=">=dev-libs/glib-2.18.2:2
 	>=x11-libs/gtk+-2.15.1:2
 	>=gnome-base/libglade-2
@@ -26,7 +24,7 @@ RDEPEND=">=dev-libs/glib-2.18.2:2
 	>=media-libs/gst-plugins-base-0.10.3
 	>=media-libs/gst-plugins-good-0.10
 	>=gnome-base/orbit-2
-	>=media-libs/libcanberra-0.4[gtk]
+	canberra? ( >=media-libs/libcanberra-0.4[gtk] )
 	>=dev-libs/libunique-1
 	gnomecd? (
 		>=gnome-extra/nautilus-cd-burner-2.12
@@ -60,7 +58,8 @@ pkg_setup() {
 		$(use_enable gnomecd)
 		$(use_enable ipv6)
 		$(use_enable pulseaudio)
-		$(use_enable !pulseaudio gstmix)"
+		$(use_enable !pulseaudio gstmix)
+		$(use_enable canberra)"
 }
 
 src_prepare() {
@@ -68,8 +67,10 @@ src_prepare() {
 
 	if use gnomecd; then
 		epatch "${FILESDIR}/${P}-missing-cddbslave-cflags.patch"
-		eautoreconf
 	fi
+	# Fix automagic canberra support + pulseaudio version (0.9.15)
+	epatch "${FILESDIR}/${P}-automagic-canberra.patch"
+	eautoreconf
 }
 
 src_compile() {
