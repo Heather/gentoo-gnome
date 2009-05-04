@@ -79,7 +79,7 @@ pkg_setup() {
 		$(use_enable nntp)
 		$(use_enable dbus)
 		$(use_enable gstreamer audio-inline)
-		$(use_enable exchange exchange-operations)
+		$(use_enable exchange)
 		$(use_enable pst pst-import)
 		$(use_enable pda pilot-conduits)
 		$(use_enable profile profiling)
