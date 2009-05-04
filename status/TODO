@@ -21,9 +21,6 @@ gnome-base/nautilus-2.26.2
  * tarball generated with broken gtk-doc, revisit me.
 gnome-extra/evolution-data-server-2.26.1.1
  * tarball generated with broken gtk-doc, revisit me.
-gnome-extra/gnome-media-2.26.0
- * libcanberra is automagic
- * dep on pulseaudio-0.9.15 when it is out.
 gnome-extra/gucharmap-2.26.1
  * add gobject-introspection support once available
 gnome-extra/libgda-4.0.2
@@ -49,8 +46,3 @@ net-misc/vino-2.26.1
  * dev-libs/libunique needs KEYWORDS
 net-wireless/gnome-bluetooth-2.27.4
  * KEYWORDS for libunique
-x11-libs/gtk+-2.16.1
- * configure says >=xrandr-1.2.99 but remi tells me it's broken
-x11-libs/pango-1.24.1
- * test
- * add gobject-introspection dependency when it is available
