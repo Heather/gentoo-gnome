@@ -1,5 +1,7 @@
- configure.ac |   42 ++++++++++++++++++++++++++----------------
- 1 files changed, 26 insertions(+), 16 deletions(-)
+ configure.ac                                |   42 ++++++++++++++++----------
+ gnome-volume-control/src/Makefile.am        |   11 ++++++-
+ gnome-volume-control/src/gvc-mixer-dialog.c |    7 ++++-
+ 3 files changed, 41 insertions(+), 19 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
 index 229ab88..c2c5031 100644
@@ -70,3 +72,79 @@ index 229ab88..c2c5031 100644
  
    *Deprecated*:
  
+diff --git a/gnome-volume-control/src/Makefile.am b/gnome-volume-control/src/Makefile.am
+index f55e714..97fc342 100644
+--- a/gnome-volume-control/src/Makefile.am
++++ b/gnome-volume-control/src/Makefile.am
+@@ -7,7 +7,6 @@ bin_PROGRAMS = 					\
+ 
+ AM_CPPFLAGS =					\
+ 	$(WARN_CFLAGS)				\
+-	-I$(top_srcdir)/sound-theme		\
+ 	$(VOLUME_CONTROL_CFLAGS)		\
+ 	$(PULSEAUDIO_CFLAGS)			\
+ 	-DLOCALE_DIR=\""$(datadir)/locale"\"	\
+@@ -16,6 +15,10 @@ AM_CPPFLAGS =					\
+ 	-DICON_DATA_DIR="\"$(pkgdatadir)/icons\"" \
+ 	$(NULL)
+ 
++if HAVE_SOUND_THEME
++	AM_CPPFLAGS += -I$(top_srcdir)/sound-theme
++endif
++
+ gnome_volume_control_applet_LDADD =		\
+ 	$(VOLUME_CONTROL_LIBS)			\
+ 	$(PULSEAUDIO_LIBS)			\
+@@ -52,9 +55,13 @@ gnome_volume_control_applet_SOURCES =		\
+ gnome_volume_control_LDADD =				\
+ 	$(VOLUME_CONTROL_LIBS)				\
+ 	$(PULSEAUDIO_LIBS)				\
+-	$(top_builddir)/sound-theme/libsoundtheme.la	\
+ 	$(NULL)
+ 
++if HAVE_SOUND_THEME
++	gnome_volume_control_LDADD +=		\ 
++	$(top_builddir)/sound-theme/libsoundtheme.la
++endif
++
+ gnome_volume_control_SOURCES =			\
+ 	gvc-mixer-stream.h			\
+ 	gvc-mixer-stream.c			\
+diff --git a/gnome-volume-control/src/gvc-mixer-dialog.c b/gnome-volume-control/src/gvc-mixer-dialog.c
+index 573a6c1..95906d2 100644
+--- a/gnome-volume-control/src/gvc-mixer-dialog.c
++++ b/gnome-volume-control/src/gvc-mixer-dialog.c
+@@ -37,7 +37,9 @@
+ #include "gvc-mixer-source.h"
+ #include "gvc-mixer-source-output.h"
+ #include "gvc-mixer-dialog.h"
++#ifdef HAVE_SOUND_THEME
+ #include "gvc-sound-theme-chooser.h"
++#endif /* HAVE_SOUND_THEME */
+ #include "gvc-level-bar.h"
+ 
+ #define SCALE_SIZE 128
+@@ -63,7 +65,9 @@ struct GvcMixerDialogPrivate
+         GtkWidget       *output_settings_box;
+         GtkWidget       *output_balance_bar;
+         GtkWidget       *input_treeview;
++#ifdef HAVE_SOUND_THEME
+         GtkWidget       *sound_theme_chooser;
++#endif
+         GtkWidget       *click_feedback_button;
+         GtkWidget       *audible_bell_button;
+         GtkSizeGroup    *size_group;
+@@ -1049,11 +1053,12 @@ gvc_mixer_dialog_constructor (GType                  type,
+         gtk_box_pack_start (GTK_BOX (self->priv->sound_effects_box),
+                             self->priv->effects_bar, FALSE, FALSE, 12);
+ 
++#ifdef HAVE_SOUND_THEME
+         self->priv->sound_theme_chooser = gvc_sound_theme_chooser_new ();
+         gtk_box_pack_start (GTK_BOX (self->priv->sound_effects_box),
+                             self->priv->sound_theme_chooser,
+                             TRUE, TRUE, 6);
+-
++#endif
+         /* Input page */
+         self->priv->input_box = gtk_vbox_new (FALSE, 12);
+         gtk_container_set_border_width (GTK_CONTAINER (self->priv->input_box), 12);

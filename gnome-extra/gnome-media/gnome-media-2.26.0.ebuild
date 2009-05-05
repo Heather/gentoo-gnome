@@ -14,6 +14,7 @@ SLOT="2"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="canberra esd gnomecd ipv6 pulseaudio"
 
+#FIXME: canberra IUSE is needed or not finally ?
 RDEPEND=">=dev-libs/glib-2.18.2:2
 	>=x11-libs/gtk+-2.15.1:2
 	>=gnome-base/libglade-2
@@ -68,7 +69,7 @@ src_prepare() {
 	if use gnomecd; then
 		epatch "${FILESDIR}/${P}-missing-cddbslave-cflags.patch"
 	fi
-	# Fix automagic canberra support + pulseaudio version (0.9.15)
+	# Fix automagic canberra support
 	epatch "${FILESDIR}/${P}-automagic-canberra.patch"
 	eautoreconf
 }
