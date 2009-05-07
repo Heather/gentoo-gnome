@@ -2,7 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit gnome2
+EAPI="2"
+
+inherit eutils gnome2
 
 DESCRIPTION="GLib-based library for accessing online service APIs using the GData protocol"
 HOMEPAGE="http://live.gnome.org/libgdata"
@@ -21,3 +23,10 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS README"
 G2CONF="${G2CONF} --disable-static"
+
+src_prepare() {
+	gnome2_src_prepare
+
+	# Fix testsuite regression, upstream bug #580330
+	epatch "${FILESDIR}/${P}-empty-title.patch"
+}

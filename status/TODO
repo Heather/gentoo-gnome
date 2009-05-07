@@ -4,8 +4,6 @@ app-misc/gnote-0.2.0
  * boost macros sucks, hence can't configure with as-needed
 dev-libs/libgweather-2.26.1
  * decide what to do with --enable-locations-compression
-dev-libs/totem-pl-parser-2.26.1
- * tests broken with USE="-doc" upstream bug #577774
 gnome-base/gnome-2.26.0
  * Rephrase to teach about using different WMs instead, as metacity is the default anyway
  * but first check WINDOW_MANAGER is still honored in 2.24. gnome-session-2.24 might have lost
@@ -14,13 +12,13 @@ gnome-base/gnome-menus-2.26.1
  * fix autofoo and report upstream
 gnome-base/gnome-panel-2.26.1
  * tarball generated with broken gtk-doc, revisit me.
-gnome-base/librsvg-2.26.0-r1
- * USEify mozilla support (?)
 gnome-base/nautilus-2.26.2
  * dev-libs/libunique needs KEYWORDS
  * tarball generated with broken gtk-doc, revisit me.
 gnome-extra/evolution-data-server-2.26.1.1
  * tarball generated with broken gtk-doc, revisit me.
+gnome-extra/gnome-media-2.26.0
+#FIXME: canberra IUSE is needed or not finally ?
 gnome-extra/gucharmap-2.26.1
  * add gobject-introspection support once available
 gnome-extra/libgda-4.0.2
@@ -44,5 +42,3 @@ net-libs/libepc-0.3.9
  * 2 out of 16 tests fail, upstream bug #578792
 net-misc/vino-2.26.1
  * dev-libs/libunique needs KEYWORDS
-net-wireless/gnome-bluetooth-2.27.4
- * KEYWORDS for libunique
