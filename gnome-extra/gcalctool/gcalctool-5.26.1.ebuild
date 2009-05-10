@@ -26,3 +26,10 @@ DEPEND="${RDEPEND}
 	>=app-text/gnome-doc-utils-0.3.2"
 
 DOCS="AUTHORS ChangeLog* MAINTAINERS NEWS README TODO"
+
+src_unpack() {
+	gnome2_src_unpack
+	
+	# Fix intltoolize broken file, see upstream #577133
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"    
+}
