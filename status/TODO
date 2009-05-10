@@ -1,15 +1,10 @@
 Ebuild Notices:
 ===============
-dev-libs/libgweather-2.26.1
- * decide what to do with --enable-locations-compression
 gnome-base/gnome-2.26.0
  * Rephrase to teach about using different WMs instead, as metacity is the default anyway
  * but first check WINDOW_MANAGER is still honored in 2.24. gnome-session-2.24 might have lost
  * support for it, but we don't ship with gnome-session-2.24 yet
 gnome-base/gnome-panel-2.26.1
- * tarball generated with broken gtk-doc, revisit me.
-gnome-base/nautilus-2.26.2
- * dev-libs/libunique needs KEYWORDS
  * tarball generated with broken gtk-doc, revisit me.
 gnome-extra/evolution-data-server-2.26.1.1
  * tarball generated with broken gtk-doc, revisit me.
