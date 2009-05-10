@@ -27,7 +27,7 @@
 # Those packages depend on gnome-desktop which breaks API again.
 # They should be hold off until they are all moved to the tree.
 ->=gnome-desktop/gnome-desktop-2.26
-->=media/gfx/eog-2.26
+->=media-gfx/eog-2.26
 ->=media-video/cheese-2.26
 ->=gnome-base/nautilus-2.26
 ->=gnome-base/gnome-control-center-2.26
