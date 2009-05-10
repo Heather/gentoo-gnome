@@ -22,3 +22,14 @@
 # Gilles Dartiguelongue <gdartiguelongue> (16 Aug 2008)
 # Masking because it's experimental, not sure it'll make it for 2.24
 >=gnome-base/gdm-2.23
+
+# Gilles Dartiguelongue <eva@gentoo.org> (10 May 2009)
+# Those packages depend on gnome-desktop which breaks API again.
+# They should be hold off until they are all moved to the tree.
+->=gnome-desktop/gnome-desktop-2.26
+->=media/gfx/eog-2.26
+->=media-video/cheese-2.26
+->=gnome-base/nautilus-2.26
+->=gnome-base/gnome-control-center-2.26
+->=gnome-base/gnome-settings-daemon-2.26
+
