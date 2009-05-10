@@ -1,8 +1,3 @@
- configure.ac                                |   42 ++++++++++++++++----------
- gnome-volume-control/src/Makefile.am        |   11 ++++++-
- gnome-volume-control/src/gvc-mixer-dialog.c |    7 ++++-
- 3 files changed, 41 insertions(+), 19 deletions(-)
-
 diff --git a/configure.ac b/configure.ac
 index 229ab88..c2c5031 100644
 --- a/configure.ac
@@ -73,7 +68,7 @@ index 229ab88..c2c5031 100644
    *Deprecated*:
  
 diff --git a/gnome-volume-control/src/Makefile.am b/gnome-volume-control/src/Makefile.am
-index f55e714..97fc342 100644
+index f55e714..40c3936 100644
 --- a/gnome-volume-control/src/Makefile.am
 +++ b/gnome-volume-control/src/Makefile.am
 @@ -7,7 +7,6 @@ bin_PROGRAMS = 					\
@@ -89,7 +84,7 @@ index f55e714..97fc342 100644
  	$(NULL)
  
 +if HAVE_SOUND_THEME
-+	AM_CPPFLAGS += -I$(top_srcdir)/sound-theme
++AM_CPPFLAGS += -I$(top_srcdir)/sound-theme
 +endif
 +
  gnome_volume_control_applet_LDADD =		\
@@ -103,7 +98,7 @@ index f55e714..97fc342 100644
  	$(NULL)
  
 +if HAVE_SOUND_THEME
-+	gnome_volume_control_LDADD +=		\ 
++gnome_volume_control_LDADD +=		\
 +	$(top_builddir)/sound-theme/libsoundtheme.la
 +endif
 +
