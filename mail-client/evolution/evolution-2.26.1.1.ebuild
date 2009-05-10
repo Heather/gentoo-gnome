@@ -34,7 +34,6 @@ RDEPEND=">=dev-libs/glib-2.18
 	dbus? ( dev-libs/dbus-glib )
 	hal? ( >=sys-apps/hal-0.5.4 )
 	pst? ( net-mail/libpst )
-	exchange? ( >=gnome-extra/evolution-exchange-2.26.1 )
 	x11-libs/libnotify
 	pda? (
 		>=app-pda/gnome-pilot-2.0.15
@@ -63,6 +62,8 @@ DEPEND="${RDEPEND}
 	app-text/scrollkeeper
 	>=gnome-base/gnome-common-2.12.0
 	>=app-text/gnome-doc-utils-0.9.1"
+
+PDEPEND="exchange? ( >=gnome-extra/evolution-exchange-2.26.1 )"
 
 DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS* README"
 ELTCONF="--reverse-deps"
@@ -114,7 +115,7 @@ src_prepare() {
 	# Ugly hack, bug #235154
 	#epatch "${WORKDIR}/${P}-libtool-hack.patch"
 	rm ltmain.sh
-	
+
 	# Fix multiple automagics plugins
 	epatch "${FILESDIR}/${P}-automagics-plugins.patch"
 
