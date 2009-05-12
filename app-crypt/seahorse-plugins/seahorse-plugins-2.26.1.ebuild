@@ -35,11 +35,11 @@ RDEPEND="
 	applet? ( >=gnome-base/gnome-panel-2.10 )
 	libnotify? ( >=x11-libs/libnotify-0.3.2 )"
 DEPEND="${RDEPEND}
-		sys-devel/gettext
-		>=app-text/gnome-doc-utils-0.3.2
-		>=app-text/scrollkeeper-0.3
-		>=dev-util/pkgconfig-0.20
-		>=dev-util/intltool-0.35"
+	sys-devel/gettext
+	>=app-text/gnome-doc-utils-0.3.2
+	>=app-text/scrollkeeper-0.3
+	>=dev-util/pkgconfig-0.20
+	>=dev-util/intltool-0.35"
 
 pkg_setup() {
 	if use epiphany ; then
@@ -66,8 +66,12 @@ pkg_setup() {
 
 src_unpack() {
 	gnome2_src_unpack
-	intltoolize --force --copy --automake || die "intltoolize failed"
-	eautomake
+
+	# Make it libtool-1 compatible
+	rm -v m4/lt* m4/libtool.m4 || die "removing libtool macros failed"
+
+	# Fix intltoolize broken file, see upstream #577133
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
 }
 
 src_install() {
