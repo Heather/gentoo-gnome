@@ -59,8 +59,12 @@ pkg_setup() {
 
 src_unpack() {
 	gnome2_src_unpack
-	intltoolize --force --copy --automake || die "intltoolize failed"
-	eautomake
+
+	# Make it libtool-1 compatible
+	rm -v m4/lt* m4/libtool.m4 || die "removing libtool macros failed"
+
+	# Fix intltoolize broken file, see upstream #577133
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
 }
 
 pkg_postinst() {
