@@ -100,7 +100,7 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-2.24.1-fix-daemonize-regression.patch"
 
 	# Fix VT grab problem causing GDM to grab VT2 instead of 7 (#261339)
-	#epatch "${FILESDIR}/${P}-fix-vt-grab-problem.patch"
+	epatch "${FILESDIR}/${P}-broken-VT-detection.patch"
 
 	# Make custom session work, bug #.
 	epatch "${FILESDIR}/${PN}-2.26.1-custom-session.patch"
