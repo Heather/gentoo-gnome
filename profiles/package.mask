@@ -10,10 +10,6 @@
 # Unmask in-tree webkit-gtk for gnome-desktop-2.26
 ->=net-libs/webkit-gtk-0_p42000
 
-# Nirbheek Chauhan <nirbheek@gentoo.org> (21 Mar 2009)
-# Unmask in-tree gnome-desktop-sharp for gnome-desktop-2.26
--=dev-dotnet/gnome-desktop-sharp-2.26*
-
 # Nirbheek Chauhan <nirbheek@gentoo.org> (17 Mar 2009)
 # Epiphany which uses webkit (bug #239112)
 # Several feature regressions
@@ -22,14 +18,3 @@
 # Gilles Dartiguelongue <gdartiguelongue> (16 Aug 2008)
 # Masking because it's experimental, not sure it'll make it for 2.24
 >=gnome-base/gdm-2.23
-
-# Gilles Dartiguelongue <eva@gentoo.org> (10 May 2009)
-# Those packages depend on gnome-desktop which breaks API again.
-# They should be hold off until they are all moved to the tree.
-->=gnome-desktop/gnome-desktop-2.26
-->=media-gfx/eog-2.26
-->=media-video/cheese-2.26
-->=gnome-base/nautilus-2.26
-->=gnome-base/gnome-control-center-2.26
-->=gnome-base/gnome-settings-daemon-2.26
-
