@@ -9,11 +9,7 @@ Bug Lists:
 
 Blockers:
 =========
-* gnome-applets: (deprecated) gstreamer mixer_applet constantly crashes for me (No GNOME bug yet)
-* gdm:
-  * Occupied VT problem[3]
-    * Temporary workaround: Press F2 during boot, before gdm gets loaded
-  * Daemonization regression[4]
+* 
 
 Tests:
 ======

@@ -6,8 +6,6 @@ gnome-base/gnome-2.26.0
  * support for it, but we don't ship with gnome-session-2.24 yet
 gnome-extra/evolution-data-server-2.26.1.1
  * tarball generated with broken gtk-doc, revisit me.
-gnome-extra/gnome-media-2.26.0
-#FIXME: canberra IUSE is needed or not finally ?
 gnome-extra/libgda-4.0.2
  * sqlite is automagic, but maybe it is a hard-dep
  * autoconf is a hell of inconsistencies
