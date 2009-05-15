@@ -11,7 +11,7 @@ LICENSE="LGPL-2 LGPL-2.1 BSD"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~sparc ~x86"
 # geoclue
-IUSE="coverage debug gnome-keyring gstreamer svg"
+IUSE="coverage debug doc gnome-keyring gstreamer svg"
 
 # use sqlite by default
 RDEPEND="
@@ -19,19 +19,22 @@ RDEPEND="
 	media-libs/jpeg
 	media-libs/libpng
 	dev-libs/libxml2
+	x11-libs/cairo
 	x11-libs/pango
 
-	>=x11-libs/gtk+-2.8
+	>=x11-libs/gtk+-2.10
 	>=dev-libs/icu-3.8.1-r1
 	>=net-libs/libsoup-2.25
 	>=dev-db/sqlite-3
+	>=app-text/enchant-0.22
 
+	gnome-keyring? ( >=gnome-base/gnome-keyring-2.26.0 )
 	gstreamer? ( >=media-libs/gst-plugins-base-0.10 )"
-
 DEPEND="${RDEPEND}
+	sys-devel/gettext
 	dev-util/gperf
 	dev-util/pkgconfig
-	virtual/perl-Text-Balanced"
+	doc? ( >=dev-util/gtk-doc-1.10 )"
 
 S="${WORKDIR}/${MY_P}"
 
@@ -55,4 +58,5 @@ src_compile() {
 
 src_install() {
 	emake DESTDIR="${D}" install || die "Install failed"
+	dodoc WebKit/gtk/{NEWS,ChangeLog}
 }
