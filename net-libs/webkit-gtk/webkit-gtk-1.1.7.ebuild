@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/net-libs/webkit-gtk/webkit-gtk-0_p40220.ebuild,v 1.3 2009/03/11 21:37:14 klausman Exp $
 
+EAPI="1"
+
 MY_P="webkit-${PV}"
 DESCRIPTION="Open source web browser engine"
 HOMEPAGE="http://www.webkitgtk.org/"
@@ -11,7 +13,7 @@ LICENSE="LGPL-2 LGPL-2.1 BSD"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~sparc ~x86"
 # geoclue
-IUSE="coverage debug doc gnome-keyring gstreamer svg"
+IUSE="coverage debug doc gnome-keyring +gstreamer +svg"
 
 # use sqlite by default
 RDEPEND="
@@ -38,25 +40,19 @@ DEPEND="${RDEPEND}
 
 S="${WORKDIR}/${MY_P}"
 
-src_compile() {
-	# It doesn't compile on alpha without this LDFLAGS
+src_configure() {
+	# It doesn't compile on alpha without this in LDFLAGS
 	use alpha && append-ldflags "-Wl,--no-relax"
 
-	local myconf
-	myconf="${myconf} --with-font-backend=pango"
-
-	econf \
+	econf --with-font-backend=pango \
 		$(use_enable gnome-keyring gnomekeyring) \
 		$(use_enable gstreamer video) \
 		$(use_enable svg) \
 		$(use_enable debug) \
-		$(use_enable coverage) \
-		${myconf}
-
-	emake || die "emake failed"
+		$(use_enable coverage)
 }
 
 src_install() {
 	emake DESTDIR="${D}" install || die "Install failed"
-	dodoc WebKit/gtk/{NEWS,ChangeLog}
+	dodoc WebKit/gtk/{NEWS,ChangeLog} || die "dodoc failed"
 }
