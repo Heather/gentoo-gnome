@@ -16,5 +16,5 @@ media-video/totem-2.26.2
  * tests broken with USE="-doc" upstream bug #577774
  * tarball generated with broken gtk-doc, revisit me.
  * why does it need write access here, probably need to set up a fake
-net-libs/libepc-0.3.9
+net-libs/libepc-0.3.10
  * 2 out of 16 tests fail, upstream bug #578792
