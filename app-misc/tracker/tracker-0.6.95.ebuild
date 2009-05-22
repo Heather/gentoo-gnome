@@ -12,7 +12,7 @@ HOMEPAGE="http://www.tracker-project.org/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
-IUSE="applet debug deskbar eds exif gnome gsf gstreamer gtk hal +jpeg pdf xine kernel_linux +tiff xml xmp"
+IUSE="applet debug deskbar eds exif gnome gsf gstreamer gtk hal +jpeg pdf xine kernel_linux +tiff vorbis xml xmp"
 
 # Automagic, gconf, raptor
 RDEPEND=">=dev-libs/dbus-glib-0.71
@@ -28,10 +28,11 @@ RDEPEND=">=dev-libs/dbus-glib-0.71
 	>=media-libs/libpng-1.2
 	>=dev-db/sqlite-3.5[threadsafe]
 	>=media-gfx/imagemagick-5.2.1[png,jpeg=]
-	applet? ( >=x11-libs/libnotify-0.4.3 )
+	applet? ( >=x11-libs/libnotify-0.4.3
+		>=x11-libs/gtk+-2.16 )
 	deskbar? ( >=gnome-extra/deskbar-applet-2.19 )
 	gnome? (
-		>=x11-libs/gtk+-2.12
+		>=x11-libs/gtk+-2.16
 		>=gnome-base/libgnome-2.14
 		>=gnome-base/libgnomeui-2.14
 		>=gnome-base/gnome-vfs-2.10
@@ -45,7 +46,7 @@ RDEPEND=">=dev-libs/dbus-glib-0.71
 	!gstreamer? ( !xine? ( || ( media-video/totem media-video/mplayer ) ) )
 	xine? ( >=media-libs/xine-lib-1.0 )
 
-	gtk? ( >=x11-libs/gtk+-2.8.20 )
+	gtk? ( >=x11-libs/gtk+-2.16.0 )
 	hal? ( >=sys-apps/hal-0.5 )
 	!kernel_linux? ( >=app-admin/gamin-0.1.7 )
 	pdf? (
@@ -58,6 +59,7 @@ RDEPEND=">=dev-libs/dbus-glib-0.71
 	exif? ( >=media-libs/libexif-0.6 )
 	jpeg? ( media-libs/jpeg )
 	tiff? ( media-libs/tiff )
+	vorbis? ( media-libs/libvorbis )
 	xmp? ( >=media-libs/exempi-2 )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
