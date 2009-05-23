@@ -6,10 +6,6 @@
 # NOTE: Please add your entry at the top!
 #
 
-# Nirbheek Chauhan <nirbheek@gentoo.org> (13 Apr 2009)
-# Unmask in-tree webkit-gtk for gnome-desktop-2.26
-->=net-libs/webkit-gtk-0_p42000
-
 # Nirbheek Chauhan <nirbheek@gentoo.org> (17 Mar 2009)
 # Epiphany which uses webkit (bug #239112)
 # Several feature regressions
