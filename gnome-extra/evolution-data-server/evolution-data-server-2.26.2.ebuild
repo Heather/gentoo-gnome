@@ -60,6 +60,8 @@ pkg_setup() {
 }
 
 src_prepare() {
+	gnome2_src_prepare
+
 	# Adjust to gentoo's /etc/service
 	epatch "${FILESDIR}"/${PN}-1.2.0-gentoo_etc_services.patch
 
@@ -72,11 +74,6 @@ src_prepare() {
 	# Fix building evo-exchange with --as-needed, upstream bug #342830
 	epatch "${FILESDIR}"/${PN}-2.25.5-as-needed.patch
 
-	# FIXME: tarball generated with broken gtk-doc, revisit me.
-	if ! use doc; then
-		sed "s/gtkdoc-rebase/true/" -i gtk-doc.make || die "sed 2 failed"
-	fi
-
 	# gtk-doc-am and gnome-common needed for this
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
@@ -84,7 +81,7 @@ src_prepare() {
 	# Use NSS/NSPR only if 'ssl' is enabled.
 	if use ssl ; then
 		sed -i -e "s|mozilla-nss|nss|
-			s|mozilla-nspr|nspr|" "${S}"/configure || die "sed 3 failed"
+			s|mozilla-nspr|nspr|" "${S}"/configure || die "sed failed"
 		G2CONF="${G2CONF} --enable-nss=yes"
 	else
 		G2CONF="${G2CONF} --without-nspr-libs --without-nspr-includes \
@@ -102,13 +99,15 @@ src_install() {
 	if use ldap; then
 		MY_MAJORV=$(get_version_component_range 1-2)
 		insinto /etc/openldap/schema
-		doins "${FILESDIR}"/calentry.schema
+		doins "${FILESDIR}"/calentry.schema || die "doins failed"
 		dosym "${D}"/usr/share/${PN}-${MY_MAJORV}/evolutionperson.schema /etc/openldap/schema/evolutionperson.schema
 	fi
 
 }
 
 pkg_postinst() {
+	gnome2_pkg_postinst
+
 	if use ldap; then
 		elog ""
 		elog "LDAP schemas needed by evolution are installed in /etc/openldap/schema"
