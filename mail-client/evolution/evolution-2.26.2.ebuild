@@ -117,7 +117,7 @@ src_prepare() {
 	rm ltmain.sh
 
 	# Fix multiple automagics plugins
-	epatch "${FILESDIR}/${P}-automagics-plugins.patch"
+	epatch "${FILESDIR}/${PN}-2.26.1.1-automagics-plugins.patch"
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
@@ -138,6 +138,7 @@ src_prepare() {
 	# Bug #?
 	if [ "${ARCH}" = "hppa" ]; then
 		append-flags "-fPIC -ffunction-sections"
+		# bad bad bad, what about user settings !!!
 		export LDFLAGS="-ffunction-sections -Wl,--stub-group-size=25000"
 	fi
 }
