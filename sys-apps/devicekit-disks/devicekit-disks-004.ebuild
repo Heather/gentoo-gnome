@@ -23,7 +23,9 @@ RDEPEND=">=dev-libs/glib-2.16.1
 	>=sys-auth/policykit-0.7
 	>=sys-apps/devicekit-002
 	>=sys-fs/udev-139
-	>=sys-fs/device-mapper-1.02
+	|| (
+		>=sys-fs/lvm2-2.02
+		>=sys-fs/device-mapper-1.02 )
 	>=sys-apps/parted-1.8.8[device-mapper]
 	>=sys-apps/libatasmart-0.5
 
@@ -47,6 +49,7 @@ pkg_setup() {
 }
 
 src_configure() {
+	# No damned pkgconfig file :|
 	DEVMAPPER_CFLAGS="-I/usr/include" DEVMAPPER_LIBS="-ldevmapper" \
 		gnome2_src_configure
 }
