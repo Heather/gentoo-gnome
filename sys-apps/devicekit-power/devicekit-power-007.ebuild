@@ -20,7 +20,7 @@ RDEPEND=">=dev-libs/glib-2.16.1
 	>=sys-apps/devicekit-002
 	>=sys-auth/policykit-0.7
 	sys-apps/dbus
-	dev-libs/libusb
+	virtual/libusb
 "
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
