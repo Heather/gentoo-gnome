@@ -31,6 +31,9 @@ src_prepare() {
 	# Fix build failure
 	epatch "${FILESDIR}/${P}-gir.patch"
 
-	eautomake
+	# Make it libtool-1 compatible, bug #270909
+	rm -v m4/lt* m4/libtool.m4 || die "removing libtool macros failed"
+
+	eautoreconf
 }
 
