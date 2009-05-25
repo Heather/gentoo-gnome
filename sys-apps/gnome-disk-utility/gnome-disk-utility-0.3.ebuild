@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="doc +nautilus"
 
-RDEPEND="
+COMMON_DEPEND="
 	>=dev-libs/glib-2.16
 	>=dev-libs/dbus-glib-0.71
 	>=dev-libs/libunique-1.0
@@ -26,7 +26,9 @@ RDEPEND="
 	>=gnome-base/gnome-keyring-2.22
 
 	nautilus? ( >=gnome-base/nautilus-2.24 )"
-DEPEND="${RDEPEND}
+RDEPEND="${COMMON_DEPEND}
+	sys-apps/devicekit-disks"
+DEPEND="${COMMON_DEPEND}
 	sys-devel/gettext
 	app-text/scrollkeeper
 	>=dev-util/pkgconfig-0.9
