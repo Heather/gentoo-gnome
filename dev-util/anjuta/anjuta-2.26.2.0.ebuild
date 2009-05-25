@@ -28,7 +28,9 @@ RDEPEND=">=dev-libs/glib-2.16.0
 	>=x11-libs/libwnck-2.12
 	>=sys-devel/binutils-2.15.92
 	>=dev-libs/libunique-1.0.0
-	symbol-db? ( gnome-extra/libgda:4 )
+	symbol-db? (
+		gnome-extra/libgda:4
+		dev-util/ctags )
 
 	dev-libs/libxslt
 	>=dev-lang/perl-5
