@@ -131,4 +131,7 @@ src_prepare() {
 		# Fix missing dbus-binding-tool xml sheets
 		epatch "${FILESDIR}/${P}-eds-dbusbindingtool-sheets.patch"
 	fi
+
+	# Fix intltoolize broken file, see upstream #577133
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
 }
