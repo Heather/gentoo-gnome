@@ -121,5 +121,14 @@ pkg_setup() {
 		$(use_enable exif libexif)
 		$(use_enable pdf)
 		$(use_enable xmp exempi)
-		$(use_enable eds evolution-push-module)"	
+		$(use_enable eds evolution-push-module)"
+}
+
+src_prepare() {
+	if use eds ; then
+		# Fix compilation error, bug #270931
+		epatch "${FILESDIR}/${P}-eds-missing-parameters.patch"
+		# Fix missing dbus-binding-tool xml sheets
+		epatch "${FILESDIR}/${P}-eds-dbusbindingtool-sheets.patch"
+	fi
 }
