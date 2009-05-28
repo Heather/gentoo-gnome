@@ -12,21 +12,26 @@ HOMEPAGE="http://live.gnome.org/libgdata"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
+IUSE="gnome"
 
 RDEPEND=">=dev-libs/glib-2.19.0
-	>=net-libs/libsoup-2.24:2.4
+	>=net-libs/libsoup-2.26.1:2.4[gnome?]
 	>=dev-libs/libxml2-2"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35.0
 	doc? ( >=dev-util/gtk-doc-1 )"
 
-DOCS="AUTHORS ChangeLog NEWS README"
-G2CONF="${G2CONF} --disable-static"
+DOCS="AUTHORS ChangeLog HACKING NEWS README"
+
+pkg_setup() {
+	G2CONF="${G2CONF}
+		--disable-static
+		$(use_enable gnome)"
+}
 
 src_prepare() {
 	gnome2_src_prepare
 
-	# Fix testsuite regression, upstream bug #580330
-	epatch "${FILESDIR}/${P}-empty-title.patch"
+	# Fix intltoolize broken file, see upstream #577133
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
 }
