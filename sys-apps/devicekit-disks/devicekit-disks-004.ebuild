@@ -27,7 +27,7 @@ RDEPEND=">=dev-libs/glib-2.16.1
 		>=sys-fs/lvm2-2.02
 		>=sys-fs/device-mapper-1.02 )
 	>=sys-apps/parted-1.8.8[device-mapper]
-	>=sys-apps/libatasmart-0.5
+	>=dev-libs/libatasmart-0.5
 
 	dev-db/sqlite:3"
 DEPEND="${RDEPEND}

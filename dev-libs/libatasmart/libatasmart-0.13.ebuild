@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+EAPI="2"
+
 DESCRIPTION="Lean and small library for ATA S.M.A.R.T. hard disks"
 HOMEPAGE="http://0pointer.de/blog/projects/being-smart.html"
 SRC_URI="http://0pointer.de/public/${P}.tar.gz"
@@ -11,7 +13,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-DEPEND="sys-fs/udev"
+DEPEND="!!sys-apps/libatasmart
+sys-fs/udev"
 RDEPEND="${DEPEND}"
 
 src_install() {
