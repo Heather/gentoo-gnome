@@ -12,3 +12,5 @@ gnome-extra/libgda-4.1.0
  * autoconf is a hell of inconsistencies
 net-libs/libepc-0.3.10
  * 2 out of 16 tests fail, upstream bug #578792
+dev-util/gnome-devel-docs-2.26.2
+ * Fix install phase error which occurs with emake jobs (-jN for N > 1)
