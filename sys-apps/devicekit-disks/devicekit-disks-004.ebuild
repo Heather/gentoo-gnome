@@ -48,6 +48,13 @@ pkg_setup() {
 		$(use_enable debug verbose-mode)"
 }
 
+src_prepare() {
+	gnome2_src_prepare
+
+	# Fix intltoolize broken file, see upstream #577133
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
+}
+
 src_configure() {
 	# No damned pkgconfig file :|
 	DEVMAPPER_CFLAGS="-I/usr/include" DEVMAPPER_LIBS="-ldevmapper" \

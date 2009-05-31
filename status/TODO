@@ -1,16 +1,6 @@
 Ebuild Notices:
 ===============
-gnome-base/gnome-2.26.0
- * Rephrase to teach about using different WMs instead, as metacity is the default anyway
- * but first check WINDOW_MANAGER is still honored in 2.24. gnome-session-2.24 might have lost
- * support for it, but we don't ship with gnome-session-2.24 yet
-gnome-extra/libgda-4.0.2
- * sqlite is automagic, but maybe it is a hard-dep
- * autoconf is a hell of inconsistencies
-gnome-extra/libgda-4.1.0
- * sqlite is automagic, but maybe it is a hard-dep
- * autoconf is a hell of inconsistencies
+dev-util/gnome-devel-docs-2.26.2
+#FIXME: Fixs the better as possible the fail install with emake jobs.
 net-libs/libepc-0.3.10
  * 2 out of 16 tests fail, upstream bug #578792
-dev-util/gnome-devel-docs-2.26.2
- * Fix install phase error which occurs with emake jobs (-jN for N > 1)
