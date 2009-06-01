@@ -54,10 +54,10 @@ src_unpack() {
 	gnome2_src_unpack
 
 	# Fix build with older gcc, bug #266987
-	epatch "${FILESDIR}/${P}-build-gcc-4.1.2.patch"
+	epatch "${FILESDIR}/${PN}-007-build-gcc-4.1.2.patch"
 
 	# Fix crazy cflags and moved them to maintainer-mode, bug #267139
-	epatch "${FILESDIR}/${P}-maintainer-cflags.patch"
+	epatch "${FILESDIR}/${PN}-007-maintainer-cflags.patch"
 
 	eautoreconf
 }
