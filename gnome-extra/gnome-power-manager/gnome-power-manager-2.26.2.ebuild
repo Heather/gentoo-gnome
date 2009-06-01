@@ -81,9 +81,6 @@ src_prepare() {
 		sed -e 's:@HAVE_DOCBOOK2MAN_TRUE@.*::' -i "${S}/man/Makefile.in" || die "sed 1 failed"
 	fi
 
-	# Fix runtime detection of xrandr-1.3, bug 268021 (patch from upstream)
-	epatch "${FILESDIR}/${PN}-2.26.1-fix-xrandr-1.3-detection.patch"
-
 	# Skip crazy compilation warnings, bug #263078
 	epatch "${FILESDIR}/${PN}-2.26.0-gcc44-options.patch"
 
@@ -91,7 +88,7 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-2.26.0-cpufreq-libhal-glib.patch"
 	epatch "${FILESDIR}/${PN}-2.26.0-cpufreq-support.patch"
 	epatch "${FILESDIR}/${PN}-2.26.0-cpufreq-ui.patch"
-	epatch "${FILESDIR}/${PN}-2.26.1-cpufreq-po.patch"
+	epatch "${FILESDIR}/${PN}-2.26.2-cpufreq-po.patch"
 
 	# Fix uninstalled cpufreq schemas, bug #266995
 	epatch "${FILESDIR}/${PN}-2.26.0-cpufreq-schemas.patch"

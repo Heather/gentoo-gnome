@@ -1,11 +1,18 @@
- data/gnome-power-manager.schemas.in |   74 +++++++++++++++++++++++++++++++++++
- 1 files changed, 74 insertions(+), 0 deletions(-)
+From ffe441257267b9795706e0d40e237fa6a6608eec Mon Sep 17 00:00:00 2001
+From: Gilles Dartiguelongue <eva@gentoo.org>
+Date: Mon, 27 Apr 2009 00:42:49 +0200
+Subject: [PATCH 5/5] Restore cpufreq schemas
+
+ Gentoo: https://bugs.gentoo.org/266995
+---
+ data/gnome-power-manager.schemas.in |   72 +++++++++++++++++++++++++++++++++++
+ 1 files changed, 72 insertions(+), 0 deletions(-)
 
 diff --git a/data/gnome-power-manager.schemas.in b/data/gnome-power-manager.schemas.in
-index 0239021..5ba6af1 100644
+index 0239021..1f7b111 100644
 --- a/data/gnome-power-manager.schemas.in
 +++ b/data/gnome-power-manager.schemas.in
-@@ -300,6 +300,68 @@
+@@ -300,6 +300,66 @@
      </schema>
  
      <schema>
@@ -68,13 +75,11 @@ index 0239021..5ba6af1 100644
 +      </locale>
 +    </schema>
 +
-+    
-+
 +    <schema>
        <key>/schemas/apps/gnome-power-manager/general/installed_schema</key>
        <applyto>/apps/gnome-power-manager/general/installed_schema</applyto>
        <owner>gnome-power-manager</owner>
-@@ -833,6 +895,18 @@
+@@ -833,6 +893,18 @@
      </schema>
  
      <schema>
@@ -93,3 +98,6 @@ index 0239021..5ba6af1 100644
        <key>/schemas/apps/gnome-power-manager/ui/enable_sound</key>
        <applyto>/apps/gnome-power-manager/ui/enable_sound</applyto>
        <owner>gnome-power-manager</owner>
+-- 
+1.6.3.1
+

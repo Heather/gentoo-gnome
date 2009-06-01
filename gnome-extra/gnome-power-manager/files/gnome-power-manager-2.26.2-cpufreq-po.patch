@@ -1,62 +1,72 @@
-From 3bfa3471d0f0a21f21b4ec27cea425fdca9f4087 Mon Sep 17 00:00:00 2001
+From 39d8d4d6d56028a21a4a312b83666e15d7c19197 Mon Sep 17 00:00:00 2001
 From: Gilles Dartiguelongue <eva@gentoo.org>
 Date: Mon, 27 Apr 2009 00:35:33 +0200
-Subject: [PATCH 5/6] Resurrect cpufreq in capplet, part 4
+Subject: [PATCH 4/5] Resurrect cpufreq in capplet, part 4
 
- Restore translations from gnome-power-manager 2.22.1 tag for cpufreq in
- gnome-power-manager capplet.
+ Restore translations.
 
  Gentoo: https://bugs.gentoo.org/263891
 ---
  po/ar.po       |  375 +++++++++---------
- po/as.po       |  449 +++++++++++----------
- po/be@latin.po |  411 ++++++++++---------
+ po/as.po       |  452 +++++++++++----------
+ po/be@latin.po |  414 ++++++++++---------
  po/bg.po       |   17 +
- po/ca.po       | 1239 +++++++++++++++++++++++++++++---------------------------
+ po/ca.po       | 1242 +++++++++++++++++++++++++++++---------------------------
  po/cs.po       |  312 ++++++++-------
- po/da.po       |  795 ++++++++++++++++++------------------
- po/de.po       | 1065 ++++++++++++++++++++++++------------------------
- po/el.po       |  547 +++++++++++++------------
- po/en_GB.po    |  833 +++++++++++++++++++-------------------
+ po/cy.po       |    4 +
+ po/da.po       |  798 +++++++++++++++++++------------------
+ po/de.po       | 1068 +++++++++++++++++++++++++------------------------
+ po/dz.po       |    3 +
+ po/el.po       |  550 +++++++++++++------------
+ po/en_GB.po    |  836 +++++++++++++++++++-------------------
  po/es.po       |   17 +
  po/et.po       |   17 +
  po/eu.po       |   17 +
- po/fi.po       |   17 +
+ po/fi.po       |   20 +
  po/fr.po       |   17 +
  po/ga.po       |   17 +
  po/gl.po       |  822 +++++++++++++++++++------------------
  po/gu.po       |   17 +
  po/he.po       |   17 +
- po/hi.po       |   17 +
+ po/hi.po       |   20 +
  po/hu.po       |   17 +
+ po/id.po       |    4 +
+ po/is.po       |    4 +
  po/it.po       |   17 +
  po/ja.po       |   17 +
- po/kn.po       |    5 +
- po/ko.po       |  759 ++++++++++++++++++-----------------
- po/lt.po       |   17 +
- po/lv.po       |   17 +
+ po/ka.po       |    4 +
+ po/kn.po       |    8 +
+ po/ko.po       |  762 ++++++++++++++++++-----------------
+ po/lt.po       |   20 +
+ po/lv.po       |   20 +
  po/ml.po       |   17 +
  po/mr.po       |   17 +
  po/nb.po       |   17 +
- po/nl.po       |   17 +
+ po/nl.po       |   20 +
+ po/nn.po       |    4 +
  po/oc.po       |   17 +
  po/or.po       |   17 +
- po/pa.po       |   17 +
- po/pl.po       |  545 +++++++++++++------------
- po/pt.po       | 1013 +++++++++++++++++++++++-----------------------
- po/pt_BR.po    |  503 ++++++++++++-----------
+ po/pa.po       |   20 +
+ po/pl.po       |  548 +++++++++++++------------
+ po/pt.po       | 1016 +++++++++++++++++++++++-----------------------
+ po/pt_BR.po    |  506 ++++++++++++-----------
  po/ro.po       |  315 ++++++++-------
  po/ru.po       |   17 +
- po/sl.po       |  489 ++++++++++++-----------
- po/sr.po       |  752 +++++++++++++++++++---------------
- po/sv.po       |   17 +
+ po/si.po       |    3 +
+ po/sk.po       |    4 +
+ po/sl.po       |  492 ++++++++++++-----------
+ po/sr.po       |  755 ++++++++++++++++++++---------------
+ po/sr@latin.po |    4 +
+ po/sv.po       |   20 +
  po/ta.po       |   17 +
- po/uk.po       |  549 +++++++++++++------------
+ po/th.po       |    4 +
+ po/tr.po       |    4 +
+ po/uk.po       |  145 +------
  po/vi.po       |   17 +
- po/zh_CN.po    |   17 +
- po/zh_HK.po    |  727 +++++++++++++++++----------------
- po/zh_TW.po    |  727 +++++++++++++++++----------------
- 48 files changed, 7291 insertions(+), 6400 deletions(-)
+ po/zh_CN.po    |   16 +
+ po/zh_HK.po    |  730 +++++++++++++++++----------------
+ po/zh_TW.po    |  730 +++++++++++++++++----------------
+ 59 files changed, 7133 insertions(+), 6264 deletions(-)
 
 diff --git a/po/ar.po b/po/ar.po
 index 25447d8..4b00075 100644
@@ -530,10 +540,10 @@ index 25447d8..4b00075 100644
 +msgstr "دائما السرعة القصوى"
 +
 diff --git a/po/as.po b/po/as.po
-index b95bb15..60e3835 100644
+index b95bb15..3664720 100644
 --- a/po/as.po
 +++ b/po/as.po
-@@ -2528,315 +2528,332 @@ msgstr "স্থগিত কৰক (_S)"
+@@ -2528,315 +2528,335 @@ msgstr "স্থগিত কৰক (_S)"
  msgid "Hi_bernate"
  msgstr "নিদ্ৰিত অবস্থা (_b)"
  
@@ -1082,11 +1092,14 @@ index b95bb15..60e3835 100644
 +msgid "Always maximum speed"
 +msgstr "সৰ্বদা"
 +
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "Computer:"
 diff --git a/po/be@latin.po b/po/be@latin.po
-index 12caaa5..7690369 100644
+index 12caaa5..6317bc5 100644
 --- a/po/be@latin.po
 +++ b/po/be@latin.po
-@@ -2460,290 +2460,307 @@ msgstr "_Zaśni"
+@@ -2460,290 +2460,310 @@ msgstr "_Zaśni"
  msgid "Hi_bernate"
  msgstr "Z_hibernuj"
  
@@ -1591,6 +1604,9 @@ index 12caaa5..7690369 100644
 +msgid "Always maximum speed"
 +msgstr "Zaŭždy maksymalnaja chutkaść"
 +
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "Praviły źmieny _chutkaści kamputara:"
 diff --git a/po/bg.po b/po/bg.po
 index ddf17df..a3020f6 100644
 --- a/po/bg.po
@@ -1617,10 +1633,10 @@ index ddf17df..a3020f6 100644
 +msgstr "Винаги максимална скорост"
 +
 diff --git a/po/ca.po b/po/ca.po
-index 2841fa9..4611f5f 100644
+index 202176f..ec1b092 100644
 --- a/po/ca.po
 +++ b/po/ca.po
-@@ -2615,781 +2615,806 @@ msgstr "Atura _temporalment"
+@@ -2615,781 +2615,809 @@ msgstr "Atura _temporalment"
  msgid "Hi_bernate"
  msgstr "Hi_berna"
  
@@ -3034,8 +3050,11 @@ index 2841fa9..4611f5f 100644
 +msgid "Always maximum speed"
 +msgstr "Sempre velocitat màxima"
 +
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "Directiva de velocitat d_e l'ordinador"
 diff --git a/po/cs.po b/po/cs.po
-index ef20467..888aa05 100644
+index b2ab530..a22be73 100644
 --- a/po/cs.po
 +++ b/po/cs.po
 @@ -2485,224 +2485,240 @@ msgstr "Uspat do _paměti"
@@ -3427,11 +3446,23 @@ index ef20467..888aa05 100644
 +msgid "Always maximum speed"
 +msgstr "Vždy maximální rychlost"
 +
+diff --git a/po/cy.po b/po/cy.po
+index 658ecc6..cef72f4 100644
+--- a/po/cy.po
++++ b/po/cy.po
+@@ -2821,3 +2821,7 @@ msgstr "_Cysgu"
+ #~ msgid "Prefer power savings over performance"
+ #~ msgstr ""
+ #~ "Rhoi blaenoriaeth i arbed pŵer yn hytrach na pherfformiad y cyfrifiadur"
++
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "Polisi _cyflymder y cyfrifiadur:"
 diff --git a/po/da.po b/po/da.po
-index 9887640..c17c513 100644
+index 9887640..b591b7e 100644
 --- a/po/da.po
 +++ b/po/da.po
-@@ -2517,540 +2517,557 @@ msgstr "Gå i h_vile"
+@@ -2517,540 +2517,560 @@ msgstr "Gå i h_vile"
  msgid "Hi_bernate"
  msgstr "Gå i _dvale"
  
@@ -4378,11 +4409,14 @@ index 9887640..c17c513 100644
 +msgid "Always maximum speed"
 +msgstr "Altid maksimal hastighed"
 +
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "Politik for _processorhastighed:"
 diff --git a/po/de.po b/po/de.po
-index 6f7e199..a11cd0d 100644
+index 6f7e199..5e81e9e 100644
 --- a/po/de.po
 +++ b/po/de.po
-@@ -2572,698 +2572,715 @@ msgstr "_Bereitschaft"
+@@ -2572,698 +2572,718 @@ msgstr "_Bereitschaft"
  msgid "Hi_bernate"
  msgstr "_Ruhezustand"
  
@@ -5622,11 +5656,25 @@ index 6f7e199..a11cd0d 100644
 +msgid "Always maximum speed"
 +msgstr "Höchste Geschwindigkeit"
 +
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "_Leistungsanpassung des Rechners:"
+diff --git a/po/dz.po b/po/dz.po
+index 76e7f4c..af4fbca 100644
+--- a/po/dz.po
++++ b/po/dz.po
+@@ -2272,3 +2272,6 @@ msgstr "འཐོབ་ཚུགས་པའི་བརྟག་ཞིབ་ཆ
+ #~ msgid "Critical action"
+ #~ msgstr "བྱ་བ་ཚབས་ཆེན།"
+ 
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "གློག་རིག་མགྱོགས་ཚད་སྲིད་བྱུས་:(_e)"
 diff --git a/po/el.po b/po/el.po
-index 1047b03..784342a 100644
+index 1047b03..06402cd 100644
 --- a/po/el.po
 +++ b/po/el.po
-@@ -2599,350 +2599,367 @@ msgstr "Αναστο_λή"
+@@ -2599,350 +2599,370 @@ msgstr "Αναστο_λή"
  msgid "Hi_bernate"
  msgstr "Α_δρανοποίηση"
  
@@ -6259,11 +6307,14 @@ index 1047b03..784342a 100644
 +msgid "Always maximum speed"
 +msgstr "Πάντα η μέγιστη ταχύτητα"
 +
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "Πολιτική τα_χύτητας υπολογιστή:"
 diff --git a/po/en_GB.po b/po/en_GB.po
-index 6663342..bffbe02 100644
+index 6663342..7ee97dc 100644
 --- a/po/en_GB.po
 +++ b/po/en_GB.po
-@@ -2473,564 +2473,581 @@ msgstr "_Suspend"
+@@ -2473,564 +2473,584 @@ msgstr "_Suspend"
  msgid "Hi_bernate"
  msgstr "Hi_bernate"
  
@@ -7253,6 +7304,9 @@ index 6663342..bffbe02 100644
 +msgid "Always maximum speed"
 +msgstr "Always maximum speed"
 +
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "Computer sp_eed policy:"
 diff --git a/po/es.po b/po/es.po
 index d2ecacc..b7170c4 100644
 --- a/po/es.po
@@ -7329,10 +7383,10 @@ index 951fc8f..9e60705 100644
 +msgstr "Beti gehienezko abiaduran"
 +
 diff --git a/po/fi.po b/po/fi.po
-index 8ae732a..df1eaca 100644
+index 8ae732a..152139e 100644
 --- a/po/fi.po
 +++ b/po/fi.po
-@@ -2470,3 +2470,20 @@ msgstr "_Lepotila"
+@@ -2470,3 +2470,23 @@ msgstr "_Lepotila"
  
  #~ msgid "gtk-refresh"
  #~ msgstr "gtk-refresh"
@@ -7353,6 +7407,9 @@ index 8ae732a..df1eaca 100644
 +msgid "Always maximum speed"
 +msgstr "Aina suurin nopeus"
 +
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "Tietokoneen nop_euden hallinta:"
 diff --git a/po/fr.po b/po/fr.po
 index 15eede8..2ca4338 100644
 --- a/po/fr.po
@@ -8416,10 +8473,10 @@ index d6b92a5..8d759e5 100644
 +msgstr "תמיד במהירות מירבית"
 +
 diff --git a/po/hi.po b/po/hi.po
-index 7f3d7dd..78acb36 100644
+index 7f3d7dd..8c5e7f9 100644
 --- a/po/hi.po
 +++ b/po/hi.po
-@@ -2406,3 +2406,20 @@ msgstr "सस्पेंड (_S)"
+@@ -2406,3 +2406,23 @@ msgstr "सस्पेंड (_S)"
  msgid "Hi_bernate"
  msgstr "छिपायें (_b)"
  
@@ -8440,6 +8497,9 @@ index 7f3d7dd..78acb36 100644
 +msgid "Always maximum speed"
 +msgstr "हमेशा अधिकतम गति"
 +
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "कंप्यूटर गति नीति (_e):"
 diff --git a/po/hu.po b/po/hu.po
 index dc4b277..47fb7b2 100644
 --- a/po/hu.po
@@ -8465,6 +8525,30 @@ index dc4b277..47fb7b2 100644
 +msgid "Always maximum speed"
 +msgstr "Mindig teljes sebesség"
 +
+diff --git a/po/id.po b/po/id.po
+index 42839e7..ea06803 100644
+--- a/po/id.po
++++ b/po/id.po
+@@ -2287,3 +2287,7 @@ msgstr "Jalankan semua tes yang tersedia"
+ 
+ #~ msgid "Make the computer go to sleep"
+ #~ msgstr "Buat komputer menjadi tidur"
++
++# : ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "Kebijakan k_ecepatan komputer:"
+diff --git a/po/is.po b/po/is.po
+index 2df30c3..c990416 100644
+--- a/po/is.po
++++ b/po/is.po
+@@ -2390,3 +2390,7 @@ msgstr "_Hvíla"
+ #: ../src/gpm-tray-icon.c:597
+ msgid "Hi_bernate"
+ msgstr "Le_ggja í dvala"
++
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr ""
 diff --git a/po/it.po b/po/it.po
 index f263d03..ba8d832 100644
 --- a/po/it.po
@@ -8515,11 +8599,23 @@ index df5a3d2..972a595 100644
 +msgid "Always maximum speed"
 +msgstr "常に高電力モード"
 +
+diff --git a/po/ka.po b/po/ka.po
+index dd35f5e..f8735c5 100644
+--- a/po/ka.po
++++ b/po/ka.po
+@@ -2511,3 +2511,7 @@ msgstr ""
+ #, fuzzy
+ #~ msgid "Power Low"
+ #~ msgstr "დაბალი"
++
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr ""
 diff --git a/po/kn.po b/po/kn.po
-index eca711a..06e9f0e 100644
+index eca711a..2b5b21a 100644
 --- a/po/kn.po
 +++ b/po/kn.po
-@@ -2351,3 +2351,8 @@ msgstr "ಸ್ಥಗಿತ(_S)"
+@@ -2351,3 +2351,11 @@ msgstr "ಸ್ಥಗಿತ(_S)"
  msgid "Hi_bernate"
  msgstr "ಹೈಬರ್ನೇಟ್(_b)"
  
@@ -8528,11 +8624,14 @@ index eca711a..06e9f0e 100644
 +msgid "Maximum power saving"
 +msgstr ""
 +
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "ಗಣಕ:"
 diff --git a/po/ko.po b/po/ko.po
-index 31a31c1..365e9b7 100644
+index 31a31c1..64262b5 100644
 --- a/po/ko.po
 +++ b/po/ko.po
-@@ -2421,498 +2421,515 @@ msgstr "절전(_S)"
+@@ -2421,498 +2421,518 @@ msgstr "절전(_S)"
  msgid "Hi_bernate"
  msgstr "최대절전(_B)"
  
@@ -9419,11 +9518,14 @@ index 31a31c1..365e9b7 100644
 +msgid "Always maximum speed"
 +msgstr "항상 최고 속도"
 +
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "컴퓨터 속도 정책(_E):"
 diff --git a/po/lt.po b/po/lt.po
-index 40087cb..eacb66e 100644
+index 40087cb..adebfef 100644
 --- a/po/lt.po
 +++ b/po/lt.po
-@@ -2504,3 +2504,20 @@ msgstr "_Užmigdyti"
+@@ -2504,3 +2504,23 @@ msgstr "_Užmigdyti"
  #: ../src/gpm-tray-icon.c:552
  msgid "Hi_bernate"
  msgstr "Hi_bernuoti"
@@ -9444,11 +9546,14 @@ index 40087cb..eacb66e 100644
 +msgid "Always maximum speed"
 +msgstr "Visada maksimalus greitis"
 +
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "Kompiuterio _spartos politika:"
 diff --git a/po/lv.po b/po/lv.po
-index 379f4b7..b8d0e4f 100644
+index 379f4b7..590d5f2 100644
 --- a/po/lv.po
 +++ b/po/lv.po
-@@ -2465,3 +2465,20 @@ msgstr "_Iesnaudināt"
+@@ -2465,3 +2465,23 @@ msgstr "_Iesnaudināt"
  msgid "Hi_bernate"
  msgstr "Iemi_dzināt"
  
@@ -9469,6 +9574,9 @@ index 379f4b7..b8d0e4f 100644
 +msgid "Always maximum speed"
 +msgstr "Vienmēr maksimālā ātrdarbība"
 +
++#: ../data/gpm-prefs.glade.h:5
++msgid "Computer sp_eed policy:"
++msgstr "Datora i_emidzināšanas politika:"
 diff --git a/po/ml.po b/po/ml.po
 index 860802f..7b4225c 100644
 --- a/po/ml.po
@@ -9545,10 +9653,10 @@ index f24d7af..cb098e7 100644
 +msgstr "Alltid maksimal hastighet"
 +
 diff --git a/po/nl.po b/po/nl.po
-index 0b0ed35..5ef51de 100644
+index 0b0ed35..a5d667e 100644
 --- a/po/nl.po
 +++ b/po/nl.po
-@@ -2604,3 +2604,20 @@ msgstr "_Pauzestand"
+@@ -2604,3 +2604,23 @@ msgstr "_Pauzestand"
  #: ../src/gpm-tray-icon.c:552
  msgid "Hi_bernate"
  msgstr "_Slaapstand"
@@ -9569,6 +9677,21 @@ index 0b0ed35..5ef51de 100644
 +msgid "Always maximum speed"
 +msgstr "Altijd maximum snelheid"
 +
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "B_eleid voor computersnelheid:"
+diff --git a/po/nn.po b/po/nn.po
+index 9597663..4e6a9ee 100644
+--- a/po/nn.po
++++ b/po/nn.po
+@@ -2475,3 +2475,7 @@ msgstr "_Dvalemodus"
+ 
+ #~ msgid "Inhibit warning!"
+ #~ msgstr "Advarsel for hindring!"
++
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "R_egler for datamaskinens hastighet:"
 diff --git a/po/oc.po b/po/oc.po
 index 9101498..1d69ab2 100644
 --- a/po/oc.po
@@ -9620,10 +9743,10 @@ index 7383081..b57e4e8 100644
 +msgstr ""
 +
 diff --git a/po/pa.po b/po/pa.po
-index bd326d9..b186334 100644
+index bd326d9..cecc666 100644
 --- a/po/pa.po
 +++ b/po/pa.po
-@@ -2472,3 +2472,20 @@ msgstr "ਸਸਪੈਂਡ(_S)"
+@@ -2472,3 +2472,23 @@ msgstr "ਸਸਪੈਂਡ(_S)"
  msgid "Hi_bernate"
  msgstr "ਹਾਈਬਰਨੇਟ(_B)"
  
@@ -9644,11 +9767,14 @@ index bd326d9..b186334 100644
 +msgid "Always maximum speed"
 +msgstr "ਹਮੇਸ਼ਾਂ ਵੱਧ ਤੋਂ ਵੱਧ ਗਤੀ ਵਰਤੋਂ"
 +
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "ਕੰਪਿਊਟਰ ਸਪੀਡ ਨੀਤੀ(_e):"
 diff --git a/po/pl.po b/po/pl.po
-index d6db0b9..4b5a9af 100644
+index d6db0b9..53629b0 100644
 --- a/po/pl.po
 +++ b/po/pl.po
-@@ -2320,268 +2320,285 @@ msgstr "_Wstrzymaj"
+@@ -2320,268 +2320,288 @@ msgstr "_Wstrzymaj"
  msgid "Hi_bernate"
  msgstr "Za_hibernuj"
  
@@ -9916,7 +10042,7 @@ index d6db0b9..4b5a9af 100644
 -#~ msgstr "Profilowany czas ładowania"
 -#~ msgid "Profiled Discharge Time"
 -#~ msgstr "Profilowany czas rozładowania"
-+
+ 
 +
 +
 +
@@ -10197,12 +10323,15 @@ index d6db0b9..4b5a9af 100644
 +#: ../src/gpm-prefs-core.c:94
 +msgid "Always maximum speed"
 +msgstr "Zawsze maksymalna wydajność"
- 
++
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "Ustawienia _wydajności:"
 diff --git a/po/pt.po b/po/pt.po
-index 7c7f86a..8aec4aa 100644
+index 7c7f86a..426d0bf 100644
 --- a/po/pt.po
 +++ b/po/pt.po
-@@ -2513,657 +2513,674 @@ msgstr "_Suspender"
+@@ -2513,657 +2513,677 @@ msgstr "_Suspender"
  msgid "Hi_bernate"
  msgstr "Hi_bernar"
  
@@ -11375,11 +11504,14 @@ index 7c7f86a..8aec4aa 100644
 +msgid "Always maximum speed"
 +msgstr "Sempre à velocidade máxima"
 +
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "Política de d_esempenho do computador:"
 diff --git a/po/pt_BR.po b/po/pt_BR.po
-index 75808a4..b44f794 100644
+index 75808a4..9d56544 100644
 --- a/po/pt_BR.po
 +++ b/po/pt_BR.po
-@@ -2521,337 +2521,354 @@ msgstr "Suspen_der"
+@@ -2521,337 +2521,357 @@ msgstr "Suspen_der"
  msgid "Hi_bernate"
  msgstr "_Hibernar"
  
@@ -11977,6 +12109,9 @@ index 75808a4..b44f794 100644
 +msgid "Always maximum speed"
 +msgstr "Sempre na velocidade máxima"
 +
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "Política de _velocidade do computador:"
 diff --git a/po/ro.po b/po/ro.po
 index 9fcb18f..cdb77da 100644
 --- a/po/ro.po
@@ -12326,11 +12461,34 @@ index 43c1c9f..4f1d94c 100644
 +msgid "Always maximum speed"
 +msgstr "Всегда максимальная скорость"
 +
+diff --git a/po/si.po b/po/si.po
+index 898fe7c..2717e92 100644
+--- a/po/si.po
++++ b/po/si.po
+@@ -2164,3 +2164,6 @@ msgstr "අත්හිටු වන්න (_S)"
+ msgid "Hi_bernate"
+ msgstr "ශිශිර තරණය (_b)"
+ 
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr ""
+diff --git a/po/sk.po b/po/sk.po
+index 04f6119..9522536 100644
+--- a/po/sk.po
++++ b/po/sk.po
+@@ -2514,3 +2514,7 @@ msgstr "Ú_sporný režim"
+ #: ../src/gpm-tray-icon.c:597
+ msgid "Hi_bernate"
+ msgstr "Dlhodo_bý spánok"
++
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "Politika rýchlo_sti počítača:"
 diff --git a/po/sl.po b/po/sl.po
-index 4dad44e..d714cb8 100644
+index 4dad44e..357720c 100644
 --- a/po/sl.po
 +++ b/po/sl.po
-@@ -2225,240 +2225,257 @@ msgstr "Zau_stavi"
+@@ -2225,240 +2225,260 @@ msgstr "Zau_stavi"
  msgid "Hi_bernate"
  msgstr "Hi_berniraj"
  
@@ -12570,7 +12728,7 @@ index 4dad44e..d714cb8 100644
 -#~ msgstr "Največje varčevanje"
 -#~ msgid "Always maximum speed"
 -#~ msgstr "Vedno največje varčevanje"
-+
+ 
 +
 +
 +
@@ -12823,12 +12981,15 @@ index 4dad44e..d714cb8 100644
 +#: ../src/gpm-prefs-core.c:94
 +msgid "Always maximum speed"
 +msgstr "Vedno največje varčevanje"
- 
++
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "Pravila _hitrosti računalnika:"
 diff --git a/po/sr.po b/po/sr.po
-index 71b9ff6..c23c8bf 100644
+index 71b9ff6..ecf885d 100644
 --- a/po/sr.po
 +++ b/po/sr.po
-@@ -2536,412 +2536,516 @@ msgstr "_Обустави"
+@@ -2536,412 +2536,519 @@ msgstr "_Обустави"
  msgid "Hi_bernate"
  msgstr "_Замрзни"
  
@@ -13669,11 +13830,26 @@ index 71b9ff6..c23c8bf 100644
 +msgid "Always maximum speed"
 +msgstr "Увек највећа брзина"
 +
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "Предвиђена правила брзине рада рачунара:"
+diff --git a/po/sr@latin.po b/po/sr@latin.po
+index d302503..4345d20 100644
+--- a/po/sr@latin.po
++++ b/po/sr@latin.po
+@@ -2945,3 +2945,7 @@ msgstr "_Zamrzni"
+ 
+ #~ msgid "Inhibit warning!"
+ #~ msgstr "Onemogući upozorenje!"
++
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "Predviđena pravila brzine rada računara:"
 diff --git a/po/sv.po b/po/sv.po
-index d475c02..3b602b8 100644
+index d475c02..0bf99d0 100644
 --- a/po/sv.po
 +++ b/po/sv.po
-@@ -2486,3 +2486,20 @@ msgstr "_Viloläge"
+@@ -2486,3 +2486,23 @@ msgstr "_Viloläge"
  #~ msgid "Computer sp_eed policy:"
  #~ msgstr "Policy för da_torhastighet:"
  
@@ -13694,6 +13870,9 @@ index d475c02..3b602b8 100644
 +msgid "Always maximum speed"
 +msgstr "Alltid maximal hastighet"
 +
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "Policy för da_torhastighet:"
 diff --git a/po/ta.po b/po/ta.po
 index 329d086..7cf0727 100644
 --- a/po/ta.po
@@ -13719,186 +13898,55 @@ index 329d086..7cf0727 100644
 +msgid "Always maximum speed"
 +msgstr "எப்போதுமே அதிகபட்ச வேகம்"
 +
+diff --git a/po/th.po b/po/th.po
+index ceea9c0..e7dbbf5 100644
+--- a/po/th.po
++++ b/po/th.po
+@@ -3082,3 +3082,7 @@ msgstr "_จำศีลเครื่อง"
+ #~ msgid ""
+ #~ "Whether we should check network utilization before doing the idle action."
+ #~ msgstr "ควรจะตรวจสอบการใช้งานของเครือข่ายก่อนจะทำการอยู่นิ่งๆหรือเปล่า"
++
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "นโยบายความเ_ร็วคอมพิวเตอร์:"
+diff --git a/po/tr.po b/po/tr.po
+index e006fba..68fc38a 100644
+--- a/po/tr.po
++++ b/po/tr.po
+@@ -2450,3 +2450,7 @@ msgstr "A_skıya Al"
+ #: ../src/gpm-tray-icon.c:552
+ msgid "Hi_bernate"
+ msgstr "_Uyku Kipi"
++
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "_Bilgisayar hız politikası:"
 diff --git a/po/uk.po b/po/uk.po
-index 65dae64..2bd2b0d 100644
+index 813ca85..e9d2f1b 100644
 --- a/po/uk.po
 +++ b/po/uk.po
-@@ -2399,310 +2399,327 @@ msgstr "Пр_изупинити"
- msgid "Hi_bernate"
- msgstr "Режим _сну"
- 
--#~ msgid ""
--#~ "If niced processes are considered, they can cause a frequency increment "
--#~ "even though their absolute load percentage wouldn't trigger the scaling "
--#~ "mechanism to switch up the frequency."
--#~ msgstr ""
--#~ "Якщо розглянути процеси зі зміненим пріоритетом, вони можуть спричиняти "
--#~ "збільшення частоти навіть тоді, коли відсоток їх абсолютного навантаження "
--#~ "не призводить до вмикання механізму зміни частоти процесору."
--
--#~ msgid "If we should show the CPU frequency scaling in the UI"
--#~ msgstr "Чи відображати зміну частоти процесора у графічному інтерфейсі"
--
--#~ msgid ""
--#~ "If we should show the CPU frequency scaling in the UI. Some people need "
--#~ "to configure this for specific systems."
--#~ msgstr ""
--#~ "Чи відображати зміну частоти процесора у графічному інтерфейсі. Декому "
--#~ "треба встановити цей параметр для окремих систем."
--
--#~ msgid "The cpufreq performance value to use when on AC power"
--#~ msgstr "Швидкодія процесора при живленні від електромережі"
--
--#~ msgid "The cpufreq performance value to use when on battery power"
--#~ msgstr "Швидкодія процесора при живленні від акумулятора"
--
--#~ msgid ""
--#~ "The cpufreq performance value used to scale the processor when on AC "
--#~ "power."
--#~ msgstr ""
--#~ "Значення швидкодії процесора, що використовується при живленні від "
--#~ "електромережі."
--
--#~ msgid ""
--#~ "The cpufreq performance value used to scale the processor when on battery "
--#~ "power."
--#~ msgstr ""
--#~ "Значення швидкодії процесора, що використовується при живленні від "
--#~ "акумулятора."
--
--#~ msgid "The cpufreq policy to use when on AC power"
--#~ msgstr "Політика зміни частоти процесора при живленні від електромережі"
--
--#~ msgid "The cpufreq policy to use when on battery power"
--#~ msgstr "Політика зміни частоти процесора при живленні від акумулятора"
--
--#~ msgid ""
--#~ "The cpufreq policy used to scale the processor when on AC power. Possible "
--#~ "values are ondemand, conservative, powersave, userspace, performance, "
--#~ "nothing."
--#~ msgstr ""
--#~ "Політика зміни частоти процесора при живленні від електромережі. Можливі "
--#~ "значення \"ondemand\"(за вимогою), \"conservative\"(консервативна), "
--#~ "\"powersave\"(збереження енергії), \"userspace\"(), \"performance"
--#~ "\"(швидкодія), \"nothing\"(немає)."
--
--#~ msgid ""
--#~ "The cpufreq policy used to scale the processor when on battery power. "
--#~ "Possible values are ondemand, conservative, powersave, userspace, "
--#~ "performance, nothing."
--#~ msgstr ""
--#~ "Політика зміни частоти процесора при живленні від акумулятора. Можливі "
--#~ "значення \"ondemand\"(за вимогою), \"conservative\"(консервативна), "
--#~ "\"powersave\"(збереження енергії), \"userspace\"(), \"performance"
--#~ "\"(швидкодія), \"nothing\"(немає)."
--
--#~ msgid ""
--#~ "The device name for the v4l device used as a brightness sensor backup"
--#~ msgstr ""
--#~ "Назва пристрою v4l, що використовується як резервний сенсор освітлення"
--
--#~ msgid ""
--#~ "The device name for the v4l device used as a brightness sensor backup. A "
--#~ "value of 'default' uses the first discovered sensor, or devices can be "
--#~ "specified, e.g. '/dev/video0'"
--#~ msgstr ""
--#~ "Назва пристрою v4l, що використовується як резервний сенсор освітлення. "
--#~ "При значенні 'default' використовується перший виявлений сенсор, або "
--#~ "можна вказати пристрій, наприклад '/dev/video0'"
--
--#~ msgid ""
--#~ "Whether or not niced processes should be considered on processor load "
--#~ "calculation"
--#~ msgstr ""
--#~ "Чи процеси зі зміненим пріоритетом виконання (програмою nice) повинні "
--#~ "враховуватись при обчисленні навантаження процесора"
--
--#~ msgid "Computer sp_eed policy:"
--#~ msgstr "Політика _швидкості комп'ютера:"
--
--#~ msgid "Debug specific files, e.g. power"
--#~ msgstr "Налагодження певних файлів, наприклад живлення"
--
--#~ msgid ""
--#~ "Policy timeout is not valid. Please wait a few seconds and try again."
--#~ msgstr ""
--#~ "Некоректний таймаут політики. Зачекайте кілька секунд та спробуйте ще раз."
--
--#~ msgid "<b>Status:</b> Charged\n"
--#~ msgstr "<b>Статус:</b> Заряджений\n"
--
--#~ msgid "<b>Status:</b> Charging\n"
--#~ msgstr "<b>Статус:</b> Заряджається\n"
--
--#~ msgid "<b>Status:</b> Discharging\n"
--#~ msgstr "<b>Статус:</b> Розряджається\n"
--
--#~ msgid "Vendor:"
--#~ msgstr "Виробник:"
--
--#~ msgid "Model:"
--#~ msgstr "Модель:"
--
--#~ msgid "Capacity:"
--#~ msgstr "Ємність:"
--
--#~ msgid "Current charge:"
--#~ msgstr "Поточний заряд:"
--
--#~ msgid "Design charge:"
--#~ msgstr "Проектний заряд:"
--
--#~ msgid "Based on processor load"
--#~ msgstr "На основі навантаження процесора"
--
--#~ msgid "Automatic power saving"
--#~ msgstr "Автоматичне збереження енергії"
--
--#~ msgid "Maximum power saving"
--#~ msgstr "Максимальне збереження енергії"
--
--#~ msgid "Always maximum speed"
--#~ msgstr "Завжди максимальна швидкість"
--
--#~ msgid "Dim display _brightness by:"
--#~ msgstr "Зменшувати _яскравість дисплею до:"
--
--#~ msgid "%s because %s"
--#~ msgstr "%s тому що %s"
--
--#~ msgid "Inhibit warning!"
--#~ msgstr "Попередження стимування!"
--
--#~ msgid "Change the brightness to a preset level on AC state change"
--#~ msgstr ""
--#~ "Змінювати яскравість до вказаного рівня при зміні стану живлення від "
--#~ "мережі"
--
--#~ msgid ""
--#~ "If the laptop should be configured as if it is using a permanent external "
--#~ "monitor"
--#~ msgstr ""
--#~ "Чи слід налаштовувати ноутбук так, ніби він використовує стаціонарний "
--#~ "монітор"
--
--#~ msgid ""
--#~ "If the laptop should be configured to not do dimming actions and DPMS off "
--#~ "if it is using a dock or external monitor. Most laptop and desktop users "
--#~ "should select FALSE here."
--#~ msgstr ""
--#~ "Чи слід налаштовувати ноутбук так, щоб не відбувалось згасання екрану та "
--#~ "була вимкнена функція DPMS, ніби використовується док-станція чи "
--#~ "зовнішній монітор. Для більшості ноутбуків та настільних комп'ютерів, тут "
--#~ "слід вибрати значення Хибність(FALSE)."
+@@ -2890,137 +2890,22 @@ msgstr "Режим _сну"
+ #~ "зовнішній монітор. Для більшості ноутбуків та настільних комп'ютерів, тут "
+ #~ "слід вибрати значення Хибність(FALSE)."
  
 -#~ msgid "Notify on a HAL error"
 -#~ msgstr "Сповіщати при помилці HAL"
++#: ../src/gpm-prefs-core.c:91
++msgid "Based on processor load"
++msgstr "На основі навантаження процесора"
  
 -#~ msgid "Percentage considered very low"
 -#~ msgstr "Відсоток вважається дуже низьким"
++#: ../src/gpm-prefs-core.c:92
++msgid "Automatic power saving"
++msgstr "Автоматичне збереження енергії"
  
 -#~ msgid "The damping factor for the rate"
 -#~ msgstr "Коефіцієнт гальмування для ступеню розряду"
++#: ../src/gpm-prefs-core.c:93
++msgid "Maximum power saving"
++msgstr "Максимальне збереження енергії"
  
 -#~ msgid ""
 -#~ "The percentage of the battery when it is considered very low. Only valid "
@@ -13906,7 +13954,7 @@ index 65dae64..2bd2b0d 100644
 -#~ msgstr ""
 -#~ "Відсоток заряду акумулятора, який розглядається як дуже низький. Значення "
 -#~ "дійсне лише якщо use_time_for_policy має значення false."
- 
+-
 -#~ msgid ""
 -#~ "The time remaining in seconds of the battery when it is considered very "
 -#~ "low. Only valid when use_time_for_policy is true."
@@ -13914,12 +13962,12 @@ index 65dae64..2bd2b0d 100644
 -#~ "Час роботи акумулятора, що залишився у секундах, при якому він вважається "
 -#~ "дуже низьким. Значення дійсне лише якщо use_time_for_policy має значення "
 -#~ "false."
- 
+-
 -#~ msgid "The time remaining when very low"
 -#~ msgstr ""
 -#~ "Час, що залишився при якому встановлюється стан критичний дуже низький "
 -#~ "заряд"
- 
+-
 -#~ msgid ""
 -#~ "The value of the damping factor used when calculating the exponentially "
 -#~ "weighted average of the rate. Increasing this value will increase the "
@@ -13930,393 +13978,107 @@ index 65dae64..2bd2b0d 100644
 -#~ "експоненціально зваженого середнього ступеню розряду. Збільшення значення "
 -#~ "збільшує ефект гальмування значення ступеню розряду, що робить час, що "
 -#~ "залишився, більш точним, але графік менш чутливим."
- 
+-
 -#~ msgid "Whether we should show the legend in the statistics window"
 -#~ msgstr "Чи слід відображати надписи у вікні статистики"
- 
+-
 -#~ msgid "Whether we should show the legend in the statistics window."
 -#~ msgstr "Чи слід відображати легенду у вікні статистики."
- 
+-
 -#~ msgid "Add _axis labels"
 -#~ msgstr "Додати позначки на _вісі"
- 
+-
 -#~ msgid "Add lege_nd"
 -#~ msgstr "Додати _легенду"
- 
--#~ msgid "Device:"
--#~ msgstr "Пристрій:"
- 
+-
 -#~ msgid "Time remaining"
 -#~ msgstr "Залишилось часу"
- 
+-
 -#~ msgid "Unknown caption"
 -#~ msgstr "Невідомий заголовок"
- 
+-
 -#~ msgid "%iW"
 -#~ msgstr "%iВт"
- 
+-
 -#~ msgid "%iV"
 -#~ msgstr "%iВ"
- 
+-
 -#~ msgid "the DBUS method Suspend() was invoked"
 -#~ msgstr "викликано метод Suspend() системи DBUS"
- 
+-
 -#~ msgid "the DBUS method Hibernate() was invoked"
 -#~ msgstr "викликано метод Hibernate() системи DBUS"
- 
+-
 -#~ msgid "the DBUS method Shutdown() was invoked"
 -#~ msgstr "викликано метод Shutdown() системи DBUS"
- 
+-
 -#~ msgid "Rebooting computer"
 -#~ msgstr "Комп'ютер перезавантажується"
- 
--#~ msgid "the DBUS method Reboot() was invoked"
--#~ msgstr "викликано метод Reboot() системи DBUS"
- 
--#~ msgid "Your system is running on backup power!"
--#~ msgstr "Система працює від резервного живлення!"
- 
--#~ msgid "user clicked hibernate from tray menu"
--#~ msgstr "користувач вибрав пункт переходу у режим сну з меню лотка"
- 
--#~ msgid "Suspend failure"
--#~ msgstr "Помилка призупинення"
- 
--#~ msgid "Your computer did not appear to resume correctly from suspend."
--#~ msgstr "Комп'ютер не зміг коректно вийти з режиму призупинення."
- 
--#~ msgid "Your computer did not appear to resume correctly from hibernate."
--#~ msgstr "Комп'ютер не зміг коректно вийти з режиму призупинення."
- 
--#~ msgid "This may be a driver or hardware problem."
--#~ msgstr "Можливо виникла проблема за драйвером чи обладнанням."
- 
--#~ msgid "Check the GNOME Power Manager manual for common problems."
--#~ msgstr ""
--#~ "Перегляньте перелік можливих проблем у довідці з менеджера живлення GNOME."
- 
--#~ msgid "Remaining time:"
--#~ msgstr "Залишилось часу:"
- 
--#~ msgid "Charge rate (smoothed):"
--#~ msgstr "Ступінь розряду (згладжений):"
- 
--#~ msgid "Recalculating information..."
--#~ msgstr "Обчислення інформації..."
- 
--#~ msgid "Power Preferences"
--#~ msgstr "Параметри живлення"
- 
--#~ msgid "Perhaps the program is not running or you are using an old version?"
--#~ msgstr "Можливо програма не запущена або ви використовуєте стару версію?"
- 
--#~ msgid "Resume"
--#~ msgstr "Продовження"
- 
--#~ msgid "HAL failed to %s. Check the help file for common problems."
--#~ msgstr ""
--#~ "Помилка HAL %s. Перегляньте у довідці інформацію про відомі проблеми."
- 
--#~ msgid "hibernate"
--#~ msgstr "режим сну"
- 
--#~ msgid "suspend"
--#~ msgstr "призупинити"
- 
--#~ msgid "Power Critically Low"
--#~ msgstr "Рівень живлення критично низький"
- 
--#~ msgid "Power Very Low"
--#~ msgstr "Рівень живлення дуже низький"
- 
--#~ msgid "Power Low"
--#~ msgstr "Рівень живлення низький"
- 
--#~ msgid "Power Inhibit Test"
--#~ msgstr "Перевірка сповільнення живлення"
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+#: ../src/gpm-prefs-core.c:91
-+msgid "Based on processor load"
-+msgstr "На основі навантаження процесора"
-+
-+#: ../src/gpm-prefs-core.c:92
-+msgid "Automatic power saving"
-+msgstr "Автоматичне збереження енергії"
-+
-+#: ../src/gpm-prefs-core.c:93
-+msgid "Maximum power saving"
-+msgstr "Максимальне збереження енергії"
-+
 +#: ../src/gpm-prefs-core.c:94
 +msgid "Always maximum speed"
 +msgstr "Завжди максимальна швидкість"
-+
+ 
+-#~ msgid "the DBUS method Reboot() was invoked"
+-#~ msgstr "викликано метод Reboot() системи DBUS"
+-
+-#~ msgid "Your system is running on backup power!"
+-#~ msgstr "Система працює від резервного живлення!"
+-
+-#~ msgid "user clicked hibernate from tray menu"
+-#~ msgstr "користувач вибрав пункт переходу у режим сну з меню лотка"
+-
+-#~ msgid "Your computer did not appear to resume correctly from suspend."
+-#~ msgstr "Комп'ютер не зміг коректно вийти з режиму призупинення."
+-
+-#~ msgid "Your computer did not appear to resume correctly from hibernate."
+-#~ msgstr "Комп'ютер не зміг коректно вийти з режиму призупинення."
+-
+-#~ msgid "This may be a driver or hardware problem."
+-#~ msgstr "Можливо виникла проблема за драйвером чи обладнанням."
+-
+-#~ msgid "Check the GNOME Power Manager manual for common problems."
+-#~ msgstr ""
+-#~ "Перегляньте перелік можливих проблем у довідці з менеджера живлення GNOME."
+-
+-#~ msgid "Remaining time:"
+-#~ msgstr "Залишилось часу:"
+-
+-#~ msgid "Charge rate (smoothed):"
+-#~ msgstr "Ступінь розряду (згладжений):"
+-
+-#~ msgid "Recalculating information..."
+-#~ msgstr "Обчислення інформації..."
+-
+-#~ msgid "Power Preferences"
+-#~ msgstr "Параметри живлення"
+-
+-#~ msgid "Perhaps the program is not running or you are using an old version?"
+-#~ msgstr "Можливо програма не запущена або ви використовуєте стару версію?"
+-
+-#~ msgid "HAL failed to %s. Check the help file for common problems."
+-#~ msgstr ""
+-#~ "Помилка HAL %s. Перегляньте у довідці інформацію про відомі проблеми."
+-
+-#~ msgid "hibernate"
+-#~ msgstr "режим сну"
+-
+-#~ msgid "suspend"
+-#~ msgstr "призупинити"
+-
+-#~ msgid "Power Critically Low"
+-#~ msgstr "Рівень живлення критично низький"
+-
+-#~ msgid "Power Very Low"
+-#~ msgstr "Рівень живлення дуже низький"
+-
+-#~ msgid "Power Low"
+-#~ msgstr "Рівень живлення низький"
+-
+-#~ msgid "Power Inhibit Test"
+-#~ msgstr "Перевірка сповільнення живлення"
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "Політика _швидкості комп'ютера:"
 diff --git a/po/vi.po b/po/vi.po
 index 779cdbf..b3dbce9 100644
 --- a/po/vi.po
@@ -14343,13 +14105,13 @@ index 779cdbf..b3dbce9 100644
 +msgstr "Luôn tốc độ tối đa"
 +
 diff --git a/po/zh_CN.po b/po/zh_CN.po
-index 5125a89..83b5463 100644
+index e16221e..61801a9 100644
 --- a/po/zh_CN.po
 +++ b/po/zh_CN.po
-@@ -2319,3 +2319,20 @@ msgstr "休眠(_B)"
+@@ -2584,3 +2584,19 @@ msgstr "休眠(_B)"
+ 
  #~ msgid "Could not connect to GNOME Power Manager."
  #~ msgstr "无法连接到 GNOME 电源管理器。"
- 
 +
 +#: ../src/gpm-prefs-core.c:91
 +msgid "Based on processor load"
@@ -14366,12 +14128,11 @@ index 5125a89..83b5463 100644
 +#: ../src/gpm-prefs-core.c:94
 +msgid "Always maximum speed"
 +msgstr "总是全速"
-+
 diff --git a/po/zh_HK.po b/po/zh_HK.po
-index 42fade6..3c29a85 100644
+index 42fade6..de4e254 100644
 --- a/po/zh_HK.po
 +++ b/po/zh_HK.po
-@@ -2306,493 +2306,510 @@ msgstr "暫停(_S)"
+@@ -2306,493 +2306,513 @@ msgstr "暫停(_S)"
  msgid "Hi_bernate"
  msgstr "休眠(_B)"
  
@@ -15237,11 +14998,14 @@ index 42fade6..3c29a85 100644
 +msgid "Always maximum speed"
 +msgstr "永遠保持最高速度"
 +
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "電腦速度政策(_E):"
 diff --git a/po/zh_TW.po b/po/zh_TW.po
-index 9cda8de..8bc03be 100644
+index 9cda8de..181009c 100644
 --- a/po/zh_TW.po
 +++ b/po/zh_TW.po
-@@ -2377,493 +2377,510 @@ msgstr "暫停(_S)"
+@@ -2377,493 +2377,513 @@ msgstr "暫停(_S)"
  msgid "Hi_bernate"
  msgstr "休眠(_B)"
  
@@ -16107,6 +15871,9 @@ index 9cda8de..8bc03be 100644
 +msgid "Always maximum speed"
 +msgstr "永遠保持最高速度"
 +
++#: ../data/gpm-prefs.glade.h:6
++msgid "Computer sp_eed policy:"
++msgstr "電腦速度政策(_E):"
 -- 
-1.6.2.3
+1.6.3.1
 
