@@ -8,7 +8,7 @@ inherit gnome2
 
 MY_PN="DeviceKit-disks"
 
-DESCRIPTION="D-Bus abstraction for enumerating power devices and querying history and statistics"
+DESCRIPTION="Daemon providing interfaces to work with storage devices"
 HOMEPAGE="http://www.freedesktop.org/wiki/Software/DeviceKit"
 SRC_URI="http://hal.freedesktop.org/releases/${MY_PN}-${PV}.tar.gz"
 
