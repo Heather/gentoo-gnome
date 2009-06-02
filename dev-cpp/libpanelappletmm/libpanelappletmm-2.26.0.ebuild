@@ -9,7 +9,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 RDEPEND=">=dev-cpp/gconfmm-2.4
@@ -17,4 +17,3 @@ RDEPEND=">=dev-cpp/gconfmm-2.4
 	>=dev-cpp/gtkmm-2.4
 	>=gnome-base/gnome-panel-2.14"
 DEPEND=">=dev-lang/perl-5"
-
