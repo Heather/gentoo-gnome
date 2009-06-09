@@ -174,6 +174,7 @@ pkg_postinst() {
 
 	elog "To make GDM start at boot, edit /etc/conf.d/xdm"
 	elog "and then execute 'rc-update add xdm default'."
+	elog "If you already have GDM running, you will need to restart it."
 
 	if use gnome-keyring; then
 		elog "For autologin to unlock your keyring, you need to set an empty"
@@ -184,19 +185,6 @@ pkg_postinst() {
 		elog "You had /etc/X11/gdm/gdm.conf which is the old configuration"
 		elog "file.  It has been moved to /etc/X11/gdm/gdm-pre-gnome-2.16"
 		mv /etc/X11/gdm/gdm.conf /etc/X11/gdm/gdm-pre-gnome-2.16
-	fi
-
-	# Soft restart, assumes Gentoo defaults for file locations
-	# Do restart after gdm.conf move above
-	FIFOFILE=/var/gdm/.gdmfifo
-	PIDFILE=/var/run/gdm.pid
-
-	if [ -w ${FIFOFILE} ] ; then
-		if [ -f ${PIDFILE} ] ; then
-			if kill -0 `cat ${PIDFILE}`; then
-				(echo;echo SOFT_RESTART) >> ${FIFOFILE}
-			fi
-		fi
 	fi
 }
 
