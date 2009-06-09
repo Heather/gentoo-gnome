@@ -15,8 +15,8 @@ for x in $(find $REPO/dev-python -name "*.ebuild" \
 	-exec egrep -H "inherit.*gnome-python-common" {} \; |\
 	cut -f1 -d:)
 do
-	CAT="$(echo $x |cut -f 4 -d /)"
-	PN="$(echo $x |cut -f 5 -d /)"
+	CAT="$(echo ${x#$REPO/} |cut -f 1 -d /)"
+	PN="$(echo ${x#$REPO/} |cut -f 2 -d /)"
 
 	if egrep -q G_PY_BINDINGS $x; then
 		BINDINGS=$(sed -n "/G_PY_BINDINGS/ p" $x | sed "s/G_PY_BINDINGS=\"//;s/\"//")
