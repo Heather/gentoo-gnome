@@ -21,7 +21,7 @@ do
 	if egrep -q G_PY_BINDINGS $x; then
 		BINDINGS=$(sed -n "/G_PY_BINDINGS/ p" $x | sed "s/G_PY_BINDINGS=\"//;s/\"//")
 	else
-		BINDINGS=$(echo $PN|sed "s/-python//")
+		BINDINGS="${PN%-python}"
 	fi
 
 	# There might be multiple bindings per package
@@ -39,7 +39,7 @@ do
 	done
 
 	echo "$CAT/$PN: $BINDINGS_OUT" | tr -s ' ' >> $TMP
-done	
+done
 
 cat $TMP |sort -u
 
