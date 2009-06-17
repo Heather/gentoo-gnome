@@ -19,15 +19,15 @@ RDEPEND=">=x11-libs/gtk+-2.14
 	>=dev-cpp/gtkmm-2.12
 	>=dev-libs/libxml2-2
 	dev-libs/libxslt
-	>=dev-cpp/libxmlpp-2.26
 	>=gnome-base/gconf-2
+	>=dev-libs/libpcre-7.8[cxx]
 	>=gnome-base/libgnomeui-2
 	>=app-text/gtkspell-2.0.9
 	>=dev-libs/boost-1.34
 	sys-libs/e2fsprogs-libs
 	>=gnome-base/gnome-panel-2
 	applet? ( >=dev-cpp/libpanelappletmm-2.26 )"
-# Build with dbus is currently broken
+# Build with dbus is currently not implemented
 #	dbus? ( >=dev-libs/dbus-glib-0.70 )"
 DEPEND="${DEPEND}
 	dev-util/pkgconfig
@@ -39,14 +39,8 @@ DOCS="AUTHORS ChangeLog NEWS README TODO"
 src_prepare() {
 	gnome2_src_prepare
 
-	# Update boost macro
-	epatch "${FILESDIR}/${PN}-0.3.1-boost-update-v10.patch"
-
-	# Fix automagic dependency on libpanelappletmm
-	epatch "${FILESDIR}/${PN}-0.3.1-automagic.patch"
-
-	intltoolize --force --copy --automake || die "intltoolize failed"
-	eautoreconf
+	# Fix intltoolize broken file, see upstream #577133
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
 }
 
 pkg_setup() {
