@@ -21,7 +21,6 @@ RDEPEND=">=x11-libs/gtk+-2.14
 	dev-libs/libxslt
 	>=gnome-base/gconf-2
 	>=dev-libs/libpcre-7.8[cxx]
-	>=gnome-base/libgnomeui-2
 	>=app-text/gtkspell-2.0.9
 	>=dev-libs/boost-1.34
 	sys-libs/e2fsprogs-libs
