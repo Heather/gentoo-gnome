@@ -17,14 +17,13 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="debug doc"
 
+# lvm2-2.02.48-r2 dep due to bug 270350
 RDEPEND=">=dev-libs/glib-2.16.1
 	>=dev-libs/dbus-glib-0.76
 	>=sys-apps/dbus-1.0
 	>=sys-auth/polkit-0.92
 	>=sys-fs/udev-145[extras]
-	|| (
-		>=sys-fs/lvm2-2.02
-		>=sys-fs/device-mapper-1.02 )
+	>=sys-fs/lvm2-2.02.48-r2
 	>=sys-apps/parted-1.8.8[device-mapper]
 	>=dev-libs/libatasmart-0.5
 	>=sys-apps/sg3_utils-1.27-r1
@@ -53,10 +52,4 @@ src_prepare() {
 
 	# Fix intltoolize broken file, see upstream #577133
 	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
-}
-
-src_configure() {
-	# No damned pkgconfig file :|
-	DEVMAPPER_CFLAGS="-I/usr/include" DEVMAPPER_LIBS="-ldevmapper" \
-		gnome2_src_configure
 }
