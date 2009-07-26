@@ -17,8 +17,8 @@ IUSE="debug doc"
 
 RDEPEND=">=dev-libs/glib-2.16.1
 	>=dev-libs/dbus-glib-0.76
-	>=sys-apps/devicekit-002
-	>=sys-auth/policykit-0.7
+	>=sys-fs/udev-145[extras]
+	>=sys-auth/polkit-0.91
 	sys-apps/dbus
 	virtual/libusb
 "
@@ -54,7 +54,7 @@ src_unpack() {
 	gnome2_src_unpack
 
 	# Fix build with older gcc, bug #266987
-	epatch "${FILESDIR}/${P}-build-gcc-4.1.2.patch"
+	epatch "${FILESDIR}/${PN}-009-build-gcc-4.1.2.patch"
 
 	# Fix crazy cflags and moved them to maintainer-mode, bug #267139
 	epatch "${FILESDIR}/${PN}-007-maintainer-cflags.patch"
