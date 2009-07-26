@@ -4,3 +4,5 @@ dev-util/gnome-devel-docs-2.26.2
 #FIXME: Fixs the better as possible the fail install with emake jobs.
 net-libs/libepc-0.3.10
  * 2 out of 16 tests fail, upstream bug #578792
+x11-libs/gtk+-2.17.6
+ * configure says >=xrandr-1.2.99 but remi tells me it's broken
