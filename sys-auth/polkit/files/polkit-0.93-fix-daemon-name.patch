@@ -1,0 +1,221 @@
+Fix daemon binary collision with <=policykit-0.9
+
+https://bugs.freedesktop.org/show_bug.cgi?id=22951
+
+--
+--- data/org.freedesktop.PolicyKit1.service.in
++++ data/org.freedesktop.PolicyKit1.service.in
+@@ -1,4 +1,4 @@
+ [D-BUS Service]
+ Name=org.freedesktop.PolicyKit1
+-Exec=@libexecdir@/polkitd
++Exec=@libexecdir@/polkitd-1
+ User=root
+--- docs/man/Makefile.am
++++ docs/man/Makefile.am
+@@ -5,7 +5,7 @@
+ 
+ man_MANS = 				\
+ 	polkit.8			\
+-	polkitd.8			\
++	polkitd-1.8			\
+ 	pklocalauthority.8		\
+ 	pkexec.1			\
+ 	pkcheck.1			\
+@@ -19,7 +19,7 @@
+ 
+ EXTRA_DIST = 				\
+ 	polkit.xml                 	\
+-	polkitd.xml			\
++	polkitd-1.xml			\
+ 	pklocalauthority.xml		\
+ 	pkexec.xml			\
+ 	pkcheck.xml			\
+--- docs/man/polkitd-1.xml
++++ docs/man/polkitd-1.xml
+@@ -0,0 +1,67 @@
++<?xml version="1.0"?>
++<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
++               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
++<!ENTITY version SYSTEM "../version.xml">
++]>
++<refentry id="polkitd-1.8">
++  <refentryinfo>
++    <title>polkitd-1</title>
++    <date>May 2009</date>
++    <productname>polkit</productname>
++  </refentryinfo>
++
++  <refmeta>
++    <refentrytitle>polkitd-1</refentrytitle>
++    <manvolnum>8</manvolnum>
++    <refmiscinfo class="version"></refmiscinfo>
++  </refmeta>
++
++  <refnamediv>
++    <refname>polkitd-1</refname>
++    <refpurpose>PolicyKit daemon</refpurpose>
++  </refnamediv>
++
++  <refsynopsisdiv>
++    <cmdsynopsis>
++      <command>polkitd-1</command>
++    </cmdsynopsis>
++  </refsynopsisdiv>
++
++  <refsect1 id="polkitd-1-description"><title>DESCRIPTION</title>
++    <para>
++      <command>polkitd-1</command> provides
++      the <emphasis>org.freedesktop.PolicyKit1</emphasis> D-Bus
++      service on the system message bus. Users or administrators
++      should never need to start this daemon as it will be
++      automatically started by
++      <citerefentry><refentrytitle>dbus-daemon</refentrytitle><manvolnum>1</manvolnum></citerefentry>
++      whenever an application calls into the service.
++    </para>
++  </refsect1>
++
++  <refsect1 id="polkitd-1-author"><title>AUTHOR</title>
++    <para>
++      Written by David Zeuthen <email>davidz@redhat.com</email> with
++      a lot of help from many others.
++    </para>
++  </refsect1>
++
++  <refsect1 id="polkitd-1-bugs">
++    <title>BUGS</title>
++    <para>
++      Please send bug reports to either the distribution or the
++      polkit-devel mailing list,
++      see the link <ulink url="http://lists.freedesktop.org/mailman/listinfo/polkit-devel"/>
++      on how to subscribe.
++    </para>
++  </refsect1>
++
++  <refsect1 id="polkitd-1-see-also">
++    <title>SEE ALSO</title>
++    <para>
++      <citerefentry>
++        <refentrytitle>polkit</refentrytitle><manvolnum>8</manvolnum>
++      </citerefentry>
++    </para>
++  </refsect1>
++</refentry>
+--- docs/man/polkitd.xml
++++ docs/man/polkitd.xml
+@@ -1,67 +0,0 @@
+-<?xml version="1.0"?>
+-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+-               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+-<!ENTITY version SYSTEM "../version.xml">
+-]>
+-<refentry id="polkitd.8">
+-  <refentryinfo>
+-    <title>polkitd</title>
+-    <date>May 2009</date>
+-    <productname>polkit</productname>
+-  </refentryinfo>
+-
+-  <refmeta>
+-    <refentrytitle>polkitd</refentrytitle>
+-    <manvolnum>8</manvolnum>
+-    <refmiscinfo class="version"></refmiscinfo>
+-  </refmeta>
+-
+-  <refnamediv>
+-    <refname>polkitd</refname>
+-    <refpurpose>PolicyKit daemon</refpurpose>
+-  </refnamediv>
+-
+-  <refsynopsisdiv>
+-    <cmdsynopsis>
+-      <command>polkitd</command>
+-    </cmdsynopsis>
+-  </refsynopsisdiv>
+-
+-  <refsect1 id="polkitd-description"><title>DESCRIPTION</title>
+-    <para>
+-      <command>polkitd</command> provides
+-      the <emphasis>org.freedesktop.PolicyKit1</emphasis> D-Bus
+-      service on the system message bus. Users or administrators
+-      should never need to start this daemon as it will be
+-      automatically started by
+-      <citerefentry><refentrytitle>dbus-daemon</refentrytitle><manvolnum>1</manvolnum></citerefentry>
+-      whenever an application calls into the service.
+-    </para>
+-  </refsect1>
+-
+-  <refsect1 id="polkitd-author"><title>AUTHOR</title>
+-    <para>
+-      Written by David Zeuthen <email>davidz@redhat.com</email> with
+-      a lot of help from many others.
+-    </para>
+-  </refsect1>
+-
+-  <refsect1 id="polkitd-bugs">
+-    <title>BUGS</title>
+-    <para>
+-      Please send bug reports to either the distribution or the
+-      polkit-devel mailing list,
+-      see the link <ulink url="http://lists.freedesktop.org/mailman/listinfo/polkit-devel"/>
+-      on how to subscribe.
+-    </para>
+-  </refsect1>
+-
+-  <refsect1 id="polkitd-see-also">
+-    <title>SEE ALSO</title>
+-    <para>
+-      <citerefentry>
+-        <refentrytitle>polkit</refentrytitle><manvolnum>8</manvolnum>
+-      </citerefentry>
+-    </para>
+-  </refsect1>
+-</refentry>
+--- docs/man/polkit.xml
++++ docs/man/polkit.xml
+@@ -424,7 +424,7 @@
+         <refentrytitle>pklocalauthority</refentrytitle><manvolnum>8</manvolnum>
+       </citerefentry>
+       <citerefentry>
+-        <refentrytitle>polkitd</refentrytitle><manvolnum>8</manvolnum>
++        <refentrytitle>polkitd-1</refentrytitle><manvolnum>8</manvolnum>
+       </citerefentry>
+       <citerefentry>
+         <refentrytitle>pkaction</refentrytitle><manvolnum>1</manvolnum>
+--- docs/polkit/Makefile.am
++++ docs/polkit/Makefile.am
+@@ -60,7 +60,7 @@
+ 	../../src/polkit/docbook-interface-org.freedesktop.PolicyKit1.Authority.xml			\
+ 	../../src/polkit/docbook-interface-org.freedesktop.PolicyKit1.AuthenticationAgent.xml		\
+ 	../man/polkit.xml										\
+-	../man/polkitd.xml										\
++	../man/polkitd-1.xml										\
+ 	../man/pklocalauthority.xml									\
+ 	../man/pkcheck.xml										\
+ 	../man/pkaction.xml										\
+--- src/polkitd/Makefile.am
++++ src/polkitd/Makefile.am
+@@ -14,19 +14,19 @@
+ 	-D_REENTRANT	                                		\
+ 	$(NULL)
+ 
+-libexec_PROGRAMS = polkitd
++libexec_PROGRAMS = polkitd-1
+ 
+-polkitd_SOURCES = 							\
++polkitd_1_SOURCES = 							\
+ 	main.c								\
+ 	$(NULL)
+ 
+-polkitd_CFLAGS = 							\
++polkitd_1_CFLAGS = 							\
+ 	-DPOLKIT_BACKEND_I_KNOW_API_IS_SUBJECT_TO_CHANGE		\
+ 	-DG_LOG_DOMAIN=\"polkitd-1\"					\
+ 	$(GLIB_CFLAGS)							\
+ 	$(NULL)
+ 
+-polkitd_LDADD = 				        		\
++polkitd_1_LDADD = 				        		\
+ 	$(DBUS_GLIB_LIBS)						\
+ 	$(GLIB_LIBS)							\
+ 	$(top_builddir)/src/polkit/libpolkit-gobject-1.la		\

@@ -35,8 +35,13 @@ pkg_setup() {
 src_prepare() {
 	# Add zsh completions
 	if use zsh-completion; then
-		epatch "${FILESDIR}/${P}-zsh-completions.patch"
+		epatch "${FILESDIR}/${PN}-0.92-zsh-completions.patch"
 	fi
+
+	# Fix daemon binary collision with <=policykit-0.9, fdo bug 22951
+	epatch "${FILESDIR}/${P}-fix-daemon-name.patch"
+
+	eautoreconf
 }
 
 src_configure() {

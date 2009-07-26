@@ -15,17 +15,17 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="examples"
 
-RDEPEND=">=x11-libs/gtk+-2.13.6
+RDEPEND=">=x11-libs/gtk+-2.17.1
 	>=gnome-base/gconf-2.8
 	>=dev-libs/dbus-glib-0.71
-	>=sys-auth/polkit-0.92"
+	>=sys-auth/polkit-0.93"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.19
 	>=dev-util/intltool-0.35.0
 	>=app-text/scrollkeeper-0.3.14"
 
-DOCS="AUTHORS ChangeLog HACKING NEWS TODO"
+DOCS="AUTHORS HACKING NEWS TODO"
 
 pkg_setup() {
 	G2CONF="${G2CONF} $(use_enable examples)"
