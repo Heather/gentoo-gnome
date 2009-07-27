@@ -67,9 +67,8 @@ pkg_setup() {
 		$(use_enable policykit gconf-defaults)
 		--enable-compile-warnings=minimum
 		--with-dpms-ext
-		--disable-legacy-buttons
+		--enable-legacy-buttons
 		--enable-applets"
-	# XXX: --disable-legacy-buttons => only xevents => newer Xorg
 }
 
 src_prepare() {
@@ -88,7 +87,7 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-2.26.0-cpufreq-libhal-glib.patch"
 	epatch "${FILESDIR}/${PN}-2.26.0-cpufreq-support.patch"
 	epatch "${FILESDIR}/${PN}-2.26.0-cpufreq-ui.patch"
-	epatch "${FILESDIR}/${PN}-2.26.2-cpufreq-po.patch"
+	epatch "${FILESDIR}/${PN}-2.26.3-cpufreq-po.patch"
 
 	# Fix uninstalled cpufreq schemas, bug #266995
 	epatch "${FILESDIR}/${PN}-2.26.0-cpufreq-schemas.patch"
