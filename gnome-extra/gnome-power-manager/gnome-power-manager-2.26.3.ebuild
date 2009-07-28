@@ -80,6 +80,10 @@ src_prepare() {
 		sed -e 's:@HAVE_DOCBOOK2MAN_TRUE@.*::' -i "${S}/man/Makefile.in" || die "sed 1 failed"
 	fi
 
+	# Drop debugger CFLAGS
+	sed -e 's:^CPPFLAGS="$CPPFLAGS -g"$::g' -i configure.ac \
+		|| die "sed 2 failed"
+
 	# Skip crazy compilation warnings, bug #263078
 	epatch "${FILESDIR}/${PN}-2.26.0-gcc44-options.patch"
 
@@ -99,7 +103,7 @@ src_prepare() {
 	eautoreconf
 
 	# glibc splits this out, whereas other libc's do not tend to
-	use elibc_glibc || sed -e 's/-lresolv//' -i configure || die "sed 2 failed"
+	use elibc_glibc || sed -e 's/-lresolv//' -i configure || die "sed 3 failed"
 }
 
 src_test() {
