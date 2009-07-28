@@ -15,8 +15,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~mips ~ppc ~x86"
 IUSE="debug doc expat pam zsh-completion nls"
 
-RDEPEND=">=dev-libs/glib-2.14
-	>=dev-libs/eggdbus-0.4
+RDEPEND=">=dev-libs/glib-2.21.4
+	>=dev-libs/eggdbus-0.5
 	expat? ( dev-libs/expat )
 	pam? ( virtual/pam )"
 DEPEND="${RDEPEND}
@@ -40,6 +40,11 @@ src_prepare() {
 
 	# Fix daemon binary collision with <=policykit-0.9, fdo bug 22951
 	epatch "${FILESDIR}/${P}-fix-daemon-name.patch"
+
+	# Fix bug #279271, unappropriated modversion of glib and gio
+	# (2.21.4 are needed) and sources use some Iface only available,
+	# since gio 2.21.4.
+	epatch "${FILESDIR}/${P}-glib-eggdbus-modversion.patch"
 
 	eautoreconf
 }
