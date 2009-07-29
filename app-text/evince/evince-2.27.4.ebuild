@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils gnome2
+inherit eutils gnome2 autotools
 
 DESCRIPTION="Simple document viewer for GNOME"
 HOMEPAGE="http://www.gnome.org/projects/evince/"
@@ -72,4 +72,10 @@ src_prepare() {
 
 	# Fix .desktop file so menu item shows up
 	epatch "${FILESDIR}"/${PN}-0.7.1-display-menu.patch
+
+	# Fix bug #279591, compilation error with
+	# --with-smclient=xsmp gave to the configure script
+	epatch "${FILESDIR}"/${P}-smclient-configure.patch
+
+	eautoreconf
 }
