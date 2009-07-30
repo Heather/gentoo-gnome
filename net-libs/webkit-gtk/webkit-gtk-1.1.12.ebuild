@@ -6,7 +6,8 @@ EAPI="2"
 
 inherit autotools
 
-MY_P="webkit-${PV}"
+MY_P=webkit-${PV}
+
 DESCRIPTION="Open source web browser engine"
 HOMEPAGE="http://www.webkitgtk.org/"
 SRC_URI="http://www.webkitgtk.org/${MY_P}.tar.gz"
@@ -15,7 +16,7 @@ LICENSE="LGPL-2 LGPL-2.1 BSD"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~sparc ~x86 ~x86-fbsd"
 # geoclue
-IUSE="coverage debug doc gnome-keyring +gstreamer pango"
+IUSE="coverage debug doc gnome-keyring +gstreamer pango ruby websockets"
 
 # use sqlite, svg by default
 RDEPEND="
@@ -36,7 +37,7 @@ RDEPEND="
 	gstreamer? (
 		media-libs/gstreamer:0.10
 		media-libs/gst-plugins-base:0.10 )
-	pango? ( x11-libs/pango )
+	pango? ( >=x11-libs/pango-1.12 )
 	!pango? (
 		media-libs/freetype:2
 		media-libs/fontconfig )
@@ -51,7 +52,8 @@ S="${WORKDIR}/${MY_P}"
 
 src_prepare() {
 	# Make it libtool-1 compatible
-	rm -v autotools/lt* autotools/libtool.m4 || die "removing libtool macros failed"
+	rm -v autotools/lt* autotools/libtool.m4 \
+		|| die "removing libtool macros failed"
 	# Don't force -O2
 	sed -i 's/-O2//g' "${S}"/configure.ac || die "sed failed"
 	# Prevent maintainer mode from being triggered during make
@@ -69,8 +71,9 @@ src_configure() {
 		$(use_enable gstreamer video)
 		$(use_enable debug)
 		$(use_enable coverage)
-		--enable-filters
-		"
+		$(use_enable ruby)
+		$(use_enable websockets web_sockets)
+		--enable-filters"
 
 	# USE-flag controlled font backend because upstream default is freetype
 	# Remove USE-flag once font-backend becomes pango upstream
