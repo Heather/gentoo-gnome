@@ -6,12 +6,3 @@ net-libs/libepc-0.3.10
  * 2 out of 16 tests fail, upstream bug #578792
 x11-libs/gtk+-2.17.6
  * configure says >=xrandr-1.2.99 but remi tells me it's broken
-media-gfx/eog-2.27.5
- * Fix compilation error, src/eog-properties-dialog.c:534 (the entire function)
-   eog_properties_dialog_set_netbook_mode(), use private members which
-   are conditionnally included (HAVE_METADATA), so when this macroconstant
-   is undefined, this module can't compile.
-   -> don't drop the function, the mostly part should be unactivated
-   if HAVE_METADATA is undefined, but "netbook-mode" is a public property.
-   Then report upstream.
-

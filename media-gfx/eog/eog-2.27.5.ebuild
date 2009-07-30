@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-gfx/eog/eog-2.26.3.ebuild,v 1.1 2009/07/06 16:52:35 mrpouet Exp $
 
+EAPI="2"
+
 inherit eutils gnome2
 
 DESCRIPTION="The Eye of GNOME image viewer"
@@ -52,6 +54,12 @@ pkg_setup() {
 		--disable-dependency-tracking
 		--disable-scrollkeeper
 		--disable-schemas-install"
+}
+
+src_prepare() {
+	# Fix upstream bug #590124, fails to compile if exempi/exif
+	# are not available
+	epatch "${FILESDIR}/${P}-eog-properties-dialog-priv.patch"
 }
 
 pkg_postinst() {
