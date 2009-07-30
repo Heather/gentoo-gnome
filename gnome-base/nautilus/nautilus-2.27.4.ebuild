@@ -15,7 +15,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="beagle doc gnome tracker xmp"
 
 # not adding gnome-base/gail because it is in gtk+
-RDEPEND=">=dev-libs/glib-2.19.0
+RDEPEND=">=dev-libs/glib-2.21.3
 	>=gnome-base/gnome-desktop-2.25.5
 	>=x11-libs/pango-1.1.2
 	>=x11-libs/gtk+-2.16.0
