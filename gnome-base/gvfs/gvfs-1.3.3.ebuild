@@ -94,8 +94,13 @@ pkg_postinst() {
 	use bash-completion && bash-completion_pkg_postinst
 
 	# Reload messagebus config
+	local dbus_initd="/etc/init.d/dbus"
+
 	# Only do so if installing into current ROOT
-	if test "${ROOT}" = "/" && test -x "/etc/init.d/dbus"; then
-		/etc/init.d/dbus -s reload
+	if test "${ROOT}" = "/" && test -x "${dbus_initd}"; then
+		# Compatible with baselayout 1 & 2, bug 279936
+		if ${dbus_initd} --quiet status; then
+			${dbus_initd} reload
+		fi
 	fi
 }
