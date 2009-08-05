@@ -20,7 +20,7 @@ index 0239021..1f7b111 100644
 +      <applyto>/apps/gnome-power-manager/cpufreq/consider_nice</applyto>
 +      <owner>gnome-power-manager</owner>
 +      <type>bool</type>
-+      <default>false</default>
++      <default>true</default>
 +      <locale name="C">
 +        <short>Whether or not niced processes should be considered on processor load calculation</short>
 +        <long>If niced processes are considered, they can cause a frequency increment even though their absolute load percentage wouldn't trigger the scaling mechanism to switch up the frequency.</long>

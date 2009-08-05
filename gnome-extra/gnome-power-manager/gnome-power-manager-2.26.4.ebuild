@@ -11,7 +11,7 @@ HOMEPAGE="http://www.gnome.org/projects/gnome-power-manager/"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~sparc ~x86"
+KEYWORDS="~amd64 ~x86"
 IUSE="doc policykit test"
 
 # See bug #196490 & bug #575500
