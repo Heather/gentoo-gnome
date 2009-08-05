@@ -1,7 +1,11 @@
 Ebuild Notices:
 ===============
+app-text/evince-2.27.4
+ * enable gobject-introspection when we have an ebuild for it.
 dev-util/gnome-devel-docs-2.26.2
 #FIXME: Fixs the better as possible the fail install with emake jobs.
+gnome-base/nautilus-2.27.4
+ * tarball generated with broken gtk-doc, revisit me.
 net-libs/libepc-0.3.10
  * 2 out of 16 tests fail, upstream bug #578792
 x11-libs/gtk+-2.17.6

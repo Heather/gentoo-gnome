@@ -15,7 +15,7 @@ KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~sparc ~x86"
 IUSE="doc policykit test"
 
 # See bug #196490 & bug #575500
-RESTRICT="test"
+#RESTRICT="test"
 
 # dev-libs/libunique needs KEYWORDS
 RDEPEND=">=dev-libs/glib-2.6.0
@@ -28,7 +28,7 @@ RDEPEND=">=dev-libs/glib-2.6.0
 	>=x11-libs/libwnck-2.10.0
 	>=x11-libs/cairo-1.0.0
 	>=gnome-base/gnome-panel-2
-	>=gnome-base/gconf-2
+	>=gnome-base/gconf-2.10
 	>=media-libs/libcanberra-0.10[gtk]
 	>=sys-apps/devicekit-001
 	>=sys-apps/devicekit-power-005
@@ -84,6 +84,10 @@ src_prepare() {
 	sed -e 's:^CPPFLAGS="$CPPFLAGS -g"$::g' -i configure.ac \
 		|| die "sed 2 failed"
 
+	# Drop test that needs a running daemon
+	sed 's:^\(.*gpm_inhibit_test (test);\)://\1:' -i src/gpm-self-test.c \
+		|| die "sed 3 failed"
+
 	# Skip crazy compilation warnings, bug #263078
 	epatch "${FILESDIR}/${PN}-2.26.0-gcc44-options.patch"
 
@@ -107,6 +111,7 @@ src_prepare() {
 }
 
 src_test() {
+	unset DBUS_SESSION_BUS_ADDRESS
 	Xemake check || die "Test phase failed"
 }
 
