@@ -6,6 +6,10 @@
 # NOTE: Please add your entry at the top!
 #
 
+# Nirbheek Chauhan <nirbheek@gentoo.org> (9 Aug 2009)
+# Mask live version of packagekit
+~app-portage/packagekit-9999
+
 # Nirbheek Chauhan <nirbheek@gentoo.org> (17 Mar 2009)
 # Epiphany which uses webkit (bug #239112)
 # Several feature regressions
