@@ -96,7 +96,9 @@ src_prepare() {
 
 	# Policykit-based solution to setting the default background.  Must be
 	# applied *after* the automagics patch
-	epatch "${FILESDIR}/${PN}-2.26.0-default-background.patch"
+	#
+	# Needs updating with 2.27 -- sounds like a job for dang!
+	#epatch "${FILESDIR}/${PN}-2.26.0-default-background.patch"
 
 	eautoreconf
 }

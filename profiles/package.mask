@@ -7,11 +7,6 @@
 #
 
 # Nirbheek Chauhan <nirbheek@gentoo.org> (9 Aug 2009)
-# Fails to compile for me
-# http://bugzilla.gnome.org/show_bug.cgi?id=591229
-=gnome-base/gnome-control-center-2.27.5
-
-# Nirbheek Chauhan <nirbheek@gentoo.org> (9 Aug 2009)
 # Mask live version of packagekit
 ~app-portage/packagekit-9999
 
