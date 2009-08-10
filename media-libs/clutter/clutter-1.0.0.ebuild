@@ -74,9 +74,8 @@ pkg_setup() {
 			--enable-cogl-debug=yes"
 	fi
 
-	# Tests are interactive, not of use for us
-	# External json-glib causes `undefined reference` errors
-	# while linking to libclutter-glx-1.0.so
+	# XXX: Tests are interactive, not of use for us
+	# FIXME: Using external json-glib breaks introspection
 	G2CONF="${G2CONF}
 		--disable-tests
 		--enable-maintainer-flags=no
