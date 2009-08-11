@@ -1,0 +1,362 @@
+#!/bin/bash
+# vim: set sw=4 sts=4 et tw=80 :
+
+# Author:        Ciaran McCreesh <ciaranm@gentoo.org>
+# Purpose:       Display ebuild keywords in a graphical form
+# Invocation:    eshowkw [-a] [ packagename ] (defaults to current directory if no
+#                packagename is provided, -a shows all arches, including prefix)
+
+shopt -s extglob
+
+PID_TO_KILL=$$
+
+die() {
+    echo "$@" 1>&2
+    kill $PID_TO_KILL
+}
+
+trap 'exit 250' 15
+
+get_portage_dir() {
+    local dir
+    if [[ -z ${portage_dir_cache} ]] ; then
+        for dir in "${HOME}/cvs/gentoo-x86" "/usr/portage" ; do
+            [[ -d ${dir}/profiles ]] && portage_dir_cache=${dir} && break
+        done
+    fi
+    [[ -z ${portage_dir_cache} ]] && portage_dir_cache=$(portageq portdir )
+    export portage_dir_cache
+    echo ${portage_dir_cache}
+}
+
+version_sort() {
+    local items= left=0
+    items=( $@ )
+
+    while [[ ${left} -lt ${#items[@]} ]] ; do
+        local lowest_idx=${left}
+        local idx=$(( ${lowest_idx} + 1 ))
+        while [[ ${idx} -lt ${#items[@]} ]] ; do
+            version_compare "${items[${lowest_idx}]}" "${items[${idx}]}"
+            [[ $? -eq 3 ]] && lowest_idx=${idx}
+            idx=$(( ${idx} + 1 ))
+        done
+        local tmp=${items[${lowest_idx}]}
+        items[${lowest_idx}]=${items[${left}]}
+        items[${left}]=${tmp}
+        left=$(( ${left} + 1 ))
+    done
+    echo ${items[@]}
+}
+
+version_compare() {
+    local ver_a=${1} ver_b=${2} parts_a parts_b cur_idx_a=0 cur_idx_b=0
+    parts_a=( $(get_all_version_components "${ver_a}" ) )
+    parts_b=( $(get_all_version_components "${ver_b}" ) )
+
+    ### compare number parts.
+    local inf_loop=0
+    while true ; do
+        # grab the current number components
+        local cur_tok_a=${parts_a[${cur_idx_a}]}
+        local cur_tok_b=${parts_b[${cur_idx_b}]}
+
+        # number?
+        if [[ -n ${cur_tok_a} ]] && [[ -z ${cur_tok_a//[[:digit:]]} ]] ; then
+            cur_idx_a=$(( ${cur_idx_a} + 1 ))
+            [[ ${parts_a[${cur_idx_a}]} == "." ]] \
+                && cur_idx_a=$(( ${cur_idx_a} + 1 ))
+        else
+            cur_tok_a=""
+        fi
+
+        if [[ -n ${cur_tok_b} ]] && [[ -z ${cur_tok_b//[[:digit:]]} ]] ; then
+            cur_idx_b=$(( ${cur_idx_b} + 1 ))
+            [[ ${parts_b[${cur_idx_b}]} == "." ]] \
+                && cur_idx_b=$(( ${cur_idx_b} + 1 ))
+        else
+            cur_tok_b=""
+        fi
+
+        # done with number components?
+        [[ -z ${cur_tok_a} ]] && [[ -z ${cur_tok_b} ]] && break
+
+        # to avoid going into octal mode, strip any leading zeros. otherwise
+        # bash will throw a hissy fit on versions like 6.3.068.
+        cur_tok_a=${cur_tok_a##+(0)}
+        cur_tok_b=${cur_tok_b##+(0)}
+
+        # if a component is blank, make it zero.
+        [[ -z ${cur_tok_a} ]] && cur_tok_a=0
+        [[ -z ${cur_tok_b} ]] && cur_tok_b=0
+
+        # compare
+        [[ ${cur_tok_a} -lt ${cur_tok_b} ]] && return 1
+        [[ ${cur_tok_a} -gt ${cur_tok_b} ]] && return 3
+    done
+
+    ### number parts equal. compare letter parts.
+    local letter_a=
+    letter_a=${parts_a[${cur_idx_a}]}
+    if [[ ${#letter_a} -eq 1 ]] && [[ -z ${letter_a/[a-z]} ]] ; then
+        cur_idx_a=$(( ${cur_idx_a} + 1 ))
+    else
+        letter_a="@"
+    fi
+
+    local letter_b=
+    letter_b=${parts_b[${cur_idx_b}]}
+    if [[ ${#letter_b} -eq 1 ]] && [[ -z ${letter_b/[a-z]} ]] ; then
+        cur_idx_b=$(( ${cur_idx_b} + 1 ))
+    else
+        letter_b="@"
+    fi
+
+    # compare
+    [[ ${letter_a} < ${letter_b} ]] && return 1
+    [[ ${letter_a} > ${letter_b} ]] && return 3
+
+    ### letter parts equal. compare suffixes in order.
+    local suffix rule part r_lt r_gt
+    for rule in "alpha=1" "beta=1" "pre=1" "rc=1" "p=3" "r=3" ; do
+        suffix=${rule%%=*}
+        r_lt=${rule##*=}
+        [[ ${r_lt} -eq 1 ]] && r_gt=3 || r_gt=1
+
+        local suffix_a=
+        for part in ${parts_a[@]} ; do
+            [[ ${part#${suffix}} != ${part} ]] && \
+                [[ -z ${part##${suffix}*([[:digit:]])} ]] && \
+                suffix_a=${part#${suffix}}0
+        done
+
+        local suffix_b=
+        for part in ${parts_b[@]} ; do
+            [[ ${part#${suffix}} != ${part} ]] && \
+                [[ -z ${part##${suffix}*([[:digit:]])} ]] && \
+                suffix_b=${part#${suffix}}0
+        done
+
+        [[ -z ${suffix_a} ]] && [[ -z ${suffix_b} ]] && continue
+
+        [[ -z ${suffix_a} ]] && return ${r_gt}
+        [[ -z ${suffix_b} ]] && return ${r_lt}
+
+        # avoid octal problems
+        suffix_a=${suffix_a##+(0)} ; suffix_a=${suffix_a:-0}
+        suffix_b=${suffix_b##+(0)} ; suffix_b=${suffix_b:-0}
+
+        [[ ${suffix_a} -lt ${suffix_b} ]] && return 1
+        [[ ${suffix_a} -gt ${suffix_b} ]] && return 3
+    done
+
+    ### no differences.
+    return 2
+}
+
+get_all_version_components() {
+    local ver_str=${1} result result_idx=0
+    result=( )
+
+    while [[ -n "$ver_str" ]] ; do
+        case "${ver_str:0:1}" in
+            # number: parse whilst we have a number
+            [[:digit:]])
+                result[$result_idx]="${ver_str%%[^[:digit:]]*}"
+                ver_str="${ver_str##+([[:digit:]])}"
+                result_idx=$(($result_idx + 1))
+                ;;
+
+            # separator: single character
+            [-_.])
+                result[$result_idx]="${ver_str:0:1}"
+                ver_str="${ver_str:1}"
+                result_idx=$(($result_idx + 1))
+                ;;
+
+            # letter: grab the letters plus any following numbers
+            [[:alpha:]])
+                local not_match="${ver_str##+([[:alpha:]])*([[:digit:]])}"
+                result[$result_idx]=${ver_str:0:$((${#ver_str} - ${#not_match}))}
+                ver_str="${not_match}"
+                result_idx=$(($result_idx + 1))
+                ;;
+
+            # huh?
+            *)
+                result[$result_idx]="${ver_str:0:1}"
+                ver_str="${ver_str:1}"
+                result_idx=$(($result_idx + 1))
+                ;;
+        esac
+    done
+
+    echo ${result[@]}
+}
+
+get_package_dir() {
+    if [[ -z ${1} ]] ; then
+        pwd
+        return 0
+    fi
+
+    if [[ -d ${1} ]] ; then
+        readlink -f ${1}
+        return 0
+    fi
+
+    get_portage_dir 1>/dev/null
+    if [[ ${1/\/} != ${1} ]] ; then
+        local d=$(get_portage_dir )/${1}
+        if [[ -d ${d} ]] ; then
+            echo ${d}
+            return 0
+        fi
+    else
+        local d
+        d=( $(echo $(get_portage_dir )/*-*/${1} ) )
+        if [[ ${#d[@]} -gt 1 ]] ; then
+            die "${1} is ambiguous"
+        elif [[ -d ${d[0]} ]] ; then
+            echo ${d[0]}
+            return 0
+        fi
+    fi
+
+    return 1
+}
+
+repeat() {
+    local i
+    for (( i=0 ; i < ${1} ; i=$(( ${i} + 1 )) )) ; do
+        echo -n "${2}"
+    done
+}
+
+get_keywords() {
+    (
+        inherit() { :; }
+        source ${1} 2>/dev/null
+        echo ${KEYWORDS}
+    )
+}
+
+colorarch() {
+    case "${1}" in
+        amd64)
+            echo -n -e "\033[0;33m${2}\033[0;0m"
+            ;;
+        x86)
+            echo -n -e "\033[0;31m${2}\033[0;0m"
+            ;;
+        *)
+            echo -n "${2}"
+            ;;
+    esac
+}
+
+colourise() {
+    case "${1}" in
+        \*)
+            echo -n -e "\033[0;31m*\033[0;0m"
+            ;;
+        +)
+            echo -n -e "\033[0;32m+\033[0;0m"
+            ;;
+        -)
+            echo -n -e "\033[0;31m-\033[0;0m"
+            ;;
+        \~)
+            echo -n -e "\033[0;33m~\033[0;0m"
+            ;;
+        *)
+            echo -n "${1}"
+            ;;
+    esac
+}
+
+show_keyword_diagram() {
+    echo -n -e "Keywords for \033[1;34m"
+    local title=$(readlink -f $(pwd ) )
+    title=${title#$(readlink -f ../.. )/*( )}
+    echo -n "${title}"
+    echo -e "\033[0;0m:"
+    echo
+
+    local archs= arch_length=0 arch=
+    if [[ $1 == "true" ]]; then
+        archs=( $( grep -v '^# Prefix keywords' $(get_portage_dir )/profiles/arch.list ) )
+    else
+        archs=( $( sed '/^\# Prefix keywords/,$ d' $(get_portage_dir )/profiles/arch.list ) )
+    fi
+    for arch in "${archs[@]}" ; do
+        [[ ${#arch} -gt ${arch_length} ]] && arch_length=${#arch}
+    done
+
+    local versions= pkgname= version_length=0 version=
+    pkgname=$(basename $(readlink -f ./ ) )
+    versions=( $(for e in $(echo *.ebuild ) ; do \
+            [[ -f ${e} ]] && echo ${e} | sed -e 's/\.ebuild$//g' \
+                    -e "s/^${pkgname}-//g" ; \
+            done ) )
+    versions=( $(version_sort ${versions[@]} ) )
+    for version in "${versions[@]}" ; do
+        [[ ${#version} -gt ${version_length} ]] && version_length=${#version}
+    done
+
+    local i=0 archletter=
+    for (( i = 0 ; i < ${arch_length} ; i=$(( ${i} + 1 )) )) ; do
+        repeat ${version_length} " "
+        echo -n " | "
+        for arch in "${archs[@]}" ; do
+            archletter="${arch:${i}:1}"
+            echo -n "$(colorarch "${arch}" "${archletter:- }" ) "
+        done
+        echo
+    done
+
+    repeat ${version_length} "-"
+    echo -n "-+"
+    repeat ${#archs[@]} "--"
+    echo
+
+    for version in "${versions[@]}" ; do
+        echo -n "${version}"
+        repeat $(( ${version_length} - ${#version} )) " "
+        echo -n " | "
+
+        local keyword keywords
+        keywords=( $(get_keywords "${pkgname}-${version}.ebuild" ) )
+        for arch in "${archs[@]}" ; do
+            local display=" "
+            [[ ${keywords[@]/-\*} != ${keywords[@]} ]] && display="*"
+            for keyword in "${keywords[@]}" ; do
+                [[ ${arch} == "${keyword#[~-]}" ]] && \
+                    display=${keyword:0:1} && \
+                    break;
+            done
+            [[ -z ${display#[~ *-]} ]] || display="+"
+            echo -n "$(colourise "${display}" ) "
+        done
+
+        echo
+    done
+}
+
+main() {
+    if [[ $1 == "-a" ]]; then
+        all_arches=true
+        shift
+    else
+        all_arches=false
+    fi
+    local dir=$(get_package_dir "${1}" )
+    [[ -z ${dir} ]] && die "Couldn't find '${1}'"
+    cd ${dir}
+    [[ $(echo *.ebuild ) != "*.ebuild" ]] || die "No ebuilds in ${dir}"
+    show_keyword_diagram $all_arches
+    true
+}
+
+main "$@"
+
