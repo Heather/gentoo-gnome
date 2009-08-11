@@ -1,0 +1,39 @@
+From bbea36bb4c271cb8af3ba5e9f892ef3c805b6802 Mon Sep 17 00:00:00 2001
+From: Richard Hughes <richard@hughsie.com>
+Date: Wed, 5 Aug 2009 15:00:01 +0100
+Subject: [PATCH] Handle not having ConsoleKit available more gracefully
+
+---
+ src/pk-dbus.c |    9 ++++++++-
+ 1 files changed, 8 insertions(+), 1 deletions(-)
+
+diff --git a/src/pk-dbus.c b/src/pk-dbus.c
+index 28ba20c..0f65783 100644
+--- a/src/pk-dbus.c
++++ b/src/pk-dbus.c
+@@ -171,6 +171,12 @@ pk_dbus_get_session (PkDbus *dbus, const gchar *sender)
+ 	g_return_val_if_fail (PK_IS_DBUS (dbus), NULL);
+ 	g_return_val_if_fail (sender != NULL, NULL);
+ 
++	/* no ConsoleKit? */
++	if (dbus->priv->proxy_session == NULL) {
++		egg_warning ("no ConsoleKit, so cannot get session");
++		goto out;
++	}
++
+ 	/* get pid */
+ 	pid = pk_dbus_get_pid (dbus, sender);
+ 	if (pid == G_MAXUINT) {
+@@ -208,7 +214,8 @@ pk_dbus_finalize (GObject *object)
+ 	dbus = PK_DBUS (object);
+ 
+ 	g_object_unref (dbus->priv->proxy_pid);
+-	g_object_unref (dbus->priv->proxy_session);
++	if (dbus->priv->proxy_session != NULL)
++		g_object_unref (dbus->priv->proxy_session);
+ 
+ 	G_OBJECT_CLASS (pk_dbus_parent_class)->finalize (object);
+ }
+-- 
+1.6.3.3
+

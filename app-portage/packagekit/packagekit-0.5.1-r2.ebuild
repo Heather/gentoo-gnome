@@ -81,6 +81,9 @@ src_prepare() {
 	#	addwrite "/root/.wapi"
 	#fi
 
+	# prevent seg-fault if consolekit is not started
+	epatch "${FILESDIR}"/${P}-segfault-no-consolekit.patch
+
 	# fix sandbox issue
 	sed -i -e "s/-p \$(PK_LOG_DIR)/-p \$(DESTDIR)\$(PK_LOG_DIR)/" \
 		src/Makefile.in || die "sed failed"
