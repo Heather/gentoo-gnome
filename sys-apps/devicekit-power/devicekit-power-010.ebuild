@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+EAPI="2"
+
 inherit eutils gnome2 autotools linux-info
 
 MY_PN="DeviceKit-power"
@@ -50,9 +52,7 @@ pkg_setup() {
 	check_battery
 }
 
-src_unpack() {
-	gnome2_src_unpack
-
+src_prepare() {
 	# Fix build with older gcc, bug #266987
 	epatch "${FILESDIR}/${PN}-009-build-gcc-4.1.2.patch"
 
