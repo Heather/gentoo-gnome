@@ -32,10 +32,10 @@ echo $IMPORTS
 # Find the python files
 for import in $(echo $IMPORTS)
 do
-	if egrep -q " $import($|,|[[:blank:]])" $TMP; then
+	if egrep -iq " $import($|,|[[:blank:]])" $TMP; then
 		#echo ""
 		echo -n " * Mapping $import"
-		echo ": $(egrep " $import( |,|$)" $TMP | cut -f1 -d:|xargs echo)"
+		echo ": $(egrep -i " $import( |,|$)" $TMP | cut -f1 -d:|xargs echo)"
 	#else
 		#echo -n "$import, "
 	#	echo ""
