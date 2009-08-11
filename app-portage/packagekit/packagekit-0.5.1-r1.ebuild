@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils multilib nsplugins
+inherit eutils multilib python nsplugins
 
 MY_PN="PackageKit"
 MY_P=${MY_PN}-${PV}
@@ -43,7 +43,6 @@ RDEPEND="${CDEPEND}
 	consolekit? ( sys-auth/consolekit )
 	pm-utils? ( sys-power/pm-utils )
 	>=app-portage/layman-1.2.3
-	dev-lang/python
 	>=sys-apps/portage-2.2_rc35"
 DEPEND="${CDEPEND}
 	nsplugin? ( >=net-libs/xulrunner-1.9.1 )
@@ -60,20 +59,18 @@ RESTRICT="test" # tests are failing atm
 # polkit is in gnome overlay, otherwise, should use policykit
 # do not use a specific user, useless and not more secure according to upstream
 # doc is in the tarball and always installed
-# ruck is broken (RDEPEND dev-python/urlgrabber)
+# ruck is broken (RDEPEND dev-python/urlgrabber), upstream bug 23248
 # mono doesn't install anything (RDEPEND dev-dotnet/gtk-sharp-gapi:2
-#	(R)DEPEND dev-dotnet/glib-sharp:2 dev-lang/mono)
-# depending on dbus-1.3.0 instead of 1.1.1 because of a bug in gentoo ebuild
+#	(R)DEPEND dev-dotnet/glib-sharp:2 dev-lang/mono), upstream bug 23247
+# using >=dbus-1.3.0 instead of >=dbus-1.1.1 because of a bug fixed in 1.3.0
 
 # TODO:
 # connman option can't be satisfied because not in the tree, bug 273679
 # gettext is probably needed only if +nls but too long to fix
+# +doc to install doc/website
 
 # UPSTREAM:
-# broken ruck
-# broken managed/mono
-# documentation/website installation
-# po/Makefile.in.in failure (+patch)
+# documentation/website with --enable-doc-install
 # failing tests
 
 src_prepare() {
@@ -88,7 +85,7 @@ src_prepare() {
 	sed -i -e "s/-p \$(PK_LOG_DIR)/-p \$(DESTDIR)\$(PK_LOG_DIR)/" \
 		src/Makefile.in || die "sed failed"
 
-	# fix translation files generation
+	# upstream bug 23249
 	if use nls; then
 		epatch "${FILESDIR}"/${P}-nls.patch
 	fi
@@ -112,6 +109,10 @@ src_prepare() {
 	if ! use policykit; then
 		sed -i -e "/policy/d" Makefile.in || die "sed failed"
 	fi
+
+	# prevent pyc/pyo generation
+	rm py-compile || die "rm py-compile failed"
+	ln -s $(type -P true) py-compile
 }
 
 src_configure() {
@@ -174,6 +175,8 @@ src_install() {
 }
 
 pkg_postinst() {
+	python_mod_optimize $(python_get_sitedir)/${PN}
+
 	if ! use policykit; then
 		ewarn "You are not using policykit, the daemon can't be considered as secure."
 		ewarn "All users will be able to do anything through ${MY_PN}."
@@ -196,4 +199,8 @@ pkg_prerm() {
 	einfo "Removing downloaded files with ${MY_PN}..."
 	[[ -d "${ROOT}"/var/cache/${MY_PN}/downloads/ ]] && \
 		rm -rf /var/cache/PackageKit/downloads/*
+}
+
+pkg_postrm() {
+	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages/${PN}
 }

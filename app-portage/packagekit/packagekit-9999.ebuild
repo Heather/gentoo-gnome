@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit autotools eutils git nsplugins
+inherit autotools eutils git python nsplugins
 
 MY_PN="PackageKit"
 
@@ -44,7 +44,6 @@ RDEPEND="${CDEPEND}
 	consolekit? ( sys-auth/consolekit )
 	pm-utils? ( sys-power/pm-utils )
 	>=app-portage/layman-1.2.3
-	dev-lang/python
 	>=sys-apps/portage-2.2_rc35"
 DEPEND="${CDEPEND}
 	doc? ( >=dev-util/gtk-doc-1.9 )
@@ -66,6 +65,10 @@ src_prepare() {
 	gtkdocize || die "gtkdocize failed"
 	eautoreconf
 	intltoolize || die "intltoolize failed"
+
+	# prevent pyc/pyo generation
+	rm py-compile || die "rm py-compile failed"
+	ln -s $(type -P true) py-compile
 }
 
 src_configure() {
@@ -129,6 +132,8 @@ src_install() {
 }
 
 pkg_postinst() {
+	python_mod_optimize $(python_get_sitedir)/${PN}
+
 	if ! use policykit; then
 		ewarn "You are not using policykit, the daemon can't be considered as secure."
 		ewarn "All users will be able to do anything through ${MY_PN}."
@@ -153,4 +158,8 @@ pkg_prerm() {
 	einfo "Removing downloaded files with ${MY_PN}..."
 	[[ -d "${ROOT}"/var/cache/${MY_PN}/downloads/ ]] && \
 		rm -rf /var/cache/PackageKit/downloads/*
+}
+
+pkg_postrm() {
+	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages/${PN}
 }
