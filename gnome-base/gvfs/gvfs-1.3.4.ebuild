@@ -14,6 +14,8 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="archive avahi bluetooth cdda doc fuse gdu gnome gnome-keyring gphoto2 gudev hal samba udev"
 
+# FIXME: gphoto2 && gudev => we need >libgphoto2-2.4.6 (unreleased)
+# see configure.ac for details
 RDEPEND=">=dev-libs/glib-2.21.2
 	>=sys-apps/dbus-1.0
 	>=net-libs/libsoup-2.25.1[gnome]
@@ -29,7 +31,8 @@ RDEPEND=">=dev-libs/glib-2.21.2
 	gdu? ( >=sys-apps/gnome-disk-utility-0.3 )
 	gnome? ( >=gnome-base/gconf-2.0 )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-1.0 )
-	gphoto2? ( >=media-libs/libgphoto2-2.4 )
+	gphoto2? (
+		>=media-libs/libgphoto2-2.4 )
 	gudev? (
 		cdda? ( >=dev-libs/libcdio-0.78.2[-minimal] )
 		>=sys-fs/udev-145[extras] )
