@@ -56,12 +56,6 @@ pkg_setup() {
 		--disable-schemas-install"
 }
 
-src_prepare() {
-	# Fix upstream bug #590124, fails to compile if exempi/exif
-	# are not available
-	epatch "${FILESDIR}/${P}-eog-properties-dialog-priv.patch"
-}
-
 pkg_postinst() {
 	gnome2_pkg_postinst
 
