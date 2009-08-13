@@ -84,7 +84,9 @@ pkg_setup() {
 }
 
 src_prepare() {
-	sed -i -e "/CPPFLAGS.*-Werror/d" configure || die "sed failed"
+	# Editing configure.ac results in maintainer-mode invocation
+	# Do Not Want eautoreconf.
+	sed -e "/CPPFLAGS.*-Werror/d" -i configure || die "sed failed"
 
 	if use nls; then
 		# upstream bug 591430
@@ -97,9 +99,10 @@ src_prepare() {
 }
 
 pkg_postinst() {
+	python_need_rebuild
 	python_mod_optimize $(python_get_sitedir)/packagekit/
 }
 
 pkg_postrm() {
-	python_mod_cleanup $(python_get_sitedir)/packagekit/
+	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages/packagekit/
 }
