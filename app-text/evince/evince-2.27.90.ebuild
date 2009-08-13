@@ -75,7 +75,7 @@ src_prepare() {
 
 	# Fix bug #279591, compilation error with
 	# --with-smclient=xsmp gave to the configure script
-	epatch "${FILESDIR}"/${P}-smclient-configure.patch
+	epatch "${FILESDIR}"/${PN}-2.27.4-smclient-configure.patch
 
 	eautoreconf
 }
