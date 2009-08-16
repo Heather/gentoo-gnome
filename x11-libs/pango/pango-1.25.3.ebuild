@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit autotools eutils gnome2 multilib
+inherit eutils gnome2 multilib
 
 DESCRIPTION="Text rendering and layout library"
 HOMEPAGE="http://www.pango.org/"
@@ -55,9 +55,7 @@ src_prepare() {
 
 	# gtk-doc checks do not pass, upstream bug #578944
 	sed 's:TESTS = check.docs: TESTS = :g'\
-		-i docs/Makefile.am docs/Makefile.in || die "sed failed"
-
-	eautoreconf
+		-i docs/Makefile.in || die "sed failed"
 }
 
 pkg_postinst() {
