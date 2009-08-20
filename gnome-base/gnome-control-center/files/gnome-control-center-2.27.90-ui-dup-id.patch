@@ -1,0 +1,38 @@
+Into GtkBuilder and Glade UI sheets objects need to have unique id.
+Otherwise it's impossible to get a specific object using glade_xml_get_widget()
+or something else similar.
+
+ capplets/appearance/data/appearance.ui |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/capplets/appearance/data/appearance.ui b/capplets/appearance/data/appearance.ui
+index 61e02cf..d6d7719 100644
+--- a/capplets/appearance/data/appearance.ui
++++ b/capplets/appearance/data/appearance.ui
+@@ -2276,7 +2276,7 @@
+                       </packing>
+                     </child>
+                     <child>
+-                      <object class="GtkLabel" id="label1">
++                      <object class="GtkLabel" id="label13">
+                         <property name="visible">True</property>
+                         <property name="xalign">0</property>
+                         <property name="label" translatable="yes">_Input boxes:</property>
+@@ -2755,7 +2755,7 @@
+     <property name="type_hint">dialog</property>
+     <property name="has_separator">False</property>
+     <child internal-child="vbox">
+-      <object class="GtkVBox" id="dialog-vbox3">
++      <object class="GtkVBox" id="dialog-vbox1">
+         <property name="visible">True</property>
+         <property name="spacing">2</property>
+         <child>
+@@ -2857,7 +2857,7 @@
+           </packing>
+         </child>
+         <child internal-child="action_area">
+-          <object class="GtkHButtonBox" id="dialog-action_area3">
++          <object class="GtkHButtonBox" id="dialog-action_area1">
+             <property name="visible">True</property>
+             <property name="layout_style">end</property>
+             <child>
