@@ -24,7 +24,10 @@ RDEPEND=">=dev-libs/glib-2.19.7
 	>=app-text/iso-codes-0.35
 	>=net-libs/webkit-gtk-1.1.11
 	>=net-libs/libsoup-2.26.0[gnome]
+	>=gnome-base/gnome-keyring-2.26.0
+
 	x11-libs/libSM
+
 	avahi? ( >=net-dns/avahi-0.6.22 )
 	networkmanager? ( net-misc/networkmanager )
 	x11-themes/gnome-icon-theme"
