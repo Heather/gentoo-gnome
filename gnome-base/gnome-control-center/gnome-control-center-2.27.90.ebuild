@@ -14,6 +14,7 @@ SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="eds hal policykit"
 
+# XXX: NEWS says libgnomeui is gone, but configure still checks for it
 RDEPEND="x11-libs/libXft
 	>=x11-libs/libXi-1.2
 	>=x11-libs/gtk+-2.15.0
@@ -38,7 +39,7 @@ RDEPEND="x11-libs/libXft
 
 	eds? ( >=gnome-extra/evolution-data-server-1.7.90 )
 	hal? ( >=sys-apps/hal-0.5.6 )
-	policykit? ( gnome-extra/policykit-gnome )
+	policykit? ( gnome-extra/polkit-gnome )
 
 	>=gnome-base/libbonobo-2
 	>=gnome-base/libgnome-2.2
@@ -78,10 +79,8 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-update-mimedb
 		--disable-static
-		--enable-canberra
 		$(use_enable eds aboutme)
-		$(use_enable hal)
-		$(use_enable policykit policykit-gnome)"
+		$(use_enable hal)"
 }
 
 src_prepare() {
@@ -93,25 +92,22 @@ src_prepare() {
 	# Fix compilation on fbsd, bug #256958
 	epatch "${FILESDIR}/${PN}-2.24.0.1-fbsd.patch"
 
-	# Fix libcanberra and policykit-gnome for about-me capplet
-	# automagics support, bug #266110
-	epatch "${FILESDIR}/${P}-automagics-canberra+polkit.patch"
-
 	# Policykit-based solution to setting the default background.  Must be
 	# applied *after* the automagics patch
 	#
 	# Needs updating with 2.27 -- sounds like a job for dang!
 	#epatch "${FILESDIR}/${PN}-2.26.0-default-background.patch"
 
-	eautoreconf
+	#eautoreconf
 }
 
 src_install() {
 	gnome2_src_install
 
-	if use policykit ; then
-		# Install the policy for default backgrounds
-		insinto /usr/share/PolicyKit/policy/
-		doins "${FILESDIR}"/org.gnome.control-center.defaultbackground.policy
-	fi
+# Needs updating with 2.27.90 -- sounds like a job for dang!
+#	if use policykit ; then
+#		# Install the policy for default backgrounds
+#		insinto /usr/share/PolicyKit/policy/
+#		doins "${FILESDIR}"/org.gnome.control-center.defaultbackground.policy
+#	fi
 }
