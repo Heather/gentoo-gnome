@@ -33,7 +33,7 @@ RDEPEND=">=dev-libs/dbus-glib-0.74
 	>=x11-libs/libxklavier-4.0
 	media-libs/fontconfig
 
-	pulseaudio? ( >=media-sound/pulseaudio-0.9.12 )
+	pulseaudio? ( >=media-sound/pulseaudio-0.9.15 )
 	!pulseaudio? (
 		>=media-libs/gstreamer-0.10.1.2
 		>=media-libs/gst-plugins-base-0.10.1.2 )"
