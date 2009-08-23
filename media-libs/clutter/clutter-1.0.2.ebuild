@@ -87,7 +87,7 @@ pkg_setup() {
 
 src_prepare() {
 	# Tests are interactive, not of use for us
-	epatch "${FILESDIR}/${P}-disable-tests.patch"
+	epatch "${FILESDIR}/${PN}-1.0.0-disable-tests.patch"
 
 	eautoreconf
 }
