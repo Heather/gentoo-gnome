@@ -8,8 +8,10 @@ inherit autotools eutils gnome2 virtualx
 
 DESCRIPTION="Gnome Power Manager"
 HOMEPAGE="http://www.gnome.org/projects/gnome-power-manager/"
-SRC_URI="${SRC_URI}"
-#	mirror://gentoo/${PN}-2.26.4-cpufreq-patches.tar.bz2"
+#TODO: Finish the patchset including translations updates
+# (that's why this patch isn't on a mirror yet)
+SRC_URI="${SRC_URI}
+	http://dev.gentoo.org/~mrpouet/pub/patches/${P}-cpufreq-patches.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -33,7 +35,6 @@ COMMON_DEPEND=">=dev-libs/glib-2.6.0
 	>=media-libs/libcanberra-0.10[gtk]
 	>=sys-apps/devicekit-power-008
 	>=dev-libs/libunique-1
-
 	>=x11-apps/xrandr-1.2
 	x11-libs/libX11
 	x11-libs/libXext
@@ -92,13 +93,13 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-2.26.0-gcc44-options.patch"
 
 	# Resurrect cpufreq in capplet, bug #263891
-#	epatch "${WORKDIR}/${PN}-2.26.0-cpufreq-libhal-glib.patch"
-#	epatch "${WORKDIR}/${PN}-2.26.0-cpufreq-support.patch"
-#	epatch "${WORKDIR}/${PN}-2.26.0-cpufreq-ui.patch"
+	epatch "${WORKDIR}/${P}-cpufreq-libhal-glib.patch"
+	epatch "${WORKDIR}/${P}-cpufreq-support.patch"
+	epatch "${WORKDIR}/${P}-cpufreq-ui.patch"
 #	epatch "${WORKDIR}/${PN}-2.26.3-cpufreq-po.patch"
 
 	# Fix uninstalled cpufreq schemas, bug #266995
-#	epatch "${WORKDIR}/${PN}-2.26.0-cpufreq-schemas.patch"
+	epatch "${WORKDIR}/${P}-cpufreq-schemas.patch"
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
 
