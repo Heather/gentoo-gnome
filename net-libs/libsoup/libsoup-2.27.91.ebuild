@@ -18,6 +18,7 @@ IUSE="debug doc gnome ssl"
 RDEPEND=">=dev-libs/glib-2.21.3
 	>=dev-libs/libxml2-2
 	gnome? (
+		gnome-base/gnome-keyring
 		net-libs/libproxy
 		>=gnome-base/gconf-2
 		dev-db/sqlite:3 )
