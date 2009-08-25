@@ -16,7 +16,7 @@ LICENSE="LGPL-2 LGPL-2.1 BSD"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~sparc ~x86 ~x86-fbsd"
 # geoclue
-IUSE="coverage debug doc gnome-keyring +gstreamer pango ruby websockets"
+IUSE="coverage debug doc +gstreamer pango ruby websockets"
 
 # use sqlite, svg by default
 RDEPEND="
@@ -28,12 +28,11 @@ RDEPEND="
 
 	>=x11-libs/gtk+-2.10
 	>=dev-libs/icu-3.8.1-r1
-	>=net-libs/libsoup-2.27.4
+	>=net-libs/libsoup-2.27.91
 	>=dev-db/sqlite-3
 	>=app-text/enchant-0.22
 	>=sys-devel/flex-2.5.33
 
-	gnome-keyring? ( >=gnome-base/gnome-keyring-2.26.0 )
 	gstreamer? (
 		media-libs/gstreamer:0.10
 		media-libs/gst-plugins-base:0.10 )
@@ -67,7 +66,6 @@ src_configure() {
 	local myconf
 
 	myconf="
-		$(use_enable gnome-keyring gnomekeyring)
 		$(use_enable gstreamer video)
 		$(use_enable debug)
 		$(use_enable coverage)
