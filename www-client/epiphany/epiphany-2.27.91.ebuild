@@ -22,8 +22,8 @@ RDEPEND=">=dev-libs/glib-2.19.7
 	>=dev-libs/dbus-glib-0.71
 	>=gnome-base/gconf-2
 	>=app-text/iso-codes-0.35
-	>=net-libs/webkit-gtk-1.1.11
-	>=net-libs/libsoup-2.26.0[gnome]
+	>=net-libs/webkit-gtk-1.1.13
+	>=net-libs/libsoup-2.27.91[gnome]
 	>=gnome-base/gnome-keyring-2.26.0
 
 	x11-libs/libSM
