@@ -19,7 +19,7 @@ RDEPEND=">=gnome-base/gconf-2
 	>=x11-libs/libSM-1.0
 	>=dev-libs/libxml2-2.5.0
 	>=dev-libs/glib-2.18
-	>=x11-libs/gtk+-2.17
+	>=x11-libs/gtk+-2.17.1
 	>=x11-libs/gtksourceview-2.5
 	spell? (
 		>=app-text/enchant-1.2
