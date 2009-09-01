@@ -1,0 +1,283 @@
+From f056c8d3a5b003e6c0840186189567cb55532022 Mon Sep 17 00:00:00 2001
+From: Richard Hughes <richard@hughsie.com>
+Date: Mon, 31 Aug 2009 18:59:30 +0000
+Subject: Don't crash g-p-s when there are no devices
+
+---
+diff --git a/src/gpm-statistics.c b/src/gpm-statistics.c
+index 28fa9be..7aa912e 100644
+--- a/src/gpm-statistics.c
++++ b/src/gpm-statistics.c
+@@ -316,6 +316,8 @@ gpm_stats_get_printable_device_path (DkpDevice *device)
+ 
+ 	/* get object path */
+ 	object_path = dkp_device_get_object_path (device);
++	if (object_path == NULL)
++		goto out;
+ 	if (!g_str_has_prefix (object_path, prefix))
+ 		goto out;
+ 
+@@ -534,7 +536,7 @@ gpm_stats_update_info_page_history (DkpDevice *device)
+ 	GTimeVal timeval;
+ 
+ 	new = g_ptr_array_new ();
+-	if (strcmp (history_type, GPM_HISTORY_CHARGE_VALUE) == 0) {
++	if (g_strcmp0 (history_type, GPM_HISTORY_CHARGE_VALUE) == 0) {
+ 		g_object_set (graph_history,
+ 			      "type-x", GPM_GRAPH_WIDGET_TYPE_TIME,
+ 			      "type-y", GPM_GRAPH_WIDGET_TYPE_PERCENTAGE,
+@@ -543,7 +545,7 @@ gpm_stats_update_info_page_history (DkpDevice *device)
+ 			      "stop-x", 0,
+ 			      "autorange-y", TRUE,
+ 			      NULL);
+-	} else if (strcmp (history_type, GPM_HISTORY_RATE_VALUE) == 0) {
++	} else if (g_strcmp0 (history_type, GPM_HISTORY_RATE_VALUE) == 0) {
+ 		g_object_set (graph_history,
+ 			      "type-x", GPM_GRAPH_WIDGET_TYPE_TIME,
+ 			      "type-y", GPM_GRAPH_WIDGET_TYPE_POWER,
+@@ -600,7 +602,7 @@ gpm_stats_update_info_page_history (DkpDevice *device)
+ 			point->color = egg_color_from_rgb (0, 0, 200);
+ #endif
+ 		else {
+-			if (strcmp (history_type, GPM_HISTORY_RATE_VALUE) == 0)
++			if (g_strcmp0 (history_type, GPM_HISTORY_RATE_VALUE) == 0)
+ 				point->color = egg_color_from_rgb (255, 255, 255);
+ 			else
+ 				point->color = egg_color_from_rgb (0, 255, 0);
+@@ -644,16 +646,16 @@ gpm_stats_update_info_page_stats (DkpDevice *device)
+ 	const gchar *type = NULL;
+ 
+ 	new = g_ptr_array_new ();
+-	if (strcmp (stats_type, GPM_STATS_CHARGE_DATA_VALUE) == 0) {
++	if (g_strcmp0 (stats_type, GPM_STATS_CHARGE_DATA_VALUE) == 0) {
+ 		type = "charging";
+ 		use_data = TRUE;
+-	} else if (strcmp (stats_type, GPM_STATS_DISCHARGE_DATA_VALUE) == 0) {
++	} else if (g_strcmp0 (stats_type, GPM_STATS_DISCHARGE_DATA_VALUE) == 0) {
+ 		type = "discharging";
+ 		use_data = TRUE;
+-	} else if (strcmp (stats_type, GPM_STATS_CHARGE_ACCURACY_VALUE) == 0) {
++	} else if (g_strcmp0 (stats_type, GPM_STATS_CHARGE_ACCURACY_VALUE) == 0) {
+ 		type = "charging";
+ 		use_data = FALSE;
+-	} else if (strcmp (stats_type, GPM_STATS_DISCHARGE_ACCURACY_VALUE) == 0) {
++	} else if (g_strcmp0 (stats_type, GPM_STATS_DISCHARGE_ACCURACY_VALUE) == 0) {
+ 		type = "discharging";
+ 		use_data = FALSE;
+ 	} else {
+@@ -801,27 +803,27 @@ gpm_stats_format_cmdline (const DkpWakeupsObj *obj)
+ 	}
+ 
+ 	/* common kernel cmd names */
+-	if (strcmp (obj->cmdline, "insmod") == 0) {
++	if (g_strcmp0 (obj->cmdline, "insmod") == 0) {
+ 		/* TRANSLATORS: kernel module, usually a device driver */
+ 		temp_ptr = _("Kernel module");
+ 		goto out;
+ 	}
+-	if (strcmp (obj->cmdline, "modprobe") == 0) {
++	if (g_strcmp0 (obj->cmdline, "modprobe") == 0) {
+ 		/* TRANSLATORS: kernel module, usually a device driver */
+ 		temp_ptr = _("Kernel module");
+ 		goto out;
+ 	}
+-	if (strcmp (obj->cmdline, "swapper") == 0) {
++	if (g_strcmp0 (obj->cmdline, "swapper") == 0) {
+ 		/* TRANSLATORS: kernel housekeeping */
+ 		temp_ptr = _("Kernel core");
+ 		goto out;
+ 	}
+-	if (strcmp (obj->cmdline, "kernel-ipi") == 0) {
++	if (g_strcmp0 (obj->cmdline, "kernel-ipi") == 0) {
+ 		/* TRANSLATORS: interrupt between processors */
+ 		temp_ptr = _("Interprocessor interrupt");
+ 		goto out;
+ 	}
+-	if (strcmp (obj->cmdline, "interrupt") == 0) {
++	if (g_strcmp0 (obj->cmdline, "interrupt") == 0) {
+ 		/* TRANSLATORS: unknown interrupt */
+ 		temp_ptr = _("Interrupt");
+ 		goto out;
+@@ -864,19 +866,19 @@ gpm_stats_format_details (const DkpWakeupsObj *obj)
+ 	gchar *details;
+ 
+ 	/* replace common driver names */
+-	if (strcmp (obj->details, "i8042") == 0) {
++	if (g_strcmp0 (obj->details, "i8042") == 0) {
+ 		/* TRANSLATORS: the keyboard and mouse device event */
+ 		details = g_strdup (_("PS/2 keyboard/mouse/touchpad"));
+-	} else if (strcmp (obj->details, "acpi") == 0) {
++	} else if (g_strcmp0 (obj->details, "acpi") == 0) {
+ 		/* TRANSLATORS: ACPI, the Intel power standard on laptops and desktops */
+ 		details = g_strdup (_("ACPI"));
+-	} else if (strcmp (obj->details, "ata_piix") == 0) {
++	} else if (g_strcmp0 (obj->details, "ata_piix") == 0) {
+ 		/* TRANSLATORS: serial ATA is a new style of hard disk interface */
+ 		details = g_strdup (_("Serial ATA"));
+-	} else if (strcmp (obj->details, "libata") == 0) {
++	} else if (g_strcmp0 (obj->details, "libata") == 0) {
+ 		/* TRANSLATORS: this is the old-style ATA interface */
+ 		details = g_strdup (_("ATA host controller"));
+-	} else if (strcmp (obj->details, "iwl3945") == 0 || strcmp (obj->details, "iwlagn") == 0) {
++	} else if (g_strcmp0 (obj->details, "iwl3945") == 0 || g_strcmp0 (obj->details, "iwlagn") == 0) {
+ 		/* TRANSLATORS: 802.11 wireless adaptor */
+ 		details = g_strdup (_("Intel wireless adaptor"));
+ 
+@@ -1200,7 +1202,7 @@ gpm_stats_device_changed_cb (DkpClient *client, DkpDevice *device, gpointer user
+ 	if (object_path == NULL || current_device == NULL)
+ 		return;
+ 	egg_debug ("changed:   %s", object_path);
+-	if (strcmp (current_device, object_path) == 0)
++	if (g_strcmp0 (current_device, object_path) == 0)
+ 		gpm_stats_update_info_data (device);
+ }
+ 
+@@ -1217,7 +1219,7 @@ gpm_stats_device_removed_cb (DkpClient *client, DkpDevice *device, gpointer user
+ 
+ 	object_path = dkp_device_get_object_path (device);
+ 	egg_debug ("removed:   %s", object_path);
+-	if (strcmp (current_device, object_path) == 0) {
++	if (g_strcmp0 (current_device, object_path) == 0) {
+ 		gtk_list_store_clear (list_store_info);
+ 	}
+ 
+@@ -1225,7 +1227,7 @@ gpm_stats_device_removed_cb (DkpClient *client, DkpDevice *device, gpointer user
+ 	ret = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (list_store_devices), &iter);
+ 	do {
+ 		gtk_tree_model_get (GTK_TREE_MODEL (list_store_devices), &iter, GPM_DEVICES_COLUMN_ID, &id, -1);
+-		if (strcmp (id, object_path) == 0) {
++		if (g_strcmp0 (id, object_path) == 0) {
+ 			gtk_list_store_remove (list_store_devices, &iter);
+ 			break;
+ 		}
+@@ -1244,25 +1246,25 @@ gpm_stats_history_type_combo_changed_cb (GtkWidget *widget, gpointer data)
+ 	const gchar *axis_x = NULL;
+ 	const gchar *axis_y = NULL;
+ 	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
+-	if (strcmp (value, GPM_HISTORY_RATE_TEXT) == 0) {
++	if (g_strcmp0 (value, GPM_HISTORY_RATE_TEXT) == 0) {
+ 		history_type = GPM_HISTORY_RATE_VALUE;
+ 		/* TRANSLATORS: this is the X axis on the graph */
+ 		axis_x = _("Time elapsed");
+ 		/* TRANSLATORS: this is the Y axis on the graph */
+ 		axis_y = _("Power");
+-	} else if (strcmp (value, GPM_HISTORY_CHARGE_TEXT) == 0) {
++	} else if (g_strcmp0 (value, GPM_HISTORY_CHARGE_TEXT) == 0) {
+ 		history_type = GPM_HISTORY_CHARGE_VALUE;
+ 		/* TRANSLATORS: this is the X axis on the graph */
+ 		axis_x = _("Time elapsed");
+ 		/* TRANSLATORS: this is the Y axis on the graph */
+ 		axis_y = _("Cell charge");
+-	} else if (strcmp (value, GPM_HISTORY_TIME_FULL_TEXT) == 0) {
++	} else if (g_strcmp0 (value, GPM_HISTORY_TIME_FULL_TEXT) == 0) {
+ 		history_type = GPM_HISTORY_TIME_FULL_VALUE;
+ 		/* TRANSLATORS: this is the X axis on the graph */
+ 		axis_x = _("Time elapsed");
+ 		/* TRANSLATORS: this is the Y axis on the graph */
+ 		axis_y = _("Predicted time");
+-	} else if (strcmp (value, GPM_HISTORY_TIME_EMPTY_TEXT) == 0) {
++	} else if (g_strcmp0 (value, GPM_HISTORY_TIME_EMPTY_TEXT) == 0) {
+ 		history_type = GPM_HISTORY_TIME_EMPTY_VALUE;
+ 		/* TRANSLATORS: this is the X axis on the graph */
+ 		axis_x = _("Time elapsed");
+@@ -1295,25 +1297,25 @@ gpm_stats_type_combo_changed_cb (GtkWidget *widget, gpointer data)
+ 	const gchar *axis_x = NULL;
+ 	const gchar *axis_y = NULL;
+ 	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
+-	if (strcmp (value, GPM_STATS_CHARGE_DATA_TEXT) == 0) {
++	if (g_strcmp0 (value, GPM_STATS_CHARGE_DATA_TEXT) == 0) {
+ 		stats_type = GPM_STATS_CHARGE_DATA_VALUE;
+ 		/* TRANSLATORS: this is the X axis on the graph */
+ 		axis_x = _("Cell charge");
+ 		/* TRANSLATORS: this is the Y axis on the graph */
+ 		axis_y = _("Correction factor");
+-	} else if (strcmp (value, GPM_STATS_CHARGE_ACCURACY_TEXT) == 0) {
++	} else if (g_strcmp0 (value, GPM_STATS_CHARGE_ACCURACY_TEXT) == 0) {
+ 		stats_type = GPM_STATS_CHARGE_ACCURACY_VALUE;
+ 		/* TRANSLATORS: this is the X axis on the graph */
+ 		axis_x = _("Cell charge");
+ 		/* TRANSLATORS: this is the Y axis on the graph */
+ 		axis_y = _("Prediction accuracy");
+-	} else if (strcmp (value, GPM_STATS_DISCHARGE_DATA_TEXT) == 0) {
++	} else if (g_strcmp0 (value, GPM_STATS_DISCHARGE_DATA_TEXT) == 0) {
+ 		stats_type = GPM_STATS_DISCHARGE_DATA_VALUE;
+ 		/* TRANSLATORS: this is the X axis on the graph */
+ 		axis_x = _("Cell charge");
+ 		/* TRANSLATORS: this is the Y axis on the graph */
+ 		axis_y = _("Correction factor");
+-	} else if (strcmp (value, GPM_STATS_DISCHARGE_ACCURACY_TEXT) == 0) {
++	} else if (g_strcmp0 (value, GPM_STATS_DISCHARGE_ACCURACY_TEXT) == 0) {
+ 		stats_type = GPM_STATS_DISCHARGE_ACCURACY_VALUE;
+ 		/* TRANSLATORS: this is the X axis on the graph */
+ 		axis_x = _("Cell charge");
+@@ -1344,13 +1346,13 @@ gpm_stats_range_combo_changed (GtkWidget *widget, gpointer data)
+ {
+ 	gchar *value;
+ 	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
+-	if (strcmp (value, GPM_HISTORY_MINUTE_TEXT) == 0)
++	if (g_strcmp0 (value, GPM_HISTORY_MINUTE_TEXT) == 0)
+ 		history_time = GPM_HISTORY_MINUTE_VALUE;
+-	else if (strcmp (value, GPM_HISTORY_HOUR_TEXT) == 0)
++	else if (g_strcmp0 (value, GPM_HISTORY_HOUR_TEXT) == 0)
+ 		history_time = GPM_HISTORY_HOUR_VALUE;
+-	else if (strcmp (value, GPM_HISTORY_DAY_TEXT) == 0)
++	else if (g_strcmp0 (value, GPM_HISTORY_DAY_TEXT) == 0)
+ 		history_time = GPM_HISTORY_DAY_VALUE;
+-	else if (strcmp (value, GPM_HISTORY_WEEK_TEXT) == 0)
++	else if (g_strcmp0 (value, GPM_HISTORY_WEEK_TEXT) == 0)
+ 		history_time = GPM_HISTORY_WEEK_VALUE;
+ 	else
+ 		g_assert (FALSE);
+@@ -1628,7 +1630,7 @@ main (int argc, char *argv[])
+ 	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_CHARGE_TEXT);
+ 	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_TIME_FULL_TEXT);
+ 	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_TIME_EMPTY_TEXT);
+-	if (strcmp (history_type, GPM_HISTORY_RATE_VALUE) == 0)
++	if (g_strcmp0 (history_type, GPM_HISTORY_RATE_VALUE) == 0)
+ 		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
+ 	else
+ 		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 1);
+@@ -1641,13 +1643,13 @@ main (int argc, char *argv[])
+ 	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_STATS_CHARGE_ACCURACY_TEXT);
+ 	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_STATS_DISCHARGE_DATA_TEXT);
+ 	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_STATS_DISCHARGE_ACCURACY_TEXT);
+-	if (strcmp (stats_type, GPM_STATS_CHARGE_DATA_VALUE) == 0)
++	if (g_strcmp0 (stats_type, GPM_STATS_CHARGE_DATA_VALUE) == 0)
+ 		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
+-	else if (strcmp (stats_type, GPM_STATS_CHARGE_DATA_VALUE) == 0)
++	else if (g_strcmp0 (stats_type, GPM_STATS_CHARGE_DATA_VALUE) == 0)
+ 		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 1);
+-	else if (strcmp (stats_type, GPM_STATS_CHARGE_DATA_VALUE) == 0)
++	else if (g_strcmp0 (stats_type, GPM_STATS_CHARGE_DATA_VALUE) == 0)
+ 		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 2);
+-	else if (strcmp (stats_type, GPM_STATS_CHARGE_DATA_VALUE) == 0)
++	else if (g_strcmp0 (stats_type, GPM_STATS_CHARGE_DATA_VALUE) == 0)
+ 		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
+ 	else
+ 		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 3);
+@@ -1722,9 +1724,11 @@ main (int argc, char *argv[])
+ 	}
+ 
+ 	/* set current device */
+-	device = g_ptr_array_index (devices, 0);
+-	gpm_stats_update_info_data (device);
+-	current_device = g_strdup (dkp_device_get_object_path (device));
++	if (devices->len > 0) {
++		device = g_ptr_array_index (devices, 0);
++		gpm_stats_update_info_data (device);
++		current_device = g_strdup (dkp_device_get_object_path (device));
++	}
+ 
+ 	last_device = gconf_client_get_string (gconf_client, GPM_CONF_INFO_LAST_DEVICE, NULL);
+ 
+@@ -1745,7 +1749,7 @@ main (int argc, char *argv[])
+ 		object_path = (const gchar *) g_ptr_array_index (devices, i);
+ 		if (last_device == NULL || object_path == NULL)
+ 			break;
+-		if (strcmp (last_device, object_path) == 0) {
++		if (g_strcmp0 (last_device, object_path) == 0) {
+ 			GtkTreePath *path;
+ 			gchar *path_str;
+ 			path_str = g_strdup_printf ("%i", i);
+--
+cgit v0.8.2

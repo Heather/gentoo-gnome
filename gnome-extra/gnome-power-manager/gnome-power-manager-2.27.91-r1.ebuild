@@ -101,6 +101,12 @@ src_prepare() {
 	# Fix uninstalled cpufreq schemas, bug #266995
 	epatch "${WORKDIR}/${P}-cpufreq-schemas.patch"
 
+	# Fix gpm-statistics crash, even if there aren't enumerated devices
+	# returned by dkp_client_enumerate_devices() the app needs to work
+	# thanks to Richard Hughes (contacted via e-mail), patch import
+	# from master branch
+	epatch "${FILESDIR}/${P}-gpm-statistic-sigsegv.patch"
+
 	intltoolize --force --copy --automake || die "intltoolize failed"
 
 	# Make it libtool-1 compatible
