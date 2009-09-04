@@ -16,10 +16,11 @@ SRC_URI="http://www.packagekit.org/releases/${MY_P}.tar.gz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~ppc ~x86"
-IUSE="+consolekit cron gtk networkmanager nls nsplugin pm-utils +policykit qt4
-static-libs test"
+IUSE="connman +consolekit cron gtk networkmanager nls nsplugin pm-utils
++policykit qt4 static-libs test"
 
 CDEPEND="
+	connman? ( net-misc/connman )
 	gtk? ( dev-libs/dbus-glib
 		media-libs/fontconfig
 		>=x11-libs/gtk+-2.14.0:2
@@ -65,7 +66,6 @@ RESTRICT="test" # tests are failing atm
 # using >=dbus-1.3.0 instead of >=dbus-1.1.1 because of a bug fixed in 1.3.0
 
 # TODO:
-# connman option can't be satisfied because not in the tree, bug 273679
 # gettext is probably needed only if +nls but too long to fix
 # +doc to install doc/website
 
@@ -130,7 +130,6 @@ src_configure() {
 	# localstatedir: for gentoo it's /var/lib but for $PN it's /var
 	# dep-tracking,option-check,libtool-lock,strict,local: obvious reasons
 	# gtk-doc: doc already built
-	# connman, not in the tree, bug 273679
 	# command,debuginfo,gstreamer,service-packs: not supported by backend
 	# ruck,managed: failing (see UPSTREAM in ebuild header)
 	econf \
@@ -142,7 +141,6 @@ src_configure() {
 		--disable-strict \
 		--disable-local \
 		--disable-gtk-doc \
-		--disable-connman \
 		--disable-command-not-found \
 		--disable-debuginfo-install \
 		--disable-gstreamer-plugin \
@@ -152,6 +150,7 @@ src_configure() {
 		--disable-dummy \
 		--enable-portage \
 		--with-default-backend=portage \
+		$(use_enable connman) \
 		$(use_enable cron) \
 		$(use_enable gtk gtk-module) \
 		$(use_enable networkmanager) \
