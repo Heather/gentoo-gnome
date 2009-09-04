@@ -14,7 +14,7 @@ SRC_URI="http://www.packagekit.org/releases/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~ppc ~x86"
+KEYWORDS="~amd64 ~ppc ~x86"
 IUSE="nls"
 
 RDEPEND="
@@ -84,13 +84,12 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# Editing configure.ac results in maintainer-mode invocation
-	# Do Not Want eautoreconf.
-	sed -e "/CPPFLAGS.*-Werror/d" -i configure || die "sed failed"
+	# Drop debugging options
+	sed -e '/CPPFLAGS=\"$CPPFLAGS -g\"/d' -i configure || die "sed failed"
 
 	if use nls; then
 		# upstream bug 591430
-		epatch "${FILESDIR}"/${P}-nls.patch
+		epatch "${FILESDIR}"/${PN}-2.27.5-nls.patch
 	fi
 
 	# fix pyc/pyo generation

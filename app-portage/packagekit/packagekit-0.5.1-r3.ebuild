@@ -15,7 +15,7 @@ SRC_URI="http://www.packagekit.org/releases/${MY_P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~ppc ~x86"
+KEYWORDS="~amd64 ~ppc ~x86"
 IUSE="connman +consolekit cron gtk networkmanager nls nsplugin pm-utils
 +policykit qt4 static-libs test"
 
