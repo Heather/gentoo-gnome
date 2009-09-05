@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<herd>gnome</herd>
+<maintainer>
+  <email>dang@gentoo.org</email>
+</maintainer>
+<use>
+	<flag name='gnome'>Enable the use of <pkg>gnome-base/gconf</pkg> to honour
+		lockdown settings</flag>
+  <flag name='dvi'>Enable the built-in DVI viewer</flag>
+  <flag name='nautilus'>Enable property page extension in <pkg>gnome-base/nautilus</pkg></flag>
+  <flag name='t1lib'>Enable the Type-1 fonts for the built-in DVI viewer
+    (<pkg>media-libs/t1lib</pkg>)</flag>
+</use>
+</pkgmetadata>
