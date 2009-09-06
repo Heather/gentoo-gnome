@@ -119,8 +119,7 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_enable debug)
 		$(use_enable nautilus)
-		$(use_enable python)
-		$(use_enable youtube)"
+		$(use_enable python)"
 }
 
 src_prepare() {
