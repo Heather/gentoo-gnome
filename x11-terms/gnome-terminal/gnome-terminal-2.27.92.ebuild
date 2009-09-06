@@ -12,13 +12,15 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE=""
 
+# libgnome needed for some monospace font schema, bug #274638
 RDEPEND=">=dev-libs/glib-2.16.0
 	>=x11-libs/gtk+-2.14.0
 	>=gnome-base/gconf-2.14
 	>=x11-libs/startup-notification-0.8
 	>=x11-libs/vte-0.20.0
 	>=dev-libs/dbus-glib-0.6
-	x11-libs/libSM"
+	x11-libs/libSM
+	gnome-base/libgnome"
 DEPEND="${RDEPEND}
 	  sys-devel/gettext
 	>=dev-util/intltool-0.40
