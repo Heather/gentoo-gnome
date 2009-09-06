@@ -52,9 +52,7 @@ RDEPEND=">=x11-libs/gtk+-2.13
 			>=media-plugins/gst-plugins-oss-0.10.14 ) )
 	hal? ( >=sys-apps/hal-0.5.3 )
 	networkmanager? ( >=net-misc/networkmanager-0.7.0 )
-	policykit? (
-		>=sys-auth/policykit-0.7
-		>=gnome-extra/policykit-gnome-0.7 )"
+	policykit? ( >=sys-auth/polkit-0.91 )"
 
 DEPEND="${RDEPEND}
 	>=app-text/scrollkeeper-0.1.4
