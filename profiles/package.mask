@@ -6,6 +6,13 @@
 # NOTE: Please add your entry at the top!
 #
 
+# Nirbheek Chauhan <nirbheek@gentoo.org> (6 Sep 2009)
+# Session-saving support has regressions
+# http://bugzilla.gnome.org/show_bug.cgi?id=585614
+# Shutdown/Reboot fix needs to be updated
+# Session-saving button patch needs updating
+=gnome-base/gnome-session-2.27*
+
 # Nirbheek Chauhan <nirbheek@gentoo.org> (9 Aug 2009)
 # Mask live version of packagekit
 ~app-portage/packagekit-9999
