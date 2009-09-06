@@ -92,10 +92,6 @@ src_prepare() {
 	# Fix compilation on fbsd, bug #256958
 	epatch "${FILESDIR}/${PN}-2.24.0.1-fbsd.patch"
 
-	# Fix duplicate objects id into appearance.ui for gnome-appearance-properties
-	# without that, it was unable to start it
-	epatch "${FILESDIR}/${P}-ui-dup-id.patch"
-
 	# Policykit-based solution to setting the default background.  Must be
 	# applied *after* the automagics patch
 	#
