@@ -68,6 +68,10 @@ src_prepare() {
 	# Don't break inclusion of gtkclist.h, upstream bug 536767
 	epatch "${FILESDIR}/${PN}-2.14.3-limit-gtksignal-includes.patch"
 
+	# Fix blured images when using jpeg7 in gdk-pixbuf, upstream
+	# bug #588740, gentoo bug #282744.
+	epatch "${FILESDIR}/${PN}-2.16.5-jpeg-backward-compatibility.patch"
+
 	# -O3 and company cause random crashes in applications. Bug #133469
 	replace-flags -O3 -O2
 	strip-flags
