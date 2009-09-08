@@ -21,3 +21,4 @@
 # Epiphany which uses webkit (bug #239112)
 # Several feature regressions
 =www-client/epiphany-2.27*
+=www-client/epiphany-extensions-2.27*
