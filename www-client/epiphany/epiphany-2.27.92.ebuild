@@ -11,7 +11,7 @@ HOMEPAGE="http://www.gnome.org/projects/epiphany/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="avahi doc networkmanager test"
+IUSE="avahi doc networkmanager +nss test"
 
 RDEPEND=">=dev-libs/glib-2.19.7
 	>=x11-libs/gtk+-2.16.0
@@ -22,12 +22,13 @@ RDEPEND=">=dev-libs/glib-2.19.7
 	>=dev-libs/dbus-glib-0.71
 	>=gnome-base/gconf-2
 	>=app-text/iso-codes-0.35
-	>=net-libs/webkit-gtk-1.1.13
+	>=net-libs/webkit-gtk-1.1.14
 	>=net-libs/libsoup-2.27.91[gnome]
 	>=gnome-base/gnome-keyring-2.26.0
 
 	x11-libs/libSM
 
+	nss? ( dev-libs/nss )
 	avahi? ( >=net-dns/avahi-0.6.22 )
 	networkmanager? ( net-misc/networkmanager )
 	x11-themes/gnome-icon-theme"
@@ -47,5 +48,6 @@ pkg_setup() {
 		--with-distributor-name=Gentoo
 		$(use_enable avahi zeroconf)
 		$(use_enable networkmanager network-manager)
+		$(use_enable nss)
 		$(use_enable test tests)"
 }
