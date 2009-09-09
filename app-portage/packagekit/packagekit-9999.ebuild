@@ -15,10 +15,11 @@ EGIT_REPO_URI="git://anongit.freedesktop.org/git/${PN}/${MY_PN}"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="" # live ebuild
-IUSE="+consolekit cron doc gtk mono networkmanager nls nsplugin pm-utils
-+policykit qt4 ruck static-libs test"
+IUSE="connman +consolekit cron doc gtk mono networkmanager nls nsplugin pm-utils
++policykit qt4 ruck static-libs test udev"
 
 CDEPEND="
+	connman? ( net-misc/connman )
 	gtk? ( dev-libs/dbus-glib
 		media-libs/fontconfig
 		>=x11-libs/gtk+-2.14.0:2
@@ -36,6 +37,7 @@ CDEPEND="
 	qt4? ( >=x11-libs/qt-core-4.4.0
 		>=x11-libs/qt-dbus-4.4.0
 		>=x11-libs/qt-sql-4.4.0 )
+	udev? ( >=sys-fs/udev-145[extras] )
 	dev-db/sqlite:3
 	>=dev-libs/dbus-glib-0.74
 	>=dev-libs/glib-2.16.1:2
@@ -44,12 +46,12 @@ RDEPEND="${CDEPEND}
 	consolekit? ( sys-auth/consolekit )
 	pm-utils? ( sys-power/pm-utils )
 	>=app-portage/layman-1.2.3
-	>=sys-apps/portage-2.2_rc35"
+	>=sys-apps/portage-2.2_rc39"
 DEPEND="${CDEPEND}
 	doc? ( >=dev-util/gtk-doc-1.9 )
 	mono? ( dev-dotnet/gtk-sharp-gapi:2 )
 	nsplugin? ( >=net-libs/xulrunner-1.9.1 )
-	test? ( qt4? ( dev-util/cppunit ) )
+	test? ( qt4? ( dev-util/cppunit >=x11-libs/qt-gui-4.4.0 ) )
 	dev-libs/libxslt
 	dev-util/gtk-doc
 	>=dev-util/intltool-0.35.0
@@ -83,9 +85,9 @@ src_configure() {
 	# localstatedir: for gentoo it's /var/lib but for $PN it's /var
 	# dep-tracking,option-check,libtool-lock,strict,local: obvious reasons
 	# gtk-doc: doc already built
-	# connman, not in the tree, bug 273679
 	# command,debuginfo,gstreamer,service-packs: not supported by backend
 	# man-pages: we want them
+	# glib2: ebuild not available atm and exprimental
 	econf \
 		${myconf} \
 		--localstatedir=/var \
@@ -94,7 +96,6 @@ src_configure() {
 		--enable-libtool-lock \
 		--disable-strict \
 		--disable-local \
-		--disable-connman \
 		--disable-command-not-found \
 		--disable-debuginfo-install \
 		--disable-gstreamer-plugin \
@@ -103,6 +104,8 @@ src_configure() {
 		--enable-portage \
 		--with-default-backend=portage \
 		--enable-man-pages \
+		--disable-glib2 \
+		$(use_enable connman) \
 		$(use_enable cron) \
 		$(use_enable doc gtk-doc) \
 		$(use_enable gtk gtk-module) \
@@ -114,7 +117,8 @@ src_configure() {
 		$(use_enable qt4 qt) \
 		$(use_enable ruck) \
 		$(use_enable static-libs static) \
-		$(use_enable test tests)
+		$(use_enable test tests) \
+		$(use_enable udev device-rebind)
 }
 
 src_install() {
