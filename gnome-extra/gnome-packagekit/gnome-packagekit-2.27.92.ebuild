@@ -15,9 +15,10 @@ SRC_URI="http://www.packagekit.org/releases/${P}.tar.gz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~ppc ~x86"
-IUSE="nls"
+IUSE="udev nls"
 
 RDEPEND="
+	udev? ( >=sys-fs/udev-145[extras] )
 	>=app-portage/packagekit-0.4.4
 	>=dev-libs/dbus-glib-0.73
 	>=dev-libs/glib-2.18.0:2
@@ -47,27 +48,16 @@ DOCS="AUTHORS MAINTAINERS NEWS README TODO"
 # app-text/gnome-doc-utils and dev-libs/libxslt required for gnome help files
 # gtk-doc is generating a useless file, don't need it
 
-# TODO:
-# intltool and gettext can be a dep of +nls but the patching will not be easy
-
 # UPSTREAM:
-# -Werror should be used via --warning feature
 # misuse of CPPFLAGS/CXXFLAGS ?
-# xsltproc is required by help/ (gnome-doc-utils), should fail
-# see if tests can forget about display
-# --with-x option looks useless
+# see if tests can forget about display (use eclass for that ?)
 # intltool and gettext only with +nls
-# linguas doesn't work because was generated with intltool-0.40.6 by upstream
-
-# TODO:
-# test on PPC
 
 pkg_setup() {
 	# localstatedir: /var for upstream /var/lib for gentoo
 	# scrollkeeper and schemas-install: managed by gnome2 eclass
 	# tests: not working (need DISPLAY)
 	# gtk-doc: not needed (builded file is useless)
-	# x: seems useless to enable/disable
 	G2CONF="
 		--localstatedir=/var
 		--enable-option-checking
@@ -79,19 +69,12 @@ pkg_setup() {
 		--disable-schemas-install
 		--disable-tests
 		--disable-gtk-doc
-		--with-x
-		$(use_enable nls)"
+		--disable-strict
+		$(use_enable nls)
+		$(use_enable udev gudev)"
 }
 
 src_prepare() {
-	# Drop debugging options
-	sed -e '/CPPFLAGS=\"$CPPFLAGS -g\"/d' -i configure || die "sed failed"
-
-	if use nls; then
-		# upstream bug 591430
-		epatch "${FILESDIR}"/${PN}-2.27.5-nls.patch
-	fi
-
 	# fix pyc/pyo generation
 	rm py-compile || die "rm py-compile failed"
 	ln -s $(type -P true) py-compile
