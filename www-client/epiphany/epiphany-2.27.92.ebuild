@@ -13,8 +13,9 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="avahi doc networkmanager +nss test"
 
+# FIXME - lower gtk+ in next tarball if needed
 RDEPEND=">=dev-libs/glib-2.19.7
-	>=x11-libs/gtk+-2.16.0
+	>=x11-libs/gtk+-2.17.11
 	>=dev-libs/libxml2-2.6.12
 	>=dev-libs/libxslt-1.1.7
 	>=x11-libs/startup-notification-0.5
