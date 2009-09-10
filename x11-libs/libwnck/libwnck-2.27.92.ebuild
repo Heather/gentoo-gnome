@@ -40,9 +40,6 @@ pkg_setup() {
 src_prepare() {
 	gnome2_src_prepare
 
-	# Fix automagic startup-notification, bug #278464
-	epatch "${FILESDIR}"/${PN}-2.26.2-automagic.patch
-
 	# Fix glib-mkenum auto generation (bug #279832)
 	epatch "${FILESDIR}"/${PN}-2.26.2-fix-glib-mkenums.diff
 	# required to force regeneration of wnck-enum-types.h
