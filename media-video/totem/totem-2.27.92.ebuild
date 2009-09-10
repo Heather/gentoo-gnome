@@ -29,9 +29,9 @@ RDEPEND=">=dev-libs/glib-2.15
 	app-text/iso-codes
 	>=dev-libs/libxml2-2.6
 	>=dev-libs/dbus-glib-0.71
-	>=media-libs/gstreamer-0.10.23.2
+	>=media-libs/gstreamer-0.10.24
 	>=media-libs/gst-plugins-good-0.10
-	>=media-libs/gst-plugins-base-0.10.23.2
+	>=media-libs/gst-plugins-base-0.10.24
 	>=media-plugins/gst-plugins-gconf-0.10
 
 	>=media-plugins/gst-plugins-taglib-0.10
