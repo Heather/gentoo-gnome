@@ -39,16 +39,16 @@ DOCS="AUTHORS ChangeLog HACKING NEWS README"
 pkg_setup() {
 	local extensions=""
 
+	# Not enabled:
+	# 	* rss: ( fixed in >92, quite useless )
 	# FIXME: broken extensions:
-	#   * adblock:crashes ( http://bugzilla.gnome.org/show_bug.cgi?id=586552 ) 
 	#	* auto-scroller: ( http://bugzilla.gnome.org/show_bug.cgi?id=589560 )
 	#   * gestures		 ( http://bugzilla.gnome.org/show_bug.cgi?id=563099 )
 	#   * push-scroller: ( http://bugzilla.gnome.org/show_bug.cgi?id=594486 )
-	# 	* rss: API break ( http://bugzilla.gnome.org/show_bug.cgi?id=594482 )
 	#   * session-saver  ( http://bugzilla.gnome.org/show_bug.cgi?id=316245 )
 	#   * sidebar: hangs ( http://bugzilla.gnome.org/show_bug.cgi?id=594481 )
 	#   * ...and probably some more... :)
-	extensions="actions auto-reload certificates \
+	extensions="actions adblock auto-reload certificates \
 			   error-viewer extensions-manager-ui \
 			   java-console livehttpheaders page-info permissions \
 			   select-stylesheet \
@@ -66,6 +66,9 @@ pkg_setup() {
 src_prepare() {
 	# Fix building with libtool-1  bug #257337
 	rm m4/lt* m4/libtool.m4
+
+	# Fix adblock crasher (in upstream)
+	epatch "${FILESDIR}/${P}-fix-adblock-crasher.patch"
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
