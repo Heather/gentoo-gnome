@@ -86,6 +86,9 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# Make it libtool-1 compatible
+	rm -v build/autotools/lt* build/autotools/libtool.m4 || die "removing libtool macros failed"
+
 	# Tests are interactive, not of use for us
 	epatch "${FILESDIR}/${PN}-1.0.0-disable-tests.patch"
 
