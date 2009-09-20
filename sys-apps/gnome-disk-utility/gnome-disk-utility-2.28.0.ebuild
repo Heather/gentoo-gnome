@@ -20,7 +20,8 @@ RDEPEND="
 	>=dev-libs/dbus-glib-0.71
 	>=dev-libs/libunique-1.0
 	>=x11-libs/gtk+-2.17
-	>=sys-apps/devicekit-disks-005
+	>=sys-apps/devicekit-disks-007
+	>=dev-libs/libatasmart-0.14
 	>=gnome-base/gnome-keyring-2.22
 
 	nautilus? ( >=gnome-base/nautilus-2.24 )"
