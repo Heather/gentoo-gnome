@@ -11,21 +11,21 @@ HOMEPAGE="http://www.gnome.org/projects/gnome-power-manager/"
 #TODO: Finish the patchset including translations updates
 # (that's why this patch isn't on a mirror yet)
 SRC_URI="${SRC_URI}
-	http://dev.gentoo.org/~mrpouet/pub/patches/${P}-cpufreq-patches.tar.bz2"
+	http://dev.gentoo.org/~mrpouet/pub/patches/${PN}-2.27.91-cpufreq-patches.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="doc policykit test"
+IUSE="doc +hal policykit test"
 
 # See bug #196490 & bug #575500
 #RESTRICT="test"
 
+# HAL is used purely as a fallback for setting brightness if xrandr fail
 COMMON_DEPEND=">=dev-libs/glib-2.6.0
 	>=x11-libs/gtk+-2.11.0
 	>=gnome-base/gconf-2.10.0
 	>=gnome-base/gnome-keyring-0.6.0
-	>=sys-apps/hal-0.5.9
 	>=dev-libs/dbus-glib-0.71
 	>=x11-libs/libnotify-0.4.3
 	>=x11-libs/libwnck-2.10.0
@@ -38,6 +38,8 @@ COMMON_DEPEND=">=dev-libs/glib-2.6.0
 	>=x11-apps/xrandr-1.2
 	x11-libs/libX11
 	x11-libs/libXext
+
+	hal? ( >=sys-apps/hal-0.5.9 )
 "
 RDEPEND="${COMMON_DEPEND}
 	gnome-extra/polkit-gnome
@@ -64,6 +66,7 @@ DOCS="AUTHORS ChangeLog NEWS README TODO"
 
 pkg_setup() {
 	G2CONF="${G2CONF}
+		$(use_enable hal)
 		$(use_enable test tests)
 		$(use_enable doc docbook-docs)
 		$(use_enable policykit gconf-defaults)
@@ -93,19 +96,13 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-2.26.0-gcc44-options.patch"
 
 	# Resurrect cpufreq in capplet, bug #263891
-	epatch "${WORKDIR}/${P}-cpufreq-libhal-glib.patch"
-	epatch "${WORKDIR}/${P}-cpufreq-support.patch"
-	epatch "${WORKDIR}/${P}-cpufreq-ui.patch"
+	epatch "${WORKDIR}/${PN}-2.27.91-cpufreq-libhal-glib.patch"
+	epatch "${WORKDIR}/${PN}-2.27.91-cpufreq-support.patch"
+	epatch "${WORKDIR}/${PN}-2.27.91-cpufreq-ui.patch"
 #	epatch "${WORKDIR}/${PN}-2.26.3-cpufreq-po.patch"
 
 	# Fix uninstalled cpufreq schemas, bug #266995
-	epatch "${WORKDIR}/${P}-cpufreq-schemas.patch"
-
-	# Fix gpm-statistics crash, even if there aren't enumerated devices
-	# returned by dkp_client_enumerate_devices() the app needs to work
-	# thanks to Richard Hughes (contacted via e-mail), patch import
-	# from master branch
-	epatch "${FILESDIR}/${P}-gpm-statistic-sigsegv.patch"
+	epatch "${WORKDIR}/${PN}-2.27.91-cpufreq-schemas.patch"
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
 
