@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit gnome2 pam virtualx eutils
+inherit autotools gnome2 pam virtualx eutils
 
 DESCRIPTION="Password and keyring managing daemon"
 HOMEPAGE="http://www.gnome.org/"
@@ -52,6 +52,11 @@ src_prepare() {
 
 	# Fix intltoolize broken file, see upstream #577133
 	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
+
+	# Fix build with as-needed, GNOME Bug 595767
+	epatch "${FILESDIR}/${P}-as-needed.patch"
+
+	eautoreconf
 }
 
 src_test() {
