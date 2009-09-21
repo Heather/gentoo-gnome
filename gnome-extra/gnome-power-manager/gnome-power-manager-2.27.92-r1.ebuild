@@ -121,6 +121,10 @@ src_test() {
 
 pkg_postinst() {
 	gnome2_pkg_postinst
+
+	elog "Cpufreq capplet is now maintained by Gentoo GNOME team"
+	elog "This implies DO NOT REPORT any bugs on upstream if you have a problem with it"
+	elog "Please report on http://bugs.gentoo.org instead."
 #	elog
 #	elog "To enable frequency scaling interface, use the following command:"
 #	elog "	gconftool-2 /apps/gnome-power-manager/ui/cpufreq_show"
