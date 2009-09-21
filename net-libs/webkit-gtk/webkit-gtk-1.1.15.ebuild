@@ -3,6 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/net-libs/webkit-gtk/webkit-gtk-1.1.10.ebuild,v 1.1 2009/06/19 17:26:25 mrpouet Exp $
 
 EAPI="2"
+WANT_AUTOMAKE=1.11
 
 inherit autotools
 
