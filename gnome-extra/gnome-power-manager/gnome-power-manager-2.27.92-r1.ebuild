@@ -11,7 +11,7 @@ HOMEPAGE="http://www.gnome.org/projects/gnome-power-manager/"
 #TODO: Finish the patchset including translations updates
 # (that's why this patch isn't on a mirror yet)
 SRC_URI="${SRC_URI}
-	http://dev.gentoo.org/~mrpouet/pub/patches/${PN}-2.27.91-cpufreq-patches.tar.bz2"
+	http://dev.gentoo.org/~mrpouet/pub/patches/${P}-cpufreq-patches.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -96,13 +96,13 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-2.26.0-gcc44-options.patch"
 
 	# Resurrect cpufreq in capplet, bug #263891
-	epatch "${WORKDIR}/${PN}-2.27.91-cpufreq-libhal-glib.patch"
-	epatch "${WORKDIR}/${PN}-2.27.91-cpufreq-support.patch"
-	epatch "${WORKDIR}/${PN}-2.27.91-cpufreq-ui.patch"
+	epatch "${WORKDIR}/${P}-cpufreq-libhal-glib.patch"
+	epatch "${WORKDIR}/${P}-cpufreq-support.patch"
+	epatch "${WORKDIR}/${P}-cpufreq-ui.patch"
 #	epatch "${WORKDIR}/${PN}-2.26.3-cpufreq-po.patch"
 
 	# Fix uninstalled cpufreq schemas, bug #266995
-	epatch "${WORKDIR}/${PN}-2.27.91-cpufreq-schemas.patch"
+	epatch "${WORKDIR}/${P}-cpufreq-schemas.patch"
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
 
