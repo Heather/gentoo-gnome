@@ -3,7 +3,6 @@
 # $Header: /var/cvsroot/gentoo-x86/net-libs/webkit-gtk/webkit-gtk-1.1.10.ebuild,v 1.1 2009/06/19 17:26:25 mrpouet Exp $
 
 EAPI="2"
-WANT_AUTOMAKE=1.11
 
 inherit autotools
 
@@ -15,8 +14,7 @@ SRC_URI="http://www.webkitgtk.org/${MY_P}.tar.gz"
 
 LICENSE="LGPL-2 LGPL-2.1 BSD"
 SLOT="0"
-#KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~sparc ~x86 ~x86-fbsd"
-KEYWORDS="-*"
+KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~sparc ~x86 ~x86-fbsd"
 # geoclue
 IUSE="coverage debug doc +gstreamer pango ruby websockets"
 
