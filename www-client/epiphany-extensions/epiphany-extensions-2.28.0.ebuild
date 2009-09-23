@@ -12,9 +12,7 @@ HOMEPAGE="http://www.gnome.org/projects/epiphany/extensions.html"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~sparc ~x86"
-# TODO: rss extension - re-add dbus USE
-# epiphany has removed one symbol required to build this extension
-IUSE="examples pcre"
+IUSE="dbus examples pcre"
 
 RDEPEND=">=www-client/epiphany-${MY_MAJORV}
 	app-text/opensp
@@ -25,9 +23,8 @@ RDEPEND=">=www-client/epiphany-${MY_MAJORV}
 	>=gnome-base/libglade-2
 	>=net-libs/webkit-gtk-1.1
 
+	dbus? ( >=dev-libs/dbus-glib-0.34 )
 	pcre? ( >=dev-libs/libpcre-3.9-r2 )"
-	# TODO: rss
-	# dbus? ( >=dev-libs/dbus-glib-0.34 )
 DEPEND="${RDEPEND}
 	  gnome-base/gnome-common
 	>=dev-util/intltool-0.40
@@ -39,21 +36,12 @@ DOCS="AUTHORS ChangeLog HACKING NEWS README"
 pkg_setup() {
 	local extensions=""
 
-	# Not enabled:
-	# 	* rss: ( fixed in >92, quite useless )
-	# FIXME: broken extensions:
-	#	* auto-scroller: ( http://bugzilla.gnome.org/show_bug.cgi?id=589560 )
-	#   * gestures		 ( http://bugzilla.gnome.org/show_bug.cgi?id=563099 )
-	#   * push-scroller: ( http://bugzilla.gnome.org/show_bug.cgi?id=594486 )
-	#   * session-saver  ( http://bugzilla.gnome.org/show_bug.cgi?id=316245 )
-	#   * sidebar: hangs ( http://bugzilla.gnome.org/show_bug.cgi?id=594481 )
-	#   * ...and probably some more... :)
-	extensions="actions adblock auto-reload certificates \
+	extensions="actions auto-reload auto-scroller certificates \
 			   error-viewer extensions-manager-ui \
 			   java-console livehttpheaders page-info permissions \
-			   select-stylesheet \
+			   push-scroller select-stylesheet \
 			   smart-bookmarks soup-fly tab-groups tab-states"
-	#use dbus && extensions="${extensions} rss"
+	use dbus && extensions="${extensions} rss"
 
 	use pcre && extensions="${extensions} greasemonkey"
 
@@ -66,9 +54,6 @@ pkg_setup() {
 src_prepare() {
 	# Fix building with libtool-1  bug #257337
 	rm m4/lt* m4/libtool.m4
-
-	# Fix adblock crasher (in upstream)
-	epatch "${FILESDIR}/${P}-fix-adblock-crasher.patch"
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
