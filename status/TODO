@@ -32,8 +32,6 @@ net-im/empathy-2.27.91.1
  * report upstream their package is broken
 net-libs/libepc-0.3.10
  * 2 out of 16 tests fail, upstream bug #578792
-www-client/epiphany-2.27.92
-# FIXME - lower gtk+ in next tarball if needed
 www-client/epiphany-extensions-2.27.92
  * broken extensions:
    - Push scroll has been fixed upstream
