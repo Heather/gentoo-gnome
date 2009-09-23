@@ -38,3 +38,6 @@ www-client/epiphany-extensions-2.27.92
    - Autoscroller has been fixed upstream
 x11-libs/gtk+-2.17.11-r1
  * configure says >=xrandr-1.2.99 but remi tells me it's broken
+Packages which provide documentation
+ * Use pre-generated doc (and don't rebuild it)
+ * Must be discussed seriously (next meeting ?)
