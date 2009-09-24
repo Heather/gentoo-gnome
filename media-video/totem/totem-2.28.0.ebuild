@@ -86,7 +86,8 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
-# FIXME: tests broken with USE="-doc" upstream bug #577774
+# FIXME: tests broken with USE="-doc" upstream bug #577774.
+# fails also with USE="doc" ^^
 RESTRICT="test"
 
 pkg_setup() {
