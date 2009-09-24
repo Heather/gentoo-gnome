@@ -44,3 +44,6 @@ x11-libs/gtk+-2.17.11-r1
 Packages which provide documentation
  * Use pre-generated doc (and don't rebuild it)
  * Must be discussed seriously (next meeting ?)
+dev-libs/totem-pl-parser 
+ * testsuite fail, please fix them and/or report on upstream
+   (have a look at strange warnings in Makefile too)

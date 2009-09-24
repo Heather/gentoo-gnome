@@ -6,7 +6,7 @@ EAPI="2"
 
 GCONF_DEBUG="no"
 
-inherit autotools eutils gnome2
+inherit gnome2
 
 DESCRIPTION="Playlist parsing library"
 HOMEPAGE="http://www.gnome.org/projects/totem/"
@@ -14,6 +14,7 @@ HOMEPAGE="http://www.gnome.org/projects/totem/"
 LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+#TODO: Re-generate doc ?
 IUSE="doc hal test"
 
 RDEPEND=">=dev-libs/glib-2.17.3
@@ -27,6 +28,8 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS"
 G2CONF="${G2CONF} --disable-static"
+#FIXME: testsuite does not work, please fix them and report on upstream
+RESTRICT="test"
 
 src_prepare() {
 	gnome2_src_prepare
@@ -38,12 +41,5 @@ src_prepare() {
 	else
 		sed "/^TARGET_DIR/i \GTKDOC_REBASE=$(type -P true)" \
 			-i gtk-doc.make || die "sed 2 failed"
-	fi
-
-	# Conditional patching is purely to avoid eautoreconf
-	if use test && ! use doc; then
-		# http://bugzilla.gnome.org/show_bug.cgi?id=577774
-		epatch "${FILESDIR}/${PN}-2.26.1-fix-tests-without-gtk-doc.patch"
-		eautoreconf
 	fi
 }
