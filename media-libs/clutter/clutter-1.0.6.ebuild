@@ -39,7 +39,7 @@ DEPEND="${RDEPEND}
 		>=app-text/docbook-sgml-utils-0.6.14[jadetex]
 		app-text/xmlto )
 	introspection? (
-		>=dev-libs/gobject-introspection-0.6.3
+		>=dev-libs/gobject-introspection-0.6.4
 		>=dev-libs/gir-repository-0.6.3[pango] )"
 
 pkg_setup() {
