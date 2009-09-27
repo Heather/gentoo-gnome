@@ -14,10 +14,11 @@ HOMEPAGE="http://live.gnome.org/GObjectIntrospection/"
 LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="atk avahi babl dbus gconf gnome-keyring gstreamer +gtk gtksourceview gupnp
-libnotify libsoup libunique libwnck pango poppler vte webkit"
+IUSE="atk avahi babl dbus gconf gnome-keyring goocanvas gstreamer +gtk
+gtksourceview gupnp libnotify libsoup libunique libwnck nautilus pango poppler
+vte webkit"
 
-RDEPEND=">=dev-libs/gobject-introspection-0.6.3"
+RDEPEND=">=dev-libs/gobject-introspection-0.6.5"
 DEPEND="${RDEPEND}
 	atk? ( >=dev-libs/atk-1.12.0 )
 	avahi? ( >=net-dns/avahi-0.6 )
@@ -47,10 +48,15 @@ DEPEND="${RDEPEND}
 	webkit? ( >=net-libs/webkit-gtk-1.0 )
 "
 
+_auto_dep() {
+	if use ${1} && ! use ${2}; then
+		ewarn "${2} is disabled, but ${1} needs ${2}. Auto-enabling..."
+		G2CONF="${G2CONF} --enable-${3:-$2}"
+	fi
+}
+
 pkg_setup() {
 	# FIXME: installs even disabled stuff if it's a dependency of something enabled
-	# XXX: Seemingly unrelated enabling is for Makefile-level dependencies
-	# FIXME: Above mentioned dependencies are incomplete
 	G2CONF="${G2CONF}
 		--disable-clutter
 		--disable-clutter-gtk
@@ -65,7 +71,6 @@ pkg_setup() {
 		$(use_enable goocanvas)
 		$(use_enable gstreamer)
 		$(use_enable gtk)
-		$(use_enable gtk atk)
 		$(use_enable gtksourceview)
 		$(use_enable gupnp gssdp)
 		$(use_enable libnotify notify)
@@ -77,8 +82,13 @@ pkg_setup() {
 		$(use_enable poppler)
 		$(use_enable vte)
 		$(use_enable webkit)
-		$(use_enable webkit soup)
 	"
+
+	# XXX: Auto-enabling is for Makefile-level dependencies
+	# FIXME: these dependencies are incomplete
+	_auto_dep gtk atk
+	_auto_dep gtk pango
+	_auto_dep webkit libsoup soup
 }
 
 src_prepare() {
