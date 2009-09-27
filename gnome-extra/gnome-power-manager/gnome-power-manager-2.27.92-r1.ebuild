@@ -42,6 +42,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.6.0
 	hal? ( >=sys-apps/hal-0.5.9 )
 "
 RDEPEND="${COMMON_DEPEND}
+	>=sys-auth/consolekit-0.4[policykit?]
 	gnome-extra/polkit-gnome
 "
 DEPEND="${COMMON_DEPEND}
