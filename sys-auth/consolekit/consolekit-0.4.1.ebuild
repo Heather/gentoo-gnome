@@ -12,7 +12,7 @@ MY_P="${MY_PN}-${MY_PV}"
 
 DESCRIPTION="Framework for defining and tracking users, login sessions and seats."
 HOMEPAGE="http://www.freedesktop.org/wiki/Software/ConsoleKit"
-SRC_URI="http://people.freedesktop.org/~mccann/dist/${MY_P}.tar.bz2"
+SRC_URI="http://www.freedesktop.org/software/${MY_PN}/dist/${MY_P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
