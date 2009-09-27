@@ -5,7 +5,7 @@
 EAPI="2"
 WANT_AUTOMAKE=1.11
 
-inherit autotools
+inherit autotools toolchain
 
 MY_P=webkit-${PV}
 
@@ -17,7 +17,7 @@ LICENSE="LGPL-2 LGPL-2.1 BSD"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~sparc ~x86 ~x86-fbsd"
 # geoclue
-IUSE="coverage debug doc +gstreamer pango ruby websockets"
+IUSE="coverage debug doc +gstreamer pango ruby sse2 websockets"
 
 # use sqlite, svg by default
 RDEPEND="
@@ -67,12 +67,16 @@ src_configure() {
 	local myconf
 
 	myconf="
-		$(use_enable gstreamer video)
-		$(use_enable debug)
 		$(use_enable coverage)
+		$(use_enable debug)
+		$(use_enable gstreamer video)
 		$(use_enable ruby)
 		$(use_enable websockets web_sockets)
 		--enable-filters"
+
+	# FIXME: JIT broken on x86 machines without SSE2 support
+	# FIXME: https://bugs.webkit.org/show_bug.cgi?id=29779
+	[[ $(tc-arch) == "x86" ]] && myconf="${myconf} $(use_enable sse2 jit)"
 
 	# USE-flag controlled font backend because upstream default is freetype
 	# Remove USE-flag once font-backend becomes pango upstream
