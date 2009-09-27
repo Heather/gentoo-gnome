@@ -5,7 +5,7 @@
 EAPI="2"
 WANT_AUTOMAKE=1.11
 
-inherit autotools toolchain
+inherit autotools
 
 MY_P=webkit-${PV}
 
@@ -76,7 +76,7 @@ src_configure() {
 
 	# FIXME: JIT broken on x86 machines without SSE2 support
 	# FIXME: https://bugs.webkit.org/show_bug.cgi?id=29779
-	[[ $(tc-arch) == "x86" ]] && myconf="${myconf} $(use_enable sse2 jit)"
+	[[ $(ARCH) == "x86" ]] && myconf="${myconf} $(use_enable sse2 jit)"
 
 	# USE-flag controlled font backend because upstream default is freetype
 	# Remove USE-flag once font-backend becomes pango upstream
