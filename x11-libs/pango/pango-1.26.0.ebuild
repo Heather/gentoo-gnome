@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils gnome2 multilib
+inherit autotools eutils gnome2 multilib
 
 DESCRIPTION="Text rendering and layout library"
 HOMEPAGE="http://www.pango.org/"
@@ -37,9 +37,9 @@ function multilib_enabled() {
 }
 
 pkg_setup() {
-	# XXX: introspection is automagic, but not compiled by default
-	# DONOT add introspection support, collides with gir-repository
+	# XXX: DONOT add introspection support, collides with gir-repository[pango]
 	G2CONF="${G2CONF}
+		--disable-introspection
 		$(use_with X x)"
 }
 
@@ -54,8 +54,13 @@ src_prepare() {
 	fi
 
 	# gtk-doc checks do not pass, upstream bug #578944
-	sed 's:TESTS = check.docs: TESTS = :g'\
-		-i docs/Makefile.in || die "sed failed"
+	sed 's:TESTS = check.docs: TESTS = :g' \
+		-i docs/Makefile.{am,in} || die "sed failed"
+
+	# Fix introspection automagic (collides with gir-repository[pango])
+	epatch "${FILESDIR}/${PN}-1.26.0-introspection-automagic.patch"
+
+	eautoreconf
 }
 
 pkg_postinst() {
