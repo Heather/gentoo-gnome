@@ -57,7 +57,8 @@ src_prepare() {
 	sed 's:TESTS = check.docs: TESTS = :g' \
 		-i docs/Makefile.{am,in} || die "sed failed"
 
-	# Fix introspection automagic (collides with gir-repository[pango])
+	# Fix introspection automagic.
+	# https://bugzilla.gnome.org/show_bug.cgi?id=596506
 	epatch "${FILESDIR}/${PN}-1.26.0-introspection-automagic.patch"
 
 	eautoreconf
