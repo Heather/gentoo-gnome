@@ -14,9 +14,8 @@ HOMEPAGE="http://live.gnome.org/GObjectIntrospection/"
 LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="atk avahi babl dbus gconf gnome-keyring goocanvas gstreamer +gtk
-gtksourceview gupnp libnotify libsoup libunique libwnck nautilus pango poppler
-vte webkit"
+IUSE="atk avahi babl dbus gconf gnome-keyring goocanvas +gtk gtksourceview gupnp
+libnotify libsoup libunique libwnck nautilus pango poppler vte webkit"
 
 RDEPEND=">=dev-libs/gobject-introspection-0.6.5"
 DEPEND="${RDEPEND}
@@ -27,9 +26,6 @@ DEPEND="${RDEPEND}
 	gconf? ( gnome-base/gconf )
 	gnome-keyring? ( gnome-base/gnome-keyring )
 	goocanvas? ( x11-libs/goocanvas )
-	gstreamer? (
-		media-libs/gstreamer:0.10
-		media-libs/gst-plugins-base:0.10 )
 	gtk? (
 		>=dev-libs/atk-1.12.0
 		x11-libs/gtk+:2 )
@@ -62,6 +58,7 @@ pkg_setup() {
 		--disable-clutter-gtk
 		--disable-clutter-cairo
 		--disable-gnio
+		--disable-gstreamer
 		$(use_enable atk)
 		$(use_enable avahi)
 		$(use_enable babl)
@@ -69,7 +66,6 @@ pkg_setup() {
 		$(use_enable gconf)
 		$(use_enable gnome-keyring gnomekeyring)
 		$(use_enable goocanvas)
-		$(use_enable gstreamer)
 		$(use_enable gtk)
 		$(use_enable gtksourceview)
 		$(use_enable gupnp gssdp)
