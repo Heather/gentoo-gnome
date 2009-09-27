@@ -273,7 +273,7 @@ So... who's going to open an upstream bug for this? =)
  AM_CONDITIONAL(BUILD_CLUTTER, $have_clutter)
  CLUTTER_BACKEND=
  CLUTTER_BACKEND_GIRS=
-@@ -126,72 +281,159 @@
+@@ -126,73 +281,160 @@
  AC_SUBST(CLUTTER_BACKEND)
  AC_SUBST(CLUTTER_BACKEND_GIRS)
  
@@ -468,9 +468,11 @@ So... who's going to open an upstream bug for this? =)
  AM_CONDITIONAL(BUILD_GSSDP, $have_gssdp)
  
 -dnl gupnp
- if test $have_gssdp; then
+-if test $have_gssdp; then
++if test "$have_gssdp" = "true"; then
      PKG_CHECK_MODULES(GUPNP, gupnp-1.0,
                        have_gupnp=true, have_gupnp=false)
+ else
 @@ -200,24 +442,68 @@
  fi
  AM_CONDITIONAL(BUILD_GUPNP, $have_gupnp)
