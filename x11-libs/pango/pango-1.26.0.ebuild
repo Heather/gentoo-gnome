@@ -50,12 +50,12 @@ src_prepare() {
 	# wont fight with each other on a multilib system.  Fix building for
 	# emul-linux-x86-gtklibs
 	if multilib_enabled ; then
-		epatch "${FILESDIR}/${PN}-1.2.5-lib64.patch"
+		epatch "${FILESDIR}/${PN}-1.26.0-lib64.patch"
 	fi
 
 	# gtk-doc checks do not pass, upstream bug #578944
-	sed 's:TESTS = check.docs: TESTS = :g' \
-		-i docs/Makefile.{am,in} || die "sed failed"
+	sed -e 's:TESTS = check.docs: TESTS = :g' \
+		-i docs/Makefile.am || die "sed failed"
 
 	# Fix introspection automagic.
 	# https://bugzilla.gnome.org/show_bug.cgi?id=596506
