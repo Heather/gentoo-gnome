@@ -33,6 +33,13 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
+# FIXME: Open security issues:
+# FIXME: - adblock        ( https://bugzilla.gnome.org/show_bug.cgi?id=595255 )
+# FIXME: broken extensions:
+# FIXME: - gestures       ( https://bugzilla.gnome.org/show_bug.cgi?id=563099 )
+# FIXME: - session-saver  ( https://bugzilla.gnome.org/show_bug.cgi?id=316245 )
+# FIXME: - sidebar: hangs ( https://bugzilla.gnome.org/show_bug.cgi?id=594481 )
+
 pkg_setup() {
 	local extensions=""
 

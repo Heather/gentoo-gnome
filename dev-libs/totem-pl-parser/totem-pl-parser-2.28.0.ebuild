@@ -14,7 +14,7 @@ HOMEPAGE="http://www.gnome.org/projects/totem/"
 LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
-#TODO: Re-generate doc ?
+# TODO: Re-generate doc ?
 IUSE="doc hal test"
 
 RDEPEND=">=dev-libs/glib-2.17.3
@@ -28,7 +28,7 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS"
 G2CONF="${G2CONF} --disable-static"
-#FIXME: testsuite does not work, please fix them and report on upstream
+# FIXME: testsuite does not work, please fix them and report on upstream
 RESTRICT="test"
 
 src_prepare() {

@@ -1,49 +1,48 @@
 Ebuild Notices:
 ===============
-dev-libs/gir-repository-0.6.3
+dev-libs/gir-repository-0.6.5
  * installs even disabled stuff if it's a dependency of something enabled
- * Above mentioned dependencies are incomplete
-dev-libs/libgweather-2.27.92
+ * these dependencies are incomplete
+dev-libs/libgweather-2.28.0
  * tarball generated with broken gtk-doc, revisit me.
-dev-libs/totem-pl-parser-2.27.2
+dev-libs/totem-pl-parser-2.28.0
+ * testsuite does not work, please fix them and report on upstream
  * tarball generated with broken gtk-doc, revisit me.
 dev-util/gnome-devel-docs-2.27.1
 #FIXME: Fixs the better as possible the fail install with emake jobs.
-gnome-base/gnome-menus-2.27.92
+gnome-base/gnome-menus-2.28.0
  * fix autofoo and report upstream
-gnome-base/gnome-session-2.27.91
+gnome-base/gnome-session-2.28.0
  * Needs updating for 2.27.91 (package is currently masked)
  * Needs updating for 2.27.91 (package is currently masked)
-gnome-base/gvfs-1.3.6
+gnome-base/gvfs-1.4.0
  * gphoto2 && gudev => we need >libgphoto2-2.4.6 (unreleased)
-gnome-base/nautilus-2.27.92
+gnome-base/nautilus-2.28.0
  * tarball generated with broken gtk-doc, revisit me.
-media-libs/clutter-1.0.2
+media-libs/clutter-1.0.6
  * Using external json-glib breaks introspection
-media-libs/libchamplain-0.3.90
+media-libs/libchamplain-0.4.0
+ * add pyclutter first
  * mono support
-media-video/totem-2.27.92
- * tests broken with USE="-doc" upstream bug #577774
+media-video/totem-2.28.0
+ * tests broken with USE="-doc" upstream bug #577774.
  * tarball generated with broken gtk-doc, revisit me.
  * why does it need write access here, probably need to set up a fake
-net-im/empathy-2.27.91.1
+net-im/empathy-2.28.0
  * libnotify & libcanberra hard deps
  * Tests are broken, upstream bug #576785
  * report upstream their package is broken
 net-libs/libepc-0.3.10
  * 2 out of 16 tests fail, upstream bug #578792
+net-libs/webkit-gtk-1.1.15.1
+ * JIT broken on x86 machines without SSE2 support
+ * https://bugs.webkit.org/show_bug.cgi?id=29779
 www-client/epiphany-extensions-2.28.0
  * Open security issues:
-   - adblock        ( https://bugzilla.gnome.org/show_bug.cgi?id=595255 )
+ * - adblock ( https://bugzilla.gnome.org/show_bug.cgi?id=595255 )
  * broken extensions:
-   - gestures       ( https://bugzilla.gnome.org/show_bug.cgi?id=563099 )
-   - session-saver  ( https://bugzilla.gnome.org/show_bug.cgi?id=316245 )
-   - sidebar: hangs ( https://bugzilla.gnome.org/show_bug.cgi?id=594481 )
-x11-libs/gtk+-2.17.11-r1
+ * - gestures ( https://bugzilla.gnome.org/show_bug.cgi?id=563099 )
+ * - session-saver ( https://bugzilla.gnome.org/show_bug.cgi?id=316245 )
+ * - sidebar: hangs ( https://bugzilla.gnome.org/show_bug.cgi?id=594481 )
+x11-libs/gtk+-2.18.0
  * configure says >=xrandr-1.2.99 but remi tells me it's broken
-Packages which provide documentation
- * Use pre-generated doc (and don't rebuild it)
- * Must be discussed seriously (next meeting ?)
-dev-libs/totem-pl-parser 
- * testsuite fail, please fix them and/or report on upstream
-   (have a look at strange warnings in Makefile too)
