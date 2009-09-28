@@ -21,7 +21,7 @@ RDEPEND=">=dev-libs/glib-2.16.0
 	>=gnome-base/gconf-2
 	>=dev-libs/dbus-glib-0.51
 	>=gnome-extra/evolution-data-server-1.2
-	>=net-libs/telepathy-glib-0.7.34
+	>=net-libs/telepathy-glib-0.7.35
 	>=media-libs/libcanberra-0.4[gtk]
 	>=x11-libs/libnotify-0.4.4
 	>=gnome-base/gnome-keyring-2.22
@@ -36,7 +36,7 @@ RDEPEND=">=dev-libs/glib-2.16.0
 
 	applet? ( >=gnome-base/gnome-panel-2.10 )
 	map? (
-		>=media-libs/libchamplain-0.3.6[gtk]
+		>=media-libs/libchamplain-0.4[gtk]
 		>=media-libs/clutter-gtk-0.10:1.0 )
 	networkmanager? ( >=net-misc/networkmanager-0.7 )
 	python? (
