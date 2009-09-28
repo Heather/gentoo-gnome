@@ -25,7 +25,8 @@ from portage.output import *
 
 # gentoo-bumpchecker output file
 BCO = "SET THIS TO YOUR gentoo-bumpchecker output file path"
-GNOME_OVERLAY = "SET TO YOUR GNOME OVERLAY PATH"
+PORTDB = portage.db['/']['porttree'].dbapi
+GNOME_OVERLAY = PORTDB.getRepositoryPath('gnome')
 DISTDIR = portage.settings['DISTDIR']
 PORTDIR = portage.settings['PORTDIR']
 
@@ -69,7 +70,7 @@ def match_cpv_to_ebuild(categ, pkg, ver):
             ebuild_path = "%s/%s" % (overlay_path, ebuild)
             parts = portage.catpkgsplit(ebuild.split('.ebuild')[0])[-2:]
             version = "%s-%s" % (parts[-2], parts[-1])
-            return (ebuild_path, version)
+            return (ebuild_path, version.replace('-r0', ''))
     return (None, None)
 # Portage section, disabled for now.
 #    portdir_path = "%s/%s/%s" % (PORTDIR, categ, pkg)
