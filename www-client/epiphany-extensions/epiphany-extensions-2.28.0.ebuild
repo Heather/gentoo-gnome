@@ -1,9 +1,11 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
-inherit autotools eutils gnome2 versionator
 
 EAPI=2
+
+inherit autotools eutils gnome2 versionator
+
 MY_MAJORV=$(get_version_component_range 1-2)
 
 DESCRIPTION="Extensions for the Epiphany web browser"
