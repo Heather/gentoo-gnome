@@ -40,9 +40,9 @@ pkg_setup() {
 		$(use_enable python)"
 }
 
-src_prepare() {
-	gnome2_src_prepare
+#src_prepare() {
+#	gnome2_src_prepare
 
 	# Fix intltoolize broken file, see upstream #577133
-	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
-}
+#	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
+#}
