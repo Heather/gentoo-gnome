@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils python gnome2
+inherit gnome2 python
 
 DESCRIPTION="A collection of documentation utilities for the Gnome project"
 HOMEPAGE="http://www.gnome.org/"
