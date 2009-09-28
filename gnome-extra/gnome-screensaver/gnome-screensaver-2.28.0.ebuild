@@ -15,7 +15,6 @@ IUSE="debug doc libnotify opengl pam $KERNEL_IUSE"
 
 RDEPEND=">=gnome-base/gconf-2.6.1
 	>=x11-libs/gtk+-2.14.0
-	>=gnome-base/libglade-2.5.0
 	>=gnome-base/gnome-desktop-2.23.2
 	>=gnome-base/gnome-menus-2.12
 	>=dev-libs/glib-2.15
