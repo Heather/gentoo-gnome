@@ -19,7 +19,7 @@ RDEPEND="
 	>=app-text/libspectre-0.2.0
 	>=dev-libs/glib-2.18.0
 	>=dev-libs/libxml2-2.5
-	>=x11-libs/gtk+-2.12
+	>=x11-libs/gtk+-2.14
 	>=x11-libs/libSM-1
 	>=x11-themes/gnome-icon-theme-2.17.1
 	dbus? ( >=dev-libs/dbus-glib-0.71 )
@@ -51,6 +51,7 @@ RESTRICT="test"
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-scrollkeeper
+		--disable-tests
 		--enable-pdf
 		--enable-comics
 		--enable-impress
