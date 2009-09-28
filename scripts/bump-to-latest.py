@@ -63,7 +63,7 @@ def match_cpv_to_ebuild(categ, pkg, ver):
     Returns (None, None) if no matching ebuild found"""
     pv = "%s-%s" % (pkg, ver)
     overlay_path = "%s/%s/%s" % (GNOME_OVERLAY, categ, pkg)
-    overlay_ebuilds = os.listdir(overlay_path)
+    overlay_ebuilds = [i for i in os.listdir(overlay_path) if i.endswith('.ebuild')]
 
     for ebuild in overlay_ebuilds:
         if ebuild.find(pv) != -1:
@@ -87,15 +87,16 @@ for i in dirs:
 
 for categ in categs:
     for pkg in os.listdir(categ):
-	vers = versions(pkg).split()
+        # Get versions from bumpchecker output
+        vers = versions(pkg).split()
         if not vers:
             continue
         cv = vers[1] # Current Version
         lv = vers[3] # Latest Version
         if cv >= lv:
             continue
-	(ce, cv) = match_cpv_to_ebuild(categ, pkg, cv)
-	le = "%s/%s/%s-%s.ebuild" % (categ, pkg, pkg, lv)
+        (ce, cv) = match_cpv_to_ebuild(categ, pkg, cv)
+        le = "%s/%s/%s-%s.ebuild" % (categ, pkg, pkg, lv)
         if not ce:
             # No matching ebuild found in overlay
             continue
