@@ -14,7 +14,6 @@ SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="eds hal policykit"
 
-# XXX: NEWS says libgnomeui is gone, but configure still checks for it
 RDEPEND="x11-libs/libXft
 	>=x11-libs/libXi-1.2
 	>=x11-libs/gtk+-2.15.0
@@ -44,7 +43,6 @@ RDEPEND="x11-libs/libXft
 	>=gnome-base/libbonobo-2
 	>=gnome-base/libgnome-2.2
 	>=gnome-base/libbonoboui-2
-	>=gnome-base/libgnomeui-2.2
 
 	x11-apps/xmodmap
 	x11-libs/libXScrnSaver
