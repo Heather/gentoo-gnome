@@ -24,6 +24,7 @@ RDEPEND=">=dev-libs/glib-2.16
 	gtk? (
 		>=x11-libs/gtk+-2.10
 		media-libs/clutter-gtk:1.0 )"
+# FIXME: add pyclutter first
 #	python? (
 #		dev-python/pygtk
 #		dev-python/pyclutter
