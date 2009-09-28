@@ -42,7 +42,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	gnome2_src_pre
+	gnome2_src_prepare
 
 	if ! use test ; then
 		sed -e 's/ tests//' -i logview/Makefile* || die "sed failed";
