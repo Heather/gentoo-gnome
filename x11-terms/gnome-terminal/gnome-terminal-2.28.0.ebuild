@@ -30,11 +30,6 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
-pkg_setup() {
-	G2CONF="${G2CONF}
-		--with-smclient-backend"
-}
-
 src_unpack() {
 	gnome2_src_unpack
 
