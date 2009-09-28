@@ -25,9 +25,9 @@ DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
 pkg_setup() {
 	# Do NOT compile with --disable-debug/--enable-debug=no
-	# FIXME: fix autofoo and report upstream
-	if use debug ; then
-		G2CONF="${G2CONF} --enable-debug=yes"
+	# It disables api usage checks
+	if ! use debug ; then
+		G2CONF="${G2CONF} --enable-debug=minimum"
 	fi
 
 	G2CONF="${G2CONF} $(use_enable python) --disable-static"

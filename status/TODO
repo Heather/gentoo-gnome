@@ -10,8 +10,6 @@ dev-libs/totem-pl-parser-2.28.0
  * tarball generated with broken gtk-doc, revisit me.
 dev-util/gnome-devel-docs-2.27.1
 #FIXME: Fixs the better as possible the fail install with emake jobs.
-gnome-base/gnome-menus-2.28.0
- * fix autofoo and report upstream
 gnome-base/gnome-session-2.28.0
  * Needs updating for 2.27.91 (package is currently masked)
  * Needs updating for 2.27.91 (package is currently masked)
