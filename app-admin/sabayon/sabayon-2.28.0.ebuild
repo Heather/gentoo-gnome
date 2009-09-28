@@ -30,6 +30,7 @@ RDEPEND="${COMMON_DEPEND}
 	dev-python/pyxdg
 	dev-libs/libxml2[python]
 	>=gnome-base/gconf-2.8.1
+	>=dev-python/libbonobo-python-2.6
 	>=dev-python/gconf-python-2.6
 	x11-libs/gksu"
 
