@@ -38,7 +38,6 @@ DOCS="AUTHORS NEWS README"
 
 pkg_setup() {
 	G2CONF="${G2CONF}
-		--disable-esdtest
 		--disable-static
 		--disable-scrollkeeper
 		--disable-schemas-install
