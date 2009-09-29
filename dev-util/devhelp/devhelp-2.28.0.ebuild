@@ -15,12 +15,14 @@ SLOT="0"
 KEYWORDS="~amd64 ~ppc ~sparc ~x86 ~x86-fbsd"
 IUSE=""
 
+# XXX: libunique dependency is due to #286890
+# Check again with 2.28.0.2
 RDEPEND=">=gnome-base/gconf-2.6
 	>=x11-libs/gtk+-2.10
 	>=dev-libs/glib-2.10
 	>=x11-libs/libwnck-2.10
 	>=net-libs/webkit-gtk-1.1.13
-	dev-libs/libunique"
+	>=dev-libs/libunique-1.1.2"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/intltool-0.40
@@ -39,8 +41,8 @@ src_prepare() {
 	gnome2_src_prepare
 
 	# disable pyc compiling
-	rm build/py-compile
-	ln -s $(type -P true) build/py-compile
+	rm py-compile
+	ln -s $(type -P true) py-compile
 
 	# Fix intltoolize broken file, see upstream #577133
 	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
