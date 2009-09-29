@@ -18,7 +18,9 @@ RDEPEND=">=dev-libs/glib-2.12.0
 	>=x11-libs/gtk+-2.11.0
 	x11-libs/libX11
 	dbus? ( >=dev-libs/dbus-glib-0.70 )
-	introspection? ( >=dev-libs/gobject-introspection-0.6.3 )"
+	introspection? (
+		>=dev-libs/gobject-introspection-0.6.3
+		dev-libs/gir-repository[gtk] )"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.17
