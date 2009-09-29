@@ -1,13 +1,13 @@
-From dec6aa5bbadc0af640148cc23db75fb63206747a Mon Sep 17 00:00:00 2001
+From 4367b1c2801a4158f53f910a89255737a1c23b73 Mon Sep 17 00:00:00 2001
 From: Romain Perier <mrpouet@gentoo.org>
-Date: Tue, 29 Sep 2009 10:40:56 +0200
+Date: Tue, 29 Sep 2009 11:19:43 +0200
 Subject: [PATCH] Add --with-libsoup-system option in order to be able to build libsoup-gnome library without libsoup library
 
 ---
  Makefile.am         |   13 +++++++---
  configure.in        |   59 ++++++++++++++++++++++++++++----------------------
- libsoup/Makefile.am |   33 +++++++++++++++++++---------
- 3 files changed, 64 insertions(+), 41 deletions(-)
+ libsoup/Makefile.am |   35 +++++++++++++++++++----------
+ 3 files changed, 65 insertions(+), 42 deletions(-)
 
 diff --git a/Makefile.am b/Makefile.am
 index 686e2e6..a919d8d 100644
@@ -135,10 +135,10 @@ index 24e0390..3f375d4 100644
  [Could not find libproxy:
  
 diff --git a/libsoup/Makefile.am b/libsoup/Makefile.am
-index c25b534..4513ce6 100644
+index c25b534..396c5f6 100644
 --- a/libsoup/Makefile.am
 +++ b/libsoup/Makefile.am
-@@ -3,17 +3,16 @@
+@@ -3,18 +3,16 @@
  if OS_WIN32
  LIBWS2_32 = -lws2_32
  endif
@@ -157,10 +157,11 @@ index c25b534..4513ce6 100644
 -	$(GCONF_CFLAGS)			\
 -	$(LIBPROXY_CFLAGS)		\
 -	$(SQLITE_CFLAGS)		\
- 	$(GNOME_KEYRING_CFLAGS)		\
+-	$(GNOME_KEYRING_CFLAGS)		\
  	$(LIBGCRYPT_CFLAGS)		\
  	$(LIBGNUTLS_CFLAGS)
-@@ -90,7 +89,7 @@ libsoupinclude_HEADERS =	\
+ 
+@@ -90,7 +88,7 @@ libsoupinclude_HEADERS =	\
  	$(soup_headers)		\
  	soup-enum-types.h
  
@@ -169,7 +170,7 @@ index c25b534..4513ce6 100644
  
  libsoup_2_4_la_LDFLAGS =	\
  	-version-info $(SOUP_CURRENT):$(SOUP_REVISION):$(SOUP_AGE) -no-undefined
-@@ -163,9 +162,15 @@ libsoup_2_4_la_SOURCES =		\
+@@ -163,9 +161,16 @@ libsoup_2_4_la_SOURCES =		\
  	soup-uri.c			\
  	soup-value-utils.c		\
  	soup-xmlrpc.c
@@ -180,7 +181,8 @@ index c25b534..4513ce6 100644
 +INCLUDES += $(LIBSOUP_CFLAGS)	\
 +	$(GCONF_CFLAGS)		\
 +	$(LIBPROXY_CFLAGS)	\
-+	$(SQLITE_CFLAGS)
++	$(SQLITE_CFLAGS)	\
++	$(GNOME_KEYRING_CFLAGS)
 +
  libsoupgnomeincludedir = $(includedir)/libsoup-gnome-2.4/libsoup
  
