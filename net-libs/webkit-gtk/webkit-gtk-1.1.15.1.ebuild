@@ -17,7 +17,7 @@ LICENSE="LGPL-2 LGPL-2.1 BSD"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~sparc ~x86 ~x86-fbsd"
 # geoclue
-IUSE="coverage debug doc +gstreamer pango ruby sse2 websockets"
+IUSE="coverage debug doc +gstreamer pango ruby websockets"
 
 # use sqlite, svg by default
 RDEPEND="
@@ -58,6 +58,9 @@ src_prepare() {
 	sed -i 's/-O2//g' "${S}"/configure.ac || die "sed failed"
 	# Prevent maintainer mode from being triggered during make
 	AT_M4DIR=autotools eautoreconf
+
+	# Fix our JIT troubles on x86 machines without SSE2
+	epatch ${FILESDIR}/jit-sse2-problem.patch
 }
 
 src_configure() {
@@ -73,10 +76,6 @@ src_configure() {
 		$(use_enable ruby)
 		$(use_enable websockets web_sockets)
 		--enable-filters"
-
-	# FIXME: JIT broken on x86 machines without SSE2 support
-	# FIXME: https://bugs.webkit.org/show_bug.cgi?id=29779
-	[[ $(ARCH) == "x86" ]] && myconf="${myconf} $(use_enable sse2 jit)"
 
 	# USE-flag controlled font backend because upstream default is freetype
 	# Remove USE-flag once font-backend becomes pango upstream
