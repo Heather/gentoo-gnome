@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit gnome2 eutils
+inherit autotools eutils gnome2
 
 DESCRIPTION="A GNOME application for managing encryption keys"
 HOMEPAGE="http://www.gnome.org/projects/seahorse/index.html"
@@ -63,8 +63,10 @@ src_prepare() {
 	# Fix intltoolize broken file, see upstream #577133
 	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
 
-	# fix building with gpgme with lfs  Bug #275445
-	epatch "${FILESDIR}"/${PN}-2.26.2-gpgme-lfs.patch
+	# https://bugzilla.gnome.org/show_bug.cgi?id=596691
+	epatch "${FILESDIR}/${PN}-2.28.0-as-needed.patch"
+	
+	eautoreconf
 }
 
 pkg_postinst() {
