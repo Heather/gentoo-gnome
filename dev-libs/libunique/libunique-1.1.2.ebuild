@@ -12,7 +12,7 @@ HOMEPAGE="http://live.gnome.org/LibUnique"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="dbus doc"
+IUSE="dbus doc introspection"
 
 RDEPEND=">=dev-libs/glib-2.12.0
 	>=x11-libs/gtk+-2.11.0
@@ -44,5 +44,6 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-maintainer-flags
 		--disable-static
-		$(use_enable dbus)"
+		$(use_enable dbus)
+		$(use_enable introspection)"
 }

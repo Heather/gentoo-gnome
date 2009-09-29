@@ -15,7 +15,7 @@ LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="atk avahi babl dbus gconf gnome-keyring goocanvas +gtk gtksourceview gupnp
-libnotify libsoup libunique libwnck nautilus pango poppler vte webkit"
+libnotify libsoup libwnck nautilus pango poppler vte webkit"
 
 RDEPEND=">=dev-libs/gobject-introspection-0.6.5"
 DEPEND="${RDEPEND}
@@ -35,7 +35,6 @@ DEPEND="${RDEPEND}
 		net-libs/gupnp )
 	libnotify? ( x11-libs/libnotify )
 	libsoup? ( net-libs/libsoup:2.4 )
-	libunique? ( >=dev-libs/libunique-1.0.0 )
 	libwnck? ( x11-libs/libwnck )
 	nautilus? ( gnome-base/nautilus )
 	pango? ( x11-libs/pango )
@@ -59,6 +58,7 @@ pkg_setup() {
 		--disable-clutter-cairo
 		--disable-gnio
 		--disable-gstreamer
+		--disable-unique
 		$(use_enable atk)
 		$(use_enable avahi)
 		$(use_enable babl)
@@ -71,7 +71,6 @@ pkg_setup() {
 		$(use_enable gupnp gssdp)
 		$(use_enable libnotify notify)
 		$(use_enable libsoup soup)
-		$(use_enable libunique unique)
 		$(use_enable libwnck wnck)
 		$(use_enable nautilus)
 		$(use_enable pango)
