@@ -13,8 +13,8 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc"
 
 RDEPEND=">=dev-python/pygobject-2.15.2
-	>=dev-python/pygtk-2.8.1
-	>=x11-libs/gtksourceview-2.3"
+	>=dev-python/pygtk-2.8
+	>=x11-libs/gtksourceview-2.8.1"
 
 DEPEND="${RDEPEND}
 	doc? (
