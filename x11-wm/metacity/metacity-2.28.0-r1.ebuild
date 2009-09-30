@@ -3,6 +3,8 @@
 # $Header: /var/cvsroot/gentoo-x86/x11-wm/metacity/metacity-2.26.0-r1.ebuild,v 1.1 2009/05/14 20:44:38 eva Exp $
 
 EAPI="2"
+# debug only changes CFLAGS
+GCONF_DEBUG="no"
 
 inherit eutils gnome2
 
