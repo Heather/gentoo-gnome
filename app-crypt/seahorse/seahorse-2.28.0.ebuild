@@ -47,6 +47,7 @@ pkg_setup() {
 		--enable-pgp
 		--enable-ssh
 		--enable-pkcs11
+		--disable-static
 		--disable-scrollkeeper
 		--disable-update-mime-database
 		--enable-hkp
@@ -60,13 +61,19 @@ pkg_setup() {
 src_prepare() {
 	gnome2_src_prepare
 
-	# Fix intltoolize broken file, see upstream #577133
-	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
-
 	# https://bugzilla.gnome.org/show_bug.cgi?id=596691
 	epatch "${FILESDIR}/${PN}-2.28.0-as-needed.patch"
-	
+
+	# Make it libtool-1 compatible
+	rm -v m4/lt* m4/libtool.m4 || die "removing libtool macros failed"
+
+	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
+}
+
+src_install() {
+	gnome2_src_install
+	find "${D}" -name '*.la' -delete
 }
 
 pkg_postinst() {
