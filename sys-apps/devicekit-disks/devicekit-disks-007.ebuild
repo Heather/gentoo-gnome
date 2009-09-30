@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit gnome2
+inherit bash-completion gnome2
 
 MY_PN="DeviceKit-disks"
 
@@ -52,4 +52,12 @@ src_prepare() {
 
 	# Fix intltoolize broken file, see upstream #577133
 	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
+}
+
+src_install() {
+	gnome2_src_install
+
+	if use bash-completion; then
+		dobashcompletion "${S}/tools/devkit-disks-bash-completion.sh"
+	fi
 }
