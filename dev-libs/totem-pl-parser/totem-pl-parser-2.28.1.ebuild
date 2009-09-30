@@ -17,7 +17,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 # TODO: Re-generate doc ?
 IUSE="doc hal test"
 
-RDEPEND=">=dev-libs/glib-2.17.3
+RDEPEND=">=dev-libs/glib-2.21.6
 	>=x11-libs/gtk+-2.12
 	dev-libs/gmime:2.4"
 DEPEND="${RDEPEND}
