@@ -13,18 +13,17 @@ HOMEPAGE="http://www.gnome.org/projects/brasero"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
-IUSE="beagle +cdr +libburn +totem +nautilus"
+IUSE="beagle +cdr +css +libburn +totem +nautilus"
 
-RDEPEND=">=dev-libs/glib-2.16.5
+COMMON_DEPEND=">=dev-libs/glib-2.16.5
 	>=x11-libs/gtk+-2.16.0
 	>=media-libs/gstreamer-0.10.15
 	>=media-libs/gst-plugins-base-0.10.15
 	>=media-plugins/gst-plugins-ffmpeg-0.10
 	>=dev-libs/libxml2-2.6
-	>=dev-libs/libunique-1.0.0
-	gnome-base/gvfs
+	>=dev-libs/libunique-1
+	gnome-base/gconf
 	>=app-cdr/cdrdao-1.2.2-r3
-	media-libs/libdvdcss
 	>=app-cdr/dvd+rw-tools-7.1
 	cdr? ( virtual/cdrtools )
 	totem? ( >=dev-libs/totem-pl-parser-2.20 )
@@ -32,16 +31,21 @@ RDEPEND=">=dev-libs/glib-2.16.5
 	libburn? ( >=dev-libs/libburn-0.6.0
 		>=dev-libs/libisofs-0.6.12 )
 	nautilus? ( >=gnome-base/nautilus-2.24.2 )"
-DEPEND="${RDEPEND}
-	gnome-base/gnome-common
+RDEPEND="${COMMON_DEPEND}
+	gnome-base/gvfs
+	media-plugins/gst-plugins-meta
+	css? ( media-libs/libdvdcss )"
+DEPEND="${COMMON_DEPEND}
 	app-text/gnome-doc-utils
 	dev-util/pkgconfig
 	sys-devel/gettext
-	dev-util/intltool
-	gnome-base/gconf"
+	dev-util/intltool"
+# eautoreconf deps
+#	gnome-base/gnome-common
 
 pkg_setup() {
 	G2CONF="${G2CONF}
+		--disable-schemas-install
 		--disable-scrollkeeper
 		--disable-caches
 		--disable-dependency-tracking
@@ -55,25 +59,17 @@ pkg_setup() {
 	DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README"
 }
 
-src_prepare() {
-	gnome2_src_prepare
-
-	# Fix intltoolize broken file, see upstream #577133
-	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in \
-		|| die "sed failed"
-}
-
-src_test() {
-	BLING=$LINGUAS
-	unset LINGUAS
-	emake check || die "emake check failed"
-	export LINGUAS=$BLING
-	unset BLING
+src_install() {
+	gnome2_src_install
+	find "${D}" -name '*.la' -delete
 }
 
 pkg_postinst() {
 	gnome2_pkg_postinst
-	elog "Brasero can use all audio files handled by the local Gstreamer installation"
+	elog
+	elog "If ${PN} doesn't handle some music or video format, please check"
+	elog "your USE flags on media-plugins/gst-plugins-meta"
+
 	if ! use cdr && ! use libburn; then
 		elog
 		ewarn "You have disabled all burning backends for Brasero"
