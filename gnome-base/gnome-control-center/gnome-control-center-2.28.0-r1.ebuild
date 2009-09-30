@@ -27,7 +27,7 @@ RDEPEND="x11-libs/libXft
 	>=x11-wm/metacity-2.23.1
 	>=gnome-base/gnome-panel-2.0
 	>=gnome-base/libgnomekbd-2.27.4
-	>=gnome-base/gnome-desktop-2.25.1
+	>=gnome-base/gnome-desktop-2.27.90
 	>=gnome-base/gnome-menus-2.11.1
 	gnome-base/gnome-settings-daemon
 
@@ -86,6 +86,9 @@ src_prepare() {
 
 	# Make it libtool-1 compatible
 	rm -v m4/lt* m4/libtool.m4 || die "removing libtool macros failed"
+
+	# Fix intltoolize broken file, see upstream #577133
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
 
 	# Fix compilation on fbsd, bug #256958
 	epatch "${FILESDIR}/${PN}-2.24.0.1-fbsd.patch"

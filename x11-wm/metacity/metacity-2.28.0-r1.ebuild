@@ -62,6 +62,10 @@ pkg_setup() {
 src_prepare() {
 	gnome2_src_prepare
 
+	# Fix intltoolize broken file, see upstream #577133
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in \
+		|| die "sed failed"
+
 	# Remove stupid CFLAGS, bug #259179
 	sed "s:-Werror::g" -i configure.in configure || die "sed failed"
 }

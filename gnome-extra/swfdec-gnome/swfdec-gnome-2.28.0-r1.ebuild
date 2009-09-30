@@ -22,3 +22,10 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext"
 
 DOCS="NEWS README"
+
+src_prepare() {
+	gnome2_src_prepare
+
+	# Fix intltoolize broken file, see upstream #577133
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
+}
