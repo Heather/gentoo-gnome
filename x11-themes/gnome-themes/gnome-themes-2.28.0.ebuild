@@ -46,6 +46,10 @@ src_unpack() {
 			desktop-themes/Makefile.am desktop-themes/Makefile.in \
 			gtk-themes/Makefile.am gtk-themes/Makefile.in \
 			icon-themes/Makefile.am icon-themes/Makefile.in \
-			|| die "sed failed"
+			|| die "sed 1 failed"
 	fi
+
+	# Fix intltoolize broken file, see upstream #577133
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in \
+		|| die "sed 2 failed"
 }
