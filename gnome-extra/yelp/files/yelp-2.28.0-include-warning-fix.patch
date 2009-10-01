@@ -1,0 +1,29 @@
+bug 287132 -- gnome-extra/yelp-2.28.0 dies install_qa
+
+Has been committed upstream, won't be needed in 2.28.1
+https://bugzilla.gnome.org/show_bug.cgi?id=596903
+---
+From fb76b4e570cb144c5e06bd707a268615b69a9b34 Mon Sep 17 00:00:00 2001
+From: Xake <xake@rymdraket.net>
+Date: Wed, 30 Sep 2009 20:02:48 +0200
+Subject: [PATCH] Forgotten include, fix warning.
+
+---
+ tests/test-uri.c |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/tests/test-uri.c b/tests/test-uri.c
+index 73f44df..5715874 100644
+--- a/tests/test-uri.c
++++ b/tests/test-uri.c
+@@ -25,6 +25,7 @@
+ #include <string.h>
+ 
+ #include <gio/gio.h>
++#include <gio/gunixoutputstream.h>
+ 
+ #include "yelp-uri.h"
+ 
+-- 
+1.6.5.rc1
+

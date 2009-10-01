@@ -46,6 +46,10 @@ DOCS="AUTHORS ChangeLog NEWS README TODO"
 src_unpack() {
 	gnome2_src_unpack
 
+	# Fix install_qa failure, bug #287132
+	# Won't be needed in 2.28.1
+	epatch "${FILESDIR}/${P}-include-warning-fix.patch"
+
 	# Fix automagic lzma support, bug #266128
 	epatch "${FILESDIR}/${PN}-2.26.0-automagic-lzma.patch"
 
