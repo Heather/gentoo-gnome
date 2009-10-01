@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-terms/gnome-terminal/gnome-terminal-2.26.3.1-r1.ebuild,v 1.1 2009/08/28 16:27:47 mrpouet Exp $
 
+GCONF_DEBUG="no"
+
 inherit eutils gnome2
 
 DESCRIPTION="The Gnome Terminal"
