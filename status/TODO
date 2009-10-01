@@ -27,7 +27,7 @@ media-libs/clutter-1.0.6
 media-libs/libchamplain-0.4.0
  * add pyclutter first
  * mono support
-media-video/totem-2.28.1
+media-video/totem-2.28.1-r1
  * tests broken with USE="-doc" upstream bug #577774.
  * tarball generated with broken gtk-doc, revisit me.
  * why does it need write access here, probably need to set up a fake
