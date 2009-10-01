@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit autotools eutils gnome2
+inherit autotools eutils gnome2 gnome2-la
 
 DESCRIPTION="A GNOME application for managing encryption keys"
 HOMEPAGE="http://www.gnome.org/projects/seahorse/index.html"
@@ -43,6 +43,9 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog NEWS README TODO THANKS"
 
 pkg_setup() {
+	# Pointless .la files for plugins
+	G2PUNT_LA="yes"
+
 	G2CONF="${G2CONF}
 		--enable-pgp
 		--enable-ssh
@@ -69,11 +72,6 @@ src_prepare() {
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
-}
-
-src_install() {
-	gnome2_src_install
-	find "${D}" -name '*.la' -delete
 }
 
 pkg_postinst() {
