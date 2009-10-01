@@ -69,3 +69,10 @@ pkg_postinst() {
 		ewarn "with the 'tiff' USE flag enabled."
 	fi
 }
+
+src_install() {
+	gnome2_src_install
+
+	# Installed for plugins, but they're dlopen()-ed
+	find "${D}" -name '*.la' -delete
+}
