@@ -3,8 +3,9 @@
 # $Header: /var/cvsroot/gentoo-x86/net-misc/vinagre/vinagre-2.26.2.ebuild,v 1.1 2009/05/22 22:45:29 eva Exp $
 
 EAPI="2"
+G2PUNT_LA="yes"
 
-inherit autotools eutils gnome2
+inherit autotools eutils gnome2 gnome2-la
 
 DESCRIPTION="VNC Client for the GNOME Desktop"
 HOMEPAGE="http://www.gnome.org/projects/vinagre/"
@@ -48,8 +49,16 @@ pkg_setup() {
 		$(use_enable telepathy)"
 }
 
+src_prepare() {
+	gnome2_src_prepare
+
+	# Fix intltoolize broken file, see upstream #577133
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in \
+		|| die "sed failed"
+}
+
 src_install() {
-	gnome2_src_install
+	gnome2-la_src_install
 
 	# Remove it's own installation of DOCS that go to $PN instead of $P and aren't ecompressed
 	rm -rf "${D}"/usr/share/doc/vinagre
