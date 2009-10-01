@@ -5,7 +5,7 @@
 EAPI="2"
 GCONF_DEBUG="no"
 
-inherit eutils toolchain-funcs gnome2 python
+inherit eutils toolchain-funcs gnome2 gnome2-la python
 
 DESCRIPTION="An API documentation browser for GNOME 2"
 HOMEPAGE="http://live.gnome.org/devhelp"
@@ -31,6 +31,9 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog NEWS README"
 
 pkg_setup() {
+	# Internal library, punt .la file
+	G2PUNT_LA="yes"
+
 	# ICC is crazy, silence warnings (bug #154010)
 	if [[ $(tc-getCC) == "icc" ]] ; then
 		G2CONF="${G2CONF} --with-compile-warnings=no"
