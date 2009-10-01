@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils gnome2
+inherit eutils gnome2 gnome2-la
 
 DESCRIPTION="The Eye of GNOME image viewer"
 HOMEPAGE="http://www.gnome.org/projects/eog/"
@@ -43,6 +43,9 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README THANKS TODO"
 
 pkg_setup() {
+	# Installed for plugins, but they're dlopen()-ed
+	G2PUNT_LA="yes"
+
 	G2CONF="${G2CONF}
 		$(use_with exif libjpeg)
 		$(use_with exif libexif)
@@ -68,11 +71,4 @@ pkg_postinst() {
 		ewarn "For TIFF file support to work, x11-libs/gtk+ must be rebuilt"
 		ewarn "with the 'tiff' USE flag enabled."
 	fi
-}
-
-src_install() {
-	gnome2_src_install
-
-	# Installed for plugins, but they're dlopen()-ed
-	find "${D}" -name '*.la' -delete
 }
