@@ -157,6 +157,14 @@ src_configure() {
 	gnome2_src_configure
 }
 
+src_install() {
+	gnome2_src_install
+
+	# Installed for plugins, but they're dlopen()-ed
+	# firefox, totem as well as nautilus
+	find "${D}" -name '*.la' -delete
+}
+
 pkg_postinst() {
 	gnome2_pkg_postinst
 	if use python; then
