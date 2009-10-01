@@ -1,10 +1,11 @@
-# Copyright 1999-2009 Gentoo Foundation
+ # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-text/evince/evince-2.26.2.ebuild,v 1.1 2009/05/18 21:48:00 eva Exp $
 
 EAPI="2"
+G2PUNT_LA="yes"
 
-inherit eutils gnome2 autotools
+inherit autotools eutils gnome2 gnome2-la
 
 DESCRIPTION="Simple document viewer for GNOME"
 HOMEPAGE="http://www.gnome.org/projects/evince/"
@@ -12,7 +13,7 @@ HOMEPAGE="http://www.gnome.org/projects/evince/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
-IUSE="dbus debug djvu doc dvi gnome gnome-keyring introspection nautilus t1lib tiff"
+IUSE="dbus debug djvu doc dvi gnome gnome-keyring introspection nautilus t1lib tiff" # tests
 
 # Since 2.26.2, can handle poppler without cairo support. Make it optional ?
 RDEPEND="
@@ -51,12 +52,14 @@ RESTRICT="test"
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-scrollkeeper
+		--disable-static
 		--disable-tests
 		--enable-pdf
 		--enable-comics
 		--enable-impress
 		--enable-thumbnailer
 		--with-smclient=xsmp
+		--with-platform=gnome
 		$(use_enable dbus)
 		$(use_enable djvu)
 		$(use_enable dvi)
@@ -81,5 +84,9 @@ src_prepare() {
 	# --with-smclient=xsmp gave to the configure script
 	epatch "${FILESDIR}"/${PN}-2.27.4-smclient-configure.patch
 
+	# Make it libtool-1 compatible
+	rm -v m4/lt* m4/libtool.m4 || die "removing libtool macros failed"
+
+	intltoolize --force --automake --copy || die "intltoolized failed"
 	eautoreconf
 }
