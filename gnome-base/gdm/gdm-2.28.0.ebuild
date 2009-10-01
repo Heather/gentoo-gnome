@@ -11,9 +11,7 @@ HOMEPAGE="http://www.gnome.org/projects/gdm/"
 
 LICENSE="GPL-2"
 SLOT="0"
-# Unkeyworded because it doesn't show anything for me
-#KEYWORDS="~amd64 ~x86"
-KEYWORDS=""
+KEYWORDS="~amd64 ~x86"
 
 IUSE_LIBC="elibc_glibc"
 IUSE="accessibility +consolekit debug ipv6 gnome-keyring selinux tcpd test xinerama +xklavier $IUSE_LIBC"
@@ -29,6 +27,7 @@ RDEPEND=">=dev-libs/dbus-glib-0.74
 	>=dev-libs/glib-2.15.4
 	>=x11-libs/gtk+-2.10.0
 	>=x11-libs/pango-1.3
+	>=media-libs/libcanberra-0.4
 	>=gnome-base/libglade-2
 	>=gnome-base/gconf-2.6.1
 	>=gnome-base/gnome-panel-2
@@ -93,6 +92,9 @@ pkg_setup() {
 
 src_prepare() {
 	gnome2_src_prepare
+
+	# Fix intltoolize broken file, see upstream #577133
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
 
 	# remove unneeded linker directive for selinux (#41022)
 	epatch "${WORKDIR}/${PN}-2.26.1-selinux-remove-attr.patch"
