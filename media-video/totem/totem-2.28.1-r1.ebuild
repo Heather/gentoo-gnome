@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit autotools eutils gnome2 multilib python
+inherit autotools eutils gnome2 gnome2-la multilib python
 
 DESCRIPTION="Media player for GNOME"
 HOMEPAGE="http://gnome.org/projects/totem/"
@@ -91,6 +91,10 @@ DOCS="AUTHORS ChangeLog NEWS README TODO"
 RESTRICT="test"
 
 pkg_setup() {
+	# Installed for plugins, but they're dlopen()-ed
+	# firefox, totem as well as nautilus
+	G2PUNT_LA="yes"
+
 	G2CONF="${G2CONF}
 		--disable-scrollkeeper
 		--disable-schemas-install
@@ -155,14 +159,6 @@ src_configure() {
 	addpredict "$(unset HOME; echo ~)/.gnome2"
 
 	gnome2_src_configure
-}
-
-src_install() {
-	gnome2_src_install
-
-	# Installed for plugins, but they're dlopen()-ed
-	# firefox, totem as well as nautilus
-	find "${D}" -name '*.la' -delete
 }
 
 pkg_postinst() {
