@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils gnome2
+inherit eutils gnome2 gnome2-la
 
 DESCRIPTION="A GNOME application for managing encryption keys"
 HOMEPAGE="http://www.gnome.org/projects/seahorse/index.html"
@@ -44,6 +44,9 @@ DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35"
 
 pkg_setup() {
+	# Installed for plugins which are dlopen()-ed
+	G2PUNT_LA="yes"
+
 	if use epiphany ; then
 		if has_version '>=www-client/epiphany-2.24.3-r10'; then
 			G2CONF="${G2CONF} --with-gecko=libxul-unstable"
@@ -75,9 +78,7 @@ src_prepare() {
 }
 
 src_install() {
-	gnome2_src_install
-
-	find "${D}" -name '*.la' -delete
+	gnome2-la_src_install
 
 	exeinto /etc/X11/xinit/xinitrc.d/
 	doexe "${FILESDIR}/70-seahorse-agent" || die "doexe failed"
