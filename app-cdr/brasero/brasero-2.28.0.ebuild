@@ -5,7 +5,7 @@
 EAPI="2"
 GCONF_DEBUG="no"
 
-inherit gnome2 eutils
+inherit eutils gnome2 gnome2-la
 
 DESCRIPTION="Brasero (aka Bonfire) is yet another application to burn CD/DVD for the gnome desktop."
 HOMEPAGE="http://www.gnome.org/projects/brasero"
@@ -44,6 +44,9 @@ DEPEND="${COMMON_DEPEND}
 #	gnome-base/gnome-common
 
 pkg_setup() {
+	# Pointless .la files for plugins
+	G2PUNT_LA="yes"
+
 	G2CONF="${G2CONF}
 		--disable-schemas-install
 		--disable-scrollkeeper
@@ -57,11 +60,6 @@ pkg_setup() {
 		$(use_enable libburn libburnia)"
 
 	DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README"
-}
-
-src_install() {
-	gnome2_src_install
-	find "${D}" -name '*.la' -delete
 }
 
 pkg_postinst() {
