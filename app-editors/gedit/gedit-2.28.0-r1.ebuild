@@ -69,6 +69,13 @@ src_unpack() {
 		|| die "sed expression failed"
 }
 
+src_install() {
+	gnome2_src_install
+
+	# Installed for plugins, but they're dlopen()-ed
+	find "${D}" -name '*.la' -delete
+}
+
 pkg_postinst() {
 	gnome2_pkg_postinst
 	use python && python_mod_optimize /usr/$(get_libdir)/gedit-2/plugins
