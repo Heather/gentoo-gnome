@@ -4,7 +4,7 @@
 
 GCONF_DEBUG="no"
 
-inherit gnome2
+inherit gnome2 gnome2-la
 
 DESCRIPTION="Disk Utility for GNOME using devicekit-disks"
 HOMEPAGE="http://git.gnome.org/cgit/gnome-disk-utility/"
@@ -34,5 +34,8 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS NEWS README TODO"
 
 pkg_setup() {
-	G2CONF="${G2CONF} $(use_enable nautilus)"
+	G2PUNT_LA="yes"
+	G2CONF="${G2CONF}
+		--disable-static
+		$(use_enable nautilus)"
 }
