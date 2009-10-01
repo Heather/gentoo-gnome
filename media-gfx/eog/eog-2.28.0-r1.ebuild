@@ -62,12 +62,12 @@ pkg_setup() {
 pkg_postinst() {
 	gnome2_pkg_postinst
 
-	if ! built_with_use =x11-libs/gtk+-2* jpeg; then
+	if ! has_version x11-libs/gtk+:2[jpeg]; then
 		ewarn "For JPEG file support to work, x11-libs/gtk+ must be rebuilt"
 		ewarn "with the 'jpeg' USE flag enabled."
 	fi
 
-	if ! built_with_use =x11-libs/gtk+-2* tiff; then
+	if ! has_version x11-libs/gtk+:2[tiff]; then
 		ewarn "For TIFF file support to work, x11-libs/gtk+ must be rebuilt"
 		ewarn "with the 'tiff' USE flag enabled."
 	fi
