@@ -4,7 +4,7 @@
 
 GCONF_DEBUG="no"
 
-inherit gnome2 python
+inherit gnome2 gnome2-la python
 
 DESCRIPTION="A text editor for the GNOME desktop"
 HOMEPAGE="http://www.gnome.org/"
@@ -49,6 +49,9 @@ if [[ "${ARCH}" == "PPC" ]] ; then
 fi
 
 pkg_setup() {
+	# Installed for plugins, but they're dlopen()-ed
+	G2PUNT_LA="yes"
+
 	G2CONF="${G2CONF}
 		--disable-scrollkeeper
 		--disable-updater
@@ -67,13 +70,6 @@ src_unpack() {
 	# Fix intltoolize broken file, see upstream #577133
 	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in \
 		|| die "sed expression failed"
-}
-
-src_install() {
-	gnome2_src_install
-
-	# Installed for plugins, but they're dlopen()-ed
-	find "${D}" -name '*.la' -delete
 }
 
 pkg_postinst() {
