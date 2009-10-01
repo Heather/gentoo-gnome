@@ -27,11 +27,11 @@ RDEPEND=">=dev-libs/dbus-glib-0.74
 	>=dev-libs/glib-2.15.4
 	>=x11-libs/gtk+-2.10.0
 	>=x11-libs/pango-1.3
-	>=media-libs/libcanberra-0.4
+	>=media-libs/libcanberra-0.4[gtk]
 	>=gnome-base/libglade-2
 	>=gnome-base/gconf-2.6.1
 	>=gnome-base/gnome-panel-2
-	xklavier? ( >=x11-libs/libxklavier-4.0 )
+	xklavier? ( >=x11-libs/libxklavier-4 )
 	x11-libs/libXft
 	app-text/iso-codes
 
@@ -93,9 +93,6 @@ pkg_setup() {
 src_prepare() {
 	gnome2_src_prepare
 
-	# Fix intltoolize broken file, see upstream #577133
-	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
-
 	# remove unneeded linker directive for selinux (#41022)
 	epatch "${WORKDIR}/${PN}-2.26.1-selinux-remove-attr.patch"
 
@@ -114,6 +111,7 @@ src_prepare() {
 	# Fix libxklavier automagic support
 	epatch "${WORKDIR}/${PN}-2.26.1-automagic-libxklavier-support.patch"
 
+	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
 }
 
