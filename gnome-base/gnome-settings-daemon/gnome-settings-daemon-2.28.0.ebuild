@@ -13,6 +13,8 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="debug libnotify pulseaudio"
+SRC_URI="${SRC_URI}
+	http://dev.gentoo.org/~mrpouet/pub/patches/${P}-gst-vol-control-support.patch.lzma"
 
 RDEPEND=">=dev-libs/dbus-glib-0.74
 	>=dev-libs/glib-2.18.0
@@ -33,7 +35,9 @@ RDEPEND=">=dev-libs/dbus-glib-0.74
 	>=x11-libs/libxklavier-4.0
 	media-libs/fontconfig
 
-	pulseaudio? ( >=media-sound/pulseaudio-0.9.15 )
+	pulseaudio? (
+		>=media-sound/pulseaudio-0.9.15
+		media-libs/libcanberra[gtk] )
 	!pulseaudio? (
 		>=media-libs/gstreamer-0.10.1.2
 		>=media-libs/gst-plugins-base-0.10.1.2 )"
@@ -67,7 +71,7 @@ src_prepare() {
 	gnome2_src_prepare
 
 	# Restore gstreamer volume control support, upstream bug #571145
-	epatch "${FILESDIR}/${PN}-2.27.5-readd-gst-vol-control-support.patch"
+	epatch "${WORKDIR}/${P}-gst-vol-control-support.patch"
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
