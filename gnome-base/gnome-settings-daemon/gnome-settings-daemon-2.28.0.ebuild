@@ -76,3 +76,9 @@ src_prepare() {
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
 }
+
+pkg_postinst() {
+	gnome2_pkg_postinst
+	elog "GStreamer volume control support is a feature powered by Gentoo GNOME Team"
+	elog "so PLEASE DO NOT report on upstream, report on https://bugs.gentoo.org instead"
+}
