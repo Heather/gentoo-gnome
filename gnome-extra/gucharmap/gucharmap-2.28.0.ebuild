@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/gucharmap/gucharmap-2.26.3.1.ebuild,v 1.1 2009/07/16 23:30:57 eva Exp $
 
-inherit gnome2
+inherit gnome2 gnome2-la
 
 DESCRIPTION="Unicode character map viewer"
 HOMEPAGE="http://gucharmap.sourceforge.net/"
@@ -29,6 +29,7 @@ DEPEND="${RDEPEND}
 DOCS="ChangeLog NEWS README TODO"
 
 pkg_setup() {
+	G2PUNT_LA="yes"
 	G2CONF="${G2CONF}
 		--disable-scrollkeeper
 		--disable-maintainer-mode
