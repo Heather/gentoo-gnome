@@ -1,0 +1,133 @@
+From 350f9cef12d6395d9d006d3101e251e035eb701b Mon Sep 17 00:00:00 2001
+From: Romain Perier <mrpouet@gentoo.org>
+Date: Sat, 3 Oct 2009 10:54:26 +0200
+Subject: [PATCH] Fix automagic dependencies for PST[1] and GStreamer[2]
+
+[1] https://bugs.gentoo.org/show_bug.cgi?id=271451
+[2] https://bugs.gentoo.org/show_bug.cgi?id=204300
+
+---
+ configure.ac |   86 +++++++++++++++++++++++++++++++++------------------------
+ 1 files changed, 50 insertions(+), 36 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 92dc7cf..97b9895 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1704,9 +1704,9 @@ dnl Add any new plugins here
+ plugins_base_always="calendar-file calendar-http $CALENDAR_WEATHER itip-formatter plugin-manager default-source addressbook-file startup-wizard mark-all-read groupwise-features groupwise-account-setup mail-account-disable publish-calendar caldav imap-features google-account-setup webdav-account-setup"
+ 
+ plugins_base="$plugins_base_always $SA_JUNK_PLUGIN $BF_JUNK_PLUGIN $EXCHANGE_PLUGIN $MONO_PLUGIN "
+-all_plugins_base="$plugins_base_always sa-junk-plugin bogo-junk-plugin exchange-operations mono"
++all_plugins_base="$plugins_base_always sa-junk-plugin bogo-junk-plugin mono"
+ 
+-plugins_standard_always="bbdb subject-thread save-calendar select-one-source copy-tool mail-to-task audio-inline mailing-list-actions default-mailer prefer-plain mail-notification attachment-reminder backup-restore email-custom-header templates pst-import vcard-inline"
++plugins_standard_always="bbdb subject-thread save-calendar select-one-source copy-tool mail-to-task mailing-list-actions default-mailer prefer-plain mail-notification attachment-reminder backup-restore email-custom-header templates vcard-inline"
+ 
+ plugins_standard="$plugins_standard_always"
+ all_plugins_standard="$plugins_standard"
+@@ -1762,29 +1762,31 @@ if test "x${enable_python}" = "xyes"; then
+ 	msg_plugins="$msg_plugins (and python)"
+ fi
+ 
+-AC_SUBST(plugins_enabled)
+-AC_SUBST(all_plugins_base)
+-AC_SUBST(all_plugins_standard)
+-AC_SUBST(all_plugins_experimental)
+-
+-if echo ${plugins_enabled} | grep "audio-inline" > /dev/null
++dnl *********************
++dnl gstreamer
++dnl *********************
++AC_ARG_ENABLE([audio-inline],
++ 	AC_HELP_STRING([--disable-audio-inline],
++ 		[Disable audio-inline plugin @<:@default=yes@:>@]),
++ 	[enable_audio_inline="$enableval"], [enable_audio_inline=yes])
++  
++if test "x$enable_audio_inline" = "xyes"
+ then
+-	if ${PKG_CONFIG} --exists gstreamer-0.10
+-	then
+-		dnl *********************
+-		dnl gstreamer
+-		dnl *********************
+-		PKG_CHECK_MODULES([GSTREAMER], [gstreamer-0.10])
+-		AC_SUBST(GSTREAMER_CFLAGS)
+-		AC_SUBST(GSTREAMER_LIBS)
+-	else
+-		plugins_enabled=`echo $plugins_enabled | sed -e "s/audio-inline//g"`
+-		echo "warning: gstreamer was not found, audio-inline plugin will not be built."
+-		echo "you are probably missing gstreamer-devel package."
+-	fi
++ 	PKG_CHECK_MODULES(GSTREAMER, gstreamer-0.10, have_gst=yes, have_gst=no)
++ 	AC_SUBST(GSTREAMER_CFLAGS)
++ 	AC_SUBST(GSTREAMER_LIBS)
++ 
++ 	if test "$have_gst" = "yes"; then
++ 		plugins_enabled="$plugins_enabled audio-inline"
++ 		msg_plugins="$msg_plugins (audio-inline)"
++  	else
++ 		AC_MSG_WARN([gstreamer was not found, audio-inline plugin will not be built.
++ 		You are probably missing gstreamer-devel package.])
++  	fi
+ fi
+ 
+-if echo ${plugins_enabled} | grep "exchange-operations" > /dev/null ; then
++
++if test "x$enable_exchange" = "xyes"; then
+ 	PKG_CHECK_MODULES([LIBEXCHANGESTORAGE], [libexchange-storage-$EDS_PACKAGE >= eds_minimum_version], [have_libexchange="yes"], [have_libexchange="no"])
+ 	if test "x$have_libexchange" = "xyes"; then
+ 		dnl **************************************************
+@@ -1799,23 +1801,35 @@ if echo ${plugins_enabled} | grep "exchange-operations" > /dev/null ; then
+ 	fi
+ fi
+ 
+-if echo ${plugins_enabled} | grep "pst-import" > /dev/null
++dnl *********************
++dnl libpst
++dnl *********************
++ 
++AC_ARG_ENABLE([pst-import],
++ 	AC_HELP_STRING([--disable-pst-import],
++ 		[Disable pst import plugin @<:@default=yes@:>@]),
++ 	[enable_pst="$enableval"], [enable_pst=yes])
++ 
++if test "x$enable_pst" = "xyes"
+ then
+-	if ${PKG_CONFIG} --exists libpst
+-	then
+-		dnl *********************
+-		dnl libpst
+-		dnl *********************
+-		PKG_CHECK_MODULES([LIBPST], [libpst >= libpst_minimum_version])
+-		AC_SUBST(LIBPST_CFLAGS)
+-		AC_SUBST(LIBPST_LIBS)
+-	else
+-		plugins_enabled=`echo $plugins_enabled | sed -e "s/pst-import//g"`
+-		echo "warning: libpst was not found, pst-import plugin will not be built."
+-		echo "you are probably missing libpst-devel package."
+-	fi
++ 	PKG_CHECK_MODULES(LIBPST, libpst, have_pst=yes, have_pst=no)
++ 	AC_SUBST(LIBPST_CFLAGS)
++ 	AC_SUBST(LIBPST_LIBS)
++ 
++ 	if test "$have_pst" = "yes"; then
++ 		plugins_enabled="$plugins_enabled pst-import"
++ 		msg_plugins="$msg_plugins (pst-import)"
++ 	else
++ 		AC_MSG_WARN([libpst was not found, pst-import plugin will not be built.
++ 		You are probably missing libpst-devel package.])
++ 	fi
+ fi
+ 
++AC_SUBST(plugins_enabled)
++AC_SUBST(all_plugins_base)
++AC_SUBST(all_plugins_standard)
++AC_SUBST(all_plugins_experimental)
++
+ dnl ***********
+ dnl GConf stuff
+ dnl ***********
+-- 
+1.6.5.rc2
+
