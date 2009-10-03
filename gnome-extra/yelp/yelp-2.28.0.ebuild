@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/yelp/yelp-2.26.0.ebuild,v 1.3 2009/09/10 20:43:14 eva Exp $
 
-EAPI="1"
+EAPI="2"
 
 inherit autotools eutils gnome2
 
@@ -43,22 +43,6 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
-src_unpack() {
-	gnome2_src_unpack
-
-	# Fix install_qa failure, bug #287132
-	# Won't be needed in 2.28.1
-	epatch "${FILESDIR}/${P}-include-warning-fix.patch"
-
-	# Fix automagic lzma support, bug #266128
-	epatch "${FILESDIR}/${PN}-2.26.0-automagic-lzma.patch"
-
-	eautoreconf
-
-	# strip stupid options in configure, see bug #196621
-	sed -i 's|$AM_CFLAGS -pedantic -ansi|$AM_CFLAGS|' configure || die "sed	failed"
-}
-
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--with-gecko=libxul-embedding
@@ -69,4 +53,21 @@ pkg_setup() {
 	else
 		G2CONF="${G2CONF} --with-search=basic"
 	fi
+}
+
+src_prepare() {
+	gnome2_src_prepare
+
+	# Fix install_qa failure, bug #287132
+	# Won't be needed in 2.28.1
+	epatch "${FILESDIR}/${P}-include-warning-fix.patch"
+
+	# Fix automagic lzma support, bug #266128
+	epatch "${FILESDIR}/${PN}-2.26.0-automagic-lzma.patch"
+
+	intltoolize --force --copy --automake || die "intltoolize failed"
+	eautoreconf
+
+	# strip stupid options in configure, see bug #196621
+	sed -i 's|$AM_CFLAGS -pedantic -ansi|$AM_CFLAGS|' configure || die "sed	failed"
 }
