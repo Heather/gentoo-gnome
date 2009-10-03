@@ -3,22 +3,19 @@
 # $Header: $
 
 EAPI="2"
-GCONF_DEBUG="no"
-WANT_AUTOMAKE="1.9"
 
-inherit gnome2 clutter autotools
+inherit autotools clutter
 
 DESCRIPTION="Clutter is a library for creating graphical user interfaces"
 
-KEYWORDS="~amd64 ~x86"
-IUSE="debug doc +gtk introspection +opengl sdl"
 SLOT="1.0"
+KEYWORDS="~amd64 ~x86"
+IUSE="debug doc +gtk introspection +opengl"
 
-RDEPEND="${RDEPEND}
-	>=dev-libs/glib-2.16
+RDEPEND=">=dev-libs/glib-2.16
 	>=x11-libs/cairo-1.4
 	>=x11-libs/pango-1.20
-	
+
 	gtk? ( >=x11-libs/gtk+-2.0 )
 	opengl? (
 		virtual/opengl
@@ -30,10 +27,11 @@ RDEPEND="${RDEPEND}
 
 		>=x11-libs/libXfixes-3
 		>=x11-libs/libXcomposite-0.4 )
-	!opengl? ( sdl? ( media-libs/libsdl ) )
+	!opengl? ( media-libs/libsdl )
 "
 DEPEND="${RDEPEND}
-	${DEPEND}
+	sys-devel/gettext
+	dev-util/gtk-doc-am
 	doc? (
 		>=dev-util/gtk-doc-1.11
 		>=app-text/docbook-sgml-utils-0.6.14[jadetex]
@@ -42,54 +40,48 @@ DEPEND="${RDEPEND}
 		>=dev-libs/gobject-introspection-0.6.4
 		>=dev-libs/gir-repository-0.6.3[pango] )"
 
-pkg_setup() {
-	local errmsg="Select either opengl or sdl as your renderer"
+src_configure() {
+	local myconf=""
 
 	if use opengl; then
-		if use sdl; then
-			ewarn "Both 'opengl' and 'sdl' USE flags selected"
-			ewarn "Selecting opengl/glx (default)..."
-		fi
 		elog "Using GLX for OpenGL backend"
-		G2CONF="${G2CONF} --with-flavour=glx"
-	elif use sdl; then
-		elog "Using SDL for OpenGL backend"
-		G2CONF="${G2CONF} --with-flavour=sdl"
+		myconf="${myconf} --with-flavour=glx"
 	else
-		eerror "${errmsg}"
-		die "${errmsg}"
+		elog "Using SDL for OpenGL backend"
+		myconf="${myconf} --with-flavour=sdl"
 	fi
 
 	if use gtk; then
-		G2CONF="${G2CONF} --with-imagebackend=gdk-pixbuf"
+		myconf="${myconf} --with-imagebackend=gdk-pixbuf"
 	else
-		G2CONF="${G2CONF} --with-imagebackend=internal"
+		myconf="${myconf} --with-imagebackend=internal"
 		# Internal image backend is experimental
 		ewarn "You have selected the experimental internal image backend"
 	fi
 
-	if use debug; then
-		G2CONF="${G2CONF}
-			--enable-debug=yes
-			--enable-cogl-debug=yes"
+	if ! use debug; then
+		myconf="${myconf}
+			--enable-debug=minimum
+			--enable-cogl-debug=minimum"
 	fi
 
-	# XXX: Tests are interactive, not of use for us
+	# FIXME: Tests are interactive, not of use for us
 	# FIXME: Using external json-glib breaks introspection
-	G2CONF="${G2CONF}
+	myconf="${myconf}
 		--disable-tests
 		--enable-maintainer-flags=no
 		--enable-xinput
 		--with-json=internal
 		$(use_enable introspection)
 		$(use_enable doc manual)"
+	econf ${myconf}
 }
 
 src_prepare() {
 	# Make it libtool-1 compatible
 	rm -v build/autotools/lt* build/autotools/libtool.m4 || die "removing libtool macros failed"
 
-	# Tests are interactive, not of use for us
+	# FIXME: Tests are interactive, not of use for us
 	epatch "${FILESDIR}/${PN}-1.0.0-disable-tests.patch"
 
 	eautoreconf
