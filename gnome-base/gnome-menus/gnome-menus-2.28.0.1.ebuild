@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-menus/gnome-menus-2.26.2.ebuild,v 1.2 2009/08/03 21:25:24 eva Exp $
 
-inherit eutils gnome2 python
+inherit eutils gnome2 gnome2-la python
 
 DESCRIPTION="The GNOME menu system, implementing the F.D.O cross-desktop spec"
 HOMEPAGE="http://www.gnome.org"
@@ -24,6 +24,8 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
 pkg_setup() {
+	G2PUNT_LA="yes"
+
 	# Do NOT compile with --disable-debug/--enable-debug=no
 	# It disables api usage checks
 	if ! use debug ; then
@@ -45,7 +47,7 @@ src_unpack() {
 }
 
 src_install() {
-	gnome2_src_install
+	gnome2-la_src_install
 
 	# Prefix menu, bug #256614
 	mv "${D}"/etc/xdg/menus/applications.menu \
