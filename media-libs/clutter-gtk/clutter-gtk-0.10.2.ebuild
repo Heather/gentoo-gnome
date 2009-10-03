@@ -4,13 +4,13 @@
 
 EAPI="2"
 
-inherit gnome2 clutter
+inherit clutter
 
 DESCRIPTION="Clutter-GTK - GTK+ Integration library for Clutter"
 
-KEYWORDS="~amd64 ~x86"
-IUSE="doc examples introspection"
 SLOT="1.0"
+KEYWORDS="~amd64 ~x86"
+IUSE="doc debug examples introspection"
 
 RDEPEND="
 	>=x11-libs/gtk+-2.12[X]
@@ -23,7 +23,13 @@ DEPEND="${RDEPEND}
 		>=dev-libs/gir-repository-0.6.3[gtk] )"
 
 EXAMPLES=examples/{*.c,redhand.png}
-G2CONF="${G2CONF}
-	--with-flavour=x11
-	--enable-maintainer-flags=no
-	$(use_enable introspection)"
+
+src_configure() {
+	local myconf="--with-flavour=x11
+		--enable-maintainer-flags=no
+		$(use_enable introspection)"
+	if ! use debug; then
+		myconf="${myconf} --enable-debug=minimum"
+	fi
+	econf ${myconf}
+}
