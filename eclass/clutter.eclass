@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-# 
+#
 # clutter.eclass
 #
 # Sets SRC_URI, SLOT, and a few deps
@@ -25,6 +25,7 @@ DOCS="AUTHORS ChangeLog NEWS README TODO"
 
 clutter_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
+	dodoc ${DOCS} || die "dodoc failed"
 
 	# examples
 	if hasq examples ${IUSE} && use examples; then
@@ -40,3 +41,5 @@ clutter_src_install() {
 		done
 	fi
 }
+
+EXPORT_FUNCTIONS src_install
