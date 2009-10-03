@@ -1,5 +1,7 @@
 Ebuild Notices:
 ===============
+app-text/gnome-doc-utils-0.18.0
+ * Highly broken with parallel make, see bug #286889
 dev-libs/gir-repository-0.6.5
  * installs even disabled stuff if it's a dependency of something enabled
  * these dependencies are incomplete

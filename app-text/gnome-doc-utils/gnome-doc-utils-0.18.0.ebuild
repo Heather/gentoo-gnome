@@ -26,16 +26,15 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS README"
 
+# FIXME: Highly broken with parallel make, see bug #286889
+MAKEOPTS="${MAKEOPTS} -j1"
+
 pkg_setup() {
 	G2CONF="${G2CONF} --disable-scrollkeeper"
 }
 
-src_prepare() {
-	gnome2_src_prepare
-
-	# If there is a need to reintroduce eautomake or eautoreconf, make sure
-	# to AT_M4DIR="tools m4", bug #224609 (m4 removes glib build time dep)
-}
+# If there is a need to reintroduce eautomake or eautoreconf, make sure
+# to AT_M4DIR="tools m4", bug #224609 (m4 removes glib build time dep)
 
 pkg_postinst() {
 	python_need_rebuild
