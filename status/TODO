@@ -38,9 +38,9 @@ media-video/totem-2.28.1-r1
  * tarball generated with broken gtk-doc, revisit me.
  * why does it need write access here, probably need to set up a fake
 net-im/empathy-2.28.0
+ * Add location support once geoclue stops being idiotic with automagic deps
  * libnotify & libcanberra hard deps
- * Tests are broken, upstream bug #576785
- * report upstream their package is broken
+ * Highly broken with parallel make, mallard strike 2, see bug #286889
 net-libs/libepc-0.3.10
  * 2 out of 16 tests fail, upstream bug #578792
 www-client/epiphany-extensions-2.28.0

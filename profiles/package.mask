@@ -22,3 +22,10 @@
 # Several feature regressions
 =www-client/epiphany-2.27*
 =www-client/epiphany-extensions-2.27*
+
+# Gilles Dartiguelongue <eva@gentoo.org> (4 Oct 2009)
+# Needed by empathy-2.28
+# Olivier Crete <tester@gentoo.org> (11 Sep 2009)
+# Mission Control 5 API is compatible with MC4
+# It is also incompatible with empathy <2.27.91
+->=net-im/telepathy-mission-control-5

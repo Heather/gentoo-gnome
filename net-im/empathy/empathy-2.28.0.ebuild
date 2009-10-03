@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils gnome2
+inherit eutils gnome2 multilib
 
 DESCRIPTION="Telepathy client and library using GTK+"
 HOMEPAGE="http://live.gnome.org/Empathy"
@@ -12,7 +12,7 @@ HOMEPAGE="http://live.gnome.org/Empathy"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~x86"
-# Add location support once geoclue stops being idiotic with automagic deps
+# FIXME: Add location support once geoclue stops being idiotic with automagic deps
 IUSE="applet doc map networkmanager python spell test webkit"
 
 # FIXME: libnotify & libcanberra hard deps
@@ -59,11 +59,12 @@ DEPEND="${RDEPEND}
 	virtual/python
 	doc? ( >=dev-util/gtk-doc-1.3 )
 "
+PDEPEND=">=net-im/telepathy-mission-control-5"
 
 DOCS="CONTRIBUTORS AUTHORS ChangeLog NEWS README"
 
-# FIXME: Tests are broken, upstream bug #576785
-RESTRICT="test"
+# FIXME: Highly broken with parallel make, mallard strike 2, see bug #286889
+MAKEOPTS="${MAKEOPTS} -j1"
 
 pkg_setup() {
 	G2CONF="${G2CONF}
@@ -87,15 +88,17 @@ src_prepare() {
 
 	# Remove hard enabled -Werror (see AM_MAINTAINER_MODE), bug 218687
 	sed -i "s:-Werror::g" configure || die "sed 1 failed"
-
-	# FIXME: report upstream their package is broken
-	# Fix intltoolize broken file, see upstream #577133
-	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed 2 failed"
 }
 
 src_test() {
 	unset DBUS_SESSION_BUS_ADDRESS
 	emake check || die "emake check failed."
+}
+
+pkg_preinst() {
+	gnome2_pkg_preinst
+	preserve_old_lib /usr/$(get_libdir)/libempathy.so.23
+	preserve_old_lib /usr/$(get_libdir)/libempathy-gtk.so.19
 }
 
 pkg_postinst() {
@@ -108,4 +111,6 @@ pkg_postinst() {
 	elog "IRC: net-irc/telepathy-idle"
 	elog "Link-local XMPP: net-irc/telepathy-salut"
 	echo
+	preserve_old_lib_notify /usr/$(get_libdir)/libempathy.so.23
+	preserve_old_lib_notify /usr/$(get_libdir)/libempathy-gtk.so.19
 }
