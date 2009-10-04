@@ -5,7 +5,7 @@
 EAPI="2"
 GCONF_DEBUG="no"
 
-inherit gnome2
+inherit gnome2 eutils
 
 DESCRIPTION="Lightweight HTML Rendering/Printing/Editing Engine"
 HOMEPAGE="http://www.gnome.org/"
@@ -42,6 +42,11 @@ pkg_setup() {
 
 src_prepare() {
 	gnome2_src_prepare
+
+	# Fix an editing crash, in components/editor/gtkhtml-editor.c (editor_method_event function)
+	# which caused evolution to crash when we try to response to someone.
+	# Patch import from upstream (cgit interface)
+	epatch "${FILESDIR}/${P}-editor-method-event-sigsegv.patch"
 
 	# Fix deprecated API disabling in used glib library - this is not future-proof, bug 210657
 	sed -i -e 's/DG_DISABLE_DEPRECATED//g' \
