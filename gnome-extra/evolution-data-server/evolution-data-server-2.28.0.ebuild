@@ -29,7 +29,6 @@ RDEPEND=">=dev-libs/glib-2.16.1
 	ssl? (
 		>=dev-libs/nspr-4.4
 		>=dev-libs/nss-3.9 )
-	>=gnome-base/libgnomeui-2
 	sys-libs/zlib
 	=sys-libs/db-4*
 	ldap? ( >=net-nds/openldap-2.0 )
@@ -88,6 +87,10 @@ src_prepare() {
 	# /usr/include/db.h is always db-1 on FreeBSD
 	# so include the right dir in CPPFLAGS
 	append-cppflags "-I$(db_includedir)"
+
+	# FIXME: Fix compilation flags crazyness
+	sed 's/CFLAGS="$CFLAGS $WARNING_FLAGS"//' \
+		-i configure.ac configure || die "sed 3 failed"
 }
 
 src_install() {
