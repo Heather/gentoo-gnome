@@ -31,7 +31,7 @@ RDEPEND=">=x11-libs/gtk+-2.12
 	gajim? ( net-im/gajim
 			 >=dev-libs/dbus-glib-0.60 )
 	pidgin? ( >=net-im/pidgin-2.0.0 )
-	upnp? ( >=net-libs/gupnp-av-0.13 )"
+	upnp? ( >=net-libs/gupnp-0.13.0 )"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=gnome-base/gnome-common-0.12
