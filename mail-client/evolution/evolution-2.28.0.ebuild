@@ -11,7 +11,7 @@ HOMEPAGE="http://www.gnome.org/projects/evolution/"
 
 LICENSE="GPL-2 FDL-1.1"
 SLOT="2.0"
-KEYWORDS="~alpha ~amd64 ~hppa ~ppc64 ~x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~hppa ~ppc64 ~x86"
 IUSE="crypt dbus hal kerberos krb4 ldap mono networkmanager nntp pda profile python ssl gstreamer exchange"
 # pst
 
@@ -33,7 +33,7 @@ RDEPEND=">=dev-libs/glib-2.20
 	>=dev-libs/libgweather-2.25.3
 	>=x11-misc/shared-mime-info-0.22
 	>=gnome-base/gnome-desktop-2.26.0
-	dbus? ( dev-libs/dbus-glib )
+	dbus? ( >=dev-libs/dbus-glib-0.74 )
 	hal? ( >=sys-apps/hal-0.5.4 )
 	x11-libs/libnotify
 	pda? (
@@ -107,7 +107,7 @@ src_prepare() {
 	gnome2_src_prepare
 
 	# Fix timezone offsets on fbsd.  bug #183708
-	# FIXME: Code has changed (a lot)
+	# FIXME: bsd needs to be more active at pushing stuff upstream
 	#epatch "${FILESDIR}/${PN}-2.21.3-fbsd.patch"
 
 	# Fix delete keyboard shortcut
@@ -115,6 +115,10 @@ src_prepare() {
 
 	# Fix multiple automagic plugins, bug #204300 & bug #271451
 	epatch "${FILESDIR}/${P}-automagic-plugins.patch"
+
+	# FIXME: Fix compilation flags crazyness
+	sed 's/CFLAGS="$CFLAGS $WARNING_FLAGS"//' \
+		-i configure.ac configure || die "sed 1 failed"
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf

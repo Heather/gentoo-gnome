@@ -32,7 +32,8 @@ gnome-extra/nautilus-sendto-2.28.0
  * mail plugin build is broken
  * skip evolution, it does not build properly
 mail-client/evolution-2.28.0
- * Code has changed (a lot)
+ * bsd needs to be more active at pushing stuff upstream
+ * Fix compilation flags crazyness
 media-libs/clutter-1.0.6
  * Tests are interactive, not of use for us
  * Using external json-glib breaks introspection
