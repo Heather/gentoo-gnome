@@ -56,5 +56,5 @@ src_prepare() {
 	rm -v m4/lt* m4/libtool.m4 || die "removing libtool macros failed"
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
-	AT_M4DIR="m4" eautoreconf
+	eautoreconf
 }
