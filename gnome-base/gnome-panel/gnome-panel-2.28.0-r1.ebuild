@@ -86,6 +86,13 @@ src_prepare() {
 	# Make it libtool-1 compatible, bug #271652
 	rm -v m4/lt* m4/libtool.m4 || die "removing libtool macros failed"
 
+	# Fix missing cflags for clock applet, bug #287853
+	epatch "${FILESDIR}/${P}-clock-applet-missing-cflags.patch"
+
+	# Fix crashes in various conditions with the new randr code,
+	# import from upstream bug #597101
+	epatch "${FILESDIR}/${P}-crashes-xrandr.patch"
+
 	eautoreconf
 }
 
