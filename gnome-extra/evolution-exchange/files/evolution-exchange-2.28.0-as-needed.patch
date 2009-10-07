@@ -1,0 +1,27 @@
+From e15fec5e7eadbcd48883c47605cc14998368b4f0 Mon Sep 17 00:00:00 2001
+From: Gilles Dartiguelongue <eva@gentoo.org>
+Date: Wed, 7 Oct 2009 23:21:25 +0200
+Subject: [PATCH] Fixed weird missing symbols while building migr-test
+
+GNOME bug #597489
+---
+ storage/Makefile.am |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+diff --git a/storage/Makefile.am b/storage/Makefile.am
+index ff68314..45da125 100644
+--- a/storage/Makefile.am
++++ b/storage/Makefile.am
+@@ -78,7 +78,8 @@ migr_test_SOURCES = \
+ 	exchange-config-listener.c \
+ 	exchange-config-listener.h \
+ 	exchange-migrate.c \
+-	exchange-migrate.h
++	exchange-migrate.h \
++	exchange-autoconfig-wizard.c
+ 
+ migr_test_LDADD =  \
+ 	$(top_builddir)/mail/libexchangemail.la  \
+-- 
+1.6.5.rc1
+
