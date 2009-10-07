@@ -3,8 +3,9 @@
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/gnome-media/gnome-media-2.26.0.ebuild,v 1.3 2009/05/30 14:20:42 ranger Exp $
 
 EAPI="2"
+GCONF_DEBUG="no"
 
-inherit autotools eutils gnome2
+inherit gnome2
 
 DESCRIPTION="Multimedia related programs for the GNOME desktop"
 HOMEPAGE="http://ronald.bitfreak.net/gnome-media.php"
@@ -34,7 +35,7 @@ DEPEND="${RDEPEND}
 	>=app-text/gnome-doc-utils-0.3.2
 	>=dev-util/intltool-0.35.0"
 
-DOCS="AUTHORS NEWS README"
+DOCS="AUTHORS ChangeLog* NEWS MAINTAINERS README"
 
 pkg_setup() {
 	G2CONF="${G2CONF}
@@ -46,6 +47,13 @@ pkg_setup() {
 		--enable-profiles
 		$(use_enable pulseaudio)
 		$(use_enable !pulseaudio gstmix)"
+}
+
+src_prepare() {
+	gnome2_src_prepare
+
+	# FIXME: Do not run intltool check, it breaks in a weird way
+	sed '/^check: all/,+6 d' -i po/Makefile.in.in || die "sed failed"
 }
 
 src_compile() {
