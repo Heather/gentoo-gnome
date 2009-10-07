@@ -58,9 +58,6 @@ src_prepare() {
 	sed -i 's/-O2//g' "${S}"/configure.ac || die "sed failed"
 	# Prevent maintainer mode from being triggered during make
 	AT_M4DIR=autotools eautoreconf
-
-	# Fix our JIT troubles on x86 machines without SSE2
-	epatch ${FILESDIR}/jit-sse2-problem.patch
 }
 
 src_configure() {
