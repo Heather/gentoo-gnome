@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit autotools eutils gnome2 virtualx
+inherit gnome2 virtualx
 
 DESCRIPTION="a library for writing single instance application"
 HOMEPAGE="http://live.gnome.org/LibUnique"
@@ -24,8 +24,9 @@ RDEPEND=">=dev-libs/glib-2.12.0
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.17
-	dev-util/gtk-doc-am
 	doc? ( >=dev-util/gtk-doc-1.11 )"
+# For eautoreconf
+#	dev-util/gtk-doc-am
 
 DOCS="AUTHORS NEWS ChangeLog README TODO"
 
