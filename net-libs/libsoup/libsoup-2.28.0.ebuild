@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit gnome2
+inherit autotools eutils gnome2
 
 DESCRIPTION="An HTTP library implementation in C"
 HOMEPAGE="http://www.gnome.org/"
@@ -20,6 +20,7 @@ RDEPEND=">=dev-libs/glib-2.21.3
 	ssl? ( >=net-libs/gnutls-1 )"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9
+	dev-util/gtk-doc-am
 	doc? ( >=dev-util/gtk-doc-1 )"
 #	test? (
 #		www-servers/apache
@@ -42,4 +43,11 @@ src_prepare() {
 	# Fix test to follow POSIX (for x86-fbsd)
 	# No patch to prevent having to eautoreconf
 	sed -e 's/\(test.*\)==/\1=/g' -i configure.in configure || die "sed failed"
+
+	# Patch *must* be applied conditionally (see patch for details)
+	if use doc; then
+		# Fix bug 268592 (build fails !gnome && doc)
+		epatch "${FILESDIR}/${PN}-2.26.3-fix-build-without-gnome-with-doc.patch"
+		eautoreconf
+	fi
 }
