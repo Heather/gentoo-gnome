@@ -28,7 +28,7 @@ RDEPEND="dev-lang/python
 	>=gnome-base/orbit-2.4
 	>=x11-libs/libwnck-2.19.5
 	>=gnome-base/gconf-2.6.1
-	>=gnome-base/gnome-menus-2.17.92
+	>=gnome-base/gnome-menus-2.27.92
 	>=gnome-base/libbonobo-2.20.4
 	gnome-base/librsvg
 	>=dev-libs/dbus-glib-0.71
