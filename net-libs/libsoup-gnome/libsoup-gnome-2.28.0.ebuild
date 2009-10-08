@@ -15,7 +15,7 @@ SRC_URI="mirror://gnome/sources/${MY_PN}/${MY_P}.tar.bz2"
 
 LICENSE="LGPL-2"
 SLOT="2.4"
-KEYWORDS="alpha amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 # Do NOT build with --disable-debug/--enable-debug=no - gnome2.eclass takes care of that
 IUSE="debug doc"
 
@@ -26,6 +26,7 @@ RDEPEND="~net-libs/libsoup-${PV}
 	dev-db/sqlite:3"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9
+	dev-util/gtk-doc-am
 	doc? ( >=dev-util/gtk-doc-1 )"
 
 S=${WORKDIR}/${MY_P}
@@ -45,6 +46,7 @@ src_prepare() {
 	# No patch to prevent having to eautoreconf
 	sed -e 's/\(test.*\)==/\1=/g' -i configure.in configure || die "sed failed"
 
+	# Use lib present on the system
 	epatch "${FILESDIR}"/${P}-system-lib.patch
 	eautoreconf
 }
