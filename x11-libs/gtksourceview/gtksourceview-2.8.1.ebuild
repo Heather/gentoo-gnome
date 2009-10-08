@@ -4,7 +4,7 @@
 
 GCONF_DEBUG="no"
 
-inherit gnome2
+inherit gnome2 gnome2-la
 
 DESCRIPTION="A text widget implementing syntax highlighting and other features"
 HOMEPAGE="http://www.gnome.org/"
@@ -26,7 +26,8 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README"
 
 src_install() {
-	gnome2_src_install
+	G2PUNT_LA="yes"
+	gnome2-la_src_install
 
 	insinto /usr/share/${PN}-2.0/language-specs
 	doins "${FILESDIR}"/2.0/gentoo.lang || die "doins failed"
