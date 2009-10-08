@@ -89,5 +89,6 @@ src_test() {
 	unset DBUS_SESSION_BUS_ADDRESS
 	export XDG_CONFIG_DIRS=/etc/xdg
 	export XDG_DATA_DIRS=/usr/local/share:/usr/share
+	export XDG_DATA_HOME=${T}
 	emake check || die "tests failed"
 }
