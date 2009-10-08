@@ -3,12 +3,10 @@
 # $Header: /var/cvsroot/gentoo-x86/net-libs/webkit-gtk/webkit-gtk-1.1.10.ebuild,v 1.1 2009/06/19 17:26:25 mrpouet Exp $
 
 EAPI="2"
-WANT_AUTOMAKE=1.11
 
 inherit autotools
 
-MY_P=webkit-${PV}
-
+MY_P="webkit-${PV}"
 DESCRIPTION="Open source web browser engine"
 HOMEPAGE="http://www.webkitgtk.org/"
 SRC_URI="http://www.webkitgtk.org/${MY_P}.tar.gz"
@@ -17,7 +15,7 @@ LICENSE="LGPL-2 LGPL-2.1 BSD"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~sparc ~x86 ~x86-fbsd"
 # geoclue
-IUSE="coverage debug doc +gstreamer pango ruby websockets"
+IUSE="coverage debug doc +gstreamer pango ruby +websockets"
 
 # use sqlite, svg by default
 RDEPEND="
@@ -28,11 +26,11 @@ RDEPEND="
 	x11-libs/cairo
 
 	>=x11-libs/gtk+-2.10
+	>=gnome-base/gail-1.8
 	>=dev-libs/icu-3.8.1-r1
 	>=net-libs/libsoup-2.27.91
 	>=dev-db/sqlite-3
 	>=app-text/enchant-0.22
-	>=sys-devel/flex-2.5.33
 
 	gstreamer? (
 		media-libs/gstreamer:0.10
@@ -43,9 +41,11 @@ RDEPEND="
 		media-libs/fontconfig )
 "
 DEPEND="${RDEPEND}
+	>=sys-devel/flex-2.5.33
 	sys-devel/gettext
 	dev-util/gperf
 	dev-util/pkgconfig
+	dev-util/gtk-doc-am
 	doc? ( >=dev-util/gtk-doc-1.10 )"
 
 S="${WORKDIR}/${MY_P}"
