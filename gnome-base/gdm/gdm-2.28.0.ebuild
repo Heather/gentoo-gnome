@@ -43,7 +43,7 @@ RDEPEND=">=dev-libs/dbus-glib-0.74
 	x11-libs/libXdmcp
 	virtual/pam
 	consolekit? (
-		sys-auth/consolekit
+		sys-auth/consolekit[policykit]
 		>=sys-apps/hal-0.5.12_rc1-r1[consolekit] )
 
 	accessibility? ( x11-libs/libXevie )
