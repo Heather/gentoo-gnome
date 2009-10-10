@@ -18,12 +18,12 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="doc +hal policykit test"
 
-# See bug #196490 & bug #575500
-#RESTRICT="test"
+# Interactive testsuite (upstream ? I'm so...pessimistic)
+RESTRICT="test"
 
 # HAL is used purely as a fallback for setting brightness if xrandr fail
 COMMON_DEPEND=">=dev-libs/glib-2.6.0
-	>=x11-libs/gtk+-2.11.0
+	>=x11-libs/gtk+-2.17.7
 	>=gnome-base/gconf-2.10.0
 	>=gnome-base/gnome-keyring-0.6.0
 	>=dev-libs/dbus-glib-0.71
@@ -74,6 +74,11 @@ pkg_setup() {
 		--enable-compile-warnings=minimum
 		--with-dpms-ext
 		--enable-applets"
+
+	if ! use hal; then
+		ewarn "You've disabled HAL support"
+		ewarn "Cpufreq support will be also disabled"
+	fi
 }
 
 src_prepare() {
