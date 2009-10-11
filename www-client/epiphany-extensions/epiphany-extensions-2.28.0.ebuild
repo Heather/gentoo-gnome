@@ -2,9 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=2
+EAPI="2"
 
-inherit autotools eutils gnome2 versionator
+inherit gnome2 gnome2-la versionator
 
 MY_MAJORV=$(get_version_component_range 1-2)
 
@@ -28,10 +28,11 @@ RDEPEND=">=www-client/epiphany-${MY_MAJORV}
 	dbus? ( >=dev-libs/dbus-glib-0.34 )
 	pcre? ( >=dev-libs/libpcre-3.9-r2 )"
 DEPEND="${RDEPEND}
-	  gnome-base/gnome-common
 	>=dev-util/intltool-0.40
 	>=dev-util/pkgconfig-0.20
 	>=app-text/gnome-doc-utils-0.3.2"
+# eautoreconf dependencies:
+#	  gnome-base/gnome-common
 
 DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
@@ -56,14 +57,8 @@ pkg_setup() {
 
 	use examples && extensions="${extensions} sample"
 
-	G2CONF="${G2CONF} --with-extensions=$(echo "${extensions}" | sed -e 's/[[:space:]]\+/,/g')"
-
-}
-
-src_prepare() {
-	# Fix building with libtool-1  bug #257337
-	rm m4/lt* m4/libtool.m4
-
-	intltoolize --force --copy --automake || die "intltoolize failed"
-	eautoreconf
+	G2CONF="${G2CONF}
+		--disable-maintainer-mode
+		--with-extensions=$(echo "${extensions}" | sed -e 's/[[:space:]]\+/,/g')"
+	G2PUNT_LA="yes"
 }
