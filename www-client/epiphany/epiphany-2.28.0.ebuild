@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit gnome2
+inherit autotools eutils gnome2
 
 DESCRIPTION="GNOME webbrowser based on Webkit"
 HOMEPAGE="http://www.gnome.org/projects/epiphany/"
@@ -41,9 +41,15 @@ DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.40
 	>=app-text/gnome-doc-utils-0.3.2
+	gnome-base/gnome-common
 	doc? ( >=dev-util/gtk-doc-1 )"
 
 DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS README TODO"
+
+src_prepare() {
+	epatch ${FILESDIR}/${PN}-parallel-build-fix.patch
+	eautoreconf
+}
 
 pkg_setup() {
 	G2CONF="${G2CONF}
