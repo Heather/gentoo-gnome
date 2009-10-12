@@ -15,14 +15,12 @@ SLOT="0"
 KEYWORDS="~amd64 ~ppc ~sparc ~x86 ~x86-fbsd"
 IUSE=""
 
-# XXX: libunique dependency is due to #286890
-# Check again with 2.28.0.2
 RDEPEND=">=gnome-base/gconf-2.6
 	>=x11-libs/gtk+-2.10
 	>=dev-libs/glib-2.10
 	>=x11-libs/libwnck-2.10
 	>=net-libs/webkit-gtk-1.1.13
-	>=dev-libs/libunique-1.1.2"
+	>=dev-libs/libunique-1"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/intltool-0.40
@@ -48,7 +46,13 @@ src_prepare() {
 	ln -s $(type -P true) py-compile
 
 	# Fix intltoolize broken file, see upstream #577133
-	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in \
+		|| die "sed 1 failed"
+
+	# Fix build with older libunique, bug #286890
+	sed -e 's/-DG.*_SINGLE_INCLUDES//' \
+		-e 's/-DG.*_DEPRECATED//' \
+		-i src/Makefile.am src/Makefile.in || die "sed 2 failed"
 }
 
 pkg_postinst() {
