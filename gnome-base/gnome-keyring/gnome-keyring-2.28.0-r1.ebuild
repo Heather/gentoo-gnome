@@ -49,9 +49,11 @@ src_prepare() {
 	# Remove silly CFLAGS
 	sed 's:CFLAGS="$CFLAGS -Werror:CFLAGS="$CFLAGS:' \
 		-i configure.in configure || die "sed failed"
-
 	# Fix intltoolize broken file, see upstream #577133
 	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
+	# Fix a delay when the daemon quits, which caused gnome-session to be very slow on shutdown/reboot/logout,
+	# patch import from upstream bug #595698.
+	epatch "${FILESDIR}/${P}-daemon-delay-on-quit.patch"
 }
 
 src_test() {
