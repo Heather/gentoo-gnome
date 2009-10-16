@@ -70,4 +70,9 @@ src_prepare() {
 
 	# Remove stupid CFLAGS, bug #259179
 	sed "s:-Werror::g" -i configure.in configure || die "sed failed"
+	# Should set RestartStyleHint to RestartIfRunning when replaced,
+	# this fix a strange issue with gnome-session (100% of the CPU,
+	# and try to restart metacity infinitively when compiz is started)
+	# patch import from upstream bug #588119.
+	epatch "${FILESDIR}/${P}-restartstylehint-when-replace.patch"
 }
