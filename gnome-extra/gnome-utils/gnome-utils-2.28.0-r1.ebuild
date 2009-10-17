@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit gnome2
+inherit gnome2 gnome2-la
 
 DESCRIPTION="Utilities for the Gnome2 desktop"
 HOMEPAGE="http://www.gnome.org/"
@@ -41,8 +41,10 @@ pkg_setup() {
 		$(use_enable ipv6)
 		--enable-maintainer-flags=no
 		--enable-zlib
+		--disable-static
 		--disable-schemas-install
 		--disable-scrollkeeper"
+	G2PUNT_LA="yes"
 }
 
 src_prepare() {
