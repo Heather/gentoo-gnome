@@ -19,7 +19,7 @@ RDEPEND=">=dev-libs/glib-2.20.0
 	>=gnome-base/gnome-panel-2.13.4
 	>=gnome-base/libgtop-2.12
 	>=gnome-base/gconf-2
-	>=media-libs/libcanberra-0.4
+	>=media-libs/libcanberra-0.4[gtk]
 	x11-libs/libXext"
 
 DEPEND="${RDEPEND}
@@ -33,6 +33,10 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog NEWS README THANKS"
 
 pkg_setup() {
+	if use ! debug; then
+		G2CONF="${G2CONF} --enable-debug=minimum"
+	fi
+
 	G2CONF="${G2CONF}
 		$(use_enable ipv6)
 		--enable-maintainer-flags=no
@@ -48,6 +52,6 @@ src_prepare() {
 	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
 
 	if ! use test ; then
-		sed -e 's/ tests//' -i logview/Makefile* || die "sed failed";
+		sed -e 's/ tests//' -i logview/Makefile.{am,in} || die "sed failed";
 	fi
 }
