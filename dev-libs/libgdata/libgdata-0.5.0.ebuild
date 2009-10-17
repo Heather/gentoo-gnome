@@ -23,15 +23,16 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
+# FIXME: fails testsuite, upstream bug #598801
+RESTRICT="test"
+
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-static
 		$(use_enable gnome)"
 }
 
-src_prepare() {
-	gnome2_src_prepare
-
-	# Fix intltoolize broken file, see upstream #577133
-	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
+src_test() {
+	unset DBUS_SESSION_BUS_ADDRESS
+	emake check || die "emake check failed"
 }

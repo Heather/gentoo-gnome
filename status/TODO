@@ -9,6 +9,8 @@ dev-cpp/cairomm-1.8.2
 dev-libs/gir-repository-0.6.5
  * installs even disabled stuff if it's a dependency of something enabled
  * these dependencies are incomplete
+dev-libs/libgdata-0.5.0
+ * fails testsuite, upstream bug #598801
 dev-libs/libgweather-2.28.0
  * tarball generated with broken gtk-doc, revisit me.
 dev-libs/totem-pl-parser-2.28.1
