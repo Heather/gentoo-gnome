@@ -13,10 +13,9 @@ LICENSE="GPL-2 LGPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 
-IUSE="bluetooth debug doc galago iplayer lirc nautilus nsplugin python tracker +youtube"
+IUSE="bluetooth debug doc galago iplayer lirc nautilus nsplugin python tracker +youtube" #zeroconf
 
 # TODO:
-# easy-publish-and-consume is not in tree (epc)
 # Cone (VLC) plugin needs someone with the right setup (remi ?)
 # check gmyth requirement ? -> waiting for updates in tree
 # coherence plugin not enabled until we have deps in tree
@@ -72,6 +71,8 @@ RDEPEND=">=dev-libs/glib-2.15
 	youtube? (
 		>=dev-libs/libgdata-0.4.0
 		media-plugins/gst-plugins-soup )"
+# FIXME: freezes totem
+#	zeroconf? ( >=net-libs/libepc-0.3 )
 DEPEND="${RDEPEND}
 	x11-proto/xproto
 	x11-proto/xextproto
@@ -86,9 +87,7 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
-# FIXME: tests broken with USE="-doc" upstream bug #577774.
-# fails also with USE="doc" ^^
-RESTRICT="test"
+# FIXME: tests broken with USE="doc" upstream bug #598805.
 
 pkg_setup() {
 	# Installed for plugins, but they're dlopen()-ed
@@ -118,6 +117,7 @@ pkg_setup() {
 	use python && plugins="${plugins},opensubtitles,jamendo,pythonconsole,dbus-service"
 	use tracker && plugins="${plugins},tracker"
 	use youtube && plugins="${plugins},youtube"
+	#use zeroconf && plugins="${plugins},publish"
 
 	G2CONF="${G2CONF} --with-plugins=${plugins}"
 
@@ -132,15 +132,6 @@ src_prepare() {
 
 	# Fix broken smclient option passing
 	epatch "${FILESDIR}/${PN}-2.26.1-smclient-target-detection.patch"
-
-	# FIXME: tarball generated with broken gtk-doc, revisit me.
-	if use doc; then
-		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/usr/bin/gtkdoc-rebase" \
-			-i gtk-doc.make || die "sed 1 failed"
-	else
-		sed "/^TARGET_DIR/i \GTKDOC_REBASE=$(type -P true)" \
-			-i gtk-doc.make || die "sed 2 failed"
-	fi
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
