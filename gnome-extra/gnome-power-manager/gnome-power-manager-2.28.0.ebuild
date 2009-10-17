@@ -8,8 +8,7 @@ inherit autotools eutils gnome2 virtualx
 
 DESCRIPTION="Gnome Power Manager"
 HOMEPAGE="http://www.gnome.org/projects/gnome-power-manager/"
-#TODO: Finish the patchset including translations updates
-# (that's why this patch isn't on a mirror yet)
+# FIXME: Finish the patchset including translations updates for feature forward port
 SRC_URI="${SRC_URI}
 	http://dev.gentoo.org/~mrpouet/pub/patches/${P}-cpufreq-patches.tar.bz2"
 
@@ -18,7 +17,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="doc +hal policykit test"
 
-# Interactive testsuite (upstream ? I'm so...pessimistic)
+# FIXME: Interactive testsuite (upstream ? I'm so...pessimistic)
 RESTRICT="test"
 
 # HAL is used purely as a fallback for setting brightness if xrandr fail

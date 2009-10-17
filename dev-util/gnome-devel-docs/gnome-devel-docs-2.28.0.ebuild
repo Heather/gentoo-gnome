@@ -12,7 +12,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-#FIXME: Fixs the better as possible the fail install with emake jobs.
+# FIXME: Find a better fix for the failure with parallel install.
 # It occurs when a thread starts a mkdir, then it's stopped
 # (during the mkdir), and then an other thread try to create the same dir.
 # -> when the first thread continue, it tries to create a dir already created
