@@ -3,8 +3,9 @@
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/nautilus/nautilus-2.26.3.ebuild,v 1.2 2009/05/30 23:41:18 ranger Exp $
 
 EAPI="2"
+GCONF_DEBUG="no"
 
-inherit gnome2 eutils virtualx
+inherit eutils gnome2 gnome2-la virtualx
 
 DESCRIPTION="A file manager for the GNOME desktop"
 HOMEPAGE="http://www.gnome.org/projects/nautilus/"
@@ -14,7 +15,7 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="beagle doc gnome tracker xmp"
 
-# not adding gnome-base/gail because it is in gtk+
+# not adding gnome-base/gail because it is in >=gtk+-2.13
 RDEPEND=">=dev-libs/glib-2.21.3
 	>=gnome-base/gnome-desktop-2.25.5
 	>=x11-libs/pango-1.1.2
@@ -38,15 +39,17 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.40.1
-	doc? ( >=dev-util/gtk-doc-1.4 )
-	gnome-base/gnome-common
-	dev-util/gtk-doc-am"
+	doc? ( >=dev-util/gtk-doc-1.4 )"
+# For eautoreconf
+#	gnome-base/gnome-common
+#	dev-util/gtk-doc-am"
 
 PDEPEND="gnome? ( >=x11-themes/gnome-icon-theme-1.1.91 )"
 
 DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS README THANKS TODO"
 
 pkg_setup() {
+	G2PUNT_LA="yes"
 	G2CONF="${G2CONF}
 		--disable-update-mimedb
 		--disable-packagekit
@@ -67,10 +70,13 @@ src_prepare() {
 			-i gtk-doc.make || die "sed 2 failed"
 	fi
 
-	# gtk-doc-am and gnome-common needed for this
-
 	# Fix intltoolize broken file, see upstream #577133
-	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in \
+		|| die "sed 3 failed"
+
+	# Remove crazy CFLAGS
+	sed 's:-DG.*DISABLE_DEPRECATED::g' -i configure.in configure \
+		|| die "sed 4 failed"
 
 	# Fix nautilus flipping-out with --no-desktop -- bug 266398
 	epatch "${FILESDIR}/${PN}-2.27.4-change-reg-desktop-file-with-no-desktop.patch"
