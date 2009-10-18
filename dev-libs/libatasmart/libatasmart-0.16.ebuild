@@ -13,9 +13,9 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-DEPEND="!!sys-apps/libatasmart
-sys-fs/udev"
-RDEPEND="${DEPEND}"
+RDEPEND="sys-fs/udev
+	!!sys-apps/libatasmart"
+DEPEND="${RDEPEND}"
 
 src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
