@@ -16,7 +16,7 @@ LICENSE="GPL-2 LGPL-2 FDL-1.1"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 
-IUSE="branding doc ipv6 splash elibc_FreeBSD"
+IUSE="branding doc ipv6 +splash elibc_FreeBSD"
 
 RDEPEND=">=dev-libs/glib-2.16
 	>=x11-libs/gtk+-2.14.0
@@ -50,13 +50,13 @@ pkg_setup() {
 		--docdir=/usr/share/doc/${PF}
 		--with-default-wm=gnome-wm
 		$(use_enable splash)
-		$(use_enable branding splash)
 		$(use_enable doc docbook-docs)
 		$(use_enable ipv6)"
 
 	if use branding && ! use splash; then
 		ewarn "You have disabled splash but enabled branding support"
 		ewarn "splash support has been auto-enabled for branding"
+		G2CONF="${G2CONF} --enable-splash"
 	fi
 }
 
