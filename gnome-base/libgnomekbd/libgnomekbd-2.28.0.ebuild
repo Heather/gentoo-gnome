@@ -5,7 +5,7 @@
 EAPI="2"
 GCONF_DEBUG="no"
 
-inherit autotools eutils gnome2
+inherit eutils gnome2 multilib
 
 DESCRIPTION="Gnome keyboard configuration library"
 HOMEPAGE="http://www.gnome.org"
@@ -33,21 +33,27 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# Fix silly upstream CFLAGS, bug #277291
-	sed "s/-Werror//g" -i capplet/Makefile.am capplet/Makefile.in \
-		libgnomekbd/Makefile.am libgnomekbd/Makefile.in \
-		test/Makefile.am test/Makefile.in \
-		configure.in configure || die "removing -Werror failed"
+	gnome2_src_prepare
 
-	# Make it libtool-1 compatible
-	rm -v m4/lt* m4/libtool.m4 || die "removing libtool macros failed"
-
-	intltoolize --force --copy --automake || die "intltoolize failed"
-	eautoreconf
+	# Fix intltoolize broken file, see upstream #577133
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in \
+		|| die "sed expression failed"
 }
 
 src_compile() {
-	# FreeBSD doesn't like -j
+	# FreeBSD doesn't like -j, upstream? bug #????
 	use x86-fbsd && MAKEOPTS="${MAKEOPTS} -j1"
 	gnome2_src_compile
+}
+
+pkg_preinst() {
+	gnome2_pkg_preinst
+	preserve_old_lib /usr/$(get_libdir)/libgnomekbd.so.3
+	preserve_old_lib /usr/$(get_libdir)/libgnomekbdui.so.3
+}
+
+pkg_postinst() {
+	gnome2_pkg_postinst
+	preserve_old_lib_notify /usr/$(get_libdir)/libgnomekbd.so.3
+	preserve_old_lib_notify /usr/$(get_libdir)/libgnomekbdui.so.3
 }
