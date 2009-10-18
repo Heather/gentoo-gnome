@@ -42,7 +42,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.6.0
 "
 RDEPEND="${COMMON_DEPEND}
 	>=sys-auth/consolekit-0.4[policykit?]
-	gnome-extra/polkit-gnome
+	policykit? ( gnome-extra/polkit-gnome )
 "
 DEPEND="${COMMON_DEPEND}
 	sys-devel/gettext
@@ -75,19 +75,16 @@ pkg_setup() {
 		--enable-applets"
 
 	if ! use hal; then
-		ewarn "You've disabled HAL support"
-		ewarn "Cpufreq support will be also disabled"
+		ewarn "hal support disabled, cpufreq applet will not be built"
 	fi
 }
 
 src_prepare() {
 	gnome2_src_prepare
 
-	if ! use doc; then
-		# Remove the docbook2man rules here since it's not handled by a proper
-		# parameter in configure.in.
-		sed -e 's:@HAVE_DOCBOOK2MAN_TRUE@.*::' -i "${S}/man/Makefile.in" || die "sed 1 failed"
-	fi
+	# Fix crazy cflags
+	sed 's:-DG.*DISABLE_DEPRECATED::g' -i configure.ac configure \
+		|| die "sed 1 failed"
 
 	# Drop debugger CFLAGS
 	sed -e 's:^CPPFLAGS="$CPPFLAGS -g"$::g' -i configure.ac \
@@ -109,14 +106,21 @@ src_prepare() {
 	# Fix uninstalled cpufreq schemas, bug #266995
 	epatch "${WORKDIR}/${P}-cpufreq-schemas.patch"
 
-	intltoolize --force --copy --automake || die "intltoolize failed"
-
 	# Make it libtool-1 compatible
 	rm -v m4/lt* m4/libtool.m4 || die "removing libtool macros failed"
+
+	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
 
+	if ! use doc; then
+		# Remove the docbook2man rules here since it's not handled by a proper
+		# parameter in configure.in.
+		sed -e 's:@HAVE_DOCBOOK2MAN_TRUE@.*::' \
+			-i "${S}/man/Makefile.in" || die "sed 4 failed"
+	fi
+
 	# glibc splits this out, whereas other libc's do not tend to
-	use elibc_glibc || sed -e 's/-lresolv//' -i configure || die "sed 4 failed"
+	use elibc_glibc || sed -e 's/-lresolv//' -i configure || die "sed 5 failed"
 }
 
 src_test() {
@@ -127,13 +131,15 @@ src_test() {
 pkg_postinst() {
 	gnome2_pkg_postinst
 
-	elog "Cpufreq capplet is now maintained by Gentoo GNOME team"
-	elog "This implies DO NOT REPORT any bugs on upstream if you have a problem with it"
+	elog "cpufreq capplet is a feature maintained by Gentoo GNOME team."
+	elog "Please DO NOT REPORT bugs on upstream bugzilla if you have a problem with it"
 	elog "Please report on http://bugs.gentoo.org instead."
-#	elog
-#	elog "To enable frequency scaling interface, use the following command:"
-#	elog "	gconftool-2 /apps/gnome-power-manager/ui/cpufreq_show"
-#	elog "Note that this will conflict with other power managment utility"
-#	elog "like app-laptop/laptop-mode-tools."
-#	elog
+
+	if use hal; then
+		elog
+		elog "To enable frequency scaling interface, use the following command:"
+		elog "	gconftool-2 /apps/gnome-power-manager/ui/cpufreq_show"
+		elog "Note that this will conflict with other power managment utility"
+		elog "like app-laptop/laptop-mode-tools."
+	fi
 }
