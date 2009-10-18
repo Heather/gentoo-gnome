@@ -45,14 +45,9 @@ pkg_setup() {
 pkg_preinst() {
 	gnome2_pkg_preinst
 	preserve_old_lib /usr/$(get_libdir)/libgnome-desktop-2.so.11
-	preserve_old_lib /usr/$(get_libdir)/libgnome-desktop-2.so.11.2.6
 }
 
 pkg_postinst() {
 	gnome2_pkg_postinst
 	preserve_old_lib_notify /usr/$(get_libdir)/libgnome-desktop-2.so.11
-	preserve_old_lib_notify /usr/$(get_libdir)/libgnome-desktop-2.so.11.2.6
-	ewarn
-	ewarn "If you are upgrading from <gnome-base/gnome-desktop-2.27, please"
-	ewarn "make sure you run revdep-rebuild at the end of the upgrade."
 }
