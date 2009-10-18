@@ -40,13 +40,15 @@ src_prepare() {
 	# Fix automagic dependency on policykit
 	epatch "${FILESDIR}/${PN}-0.4.0-polkit-automagic.patch"
 
-	#epatch "${FILESDIR}/${PN}-0.3.0-skip_xmlto_validation.patch"
+	# Fix multilib support
+	epatch "${FILESDIR}/${PN}-0.4.0-multilib.patch"
 
 	eautoreconf
 }
 
 src_configure() {
 	econf \
+		XMLTO_FLAGS="--skip-validation" \
 		$(use_enable debug) \
 		$(use_enable doc docbook-docs) \
 		$(use_enable pam pam-module) \
@@ -75,10 +77,10 @@ src_install() {
 	keepdir /var/log/ConsoleKit
 
 	exeinto /etc/X11/xinit/xinitrc.d/
-	doexe "${FILESDIR}/90-consolekit" || die "doexe failed"
+	doexe "${FILESDIR}/90-consolekit" || die "doexe failed"
 
 	exeinto /usr/$(get_libdir)/ConsoleKit/run-session.d/
-	doexe "${FILESDIR}/pam-foreground-compat.ck" || die "doexe failed"
+	doexe "${FILESDIR}/pam-foreground-compat.ck" || die "doexe failed"
 }
 
 pkg_postinst() {
