@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit autotools gnome2 pam virtualx
+inherit gnome2 pam virtualx
 
 DESCRIPTION="Password and keyring managing daemon"
 HOMEPAGE="http://www.gnome.org/"
@@ -49,15 +49,9 @@ src_prepare() {
 	# Remove silly CFLAGS
 	sed 's:CFLAGS="$CFLAGS -Werror:CFLAGS="$CFLAGS:' \
 		-i configure.in configure || die "sed failed"
-	# Fix intltoolize broken file, see upstream #577133
-	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
 }
 
 src_test() {
 	unset DBUS_SESSION_BUS_ADDRESS
 	Xemake check || die "emake check failed!"
-
-	# Remove broken tests, bug #272450, upstream bug #553164
-	rm "${S}"/gcr/tests/run-* || die "rm failing tests failed"
-	Xemake -C tests run || die "running tests failed!"
 }
