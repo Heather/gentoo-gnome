@@ -12,7 +12,7 @@ HOMEPAGE="http://www.gnome.org/"
 LICENSE="GPL-2"
 SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="eds hal policykit"
+IUSE="eds hal"
 
 RDEPEND="x11-libs/libXft
 	>=x11-libs/libXi-1.2
@@ -25,12 +25,12 @@ RDEPEND="x11-libs/libXft
 	>=dev-libs/dbus-glib-0.73
 	>=x11-libs/libxklavier-4.0
 	>=x11-wm/metacity-2.23.1
-	>=gnome-base/gnome-panel-2.0
 	>=gnome-base/libgnomekbd-2.27.4
 	>=gnome-base/gnome-desktop-2.27.90
 	>=gnome-base/gnome-menus-2.11.1
 	gnome-base/gnome-settings-daemon
 
+	dev-libs/libunique
 	x11-libs/pango
 	dev-libs/libxml2
 	media-libs/freetype
@@ -38,11 +38,6 @@ RDEPEND="x11-libs/libXft
 
 	eds? ( >=gnome-extra/evolution-data-server-1.7.90 )
 	hal? ( >=sys-apps/hal-0.5.6 )
-	policykit? ( gnome-extra/polkit-gnome )
-
-	>=gnome-base/libbonobo-2
-	>=gnome-base/libgnome-2.2
-	>=gnome-base/libbonoboui-2
 
 	x11-apps/xmodmap
 	x11-libs/libXScrnSaver
@@ -67,9 +62,9 @@ DEPEND="${RDEPEND}
 	dev-util/desktop-file-utils
 
 	app-text/scrollkeeper
-	>=app-text/gnome-doc-utils-0.10.1
-	gnome-base/gnome-common"
+	>=app-text/gnome-doc-utils-0.10.1"
 # Needed for autoreconf
+#	gnome-base/gnome-common
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
@@ -84,31 +79,9 @@ pkg_setup() {
 src_prepare() {
 	gnome2_src_prepare
 
-	# Make it libtool-1 compatible
-	rm -v m4/lt* m4/libtool.m4 || die "removing libtool macros failed"
-
 	# Fix intltoolize broken file, see upstream #577133
 	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
 
 	# Fix compilation on fbsd, bug #256958
 	epatch "${FILESDIR}/${PN}-2.24.0.1-fbsd.patch"
-
-	# Policykit-based solution to setting the default background.  Must be
-	# applied *after* the automagics patch
-	#
-	# Needs updating with 2.27 -- sounds like a job for dang!
-	#epatch "${FILESDIR}/${PN}-2.26.0-default-background.patch"
-
-	#eautoreconf
-}
-
-src_install() {
-	gnome2_src_install
-
-# Needs updating with 2.27.90 -- sounds like a job for dang!
-#	if use policykit ; then
-#		# Install the policy for default backgrounds
-#		insinto /usr/share/PolicyKit/policy/
-#		doins "${FILESDIR}"/org.gnome.control-center.defaultbackground.policy
-#	fi
 }
