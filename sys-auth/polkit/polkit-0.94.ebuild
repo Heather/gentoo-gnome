@@ -13,11 +13,12 @@ SRC_URI="http://hal.freedesktop.org/releases/${P}.tar.gz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~mips ~ppc ~x86"
-IUSE="debug doc expat pam zsh-completion nls"
+IUSE="debug doc expat introspection pam zsh-completion nls"
 
 RDEPEND=">=dev-libs/glib-2.21.4
 	>=dev-libs/eggdbus-0.5
 	expat? ( dev-libs/expat )
+	introspection? ( dev-libs/gobject-introspection )
 	pam? ( virtual/pam )"
 DEPEND="${RDEPEND}
 	!!>=sys-auth/policykit-0.92
@@ -25,10 +26,11 @@ DEPEND="${RDEPEND}
 	app-text/docbook-xsl-stylesheets
 	>=dev-util/pkgconfig-0.18
 	>=dev-util/intltool-0.36
-	>=dev-util/gtk-doc-am-1.10-r1
+	dev-util/gtk-doc-am
 	doc? ( >=dev-util/gtk-doc-1.10 )"
 
 pkg_setup() {
+	enewgroup polkituser
 	enewuser polkituser -1 "-1" /dev/null polkituser
 }
 
@@ -39,13 +41,9 @@ src_prepare() {
 	fi
 
 	# Fix daemon binary collision with <=policykit-0.9, fdo bug 22951
-	epatch "${FILESDIR}/${P}-fix-daemon-name.patch"
+	epatch "${FILESDIR}/${PN}-0.93-fix-daemon-name.patch"
 
-	# Fix bug #279271, unappropriated modversion of glib and gio
-	# (2.21.4 are needed) and sources use some Iface only available,
-	# since gio 2.21.4.
-	epatch "${FILESDIR}/${P}-glib-eggdbus-modversion.patch"
-
+	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
 }
 
@@ -73,6 +71,7 @@ src_configure() {
 		--localstatedir=/var \
 		$(use_enable debug verbose-mode) \
 		$(use_enable doc gtk-doc) \
+		$(use_enable introspection) \
 		$(use_enable nls)
 }
 
@@ -89,7 +88,7 @@ src_install() {
 	fi
 
 	# Need to keep a few directories around...
-	diropts -m0770 -o root -g polkituser
+	diropts -m0700 -o root -g polkituser
 	keepdir /var/run/polkit-1
 	keepdir /var/lib/polkit-1
 }
