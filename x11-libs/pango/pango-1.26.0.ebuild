@@ -3,28 +3,33 @@
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/pango/pango-1.24.5.ebuild,v 1.2 2009/07/24 17:19:03 dang Exp $
 
 EAPI="2"
+GCONF_DEBUG="yes"
 
 inherit autotools eutils gnome2 multilib
 
-DESCRIPTION="Text rendering and layout library"
+DESCRIPTION="Internationalized text layout and rendering library"
 HOMEPAGE="http://www.pango.org/"
 
 LICENSE="LGPL-2 FTL"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="X doc"
+IUSE="X doc test"
 
-RDEPEND="dev-libs/glib:2
+RDEPEND=">=dev-libs/glib-2.17.3
 	>=media-libs/fontconfig-2.5.0
 	media-libs/freetype:2
-	>=x11-libs/cairo-1.7.6[X?,svg]
+	>=x11-libs/cairo-1.7.6[X?]
 	X? (
 		x11-libs/libXrender
 		x11-libs/libX11
 		x11-libs/libXft )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	>=dev-util/pkgconfig-0.9
 	doc? (
+		>=dev-util/gtk-doc-1
+		~app-text/docbook-xml-dtd-4.1.2
+		x11-libs/libXft )
+	test? (
 		>=dev-util/gtk-doc-1
 		~app-text/docbook-xml-dtd-4.1.2
 		x11-libs/libXft )
