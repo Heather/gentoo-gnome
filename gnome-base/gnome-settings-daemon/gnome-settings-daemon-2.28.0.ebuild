@@ -8,13 +8,13 @@ inherit autotools eutils gnome2
 
 DESCRIPTION="Gnome Settings Daemon"
 HOMEPAGE="http://www.gnome.org"
+SRC_URI="${SRC_URI}
+	http://dev.gentoo.org/~mrpouet/pub/patches/${P}-gst-vol-control-support.patch.lzma"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="debug libnotify pulseaudio"
-SRC_URI="${SRC_URI}
-	http://dev.gentoo.org/~mrpouet/pub/patches/${P}-gst-vol-control-support.patch.lzma"
 
 RDEPEND=">=dev-libs/dbus-glib-0.74
 	>=dev-libs/glib-2.18.0
@@ -79,6 +79,9 @@ src_prepare() {
 
 pkg_postinst() {
 	gnome2_pkg_postinst
-	elog "GStreamer volume control support is a feature powered by Gentoo GNOME Team"
-	elog "so PLEASE DO NOT report on upstream, report on https://bugs.gentoo.org instead"
+
+	if ! use pulseaudio; then
+		elog "GStreamer volume control support is a feature powered by Gentoo GNOME Team"
+		elog "so PLEASE DO NOT report on upstream, report on https://bugs.gentoo.org instead"
+	fi
 }
