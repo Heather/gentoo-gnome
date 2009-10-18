@@ -2,8 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/at-spi/at-spi-1.26.0.ebuild,v 1.2 2009/05/25 22:07:35 eva Exp $
 
-WANT_AUTOMAKE="1.9"
-
 inherit autotools eutils gnome2 python virtualx
 
 DESCRIPTION="The Gnome Accessibility Toolkit"
@@ -32,6 +30,8 @@ RDEPEND=">=dev-libs/atk-1.17
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.40
+	gnome-base/gnome-common
+	dev-util/gtk-doc-am
 	doc? ( >=dev-util/gtk-doc-1 )
 
 	x11-libs/libXt
@@ -61,7 +61,8 @@ src_unpack() {
 	# should fix tests
 	epatch "${FILESDIR}"/${PN}-1.22.0-tests.patch
 
-	eautomake
+	intltoolize --force --copy --automake || die "intltoolize failed"
+	eautoreconf
 }
 
 src_test() {
