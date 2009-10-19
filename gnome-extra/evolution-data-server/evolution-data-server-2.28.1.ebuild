@@ -61,10 +61,10 @@ src_prepare() {
 	gnome2_src_prepare
 
 	# Adjust to gentoo's /etc/service
-	epatch "${FILESDIR}"/${P}-gentoo_etc_services.patch
+	epatch "${FILESDIR}/${PN}-2.28.0-gentoo_etc_services.patch"
 
 	# Rewind in camel-disco-diary to fix a crash
-	epatch "${FILESDIR}"/${PN}-1.8.0-camel-rewind.patch
+	epatch "${FILESDIR}/${PN}-1.8.0-camel-rewind.patch"
 
 	if use doc; then
 		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/usr/bin/gtkdoc-rebase" \
