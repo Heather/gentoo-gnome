@@ -5,7 +5,7 @@
 EAPI="2"
 GCONF_DEBUG="no"
 
-inherit eutils gnome2
+inherit autotools eutils gnome2
 
 DESCRIPTION="Lightweight HTML Rendering/Printing/Editing Engine"
 HOMEPAGE="http://www.gnome.org/"
@@ -47,15 +47,14 @@ src_prepare() {
 	cp "${FILESDIR}/gtkhtml-editor.xml" \
 		"${S}/components/editor/gtkhtml-editor.xml" || die "cp failed"
 
-	# Fix an editing crash, in components/editor/gtkhtml-editor.c (editor_method_event function)
-	# which caused evolution to crash when we try to respond to someone.
-	# Patch import from upstream (cgit interface)
-	epatch "${FILESDIR}/${P}-editor-method-event-sigsegv.patch"
-
 	# FIXME: Fix compilation flags crazyness
 	sed 's/CFLAGS="$CFLAGS $WARNING_FLAGS"//' \
 		-i configure.ac configure || die "sed 1 failed"
 
 	sed -i -e 's:-DGTK_DISABLE_DEPRECATED=1 -DGDK_DISABLE_DEPRECATED=1 -DG_DISABLE_DEPRECATED=1 -DGNOME_DISABLE_DEPRECATED=1::g' \
 		a11y/Makefile.am a11y/Makefile.in || die "sed 2 failed"
+
+	# ./../doltcompile: line 31: --silent : command not found
+	intltoolize --force --copy --automake || die "intltoolize failed"
+	eautoreconf
 }

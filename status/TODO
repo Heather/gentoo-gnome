@@ -37,7 +37,7 @@ gnome-extra/gnome-power-manager-2.28.0
 gnome-extra/gnome-user-share-2.28.0
  * could libnotify be made optional ?
  * gnome-bluetooth is a hard-dep
-gnome-extra/gtkhtml-3.28.0-r1
+gnome-extra/gtkhtml-3.28.1
  * Fix compilation flags crazyness
 gnome-extra/gucharmap-2.28.0
  * add gobject-introspection support once available
