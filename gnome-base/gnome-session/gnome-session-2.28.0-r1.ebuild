@@ -73,6 +73,10 @@ src_prepare() {
 	# Add "session saving" button back, upstream bug #575544
 	# FIXME: Needs updating for 2.27.91 (package is currently masked)
 	#epatch "${WORKDIR}/${PN}-2.26.2-session-saving-button.patch"
+
+	# Throw an error in xsmp_stop() when the client isn't registered,
+	# it's fixes a segfault, patch import from upstream bug #598211.
+	epatch "${FILESDIR}/${P}-xsmp-stop-throw-error.patch"
 }
 
 src_install() {
