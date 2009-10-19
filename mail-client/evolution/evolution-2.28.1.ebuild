@@ -3,6 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.26.3.ebuild,v 1.4 2009/09/09 19:34:01 mrpouet Exp $
 
 EAPI="2"
+GCONF_DEBUG="no"
 
 inherit autotools gnome2 flag-o-matic python
 
@@ -74,7 +75,6 @@ PDEPEND="exchange? ( >=gnome-extra/evolution-exchange-2.26.1 )"
 
 DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS* README"
 ELTCONF="--reverse-deps"
-GCONF_DEBUG="no"
 
 pkg_setup() {
 	G2CONF="${G2CONF}
@@ -110,11 +110,11 @@ src_prepare() {
 	# FIXME: bsd needs to be more active at pushing stuff upstream
 	#epatch "${FILESDIR}/${PN}-2.21.3-fbsd.patch"
 
-	# Fix delete keyboard shortcut
-	epatch "${FILESDIR}/${P}-delete-key.patch"
+	# Fix delete keyboard shortcut, bug #????
+	epatch "${FILESDIR}/${PN}-2.28.0-delete-key.patch"
 
 	# Fix multiple automagic plugins, bug #204300 & bug #271451
-	epatch "${FILESDIR}/${P}-automagic-plugins.patch"
+	epatch "${FILESDIR}/${PN}-2.28.0-automagic-plugins.patch"
 
 	# FIXME: Fix compilation flags crazyness
 	sed 's/CFLAGS="$CFLAGS $WARNING_FLAGS"//' \
