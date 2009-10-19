@@ -3,6 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/gcalctool/gcalctool-5.26.3.ebuild,v 1.1 2009/07/02 18:33:50 leio Exp $
 
 EAPI="2"
+GCONF_DEBUG="no"
 
 inherit gnome2
 
