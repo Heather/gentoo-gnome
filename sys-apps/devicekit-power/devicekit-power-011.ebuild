@@ -58,5 +58,9 @@ src_prepare() {
 
 	# Fix crazy cflags
 	sed 's:-DG.*DISABLE_DEPRECATED::g' -i configure.ac configure \
-		|| die "sed failed"
+		|| die "sed 1 failed"
+	# Drop this command line option, because only available since gcc 4.3,
+	# bug 289873.
+	sed 's:WARNINGFLAGS_C=\"$WARNINGFLAGS_C -Wtype-limits\"::g' -i configure.ac configure \
+		|| die "sed 2 failed"
 }
