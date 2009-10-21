@@ -9,7 +9,7 @@ inherit autotools eutils gnome2
 DESCRIPTION="Gnome Settings Daemon"
 HOMEPAGE="http://www.gnome.org"
 SRC_URI="${SRC_URI}
-	http://dev.gentoo.org/~mrpouet/pub/patches/${P}-gst-vol-control-support.patch.lzma"
+	http://dev.gentoo.org/~mrpouet/pub/patches/${PN}-2.28.0-gst-vol-control-support.patch.lzma"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -71,7 +71,7 @@ src_prepare() {
 	gnome2_src_prepare
 
 	# Restore gstreamer volume control support, upstream bug #571145
-	epatch "${WORKDIR}/${P}-gst-vol-control-support.patch"
+	epatch "${WORKDIR}/${PN}-2.28.0-gst-vol-control-support.patch"
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
