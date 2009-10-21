@@ -55,6 +55,10 @@ src_prepare() {
 	# Fix intltoolize broken file, see upstream #577133
 	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in \
 		|| die "sed failed"
+	# Fix a crash in Remote Desktop Viewer,
+	# patch import from upstream bug #599121.
+	# solves gentoo bug #289977.
+	epatch "${FILESDIR}/${P}-avahi-sigsegv.patch"
 }
 
 src_install() {

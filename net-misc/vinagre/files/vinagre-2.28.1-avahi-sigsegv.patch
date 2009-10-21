@@ -1,0 +1,39 @@
+From cc616f47a2d2abd7a0e80a168843fe29a29a93a3 Mon Sep 17 00:00:00 2001
+From: Jonh Wendell <wendell@bani.com.br>
+Date: Wed, 21 Oct 2009 15:14:53 +0200
+Subject: [PATCH] Fix a crash in Remote Desktop Viewer
+
+---
+ vinagre/vinagre-fav.c |    7 +++----
+ 1 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/vinagre/vinagre-fav.c b/vinagre/vinagre-fav.c
+index 6ed635a..b4f633e 100644
+--- a/vinagre/vinagre-fav.c
++++ b/vinagre/vinagre-fav.c
+@@ -197,7 +197,7 @@ vinagre_fav_selection_changed_cb (GtkTreeSelection *selection,
+ 				  VinagreFav       *fav)
+ {
+   GtkTreeIter iter;
+-  VinagreBookmarksEntry *entry;
++  VinagreBookmarksEntry *entry = NULL;
+   gboolean avahi;
+ 
+   if (gtk_tree_selection_get_selected (selection, NULL, &iter))
+@@ -207,11 +207,10 @@ vinagre_fav_selection_changed_cb (GtkTreeSelection *selection,
+ 			  ENTRY_COL, &entry,
+                           IS_AVAHI_COL, &avahi,
+ 			  -1);
++      if (avahi)
++	entry = NULL;
+     }
+ 
+-  if (avahi)
+-    entry = NULL;
+-
+   /* Emits the signal saying that user has selected a bookmark */
+   g_signal_emit (G_OBJECT (fav), 
+ 		 signals[FAV_SELECTED],
+-- 
+1.6.5.1
+
