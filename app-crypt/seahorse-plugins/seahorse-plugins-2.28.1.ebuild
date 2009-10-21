@@ -75,9 +75,6 @@ src_prepare() {
 
 	# Fix intltoolize broken file, see upstream #577133
 	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
-	# Fix compatibility with gnupg-2.0.12, gentoo bug #275291,
-	# patch import from upstream bug #586855.
-	epatch "${FILESDIR}/${P}-agent-gpg-compat.patch"
 }
 
 src_install() {
