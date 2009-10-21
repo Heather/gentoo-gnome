@@ -23,7 +23,8 @@ SRC_URI="${SRC_URI}
 	mirror://gentoo/${PN}-2.26-gentoo-patches.tar.bz2
 	mirror://gentoo/${GDM_EXTRA}.tar.bz2"
 
-RDEPEND=">=dev-libs/dbus-glib-0.74
+RDEPEND=">=sys-apps/devicekit-power-008
+	>=dev-libs/dbus-glib-0.74
 	>=dev-libs/glib-2.15.4
 	>=x11-libs/gtk+-2.10.0
 	>=x11-libs/pango-1.3

@@ -21,12 +21,6 @@ Informations:
     mrpouet: --> please DO NOT import my patch EVEN its avoids the segfault, probably client
                  aren't stopped correctly, wait until upstream confirmation.
   - take care of restoring old patches
-* gnome-base/gdm-2.28.0
-  - import patch from upstream https://bugzilla.gnome.org/show_bug.cgi?id=594572
-    --> I had a quick look at it, and its seems to be good, however wait some feedbacks
-        from upstream.
-    --> I'm pretty sure it will be accepted on upstream (discussed with vuntz)
-
 Enhancements:
 =============
 *
