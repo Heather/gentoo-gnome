@@ -19,7 +19,7 @@ RDEPEND=">=dev-libs/glib-2.16.0
 	>=x11-libs/gtk+-2.14.0
 	>=gnome-base/gconf-2.14
 	>=x11-libs/startup-notification-0.8
-	>=x11-libs/vte-0.21.5
+	>=x11-libs/vte-0.22.0
 	>=dev-libs/dbus-glib-0.6
 	x11-libs/libSM
 	gnome-base/libgnome"
