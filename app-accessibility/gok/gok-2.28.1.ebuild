@@ -5,7 +5,7 @@
 EAPI="2"
 GCONF_DEBUG="no"
 
-inherit eutils gnome2 virtualx
+inherit autotools eutils gnome2 virtualx
 
 DESCRIPTION="Gnome Onscreen Keyboard"
 HOMEPAGE="http://www.gok.ca/"
@@ -54,7 +54,7 @@ src_prepare() {
 	gnome2_src_prepare
 
 	# Fix missing link to -lm with --as-needed, upstream #589120
-	epatch "${FILESDIR}/${P}-link.patch"
+	epatch "${FILESDIR}/${PN}-2.28.0-link.patch"
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
