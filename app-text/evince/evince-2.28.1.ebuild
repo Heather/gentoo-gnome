@@ -39,7 +39,9 @@ DEPEND="${RDEPEND}
 	>=app-text/gnome-doc-utils-0.3.2
 	~app-text/docbook-xml-dtd-4.1.2
 	>=dev-util/pkgconfig-0.9
+	sys-devel/gettext
 	>=dev-util/intltool-0.35
+	dev-util/gtk-doc-am
 	doc? ( dev-util/gtk-doc )"
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
@@ -73,9 +75,6 @@ pkg_setup() {
 
 src_prepare() {
 	gnome2_src_prepare
-
-	# Fix intltoolize broken file, see upstream #577133
-	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
 
 	# Fix .desktop file so menu item shows up
 	epatch "${FILESDIR}"/${PN}-0.7.1-display-menu.patch
