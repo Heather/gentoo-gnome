@@ -88,6 +88,9 @@ src_prepare() {
 
 	# Remove hard enabled -Werror (see AM_MAINTAINER_MODE), bug 218687
 	sed -i "s:-Werror::g" configure || die "sed 1 failed"
+
+	# Fix testsuite, upstream bug #599243
+	epatch "${FILESDIR}/${P}-coding-style.patch"
 }
 
 src_test() {
