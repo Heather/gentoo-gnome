@@ -1,3 +1,5 @@
+THIS FILE IS AUTO GENERATED, DO NOT MODIFY BY HAND
+
 Ebuild Notices:
 ===============
 app-text/gnome-doc-utils-0.18.0
@@ -37,7 +39,7 @@ gnome-extra/gnome-user-share-2.28.0
  * gnome-bluetooth is a hard-dep
 gnome-extra/gtkhtml-3.28.1
  * Fix compilation flags crazyness
-gnome-extra/gucharmap-2.28.0
+gnome-extra/gucharmap-2.28.1
  * add gobject-introspection support once available
 gnome-extra/nautilus-sendto-2.28.0
  * mail plugin build is broken
