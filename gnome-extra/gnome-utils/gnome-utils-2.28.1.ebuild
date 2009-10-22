@@ -33,7 +33,7 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog NEWS README THANKS"
 
 pkg_setup() {
-	if use ! debug; then
+	if ! use debug; then
 		G2CONF="${G2CONF} --enable-debug=minimum"
 	fi
 
