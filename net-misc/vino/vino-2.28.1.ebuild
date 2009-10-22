@@ -12,8 +12,7 @@ HOMEPAGE="http://www.gnome.org/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc64 ~sparc ~x86 ~x86-fbsd"
-IUSE="avahi crypt gnutls ipv6 jpeg gnome-keyring libnotify networkmanager
-+telepathy zlib"
+IUSE="avahi crypt gnutls ipv6 jpeg gnome-keyring libnotify networkmanager +telepathy zlib"
 
 RDEPEND=">=dev-libs/glib-2.17
 	>=x11-libs/gtk+-2.16.0
