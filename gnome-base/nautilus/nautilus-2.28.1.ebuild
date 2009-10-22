@@ -31,7 +31,7 @@ RDEPEND=">=dev-libs/glib-2.21.3
 	beagle? ( || (
 		dev-libs/libbeagle
 		=app-misc/beagle-0.2* ) )
-	tracker? ( >=app-misc/tracker-0.6.4 )
+	tracker? ( >=app-misc/tracker-0.7 )
 	xmp? ( >=media-libs/exempi-2 )"
 
 DEPEND="${RDEPEND}
