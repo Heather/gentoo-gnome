@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit autotools eutils gnome2
+inherit autotools eutils gnome2-la
 
 DESCRIPTION="The gnome2 Desktop configuration tool"
 HOMEPAGE="http://www.gnome.org/"
@@ -12,7 +12,7 @@ HOMEPAGE="http://www.gnome.org/"
 LICENSE="GPL-2"
 SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="eds hal"
+IUSE="eds"
 
 RDEPEND="x11-libs/libXft
 	>=x11-libs/libXi-1.2
@@ -37,7 +37,6 @@ RDEPEND="x11-libs/libXft
 	>=media-libs/libcanberra-0.4[gtk]
 
 	eds? ( >=gnome-extra/evolution-data-server-1.7.90 )
-	hal? ( >=sys-apps/hal-0.5.6 )
 
 	x11-apps/xmodmap
 	x11-libs/libXScrnSaver
@@ -66,14 +65,17 @@ DEPEND="${RDEPEND}
 # Needed for autoreconf
 #	gnome-base/gnome-common
 
+# gmodule is used to load plugins
+# (on POSIX systems gmodule uses dlopen)
+G2PUNT_LA="yes"
+
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-update-mimedb
 		--disable-static
-		$(use_enable eds aboutme)
-		$(use_enable hal)"
+		$(use_enable eds aboutme)"
 }
 
 src_prepare() {
