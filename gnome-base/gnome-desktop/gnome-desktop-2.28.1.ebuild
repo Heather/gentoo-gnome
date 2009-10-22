@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-desktop/gnome-desktop-2.26.3.ebuild,v 1.1 2009/07/11 08:57:17 eva Exp $
 
-inherit eutils gnome2-la
+inherit eutils gnome2
 
 DESCRIPTION="Libraries for the gnome desktop that are not part of the UI"
 HOMEPAGE="http://www.gnome.org/"
@@ -40,7 +40,6 @@ pkg_setup() {
 		--with-gnome-distributor=Gentoo
 		--disable-scrollkeeper
 		--disable-static"
-	G2PUNT_LA="yes"
 }
 
 pkg_preinst() {
