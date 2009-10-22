@@ -16,6 +16,8 @@ dev-libs/libgweather-2.28.0
 dev-libs/totem-pl-parser-2.28.1
  * testsuite does not work, please fix them and report on upstream
  * tarball generated with broken gtk-doc, revisit me.
+dev-python/pygobject-2.20.0
+ * add introspection support
 dev-util/gnome-devel-docs-2.28.0
  * Find a better fix for the failure with parallel install.
 gnome-base/gnome-panel-2.28.0-r1
