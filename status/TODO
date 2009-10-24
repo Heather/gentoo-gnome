@@ -68,6 +68,8 @@ net-im/empathy-2.28.1
  * Highly broken with parallel make, mallard strike 2, see bug #286889
 net-libs/libepc-0.3.10
  * 2 out of 16 tests fail, upstream bug #578792
+sys-auth/consolekit-0.4.1-r1
+ * Report on upstream for patch about policies ? (probably upstream devs wanted this behaviour as default...)
 www-client/epiphany-extensions-2.28.1
  * Open security issues:
  * - adblock ( https://bugzilla.gnome.org/show_bug.cgi?id=595255 )

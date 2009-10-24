@@ -10,6 +10,7 @@ MY_PN="ConsoleKit"
 MY_PV="${PV//_pre*/}"
 MY_P="${MY_PN}-${MY_PV}"
 
+# FIXME: Report on upstream for patch about policies ? (probably upstream devs wanted this behaviour as default...)
 DESCRIPTION="Framework for defining and tracking users, login sessions and seats."
 HOMEPAGE="http://www.freedesktop.org/wiki/Software/ConsoleKit"
 SRC_URI="http://www.freedesktop.org/software/${MY_PN}/dist/${MY_P}.tar.bz2"
@@ -42,6 +43,9 @@ src_prepare() {
 
 	# Fix multilib support
 	epatch "${FILESDIR}/${PN}-0.4.0-multilib.patch"
+
+	# Be able to shutdown or reboot even without polkit or RBAC supports
+	epatch "${FILESDIR}/${P}-shutdown-reboot-without-policies.patch"
 
 	eautoreconf
 }
