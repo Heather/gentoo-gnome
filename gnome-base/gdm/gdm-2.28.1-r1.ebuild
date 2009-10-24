@@ -23,6 +23,7 @@ SRC_URI="${SRC_URI}
 	mirror://gentoo/${PN}-2.26-gentoo-patches.tar.bz2
 	mirror://gentoo/${GDM_EXTRA}.tar.bz2"
 
+# FIXME: gdm has a strange behaviour on reboot (from runlevel), especially when xdm tries to stop it (its blocks).
 RDEPEND=">=sys-apps/devicekit-power-008
 	>=dev-libs/dbus-glib-0.74
 	>=dev-libs/glib-2.15.4
@@ -44,7 +45,7 @@ RDEPEND=">=sys-apps/devicekit-power-008
 	x11-libs/libXdmcp
 	virtual/pam
 	consolekit? (
-		sys-auth/consolekit[policykit]
+		sys-auth/consolekit
 		>=sys-apps/hal-0.5.12_rc1-r1[consolekit] )
 
 	accessibility? ( x11-libs/libXevie )
