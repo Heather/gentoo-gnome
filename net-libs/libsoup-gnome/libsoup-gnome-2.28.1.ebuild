@@ -11,7 +11,7 @@ MY_P=${MY_PN}-${PV}
 
 DESCRIPTION="GNOME plugin for libsoup"
 HOMEPAGE="http://www.gnome.org/"
-SRC_URI="mirror://gnome/sources/${MY_PN}/${MY_P}.tar.bz2"
+SRC_URI="${SRC_URI//-gnome}"
 
 LICENSE="LGPL-2"
 SLOT="2.4"
