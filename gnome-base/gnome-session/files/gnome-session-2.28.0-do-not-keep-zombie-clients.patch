@@ -1,0 +1,50 @@
+From: Romain Perier <mrpouet@gentoo.org>
+Date: Fri, 23 Oct 2009 14:17:40 +0200
+Subject: [PATCH] Avoid to keep zombie clients in the case when a IceError is thrown between accept_ice_connection() and accept_xsmp_connection()
+
+Assuming the following behaviour:
+An "Ice packet" is caught by accept_ice_connection() and the new Ice connection is accepted, 
+then a GsmXsmpClient is instancied and stored in GsmXsmpServer's table. 
+gsm_store_add() function emits the "ADDED" signal, which calls gsm_manager.c:on_store_client_added() (connected to ADDED signal),
+this previous callback install some signals EXCEPT "disconnect" signal on this new client.
+Now before the client being registered by libSM and before accept_xsmp_connection() is invoked, an IceError is thrown.
+gsm_xsmp_client.c:client_iochannel_watch() catchs this error :
+What is the default behaviour of this function when a IceProcessMessagesIOError is detected ?
+- the status of the client is changed to GSM_CLIENT_FAILED
+- then the "disconnect" signal is emited on this object (a client)
+
+=> a problem occurs, because the "disconnect" signal is not connected yet (done by GsmManager on a registered xsmp client)
+=> so the client is able to be freed (depending on the counter reference)
+=> but the client is not removed from the GsmManager's table.
+Conclusion: the client is a "zombie".
+
+The solution is to connect the "disconnect" client in gsm_manager.c:on_store_client_added(), and in a case like that
+its works perfectly :)
+
+=> NO timeout executed on logout/reboot/shutdown ;)
+
+---
+ gnome-session/gsm-manager.c |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/gnome-session/gsm-manager.c b/gnome-session/gsm-manager.c
+index ee90716..06c6a02 100644
+--- a/gnome-session/gsm-manager.c
++++ b/gnome-session/gsm-manager.c
+@@ -1988,9 +1988,11 @@ on_store_client_added (GsmStore   *store,
+                           "end-session-response",
+                           G_CALLBACK (on_client_end_session_response),
+                           manager);
+-
++         g_signal_connect (client,
++                          "disconnected",
++                          G_CALLBACK (on_client_disconnected),
++                          manager);
+         g_signal_emit (manager, signals [CLIENT_ADDED], 0, id);
+-        /* FIXME: disconnect signal handler */
+ }
+ 
+ static void
+-- 
+1.6.5.1
+

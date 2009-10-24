@@ -77,6 +77,12 @@ src_prepare() {
 	# Throw an error in xsmp_stop() when the client isn't registered,
 	# it's fixes a segfault, patch import from upstream bug #598211.
 	epatch "${FILESDIR}/${P}-xsmp-stop-throw-error.patch"
+
+	# Avoid to keep zombie clients in the case when a IceError is thrown
+	# between accept_ice_connection() and accept_xsmp_connection(),
+	# this patch should fix the timeout executed for some logout/shutdown
+	# /reboot. (patch commented out)
+	epatch "${FILESDIR}/${P}-do-not-keep-zombie-clients.patch"
 }
 
 src_install() {
