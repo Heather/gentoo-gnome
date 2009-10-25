@@ -1,0 +1,89 @@
+From 62ed030d66574884c7d716c436e9e20ce6da829b Mon Sep 17 00:00:00 2001
+From: Gilles Dartiguelongue <eva@gentoo.org>
+Date: Sun, 25 Oct 2009 20:58:15 +0100
+Subject: [PATCH] Allow disabling symbol-db plugin
+
+---
+ configure.in                  |   32 ++++++++++++++++++++++++++++++--
+ plugins/symbol-db/Makefile.am |    4 ++++
+ 2 files changed, 34 insertions(+), 2 deletions(-)
+
+diff --git a/configure.in b/configure.in
+index 197cafd..e7c5445 100644
+--- a/configure.in
++++ b/configure.in
+@@ -230,6 +230,29 @@ fi
+ 
+ AM_CONDITIONAL(HAVE_PLUGIN_GLADE, [test x$gladeui_found = xyes])
+ 
++dnl Plugin Symbol DB
++dnl -------------------------------------------------------------
++
++AC_ARG_ENABLE(plugin-symbol-db,
++	AC_HELP_STRING([--disable-plugin-symbol-db],[libgda-4 based symbol DB]),
++	[ if test "$enableval" = "yes"; then
++		user_disabled_symbol_db=1
++	  fi ],
++	[ user_disabled_symbol_db=0 ])
++
++AC_MSG_CHECKING(if symbol db plugin is disabled)
++if test "$user_disabled_symbol_db" = 1; then
++	AC_MSG_RESULT(no)
++	symbol_db="yes"
++
++	PKG_CHECK_MODULES(PLUGIN_SYMBOL_DB,
++			[libgda-4.0 >= $GDA_REQUIRED])
++else
++	AC_MSG_RESULT(yes)
++	symbol_db="no"
++fi
++AM_CONDITIONAL(HAVE_PLUGIN_SYMBOL_DB, [test x$symbol_db = xyes])
++
+ dnl Build gtksourceview plugin only on gnome 2.14 and gtk 2.10
+ dnl -------------------------------------------------------------
+ 
+@@ -255,8 +278,6 @@ fi
+ 
+ AM_CONDITIONAL(HAVE_PLUGIN_SOURCEVIEW, [test x$sourceview = xyes])
+ 
+-PKG_CHECK_MODULES(PLUGIN_SYMBOL_DB,
+-		[libgda-4.0 >= $GDA_REQUIRED])
+ 
+ dnl Setup Anjuta Library flags
+ dnl --------------------------
+@@ -862,6 +883,13 @@ else
+        echo "        Requires devhelp >= 0.22"
+ fi
+ 
++if [ test x$symbol_db = xyes ]; then
++        echo "Building Symbol DB plugin: .............................YES"
++else
++        echo "Building Symbol DB plugin: .............................NO"
++	echo "		Requires libgda-4"
++fi
++
+ if [ test x$sourceview = xyes ]; then
+         echo "Building GtkSourceView based editor: ...................YES"
+ else
+diff --git a/plugins/symbol-db/Makefile.am b/plugins/symbol-db/Makefile.am
+index 9b94b6d..07aad96 100644
+--- a/plugins/symbol-db/Makefile.am
++++ b/plugins/symbol-db/Makefile.am
+@@ -1,3 +1,5 @@
++if HAVE_PLUGIN_SYMBOL_DB
++
+ SUBDIRS = images benchmark anjuta-tags test-queries
+ 
+ symbol_db_datadir = $(anjuta_data_dir)
+@@ -82,6 +84,8 @@ libanjuta_symbol_db_la_LIBADD = \
+ prefs_ui_files = anjuta-symbol-db.ui
+ include $(top_srcdir)/scripts/build-schemas.mk
+ 
++endif
++
+ EXTRA_DIST = \
+ 	$(plugin_in_files) \
+ 	$(symbol_db_plugin_DATA) \
+-- 
+1.6.5.rc1
+
