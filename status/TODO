@@ -35,7 +35,7 @@ gnome-extra/evolution-exchange-2.28.1
  * Fix compilation flags crazyness
 gnome-extra/gnome-media-2.28.1
  * Do not run intltool check, it breaks in a weird way
-gnome-extra/gnome-power-manager-2.28.0
+gnome-extra/gnome-power-manager-2.28.1
  * Finish the patchset including translations updates for feature forward port
  * Interactive testsuite (upstream ? I'm so...pessimistic)
 gnome-extra/gnome-user-share-2.28.0

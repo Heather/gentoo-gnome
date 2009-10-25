@@ -10,7 +10,7 @@ DESCRIPTION="Gnome Power Manager"
 HOMEPAGE="http://www.gnome.org/projects/gnome-power-manager/"
 # FIXME: Finish the patchset including translations updates for feature forward port
 SRC_URI="${SRC_URI}
-	http://dev.gentoo.org/~mrpouet/pub/patches/${P}-cpufreq-patches.tar.bz2"
+	http://dev.gentoo.org/~mrpouet/pub/patches/${P}-cpufreq-patches.tar.lzma"
 
 LICENSE="GPL-2"
 SLOT="0"
