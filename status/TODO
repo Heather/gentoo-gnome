@@ -18,6 +18,8 @@ dev-libs/totem-pl-parser-2.28.1
  * tarball generated with broken gtk-doc, revisit me.
 dev-python/pygobject-2.20.0
  * add introspection support
+dev-util/anjuta-2.28.1.0
+ * Anjuta has some CRITICAL and WARNINGS messages, that would be nice to fix them and/or report on upstream
 dev-util/gnome-devel-docs-2.28.0
  * Find a better fix for the failure with parallel install.
 gnome-base/gdm-2.28.1-r1

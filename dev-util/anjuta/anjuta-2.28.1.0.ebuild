@@ -14,6 +14,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~ppc ~sparc ~x86 ~x86-fbsd"
 IUSE="debug devhelp doc glade sourceview subversion +symbol-db test"
 
+# FIXME: Anjuta has some CRITICAL and WARNINGS messages, that would be nice to fix them and/or report on upstream
 RDEPEND=">=dev-libs/glib-2.16
 	>=x11-libs/gtk+-2.14
 	>=gnome-base/orbit-2.6
@@ -83,6 +84,9 @@ src_prepare() {
 
 	# Make Symbol DB optional
 	epatch "${FILESDIR}/${PN}-2.28.1.0-symbol-db-optional.patch"
+	# Do not force the debugging mode when --disable-debug
+	# is given on the command line.
+	epatch "${FILESDIR}/${P}-debug-mode.patch"
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
