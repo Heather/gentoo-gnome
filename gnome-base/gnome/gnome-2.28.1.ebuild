@@ -20,6 +20,7 @@ S=${WORKDIR}
 
 # FIXME: bump gstreamer to 0.10.25
 # FIXME: bump gnome-games to 2.28
+# XXX: lower gdm to 2.20 since we still keep 2.28 masked
 RDEPEND="
 	>=dev-libs/glib-2.22.2
 	>=x11-libs/gtk+-2.18.3
@@ -80,7 +81,7 @@ RDEPEND="
 	>=gnome-extra/gcalctool-5.28.1
 
 	>=gnome-extra/gconf-editor-2.28.0
-	>=gnome-base/gdm-2.28.1
+	>=gnome-base/gdm-2.20.10-r2
 	>=x11-libs/gtksourceview-2.8.1:2.0
 	>=app-editors/gedit-2.28.0
 
