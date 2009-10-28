@@ -63,7 +63,7 @@ media-libs/clutter-1.0.8
  * Tests are interactive, not of use for us
  * Using external json-glib breaks introspection
  * Tests are interactive, not of use for us
-media-libs/libchamplain-0.4.1
+media-libs/libchamplain-0.4.2
  * add pyclutter and pyclutter-gtk first
  * add clutter-sharp first
 media-sound/sound-juicer-2.28.0
