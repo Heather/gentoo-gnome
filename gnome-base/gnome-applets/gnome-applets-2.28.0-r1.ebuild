@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-applets/gnome-applets-2.26.3.ebuild,v 1.1 2009/07/19 21:38:23 eva Exp $
 
-inherit gnome2 python
+inherit eutils gnome2 python
 
 DESCRIPTION="Applets for the GNOME Desktop and Panel"
 HOMEPAGE="http://www.gnome.org/"
@@ -75,6 +75,9 @@ src_unpack() {
 	# Invest applet tests need gconf/proxy/...
 	sed 's/^TESTS.*/TESTS=/g' -i invest-applet/invest/Makefile.am \
 		invest-applet/invest/Makefile.in || die "disabling invest tests failed"
+
+	# Fixes a crash when creating new sticky note, bug #207877, upstream #594797
+	epatch "${FILESDIR}/${P}-stickynotes-duplicate-labels-ui.patch"
 }
 
 pkg_setup() {
