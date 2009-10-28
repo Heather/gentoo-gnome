@@ -21,33 +21,35 @@ IUSE=""
 # bluetooth is pure runtime dep (dbus)
 RDEPEND=">=dev-libs/glib-2.16.0
 	>=x11-libs/gtk+-2.14
-	>=gnome-base/gconf-2.10
-	>=sys-apps/dbus-1.1.1
+	>=app-mobilephone/obex-data-server-0.4
 	>=dev-libs/dbus-glib-0.70
-	>=www-apache/mod_dnssd-0.6
-	>=www-servers/apache-2.2
-	x11-libs/libnotify
+	>=gnome-base/gconf-2.10
+	media-libs/libcanberra[gtk]
 	>=net-wireless/gnome-bluetooth-2.27.7.2:2
 	>=net-wireless/bluez-4.18
-	>=app-mobilephone/obex-data-server-0.4"
-
+	>=sys-apps/dbus-1.1.1
+	>=www-apache/mod_dnssd-0.6
+	>=www-servers/apache-2.2[apache2_modules_dav,apache2_modules_dav_fs,apache2_modules_authn_file,apache2_modules_auth_digest,apache2_modules_authz_groupfile]
+	x11-libs/libnotify"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/intltool-0.35
 	>=dev-util/pkgconfig-0.17
-	app-text/gnome-doc-utils"
+	app-text/gnome-doc-utils
+	app-text/docbook-xml-dtd:4.1.2"
 
 DOCS="AUTHORS ChangeLog NEWS README"
 
 pkg_setup() {
-	if ! built_with_use www-servers/apache apache2_modules_dav \
-	apache2_modules_dav_fs apache2_modules_authn_file \
-	apache2_modules_auth_digest apache2_modules_authz_groupfile ; then
-		eerror "You need to build www-servers/apache with APACHE2_MODULES='dav dav_fs authn_file auth_digest authz_groupfile'"
-		die "re-emerge www-servers/apache with APACHE2_MODULES='dav dav_fs authn_file auth_digest authz_groupfile'"
-	fi
-
 	G2CONF="${G2CONF}
 		--with-httpd=apache2
 		--with-modules-path=/usr/lib/apache2/modules/"
+}
+
+src_prepare() {
+	gnome2_src_prepare
+
+	# Fix intltoolize broken file, see upstream #577133
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in \
+		|| die "sed failed"
 }
