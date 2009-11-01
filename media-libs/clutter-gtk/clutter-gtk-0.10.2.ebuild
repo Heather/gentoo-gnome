@@ -12,8 +12,9 @@ SLOT="1.0"
 KEYWORDS="~amd64 ~x86"
 IUSE="doc debug examples introspection"
 
+# XXX: Needs gtk with X support (!directfb)
 RDEPEND="
-	>=x11-libs/gtk+-2.12[X]
+	>=x11-libs/gtk+-2.12
 	media-libs/clutter:1.0[opengl]"
 DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1.11 )
