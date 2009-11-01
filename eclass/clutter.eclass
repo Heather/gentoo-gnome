@@ -21,7 +21,7 @@ LICENSE="LGPL-2"
 
 DEPEND="dev-util/pkgconfig"
 
-DOCS="AUTHORS ChangeLog NEWS README TODO"
+DOCS="${DOCS:-AUTHORS ChangeLog NEWS README TODO}"
 
 clutter_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
