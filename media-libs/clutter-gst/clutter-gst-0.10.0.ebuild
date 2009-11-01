@@ -10,7 +10,7 @@ DESCRIPTION="GStreamer Integration library for Clutter"
 
 SLOT="1.0"
 KEYWORDS="~amd64 ~x86"
-IUSE="doc"
+IUSE="doc examples"
 
 RDEPEND="
 	media-libs/clutter:1.0
@@ -20,4 +20,4 @@ DEPEND="${RDEPEND}
 	virtual/python"
 
 DOCS="AUTHORS ChangeLog NEWS README"
-EXAMPLES=examples/{*.c,*.png,README}
+EXAMPLES="examples/{*.c,*.png,README}"

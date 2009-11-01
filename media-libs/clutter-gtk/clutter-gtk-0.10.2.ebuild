@@ -22,8 +22,7 @@ DEPEND="${RDEPEND}
 		media-libs/clutter[introspection]
 		>=dev-libs/gobject-introspection-0.6.3
 		>=dev-libs/gir-repository-0.6.3[gtk] )"
-
-EXAMPLES=examples/{*.c,redhand.png}
+EXAMPLES="examples/{*.c,redhand.png}"
 
 src_configure() {
 	local myconf="--with-flavour=x11

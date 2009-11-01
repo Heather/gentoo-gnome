@@ -31,7 +31,8 @@ clutter_src_install() {
 	if hasq examples ${IUSE} && use examples; then
 		insinto /usr/share/doc/${PF}/examples
 
-		for example in ${EXAMPLES}; do
+		# We use eval to be able to use globs
+		for example in $(eval echo ${EXAMPLES}); do
 			# If directory
 			if [[ ${example: -1} = "/" ]]; then
 				doins -r ${example}
