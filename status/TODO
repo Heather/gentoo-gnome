@@ -2,6 +2,8 @@ THIS FILE IS AUTO GENERATED, DO NOT MODIFY BY HAND
 
 Ebuild Notices:
 ===============
+app-misc/tracker-0.7.4
+ * Missing files to run functional tests
 dev-libs/gir-repository-0.6.5
  * installs even disabled stuff if it's a dependency of something enabled
  * these dependencies are incomplete
