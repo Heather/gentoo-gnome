@@ -2,63 +2,11 @@ THIS FILE IS AUTO GENERATED, DO NOT MODIFY BY HAND
 
 Ebuild Notices:
 ===============
-app-text/gnome-doc-utils-0.18.0
- * Highly broken with parallel make, see bug #286889
-dev-cpp/cairomm-1.8.2
- * svg support is automagic
 dev-libs/gir-repository-0.6.5
  * installs even disabled stuff if it's a dependency of something enabled
  * these dependencies are incomplete
-dev-libs/libgdata-0.5.0
- * fails testsuite, upstream bug #598801
-dev-libs/libgweather-2.28.0
- * tarball generated with broken gtk-doc, revisit me.
-dev-libs/totem-pl-parser-2.28.1
- * testsuite does not work, please fix them and report on upstream
- * tarball generated with broken gtk-doc, revisit me.
-dev-python/pygobject-2.20.0
- * add introspection support
-dev-util/anjuta-2.28.1.0
- * Anjuta has some CRITICAL and WARNINGS messages, that would be nice to fix them and/or report on upstream
 dev-util/gnome-devel-docs-2.28.0
  * Find a better fix for the failure with parallel install.
-gnome-base/gdm-2.28.1-r1
- * gdm has a strange behaviour on reboot (from runlevel), especially when xdm tries to stop it (its blocks).
-gnome-base/gnome-2.28.1
- * bump gstreamer to 0.10.25
- * bump gnome-games to 2.28
- * Rephrase to teach about using different WMs instead, as metacity is the default anyway
- * but first check WINDOW_MANAGER is still honored in 2.24. gnome-session-2.24 might have lost
- * support for it, but we don't ship with gnome-session-2.24 yet
-gnome-base/gnome-panel-2.28.0-r1
- * tarball generated with broken gtk-doc, revisit me.
-gnome-base/gnome-session-2.28.0-r2
- * Needs updating for 2.27.91 (package is currently masked)
- * Needs updating for 2.27.91 (package is currently masked)
-gnome-base/nautilus-2.28.1
- * tarball generated with broken gtk-doc, revisit me.
-gnome-extra/evolution-data-server-2.28.1
- * Fix compilation flags crazyness
-gnome-extra/evolution-exchange-2.28.1
- * Fix compilation flags crazyness
-gnome-extra/gnome-media-2.28.1
- * Do not run intltool check, it breaks in a weird way
-gnome-extra/gnome-power-manager-2.28.1
- * Finish the patchset including translations updates for feature forward port
- * Interactive testsuite (upstream ? I'm so...pessimistic)
-gnome-extra/gnome-user-share-2.28.1
- * could libnotify be made optional ?
- * gnome-bluetooth is a hard-dep
-gnome-extra/gtkhtml-3.28.1
- * Fix compilation flags crazyness
-gnome-extra/gucharmap-2.28.1
- * add gobject-introspection support once available
-gnome-extra/nautilus-sendto-2.28.0
- * mail plugin build is broken
- * skip evolution, it does not build properly
-mail-client/evolution-2.28.1
- * bsd needs to be more active at pushing stuff upstream
- * Fix compilation flags crazyness
 media-libs/clutter-1.0.8
  * Tests are interactive, not of use for us
  * Using external json-glib breaks introspection
@@ -66,28 +14,5 @@ media-libs/clutter-1.0.8
 media-libs/libchamplain-0.4.2
  * add pyclutter and pyclutter-gtk first
  * add clutter-sharp first
-media-sound/sound-juicer-2.28.0
- * possibly automagic dual slot dep on musicbrainz
-media-video/totem-2.28.1-r1
- * freezes totem
- * tests broken with USE="doc" upstream bug #598805.
- * why does it need write access here, probably need to set up a fake
-net-im/empathy-2.28.1.1
- * Add location support once geoclue stops being idiotic with automagic deps
- * libnotify & libcanberra hard deps
- * Highly broken with parallel make, mallard strike 2, see bug #286889
 net-libs/libepc-0.3.10
  * 2 out of 16 tests fail, upstream bug #578792
-sys-auth/consolekit-0.4.1-r1
- * Report on upstream for patch about policies ? (probably upstream devs wanted this behaviour as default...)
-www-client/epiphany-extensions-2.28.1
- * Open security issues:
- * - adblock ( https://bugzilla.gnome.org/show_bug.cgi?id=595255 )
- * broken extensions:
- * - gestures ( https://bugzilla.gnome.org/show_bug.cgi?id=563099 )
- * - session-saver ( https://bugzilla.gnome.org/show_bug.cgi?id=316245 )
- * - sidebar: hangs ( https://bugzilla.gnome.org/show_bug.cgi?id=594481 )
-x11-libs/gtk+-2.18.3
- * configure says >=xrandr-1.2.99 but remi tells me it's broken
-x11-themes/gnome-icon-theme-2.28.0
- * double check potential LINGUAS problem
