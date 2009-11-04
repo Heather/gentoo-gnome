@@ -15,7 +15,7 @@ LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="atk avahi babl dbus gconf gnome-keyring goocanvas +gtk gtksourceview gupnp
-libnotify libsoup libwnck nautilus pango poppler vte webkit"
+libnotify libsoup libwnck nautilus pango poppler vte"
 
 RDEPEND=">=dev-libs/gobject-introspection-0.6.5"
 DEPEND="${RDEPEND}
@@ -40,7 +40,6 @@ DEPEND="${RDEPEND}
 	pango? ( x11-libs/pango )
 	poppler? ( >=virtual/poppler-glib-0.8 )
 	vte? ( x11-libs/vte )
-	webkit? ( >=net-libs/webkit-gtk-1.0 )
 "
 
 _auto_dep() {
@@ -59,6 +58,7 @@ pkg_setup() {
 		--disable-gnio
 		--disable-gstreamer
 		--disable-unique
+		--disable-webkit
 		$(use_enable atk)
 		$(use_enable avahi)
 		$(use_enable babl)
@@ -76,14 +76,12 @@ pkg_setup() {
 		$(use_enable pango)
 		$(use_enable poppler)
 		$(use_enable vte)
-		$(use_enable webkit)
 	"
 
 	# XXX: Auto-enabling is for Makefile-level dependencies
 	# FIXME: these dependencies are incomplete
 	_auto_dep gtk atk
 	_auto_dep gtk pango
-	_auto_dep webkit libsoup soup
 }
 
 src_prepare() {
