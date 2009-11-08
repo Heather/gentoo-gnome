@@ -122,6 +122,10 @@ src_prepare() {
 	# Fix bug #281718 -- *** glibc detected *** gtali: free(): invalid pointer
 	epatch "${FILESDIR}/${PN}-2.26.3-gtali-invalid-pointer.patch"
 
+	# Fix build failure, conflicting types for 'games_sound_init',
+	# in libgames-support/games_sound.c.
+	epatch "${FILESDIR}/${P}-conflicting-types-libgames-support.patch"
+
 	# If calling eautoreconf, this ebuild uses libtool-2
 	eautomake
 }
