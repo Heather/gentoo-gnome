@@ -30,6 +30,15 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS NEWS ChangeLog README TODO"
 
+pkg_setup() {
+	G2CONF="${G2CONF}
+		--disable-maintainer-flags
+		--disable-static
+		--enable-bacon
+		$(use_enable dbus)
+		$(use_enable introspection)"
+}
+
 src_test() {
 	cd "${S}/tests"
 
@@ -41,12 +50,4 @@ src_test() {
 
 	cp "${FILESDIR}/run-tests" . || die "Unable to cp \${FILESDIR}/run-tests"
 	Xemake -f run-tests || die "Tests failed"
-}
-
-pkg_setup() {
-	G2CONF="${G2CONF}
-		--disable-maintainer-flags
-		--disable-static
-		$(use_enable dbus)
-		$(use_enable introspection)"
 }
