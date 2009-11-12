@@ -16,6 +16,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE="applet deskbar eds exif gsf gstreamer gtk hal iptc +jpeg kmail laptop pdf playlist test +tiff xine +xml xmp +vorbis"
 
 # Automagic, gconf, uuid, enca and probably more
+# TODO: quill and streamanalyzer support
 RDEPEND="
 	>=app-i18n/enca-1.9
 	>=dev-db/sqlite-3.6.16[threadsafe]
@@ -118,7 +119,6 @@ pkg_setup() {
 		$(use_enable eds evolution-push-module)
 		$(use_enable exif libexif)
 		$(use_enable gsf libgsf)
-		$(use_enable gtk gdkpixbuf)
 		$(use_enable gtk libtrackergtk)
 		$(use_enable gtk tracker-explorer)
 		$(use_enable gtk tracker-preferences)
@@ -135,6 +135,8 @@ pkg_setup() {
 		$(use_enable vorbis libvorbis)"
 		# FIXME: Missing files to run functional tests
 		# $(use_enable test functional-tests)
+		# FIXME: useless without quill (extract mp3 albumart...)
+		# $(use_enable gtk gdkpixbuf)
 }
 
 src_test() {
