@@ -8,7 +8,7 @@ app-misc/tracker-0.7.7
 dev-libs/gir-repository-0.6.5
  * installs even disabled stuff if it's a dependency of something enabled
  * these dependencies are incomplete
-dev-util/gnome-devel-docs-2.28.0
+dev-util/gnome-devel-docs-2.28.1
  * Find a better fix for the failure with parallel install.
 media-libs/clutter-1.0.8
  * Tests are interactive, not of use for us
