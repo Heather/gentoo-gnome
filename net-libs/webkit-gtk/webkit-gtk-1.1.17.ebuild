@@ -56,14 +56,6 @@ DEPEND="${RDEPEND}
 S="${WORKDIR}/${MY_P}"
 
 src_prepare() {
-	# Add files missing from tarball...
-	# https://bugs.webkit.org/show_bug.cgi?id=31102
-	for file in JSCore-1.0.gir JSCore-1.0.typelib; do
-		cp "${FILESDIR}/$file" "${S}/WebKit/gtk/" || die "Error copying $file"
-	done
-	# ...and fix the include path for these
-	epatch "${FILESDIR}/webkit-introspection-jscore-path.patch"
-
 	# Make it libtool-1 compatible
 	rm -v autotools/lt* autotools/libtool.m4 \
 		|| die "removing libtool macros failed"
