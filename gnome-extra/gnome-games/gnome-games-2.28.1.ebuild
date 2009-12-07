@@ -4,7 +4,7 @@
 
 EAPI="2"
 GCONF_DEBUG="no"
-WANT_AUTOMAKE="1.10"
+WANT_AUTOMAKE="1.11"
 
 # make sure games is inherited first so that the gnome2
 # functions will be called if they are not overridden
