@@ -13,7 +13,7 @@ HOMEPAGE="http://www.tracker-project.org/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="applet deskbar eds exif gsf gstreamer gtk hal iptc +jpeg kmail laptop mp3 pdf playlist test +tiff xine +xml xmp +vorbis"
+IUSE="applet deskbar doc eds exif gsf gstreamer gtk hal iptc +jpeg kmail laptop mp3 pdf playlist test +tiff xine +xml xmp +vorbis"
 
 # Automagic, gconf, uuid, enca and probably more
 # TODO: quill and streamanalyzer support
