@@ -2,7 +2,7 @@ THIS FILE IS AUTO GENERATED, DO NOT MODIFY BY HAND
 
 Ebuild Notices:
 ===============
-app-misc/tracker-0.7.7
+app-misc/tracker-0.7.10
  * Missing files to run functional tests
  * useless without quill (extract mp3 albumart...)
 dev-libs/gir-repository-0.6.5

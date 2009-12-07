@@ -13,7 +13,7 @@ HOMEPAGE="http://www.tracker-project.org/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="applet deskbar eds exif gsf gstreamer gtk hal iptc +jpeg kmail laptop pdf playlist test +tiff xine +xml xmp +vorbis"
+IUSE="applet deskbar eds exif gsf gstreamer gtk hal iptc +jpeg kmail laptop mp3 pdf playlist test +tiff xine +xml xmp +vorbis"
 
 # Automagic, gconf, uuid, enca and probably more
 # TODO: quill and streamanalyzer support
@@ -46,6 +46,7 @@ RDEPEND="
 	laptop? (
 		hal? ( >=sys-apps/hal-0.5 )
 		!hal? ( >=sys-apps/devicekit-power-007 ) )
+	mp3? ( >=media-libs/id3lib-3.8.3 )
 	pdf? (
 		>=x11-libs/cairo-1
 		>=virtual/poppler-glib-0.5[cairo]
@@ -56,7 +57,7 @@ RDEPEND="
 	vorbis? ( >=media-libs/libvorbis-0.22 )
 	xine? ( >=media-libs/xine-lib-1 )
 	xml? ( >=dev-libs/libxml2-2.6 )
-	xmp? ( >=media-libs/exempi-2 )"
+	xmp? ( >=media-libs/exempi-2.1 )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
 	>=sys-devel/gettext-0.14
@@ -116,7 +117,7 @@ pkg_setup() {
 		$(use_enable applet tracker-status-icon)
 		$(use_enable applet tracker-search-bar)
 		$(use_enable deskbar deskbar-applet)
-		$(use_enable eds evolution-push-module)
+		$(use_enable eds evolution-miner)
 		$(use_enable exif libexif)
 		$(use_enable gsf libgsf)
 		$(use_enable gtk libtrackergtk)
@@ -125,7 +126,8 @@ pkg_setup() {
 		$(use_enable gtk tracker-search-tool)
 		$(use_enable iptc libiptcdata)
 		$(use_enable jpeg libjpeg)
-		$(use_enable kmail kmail-push-module)
+		$(use_enable kmail kmail-miner)
+		$(use_enable mp3 id3lib)
 		$(use_enable pdf poppler-glib)
 		$(use_enable playlist)
 		$(use_enable test unit-tests)
