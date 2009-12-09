@@ -76,16 +76,14 @@ DOCS="AUTHORS ChangeLog NEWS README"
 function notify_inotify() {
 	ewarn
 	ewarn "You should enable the INOTIFY support in your kernel."
-	ewarn "Check the 'Inotify file change notification support' under the"
-	ewarn "'File systems' option.  It is marked as CONFIG_INOTIFY in the config"
-	ewarn "Also enable 'Inotify support for userland' in under the previous"
-	ewarn "option.  It is marked as CONFIG_INOTIFY_USER in the config."
+	ewarn "Check the 'Inotify support for userland' under the 'File systems'"
+	ewarn "option. It is marked as CONFIG_INOTIFY_USER in the config"
 	ewarn
 	die 'missing CONFIG_INOTIFY'
 }
 
 function inotify_enabled() {
-	linux_chkconfig_present INOTIFY && linux_chkconfig_present INOTIFY_USER
+	linux_chkconfig_present INOTIFY_USER
 }
 
 pkg_setup() {
