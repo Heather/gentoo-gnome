@@ -6,6 +6,10 @@
 # NOTE: Please add your entry at the top!
 #
 
+# Arun Raghavan <ford_prefect@gentoo.org> (9 Dec 2009)
+# Mask live version of gst-convenience
+~media-libs/gst-conveninence-9999
+
 # Nirbheek Chauhan <nirbheek@gentoo.org> (6 Sep 2009)
 # Session-saving support has regressions
 # http://bugzilla.gnome.org/show_bug.cgi?id=585614
