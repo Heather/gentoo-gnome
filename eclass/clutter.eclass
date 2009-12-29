@@ -5,11 +5,13 @@
 #
 # clutter.eclass
 #
-# Sets SRC_URI, SLOT, and a few deps
+# Sets SRC_URI, LICENSE, etc and exports src_install
 #
 # Authors:
 # Nirbheek Chauhan <nirbheek@gentoo.org>
 #
+# Maintained by:
+# GNOME Herd <gnome@gentoo.org>
 
 inherit versionator
 
