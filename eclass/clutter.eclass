@@ -36,10 +36,10 @@ clutter_src_install() {
 		# We use eval to be able to use globs
 		for example in $(eval echo ${EXAMPLES}); do
 			# If directory
-			if [[ ${example: -1} = "/" ]]; then
-				doins -r ${example}
+			if [[ ${example: -1} == "/" ]]; then
+				doins -r ${example} || die "doins ${example} failed!"
 			else
-				doins ${example}
+				doins ${example} || die "doins ${example} failed!"
 			fi
 		done
 	fi
