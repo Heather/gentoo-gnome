@@ -28,7 +28,7 @@ RDEPEND="
 	>=x11-libs/gtk+-2.10
 	>=gnome-base/gail-1.8
 	>=dev-libs/icu-3.8.1-r1
-	>=net-libs/libsoup-2.27.91
+	>=net-libs/libsoup-2.29.3
 	>=dev-db/sqlite-3
 	>=app-text/enchant-0.22
 
@@ -89,6 +89,12 @@ src_configure() {
 	fi
 
 	econf ${myconf}
+}
+
+src_compile() {
+	# Fix sandbox error with USE="introspection"
+	addpredict "$(unset HOME; echo ~)/.local"
+	emake || die "Compile failed"
 }
 
 src_install() {
