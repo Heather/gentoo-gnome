@@ -57,3 +57,9 @@ pkg_setup() {
 		$(use_enable nss)
 		$(use_enable test tests)"
 }
+
+src_compile() {
+	# Fix sandbox error with USE="introspection"
+	addpredict "$(unset HOME; echo ~)/.local"
+	emake || die "Compile failed"
+}
