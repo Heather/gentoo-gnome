@@ -1,10 +1,10 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-client/epiphany/epiphany-2.22.3-r10.ebuild,v 1.1 2008/07/06 11:19:35 eva Exp $
+# $Header: $
 
 EAPI="2"
 
-inherit gnome2
+inherit eutils gnome2
 
 DESCRIPTION="GNOME webbrowser based on Webkit"
 HOMEPAGE="http://www.gnome.org/projects/epiphany/"
@@ -12,11 +12,13 @@ HOMEPAGE="http://www.gnome.org/projects/epiphany/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="avahi doc introspection networkmanager +nss test"
+IUSE="avahi doc networkmanager +nss test"
+#IUSE="avahi doc introspection networkmanager +nss test"
 
 # TODO: add seed support
+#	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
 RDEPEND=">=dev-libs/glib-2.19.7
-	>=x11-libs/gtk+-2.17.11
+	>=x11-libs/gtk+-2.18.0
 	>=dev-libs/libxml2-2.6.12
 	>=dev-libs/libxslt-1.1.7
 	>=x11-libs/startup-notification-0.5
@@ -24,8 +26,8 @@ RDEPEND=">=dev-libs/glib-2.19.7
 	>=dev-libs/dbus-glib-0.71
 	>=gnome-base/gconf-2
 	>=app-text/iso-codes-0.35
-	>=net-libs/webkit-gtk-1.1.11
-	>=net-libs/libsoup-2.27.91[gnome]
+	>=net-libs/webkit-gtk-1.1.18
+	>=net-libs/libsoup-2.29.4[gnome]
 	>=gnome-base/gnome-keyring-2.26.0
 
 	x11-libs/libICE
@@ -34,7 +36,6 @@ RDEPEND=">=dev-libs/glib-2.19.7
 	nss? ( dev-libs/nss )
 	avahi? ( >=net-dns/avahi-0.6.22 )
 	networkmanager? ( net-misc/networkmanager )
-	introspection? ( >=dev-libs/gobject-introspection-0.6.2 )
 	x11-themes/gnome-icon-theme"
 DEPEND="${RDEPEND}
 	app-text/scrollkeeper
@@ -47,19 +48,18 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS README TODO"
 
 pkg_setup() {
+	#	$(use_enable introspection)
 	G2CONF="${G2CONF}
 		--disable-scrollkeeper
 		--disable-maintainer-mode
 		--with-distributor-name=Gentoo
 		$(use_enable avahi zeroconf)
-		$(use_enable introspection)
 		$(use_enable networkmanager network-manager)
 		$(use_enable nss)
 		$(use_enable test tests)"
 }
 
-src_compile() {
-	# Fix sandbox error with USE="introspection"
-	addpredict "$(unset HOME; echo ~)/.local"
-	emake || die "Compile failed"
+src_prepare() {
+	cd ${S}
+	epatch ${FILESDIR}/${P}-fix-schemas.patch
 }
