@@ -13,7 +13,7 @@ SRC_URI="http://www.webkitgtk.org/${MY_P}.tar.gz"
 
 LICENSE="LGPL-2 LGPL-2.1 BSD"
 SLOT="0"
-KEYWORDS="-*"
+KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~sparc ~x86 ~x86-fbsd"
 # geoclue
 IUSE="coverage debug doc +gstreamer introspection pango"
 
@@ -28,7 +28,7 @@ RDEPEND="
 	>=x11-libs/gtk+-2.10
 	>=gnome-base/gail-1.8
 	>=dev-libs/icu-3.8.1-r1
-	>=net-libs/libsoup-2.28.2
+	>=net-libs/libsoup-2.29.3
 	>=dev-db/sqlite-3
 	>=app-text/enchant-0.22
 
