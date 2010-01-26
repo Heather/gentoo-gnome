@@ -1,0 +1,94 @@
+From 156b7b87c56f6fce779a2ceded2951a9bca4f6c1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Sebastian=20Dr=C3=B6ge?= <sebastian.droege@collabora.co.uk>
+Date: Fri, 22 Jan 2010 16:48:05 +0100
+Subject: [PATCH 1/2] Update copy of the source whenever playbin2's source property changes
+
+* platform/graphics/gtk/MediaPlayerPrivateGStreamer.cpp:
+        (WebCore::mediaPlayerPrivateSourceChangedCallback):
+        (WebCore::MediaPlayerPrivate::updateStates):
+        (WebCore::MediaPlayerPrivate::createGSTPlayBin):
+        * platform/graphics/gtk/MediaPlayerPrivateGStreamer.h:
+        Connect to the notify::source signal and update the source
+        element pointer from there. This makes sure that we never
+        store a pointer to an old source element.
+---
+ WebCore/ChangeLog                                  |   31 ++++++++++++++++++++
+ .../graphics/gtk/MediaPlayerPrivateGStreamer.cpp   |   20 ++++++++++--
+ .../graphics/gtk/MediaPlayerPrivateGStreamer.h     |    6 ++-
+ 3 files changed, 51 insertions(+), 6 deletions(-)
+
+diff --git a/WebCore/platform/graphics/gtk/MediaPlayerPrivateGStreamer.cpp b/WebCore/platform/graphics/gtk/MediaPlayerPrivateGStreamer.cpp
+index facf738..77b2a3d 100644
+--- a/WebCore/platform/graphics/gtk/MediaPlayerPrivateGStreamer.cpp
++++ b/WebCore/platform/graphics/gtk/MediaPlayerPrivateGStreamer.cpp
+@@ -124,6 +124,16 @@ gboolean mediaPlayerPrivateMessageCallback(GstBus* bus, GstMessage* message, gpo
+     return true;
+ }
+ 
++void mediaPlayerPrivateSourceChangedCallback(GObject *object, GParamSpec *pspec, gpointer data)
++{
++    MediaPlayerPrivate* mp = reinterpret_cast<MediaPlayerPrivate*>(data);
++    GstElement* element;
++
++    g_object_get(mp->m_playBin, "source", &element, NULL);
++    gst_object_replace((GstObject**) &mp->m_source, (GstObject*) element);
++    gst_object_unref(element);
++}
++
+ void mediaPlayerPrivateVolumeChangedCallback(GObject *element, GParamSpec *pspec, gpointer data)
+ {
+     MediaPlayerPrivate* mp = reinterpret_cast<MediaPlayerPrivate*>(data);
+@@ -257,6 +267,11 @@ MediaPlayerPrivate::~MediaPlayerPrivate()
+         m_mediaLocations = 0;
+     }
+ 
++    if (m_source) {
++        gst_object_unref(m_source);
++        m_source = 0;
++    }
++
+     if (m_playBin) {
+         gst_element_set_state(m_playBin, GST_STATE_NULL);
+         gst_object_unref(GST_OBJECT(m_playBin));
+@@ -664,10 +679,6 @@ void MediaPlayerPrivate::updateStates()
+         }
+ 
+         m_networkState = MediaPlayer::Loaded;
+-
+-        g_object_get(m_playBin, "source", &m_source, NULL);
+-        if (!m_source)
+-            LOG_VERBOSE(Media, "m_source is 0");
+         break;
+     case GST_STATE_CHANGE_ASYNC:
+         LOG_VERBOSE(Media, "Async: State: %s, pending: %s",
+@@ -1058,6 +1069,7 @@ void MediaPlayerPrivate::createGSTPlayBin(String url)
+     g_object_set(m_playBin, "uri", url.utf8().data(), NULL);
+ 
+     g_signal_connect(m_playBin, "notify::volume", G_CALLBACK(mediaPlayerPrivateVolumeChangedCallback), this);
++    g_signal_connect(m_playBin, "notify::source", G_CALLBACK(mediaPlayerPrivateSourceChangedCallback), this);
+ 
+     m_videoSink = webkit_video_sink_new();
+ 
+diff --git a/WebCore/platform/graphics/gtk/MediaPlayerPrivateGStreamer.h b/WebCore/platform/graphics/gtk/MediaPlayerPrivateGStreamer.h
+index 278bd1c..f96ccf0 100644
+--- a/WebCore/platform/graphics/gtk/MediaPlayerPrivateGStreamer.h
++++ b/WebCore/platform/graphics/gtk/MediaPlayerPrivateGStreamer.h
+@@ -45,11 +45,13 @@ class IntRect;
+ class String;
+ 
+ gboolean mediaPlayerPrivateMessageCallback(GstBus* bus, GstMessage* message, gpointer data);
+-void mediaPlayerPrivateVolumeChangedCallback(GObject *element, GParamSpec *pspec, gpointer data);
++void mediaPlayerPrivateVolumeChangedCallback(GObject* element, GParamSpec* pspec, gpointer data);
++void mediaPlayerPrivateSourceChangedCallback(GObject* element, GParamSpec* pspec, gpointer data);
+ 
+ class MediaPlayerPrivate : public MediaPlayerPrivateInterface {
+         friend gboolean mediaPlayerPrivateMessageCallback(GstBus* bus, GstMessage* message, gpointer data);
+-        friend void mediaPlayerPrivateRepaintCallback(WebKitVideoSink*, GstBuffer *buffer, MediaPlayerPrivate* playerPrivate);
++        friend void mediaPlayerPrivateRepaintCallback(WebKitVideoSink*, GstBuffer* buffer, MediaPlayerPrivate* playerPrivate);
++        friend void mediaPlayerPrivateSourceChangedCallback(GObject* element, GParamSpec* pspec, gpointer data);
+ 
+         public:
+             static void registerMediaEngine(MediaEngineRegistrar);
+-- 
+1.6.6
+

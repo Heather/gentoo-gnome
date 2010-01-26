@@ -1,0 +1,63 @@
+From 2511b31c13cdf9c4423af3abd60ac7c768c13507 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Sebastian=20Dr=C3=B6ge?= <sebastian.droege@collabora.co.uk>
+Date: Sat, 23 Jan 2010 23:10:17 +0100
+Subject: [PATCH 2/2] Pass cookies to the GStreamer HTTP source
+
+        * platform/graphics/gtk/MediaPlayerPrivateGStreamer.cpp:
+        (WebCore::mediaPlayerPrivateSourceChangedCallback):
+        When using an appropiate GStreamer HTTP source element, pass
+        the cookies for the media URI to it. This fixes playback of
+        the YouTube HTML5 videos.
+---
+ WebCore/ChangeLog                                  |   15 +++++++++++
+ .../graphics/gtk/MediaPlayerPrivateGStreamer.cpp   |   27 ++++++++++++++++++++
+ 2 files changed, 42 insertions(+), 0 deletions(-)
+
+diff --git a/WebCore/platform/graphics/gtk/MediaPlayerPrivateGStreamer.cpp b/WebCore/platform/graphics/gtk/MediaPlayerPrivateGStreamer.cpp
+index 77b2a3d..e727d4c 100644
+--- a/WebCore/platform/graphics/gtk/MediaPlayerPrivateGStreamer.cpp
++++ b/WebCore/platform/graphics/gtk/MediaPlayerPrivateGStreamer.cpp
+@@ -47,6 +47,7 @@
+ #include <gst/video/video.h>
+ #include <limits>
+ #include <math.h>
++#include <webkit/webkitwebview.h>
+ #include <wtf/gtk/GOwnPtr.h>
+ 
+ using namespace std;
+@@ -131,6 +132,32 @@ void mediaPlayerPrivateSourceChangedCallback(GObject *object, GParamSpec *pspec,
+ 
+     g_object_get(mp->m_playBin, "source", &element, NULL);
+     gst_object_replace((GstObject**) &mp->m_source, (GstObject*) element);
++
++    if (element) {
++        GParamSpec* pspec = g_object_class_find_property(G_OBJECT_GET_CLASS(element), "cookies");
++
++        // First check if the source element has a cookies property
++        // of the format we expect
++        if (!pspec || pspec->value_type != G_TYPE_STRV)
++            return;
++
++        // Then get the cookies for the URI and set them
++        SoupSession* session = webkit_get_default_session();
++        SoupCookieJar* cookieJar = SOUP_COOKIE_JAR(soup_session_get_feature(session, SOUP_TYPE_COOKIE_JAR));
++
++        char* location;
++        g_object_get(element, "location", &location, NULL);
++
++        SoupURI* uri = soup_uri_new(location);
++        g_free(location);
++        char* cookies = soup_cookie_jar_get_cookies(cookieJar, uri, FALSE);
++        soup_uri_free(uri);
++
++        char* cookiesStrv[] = {cookies, NULL};
++        g_object_set(element, "cookies", cookiesStrv, NULL);
++        g_free(cookies);
++    }
++
+     gst_object_unref(element);
+ }
+ 
+-- 
+1.6.6
+

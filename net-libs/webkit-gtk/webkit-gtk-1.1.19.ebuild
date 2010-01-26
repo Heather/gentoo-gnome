@@ -91,6 +91,12 @@ src_configure() {
 	econf ${myconf}
 }
 
+src_prepare() {
+	cd ${S}
+	epatch ${FILESDIR}/${P}-html5-playbin-source.patch
+	epatch ${FILESDIR}/${P}-html5-cookies.patch
+}
+
 src_compile() {
 	# Fix sandbox error with USE="introspection"
 	addpredict "$(unset HOME; echo ~)/.local"
