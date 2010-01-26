@@ -58,8 +58,3 @@ pkg_setup() {
 		$(use_enable nss)
 		$(use_enable test tests)"
 }
-
-src_prepare() {
-	cd ${S}
-	epatch ${FILESDIR}/${P}-fix-schemas.patch
-}
