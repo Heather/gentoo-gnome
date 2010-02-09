@@ -40,8 +40,6 @@ pkg_setup() {
 src_prepare() {
 	gnome2_src_prepare
 
-	epatch ${FILESDIR}/libsoup-fix-gzip-decode-hang.patch
-
 	# Fix test to follow POSIX (for x86-fbsd)
 	# No patch to prevent having to eautoreconf
 	sed -e 's/\(test.*\)==/\1=/g' -i configure.in configure || die "sed failed"
