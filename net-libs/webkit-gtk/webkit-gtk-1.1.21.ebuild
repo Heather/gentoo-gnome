@@ -28,7 +28,7 @@ RDEPEND="
 	>=x11-libs/gtk+-2.10
 	>=gnome-base/gail-1.8
 	>=dev-libs/icu-3.8.1-r1
-	>=net-libs/libsoup-2.27.91
+	>=net-libs/libsoup-2.29.90
 	>=dev-db/sqlite-3
 	>=app-text/enchant-0.22
 
@@ -56,8 +56,6 @@ DEPEND="${RDEPEND}
 S="${WORKDIR}/${MY_P}"
 
 src_prepare() {
-	epatch "${FILESDIR}/${P}-handle-mime.patch"
-
 	# Make it libtool-1 compatible
 	rm -v autotools/lt* autotools/libtool.m4 \
 		|| die "removing libtool macros failed"
