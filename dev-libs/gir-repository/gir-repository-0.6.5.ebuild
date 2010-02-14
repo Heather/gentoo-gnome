@@ -38,7 +38,7 @@ DEPEND="${RDEPEND}
 	libwnck? ( x11-libs/libwnck )
 	nautilus? ( gnome-base/nautilus )
 	pango? ( x11-libs/pango )
-	poppler? ( >=virtual/poppler-glib-0.8 )
+	poppler? ( >=app-text/poppler-0.8[glib] )
 	vte? ( x11-libs/vte )
 	webkit? ( >=net-libs/webkit-gtk-1.0 )
 "
