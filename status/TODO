@@ -16,3 +16,9 @@ media-libs/libchamplain-0.4.2
  * add clutter-sharp first
 net-libs/libepc-0.3.10
  * 2 out of 16 tests fail, upstream bug #578792
+www-client/epiphany-extensions-2.29.6
+ * Open security issues:
+ * - adblock ( https://bugzilla.gnome.org/show_bug.cgi?id=595255 )
+ * broken extensions:
+ * - session-saver ( https://bugzilla.gnome.org/show_bug.cgi?id=316245 )
+ * - sidebar: not working ( https://bugzilla.gnome.org/show_bug.cgi?id=594481 )
