@@ -40,7 +40,6 @@ DOCS="AUTHORS ChangeLog HACKING NEWS README"
 # FIXME: - adblock        ( https://bugzilla.gnome.org/show_bug.cgi?id=595255 )
 # FIXME: broken extensions:
 # FIXME: - session-saver  ( https://bugzilla.gnome.org/show_bug.cgi?id=316245 )
-# FIXME: - sidebar: not working ( https://bugzilla.gnome.org/show_bug.cgi?id=594481 )
 
 pkg_setup() {
 	local extensions=""
