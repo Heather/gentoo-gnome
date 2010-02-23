@@ -18,7 +18,7 @@ IUSE="avahi doc networkmanager +nss test"
 # TODO: add seed support
 #	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
 RDEPEND=">=dev-libs/glib-2.19.7
-	>=x11-libs/gtk+-2.18.0
+	>=x11-libs/gtk+-2.19.5
 	>=dev-libs/libxml2-2.6.12
 	>=dev-libs/libxslt-1.1.7
 	>=x11-libs/startup-notification-0.5
@@ -26,8 +26,8 @@ RDEPEND=">=dev-libs/glib-2.19.7
 	>=dev-libs/dbus-glib-0.71
 	>=gnome-base/gconf-2
 	>=app-text/iso-codes-0.35
-	>=net-libs/webkit-gtk-1.1.21
-	>=net-libs/libsoup-2.29.90[gnome]
+	>=net-libs/webkit-gtk-1.1.22
+	>=net-libs/libsoup-2.29.91[gnome]
 	>=gnome-base/gnome-keyring-2.26.0
 
 	x11-libs/libICE
