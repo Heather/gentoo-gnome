@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/libsoup/libsoup-2.28.2.ebuild,v 1.1 2009/12/17 22:54:42 eva Exp $
+# $Header: $
 
 EAPI="2"
 
@@ -42,7 +42,7 @@ src_prepare() {
 
 	# Fix test to follow POSIX (for x86-fbsd)
 	# No patch to prevent having to eautoreconf
-	sed -e 's/\(test.*\)==/\1=/g' -i configure.in configure || die "sed failed"
+	sed -e 's/\(test.*\)==/\1=/g' -i configure.ac configure || die "sed failed"
 
 	# Patch *must* be applied conditionally (see patch for details)
 	if use doc; then

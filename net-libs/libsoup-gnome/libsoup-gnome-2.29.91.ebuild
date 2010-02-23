@@ -44,7 +44,7 @@ src_prepare() {
 
 	# Fix test to follow POSIX (for x86-fbsd)
 	# No patch to prevent having to eautoreconf
-	sed -e 's/\(test.*\)==/\1=/g' -i configure.in configure || die "sed failed"
+	sed -e 's/\(test.*\)==/\1=/g' -i configure.ac configure || die "sed failed"
 
 	# Use lib present on the system
 	epatch "${FILESDIR}"/${PN}-system-lib.patch
