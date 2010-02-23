@@ -34,7 +34,7 @@ RDEPEND="
 
 	gstreamer? (
 		media-libs/gstreamer:0.10
-		media-libs/gst-plugins-base:0.10 )
+		>=media-libs/gst-plugins-base-0.10.25 )
 	introspection? (
 		>=dev-libs/gobject-introspection-0.6.2
 		!!dev-libs/gir-repository[webkit]
