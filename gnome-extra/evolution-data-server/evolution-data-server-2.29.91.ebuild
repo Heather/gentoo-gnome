@@ -67,6 +67,9 @@ src_prepare() {
 	# Rewind in camel-disco-diary to fix a crash
 	epatch "${FILESDIR}/${PN}-1.8.0-camel-rewind.patch"
 
+	# Fix build error due to duplicate header definition
+	epatch "${FILESDIR}/${PN}-duplicate-header.patch"
+
 	if use doc; then
 		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/usr/bin/gtkdoc-rebase" \
 			-i gtk-doc.make || die "sed 1 failed"
