@@ -6,6 +6,12 @@
 # NOTE: Please add your entry at the top!
 #
 
+# Nirbheek Chauhan <nirbheek@gentoo.org> (27 Feb 2010)
+# Revert portage introspection mask
+# You will have to unmask the use.mask yourself. See man portage
+-dev-libs/gir-repository
+-dev-libs/gobject-introspection
+
 # Arun Raghavan <ford_prefect@gentoo.org> (9 Dec 2009)
 # Mask live version of gst-convenience
 ~media-libs/gst-conveninence-9999
