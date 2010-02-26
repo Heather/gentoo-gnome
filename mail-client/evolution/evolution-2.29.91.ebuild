@@ -10,7 +10,7 @@ inherit autotools gnome2 flag-o-matic python
 DESCRIPTION="Integrated mail, addressbook and calendaring functionality"
 HOMEPAGE="http://www.gnome.org/projects/evolution/"
 
-LICENSE="GPL-2 FDL-1.1"
+LICENSE="GPL-2 LGPL-2 OPENLDAP"
 SLOT="2.0"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="crypt kerberos ldap mono networkmanager pda profile python ssl
@@ -33,6 +33,7 @@ RDEPEND=">=dev-libs/glib-2.22
 	>=dev-libs/libxml2-2.7.3
 	>=dev-libs/libgweather-2.25.3
 	>=net-libs/libsoup-2.4
+	>=media-gfx/gtkimageview-1.6
 	x11-libs/libnotify
 	>=x11-misc/shared-mime-info-0.22
 	>=x11-themes/gnome-icon-theme-2.20
@@ -75,6 +76,7 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--without-kde-applnk-path
 		--enable-plugins=experimental
+		--enable-image-inline
 		--enable-weather
 		$(use_enable ssl nss)
 		$(use_enable ssl smime)
