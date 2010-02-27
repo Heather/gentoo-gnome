@@ -57,3 +57,10 @@ pkg_setup() {
 		$(use_enable nss)
 		$(use_enable test tests)"
 }
+
+src_compile() {
+	# Fix sandbox error with USE="introspection"
+	# https://bugs.webkit.org/show_bug.cgi?id=35471
+	addpredict "$(unset HOME; echo ~)/.local"
+	emake || die "Compile failed"
+}
