@@ -12,11 +12,9 @@ HOMEPAGE="http://www.gnome.org/projects/epiphany/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="avahi doc networkmanager +nss test"
-#IUSE="avahi doc introspection networkmanager +nss test"
+IUSE="avahi doc introspection networkmanager +nss test"
 
 # TODO: add seed support
-#	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
 RDEPEND=">=dev-libs/glib-2.19.7
 	>=x11-libs/gtk+-2.19.5
 	>=dev-libs/libxml2-2.6.12
@@ -33,9 +31,10 @@ RDEPEND=">=dev-libs/glib-2.19.7
 	x11-libs/libICE
 	x11-libs/libSM
 
-	nss? ( dev-libs/nss )
 	avahi? ( >=net-dns/avahi-0.6.22 )
+	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
 	networkmanager? ( net-misc/networkmanager )
+	nss? ( dev-libs/nss )
 	x11-themes/gnome-icon-theme"
 DEPEND="${RDEPEND}
 	app-text/scrollkeeper
@@ -48,12 +47,12 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS README TODO"
 
 pkg_setup() {
-	#	$(use_enable introspection)
 	G2CONF="${G2CONF}
 		--disable-scrollkeeper
 		--disable-maintainer-mode
 		--with-distributor-name=Gentoo
 		$(use_enable avahi zeroconf)
+		$(use_enable introspection)
 		$(use_enable networkmanager network-manager)
 		$(use_enable nss)
 		$(use_enable test tests)"
