@@ -47,6 +47,7 @@ src_test() {
 
 	# Force Xemake to use Xvfb, bug 279840
 	unset XAUTHORITY
+	unset DISPLAY
 
 	cp "${FILESDIR}/run-tests" . || die "Unable to cp \${FILESDIR}/run-tests"
 	Xemake -f run-tests || die "Tests failed"
