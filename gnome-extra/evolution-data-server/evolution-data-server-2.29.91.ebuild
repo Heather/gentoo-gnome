@@ -70,6 +70,11 @@ src_prepare() {
 	# Fix build error due to duplicate header definition
 	epatch "${FILESDIR}/${PN}-duplicate-header.patch"
 
+	# GNOME bugs: 611353 and 611355
+	epatch "${FILESDIR}/e-d-s-camel-skip-failing-test.patch"
+	epatch "${FILESDIR}/e-d-s-fix-calendar-create-object-2-test.patch"
+
+
 	if use doc; then
 		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/usr/bin/gtkdoc-rebase" \
 			-i gtk-doc.make || die "sed 1 failed"
@@ -96,6 +101,10 @@ src_install() {
 		doins "${FILESDIR}"/calentry.schema || die "doins failed"
 		dosym /usr/share/${PN}-${MY_MAJORV}/evolutionperson.schema /etc/openldap/schema/evolutionperson.schema
 	fi
+}
+
+src_test() {
+	emake check || die "Tests failed."
 }
 
 pkg_postinst() {
