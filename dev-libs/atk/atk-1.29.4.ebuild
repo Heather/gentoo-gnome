@@ -21,3 +21,7 @@ DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1 )"
 
 DOCS="AUTHORS ChangeLog NEWS README"
+
+pkg_setup() {
+	G2CONF="${G2CONF} --disable-introspection"
+}
