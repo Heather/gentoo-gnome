@@ -104,6 +104,7 @@ src_configure() {
 		$(use_with tiff libtiff) \
 		$(use_enable xinerama) \
 		$(use_enable cups cups auto) \
+		--disable-introspection \
 		--disable-papi \
 		--with-libpng"
 	if use aqua; then
