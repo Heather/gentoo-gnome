@@ -90,6 +90,11 @@ src_prepare() {
 	# FIXME: Fix compilation flags crazyness
 	sed 's/CFLAGS="$CFLAGS $WARNING_FLAGS"//' \
 		-i configure.ac configure || die "sed 3 failed"
+
+	# Fix intltoolize broken file, see upstream #577133
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in \
+		|| die "intltool rules fix failed"
+
 }
 
 src_install() {
