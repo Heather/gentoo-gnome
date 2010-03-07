@@ -1,0 +1,12 @@
+diff --git a/gnome-power-manager-2.29.91.old/src/gpm-brightness-hal.c b/gnome-power-manager-2.29.91/src/gpm-brightness-hal.c
+index 64bf30e..5b80fea 100644
+--- a/gnome-power-manager-2.29.91.old/src/gpm-brightness-hal.c
++++ b/gnome-power-manager-2.29.91/src/gpm-brightness-hal.c
+@@ -441,6 +441,7 @@ gpm_brightness_hal_init (GpmBrightnessHal *brightness)
+ 	HalDevice *device;
+ 	gboolean res;
+ 	DBusGConnection *connection;
++	GError *error = NULL;
+ 
+ 	brightness->priv = GPM_BRIGHTNESS_HAL_GET_PRIVATE (brightness);
+ 	brightness->priv->proxy = NULL;
