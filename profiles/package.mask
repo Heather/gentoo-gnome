@@ -7,6 +7,10 @@
 #
 
 # Maciej Piechotka <uzytkownik2@gmail.com> (7 Mar 2010)
+# Revert portage libxklavier mask. Needed by >=gnome-base/libgnomekbd-2.29.5
+->=x11-libs/libxklavier-5
+
+# Maciej Piechotka <uzytkownik2@gmail.com> (7 Mar 2010)
 # Mask until sys-apps/devicekit-disks will be renamed as sys-apps/udisks
 >=sys-apps/gnome-disk-utility-2.29.90
 

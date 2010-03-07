@@ -15,11 +15,11 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~x86-solaris"
 IUSE=""
 
-RDEPEND=">=dev-libs/glib-2.16
+RDEPEND=">=dev-libs/glib-2.18
 	>=sys-apps/dbus-0.92
 	>=dev-libs/dbus-glib-0.34
 	>=gnome-base/gconf-2.14
-	>=x11-libs/gtk+-2.13
+	>=x11-libs/gtk+-2.18
 	>=x11-libs/libxklavier-5.0"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
