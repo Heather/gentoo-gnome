@@ -1,0 +1,31 @@
+From ff15cffb457715179a69cc8e05212a19ffbd4a25 Mon Sep 17 00:00:00 2001
+From: Romain Perier <mrpouet@gentoo.org>
+Date: Wed, 14 Oct 2009 11:06:19 +0200
+Subject: [PATCH] Throw an error from xsmp_stop() when the client is not registered, it's fixes a SIGSEGV
+
+---
+ gnome-session/gsm-xsmp-client.c |    9 +++++++++
+ 1 files changed, 9 insertions(+), 0 deletions(-)
+
+diff --git a/gnome-session/gsm-xsmp-client.c b/gnome-session/gsm-xsmp-client.c
+index bc3f77e..7e7ad99 100644
+--- a/gnome-session/gsm-xsmp-client.c
++++ b/gnome-session/gsm-xsmp-client.c
+@@ -713,6 +713,15 @@ xsmp_stop (GsmClient *client,
+ 
+         g_debug ("GsmXSMPClient: xsmp_stop ('%s')", xsmp->priv->description);
+ 
++        /*FIXME: What do we do if the client can't be stoped ?
++         * (probably a cleaner solution exists...) */
++        if (xsmp->priv->conn == NULL) {
++                g_set_error (error,
++                             GSM_CLIENT_ERROR,
++                             GSM_CLIENT_ERROR_NOT_REGISTERED,
++                             "Client is not registered");
++                return FALSE;
++        }
+         SmsDie (xsmp->priv->conn);
+ 
+         return TRUE;
+-- 
+1.6.5

@@ -1,0 +1,14 @@
+Our own splash for world domination (updated for 2.27.91)
+
+---
+--- data/gnome-session.schemas.in.in
++++ data/gnome-session.schemas.in.in
+@@ -40,7 +40,7 @@
+          <applyto>/apps/gnome-session/options/splash_image</applyto>
+          <owner>gnome</owner>
+          <type>string</type>
+-         <default>splash/gnome-splash.png</default>
++         <default>splash/gentoo-splash.png</default>
+          <locale name="C">
+             <short>Preferred Image to use for login splash screen</short>
+             <long>This is a relative path value based off the $datadir/pixmaps/ directory.  Sub-directories and image names are valid values. Changing this value will effect the next session login.</long>
