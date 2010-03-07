@@ -1,0 +1,16 @@
+Fix linking libgcryptui.so with -Wl,--as-needed in LDFLAGS. Missing DBUS_CFLAGS
+in INCLUDES.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=596691
+
+---
+--- libcryptui/Makefile.am
++++ libcryptui/Makefile.am
+@@ -70,6 +70,7 @@
+ 
+ INCLUDES = -I$(top_builddir) \
+ 	-I$(top_srcdir) \
++	$(DBUS_CFLAGS) \
+ 	$(LIBCRYPTUI_CFLAGS) \
+ 	-DLIBCRYPTUI_BUILD=1 \
+ 	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE
