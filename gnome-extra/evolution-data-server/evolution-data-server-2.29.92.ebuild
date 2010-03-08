@@ -67,12 +67,8 @@ src_prepare() {
 	# Rewind in camel-disco-diary to fix a crash
 	epatch "${FILESDIR}/${PN}-1.8.0-camel-rewind.patch"
 
-	# Fix build error due to duplicate header definition
-	epatch "${FILESDIR}/${PN}-duplicate-header.patch"
-
-	# GNOME bugs: 611353 and 611355
+	# GNOME bug 611353 (skips failing test atm)
 	epatch "${FILESDIR}/e-d-s-camel-skip-failing-test.patch"
-	epatch "${FILESDIR}/e-d-s-fix-calendar-create-object-2-test.patch"
 
 
 	if use doc; then
