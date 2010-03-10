@@ -70,6 +70,9 @@ src_prepare() {
 	# GNOME bug 611353 (skips failing test atm)
 	epatch "${FILESDIR}/e-d-s-camel-skip-failing-test.patch"
 
+	# Already fixed in git
+	epatch "${FILESDIR}/e-d-s-imapx-update-flags-on-move.patch"
+
 
 	if use doc; then
 		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/usr/bin/gtkdoc-rebase" \
