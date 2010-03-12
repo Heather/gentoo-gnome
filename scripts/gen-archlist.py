@@ -166,7 +166,10 @@ def latest_kws(cp, old_rel=OLD_REL,
     if best_old in cp_kws:
         index = cp_kws.index(best_old)
     else:
-        debug_print('%s has no vers from the release %s (TODO)' % (cp, old_rel))
+        if not old_rel:
+            debug_print('%s has no versions with stable keywords' % cp)
+        else:
+            debug_print('%s has no versions from the release %s' % (cp,old_rel))
         if DEBUG:
             debug_print('cp_kws: %s' % cp_kws)
             debug_print('best_old: %s' % best_old)
