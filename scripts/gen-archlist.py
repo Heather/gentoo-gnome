@@ -15,6 +15,7 @@
 # * ispmasked() is quite broken. It only works if the atom in p.masked is the
 #   same as the cpv in the argument
 # * Only supports ebuilds in PORTDIR
+# * Support recursive checking of needed keywords in deps
 #
 
 from __future__ import division
@@ -103,7 +104,8 @@ def ispmasked(cpv):
     """
     Check if a package atom is masked
 
-    FIXME: Doesn't quite work yet. Need to manually parse p.mask or something.
+    FIXME: Only works if atom in p.mask == cpv
+    Need to manually parse p.mask or something
     """
     portdb = portage.portdb
     db_keys = list(portdb._aux_cache_keys)
