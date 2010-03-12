@@ -15,7 +15,6 @@
 # * ispmasked() is quite broken. It only works if the atom in p.masked is the
 #   same as the cpv in the argument
 # * Only supports ebuilds in PORTDIR
-# * Alignment of output is very bad
 #
 
 from __future__ import division
@@ -66,6 +65,12 @@ def flatten(list, sep=' '):
     for i in list:
         str += i+sep
     return str[:-1] # There's an extra 'sep' at the end
+
+def n_sep(n, sep=' '):
+    tmp = ''
+    for i in range(0, n):
+        tmp += sep
+    return tmp
 
 def debug_print(string, debug=False):
     from portage.output import EOutput
@@ -189,6 +194,10 @@ def latest_kws(cp, old_rel=OLD_REL,
 #######################
 ## Use the Functions ##
 #######################
+kws_mapping = []
+max_len = 0
+kws_all = []
+cpv_kw_list = []
 for i in open(CP_FILE).readlines():
     if i.startswith('#') or not i[:-1]:
         continue
@@ -205,5 +214,24 @@ for i in open(CP_FILE).readlines():
     for kw in best_old[1]:
         if kw not in best_new[1]:
             kws_wanted.append(kw)
-    # FIXME: Alignment needs to be done on the final output
-    print flatten([best_new[0]]+kws_wanted)
+    # Find the atom with max length (for output formatting)
+    if len(best_new[0]) > max_len:
+        max_len = len(best_new[0])
+    # Find the set of all kws listed
+    kws_all = list(set(kws_all).union(set(kws_wanted)))
+    kws_all.sort()
+    cpv_kw_list.append([best_new[0]]+[kws_wanted])
+
+# We need to do another pass to print because in the last pass, we found kws_all
+for each in cpv_kw_list:
+    # Pad the cpvs with space
+    each[0] += n_sep(max_len - len(each[0]))
+    for i in range(0, len(kws_all)):
+        if i == len(each[1]):
+            # Prevent an IndexError
+            # This is a problem in the algo I selected
+            each[1].append('')
+        if each[1][i] != kws_all[i]:
+            # If no arch, insert space
+            each[1].insert(i, n_sep(len(kws_all[i])))
+    print each[0], flatten(each[1])
