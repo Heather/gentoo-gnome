@@ -9,11 +9,12 @@
 #
 # You can use test-data/package-list to test the script out.
 # 
-# TODO:
+# BUGS:
 # * belongs_release() is a very primitive function, which means usage of old/new
 #   release numbers gives misleading output
-# * ispmasked() is quite broken. It only works if the atom in p.masked is the
-#   same as the cpv in the argument
+# * When creating a stabilization list, does not check whether the cpv had
+#   ~arch keywords earlier for those arches
+# TODO:
 # * Only supports ebuilds in PORTDIR
 # * Support recursive checking of needed keywords in deps
 #
@@ -51,6 +52,7 @@ except IndexError:
     print '  [new_rel] is an optional argument for specifying which release cycle'
     print '            to use to get the latest cpv on which we want keywords'
     print '            i.e., which cpvs will go in the list?'
+    print 'WARNING: the logic for old_rel & new_rel is very incomplete. See TODO'
     sys.exit(0)
 if len(sys.argv) > 2:
     OLD_REL = sys.argv[2]
@@ -87,6 +89,7 @@ def belongs_release(cpv, release):
     return get_ver(cpv).startswith(release)
 
 def get_ver(cpv):
+    "Get the version string from a cpv"
     split = portage.catpkgsplit(cpv)
     return '%s-%s' % (split[2], split[3])
 
@@ -103,17 +106,11 @@ def get_pvs(cp, repo=PORTDIR):
 def ispmasked(cpv):
     """
     Check if a package atom is masked
-
-    FIXME: Only works if atom in p.mask == cpv
-    Need to manually parse p.mask or something
     """
-    portdb = portage.portdb
-    db_keys = list(portdb._aux_cache_keys)
-    metadata = dict(zip(db_keys, portdb.aux_get(cpv, db_keys)))
-    if portage.settings._getMaskAtom(cpv, metadata):
-        return True
-    else:
+    if portage.portdb.visible([cpv]):
         return False
+    else:
+        return True
 
 def latest_kws(cp, old_rel=OLD_REL,
                    new_rel=NEW_REL,
