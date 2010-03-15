@@ -47,9 +47,6 @@ src_prepare() {
 	# Fix gmodule issues on fbsd; bug #184301
 	epatch "${FILESDIR}"/${PN}-2.12.12-fbsd.patch
 
-	# GNOME bug #612099
-	epatch "${FILESDIR}"/fix-run-assert-msg-test.patch
-
 	# Do not try to remove files on live filesystem, bug #XXX ?
 	sed 's:^\(.*"/desktop-app-info/delete".*\):/*\1*/:' \
 		-i "${S}"/gio/tests/desktop-app-info.c || die "sed failed"
