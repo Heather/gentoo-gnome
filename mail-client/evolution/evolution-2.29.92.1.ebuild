@@ -22,7 +22,7 @@ gstreamer +sound"
 # password from inside evolution, bug 160302
 RDEPEND=">=dev-libs/glib-2.22
 	>=x11-libs/gtk+-2.18
-	>=gnome-extra/evolution-data-server-${PV}
+	>=gnome-extra/evolution-data-server-2.29.92
 	>=gnome-base/gnome-desktop-2.26.0
 	>=gnome-extra/gtkhtml-3.29.6
 	>=gnome-base/gconf-2
@@ -100,6 +100,9 @@ pkg_setup() {
 
 src_prepare() {
 	gnome2_src_prepare
+
+	epatch "${FILESDIR}"/evolution-fix-crash-in-addressbook.patch
+	epatch "${FILESDIR}"/evolution-add-sentinel.patch
 
 	# FIXME: Fix compilation flags crazyness
 	sed 's/CFLAGS="$CFLAGS $WARNING_FLAGS"//' \
