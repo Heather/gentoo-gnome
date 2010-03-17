@@ -1,0 +1,28 @@
+From 122ee65df6d491e9e23d7ab724dcf5cb9cc8df0a Mon Sep 17 00:00:00 2001
+From: Priit Laes <plaes@plaes.org>
+Date: Wed, 17 Mar 2010 18:45:52 +0200
+Subject: [PATCH] [Bug 613169] Weather calendar backend links against out-of-tree library
+
+When uprading from 2.28.x -> 2.29.x weather calendar library is linked
+against wrong library causing broken Evolution.
+---
+ calendar/backends/weather/Makefile.am |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
+
+diff --git a/calendar/backends/weather/Makefile.am b/calendar/backends/weather/Makefile.am
+index 6a6fec9..bdaa52b 100644
+--- a/calendar/backends/weather/Makefile.am
++++ b/calendar/backends/weather/Makefile.am
+@@ -35,8 +35,7 @@ libecalbackendweather_la_LIBADD =						\
+ 	$(LIBGWEATHER_LIBS)
+ 
+ libecalbackendweather_la_LDFLAGS =		\
+-	-module -avoid-version $(NO_UNDEFINED)	\
+-	$(LIBGWEATHER_LIBS)
++	-module -avoid-version $(NO_UNDEFINED)
+ 	
+ 
+ weatherdata_in_files = Locations.xml.in
+-- 
+1.7.0.2
+

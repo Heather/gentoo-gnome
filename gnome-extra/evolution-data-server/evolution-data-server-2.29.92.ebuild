@@ -73,6 +73,8 @@ src_prepare() {
 	# Already fixed in git
 	epatch "${FILESDIR}/e-d-s-imapx-update-flags-on-move.patch"
 
+	# GNOME bug 613169
+	epatch "${FILESDIR}/e-d-s-fix-wrong-item-in-ldflags.patch"
 
 	if use doc; then
 		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/usr/bin/gtkdoc-rebase" \
