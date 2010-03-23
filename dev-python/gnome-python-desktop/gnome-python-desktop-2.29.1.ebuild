@@ -10,6 +10,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~ppc ~x86"
 IUSE=""
 
+DEPEND="!dev-python/nautilus-cd-burner-python"
 RDEPEND="~dev-python/bug-buddy-python-${PV}
 	~dev-python/evolution-python-${PV}
 	~dev-python/evince-python-${PV}
@@ -23,7 +24,6 @@ RDEPEND="~dev-python/bug-buddy-python-${PV}
 	~dev-python/librsvg-python-${PV}
 	~dev-python/libwnck-python-${PV}
 	~dev-python/metacity-python-${PV}
-	~dev-python/nautilus-cd-burner-python-${PV}
 	~dev-python/brasero-python-${PV}
 	~dev-python/totem-python-${PV}"
 
