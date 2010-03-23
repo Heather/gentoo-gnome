@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.18.6.ebuild,v 1.2 2010/01/19 18:52:39 ssuominen Exp $
+# $Header: $
 
 EAPI="2"
 
@@ -32,7 +32,7 @@ RDEPEND="!aqua? (
 		>=x11-libs/cairo-1.6[aqua,svg]
 	)
 	xinerama? ( x11-libs/libXinerama )
-	>=dev-libs/glib-2.21.3
+	>=dev-libs/glib-2.23.6
 	>=x11-libs/pango-1.20
 	>=dev-libs/atk-1.29.2
 	media-libs/fontconfig
