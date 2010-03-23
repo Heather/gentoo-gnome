@@ -27,6 +27,7 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README TODO"
 
 src_prepare() {
+	gnome2_src_prepare
 	# disable pyc compiling
 	mv "${S}"/py-compile "${S}"/py-compile.orig
 	ln -s $(type -P true) "${S}"/py-compile
