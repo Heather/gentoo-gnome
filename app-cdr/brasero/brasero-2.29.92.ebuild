@@ -51,6 +51,7 @@ PDEPEND="gnome-base/gvfs"
 
 pkg_setup() {
 	G2CONF="${G2CONF}
+		--disable-introspection
 		--disable-schemas-install
 		--disable-scrollkeeper
 		--disable-caches
