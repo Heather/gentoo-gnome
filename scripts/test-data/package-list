@@ -13,10 +13,7 @@ app-misc/tomboy
 app-text/evince
 dev-libs/atk
 dev-libs/glib
-dev-libs/libIDL
 dev-libs/libgweather
-dev-libs/libxml2
-dev-libs/libxslt
 dev-libs/totem-pl-parser
 gnome-base/gconf
 gnome-base/gdm
@@ -77,7 +74,8 @@ net-libs/libsoup
 net-misc/vinagre
 net-misc/vino
 net-print/gnome-cups-manager
-net-voip/ekiga
+# Else, it starts resolving KDE libs..
+net-voip/ekiga-2.0.12
 www-client/epiphany
 x11-libs/gtk+
 x11-libs/libwnck
