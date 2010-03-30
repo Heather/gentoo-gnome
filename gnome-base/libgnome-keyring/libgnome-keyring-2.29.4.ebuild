@@ -30,7 +30,3 @@ pkg_setup() {
 		$(use_enable debug)
 		$(use_enable test tests)"
 }
-
-src_prepare() {
-	use arm && epatch "${FILESDIR}"/${PN}-armel-assert.patch
-}
