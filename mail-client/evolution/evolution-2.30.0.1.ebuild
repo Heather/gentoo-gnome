@@ -103,9 +103,6 @@ pkg_setup() {
 src_prepare() {
 	gnome2_src_prepare
 
-	epatch "${FILESDIR}"/evolution-fix-crash-in-addressbook.patch
-	epatch "${FILESDIR}"/evolution-add-sentinel.patch
-
 	# FIXME: Fix compilation flags crazyness
 	sed 's/CFLAGS="$CFLAGS $WARNING_FLAGS"//' \
 		-i configure.ac configure || die "sed 1 failed"
