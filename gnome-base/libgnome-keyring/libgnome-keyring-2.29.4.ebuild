@@ -4,7 +4,7 @@
 
 EAPI=2
 
-inherit gnome2
+inherit eutils gnome2
 
 DESCRIPTION="Compatibility library for accessing secrets"
 HOMEPAGE="http://live.gnome.org/GnomeKeyring"
@@ -31,3 +31,6 @@ pkg_setup() {
 		$(use_enable test tests)"
 }
 
+src_prepare() {
+	use arm && epatch "${FILESDIR}"/${PN}-armel-assert.patch
+}
