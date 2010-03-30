@@ -15,6 +15,7 @@ KEYWORDS="~x86 ~amd64"
 IUSE="debug doc test"
 
 DEPEND=">=sys-apps/dbus-1.0
+	>=dev-libs/eggdbus-0.4
 	gnome-base/gconf
 	>=gnome-base/gnome-keyring-2.29
 	!<gnome-base/gnome-keyring-2.29"
