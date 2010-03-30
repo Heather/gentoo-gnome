@@ -78,6 +78,7 @@ pkg_setup() {
 		$(use_enable applet megaphone)
 		$(use_enable applet nothere)
 		$(use_enable debug)
+		$(use_enable tpl favourite_contacts)
 		$(use_with networkmanager connectivity nm)
 		$(use_enable python)
 		$(use_enable spell)
@@ -89,9 +90,6 @@ pkg_setup() {
 
 src_prepare() {
 	gnome2_src_prepare
-
-	epatch "${FILESDIR}/${P}-do-not-migrate-with-tpl.patch"
-	eautomake
 
 	# Remove hard enabled -Werror (see AM_MAINTAINER_MODE), bug 218687
 	sed -i "s:-Werror::g" configure || die "sed 1 failed"
