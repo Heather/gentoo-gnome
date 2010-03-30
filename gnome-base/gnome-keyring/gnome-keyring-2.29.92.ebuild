@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit gnome2 pam virtualx
+inherit eutils gnome2 pam virtualx
 
 DESCRIPTION="Password and keyring managing daemon"
 HOMEPAGE="http://www.gnome.org/"
@@ -46,6 +46,9 @@ pkg_setup() {
 
 src_prepare() {
 	gnome2_src_prepare
+	
+	# Already fixed upstream...
+	use arm && epatch "${FILESDIR}"/${PN}-armel-assert.patch
 
 	# Remove silly CFLAGS
 	sed 's:CFLAGS="$CFLAGS -Werror:CFLAGS="$CFLAGS:' \

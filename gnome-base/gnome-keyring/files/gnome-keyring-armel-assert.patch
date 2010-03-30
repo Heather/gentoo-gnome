@@ -1,0 +1,25 @@
+From cf1d4b562409b278bf5f4336184a2e4b573ea4c5 Mon Sep 17 00:00:00 2001
+From: Michael Casadevall <mcasadevall@ubuntu.com>
+Date: Fri, 19 Mar 2010 23:10:59 +0000
+Subject: Don't assert on va_list
+
+Remove an assertion on a va_list, which is invalid since va_lis is
+not guaranteed to be a pointer. This also fixes an FTBFS on armel
+since va_list on armel is a scalar.
+
+Fixes bug #610997
+---
+diff --git a/pkcs11/gck/gck-sexp.c b/pkcs11/gck/gck-sexp.c
+index a8d8ae0..b48c4d6 100644
+--- a/pkcs11/gck/gck-sexp.c
++++ b/pkcs11/gck/gck-sexp.c
+@@ -249,7 +249,6 @@ gck_sexp_get_childv (gcry_sexp_t sexp, va_list va)
+ 	const char *name;
+ 
+ 	g_assert (sexp);
+-	g_assert (va);
+ 
+ 	for(;;) {
+ 		name = va_arg (va, const char*);
+--
+cgit v0.8.3.1
