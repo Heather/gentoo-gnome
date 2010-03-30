@@ -15,11 +15,11 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-
 IUSE="doc ipv6 kerberos gnome-keyring ldap nntp ssl"
 
 RDEPEND=">=dev-libs/glib-2.16.1
-	>=x11-libs/gtk+-2.14
+	>=x11-libs/gtk+-2.18
 	>=gnome-base/gconf-2
 	>=dev-db/sqlite-3.5
 	>=dev-libs/libxml2-2
-	>=net-libs/libsoup-2.4
+	>=net-libs/libsoup-2.3
 	>=dev-libs/libgweather-2.25.4
 	>=dev-libs/libical-0.43
 	>=dev-libs/dbus-glib-0.6
@@ -69,12 +69,6 @@ src_prepare() {
 
 	# GNOME bug 611353 (skips failing test atm)
 	epatch "${FILESDIR}/e-d-s-camel-skip-failing-test.patch"
-
-	# Already fixed in git
-	epatch "${FILESDIR}/e-d-s-imapx-update-flags-on-move.patch"
-
-	# GNOME bug 613169
-	epatch "${FILESDIR}/e-d-s-fix-wrong-item-in-ldflags.patch"
 
 	if use doc; then
 		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/usr/bin/gtkdoc-rebase" \
