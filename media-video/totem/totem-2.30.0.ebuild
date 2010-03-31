@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/totem/totem-2.28.5.ebuild,v 1.1 2009/12/23 10:21:59 mrpouet Exp $
+# $Header: $
 
 EAPI="2"
 
@@ -12,7 +12,6 @@ HOMEPAGE="http://gnome.org/projects/totem/"
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86 ~x86-fbsd"
-KEYWORDS="~amd64 ~x86 ~x86-fbsd -amd64"
 
 IUSE="bluetooth debug doc galago iplayer lirc nautilus nsplugin python tracker +youtube" #zeroconf
 
