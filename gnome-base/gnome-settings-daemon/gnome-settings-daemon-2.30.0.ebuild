@@ -68,7 +68,7 @@ src_prepare() {
 	gnome2_src_prepare
 
 	# Restore gstreamer volume control support, upstream bug #571145
-	epatch "${WORKDIR}/${PN}-2.28.2-gst-vol-control-support.patch"
+	epatch "${FILESDIR}/${PN}-2.30.0-gst-vol-control-support.patch"
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
