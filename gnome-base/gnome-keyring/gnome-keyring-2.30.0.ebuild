@@ -30,7 +30,7 @@ DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1.9 )"
 PDEPEND="gnome-base/libgnome-keyring"
 
-DOCS="AUTHORS ChangeLog NEWS README TODO keyring-intro.txt"
+DOCS="AUTHORS ChangeLog NEWS README"
 
 pkg_setup() {
 	G2CONF="${G2CONF}
@@ -47,9 +47,6 @@ pkg_setup() {
 src_prepare() {
 	gnome2_src_prepare
 	
-	# Already fixed upstream...
-	use arm && epatch "${FILESDIR}"/${PN}-armel-assert.patch
-
 	# Remove silly CFLAGS
 	sed 's:CFLAGS="$CFLAGS -Werror:CFLAGS="$CFLAGS:' \
 		-i configure.in configure || die "sed failed"
