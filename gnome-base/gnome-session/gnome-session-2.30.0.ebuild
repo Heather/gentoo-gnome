@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-session/gnome-session-2.28.0.ebuild,v 1.1 2009/10/29 23:46:26 eva Exp $
+# $Header: $
 
 EAPI="2"
 
@@ -22,13 +22,14 @@ RDEPEND=">=dev-libs/glib-2.16
 	>=x11-libs/gtk+-2.14.0
 	>=dev-libs/dbus-glib-0.76
 	>=gnome-base/gconf-2
-	>=x11-libs/startup-notification-0.9
+	>=x11-libs/startup-notification-0.10
 	>=sys-apps/devicekit-power-008
 	elibc_FreeBSD? ( dev-libs/libexecinfo )
 
 	x11-libs/libSM
 	x11-libs/libICE
 	x11-libs/libX11
+	x11-libs/libXext
 	x11-libs/libXtst
 	x11-apps/xdpyinfo"
 DEPEND="${RDEPEND}
@@ -71,12 +72,7 @@ src_prepare() {
 	#epatch "${FILESDIR}/${PN}-2.26.2-shutdown.patch"
 
 	# Add "session saving" button back, upstream bug #575544
-	# FIXME: Needs updating for 2.27.91 (package is currently masked)
-	#epatch "${WORKDIR}/${PN}-2.26.2-session-saving-button.patch"
-
-	# Throw an error in xsmp_stop() when the client isn't registered,
-	# it's fixes a segfault, patch import from upstream bug #598211.
-	epatch "${FILESDIR}/${PN}-2.28.0-xsmp-stop-throw-error.patch"
+	epatch "${FILESDIR}/${PN}-2.30.0-session-saving-button.patch"
 
 	# Avoid to keep zombie clients in the case when a IceError is thrown
 	# between accept_ice_connection() and accept_xsmp_connection(),
