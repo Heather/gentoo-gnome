@@ -26,7 +26,8 @@ RDEPEND=">=x11-libs/gtk+-2.17.5
 	exif? (
 		>=media-libs/libexif-0.6.14
 		media-libs/jpeg )
-	jpeg? ( >=x11-libs/gtk+-2.15.1[jpeg] )
+	jpeg? ( media-libs/jpeg
+			x11-libs/gtk+[jpeg] )
 	lcms? ( media-libs/lcms )
 	python? (
 		>=dev-lang/python-2.3
