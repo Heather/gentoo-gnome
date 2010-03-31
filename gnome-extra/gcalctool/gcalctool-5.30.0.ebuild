@@ -27,7 +27,7 @@ DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9
 	>=app-text/gnome-doc-utils-0.3.2"
 
-DOCS="AUTHORS ChangeLog* MAINTAINERS NEWS README"
+DOCS="AUTHORS ChangeLog* NEWS README"
 
 src_prepare() {
 	gnome2_src_prepare
