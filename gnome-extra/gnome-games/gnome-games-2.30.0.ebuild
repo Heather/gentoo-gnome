@@ -124,9 +124,6 @@ src_prepare() {
 
 	# Fix bug #281718 -- *** glibc detected *** gtali: free(): invalid pointer
 	epatch "${FILESDIR}/${PN}-2.26.3-gtali-invalid-pointer.patch"
-
-	# If calling eautoreconf, this ebuild uses libtool-2
-	eautomake
 }
 
 src_test() {
