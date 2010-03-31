@@ -50,7 +50,4 @@ src_prepare() {
 		-i configure.ac configure || die "sed 1 failed"
 	sed -i -e 's:-DGTK_DISABLE_DEPRECATED=1 -DGDK_DISABLE_DEPRECATED=1 -DG_DISABLE_DEPRECATED=1 -DGNOME_DISABLE_DEPRECATED=1::g' \
 		a11y/Makefile.am a11y/Makefile.in || die "sed 2 failed"
-
-	# Already fixed upstream...
-	epatch ${FILESDIR}/${PN}-fix-crash-on-paste.patch
 }
