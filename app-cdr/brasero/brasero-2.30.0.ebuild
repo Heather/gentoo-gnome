@@ -16,7 +16,7 @@ KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 IUSE="beagle +cdr +css doc +libburn nautilus playlist test"
 
 COMMON_DEPEND=">=dev-libs/glib-2.22
-	>=x11-libs/gtk+-2.18
+	>=x11-libs/gtk+-2.19.7
 	>=gnome-base/gconf-2
 	>=media-libs/gstreamer-0.10.15
 	>=media-libs/gst-plugins-base-0.10
