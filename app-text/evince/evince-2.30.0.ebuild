@@ -81,10 +81,6 @@ src_prepare() {
 	# Fix .desktop file so menu item shows up
 	epatch "${FILESDIR}"/${PN}-0.7.1-display-menu.patch
 
-	# Fix bug #279591, compilation error with
-	# --with-smclient=xsmp gave to the configure script
-	#epatch "${FILESDIR}"/${PN}-2.27.4-smclient-configure.patch
-
 	# Make it libtool-1 compatible
 	rm -v m4/lt* m4/libtool.m4 || die "removing libtool macros failed"
 
