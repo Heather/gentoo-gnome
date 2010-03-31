@@ -28,7 +28,6 @@ DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
 	dev-util/gtk-doc-am
 	gnome-base/gnome-common
-	dev-libs/gobject-introspection
 	doc? ( >=dev-util/gtk-doc-1.9 )
 	x86-interix? (
 		sys-libs/itx-bind
