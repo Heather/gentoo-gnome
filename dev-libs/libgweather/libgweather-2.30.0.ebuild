@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libgweather/libgweather-2.28.0.ebuild,v 1.1 2009/10/29 22:31:01 eva Exp $
+# $Header: $
 
 EAPI="2"
 GCONF_DEBUG="no"
