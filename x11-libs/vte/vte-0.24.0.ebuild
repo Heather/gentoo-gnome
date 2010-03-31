@@ -39,3 +39,8 @@ pkg_setup() {
 		$(use_enable python)
 		--with-html-dir=/usr/share/doc/${PF}/html"
 }
+
+src_prepare() {
+	gnome2_src_prepare
+	epatch "${FILESDIR}"/${PN}-invisible-cursor-fix.patch
+}
