@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-terms/gnome-terminal/gnome-terminal-2.28.2.ebuild,v 1.2 2010/01/06 19:24:42 fauli Exp $
+# $Header: $
 
 GCONF_DEBUG="no"
 
@@ -18,7 +18,7 @@ IUSE=""
 RDEPEND=">=dev-libs/glib-2.16.0
 	>=x11-libs/gtk+-2.14.0
 	>=gnome-base/gconf-2.14
-	>=x11-libs/vte-0.23.5
+	>=x11-libs/vte-0.24.0
 	>=dev-libs/dbus-glib-0.6
 	x11-libs/libSM
 	gnome-base/libgnome"
