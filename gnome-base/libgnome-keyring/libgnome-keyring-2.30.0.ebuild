@@ -14,12 +14,12 @@ SLOT="0"
 KEYWORDS="~x86 ~amd64 ~arm"
 IUSE="debug doc test"
 
-DEPEND=">=sys-apps/dbus-1.0
+RDEPEND=">=sys-apps/dbus-1.0
 	>=dev-libs/eggdbus-0.4
 	gnome-base/gconf
 	>=gnome-base/gnome-keyring-2.29
 	!<gnome-base/gnome-keyring-2.29"
-RDEPEND="${DEPEND}
+DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/intltool-0.35
 	>=dev-util/pkgconfig-0.9
