@@ -15,11 +15,10 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm ~hppa ~sh ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux"
 IUSE="doc gnome xmp"
 
-# not adding gnome-base/gail because it is in >=gtk+-2.13
-RDEPEND=">=dev-libs/glib-2.23.0
+RDEPEND=">=dev-libs/glib-2.24.0
 	>=gnome-base/gnome-desktop-2.29.91
 	>=x11-libs/pango-1.1.2
-	>=x11-libs/gtk+-2.19.6
+	>=x11-libs/gtk+-2.20.0
 	>=dev-libs/libxml2-2.4.7
 	>=media-libs/libexif-0.5.12
 	>=gnome-base/gconf-2.0
