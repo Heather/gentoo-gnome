@@ -50,11 +50,13 @@ src_prepare() {
 		append-flags "-I${EPREFIX}/usr/include/bind"
 		append-ldflags "-L${EPREFIX}/usr/lib/bind"
 	fi
-
+	
+	if has_version '<sys-devel/libtool-2.2.6b'; then
 	intltoolize --force --copy --automake || die "intltoolize failed"
 
 	# Make it libtool-1 compatible, bug #280876
 	rm -v m4/lt* m4/libtool.m4 || die "removing libtool macros failed"
 
 	AT_M4DIR="m4" eautoreconf
+	fi
 }
