@@ -1,7 +1,8 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-themes/gnome-themes/gnome-themes-2.28.1.ebuild,v 1.2 2010/01/06 19:34:10 fauli Exp $
+# $Header: $
 
+EAPI="2"
 GCONF_DEBUG="no"
 
 inherit eutils gnome2
@@ -27,16 +28,12 @@ DOCS="AUTHORS ChangeLog NEWS README"
 # This ebuild does not install any binaries
 RESTRICT="binchecks strip"
 
-pkg_setup() {
-	G2CONF="${G2CONF}
+G2CONF="${G2CONF}
 		$(use_enable accessibility all-themes)
 		--disable-test-themes
 		--enable-icon-mapping"
-}
 
-src_unpack() {
-	gnome2_src_unpack
-
+src_prepare() {
 	# Fix bashisms, bug #256337
 	epatch "${FILESDIR}/${PN}-2.24.3-bashism.patch"
 
