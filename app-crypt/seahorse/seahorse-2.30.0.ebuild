@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-crypt/seahorse/seahorse-2.28.1.ebuild,v 1.2 2009/10/29 21:15:39 eva Exp $
+# $Header: $
 
 EAPI="2"
 
@@ -51,6 +51,7 @@ pkg_setup() {
 		--disable-scrollkeeper
 		--disable-update-mime-database
 		--enable-hkp
+		--disable-introspection
 		$(use_enable avahi sharing)
 		$(use_enable debug)
 		$(use_enable ldap)
@@ -60,9 +61,6 @@ pkg_setup() {
 
 src_prepare() {
 	gnome2_src_prepare
-
-	# https://bugzilla.gnome.org/show_bug.cgi?id=596691
-	epatch "${FILESDIR}/${PN}-2.28.0-as-needed.patch"
 
 	# Make it libtool-1 compatible
 	rm -v m4/lt* m4/libtool.m4 || die "removing libtool macros failed"
