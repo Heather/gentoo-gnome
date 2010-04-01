@@ -5,7 +5,7 @@
 EAPI="2"
 GCONF_DEBUG="no"
 
-inherit gnome2
+inherit autotools eutils gnome2
 
 DESCRIPTION="Multimedia related programs for the GNOME desktop"
 HOMEPAGE="http://ronald.bitfreak.net/gnome-media.php"
@@ -48,19 +48,6 @@ pkg_setup() {
 		--enable-profiles
 		$(use_enable pulseaudio)
 		$(use_enable !pulseaudio gstmix)"
-}
-
-src_prepare() {
-	gnome2_src_prepare
-
-	# FIXME: Do not run intltool check, it breaks in a weird way
-	sed '/^check: all/,+6 d' -i po/Makefile.in.in || die "sed failed"
-}
-
-src_compile() {
-	addpredict "$(unset HOME; echo ~)/.gconf"
-	addpredict "$(unset HOME; echo ~)/.gconfd"
-	gnome2_src_compile
 }
 
 pkg_postinst() {
