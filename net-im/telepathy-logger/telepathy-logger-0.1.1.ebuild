@@ -25,6 +25,8 @@ DEPEND=">=dev-libs/glib-2.22
 		dev-python/twisted )"
 RDEPEND="${DEPEND}"
 
+MAKEOPTS="${MAKEOPTS} -j1"
+
 src_configure() {
 	econf \
 		$(use_enable doc gtk-doc) \
@@ -32,10 +34,6 @@ src_configure() {
 		--enable-channeltext \
 		--disable-coding-style-checks \
 		--disable-Werror
-}
-
-src_compile() {
-	emake -j1
 }
 
 src_install() {
