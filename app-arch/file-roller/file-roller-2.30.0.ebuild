@@ -43,10 +43,6 @@ src_prepare() {
 	# Use absolute path to GNU tar since star doesn't have the same
 	# options. On Gentoo, star is /usr/bin/tar, GNU tar is /bin/tar
 	epatch "${FILESDIR}"/${PN}-2.10.3-use_bin_tar.patch
-
-	# Fix intltoolize broken file, see upstream #577133 and #579464
-#	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in \
-#		|| die "sed failed"
 }
 
 pkg_postinst() {
