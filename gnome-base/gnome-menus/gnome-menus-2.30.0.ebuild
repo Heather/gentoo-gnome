@@ -1,7 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-menus/gnome-menus-2.28.0.1.ebuild,v 1.3 2009/12/27 04:16:09 nirbheek Exp $
+# $Header: $
 
+EAPI="2"
 inherit eutils gnome2 python
 
 DESCRIPTION="The GNOME menu system, implementing the F.D.O cross-desktop spec"
@@ -14,7 +15,7 @@ IUSE="debug python"
 
 RDEPEND=">=dev-libs/glib-2.18.0
 	python? (
-		>=dev-lang/python-2.4.4-r5
+		>=virtual/python-2.4
 		dev-python/pygtk )"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
@@ -30,10 +31,10 @@ pkg_setup() {
 		G2CONF="${G2CONF} --enable-debug=minimum"
 	fi
 
-	G2CONF=${G2CONF} \
+	G2CONF="${G2CONF} \
 		$(use_enable python) \
 		--disable-static \
-		--disable-introspection
+		--disable-introspection"
 }
 
 src_unpack() {
@@ -41,6 +42,11 @@ src_unpack() {
 
 	# Don't show KDE standalone settings desktop files in GNOME others menu
 	epatch "${FILESDIR}/${PN}-2.18.3-ignore_kde_standalone.patch"
+
+	# Fix intltoolize broken file, see upstream #577133
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in \
+		|| die "sed failed"
+
 
 	# disable pyc compiling
 	mv py-compile py-compile-disabled
