@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit db-use eutils flag-o-matic gnome2 versionator
+inherit db-use eutils flag-o-matic gnome2 versionator virtualx
 
 DESCRIPTION="Evolution groupware backend"
 HOMEPAGE="http://www.gnome.org/projects/evolution/"
@@ -104,7 +104,7 @@ src_install() {
 }
 
 src_test() {
-	emake check || die "Tests failed."
+	Xemake check || die "Tests failed."
 }
 
 pkg_postinst() {
