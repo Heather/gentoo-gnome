@@ -25,6 +25,13 @@ DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9
 	doc? ( >=dev-util/gtk-doc-1.9 )"
 
+src_prepare() {
+	gnome2_src_prepare
+	# Fix intltoolize broken file, see upstream #577133
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in \
+		|| die "sed failed"
+}
+
 pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_enable debug)
