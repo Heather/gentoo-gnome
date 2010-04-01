@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-im/empathy/empathy-2.28.2.ebuild,v 1.3 2010/02/19 19:33:27 armin76 Exp $
+# $Header: $
 
 EAPI="2"
 
@@ -13,7 +13,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~ia64 ~ppc ~sparc ~x86"
 # FIXME: Add location support once geoclue stops being idiotic with automagic deps
-IUSE="applet networkmanager python spell test +tpl webkit" # map
+IUSE="nautilus networkmanager spell test +tpl webkit" # map
 
 # FIXME: libnotify & libcanberra hard deps
 RDEPEND=">=dev-libs/glib-2.22.0
@@ -35,11 +35,8 @@ RDEPEND=">=dev-libs/glib-2.22.0
 	x11-libs/libX11
 	net-voip/telepathy-connection-managers
 
-	applet? ( >=gnome-base/gnome-panel-2.10 )
+	nautilus? ( >=gnome-extra/nautilus-sendto-2.28.1[-empathy] )
 	networkmanager? ( >=net-misc/networkmanager-0.7 )
-	python? (
-		>=dev-lang/python-2.4.4-r5
-		>=dev-python/pygtk-2 )
 	spell? (
 		app-text/enchant
 		app-text/iso-codes )
@@ -64,23 +61,17 @@ PDEPEND=">=net-im/telepathy-mission-control-5"
 
 DOCS="CONTRIBUTORS AUTHORS ChangeLog NEWS README"
 
-# FIXME: Highly broken with parallel make, mallard strike 2, see bug #286889
-MAKEOPTS="${MAKEOPTS} -j1"
-
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-maintainer-mode
 		--disable-static
 		--disable-location
-		--disable-gtk-doc
 		--disable-map
 		--disable-control-center-embedding
-		$(use_enable applet megaphone)
-		$(use_enable applet nothere)
+		--disable-Werror
 		$(use_enable debug)
 		$(use_enable tpl favourite_contacts)
 		$(use_with networkmanager connectivity nm)
-		$(use_enable python)
 		$(use_enable spell)
 		$(use_enable test coding-style-checks)
 		$(use_enable tpl)
@@ -88,22 +79,9 @@ pkg_setup() {
 	"
 }
 
-src_prepare() {
-	gnome2_src_prepare
-
-	# Remove hard enabled -Werror (see AM_MAINTAINER_MODE), bug 218687
-	sed -i "s:-Werror::g" configure || die "sed 1 failed"
-}
-
 src_test() {
 	unset DBUS_SESSION_BUS_ADDRESS
 	emake check || die "emake check failed."
-}
-
-pkg_preinst() {
-	gnome2_pkg_preinst
-	preserve_old_lib /usr/$(get_libdir)/libempathy.so.23
-	preserve_old_lib /usr/$(get_libdir)/libempathy-gtk.so.19
 }
 
 pkg_postinst() {
@@ -112,6 +90,4 @@ pkg_postinst() {
 	elog "Empathy needs telepathy's connection managers to use any IM protocol."
 	elog "See the USE flags on net-voip/telepathy-connection-managers"
 	elog "to install them."
-	preserve_old_lib_notify /usr/$(get_libdir)/libempathy.so.23
-	preserve_old_lib_notify /usr/$(get_libdir)/libempathy-gtk.so.19
 }
