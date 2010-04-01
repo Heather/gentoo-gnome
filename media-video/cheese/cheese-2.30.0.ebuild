@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/cheese/cheese-2.26.2.ebuild,v 1.1 2009/05/18 21:32:54 eva Exp $
+# $Header: $
 
 GCONF_DEBUG="no"
 EAPI=2
@@ -45,7 +45,4 @@ DEPEND="${COMMON_DEPEND}
 	x11-proto/xf86vidmodeproto"
 
 DOCS="AUTHORS ChangeLog NEWS README"
-
-pkg_setup() {
-	G2CONF="${G2CONF} --disable-scrollkeeper --disable-hildon"
-}
+G2CONF="${G2CONF} --disable-scrollkeeper"
