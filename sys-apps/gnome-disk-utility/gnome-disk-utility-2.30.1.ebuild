@@ -34,6 +34,7 @@ DEPEND="${RDEPEND}
 	app-text/gnome-doc-utils
 	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.35
+	>=dev-util/gtk-doc-am-1.13
 	doc? ( >=dev-util/gtk-doc-1.3 )"
 DOCS="AUTHORS NEWS README TODO"
 
