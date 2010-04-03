@@ -16,21 +16,19 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm ~x86"
 IUSE="avahi doc +nautilus remote-access"
 
-COMMON_DEPEND="
+RDEPEND="
 	>=dev-libs/glib-2.22
 	>=dev-libs/dbus-glib-0.74
 	>=dev-libs/libunique-1.0
 	>=x11-libs/gtk+-2.17
-	=sys-apps/udisks-1.0*
+	=sys-apps/udisks-1.0*[remote-access?]
 	>=dev-libs/libatasmart-0.14
 	>=gnome-base/gnome-keyring-2.22
 	>=x11-libs/libnotify-0.3
 
 	avahi? ( >=net-dns/avahi-0.6.25[gtk] )
 	nautilus? ( >=gnome-base/nautilus-2.24 )"
-RDEPEND="${COMMON_DEPEND}
-	remote-access? ( net-dns/avahi )"
-DEPEND="${COMMON_DEPEND}
+DEPEND="${RDEPEND}
 	sys-devel/gettext
 	app-text/scrollkeeper
 	app-text/gnome-doc-utils
