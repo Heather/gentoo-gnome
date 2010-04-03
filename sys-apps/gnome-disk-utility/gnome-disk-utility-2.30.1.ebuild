@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/gnome-disk-utility/gnome-disk-utility-2.28.1.ebuild,v 1.1 2009/11/04 21:27:40 eva Exp $
+# $Header: $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -13,7 +13,7 @@ SRC_URI="http://hal.freedesktop.org/releases/${P}.tar.bz2"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm ~x86"
 IUSE="avahi doc +nautilus"
 
 RDEPEND="
@@ -26,7 +26,6 @@ RDEPEND="
 	>=gnome-base/gnome-keyring-2.22
 	>=x11-libs/libnotify-0.3
 	>=net-dns/avahi-0.6.25[gtk]
-
 	nautilus? ( >=gnome-base/nautilus-2.24 )"
 DEPEND="${RDEPEND}
 	sys-devel/gettext

@@ -6,6 +6,10 @@
 # NOTE: Please add your entry at the top!
 #
 
+# Steev Klimaszewski <steev@gentoo.org> (3 Arp 2010)
+# Needs to be cleaned up, use flags added.  Needed for gnome-disk-utility
+>=sys-apps/udisks-1.0.0
+
 # Maciej Piechotka <uzytkownik2@gmail.com> (7 Mar 2010)
 # Revert portage libxklavier mask. Needed by >=gnome-base/libgnomekbd-2.29.5
 ->=x11-libs/libxklavier-5
