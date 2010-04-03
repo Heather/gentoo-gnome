@@ -1,0 +1,85 @@
+From: Romain Perier <mrpouet@gentoo.org>
+Date: Sat, 3 Apr 2010 13:00:27 +0200
+Subject: Fix build failure due to use of deprecated GTK+ macros (disabled as default since 2.20)
+
+mrpouet: greatly inspired from upstream bug #612440, bug fixed to be backward compatible with old gtk+
+(since gnome-keyring depends on >= gtk+-2.6)
+
+---
+ daemon/prompt/gkd-prompt-tool.c |   13 ++++++++++---
+ gcr/gcr-import-dialog.c         |   20 +++++++++++++++-----
+ 2 files changed, 25 insertions(+), 8 deletions(-)
+
+--- a/daemon/prompt/gkd-prompt-tool.c
++++ b/daemon/prompt/gkd-prompt-tool.c
+@@ -419,7 +419,11 @@ validate_passwords (GtkBuilder *builder, GtkDialog *dialog)
+ 	g_return_val_if_fail (pentry && centry, FALSE);
+ 
+ 	/* No confirm, no password check */
+-	if (!GTK_WIDGET_REALIZED (centry))
++#if GTK_MINOR_VERSION >= 20
++	if (!gtk_widget_get_realized (centry))
++#else
++        if (!GTK_WIDGET_REALIZED (centry))
++#endif
+ 		return TRUE;
+ 
+ 	password = gtk_entry_get_text (GTK_ENTRY (pentry));
+@@ -510,8 +514,11 @@ gather_password (GtkBuilder *builder, const gchar *password_type)
+ 	entry = GTK_ENTRY (gtk_builder_get_object (builder, name));
+ 	g_return_if_fail (GTK_IS_ENTRY (entry));
+ 	g_free (name);
+-
+-	if (!GTK_WIDGET_REALIZED (GTK_WIDGET (entry)))
++#if GTK_MINOR_VERSION >= 20
++	if (!gtk_widget_get_realized (GTK_WIDGET (entry)))
++#else
++        if (!GTK_WIDGET_REALIZED (GTK_WIDGET (entry)))
++#endif
+ 		return;
+ 
+ 	/* A non-encrypted password: just send the value back */
+--- a/gcr/gcr-import-dialog.c
++++ b/gcr/gcr-import-dialog.c
+@@ -110,7 +110,11 @@ static void
+ gcr_import_dialog_real_realize (GtkWidget *base)
+ {
+ 	GcrImportDialog *self = GCR_IMPORT_DIALOG (base);
+-	if (GTK_WIDGET_VISIBLE (self->pv->combo)) 
++#if GTK_MINOR_VERSION >= 20
++	if (gtk_widget_get_visible (GTK_WIDGET(self->pv->combo)))
++#else
++        if (GTK_WIDGET_VISIBLE (self->pv->combo)) 
++#endif
+ 		populate_slots (self);	
+ 	GTK_WIDGET_CLASS (_gcr_import_dialog_parent_class)->realize (base);
+ }
+@@ -310,8 +314,11 @@ _gcr_import_dialog_get_selected_slot (GcrImportDialog *self)
+ 	GP11Slot *slot;
+ 	
+ 	g_return_val_if_fail (GCR_IMPORT_DIALOG (self), NULL);
+-	
+-	if (GTK_WIDGET_VISIBLE (self->pv->combo))
++#if GTK_MINOR_VERSION >= 20	
++	if (gtk_widget_get_visible (GTK_WIDGET(self->pv->combo)))
++#else
++        if (GTK_WIDGET_VISIBLE (self->pv->combo))
++#endif
+ 		populate_slots (self);
+ 	else
+ 		return NULL;
+@@ -336,8 +343,11 @@ _gcr_import_dialog_set_selected_slot (GcrImportDialog *self, GP11Slot *slot)
+ 	gboolean matched;
+ 
+ 	g_return_if_fail (GCR_IMPORT_DIALOG (self));
+-	
+-	if (GTK_WIDGET_VISIBLE (self->pv->combo)) 
++#if GTK_MINOR_VERSION >= 20	
++	if (gtk_widget_get_visible (GTK_WIDGET(self->pv->combo)))
++#else
++        if (GTK_WIDGET_VISIBLE (self->pv->combo)) 
++#endif
+ 		populate_slots (self);
+ 	else
+ 		g_return_if_reached ();
+
