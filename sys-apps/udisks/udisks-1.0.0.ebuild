@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit gnome2
+inherit bash-completion gnome2
 
 DESCRIPTION="Storage daemon that implements well defined DBus interfaces."
 HOMEPAGE="http://www.freedesktop.org/wiki/Software/udisks"
