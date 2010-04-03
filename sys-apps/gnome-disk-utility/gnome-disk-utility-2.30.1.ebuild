@@ -25,7 +25,7 @@ RDEPEND="
 	>=dev-libs/libatasmart-0.14
 	>=gnome-base/gnome-keyring-2.22
 	>=x11-libs/libnotify-0.3
-	>=net-dns/avahi-0.6.25[gtk]
+	avahi? ( >=net-dns/avahi-0.6.25[gtk] )
 	nautilus? ( >=gnome-base/nautilus-2.24 )"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
@@ -39,6 +39,7 @@ DOCS="AUTHORS NEWS README TODO"
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-static
+		$(use_enable avahi remote-access)
 		$(use_enable nautilus)"
 }
 
