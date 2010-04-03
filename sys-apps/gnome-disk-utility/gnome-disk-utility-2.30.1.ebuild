@@ -5,7 +5,7 @@
 EAPI="2"
 GCONF_DEBUG="no"
 
-inherit gnome2
+inherit autotools eutils gnome2
 
 DESCRIPTION="Disk Utility for GNOME using devicekit-disks"
 HOMEPAGE="http://git.gnome.org/cgit/gnome-disk-utility/"
@@ -14,9 +14,9 @@ SRC_URI="http://hal.freedesktop.org/releases/${P}.tar.bz2"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~x86"
-IUSE="avahi doc +nautilus"
+IUSE="avahi doc +nautilus remote-access"
 
-RDEPEND="
+COMMON_DEPEND="
 	>=dev-libs/glib-2.22
 	>=dev-libs/dbus-glib-0.74
 	>=dev-libs/libunique-1.0
@@ -25,9 +25,12 @@ RDEPEND="
 	>=dev-libs/libatasmart-0.14
 	>=gnome-base/gnome-keyring-2.22
 	>=x11-libs/libnotify-0.3
+
 	avahi? ( >=net-dns/avahi-0.6.25[gtk] )
 	nautilus? ( >=gnome-base/nautilus-2.24 )"
-DEPEND="${RDEPEND}
+RDEPEND="${COMMON_DEPEND}
+	remote-access? ( net-dns/avahi )"
+DEPEND="${COMMON_DEPEND}
 	sys-devel/gettext
 	app-text/scrollkeeper
 	app-text/gnome-doc-utils
@@ -36,11 +39,15 @@ DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1.3 )"
 DOCS="AUTHORS NEWS README TODO"
 
-pkg_setup() {
+src_prepare() {
 	G2CONF="${G2CONF}
 		--disable-static
-		$(use_enable avahi remote-access)
-		$(use_enable nautilus)"
+		$(use_enable avahi avahi-ui)
+		$(use_enable nautilus)
+		$(use_enable remote-access)"
+	
+	epatch "${FILESDIR}/${P}-optional-avahi.patch"
+	eautoreconf
 }
 
 src_install() {

@@ -2,7 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=2
+EAPI="2"
+
+inherit gnome2
 
 DESCRIPTION="Storage daemon that implements well defined DBus interfaces."
 HOMEPAGE="http://www.freedesktop.org/wiki/Software/udisks"
@@ -11,34 +13,50 @@ SRC_URI="http://hal.freedesktop.org/releases/${P}.tar.gz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~x86"
-IUSE="lvm2"
+IUSE="bash-completion lvm2 remote-access"
 
-# Okay, we need lvm2-2.02.61 (Release 15 Feb 2010) to actually get 
-# lvm2 support in udisks.
-# parted[device-mapper] causes device-mapper to be installed, and udev blocks on
-# that, so we pull in lvm2 which provides device-mapper, and disable lvm2
-# support.
-
-RDEPEND=">=sys-fs/udev-147[extras]
-	sys-apps/sg3_utils
-	>=dev-libs/glib-2.15
+COMMON_DEPEND="
+	>=dev-libs/glib-2.16.1
 	>=sys-apps/dbus-1.0
 	>=dev-libs/dbus-glib-0.82
 	>=sys-auth/polkit-0.92
-	sys-apps/parted[device-mapper]
-	sys-fs/lvm2
-	>=dev-libs/libatasmart-0.14"
-DEPEND="${RDEPEND}
+
+	>=dev-libs/libatasmart-0.14
+	>=sys-apps/sg3_utils-1.27.20090411
+	>=sys-apps/parted-1.8.8[device-mapper]
+	>=sys-fs/lvm2-2.02.48-r2
+	>=sys-fs/udev-147[extras]
+	lvms? ( >=sys-fs/lvm2-2.02.61 )"
+RDEPEND="${COMMON_DEPEND}
+	remote-access? ( net-dns/avahi )"
+DEPEND="${COMMON_DEPEND}
 	dev-libs/libxslt
 	>=dev-util/pkgconfig-0.20
-	>=dev-util/intltool-0.36"
+	>=dev-util/intltool-0.40
+	doc? ( >=dev-util/gtk-doc-1.3 )"
+# dev-util/gtk-doc-am needed if eautoreconf
 
-src_configure() {
-	econf $(use_enable lvm2) \
+pkg_setup() {
+	# Pedantic is currently broken
+	G2CONF="${G2CONF}
+		--disable-ansi
+		--enable-man-pages
 		--localstatedir=/var
+		$(use_enable lvm2)
+		$(use_enable remote-access)"
+}
+
+src_prepare() {
+	gnome2_src_prepare
+
+	# Fix intltoolize broken file, see upstream #577133
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
 }
 
 src_install() {
-	emake DESTDIR="${D}" install
-	keepdir /var/{lib,run}/udisks
+	gnome2_src_install
+
+	if use bash-completion; then
+		dobashcompletion "${S}/tools/udisks-bash-completion.sh"
+	fi
 }
