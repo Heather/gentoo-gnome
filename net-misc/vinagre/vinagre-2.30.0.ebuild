@@ -15,6 +15,8 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="applet avahi +ssh +telepathy test"
 
+# Telepathy-glib version in tarball is wrong:
+# https://bugzilla.gnome.org/show_bug.cgi?id=614716
 RDEPEND=">=dev-libs/glib-2.17.0
 	>=x11-libs/gtk+-2.16
 	>=gnome-base/gconf-2.16
@@ -27,7 +29,7 @@ RDEPEND=">=dev-libs/glib-2.17.0
 	ssh? (
 		>=dev-libs/libxml2-2.6.31
 		>=x11-libs/vte-0.20 )
-	telepathy? ( >=net-libs/telepathy-glib-0.7.31 )"
+	telepathy? ( >=net-libs/telepathy-glib-0.10 )"
 
 DEPEND="${RDEPEND}
 	gnome-base/gnome-common
