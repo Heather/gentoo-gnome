@@ -46,14 +46,18 @@ pkg_setup() {
 
 src_prepare() {
 	gnome2_src_prepare
-	
+
 	# Remove silly CFLAGS
 	sed 's:CFLAGS="$CFLAGS -Werror:CFLAGS="$CFLAGS:' \
 		-i configure.in configure || die "sed failed"
-		
+
 	# Fix intltoolize broken file, see upstream #577133
 	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in \
 		|| die "sed failed"
+
+	# Fix build failure due deprecated removed GTK+ macros,
+	# import from upstream bug #612440
+	epatch "${FILESDIR}"/${P}-deprecated-gtk+-macros.patch
 }
 
 src_test() {

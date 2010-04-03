@@ -2,23 +2,55 @@ THIS FILE IS AUTO GENERATED, DO NOT MODIFY BY HAND
 
 Ebuild Notices:
 ===============
+app-text/gnome-doc-utils-0.19.5
+ * Highly broken with parallel make, see bug #286889
+dev-libs/atk-1.30.0
+ * This package also supports introspection
 dev-libs/gir-repository-0.6.5
  * installs even disabled stuff if it's a dependency of something enabled
  * these dependencies are incomplete
+dev-libs/libgweather-2.30.0
+ * tarball generated with broken gtk-doc, revisit me.
+dev-libs/totem-pl-parser-2.30.0
+ * testsuite does not work, please fix them and report on upstream
+ * tarball generated with broken gtk-doc, revisit me.
 dev-util/gnome-devel-docs-2.28.1
  * Find a better fix for the failure with parallel install.
-media-libs/clutter-1.0.8
- * Tests are interactive, not of use for us
- * Using external json-glib breaks introspection
- * Tests are interactive, not of use for us
+gnome-base/gnome-panel-2.30.0
+ * tarball generated with broken gtk-doc, revisit me.
+gnome-base/gnome-session-2.30.0
+ * Needs updating for 2.27.91 (package is currently masked)
+gnome-base/nautilus-2.30.0
+ * tarball generated with broken gtk-doc, revisit me.
+gnome-extra/evolution-data-server-2.30.0
+ * Fix compilation flags crazyness
+gnome-extra/gnome-power-manager-2.30.0
+ * Interactive testsuite (upstream ? I'm so...pessimistic)
+gnome-extra/gnome-user-docs-2.30.0
+ * Parallel make is badly broken, bug #260827 and #296375
+gnome-extra/gtkhtml-3.30.0
+ * Fix compilation flags crazyness
+gnome-extra/gucharmap-2.30.0
+ * add gobject-introspection support once available
+mail-client/evolution-2.30.0.1
+ * Fix compilation flags crazyness
 media-libs/libchamplain-0.4.2
  * add pyclutter and pyclutter-gtk first
  * add clutter-sharp first
-net-libs/libepc-0.3.10
+media-video/totem-2.30.0
+ * freezes totem
+ * why does it need write access here, probably need to set up a fake
+net-im/empathy-2.30.0
+ * Add location support once geoclue stops being idiotic with automagic deps
+ * libnotify & libcanberra hard deps
+net-libs/libepc-0.3.11
  * 2 out of 16 tests fail, upstream bug #578792
+net-libs/webkit-gtk-1.1.90-r1
+ * Fix unaligned accesses on ARM, IA64 and SPARC
 www-client/epiphany-extensions-2.29.6
  * Open security issues:
  * - adblock ( https://bugzilla.gnome.org/show_bug.cgi?id=595255 )
  * broken extensions:
  * - session-saver ( https://bugzilla.gnome.org/show_bug.cgi?id=316245 )
- * - sidebar: not working ( https://bugzilla.gnome.org/show_bug.cgi?id=594481 )
+x11-themes/gnome-icon-theme-2.30.0
+ * double check potential LINGUAS problem
