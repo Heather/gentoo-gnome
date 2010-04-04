@@ -8,5 +8,5 @@ Linking to lvm2app needs -ldl if it's built with --as-needed
  Version: @LVM_MAJOR@.@LVM_LIBAPI@
  Cflags: -I${includedir} 
 -Libs: -L${libdir} -llvm2app
-+Libs: -L${libdir} -ldl -llvm2app
++Libs: -L${libdir} -llvm2app -ldl
  Libs.private: -ldevmapper
