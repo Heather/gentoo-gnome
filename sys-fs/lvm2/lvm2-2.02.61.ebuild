@@ -62,6 +62,8 @@ src_prepare() {
 	epatch "${FILESDIR}"/${PN}-2.02.56-always-make-static-libdm.patch
 	epatch "${FILESDIR}"/lvm2-2.02.56-lvm2create_initrd.patch
 
+	epatch "${FILESDIR}"/lvm2-2.02.61-lvm2app-pkgconfig.patch
+
 	eautoreconf
 }
 
