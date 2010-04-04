@@ -51,9 +51,8 @@ src_prepare() {
 		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/$(type -P true)" \
 			-i gtk-doc.make || die "sed 2 failed"
 	fi
-
-	# Make it libtool-1 compatible, bug #278516
-	rm -v m4/lt* m4/libtool.m4 || die "removing libtool macros failed"
+	# Fix building -python, Gnome bug #596660.
+	epatch "${FILESDIR}/${PN}-fix-automagic-python-support.patch"
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
