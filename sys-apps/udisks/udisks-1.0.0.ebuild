@@ -26,7 +26,7 @@ COMMON_DEPEND="
 	>=sys-apps/parted-1.8.8[device-mapper]
 	>=sys-fs/lvm2-2.02.48-r2
 	>=sys-fs/udev-147[extras]
-	lvms? ( >=sys-fs/lvm2-2.02.61 )"
+	lvm2? ( >=sys-fs/lvm2-2.02.61 )"
 RDEPEND="${COMMON_DEPEND}
 	remote-access? ( net-dns/avahi )"
 DEPEND="${COMMON_DEPEND}
