@@ -85,4 +85,8 @@ src_prepare() {
 	# https://bugs.gentoo.org/show_bug.cgi?id=309443
 	# https://bugzilla.gnome.org/show_bug.cgi?id=605460
 	epatch "${FILESDIR}/${PN}-2.28.1-wif_macros.patch"
+
+	# Fix metacity dying when right clicking on titlebar (actually its more
+	# clicking on the menu button, but semantics...
+	epatch "${FILESDIR}/${PN}-2.30.0-ignore-meta-menu-keybinding.patch"
 }
