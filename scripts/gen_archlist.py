@@ -38,13 +38,14 @@ UNSTABLE_ARCHES = ('~alpha', '~amd64', '~arm', '~hppa', '~ia64', 'm68k', '~ppc',
         '~ppc64', '~s390', '~sh', '~sparc', '~x86', '~x86-fbsd')
 ALL_ARCHES = STABLE_ARCHES+UNSTABLE_ARCHES
 SYSTEM_PACKAGES = []
+LINE_SEP = '\n'
 
 ##############
 ## Settings ##
 ##############
 DEBUG = False
 EXTREME_DEBUG = False
-CHECK_DEPS = True
+CHECK_DEPS = False
 # Check for stable keywords
 STABLE = True
 
@@ -252,8 +253,8 @@ def kws_wanted(cpv_kws, prev_cpv_kws):
     return wanted
 
 def gen_cpv_kws(cpv, kws_aim):
-    cpv_kw_hash = {cpv: kws_wanted(get_kws(cpv, arches=ALL_ARCHES), kws_aim)}
-    if not cpv_kw_hash[cpv]:
+    cpv_kw_list = [[cpv, kws_wanted(get_kws(cpv, arches=ALL_ARCHES), kws_aim)]]
+    if not cpv_kw_list[0][1]:
         # This happens when cpv has less keywords than kws_aim
         # Usually happens when a dep was an || dep, or under a USE-flag which is
         # masked in some profiles. We make all deps strict in get_best_deps()
@@ -264,44 +265,107 @@ def gen_cpv_kws(cpv, kws_aim):
             nothing_to_be_done(cpv, type='dep')
             return None
         wanted = get_kws(cpv, arches=make_unstable(kws_aim))
-        cpv_kw_hash = {cpv: wanted}
+        cpv_kw_list = [[cpv, wanted]]
     if CHECK_DEPS and not issystempackage(cpv):
-        deps = get_best_deps(cpv, cpv_kw_hash[cpv], release=NEW_REL)
+        deps = get_best_deps(cpv, cpv_kw_list[0][1], release=NEW_REL)
         if EXTREME_DEBUG:
-            print cpv, cpv_kw_hash[cpv], deps
+            print cpv, cpv_kw_list[0][1], deps
         for dep in deps:
             # Assumes that keyword deps are OK if STABLE
-            cpv_kw_hash.update(gen_cpv_kws(dep, cpv_kw_hash[cpv]))
-    return cpv_kw_hash
+            dep_deps = gen_cpv_kws(dep, cpv_kw_list[0][1])
+            dep_deps.reverse()
+            for i in dep_deps:
+                # Make sure we don't already have the same [cpv, [kws]]
+                if i not in ord_kws and i not in cpv_kw_list:
+                    cpv_kw_list.append(i)
+    cpv_kw_list.reverse()
+    return cpv_kw_list
+
+def fix_nesting(nested_list):
+    """Takes a list of unknown nesting depth, and gives a nice list with each
+    element of the form [cpv, [kws]]"""
+    index = 0
+    cpv_index = -1
+    nice_list = []
+    # Has an unpredictable nesting of lists; so we flatten it...
+    flat_list = portage.flatten(nested_list)
+    # ... and re-create a nice list for us to use
+    while index < len(flat_list):
+        if portage.catpkgsplit(flat_list[index]):
+            cpv_index += 1
+            nice_list.append([flat_list[index], []])
+        else:
+            nice_list[cpv_index][1].append(flat_list[index])
+        index += 1
+    return nice_list
+
+def consolidate_dupes(cpv_kws):
+    """Consolidate duplicate cpvs with differing keywords"""
+    cpv_kw_hash = {}
+
+    for i in cpv_kws:
+        # Ignore comments/whitespace carried over from original list
+        if type(i) is not list:
+            continue
+        if not cpv_kw_hash.has_key(i[0]):
+            cpv_kw_hash[i[0]] = set()
+        cpv_kw_hash[i[0]].update(i[1])
+
+    i = 0
+    cpv_done_list = []
+    while i < len(cpv_kws):
+        # Ignore comments/whitespace carried over from original list
+        if type(cpv_kws[i]) is not list:
+            i += 1
+            continue
+        cpv = cpv_kws[i][0]
+        if cpv_kw_hash.has_key(cpv):
+            cpv_kws[i][1] = list(cpv_kw_hash.pop(cpv))
+            cpv_kws[i][1].sort()
+            cpv_done_list.append(cpv)
+            i += 1
+        elif cpv in cpv_done_list:
+            print cpv, cpv_done_list
+            cpv_kws.remove(cpv_kws[i])
+
+    return cpv_kws
 
 # FIXME: This is broken
 def prettify(cpv_kws):
-    "Takes a hash of {cpv: [kws]} and prettifies it"
+    "Takes a list of [cpv, [kws]] and prettifies it"
     max_len = 0
     kws_all = []
     pretty_list = []
-    for cpv in cpv_kws.keys():
-        # Find the atom with max length (for output formatting)
-        if len(cpv) > max_len:
-            max_len = len(cpv)
 
-    # Find the set of all kws listed
-    kws_all = list(set(portage.flatten([i for i in cpv_kws.values()])))
+    for each in cpv_kws:
+        # Ignore comments/whitespace carried over from original list
+        if type(each) is not list:
+            continue
+        # Find the atom with max length (for output formatting)
+        if len(each[0]) > max_len:
+            max_len = len(each[0])
+        # Find the set of all kws listed
+        for kw in each[1]:
+            if kw not in kws_all:
+                kws_all.append(kw)
     kws_all.sort()
 
-    for (atom, kws) in cpv_kws.iteritems():
+    for each in cpv_kws:
+        # Ignore comments/whitespace carried over from original list
+        if type(each) is not list:
+            pretty_list.append([each, []])
+            continue
         # Pad the cpvs with space
-        atom += n_sep(max_len - len(atom))
+        each[0] += n_sep(max_len - len(each[0]))
         for i in range(0, len(kws_all)):
-            if i == len(kws):
+            if i == len(each[1]):
                 # Prevent an IndexError
                 # This is a problem in the algo I selected
-                kws.append('')
-            if kws[i] != kws_all[i]:
+                each[1].append('')
+            if each[1][i] != kws_all[i]:
                 # If no arch, insert space
-                kws.insert(i, n_sep(len(kws_all[i])))
-        pretty_list.append([atom, kws])
-    pretty_list.sort()
+                each[1].insert(i, n_sep(len(kws_all[i])))
+        pretty_list.append([each[0], each[1]])
     return pretty_list
 
 #######################
@@ -309,11 +373,14 @@ def prettify(cpv_kws):
 #######################
 # cpvs that will make it to the final list
 if __name__ == "__main__":
-    cpv_kws = {}
+    index = 0
+    ord_kws = []
+    array = []
 
     for i in open(CP_FILE).readlines():
         cpv = i[:-1]
-        if cpv.startswith('#') or not cpv:
+        if cpv.startswith('#') or cpv.isspace() or not cpv:
+            ord_kws.append(cpv)
             continue
         if not portage.catpkgsplit(cpv):
             # It's actually a cp
@@ -325,7 +392,13 @@ if __name__ == "__main__":
         if not prev_cpv:
             nothing_to_be_done(cpv)
             continue
-        cpv_kws.update(gen_cpv_kws(cpv, get_kws(prev_cpv)))
+        ord_kws += fix_nesting(gen_cpv_kws(cpv, get_kws(prev_cpv)))
+        if CHECK_DEPS:
+            ord_kws.append(LINE_SEP)
 
-    for i in prettify(cpv_kws):
+    # FIXME: This is incomplete; it doesn't take care of the deps of the cpv
+    # FIXME: It also eats data...
+    #ord_kws = consolidate_dupes(ord_kws)
+
+    for i in prettify(ord_kws):
         print i[0], flatten(i[1])
