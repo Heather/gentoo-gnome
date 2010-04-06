@@ -382,6 +382,8 @@ if __name__ == "__main__":
         if cpv.startswith('#') or cpv.isspace() or not cpv:
             ord_kws.append(cpv)
             continue
+        if cpv.find('#') is not -1:
+            raise Exception('Inline comments are not supported')
         if not portage.catpkgsplit(cpv):
             # It's actually a cp
             cpv = match_wanted_atoms(cpv, release=NEW_REL)[0]
