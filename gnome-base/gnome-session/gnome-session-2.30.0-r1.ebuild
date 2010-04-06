@@ -74,11 +74,12 @@ src_prepare() {
 	# Add "session saving" button back, upstream bug #575544
 	epatch "${FILESDIR}/${PN}-2.30.0-session-saving-button.patch"
 
-	# Avoid to keep zombie clients in the case when a IceError is thrown
-	# between accept_ice_connection() and accept_xsmp_connection(),
-	# this patch should fix the timeout executed for some logout/shutdown
-	# /reboot. (patch commented out)
-	epatch "${FILESDIR}/${PN}-2.28.0-do-not-keep-zombie-clients.patch"
+	# This patch was just a workaround, the real fix has been pushed on upstream
+	# before the 2.29.92 tag (2010-03-09).
+	# epatch "${FILESDIR}/${PN}-2.28.0-do-not-keep-zombie-clients.patch"
+
+	# Fix intltoolize broken file, see upstream #577133
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
 }
 
 src_install() {
