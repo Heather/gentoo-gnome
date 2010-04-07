@@ -4,8 +4,11 @@
 
 EAPI="3"
 
+inherit versionator
+
 MY_PN="gtk-doc"
 MY_P=${MY_PN}-${PV}
+MAJ_PV=$(get_version_component_range 1-2)
 DESCRIPTION="Automake files from gtk-doc"
 HOMEPAGE="http://www.gtk.org/gtk-doc/"
 SRC_URI="mirror://gnome/sources/${MY_PN}/${PV}/${MY_P}.tar.bz2"
@@ -18,7 +21,7 @@ IUSE=""
 RDEPEND=">=dev-lang/perl-5.6"
 
 DEPEND="${RDEPEND}
-	!<dev-util/gtk-doc-1.13
+	!<dev-util/gtk-doc-${MAJ_PV}
 	app-text/docbook-xml-dtd:4.3
 	app-text/docbook-xsl-stylesheets
 	dev-libs/libxslt
