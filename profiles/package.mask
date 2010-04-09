@@ -8,7 +8,8 @@
 
 # Nirbheek Chauhan <nirbheek@gentoo.org> (7 Apr 2010)
 # Revert portage sys-fs/udisks mask
--=sys-fs/udisks-1*
+# Somehow it's not working w/o unconditional unmask
+-sys-fs/udisks
 
 # Maciej Piechotka <uzytkownik2@gmail.com> (7 Mar 2010)
 # Revert portage libxklavier mask. Needed by >=gnome-base/libgnomekbd-2.29.5
