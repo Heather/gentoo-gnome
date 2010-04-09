@@ -28,6 +28,7 @@ RDEPEND="dev-lang/python
 	>=gnome-base/orbit-2.4
 	>=x11-libs/libwnck-2.19.5
 	>=gnome-base/gconf-2.6.1
+	>=media-libs/libcanberra-0.23[gtk]
 	>=gnome-base/gnome-menus-2.27.92
 	>=gnome-base/libbonobo-2.20.4
 	gnome-base/librsvg
