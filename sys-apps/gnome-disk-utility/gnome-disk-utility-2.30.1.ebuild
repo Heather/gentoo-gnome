@@ -21,11 +21,10 @@ RDEPEND="
 	>=dev-libs/dbus-glib-0.74
 	>=dev-libs/libunique-1.0
 	>=x11-libs/gtk+-2.17
-	=sys-apps/udisks-1.0*[remote-access?]
+	=sys-fs/udisks-1.0*[remote-access?]
 	>=dev-libs/libatasmart-0.14
 	>=gnome-base/gnome-keyring-2.22
 	>=x11-libs/libnotify-0.3
-
 	avahi? ( >=net-dns/avahi-0.6.25[gtk] )
 	nautilus? ( >=gnome-base/nautilus-2.24 )"
 DEPEND="${RDEPEND}
