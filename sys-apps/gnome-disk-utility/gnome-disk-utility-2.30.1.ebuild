@@ -25,15 +25,20 @@ RDEPEND="
 	>=dev-libs/libatasmart-0.14
 	>=gnome-base/gnome-keyring-2.22
 	>=x11-libs/libnotify-0.3
+
 	avahi? ( >=net-dns/avahi-0.6.25[gtk] )
-	nautilus? ( >=gnome-base/nautilus-2.24 )"
+	nautilus? ( >=gnome-base/nautilus-2.24 )
+
+	!!sys-apps/udisks"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	app-text/scrollkeeper
 	app-text/gnome-doc-utils
+
 	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.35
 	>=dev-util/gtk-doc-am-1.13
+
 	doc? ( >=dev-util/gtk-doc-1.3 )"
 DOCS="AUTHORS NEWS README TODO"
 

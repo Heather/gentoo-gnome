@@ -6,6 +6,10 @@
 # NOTE: Please add your entry at the top!
 #
 
+# Nirbheek Chauhan <nirbheek@gentoo.org> (7 Apr 2010)
+# Revert portage sys-fs/udisks mask
+-=sys-fs/udisks-1*
+
 # Maciej Piechotka <uzytkownik2@gmail.com> (7 Mar 2010)
 # Revert portage libxklavier mask. Needed by >=gnome-base/libgnomekbd-2.29.5
 ->=x11-libs/libxklavier-5
