@@ -31,6 +31,8 @@ DOCS="AUTHORS ChangeLog NEWS README"
 G2CONF="${G2CONF} $(use_enable glade)"
 
 src_prepare() {
+	# Fix intltoolize broken file, see upstream #577133
+	# TODO: report upstream their translations are broken (intltool)
 	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in \
 		|| die "sed failed"
 }

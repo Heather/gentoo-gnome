@@ -32,7 +32,7 @@ gnome-extra/gtkhtml-3.30.0
  * Fix compilation flags crazyness
 gnome-extra/gucharmap-2.30.0
  * add gobject-introspection support once available
-mail-client/evolution-2.30.0.1
+mail-client/evolution-2.30.0.1-r1
  * Fix compilation flags crazyness
 media-libs/libchamplain-0.4.2
  * add pyclutter and pyclutter-gtk first
