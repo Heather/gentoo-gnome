@@ -107,6 +107,10 @@ src_prepare() {
 	sed 's/CFLAGS="$CFLAGS $WARNING_FLAGS"//' \
 		-i configure.ac configure || die "sed 1 failed"
 
+	# Null pointer dereference when decoding a message
+	# https://bugzilla.gnome.org/show_bug.cgi?id=612082
+	epatch "${FILESDIR}"/fix-null-pointer-dereference.patch
+
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
 
