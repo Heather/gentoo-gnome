@@ -36,7 +36,7 @@ UNSTABLE_ARCHES = ('~alpha', '~amd64', '~arm', '~hppa', '~ia64', 'm68k', '~ppc',
         '~ppc64', '~s390', '~sh', '~sparc', '~x86', '~x86-fbsd')
 ALL_ARCHES = STABLE_ARCHES+UNSTABLE_ARCHES
 SYSTEM_PACKAGES = []
-LINE_SEP = ' '
+LINE_SEP = ''
 
 ##############
 ## Settings ##
@@ -77,14 +77,12 @@ if STABLE:
 else:
     ARCHES = UNSTABLE_ARCHES
 
-if os.environ.has_key('STABLE'):
-    STABLE = os.environ['STABLE']
 if os.environ.has_key('CHECK_DEPS'):
     CHECK_DEPS = os.environ['CHECK_DEPS']
 
-if CHECK_DEPS and not STABLE:
-    print 'Dep-checking mode is broken with keyword checking'
-    # Causes infinite loops.
+if not STABLE:
+    print 'Currently broken for anything except STABLEREQ'
+    print 'Please set STABLE to True'
     sys.exit(1)
 
 ######################
