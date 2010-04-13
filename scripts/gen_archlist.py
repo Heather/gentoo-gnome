@@ -18,7 +18,6 @@
 #   This happens when a cp is specified in the cpv list, and is resolved as
 #   a dependency as well.
 # TODO:
-# * Only supports ebuilds in PORTDIR
 # * Support recursive checking of needed keywords in deps
 #
 
@@ -29,16 +28,15 @@ import portage
 ###############
 ## Constants ##
 ###############
-#PORTDB = portage.db['/']['porttree'].dbapi
 #GNOME_OVERLAY = PORTDB.getRepositoryPath('gnome')
-PORTDIR = portage.settings['PORTDIR']
+portage.portdb.porttrees = [portage.settings['PORTDIR']]
 STABLE_ARCHES = ('alpha', 'amd64', 'arm', 'hppa', 'ia64', 'm68k', 'ppc',
         'ppc64', 's390', 'sh', 'sparc', 'x86')
 UNSTABLE_ARCHES = ('~alpha', '~amd64', '~arm', '~hppa', '~ia64', 'm68k', '~ppc',
         '~ppc64', '~s390', '~sh', '~sparc', '~x86', '~x86-fbsd')
 ALL_ARCHES = STABLE_ARCHES+UNSTABLE_ARCHES
 SYSTEM_PACKAGES = []
-LINE_SEP = '\n'
+LINE_SEP = ' '
 
 ##############
 ## Settings ##
@@ -52,6 +50,7 @@ STABLE = True
 #################
 ## Preparation ##
 #################
+ALL_CPV_KWS = []
 OLD_REL = None
 NEW_REL = None
 if __name__ == "__main__":
@@ -175,10 +174,10 @@ def get_best_deps(cpv, kws, release=None):
     Returns a list of the best deps of a cpv, optionally matching a release, and
     with max of the specified keywords
     """
-    atoms = portage.portdb.aux_get(cpv, ['DEPEND', 'RDEPEND'])
-    deps = []
+    atoms = portage.portdb.aux_get(cpv, ['DEPEND', 'RDEPEND', 'PDEPEND'])
+    deps = set()
     tmp = []
-    for atom in atoms[0].split()+atoms[1].split():
+    for atom in ' '.join(atoms).split():
         if atom.find('/') is -1:
             # It's not a dep atom
             continue
@@ -220,25 +219,31 @@ def get_best_deps(cpv, kws, release=None):
             # This mostly happens because an || or use dep exists. However, we
             # make such deps strict while parsing
             # XXX: We arbitrarily select the most recent version for this case
-            deps.append(ret[0])
+            deps.add(ret[0])
         else:
-            deps.append(best_kws[0])
-    return deps
+            deps.add(best_kws[0])
+    return list(deps)
 
-def prev_cpv_with_kws(cpv, release=None):
+def max_kws(cpv, release=None):
     """
-    Given a cpv, find the previous cpv that had more kws than this
+    Given a cpv, find the intersection of "most keywords it can have" and
+    "keywords it has", and returns a sorted list
 
-    Returns None is there is no better previous cpv
+    If STABLE; makes sure it has unstable keywords right now
+
+    Returns [] if current cpv has best keywords
     """
-    best_prev_cpv = cpv
+    current_kws = get_kws(cpv, arches=ALL_ARCHES)
+    best_kws = []
     for atom in match_wanted_atoms('<'+cpv, release):
-        # XXX: Random heuristic, say 3/4th of the keywords are new
-        if len(get_kws(best_prev_cpv)) < len(get_kws(atom))*3/4:
-            best_prev_cpv = atom
-    if best_prev_cpv is cpv:
-        return None
-    return best_prev_cpv
+        kws = get_kws(atom)
+        for kw in kws:
+            if kw not in best_kws+current_kws:
+                if STABLE and '~'+kw not in current_kws:
+                    continue
+                best_kws.append(kw)
+    best_kws.sort()
+    return best_kws
 
 # FIXME: This is broken
 def kws_wanted(cpv_kws, prev_cpv_kws):
@@ -252,7 +257,8 @@ def kws_wanted(cpv_kws, prev_cpv_kws):
             wanted.append(kw)
     return wanted
 
-def gen_cpv_kws(cpv, kws_aim):
+def gen_cpv_kws(cpv, kws_aim, depgraph):
+    depgraph.add(cpv)
     cpv_kw_list = [[cpv, kws_wanted(get_kws(cpv, arches=ALL_ARCHES), kws_aim)]]
     if not cpv_kw_list[0][1]:
         # This happens when cpv has less keywords than kws_aim
@@ -269,14 +275,17 @@ def gen_cpv_kws(cpv, kws_aim):
     if CHECK_DEPS and not issystempackage(cpv):
         deps = get_best_deps(cpv, cpv_kw_list[0][1], release=NEW_REL)
         if EXTREME_DEBUG:
-            print cpv, cpv_kw_list[0][1], deps
+            debug('The deps of %s are %s' % (cpv, deps))
         for dep in deps:
+            if dep in depgraph:
+                continue
+            depgraph.add(dep)
             # Assumes that keyword deps are OK if STABLE
-            dep_deps = gen_cpv_kws(dep, cpv_kw_list[0][1])
+            dep_deps = gen_cpv_kws(dep, cpv_kw_list[0][1], depgraph)
             dep_deps.reverse()
             for i in dep_deps:
                 # Make sure we don't already have the same [cpv, [kws]]
-                if i not in ord_kws and i not in cpv_kw_list:
+                if i not in ALL_CPV_KWS and i not in cpv_kw_list:
                     cpv_kw_list.append(i)
     cpv_kw_list.reverse()
     return cpv_kw_list
@@ -325,7 +334,6 @@ def consolidate_dupes(cpv_kws):
             cpv_done_list.append(cpv)
             i += 1
         elif cpv in cpv_done_list:
-            print cpv, cpv_done_list
             cpv_kws.remove(cpv_kws[i])
 
     return cpv_kws
@@ -374,13 +382,12 @@ def prettify(cpv_kws):
 # cpvs that will make it to the final list
 if __name__ == "__main__":
     index = 0
-    ord_kws = []
     array = []
 
     for i in open(CP_FILE).readlines():
         cpv = i[:-1]
         if cpv.startswith('#') or cpv.isspace() or not cpv:
-            ord_kws.append(cpv)
+            ALL_CPV_KWS.append(cpv)
             continue
         if cpv.find('#') is not -1:
             raise Exception('Inline comments are not supported')
@@ -390,17 +397,17 @@ if __name__ == "__main__":
             if not cpv:
                 debug('%s: Invalid cpv' % cpv)
                 continue
-        prev_cpv = prev_cpv_with_kws(cpv, release=OLD_REL)
-        if not prev_cpv:
+        prev_kws = max_kws(cpv, release=OLD_REL)
+        if not prev_kws:
             nothing_to_be_done(cpv)
             continue
-        ord_kws += fix_nesting(gen_cpv_kws(cpv, get_kws(prev_cpv)))
+        ALL_CPV_KWS += fix_nesting(gen_cpv_kws(cpv, prev_kws, set()))
         if CHECK_DEPS:
-            ord_kws.append(LINE_SEP)
+            ALL_CPV_KWS.append(LINE_SEP)
 
     # FIXME: This is incomplete; it doesn't take care of the deps of the cpv
     # FIXME: It also eats data...
-    #ord_kws = consolidate_dupes(ord_kws)
+    #ALL_CPV_KWS = consolidate_dupes(ALL_CPV_KWS)
 
-    for i in prettify(ord_kws):
+    for i in prettify(ALL_CPV_KWS):
         print i[0], flatten(i[1])

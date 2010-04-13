@@ -25,6 +25,7 @@ gnome-base/gnome-menus
 gnome-base/gnome-panel
 gnome-base/gnome-session
 gnome-base/gnome-settings-daemon
+gnome-base/gvfs
 gnome-base/libbonobo
 gnome-base/libbonoboui
 gnome-base/libglade
@@ -74,7 +75,7 @@ net-libs/libsoup
 net-misc/vinagre
 net-misc/vino
 net-print/gnome-cups-manager
-# Else, it starts resolving KDE libs..
+# Don't try v3; starts resolving KDE deps...
 net-voip/ekiga-2.0.12
 www-client/epiphany
 x11-libs/gtk+
