@@ -1,0 +1,24 @@
+From 15ec4300b7ca49bf6f6363c61d666830de43fdcb Mon Sep 17 00:00:00 2001
+From: Alexandre Rostovtsev <tetromino@gmail.com>
+Date: Mon, 12 Apr 2010 20:58:27 +0000
+Subject: Bug 615290 - Fails to build with Heimdal Kerberos
+
+---
+diff --git a/camel/camel-sasl-gssapi.c b/camel/camel-sasl-gssapi.c
+index 5c49d0e..3545b72 100644
+--- a/camel/camel-sasl-gssapi.c
++++ b/camel/camel-sasl-gssapi.c
+@@ -31,7 +31,11 @@
+ #include <string.h>
+ #include <sys/socket.h>
+ #include <sys/types.h>
++#ifdef HAVE_HEIMDAL_KRB5
++#include <krb5.h>
++#else
+ #include <krb5/krb5.h>
++#endif
+ #ifdef HAVE_ET_COM_ERR_H
+ #include <et/com_err.h>
+ #else
+--
+cgit v0.8.3.1
