@@ -329,34 +329,52 @@ def fix_nesting(nested_list):
     return nice_list
 
 def consolidate_dupes(cpv_kws):
-    """Consolidate duplicate cpvs with differing keywords"""
-    cpv_kw_hash = {}
+    """
+    Consolidate duplicate cpvs with differing keywords
 
-    for i in cpv_kws:
-        # Ignore comments/whitespace carried over from original list
-        if type(i) is not list:
+    Cannot handle cps with different versions since we don't know if they are
+    inter-changeable
+    """
+    cpv_indices = {}
+
+    # Find all indices of each cpv
+    for each in cpv_kws:
+        # Comments/whitespace carried over from original list
+        if type(each) is not list:
             continue
-        if not cpv_kw_hash.has_key(i[0]):
-            cpv_kw_hash[i[0]] = set()
-        cpv_kw_hash[i[0]].update(i[1])
+        else:
+            if not cpv_indices.has_key(each[0]):
+                cpv_indices[each[0]] = []
+            cpv_indices[each[0]].append(cpv_kws.index(each))
 
-    i = 0
-    cpv_done_list = []
-    while i < len(cpv_kws):
+    # Replace the keywords of each cpv with the union of all keywords in the
+    # list belonging to this cpv
+    for each in cpv_kws:
         # Ignore comments/whitespace carried over from original list
-        if type(cpv_kws[i]) is not list:
-            i += 1
+        if type(each) is not list:
             continue
-        cpv = cpv_kws[i][0]
-        if cpv_kw_hash.has_key(cpv):
-            cpv_kws[i][1] = list(cpv_kw_hash.pop(cpv))
-            cpv_kws[i][1].sort()
-            cpv_done_list.append(cpv)
-            i += 1
-        elif cpv in cpv_done_list:
-            cpv_kws.remove(cpv_kws[i])
+        kws = set()
+        for index in cpv_indices[each[0]]:
+            kws.update(cpv_kws[index][1])
+        each[1] = list(kws)
+        each[1].sort()
 
-    return cpv_kws
+    index = 0
+    deduped_cpv_kws = cpv_kws[:]
+    deduped_cpv_kws.reverse()
+    while index < len(deduped_cpv_kws):
+        item = deduped_cpv_kws[index]
+        if type(item) is not list:
+            index += 1
+            continue
+        if deduped_cpv_kws.count(item) is 1:
+            index += 1
+        else:
+            while deduped_cpv_kws.count(item) is not 1:
+                deduped_cpv_kws.remove(item)
+    deduped_cpv_kws.reverse()
+
+    return deduped_cpv_kws
 
 # FIXME: This is broken
 def prettify(cpv_kws):
@@ -425,9 +443,7 @@ if __name__ == "__main__":
         if CHECK_DEPS:
             ALL_CPV_KWS.append(LINE_SEP)
 
-    # FIXME: This is incomplete; it doesn't take care of the deps of the cpv
-    # FIXME: It also eats data...
-    #ALL_CPV_KWS = consolidate_dupes(ALL_CPV_KWS)
+    ALL_CPV_KWS = consolidate_dupes(ALL_CPV_KWS)
 
     for i in prettify(ALL_CPV_KWS):
         print i[0], flatten(i[1])
