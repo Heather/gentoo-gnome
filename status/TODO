@@ -16,6 +16,8 @@ dev-libs/totem-pl-parser-2.30.0
  * tarball generated with broken gtk-doc, revisit me.
 dev-util/gnome-devel-docs-2.28.1
  * Find a better fix for the failure with parallel install.
+gnome-base/gdm-2.30.0
+ * gdm has a strange behaviour on reboot (from runlevel), especially when xdm tries to stop it (its blocks).
 gnome-base/gnome-panel-2.30.0
  * tarball generated with broken gtk-doc, revisit me.
 gnome-base/gnome-session-2.30.0-r1
@@ -45,7 +47,7 @@ net-im/empathy-2.30.0
  * libnotify & libcanberra hard deps
 net-libs/libepc-0.3.11
  * 2 out of 16 tests fail, upstream bug #578792
-net-libs/webkit-gtk-1.1.90-r1
+net-libs/webkit-gtk-1.2.0
  * Fix unaligned accesses on ARM, IA64 and SPARC
 www-client/epiphany-extensions-2.29.6
  * Open security issues:
