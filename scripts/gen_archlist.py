@@ -173,9 +173,11 @@ def get_best_deps(cpv, kws, release=None):
     with max of the specified keywords
     """
     atoms = portage.portdb.aux_get(cpv, ['DEPEND', 'RDEPEND', 'PDEPEND'])
+    atoms = ' '.join(atoms).split() # consolidate atoms
+    atoms = list(set(atoms)) # de-duplicate
     deps = set()
     tmp = []
-    for atom in ' '.join(atoms).split():
+    for atom in atoms:
         if atom.find('/') is -1:
             # It's not a dep atom
             continue
