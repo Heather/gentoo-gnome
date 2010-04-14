@@ -193,18 +193,18 @@ def get_best_deps(cpv, kws, release=None):
                     best_kws = 'none'
                     if DEBUG: debug('Insufficient unstable keywords in: %s' % i)
                     continue
-            cur_kws = get_kws(i, arches=kws)
-            if set(cur_kws) == set(kws):
+            cur_match_kws = get_kws(i, arches=kws)
+            if set(cur_match_kws) == set(kws):
                 # This dep already has all keywords
                 best_kws = 'alreadythere'
                 break
             # Select the version which needs least new keywords
-            if len(cur_kws) > len(best_kws[1]):
-                best_kws = [i, cur_kws]
-            elif not best_kws[1]:
-                # We do this so that if none of the versions have any stable
-                # keywords, the latest version gets selected as the "best" one.
-                best_kws = [i, ['iSuck']]
+            if len(cur_match_kws) > len(best_kws[1]):
+                best_kws = [i, cur_match_kws]
+            elif not best_kws[0]:
+                # This means that none of the versions have any of the stable
+                # keywords that *we checked* (i.e. kws).
+                best_kws = [i, []]
         if best_kws == 'alreadythere':
             if DEBUG: nothing_to_be_done(atom, type='dep')
             continue
@@ -218,6 +218,26 @@ def get_best_deps(cpv, kws, release=None):
             # make such deps strict while parsing
             # XXX: We arbitrarily select the most recent version for this case
             deps.add(ret[0])
+        elif not best_kws[1]:
+            # This means that none of the versions have any of the stable
+            # keywords that *we checked* (i.e. kws). Hence, we do another pass;
+            # this time checking *all* keywords.
+            #
+            # XXX: We duplicate some of the things from the for loop above
+            # We don't need to duplicate anything that caused a 'continue' or
+            # a 'break' above
+            ret = match_wanted_atoms(atom, release)
+            best_kws = ['', []]
+            for i in ret:
+                cur_kws = get_kws(i)
+                if len(cur_kws) > len(best_kws[1]):
+                    best_kws = [i, cur_kws]
+                elif not best_kws[0]:
+                    # This means that none of the versions have any of the stable
+                    # keywords *at all*. No choice but to arbitrarily select the
+                    # latest version in that case.
+                    best_kws = [i, []]
+            deps.add(best_kws[0])
         else:
             deps.add(best_kws[0])
     return list(deps)
