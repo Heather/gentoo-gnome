@@ -13,7 +13,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~ia64 ~ppc ~sparc ~x86"
 # FIXME: Add location support once geoclue stops being idiotic with automagic deps
-IUSE="nautilus networkmanager spell test +tpl webkit" # map
+IUSE="nautilus networkmanager spell test webkit" # map
 
 # FIXME: libnotify & libcanberra hard deps
 RDEPEND=">=dev-libs/glib-2.22.0
@@ -40,9 +40,9 @@ RDEPEND=">=dev-libs/glib-2.22.0
 	spell? (
 		app-text/enchant
 		app-text/iso-codes )
-	tpl? ( >=net-im/telepathy-logger-0.1.1 )
-	webkit? ( >=net-libs/webkit-gtk-1.1.15 )
-"
+	webkit? ( >=net-libs/webkit-gtk-1.1.15 )"
+#	Upstream says not to ship this, or use this.  It is also buggy.
+#	tpl? ( >=net-im/telepathy-logger-0.1.1 )
 #	map? (
 #		>=media-libs/libchamplain-0.4[gtk]
 #		>=media-libs/clutter-gtk-0.10:1.0 )
@@ -62,6 +62,7 @@ PDEPEND=">=net-im/telepathy-mission-control-5"
 DOCS="CONTRIBUTORS AUTHORS ChangeLog NEWS README"
 
 pkg_setup() {
+	# Hard disable favourite_contacts and tpl, TpLogger is buggy.
 	G2CONF="${G2CONF}
 		--disable-maintainer-mode
 		--disable-static
@@ -69,14 +70,13 @@ pkg_setup() {
 		--disable-map
 		--disable-control-center-embedding
 		--disable-Werror
+		--disable-favourite_contacts
+		--disable-tpl
 		$(use_enable debug)
-		$(use_enable tpl favourite_contacts)
 		$(use_with networkmanager connectivity nm)
 		$(use_enable spell)
 		$(use_enable test coding-style-checks)
-		$(use_enable tpl)
-		$(use_enable webkit)
-	"
+		$(use_enable webkit)"
 }
 
 src_test() {
