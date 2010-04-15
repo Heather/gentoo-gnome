@@ -6,6 +6,10 @@
 # NOTE: Please add your entry at the top!
 #
 
+# Steev Klimaszewski <steev@gentoo.org> (14 Apr 2010)
+# Upstream says this should not be used, and isn't ready.
+net-im/telepathy-logger
+
 # Nirbheek Chauhan <nirbheek@gentoo.org> (7 Apr 2010)
 # Revert portage sys-fs/udisks mask
 # Somehow it's not working w/o unconditional unmask
