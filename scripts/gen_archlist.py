@@ -252,18 +252,26 @@ def max_kws(cpv, release=None):
     If STABLE; makes sure it has unstable keywords right now
 
     Returns [] if current cpv has best keywords
+    Returns None if no cpv has keywords
     """
     current_kws = get_kws(cpv, arches=ALL_ARCHES)
-    best_kws = []
-    for atom in match_wanted_atoms('<'+cpv, release):
+    maximum_kws = [] # Maximum keywords that a cpv has
+    missing_kws = []
+    for atom in match_wanted_atoms('<='+cpv, release):
         kws = get_kws(atom)
+        if len(kws) > len(maximum_kws):
+            maximum_kws = kws
         for kw in kws:
-            if kw not in best_kws+current_kws:
+            if kw not in missing_kws+current_kws:
                 if STABLE and '~'+kw not in current_kws:
                     continue
-                best_kws.append(kw)
-    best_kws.sort()
-    return best_kws
+                missing_kws.append(kw)
+    missing_kws.sort()
+    if maximum_kws != []:
+        return missing_kws
+    else:
+        # No cpv has the keywords we need
+        return None
 
 # FIXME: This is broken
 def kws_wanted(cpv_kws, prev_cpv_kws):
@@ -435,11 +443,17 @@ if __name__ == "__main__":
             if not cpv:
                 debug('%s: Invalid cpv' % cpv)
                 continue
-        prev_kws = max_kws(cpv, release=OLD_REL)
-        if not prev_kws:
+        kws_missing = max_kws(cpv, release=OLD_REL)
+        if kws_missing == []:
+            # Current cpv has the max keywords => nothing to do
             nothing_to_be_done(cpv)
             continue
-        ALL_CPV_KWS += fix_nesting(gen_cpv_kws(cpv, prev_kws, set()))
+        elif kws_missing == None:
+            debug ('No versions with stable keywords for %s' % cpv)
+            # No cpv with stable keywords => select latest
+            arches = make_unstable(ARCHES)
+            kws_missing = [kw[1:] for kw in get_kws(cpv, arches)]
+        ALL_CPV_KWS += fix_nesting(gen_cpv_kws(cpv, kws_missing, set()))
         if CHECK_DEPS:
             ALL_CPV_KWS.append(LINE_SEP)
 
