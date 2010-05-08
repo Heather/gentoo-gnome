@@ -70,9 +70,6 @@ src_prepare() {
 	# GNOME bug 611353 (skips failing test atm)
 	epatch "${FILESDIR}/e-d-s-camel-skip-failing-test.patch"
 
-	# Already committed upstream
-	epatch "${FILESDIR}/e-d-s-heimdal-krb5.patch"
-
 	if use doc; then
 		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/usr/bin/gtkdoc-rebase" \
 			-i gtk-doc.make || die "sed 1 failed"
