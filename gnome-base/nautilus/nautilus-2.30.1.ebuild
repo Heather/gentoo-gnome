@@ -62,10 +62,6 @@ src_prepare() {
 			-i gtk-doc.make || die "sed 2 failed"
 	fi
 
-	# Fix intltoolize broken file, see upstream #577133
-	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in \
-		|| die "sed 3 failed"
-
 	# Remove crazy CFLAGS
 	sed 's:-DG.*DISABLE_DEPRECATED::g' -i configure.in configure \
 		|| die "sed 4 failed"
