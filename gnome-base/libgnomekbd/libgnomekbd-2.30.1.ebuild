@@ -32,14 +32,6 @@ pkg_setup() {
 	G2CONF="${G2CONF} --disable-tests --disable-static"
 }
 
-src_prepare() {
-	gnome2_src_prepare
-
-	# Fix intltoolize broken file, see upstream #577133
-	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in \
-		|| die "sed expression failed"
-}
-
 src_compile() {
 	# FreeBSD doesn't like -j, upstream? bug #????
 	use x86-fbsd && MAKEOPTS="${MAKEOPTS} -j1"
