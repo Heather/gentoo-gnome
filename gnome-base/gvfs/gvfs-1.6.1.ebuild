@@ -78,9 +78,6 @@ pkg_setup() {
 src_prepare() {
 	gnome2_src_prepare
 
-	# Fix intltoolize broken file, see upstream #577133
-	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
-
 	# Conditional patching purely to avoid eautoreconf
 	use gphoto2 && epatch "${FILESDIR}/${PN}-1.2.2-gphoto2-stricter-checks.patch"
 
