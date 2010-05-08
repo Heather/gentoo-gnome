@@ -14,7 +14,6 @@ IUSE="doc"
 
 RDEPEND=">=dev-libs/atk-1.29.2
 	>=x11-libs/gtk+-2.19.7
-	>=gnome-base/gail-1.9.0
 	>=gnome-base/libbonobo-1.107
 	>=gnome-base/orbit-2
 	>=dev-libs/dbus-glib-0.76
