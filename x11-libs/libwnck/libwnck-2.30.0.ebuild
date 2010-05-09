@@ -59,4 +59,9 @@ src_prepare() {
 
 	AT_M4DIR="m4" eautoreconf
 	fi
+
+	# Fix intltoolize broken file, see upstream #577133
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in \
+		|| die "sed failed"
+
 }
