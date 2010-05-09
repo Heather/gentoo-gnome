@@ -19,7 +19,7 @@ IUSE="udev nls"
 
 RDEPEND="
 	udev? ( >=sys-fs/udev-145[extras] )
-	>=app-portage/packagekit-0.4.4
+	>=app-portage/packagekit-0.5.5
 	>=dev-libs/dbus-glib-0.73
 	>=dev-libs/glib-2.18.0:2
 	>=dev-libs/libunique-1.0.0
@@ -29,7 +29,7 @@ RDEPEND="
 	>=media-libs/libcanberra-0.10[gtk]
 	>=sys-apps/dbus-1.1.2
 	>=sys-apps/devicekit-power-007
-	>=x11-libs/gtk+-2.16.0:2
+	>=x11-libs/gtk+-2.19.3:2
 	>=x11-libs/libnotify-0.4.3"
 DEPEND="${RDEPEND}
 	app-text/docbook-sgml-utils
