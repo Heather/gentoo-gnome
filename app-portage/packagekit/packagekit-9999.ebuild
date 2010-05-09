@@ -16,7 +16,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="" # live ebuild
 IUSE="connman +consolekit cron doc gtk mono networkmanager nls nsplugin pm-utils
-+policykit qt4 ruck static-libs test udev"
++policykit qt4 static-libs test udev"
 
 CDEPEND="
 	connman? ( net-misc/connman )
@@ -87,7 +87,6 @@ src_configure() {
 	# gtk-doc: doc already built
 	# command,debuginfo,gstreamer,service-packs: not supported by backend
 	# man-pages: we want them
-	# glib2: ebuild not available atm and exprimental
 	econf \
 		${myconf} \
 		--localstatedir=/var \
@@ -104,7 +103,6 @@ src_configure() {
 		--enable-portage \
 		--with-default-backend=portage \
 		--enable-man-pages \
-		--disable-glib2 \
 		$(use_enable connman) \
 		$(use_enable cron) \
 		$(use_enable doc gtk-doc) \
@@ -115,7 +113,6 @@ src_configure() {
 		$(use_enable nsplugin browser-plugin) \
 		$(use_enable pm-utils) \
 		$(use_enable qt4 qt) \
-		$(use_enable ruck) \
 		$(use_enable static-libs static) \
 		$(use_enable test tests) \
 		$(use_enable udev device-rebind)

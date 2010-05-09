@@ -39,8 +39,8 @@ CDEPEND="
 	udev? ( >=sys-fs/udev-145[extras] )
 	dev-db/sqlite:3
 	>=dev-libs/dbus-glib-0.74
-	>=dev-libs/glib-2.16.1:2
-	>=sys-apps/dbus-1.3.0"
+	>=dev-libs/glib-2.22:2
+	>=sys-apps/dbus-1.1.0"
 RDEPEND="${CDEPEND}
 	consolekit? ( sys-auth/consolekit )
 	pm-utils? ( sys-power/pm-utils )
@@ -61,11 +61,9 @@ RESTRICT="test" # tests are failing atm
 # polkit is in gnome overlay, otherwise, should use policykit
 # do not use a specific user, useless and not more secure according to upstream
 # doc is in the tarball and always installed
-# ruck is broken (RDEPEND dev-python/urlgrabber), upstream bug 23248
 # mono doesn't install anything (RDEPEND dev-dotnet/gtk-sharp-gapi:2
 #	(R)DEPEND dev-dotnet/glib-sharp:2 dev-lang/mono), upstream bug 23247
 # using >=dbus-1.3.0 instead of >=dbus-1.1.1 because of a bug fixed in 1.3.0
-# glib2 is experimental atm. Think about a USE flag when it will be usable.
 
 # TODO:
 # gettext is probably needed only if +nls but too long to fix
@@ -102,8 +100,7 @@ src_configure() {
 	# dep-tracking,option-check,libtool-lock,strict,local: obvious reasons
 	# gtk-doc: doc already built
 	# command,debuginfo,gstreamer,service-packs: not supported by backend
-	# ruck,managed: failing (see UPSTREAM in ebuild header)
-	# glib2: experimental 
+	# managed: failing (see UPSTREAM in ebuild header)
 	econf \
 		${myconf} \
 		--localstatedir=/var \
@@ -117,9 +114,7 @@ src_configure() {
 		--disable-debuginfo-install \
 		--disable-gstreamer-plugin \
 		--disable-service-packs \
-		--disable-ruck \
 		--disable-managed \
-		--disable-glib2 \
 		--enable-man-pages \
 		--disable-dummy \
 		--enable-portage \
