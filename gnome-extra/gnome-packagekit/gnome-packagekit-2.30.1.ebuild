@@ -28,7 +28,7 @@ RDEPEND="
 	media-libs/fontconfig
 	>=media-libs/libcanberra-0.10[gtk]
 	>=sys-apps/dbus-1.1.2
-	>=sys-apps/devicekit-power-007
+	|| ( sys-power/upower >=sys-apps/devicekit-power-007 )
 	>=x11-libs/gtk+-2.19.3:2
 	>=x11-libs/libnotify-0.4.3"
 DEPEND="${RDEPEND}
