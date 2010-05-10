@@ -11,7 +11,8 @@ HOMEPAGE="http://gnome.org/projects/totem/"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86 ~x86-fbsd"
+#KEYWORDS="~amd64 ~x86 ~x86-fbsd"
+KEYWORDS="-amd64 -x86 -x86-fbsd"
 
 IUSE="bluetooth debug doc galago iplayer lirc nautilus nsplugin python tracker +youtube" #zeroconf
 
@@ -127,6 +128,11 @@ src_prepare() {
 
 	# Fix broken smclient option passing
 	epatch "${FILESDIR}/${PN}-2.26.1-smclient-target-detection.patch"
+
+	epatch "${FILESDIR}/${P}-fix-gmp-plugin.patch"
+	epatch "${FILESDIR}/${P}-fix-pygtk-include.patch"
+	epatch "${FILESDIR}/${P}-fix-qt-eos.patch"
+
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
