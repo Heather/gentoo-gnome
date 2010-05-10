@@ -32,6 +32,7 @@ RDEPEND="
 	!!sys-apps/udisks"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
+	gnome-base/gnome-common
 	app-text/scrollkeeper
 	app-text/gnome-doc-utils
 
