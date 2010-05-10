@@ -29,7 +29,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.13.0
 	>=gnome-base/gnome-panel-2
 	>=gnome-base/gconf-2.10
 	>=media-libs/libcanberra-0.10[gtk]
-	>=sys-apps/devicekit-power-008
+	|| ( sys-power/upower >=sys-apps/devicekit-power-008 )
 	>=dev-libs/libunique-1.1.0
 	>=x11-apps/xrandr-1.2
 	x11-libs/libX11
