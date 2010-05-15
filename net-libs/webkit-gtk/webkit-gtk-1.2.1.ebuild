@@ -59,10 +59,12 @@ src_prepare() {
 	epatch "${FILESDIR}"/webkit-icu-4.4.patch
 
 	# FIXME: Fix unaligned accesses on ARM, IA64 and SPARC
+	# https://bugs.webkit.org/show_bug.cgi?id=19775
 	use sparc && epatch "${FILESDIR}"/${PN}-1.1.15.2-unaligned.patch
 
 	# Darwin/Aqua build is broken, needs autoreconf
 	# XXX: BROKEN. Patch does not apply anymore.
+	# https://bugs.webkit.org/show_bug.cgi?id=28727
 	#epatch "${FILESDIR}"/${PN}-1.1.15.4-darwin-quartz.patch
 
 	# Make it libtool-1 compatible
@@ -103,6 +105,7 @@ src_test() {
 
 src_compile() {
 	# Fix sandbox error with USE="introspection"
+	# https://bugs.webkit.org/show_bug.cgi?id=35471
 	addpredict "$(unset HOME; echo ~)/.local"
 	emake || die "Compile failed"
 }
