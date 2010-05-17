@@ -82,6 +82,9 @@ src_prepare() {
 	# add correct framework linking options, for aqua
 	epatch "${FILESDIR}/${PN}-2.18.5-macosx-aqua.patch"
 
+	# fix a 64-bit crasher in libpng 1.4 (upstream bug #617878)
+	epatch "${FILESDIR}/${P}-libpng-fix.patch"
+
 	# -O3 and company cause random crashes in applications. Bug #133469
 	replace-flags -O3 -O2
 	strip-flags
