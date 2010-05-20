@@ -15,6 +15,7 @@ IUSE="acpi apm doc gnome gstreamer hal ipv6 networkmanager policykit"
 # TODO: configure says python stuff is optional
 # my secret script says cpufrequtils might be needed in RDEPEND
 
+HALDEPEND=" hal? ( >=sys-apps/hal-0.5.3 ) "
 RDEPEND=">=x11-libs/gtk+-2.13
 	>=dev-libs/glib-2.22.0
 	>=gnome-base/gconf-2.8
@@ -31,7 +32,8 @@ RDEPEND=">=x11-libs/gtk+-2.13
 	>=virtual/python-2.4
 	x11-libs/libX11
 
-	apm? ( sys-apps/apmd )
+	apm? ( sys-apps/apmd $HALDEPEND )
+	acpi? ( $HALDEPEND )
 	gnome?	(
 		>=gnome-base/libgnomekbd-2.21.4.1
 		gnome-base/gnome-settings-daemon
@@ -50,7 +52,6 @@ RDEPEND=">=x11-libs/gtk+-2.13
 		|| (
 			>=media-plugins/gst-plugins-alsa-0.10.14
 			>=media-plugins/gst-plugins-oss-0.10.14 ) )
-	hal? ( >=sys-apps/hal-0.5.3 )
 	networkmanager? ( >=net-misc/networkmanager-0.7.0 )
 	policykit? ( >=sys-auth/polkit-0.92 )"
 
