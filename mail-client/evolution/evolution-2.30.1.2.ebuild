@@ -23,7 +23,7 @@ gstreamer +sound"
 # password from inside evolution, bug 160302
 RDEPEND=">=dev-libs/glib-2.22
 	>=x11-libs/gtk+-2.18
-	>=gnome-extra/evolution-data-server-2.29.92
+	>=gnome-extra/evolution-data-server-2.30.1
 	>=gnome-base/gnome-desktop-2.26.0
 	>=gnome-extra/gtkhtml-3.29.6
 	>=gnome-base/gconf-2
