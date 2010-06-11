@@ -44,6 +44,7 @@ x11-themes/hicolor-icon-theme
 x11-themes/sound-theme-freedesktop
 
 # Accessibility
+app-accessibility/accerciser
 gnome-extra/at-spi
 gnome-extra/libgail-gnome
 app-accessibility/dasher
@@ -70,9 +71,12 @@ media-sound/esound
 # Base applications
 gnome-base/gconf
 x11-wm/metacity
+sys-apps/gnome-disk-utility
 gnome-base/gvfs
 gnome-extra/zenity
 gnome-base/nautilus
+dev-libs/libgweather
+gnome-base/gnome-menus
 gnome-base/gnome-panel
 gnome-base/gnome-session
 gnome-base/gnome-settings-daemon
@@ -103,12 +107,13 @@ mail-client/evolution
 media-gfx/eog
 media-sound/sound-juicer
 media-video/totem
+net-im/empathy
 www-client/epiphany
 www-client/epiphany-extensions
 x11-misc/alacarte
 x11-terms/gnome-terminal
 
-# Extra applications
+# Other applications
 app-admin/pessulus
 app-admin/sabayon
 app-misc/tomboy
@@ -118,7 +123,7 @@ gnome-extra/evolution-webcal
 gnome-extra/gconf-editor
 gnome-extra/gnome-games
 gnome-extra/gnome-games-extra-data
-gnome-extra/gnome-user-docs
+gnome-extra/gnome-user-share
 gnome-extra/gnome-utils
 gnome-extra/hamster-applet
 gnome-extra/swfdec-gnome
@@ -129,3 +134,7 @@ net-misc/vinagre
 net-misc/vino
 net-print/gnome-cups-manager
 net-voip/ekiga
+
+# Documentation
+gnome-extra/gnome-devel-docs
+gnome-extra/gnome-user-docs
