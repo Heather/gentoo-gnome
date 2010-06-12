@@ -20,13 +20,11 @@ DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.19
 	>=dev-util/intltool-0.40
 	sys-devel/gettext"
-# Upstream didn't give us a ChangeLog with 2.30
 DOCS="AUTHORS NEWS TODO"
 
 # This ebuild does not install any binaries
 RESTRICT="binchecks strip"
 
-# FIXME: double check potential LINGUAS problem
 pkg_setup() {
 	G2CONF="${G2CONF} --enable-icon-mapping"
 }
