@@ -1,0 +1,19 @@
+# Base libraries
+dev-cpp/glibmm
+dev-cpp/cairomm
+dev-cpp/pangomm
+dev-cpp/gtkmm
+
+# Extra libraries
+dev-cpp/libgdamm
+dev-cpp/gtkglextmm
+dev-cpp/gtksourceviewmm
+dev-cpp/gstreamermm
+dev-cpp/libpanelappletmm
+
+# Deprecated libraries
+dev-cpp/gconfmm
+dev-cpp/gnome-vfsmm
+dev-cpp/libgnomecanvasmm
+dev-cpp/libgnomemm
+dev-cpp/libgnomeuimm
