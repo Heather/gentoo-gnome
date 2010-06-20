@@ -49,13 +49,13 @@ media-plugins/gst-plugins-dvb
 media-plugins/gst-plugins-faac
 media-plugins/gst-plugins-faad
 media-plugins/gst-plugins-ladspa
-#media-plugins/gst-plugins-libmms
-#media-plugins/gst-plugins-mimic
+media-plugins/gst-plugins-libmms
+media-plugins/gst-plugins-mimic
 media-plugins/gst-plugins-modplug
 media-plugins/gst-plugins-musepack
 media-plugins/gst-plugins-mythtv
 media-plugins/gst-plugins-neon
-#media-plugins/gst-plugins-resindvd
+media-plugins/gst-plugins-resindvd
 #media-plugins/gst-plugins-schroedinger
 
 dev-python/gst-python
