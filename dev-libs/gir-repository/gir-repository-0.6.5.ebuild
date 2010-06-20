@@ -86,7 +86,7 @@ src_install() {
 	# These are needed to build other .girs and .typelibs,
 	# but they shouldn't be installed since they are provided by gtk+/atk/pango
 	for i in Pango{,FT2,Cairo,Xft,X}-1.0 Atk-1.0 Gtk-2.0 Gdk{,Pixbuf}-2.0; do
-		rm -f "${D}/usr/lib/girepository-1.0/${i}.typelib"
+		rm -f "${D}/usr/lib{,64}/girepository-1.0/${i}.typelib"
 		rm -f "${D}/usr/share/gir-1.0/${i}.gir"
 	done
 	rm -f ${D}/usr/lib/{,debug/usr/lib/}*{Gdk,Gtk}*
