@@ -1,0 +1,17 @@
+Package		Available where		Dependencies
+-------------------------------------------------------------
+gconf		2.28.2 (no release)	g-i
+libsoup		2.30			g-i
+webkit-gtk	1.2.1			libsoup
+gnome-menus	master			g-i
+vte		master			gtk+-(2.0|3.0) pango
+libwnck		2.32			gtk+-2.0
+nautilus	2.32			gtk+-2.0
+gtksourceview	3.0			gtk+-3.0
+avahi		gir-repository		???
+babl		gir-repository		???
+goocanvas	gir-repository		???
+gnome-keyring	gir-repository		???
+gstreamer	gir-repository		???
+poppler		gir-repository		???
+dbus-glib	???			???
