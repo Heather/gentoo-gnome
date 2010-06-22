@@ -14,7 +14,10 @@ SLOT="0"
 #KEYWORDS="~amd64 ~x86 ~x86-fbsd"
 KEYWORDS="-amd64 -x86 -x86-fbsd"
 
-IUSE="bluetooth debug doc galago iplayer lirc nautilus nsplugin python tracker +youtube" #zeroconf
+# FIXME: Enable for now python USE flag per bug #316409
+# this change should only be noticed by people not following current
+# current linux profiles default
+IUSE="bluetooth debug doc galago iplayer lirc nautilus nsplugin +python tracker +youtube" #zeroconf
 
 # TODO:
 # Cone (VLC) plugin needs someone with the right setup (remi ?)
