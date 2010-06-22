@@ -10,31 +10,6 @@
 # Upstream says this should not be used, and isn't ready.
 net-im/telepathy-logger
 
-# Nirbheek Chauhan <nirbheek@gentoo.org> (7 Apr 2010)
-# Revert portage sys-fs/udisks mask
-# Somehow it's not working w/o unconditional unmask
--sys-fs/udisks
-
-# Maciej Piechotka <uzytkownik2@gmail.com> (7 Mar 2010)
-# Revert portage libxklavier mask. Needed by >=gnome-base/libgnomekbd-2.29.5
-->=x11-libs/libxklavier-5
-
 # Arun Raghavan <ford_prefect@gentoo.org> (23 Jun 2010)
 # We don't actually want gir-repository being used.
 dev-libs/gir-repository
-
-# Arun Raghavan <ford_prefect@gentoo.org> (9 Dec 2009)
-# Mask live version of gst-convenience
-~media-libs/gst-conveninence-9999
-
-# Nirbheek Chauhan <nirbheek@gentoo.org> (9 Aug 2009)
-# Mask live version of packagekit
-~app-portage/packagekit-9999
-
-# Gilles Dartiguelongue <eva@gentoo.org> (15 Feb 2010)
-# Mask Gnome 2.29 ebuilds
-#=www-client/epiphany-2.29*
-#=www-client/epiphany-extensions-2.29*
-#=net-libs/libsoup-gnome-2.29*
-#=net-libs/libsoup-2.29*
-#=net-libs/webkit-gtk-1.1.19
