@@ -221,3 +221,27 @@ gnome2_scrollkeeper_update() {
 		"${SCROLLKEEPER_UPDATE_BIN}" -q -p "${SCROLLKEEPER_DIR}"
 	fi
 }
+
+gnome2_schemas_savelist() {
+	pushd "${D}" &>/dev/null
+	export GNOME2_ECLASS_GLIB_SCHEMAS=$(find 'usr/share/glib-2.0/schemas' -name '*.gschema.xml' 2>/dev/null)
+	popd &>/dev/null
+}
+
+gnome2_schemas_update() {
+	local updater="$(type -P glib-compile-schemas 2>/dev/null)"
+
+	if [[ ! -x ${updater} ]]; then
+		debug-print "${updater} is not executable"
+		return
+	fi
+
+	if [[ -z ${GNOME2_ECLASS_GLIB_SCHEMAS} ]]; then
+		debug-print "no schemas to update"
+		return
+	fi
+
+	ebegin "Updating GSettings schemas"
+	${updater} --allow-any-name "$@" "${ROOT%/}/usr/share/glib-2.0/schemas" &>/dev/null
+	eend $?
+}
