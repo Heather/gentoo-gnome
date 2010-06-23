@@ -24,6 +24,7 @@
 =media-gfx/eog-2.31*
 =x11-libs/gtk+-2.21*
 x11-libs/gtk+:3
+=x11-themes/gnome-themes-2.31*
 
 # Steev Klimaszewski <steev@gentoo.org> (14 Apr 2010)
 # Upstream says this should not be used, and isn't ready.
