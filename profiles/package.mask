@@ -9,6 +9,7 @@
 # Jonathan Callen <abcd@gentoo.org> (22 Jun 2010)
 # Mask GTK+ 2.21 / GTK+ 3 / GLib 2.25 / Gnome 2.31
 =app-arch/file-roller-2.31*
+=app-cdr/brasero-2.31*
 =dev-libs/glib-2.25*
 =x11-libs/gtk+-2.21*
 x11-libs/gtk+:3
