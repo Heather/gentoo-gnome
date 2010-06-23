@@ -6,6 +6,10 @@
 # NOTE: Please add your entry at the top!
 #
 
+# Jonathan Callen <abcd@gentoo.org> (23 Jun 2010)
+# Mask other dev versions
+=x11-misc/alacarte-0.13*
+
 # Jonathan Callen <abcd@gentoo.org> (22 Jun 2010)
 # Mask GTK+ 2.21 / GTK+ 3 / GLib 2.25 / Gnome 2.31
 =app-arch/file-roller-2.31*
