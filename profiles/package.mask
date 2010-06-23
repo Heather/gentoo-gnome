@@ -19,11 +19,9 @@ net-im/telepathy-logger
 # Revert portage libxklavier mask. Needed by >=gnome-base/libgnomekbd-2.29.5
 ->=x11-libs/libxklavier-5
 
-# Nirbheek Chauhan <nirbheek@gentoo.org> (27 Feb 2010)
-# Revert portage introspection mask
-# You will have to unmask the use.mask yourself. See man portage
--dev-libs/gir-repository
--dev-libs/gobject-introspection
+# Arun Raghavan <ford_prefect@gentoo.org> (23 Jun 2010)
+# We don't actually want gir-repository being used.
+dev-libs/gir-repository
 
 # Arun Raghavan <ford_prefect@gentoo.org> (9 Dec 2009)
 # Mask live version of gst-convenience
