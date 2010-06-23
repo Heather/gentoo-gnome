@@ -20,6 +20,7 @@
 =gnome-extra/bug-buddy-2.31*
 =gnome-extra/evolution-data-server-2.31*
 =gnome-extra/gcalctool-5.31*
+=gnome-extra/gnome-games-2.31*
 =gnome-extra/zenity-2.31*
 =media-gfx/eog-2.31*
 =x11-libs/gtk+-2.21*
