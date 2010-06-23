@@ -14,6 +14,7 @@
 =dev-libs/glib-2.25*
 =gnome-base/gconf-2.31*
 =gnome-extra/bug-buddy-2.31*
+=gnome-extra/evolution-data-server-2.31*
 =x11-libs/gtk+-2.21*
 x11-libs/gtk+:3
 
