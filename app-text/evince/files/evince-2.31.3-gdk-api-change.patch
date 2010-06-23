@@ -1,0 +1,40 @@
+From c16ad49219beb256b7f6cea1d1ce8d8a4a2b654c Mon Sep 17 00:00:00 2001
+From: Jose Aliste <jose.aliste@gmail.com>
+Date: Sun, 06 Jun 2010 23:50:31 +0000
+Subject: [toolbar-editor] Syncing to GDK API changes
+
+---
+diff --git a/configure.ac b/configure.ac
+index d145c7d..571a3d0 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -122,7 +122,7 @@ AM_CONDITIONAL([PLATFORM_HILDON],[test "$with_platform" = "hildon"])
+ AM_CONDITIONAL([PLATFORM_WIN32],[test "$with_platform" = "win32"])
+ 
+ dnl Specify required versions of dependencies
+-GTK_REQUIRED=2.21.1
++GTK_REQUIRED=2.21.2
+ GLIB_REQUIRED=2.25.7
+ KEYRING_REQUIRED=2.22.0
+ AC_SUBST([GLIB_REQUIRED])
+diff --git a/cut-n-paste/toolbar-editor/egg-editable-toolbar.c b/cut-n-paste/toolbar-editor/egg-editable-toolbar.c
+index 44f0322..9193120 100644
+--- a/cut-n-paste/toolbar-editor/egg-editable-toolbar.c
++++ b/cut-n-paste/toolbar-editor/egg-editable-toolbar.c
+@@ -695,12 +695,12 @@ toolbar_drag_data_received_cb (GtkToolbar         *toolbar,
+           gint tpos = get_toolbar_position (etoolbar, GTK_WIDGET (toolbar));
+           egg_toolbars_model_add_item (etoolbar->priv->model, tpos, ipos, name);
+           gtk_drag_finish (context, TRUE,
+-			   gdk_drag_context_get_action (context) == GDK_ACTION_MOVE, time);
++			   gdk_drag_context_get_selected_action (context) == GDK_ACTION_MOVE, time);
+         }
+       else
+         {
+           gtk_drag_finish (context, FALSE,
+-			   gdk_drag_context_get_action (context) == GDK_ACTION_MOVE, time);
++			   gdk_drag_context_get_selected_action (context) == GDK_ACTION_MOVE, time);
+         }
+     }
+ 
+--
+cgit v0.8.3.1
