@@ -89,5 +89,5 @@ src_install() {
 		rm -f "${D}/usr/$(get_libdir)/girepository-1.0/${i}.typelib"
 		rm -f "${D}/usr/share/gir-1.0/${i}.gir"
 	done
-	rm -f ${D}/usr/lib/{,debug/usr/lib/}*{Gdk,Gtk}*
+	rm -f ${D}/usr/$(get_libdir)/*{Gdk,Gtk}*
 }
