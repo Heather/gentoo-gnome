@@ -18,6 +18,7 @@
 =dev-libs/glib-2.25*
 =gnome-base/gconf-2.31*
 =gnome-base/gnome-session-2.31*
+=gnome-base/gnome-settings-daemon-2.31*
 =gnome-base/nautilus-2.31*
 =gnome-base/libgnomekbd-2.31*
 =gnome-extra/bug-buddy-2.31*
