@@ -17,6 +17,7 @@
 =app-text/evince-2.31*
 =dev-libs/glib-2.25*
 =gnome-base/gconf-2.31*
+=gnome-base/gnome-session-2.31*
 =gnome-extra/bug-buddy-2.31*
 =gnome-extra/evolution-data-server-2.31*
 =gnome-extra/gcalctool-5.31*
