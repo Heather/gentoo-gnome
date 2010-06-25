@@ -15,7 +15,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE="coverage examples"
 
 RDEPEND=">=dev-libs/glib-2.16.0
-	>=dev-libs/gobject-introspection-0.6.3
+	>=dev-libs/gobject-introspection-0.6.10
 
 	dev-libs/dbus-glib
 	x11-libs/cairo
@@ -29,12 +29,12 @@ DEPEND="${RDEPEND}
 # AUTHORS, ChangeLog are empty
 DOCS="NEWS README"
 
+# tests fail and upstream does not support anything but git master
+RESTRICT="test"
+
 pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_enable coverage)"
-	# Build fails without this :/
-	# .libs/libgjs-gi.so: file not recognized: File format not recognized
-	MAKEOPTS="${MAKEOPTS} -j1"
 }
 
 src_install() {
