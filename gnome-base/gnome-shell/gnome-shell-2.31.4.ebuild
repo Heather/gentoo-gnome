@@ -37,6 +37,8 @@ RDEPEND=">=dev-libs/glib-2.25.9
 	x11-libs/libXfixes
 	>=x11-wm/mutter-2.31.4[introspection]
 	x11-apps/mesa-progs
+
+	dev-python/dbus-python
 "
 DEPEND="${RDEPEND}
 	>=sys-devel/libtool-2.2.6
