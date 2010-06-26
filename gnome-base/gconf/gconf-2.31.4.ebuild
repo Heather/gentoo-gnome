@@ -17,7 +17,7 @@ SRC_URI="mirror://gnome/sources/${MY_PN}/${PVP[0]}.${PVP[1]}/${MY_P}.tar.bz2"
 LICENSE="LGPL-2"
 SLOT="2"
 KEYWORDS="~alpha amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc x86 ~x86-fbsd"
-IUSE="debug doc ldap policykit"
+IUSE="debug doc +introspection ldap policykit"
 
 RDEPEND=">=dev-libs/glib-2.25.9
 	>=x11-libs/gtk+-2.14
@@ -26,7 +26,8 @@ RDEPEND=">=dev-libs/glib-2.25.9
 	>=gnome-base/orbit-2.4
 	>=dev-libs/libxml2-2
 	ldap? ( net-nds/openldap )
-	policykit? ( sys-auth/polkit )"
+	policykit? ( sys-auth/polkit )
+	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
 	>=dev-util/pkgconfig-0.9
@@ -43,6 +44,7 @@ pkg_setup() {
 		--disable-static
 		--enable-gsettings-backend
 		$(use_with ldap openldap)
+		$(use_enable introspection)
 		$(use_enable policykit defaults-service)"
 	kill_gconf
 
