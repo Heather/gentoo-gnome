@@ -1,0 +1,65 @@
+From 228da3650a004dbab834c041a78eb3bec24b4547 Mon Sep 17 00:00:00 2001
+From: Benjamin Berg <benjamin@sipsolutions.net>
+Date: Mon, 14 Jun 2010 09:17:10 +0000
+Subject: Remove draw_string code, which does not exist anymore.
+
+---
+diff --git a/engines/mist/src/mist-style.c b/engines/mist/src/mist-style.c
+index 39fc303..47bd3bb 100644
+--- a/engines/mist/src/mist-style.c
++++ b/engines/mist/src/mist-style.c
+@@ -1161,42 +1161,6 @@ mist_style_draw_resize_grip(GtkStyle *style,
+ 	cairo_destroy(cr);
+ }
+ 
+-#ifndef GTK_DISABLE_DEPRECATED
+-#ifndef GDK_DISABLE_DEPRECATED
+-#define DISABLE_CUSTOM_STRING_DRAWING
+-#warning Disabling custom string drawing so that no deprecated API is used.
+-#endif /* GDK_DISABLE_DEPRECATED */
+-#endif /* GTK_DISABLE_DEPRECATED */
+-
+-#ifndef DISABLE_CUSTOM_STRING_DRAWING
+-static void
+-mist_style_draw_string (GtkStyle      *style,
+-	     GdkWindow     *window,
+-	     GtkStateType   state_type,
+-	     GdkRectangle  *area,
+-	     GtkWidget     *widget,
+-	     const char    *detail,
+-	     int            x,
+-	     int            y,
+-	     const char    *string)
+-{
+-	CHECK_ARGS
+-	
+-	if (area) {
+-		gdk_gc_set_clip_rectangle (style->fg_gc[state_type], area);
+-	}	
+-	
+-	gdk_draw_string (window,
+-			 gtk_style_get_font (style),
+-			 style->fg_gc[state_type], x, y, string);
+-	
+-	if (area) {
+-		gdk_gc_set_clip_rectangle (style->fg_gc[state_type], NULL);
+-	}
+-}
+-#endif /* DISABLE_CUSTOM_STRING_DRAWING */
+-
+-
+ static void
+ mist_style_draw_layout (GtkStyle        *style,
+ 	     GdkWindow       *window,
+@@ -1418,9 +1382,6 @@ mist_style_class_init (MistStyleClass *klass)
+ 	style_class->draw_extension = mist_style_draw_extension;
+ 	style_class->draw_handle = mist_style_draw_handle;
+ 	style_class->draw_resize_grip = mist_style_draw_resize_grip;
+-#ifndef DISABLE_CUSTOM_STRING_DRAWING
+-	style_class->draw_string = mist_style_draw_string;
+-#endif
+ 	style_class->draw_layout = mist_style_draw_layout;
+ 	style_class->render_icon = mist_style_render_icon;
+ 	style_class->draw_focus = mist_style_draw_focus;
+--
+cgit v0.8.3.1
