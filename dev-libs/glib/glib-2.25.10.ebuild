@@ -12,7 +12,7 @@ HOMEPAGE="http://www.gtk.org/"
 LICENSE="LGPL-2"
 SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
-IUSE="debug doc fam hardened selinux static-libs test xattr"
+IUSE="debug doc fam hardened +introspection selinux static-libs test xattr"
 
 RDEPEND="virtual/libiconv
 	xattr? ( sys-apps/attr )
@@ -25,6 +25,7 @@ DEPEND="${RDEPEND}
 		>=dev-util/gtk-doc-1.11
 		~app-text/docbook-xml-dtd-4.1.2 )
 	test? ( >=sys-apps/dbus-1.2.14 )"
+PDEPEND="introspection? ( dev-libs/gobject-introspection )"
 
 src_prepare() {
 	if use ppc64 && use hardened ; then
@@ -98,4 +99,19 @@ src_test() {
 	export XDG_DATA_DIRS=/usr/local/share:/usr/share
 	export XDG_DATA_HOME="${T}"
 	emake check || die "tests failed"
+}
+
+pkg_preinst() {
+	gnome2_pkg_preinst
+
+	# Only give the introspection message if: 
+	# * The user has it enabled
+	# * Has glib already installed
+	# * Previous version was different from new version
+	if use introspection && has_version "${CATEGORY}/${PN}"; then
+		if ! has_version "${CATEGORY}/${PF}"; then
+			ewarn "You must rebuild gobject-introspection so that the installed"
+			ewarn "typelibs and girs are regenerated for the new APIs in glib"
+		fi
+	fi
 }
