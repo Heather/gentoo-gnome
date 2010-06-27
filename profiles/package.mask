@@ -30,6 +30,7 @@ gnome-base/gnome-shell
 gnome-extra/yelp-xsl
 =gnome-extra/zenity-2.31*
 =media-gfx/eog-2.31*
+x11-libs/gdk-pixbuf
 =x11-libs/gtk+-2.21*
 x11-libs/gtk+:3
 =x11-themes/gnome-themes-2.31*
