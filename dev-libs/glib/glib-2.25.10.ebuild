@@ -102,14 +102,12 @@ src_test() {
 }
 
 pkg_preinst() {
-	gnome2_pkg_preinst
-
 	# Only give the introspection message if: 
 	# * The user has it enabled
 	# * Has glib already installed
 	# * Previous version was different from new version
 	if use introspection && has_version "${CATEGORY}/${PN}"; then
-		if ! has_version "${CATEGORY}/${PF}"; then
+		if ! has_version "=${CATEGORY}/${PF}"; then
 			ewarn "You must rebuild gobject-introspection so that the installed"
 			ewarn "typelibs and girs are regenerated for the new APIs in glib"
 		fi
