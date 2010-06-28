@@ -13,7 +13,7 @@ HOMEPAGE="http://www.gnome.org/projects/nautilus/"
 LICENSE="GPL-2 LGPL-2 FDL-1.1"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux"
-IUSE="doc gnome xmp"
+IUSE="doc gnome introspection xmp"
 
 RDEPEND=">=dev-libs/glib-2.25.9
 	>=gnome-base/gnome-desktop-2.29.91
@@ -25,6 +25,7 @@ RDEPEND=">=dev-libs/glib-2.25.9
 	dev-libs/libunique
 	x11-libs/libXft
 	x11-libs/libXrender
+	introspection? ( >=dev-libs/gobject-introspection-0.6.4 )
 	xmp? ( >=media-libs/exempi-2 )"
 
 DEPEND="${RDEPEND}
@@ -46,6 +47,7 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-update-mimedb
 		--disable-packagekit
+		$(use_enable introspection)
 		$(use_enable xmp)"
 }
 
