@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-extra/bug-buddy/bug-buddy-2.30.0.ebuild,v 1.1 2010/06/13 18:57:24 pacho Exp $
+# $Header: $
 
 EAPI="1"
 GCONF_DEBUG="no"
@@ -34,9 +34,6 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
 pkg_setup() {
-	# Google-breakpad seems to support only x86.
-	# It is mostly useless for a distro like gentoo. Disable for now.
 	G2CONF="${G2CONF}
-		--disable-google-breakpad
 		$(use_enable eds)"
 }
