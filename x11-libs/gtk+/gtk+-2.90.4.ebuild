@@ -108,6 +108,12 @@ src_configure() {
 	econf --libdir="${EPREFIX}/usr/$(get_libdir)" ${myconf}
 }
 
+src_compile() {
+	# Unfortunately, the parellel make breaks if USE=introspection
+	use introspection && export MAKEOPTS="${MAKEOPTS} -j1"
+	gnome2_src_compile
+}
+
 src_test() {
 	unset DBUS_SESSION_BUS_ADDRESS
 	Xemake check || die "tests failed"
