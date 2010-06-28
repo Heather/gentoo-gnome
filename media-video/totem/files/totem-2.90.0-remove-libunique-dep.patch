@@ -1,0 +1,484 @@
+From 0707073a6970109d06453617f1462bc8beadaec9 Mon Sep 17 00:00:00 2001
+From: Saleem Abdulrasool <compnerd@compnerd.org>
+Date: Sun, 20 Jun 2010 01:24:53 +0000
+Subject: Port from unique to GApplication
+
+https://bugzilla.gnome.org/show_bug.cgi?id=622151
+---
+diff --git a/configure.in b/configure.in
+index 0eab23a..99ee9db 100644
+--- a/configure.in
++++ b/configure.in
+@@ -38,7 +38,7 @@ AC_PATH_PROG([GLIB_MKENUMS],[glib-mkenums])
+ 
+ # Requirements
+ GLIB_REQS=2.25.8
+-GTK_REQS=2.90.2
++GTK_REQS=2.90.3
+ TOTEM_PLPARSER_REQS=2.29.1
+ GNOMEICON_REQS=2.15.90
+ DBUS_REQS=0.61
+@@ -196,8 +196,6 @@ PKG_CHECK_EXISTS([
+   $ISO_CODES
+   gnome-icon-theme >= $GNOMEICON_REQS])
+ 
+-PKG_CHECK_MODULES([UNIQUE], unique-3.0)
+-
+ dnl *************************
+ dnl X11 related functionality
+ dnl *************************
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 5b82995..c0c1e99 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -42,7 +42,6 @@ libtotem_player_la_CPPFLAGS = \
+ libtotem_player_la_CFLAGS = \
+ 	$(DEPENDENCY_CFLAGS)	\
+ 	$(WARN_CFLAGS)		\
+-	$(UNIQUE_CFLAGS)	\
+ 	$(AM_CFLAGS)
+ 
+ libtotem_player_la_LDFLAGS = \
+@@ -100,7 +99,6 @@ libtotem_main_la_CFLAGS = \
+ 	$(WARN_CFLAGS)			\
+ 	$(DBUS_CFLAGS)			\
+ 	$(MISSING_PLUGINS_CFLAGS)	\
+-	$(UNIQUE_CFLAGS)		\
+ 	$(PEASUI_CFLAGS)		\
+ 	$(AM_CFLAGS)
+ 
+@@ -112,7 +110,6 @@ libtotem_main_la_LIBADD = \
+ 	libtotem_player.la		\
+ 	backend/libbaconvideowidget.la	\
+ 	plugins/libtotemmodule.la	\
+-	$(UNIQUE_LIBS)			\
+ 	$(PEASUI_LIBS)			\
+ 	$(DEPENDENCY_LIBS)		\
+ 	$(DBUS_LIBS)			\
+@@ -177,7 +174,6 @@ totem_CPPFLAGS =			\
+ 	$(AM_CPPFLAGS)
+ 
+ totem_CFLAGS =				\
+-	$(UNIQUE_CFLAGS)		\
+ 	$(PEAS_CFLAGS)			\
+ 	$(WARN_CFLAGS)			\
+ 	$(DEPENDENCY_CFLAGS)		\
+diff --git a/src/plugins/publish/Makefile.am b/src/plugins/publish/Makefile.am
+index 83ebfcd..6e3bf2d 100644
+--- a/src/plugins/publish/Makefile.am
++++ b/src/plugins/publish/Makefile.am
+@@ -34,7 +34,6 @@ libpublish_la_CFLAGS = \
+ 	$(WARN_CFLAGS)		\
+ 	$(DBUS_CFLAGS)		\
+ 	$(LIBEPC_CFLAGS)	\
+-	$(UNIQUE_CFLAGS)	\
+ 	$(AM_CFLAGS)		\
+ 	-I$(top_srcdir)/	\
+ 	-I$(top_srcdir)/lib	\
+diff --git a/src/totem-options.c b/src/totem-options.c
+index dcc3d98..38387ab 100644
+--- a/src/totem-options.c
++++ b/src/totem-options.c
+@@ -22,6 +22,7 @@
+ 
+ #include "config.h"
+ 
++#include <glib.h>
+ #include <glib/gi18n.h>
+ #include <string.h>
+ #include <stdlib.h>
+@@ -90,9 +91,8 @@ totem_options_register_remote_commands (Totem *totem)
+ 
+ 	klass = (GEnumClass *) g_type_class_ref (TOTEM_TYPE_REMOTE_COMMAND);
+ 	for (i = TOTEM_REMOTE_COMMAND_UNKNOWN + 1; i < klass->n_values; i++) {
+-		GEnumValue *val;
+-		val = g_enum_get_value (klass, i);
+-		unique_app_add_command (totem->app, val->value_name, i);
++		GEnumValue *val = g_enum_get_value (klass, i);
++		g_application_add_action (G_APPLICATION (totem->app), val->value_name, val->value_nick);
+ 	}
+ 	g_type_class_unref (klass);
+ }
+@@ -110,19 +110,41 @@ totem_options_process_early (Totem *totem, const TotemCmdLineOptions* options)
+ 			       options->debug, NULL);
+ }
+ 
++static char *
++totem_get_action_for_command (const TotemRemoteCommand command)
++{
++	GEnumClass *klass;
++	char *name;
++
++	klass = g_type_class_ref (TOTEM_TYPE_REMOTE_COMMAND);
++	name = g_strdup (g_enum_get_value (klass, command)->value_name);
++	g_type_class_unref (klass);
++
++	return name;
++}
++
++#define UPDATE_ACTION(action, command)                                  \
++	do {                                                            \
++		g_free ((action));                                      \
++		(action) = totem_get_action_for_command ((command));    \
++	} while (0)
++
+ void
+-totem_options_process_for_server (UniqueApp *app,
++totem_options_process_for_server (GApplication *app,
+ 				  const TotemCmdLineOptions* options)
+ {
++	gchar *action = NULL;
+ 	GList *commands, *l;
+-	int default_action, i;
++	int i;
+ 
+ 	commands = NULL;
+-	default_action = TOTEM_REMOTE_COMMAND_REPLACE;
++	UPDATE_ACTION (action, TOTEM_REMOTE_COMMAND_REPLACE);
+ 
+ 	/* Are we quitting ? */
+ 	if (options->quit) {
+-		unique_app_send_message (app, TOTEM_REMOTE_COMMAND_QUIT, NULL);
++		g_application_invoke_action (G_APPLICATION (app),
++					     totem_get_action_for_command (TOTEM_REMOTE_COMMAND_QUIT),
++					     NULL);
+ 		return;
+ 	}
+ 
+@@ -131,101 +153,113 @@ totem_options_process_for_server (UniqueApp *app,
+ 		/* FIXME translate that */
+ 		g_warning ("Can't enqueue and replace at the same time");
+ 	} else if (options->replace) {
+-		default_action = TOTEM_REMOTE_COMMAND_REPLACE;
++		UPDATE_ACTION (action, TOTEM_REMOTE_COMMAND_REPLACE);
+ 	} else if (options->enqueue) {
+-		default_action = TOTEM_REMOTE_COMMAND_ENQUEUE;
++		UPDATE_ACTION (action, TOTEM_REMOTE_COMMAND_ENQUEUE);
+ 	}
+ 
+ 	/* Send the files to enqueue */
+ 	for (i = 0; options->filenames && options->filenames[i] != NULL; i++) {
+-		UniqueMessageData *data;
++		GVariant *data;
+ 		char *full_path;
++		GVariantBuilder builder;
+ 
+-		data = unique_message_data_new ();
+-		full_path = totem_create_full_path (options->filenames[i]);
+-		unique_message_data_set_text (data, full_path ? full_path : options->filenames[i], -1);
+ 		full_path = totem_create_full_path (options->filenames[i]);
+ 
+-		unique_app_send_message (app, default_action, data);
++		g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{sv}"));
++		g_variant_builder_add (&builder, "{sv}",
++				       "url", g_variant_new_string (full_path ? full_path : options->filenames[i]));
++		data = g_variant_builder_end (&builder);
++
++		g_application_invoke_action (G_APPLICATION (app), action, data);
++
++		g_free (full_path);
++		g_variant_unref (data);
+ 
+ 		/* Even if the default action is replace, we only want to replace with the
+ 		   first file.  After that, we enqueue. */
+-		default_action = TOTEM_REMOTE_COMMAND_ENQUEUE;
+-		unique_message_data_free (data);
+-		g_free (full_path);
++		if (i == 0) {
++			UPDATE_ACTION (action, TOTEM_REMOTE_COMMAND_ENQUEUE);
++		}
+ 	}
+ 
+ 	if (options->playpause) {
+-		commands = g_list_append (commands, GINT_TO_POINTER
++		commands = g_list_append (commands, totem_get_action_for_command
+ 					  (TOTEM_REMOTE_COMMAND_PLAYPAUSE));
+ 	}
+ 
+ 	if (options->play) {
+-		commands = g_list_append (commands, GINT_TO_POINTER
++		commands = g_list_append (commands, totem_get_action_for_command
+ 					  (TOTEM_REMOTE_COMMAND_PLAY));
+ 	}
+ 
+ 	if (options->pause) {
+-		commands = g_list_append (commands, GINT_TO_POINTER
++		commands = g_list_append (commands, totem_get_action_for_command
+ 					  (TOTEM_REMOTE_COMMAND_PAUSE));
+ 	}
+ 
+ 	if (options->next) {
+-		commands = g_list_append (commands, GINT_TO_POINTER
++		commands = g_list_append (commands, totem_get_action_for_command
+ 					  (TOTEM_REMOTE_COMMAND_NEXT));
+ 	}
+ 
+ 	if (options->previous) {
+-		commands = g_list_append (commands, GINT_TO_POINTER
++		commands = g_list_append (commands, totem_get_action_for_command
+ 					  (TOTEM_REMOTE_COMMAND_PREVIOUS));
+ 	}
+ 
+ 	if (options->seekfwd) {
+-		commands = g_list_append (commands, GINT_TO_POINTER
++		commands = g_list_append (commands, totem_get_action_for_command
+ 					  (TOTEM_REMOTE_COMMAND_SEEK_FORWARD));
+ 	}
+ 
+ 	if (options->seekbwd) {
+-		commands = g_list_append (commands, GINT_TO_POINTER
++		commands = g_list_append (commands, totem_get_action_for_command
+ 					  (TOTEM_REMOTE_COMMAND_SEEK_BACKWARD));
+ 	}
+ 
+ 	if (options->volumeup) {
+-		commands = g_list_append (commands, GINT_TO_POINTER
++		commands = g_list_append (commands, totem_get_action_for_command
+ 					  (TOTEM_REMOTE_COMMAND_VOLUME_UP));
+ 	}
+ 
+ 	if (options->volumedown) {
+-		commands = g_list_append (commands, GINT_TO_POINTER
++		commands = g_list_append (commands, totem_get_action_for_command
+ 					  (TOTEM_REMOTE_COMMAND_VOLUME_DOWN));
+ 	}
+ 
+ 	if (options->mute) {
+-		commands = g_list_append (commands, GINT_TO_POINTER
++		commands = g_list_append (commands, totem_get_action_for_command
+ 					  (TOTEM_REMOTE_COMMAND_MUTE));
+ 	}
+ 
+ 	if (options->fullscreen) {
+-		commands = g_list_append (commands, GINT_TO_POINTER
++		commands = g_list_append (commands, totem_get_action_for_command
+ 					  (TOTEM_REMOTE_COMMAND_FULLSCREEN));
+ 	}
+ 
+ 	if (options->togglecontrols) {
+-		commands = g_list_append (commands, GINT_TO_POINTER
++		commands = g_list_append (commands, totem_get_action_for_command
+ 					  (TOTEM_REMOTE_COMMAND_TOGGLE_CONTROLS));
+ 	}
+ 
+ 	/* No commands, no files, show ourselves */
+ 	if (commands == NULL && options->filenames == NULL) {
+-		unique_app_send_message (app, TOTEM_REMOTE_COMMAND_SHOW, NULL);
++		g_application_invoke_action (G_APPLICATION (app),
++					     totem_get_action_for_command (TOTEM_REMOTE_COMMAND_SHOW),
++					     NULL);
+ 		return;
+ 	}
+ 
+ 	/* Send commands */
+ 	for (l = commands; l != NULL; l = l->next) {
+-		int command = GPOINTER_TO_INT (l->data);
+-		unique_app_send_message (app, command, NULL);
++		g_application_invoke_action (G_APPLICATION (app), l->data, NULL);
+ 	}
++
++	g_free (action);
++	g_list_foreach (commands, (GFunc) g_free, NULL);
+ 	g_list_free (commands);
+ }
+ 
++#undef UPDATE_ACTION
++
+diff --git a/src/totem-options.h b/src/totem-options.h
+index 185eec9..d178134 100644
+--- a/src/totem-options.h
++++ b/src/totem-options.h
+@@ -24,7 +24,7 @@
+ #define TOTEM_OPTIONS_H
+ 
+ #include <gconf/gconf-client.h>
+-#include <unique/uniqueapp.h>
++#include <gtk/gtk.h>
+ 
+ #include "totem.h"
+ 
+@@ -62,7 +62,7 @@ void totem_options_process_early (Totem *totem,
+ 				  const TotemCmdLineOptions* options);
+ void totem_options_process_late (Totem *totem, 
+ 				 const TotemCmdLineOptions* options);
+-void totem_options_process_for_server (UniqueApp *app,
++void totem_options_process_for_server (GApplication *app,
+ 				       const TotemCmdLineOptions* options);
+ 
+ G_END_DECLS
+diff --git a/src/totem-private.h b/src/totem-private.h
+index 660c53f..8caef97 100644
+--- a/src/totem-private.h
++++ b/src/totem-private.h
+@@ -31,7 +31,6 @@
+ #include <gconf/gconf-client.h>
+ #include <gtk/gtk.h>
+ #include <gio/gio.h>
+-#include <unique/uniqueapp.h>
+ 
+ #include "totem-playlist.h"
+ #include "bacon-video-widget.h"
+@@ -160,7 +159,7 @@ struct _TotemObject {
+ 	gint64 seek_to;
+ 	TotemPlaylist *playlist;
+ 	GConfClient *gc;
+-	UniqueApp *app;
++	GApplication *app;
+ 	TotemStates state;
+ 	TotemOpenLocation *open_location;
+ 	gboolean remember_position;
+diff --git a/src/totem.c b/src/totem.c
+index 77f56e2..2e059da 100644
+--- a/src/totem.c
++++ b/src/totem.c
+@@ -28,6 +28,7 @@
+ 
+ #include "config.h"
+ 
++#include <glib.h>
+ #include <glib-object.h>
+ #include <glib/gi18n.h>
+ #include <gtk/gtk.h>
+@@ -57,25 +58,38 @@ long_action (void)
+ 		gtk_main_iteration ();
+ }
+ 
+-static UniqueResponse
+-totem_message_received_cb (UniqueApp         *app,
+-			   int                command,
+-			   UniqueMessageData *message_data,
+-			   guint              time_,
+-			   Totem             *totem)
++static void
++totem_action_handler (GApplication      *app,
++		      gchar             *name,
++		      GVariant          *platform_data,
++		      gpointer           user_data)
+ {
+-	char *url;
++	GEnumClass *klass;
++	GEnumValue *value;
++	const gchar *url = NULL;
++	TotemRemoteCommand command;
++
++	/* GApplication requires the platform_data to be of type a{sv}. */
++	if (platform_data) {
++		GVariantIter iter;
++		GVariant *value;
++		gchar *key;
++
++		g_variant_iter_init (&iter, platform_data);
++		if (g_variant_iter_next (&iter, "{sv}", &key, &value))
++			url = g_variant_get_string (value, NULL);
++	}
+ 
+-	if (message_data != NULL)
+-		url = unique_message_data_get_text (message_data);
+-	else
+-		url = NULL;
++	klass = g_type_class_ref (TOTEM_TYPE_REMOTE_COMMAND);
+ 
+-	totem_action_remote (totem, command, url);
++	value = g_enum_get_value_by_name (klass, name);
++	if (! value)
++		return;
++	command = value->value;
+ 
+-	g_free (url);
++	g_type_class_unref (klass);
+ 
+-	return UNIQUE_RESPONSE_OK;
++	totem_action_remote (TOTEM_OBJECT (user_data), command, url);
+ }
+ 
+ static void
+@@ -130,6 +144,26 @@ debug_handler (const char *log_domain,
+ 		g_log_default_handler (log_domain, log_level, message, NULL);
+ }
+ 
++static GVariant *
++variant_from_argv (int    argc,
++		   char **argv)
++{
++	GVariantBuilder builder;
++	int i;
++
++	g_variant_builder_init (&builder, G_VARIANT_TYPE("aay"));
++
++	for (i = 1; i < argc; i++) {
++		guint8 *argv_bytes;
++
++		argv_bytes = (guint8 *) argv[i];
++		g_variant_builder_add_value (&builder,
++					     g_variant_new_byte_array (argv_bytes, -1));
++	}
++
++	return g_variant_builder_end (&builder);
++}
++
+ int
+ main (int argc, char **argv)
+ {
+@@ -185,9 +219,9 @@ main (int argc, char **argv)
+ 	g_object_set (G_OBJECT (settings), "gtk-application-prefer-dark-theme", TRUE, NULL);
+ 
+ 	gc = gconf_client_get_default ();
+-	if (gc == NULL)
+-	{
+-		totem_action_error_and_exit (_("Totem could not initialize the configuration engine."), _("Make sure that GNOME is properly installed."), NULL);
++	if (gc == NULL) {
++		totem_action_error_and_exit (_("Totem could not initialize the configuration engine."),
++					     _("Make sure that GNOME is properly installed."), NULL);
+ 	}
+ 
+ 	/* Debug log handling */
+@@ -199,13 +233,23 @@ main (int argc, char **argv)
+ 
+ 	/* IPC stuff */
+ 	if (optionstate.notconnectexistingsession == FALSE) {
+-		totem->app = unique_app_new ("org.gnome.Totem", NULL);
+-		totem_options_register_remote_commands (totem);
+-		if (unique_app_is_running (totem->app) != FALSE) {
+-			totem_options_process_for_server (totem->app, &optionstate);
++		GError *error = NULL;
++
++		/* FIXME should be GtkApplication */
++		totem->app = g_initable_new (G_TYPE_APPLICATION,
++					     NULL,
++					     &error,
++					     "application-id", "org.gnome.Totem",
++					     "argv", variant_from_argv (argc, argv),
++					     "default-quit", FALSE,
++					     NULL);
++
++		if (g_application_is_remote (G_APPLICATION (totem->app))) {
++			totem_options_process_for_server (G_APPLICATION (totem->app), &optionstate);
+ 			gdk_notify_startup_complete ();
+ 			totem_action_exit (totem);
+ 		} else {
++			totem_options_register_remote_commands (totem);
+ 			totem_options_process_early (totem, &optionstate);
+ 		}
+ 	} else {
+@@ -218,6 +262,8 @@ main (int argc, char **argv)
+ 		totem_action_exit (NULL);
+ 
+ 	totem->win = GTK_WIDGET (gtk_builder_get_object (totem->xml, "totem_main_window"));
++	/* FIXME should be enabled
++	gtk_application_add_window (totem->app, GTK_WINDOW (totem->win)); */
+ 
+ 	/* Menubar */
+ 	totem_ui_manager_setup (totem);
+@@ -296,8 +342,8 @@ main (int argc, char **argv)
+ 		gdk_window_set_cursor (gtk_widget_get_window (totem->win), NULL);
+ 
+ 	if (totem->app != NULL) {
+-		g_signal_connect (totem->app, "message-received",
+-				  G_CALLBACK (totem_message_received_cb), totem);
++		g_signal_connect (G_APPLICATION (totem->app), "action-with-data",
++				  G_CALLBACK (totem_action_handler), totem);
+ 	}
+ 
+ 	gtk_main ();
+--
+cgit v0.8.3.1
