@@ -79,6 +79,15 @@ gnome2_src_configure() {
 
 gnome2_src_compile() {
 	has ${EAPI:-0} 0 1 && gnome2_src_configure "$@"
+
+	# Whenever new API is added to glib/cairo/libxml2 etc, gobject-introspection
+	# needs to be rebuilt so that the typelibs/girs contain the new API data
+	if has introspection ${IUSE} && use introspection; then
+		ewarn "If you get a compilation failure related to introspection, try"
+		ewarn "rebuilding dev-libs/gobject-introspection so that it's updated"
+		ewarn "for any new glib, cairo, etc APIs"
+	fi
+
 	emake || die "compile failure"
 }
 
