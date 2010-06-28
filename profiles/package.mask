@@ -16,6 +16,7 @@
 =app-cdr/brasero-2.31*
 =app-text/evince-2.31*
 =dev-libs/glib-2.25*
+dev-libs/libpeas
 =gnome-base/gconf-2.31*
 =gnome-base/gnome-session-2.31*
 =gnome-base/gnome-settings-daemon-2.31*
