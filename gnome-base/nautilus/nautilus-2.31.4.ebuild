@@ -16,14 +16,13 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~
 IUSE="doc gnome introspection xmp"
 
 RDEPEND=">=dev-libs/glib-2.25.9
-	>=gnome-base/gnome-desktop-2.29.91
+	gnome-base/gnome-desktop:3
 	>=x11-libs/pango-1.1.2
-	>=x11-libs/gtk+-2.20.0
+	>=x11-libs/gtk+-2.90.2:3[introspection?]
 	>=dev-libs/libxml2-2.4.7
 	>=media-libs/libexif-0.5.12
-	>=gnome-base/gconf-2.0
-	dev-libs/libunique
-	x11-libs/libXft
+	>=gnome-base/gconf-2.0[introspection?]
+	x11-libs/libXext
 	x11-libs/libXrender
 	introspection? ( >=dev-libs/gobject-introspection-0.6.4 )
 	xmp? ( >=media-libs/exempi-2 )"
@@ -69,8 +68,6 @@ src_prepare() {
 
 	# Fix nautilus flipping-out with --no-desktop -- bug 266398
 	epatch "${FILESDIR}/${PN}-2.27.4-change-reg-desktop-file-with-no-desktop.patch"
-
-	epatch "${FILESDIR}"/${P}-glib-api-change.patch
 }
 
 src_test() {
