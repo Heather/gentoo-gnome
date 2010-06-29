@@ -13,15 +13,11 @@ inherit games games-ggz eutils gnome2 python virtualx
 DESCRIPTION="Collection of games for the GNOME desktop"
 HOMEPAGE="http://live.gnome.org/GnomeGames/"
 
-LICENSE="GPL-2 FDL-1.1"
+LICENSE="GPL-2 GPL-3 FDL-1.1"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="artworkextra guile opengl sound test" # introspection
+IUSE="artworkextra +clutter guile +introspection opengl sound test"
 
-# Introspection support needs
-#	media-libs/clutter
-#	>=dev-libs/gobject-introspection 0.6.3
-# and generates GnomeGames...gir
 RDEPEND="
 	>=dev-games/libggz-0.0.14
 	>=dev-games/ggz-client-libs-0.0.14
@@ -32,10 +28,10 @@ RDEPEND="
 	>=dev-python/pygobject-2
 	>=dev-python/pygtk-2.14
 	>=dev-python/pycairo-1
-	>=gnome-base/gconf-2.31.1
+	>=gnome-base/gconf-2.31.1[introspection?]
 	>=gnome-base/librsvg-2.14
 	>=x11-libs/cairo-1
-	>=x11-libs/gtk+-2.16:2
+	>=x11-libs/gtk+-2.16:2[introspection?]
 	x11-libs/libSM
 
 	sound? ( media-libs/libcanberra[gtk] )
@@ -44,6 +40,9 @@ RDEPEND="
 	opengl? (
 		dev-python/pygtkglext
 		>=dev-python/pyopengl-3 )
+	clutter? ( >=media-libs/clutter-1.0[gtk,introspection?]
+		>=media-libs/clutter-gtk-0.10[introspection?] )
+	introspection? ( >=dev-libs/gobject-introspection-0.6.3 )
 	!games-board/glchess"
 
 DEPEND="${RDEPEND}
@@ -71,27 +70,25 @@ pkg_setup() {
 	# create the games user / group
 	games_pkg_setup
 
-	# Needs "seed", which needs gobject-introspection, libffi, etc.
-	#$(use_enable clutter)
-	#$(use_enable clutter staging)
-	#$(use_enable introspection)
 	G2CONF="${G2CONF}
 		$(use_enable sound)
-		--disable-introspection
-		--disable-card-themes-installer
+		$(use_enable introspection)
 		--with-scores-group=${GAMES_GROUP}
 		--with-platform=gnome
 		--with-card-theme-formats=all
 		--with-smclient
+		--with-gtk=2.0
 		--enable-omitgames=none" # This line should be last for _omitgame
 
-	# Needs clutter, always disable till we can have that
-	#if ! use clutter; then
+	# Needs seed, always disable till we can have that
+	_omitgame swell-foop
+	_omitgame lightsoff
+
+	if ! use clutter; then
+		ewarn "USE='-clutter' implies that quadrapassel and gnibbles won't be installed"
 		_omitgame quadrapassel
-		_omitgame lightsoff
-		_omitgame swell-foop
 		_omitgame gnibbles
-	#fi
+	fi
 
 	if ! use guile; then
 		ewarn "USE='-guile' implies that Aisleriot won't be installed"
@@ -110,9 +107,6 @@ src_prepare() {
 	# disable pyc compiling
 	mv py-compile py-compile.orig
 	ln -s $(type -P true) py-compile
-
-	# Fix bug #281718 -- *** glibc detected *** gtali: free(): invalid pointer
-	epatch "${FILESDIR}/${PN}-2.26.3-gtali-invalid-pointer.patch"
 }
 
 src_test() {
