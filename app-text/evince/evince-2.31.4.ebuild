@@ -1,10 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-text/evince/evince-2.30.1-r1.ebuild,v 1.1 2010/06/13 19:37:22 pacho Exp $
+# $Header: $
 
 EAPI="2"
 
-inherit eutils autotools gnome2
+inherit eutils gnome2
 
 DESCRIPTION="Simple document viewer for GNOME"
 HOMEPAGE="http://www.gnome.org/projects/evince/"
@@ -13,28 +13,27 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~x64-solaris"
 
-IUSE="dbus debug djvu doc dvi gnome gnome-keyring nautilus t1lib tiff"
-# tests introspection
+IUSE="dbus debug djvu doc dvi gnome gnome-keyring +introspection nautilus t1lib tiff"
 
 # Since 2.26.2, can handle poppler without cairo support. Make it optional ?
 # not mature enough
-#	introspection? ( >=dev-libs/gobject-introspection-0.6 )
 RDEPEND="
 	>=app-text/libspectre-0.2.0
 	>=dev-libs/glib-2.25.9
 	>=dev-libs/libxml2-2.5
-	>=x11-libs/gtk+-2.21.2:2
+	>=x11-libs/gtk+-2.21.2:2[introspection?]
 	>=x11-libs/libSM-1
 	>=x11-themes/gnome-icon-theme-2.17.1
-	gnome? ( >=gnome-base/gconf-2 )
+	gnome? ( >=gnome-base/gconf-2[introspection?] )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-2.22.0 )
-	nautilus? ( >=gnome-base/nautilus-2.10 )
-	>=app-text/poppler-0.12.3-r3[cairo]
+	nautilus? ( >=gnome-base/nautilus-2.10[introspection?] )
+	>=app-text/poppler-0.14[cairo]
 	dvi? (
 		virtual/tex-base
 		t1lib? ( >=media-libs/t1lib-5.0.0 ) )
 	tiff? ( >=media-libs/tiff-3.6 )
-	djvu? ( >=app-text/djvu-3.5.17 )"
+	djvu? ( >=app-text/djvu-3.5.17 )
+	introspection? ( >=dev-libs/gobject-introspection-0.6 )"
 DEPEND="${RDEPEND}
 	app-text/scrollkeeper
 	>=app-text/gnome-doc-utils-0.3.2
@@ -54,7 +53,6 @@ RESTRICT="test"
 
 pkg_setup() {
 	G2CONF="${G2CONF}
-		--disable-introspection
 		--disable-scrollkeeper
 		--disable-static
 		--disable-tests
@@ -71,8 +69,8 @@ pkg_setup() {
 		$(use_with gnome-keyring keyring)
 		$(use_enable t1lib)
 		$(use_enable tiff)
-		$(use_enable nautilus)"
-#		$(use_enable introspection)
+		$(use_enable nautilus)
+		$(use_enable introspection)"
 }
 
 src_prepare() {
@@ -81,13 +79,7 @@ src_prepare() {
 	# Fix .desktop file so menu item shows up
 	epatch "${FILESDIR}"/${PN}-0.7.1-display-menu.patch
 
-	# Remove in 2.31.4 (upstreamed)
-	epatch "${FILESDIR}"/${P}-fix-impress.patch
-	epatch "${FILESDIR}"/${P}-gdk-api-change.patch
-	epatch "${FILESDIR}"/${P}-glib-api-change.patch
-	epatch "${FILESDIR}"/${P}-glib-api-change-2.patch
-
-	eautoreconf
+	epatch "${FILESDIR}"/${P}-pdf-build-fix.patch
 }
 
 src_install() {
