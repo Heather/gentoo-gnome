@@ -133,8 +133,8 @@ src_install() {
 
 	dodoc AUTHORS ChangeLog* HACKING NEWS* README* || die "dodoc failed"
 
-	# Remove unneeded *.la files for modules
-	find "${D}"usr/$(get_libdir)/gtk-3.0 -name "*.la" -delete
+	# Remove unneeded *.la files
+	find "${D}" -name "*.la" -delete
 
 	# add -framework Carbon to the .pc files
 	use aqua && for i in gtk+-3.0.pc gtk+-quartz-3.0.pc gtk+-unix-print-3.0.pc; do
