@@ -13,11 +13,11 @@ HOMEPAGE="http://www.gnome.org/projects/brasero"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86"
-IUSE="beagle +cdr +css doc +libburn nautilus playlist test"
+IUSE="beagle +cdr +css doc +introspection +libburn nautilus playlist test"
 
-COMMON_DEPEND=">=dev-libs/glib-2.22
-	>=x11-libs/gtk+-2.19.7:2
-	>=gnome-base/gconf-2
+COMMON_DEPEND=">=dev-libs/glib-2.25
+	>=x11-libs/gtk+-2.19.7:2[introspection?]
+	>=gnome-base/gconf-2.31.1[introspection?]
 	>=media-libs/gstreamer-0.10.15
 	>=media-libs/gst-plugins-base-0.10
 	>=dev-libs/libxml2-2.6
@@ -26,10 +26,11 @@ COMMON_DEPEND=">=dev-libs/glib-2.22
 	media-libs/libcanberra[gtk]
 	x11-libs/libSM
 	beagle? ( >=dev-libs/libbeagle-0.3 )
+	introspection? ( >=dev-libs/gobject-introspection-0.6.3 )
 	libburn? (
 		>=dev-libs/libburn-0.4
 		>=dev-libs/libisofs-0.6.4 )
-	nautilus? ( >=gnome-base/nautilus-2.22.2 )
+	nautilus? ( >=gnome-base/nautilus-2.22.2[introspection?] )
 	playlist? ( >=dev-libs/totem-pl-parser-2.29.1 )"
 RDEPEND="${COMMON_DEPEND}
 	app-cdr/cdrdao
@@ -52,14 +53,13 @@ PDEPEND="gnome-base/gvfs"
 
 pkg_setup() {
 	G2CONF="${G2CONF}
-		--disable-introspection
-		--disable-schemas-install
 		--disable-scrollkeeper
 		--disable-caches
 		--disable-dependency-tracking
 		$(use_enable beagle search beagle)
 		$(use_enable cdr cdrtools)
 		$(use_enable cdr cdrkit)
+		$(use_enable introspection)
 		$(use_enable libburn libburnia)
 		$(use_enable nautilus)
 		$(use_enable playlist)"
