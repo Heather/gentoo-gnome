@@ -18,7 +18,7 @@
 =dev-libs/glib-2.25*
 dev-libs/libpeas
 =gnome-base/gconf-2.31*
-=gnome-base/gnome-desktop-2.31*:0
+=gnome-base/gnome-desktop-2.31*
 gnome-base/gnome-desktop:3
 =gnome-base/gnome-keyring-2.31*
 =gnome-base/gnome-session-2.31*
