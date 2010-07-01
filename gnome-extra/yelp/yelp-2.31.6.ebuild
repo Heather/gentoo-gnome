@@ -16,7 +16,7 @@ IUSE="lzma"
 
 RDEPEND="
 	>=x11-libs/gtk+-2.18
-	>=dev-libs/glib-2.25.3
+	>=dev-libs/glib-2.25.10
 	>=dev-libs/libxml2-2.6.5
 	>=dev-libs/libxslt-1.1.4
 	>=dev-libs/dbus-glib-0.71

@@ -1,0 +1,22 @@
+From cc687827d8ba4b8bae369d0a7861d7fb9a2ece6a Mon Sep 17 00:00:00 2001
+From: Matthias Clasen <mclasen@redhat.com>
+Date: Wed, 30 Jun 2010 13:43:56 +0000
+Subject: Adapt to recent glib api changes
+
+g_keyfile_settings_backend_new now takes 3 arguments, see bug 623154
+---
+diff --git a/src/yelp-application.c b/src/yelp-application.c
+index 9fcba5d..3c8436d 100644
+--- a/src/yelp-application.c
++++ b/src/yelp-application.c
+@@ -224,7 +224,7 @@ application_setup (YelpApplication *app)
+         gchar *keyfile = g_build_filename (g_get_user_config_dir (),
+                                            "yelp", "yelp.cfg",
+                                            NULL);
+-        priv->backend = g_keyfile_settings_backend_new (keyfile);
++        priv->backend = g_keyfile_settings_backend_new (keyfile, "/org/gnome/yelp", NULL);
+         priv->gsettings = g_settings_new_with_backend ("org.gnome.yelp",
+                                                        priv->backend);
+         g_free (keyfile);
+--
+cgit v0.8.3.1
