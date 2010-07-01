@@ -21,7 +21,7 @@ RDEPEND="
 	>=dev-libs/libxslt-1.1.4
 	>=dev-libs/dbus-glib-0.71
 	>=gnome-extra/yelp-xsl-2.31.3
-	>=net-libs/webkit-gtk-1.1.5
+	>=net-libs/webkit-gtk-1.3.1
 	app-arch/bzip2
 	lzma? ( >=app-arch/xz-utils-4.9 )"
 DEPEND="${RDEPEND}
