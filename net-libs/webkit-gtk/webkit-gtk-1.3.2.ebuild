@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/webkit-gtk/webkit-gtk-1.2.1.ebuild,v 1.3 2010/06/13 22:12:27 pacho Exp $
+# $Header: $
 
 EAPI="2"
 
@@ -16,7 +16,7 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-macos"
 # geoclue
 # introspection requires libsoup's gir
-IUSE="coverage debug doc +gstreamer +websockets" # aqua
+IUSE="coverage debug doc +gstreamer" # aqua
 
 # use sqlite, svg by default
 # dependency on >=x11-libs/gtk+-2.13 for gail
@@ -86,8 +86,7 @@ src_configure() {
 		--disable-introspection
 		$(use_enable coverage)
 		$(use_enable debug)
-		$(use_enable gstreamer video)
-		$(use_enable websockets web_sockets)"
+		$(use_enable gstreamer video)"
 		# quartz patch above does not apply anymore
 		#$(use aqua && echo "--with-target=quartz")"
 
