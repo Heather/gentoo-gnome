@@ -24,6 +24,7 @@ gnome-base/gnome-desktop:3
 =gnome-base/gnome-session-2.31*
 =gnome-base/gnome-settings-daemon-2.31*
 gnome-base/gnome-shell
+=gnome-base/libgnomekbd-2.31*
 =gnome-base/librsvg-2.31*
 =gnome-base/nautilus-2.31*
 =gnome-base/libgnomekbd-2.31*
