@@ -4,7 +4,7 @@
 
 EAPI="3"
 
-inherit gnome.org flag-o-matic multilib libtool virtualx
+inherit gnome.org flag-o-matic multilib libtool autotools virtualx
 
 DESCRIPTION="Image loading library for GTK+"
 HOMEPAGE="http://www.gtk.org/"
@@ -12,7 +12,7 @@ HOMEPAGE="http://www.gtk.org/"
 LICENSE="LGPL-2"
 SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
-IUSE="debug doc +introspection jpeg jpeg2k tiff test"
+IUSE="+X debug doc +introspection jpeg jpeg2k tiff test"
 
 RDEPEND="
 	>=dev-libs/glib-2.25.9
@@ -20,6 +20,7 @@ RDEPEND="
 	jpeg? ( >=media-libs/jpeg-6b-r9:0 )
 	jpeg2k? ( media-libs/jasper )
 	tiff? ( >=media-libs/tiff-3.9.2 )
+	X? ( x11-libs/libX11 )
 	!<gnome-base/gail-1000
 	!<x11-libs/gtk+-2.21.3:2
 	!<x11-libs/gtk+-2.90.4:3"
@@ -36,9 +37,14 @@ DEPEND="${RDEPEND}
 	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )"
 
 src_prepare() {
+	# From upstream, adds some APIs used by "older" programs
 	epatch "${FILESDIR}"/${P}-readd-deprecated-apis.patch
 
+	# Only build against libX11 if the user wants to do so
+	epatch "${FILESDIR}"/${P}-fix-automagic-x11.patch
+
 	elibtoolize
+	eautoreconf
 }
 
 src_configure() {
@@ -61,6 +67,7 @@ src_configure() {
 		$(use_with jpeg2k libjasper)
 		$(use_with tiff libtiff)
 		$(use_enable introspection)
+		$(use_with X x11)
 		--with-libpng"
 
 	# Passing --disable-debug is not recommended for production use

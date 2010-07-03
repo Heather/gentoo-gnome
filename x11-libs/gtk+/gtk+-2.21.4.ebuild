@@ -27,9 +27,11 @@ RDEPEND="!aqua? (
 		x11-libs/libXcomposite
 		x11-libs/libXdamage
 		>=x11-libs/cairo-1.6[X,svg]
+		x11-libs/gdk-pixbuf[X,introspection?,jpeg?,jpeg2k?,tiff?]
 	)
 	aqua? (
 		>=x11-libs/cairo-1.6[aqua,svg]
+		x11-libs/gdk-pixbuf[introspection?,jpeg?,jpeg2k?,tiff?]
 	)
 	xinerama? ( x11-libs/libXinerama )
 	>=dev-libs/glib-2.25.8
@@ -37,7 +39,6 @@ RDEPEND="!aqua? (
 	>=dev-libs/atk-1.29.2[introspection?]
 	media-libs/fontconfig
 	x11-misc/shared-mime-info
-	x11-libs/gdk-pixbuf[introspection?,jpeg?,jpeg2k?,tiff?]
 	cups? ( net-print/cups )
 	!<gnome-base/gail-1000"
 DEPEND="${RDEPEND}
