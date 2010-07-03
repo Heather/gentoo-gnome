@@ -36,6 +36,12 @@ DEPEND="${RDEPEND}
 	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )"
 
 src_prepare() {
+	epatch "${FILESDIR}"/${P}-readd-deprecated-apis.patch
+
+	elibtoolize
+}
+
+src_configure() {
 	# -O3 and company cause random crashes in applications. Bug #133469
 	replace-flags -O3 -O2
 	strip-flags
@@ -48,10 +54,6 @@ src_prepare() {
 		append-ldflags "-L${EPREFIX}/usr/lib/bind"
 	fi
 
-	elibtoolize
-}
-
-src_configure() {
 	# png always on to display icons (foser)
 	local myconf="
 		$(use_enable doc gtk-doc)
