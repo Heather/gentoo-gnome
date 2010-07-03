@@ -38,8 +38,8 @@ pkg_setup() {
 		$(use_enable lzma)"
 }
 
-src_configure() {
+src_prepare() {
 	epatch "${FILESDIR}"/${P}-gsettings-api-change.patch
 
-	gnome2_src_configure
+	gnome2_src_prepare
 }
