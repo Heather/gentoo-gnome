@@ -1,0 +1,11 @@
+--- yelp-2.31.6.orig/src/yelp-application.c
++++ yelp-2.31.6/src/yelp-application.c
+@@ -574,7 +574,7 @@ application_get_doc_settings (YelpApplic
+                                                              priv->backend,
+                                                              settings_path);
+         else
+-            settings = g_settings_new_with_path ("org.gnome.yelp.document",
++            settings = g_settings_new_with_path ("org.gnome.yelp.documents",
+                                                  settings_path);
+         g_hash_table_insert (priv->docsettings, g_strdup (doc_uri), settings);
+         g_free (settings_path);

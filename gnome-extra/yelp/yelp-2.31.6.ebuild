@@ -40,6 +40,9 @@ pkg_setup() {
 
 src_prepare() {
 	epatch "${FILESDIR}"/${P}-gsettings-api-change.patch
+	epatch "${FILESDIR}"/${P}-fix-broken-keyfile-setup.patch
+
+	epatch "${FILESDIR}"/${P}-fix-gsettings-path.patch
 
 	gnome2_src_prepare
 }
