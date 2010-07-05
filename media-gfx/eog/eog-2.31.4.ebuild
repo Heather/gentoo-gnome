@@ -3,7 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/media-gfx/eog/eog-2.30.1.ebuild,v 1.2 2010/06/21 11:48:28 ssuominen Exp $
 
 EAPI=2
-inherit eutils gnome2 autotools
+inherit gnome2
 
 DESCRIPTION="The Eye of GNOME image viewer"
 HOMEPAGE="http://www.gnome.org/projects/eog/"
@@ -14,10 +14,10 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="dbus doc exif jpeg lcms python svg tiff xmp"
 
 RDEPEND=">=x11-libs/gtk+-2.18:2
-	>=dev-libs/glib-2.25.6
+	>=dev-libs/glib-2.25.9
 	>=dev-libs/libxml2-2
 	>=gnome-base/gconf-2.31.1
-	>=gnome-base/gnome-desktop-2.25.1
+	>=gnome-base/gnome-desktop-2.25.1:0
 	>=x11-themes/gnome-icon-theme-2.19.1
 	>=x11-misc/shared-mime-info-0.20
 	x11-libs/libX11
@@ -57,13 +57,4 @@ pkg_setup() {
 		$(use_with svg librsvg)
 		--disable-scrollkeeper
 		--disable-schemas-install"
-}
-
-src_prepare() {
-	gnome2_src_prepare
-
-	# Fix build without libjpeg, bug #319157
-	epatch "${FILESDIR}/${PN}-2.30.1-libjpeg-configure.patch"
-
-	eautoreconf
 }
