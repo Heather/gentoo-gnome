@@ -14,6 +14,7 @@
 # Mask GTK+ 2.21 / GTK+ 3 / GLib 2.25 / Gnome 2.31
 =app-arch/file-roller-2.31*
 =app-cdr/brasero-2.31*
+=app-editors/gedit-2.31*
 =app-text/evince-2.31*
 =dev-libs/glib-2.25*
 dev-libs/libpeas
