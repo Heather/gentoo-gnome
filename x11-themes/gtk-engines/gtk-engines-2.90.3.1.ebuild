@@ -27,10 +27,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}"/${P}-clearlooks-fix.patch
-	epatch "${FILESDIR}"/${P}-deprecations.patch
-	epatch "${FILESDIR}"/${P}-more-deprecations.patch
-
 	# This has not been submitted upstream yet...
 	epatch "${FILESDIR}"/${P}-gseal-fixes.patch
 

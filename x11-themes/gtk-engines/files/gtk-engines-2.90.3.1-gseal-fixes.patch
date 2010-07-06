@@ -1,0 +1,31 @@
+--- gtk-engines-2.90.3.1.orig/engines/clearlooks/src/animation.h
++++ gtk-engines-2.90.3.1/engines/clearlooks/src/animation.h
+@@ -31,7 +31,11 @@
+ #include <gtk/gtk.h>
+ #include <ge-support.h>
+ 
+-#define CL_IS_PROGRESS_BAR(widget) GE_IS_PROGRESS_BAR(widget) && widget->allocation.x != -1 && widget->allocation.y != -1
++#define CL_IS_PROGRESS_BAR(widget) GE_IS_PROGRESS_BAR(widget) && ({ \
++		GtkAllocation __allocation; \
++		gtk_widget_get_allocation(widget, &__allocation); \
++		__allocation.x != -1 && __allocation.y != -1; \
++	})
+ #define ANIMATION_DELAY 100
+ #define CHECK_ANIMATION_TIME 0.5
+ 
+--- gtk-engines-2.90.3.1.orig/engines/clearlooks/src/clearlooks_style.c
++++ gtk-engines-2.90.3.1/engines/clearlooks/src/clearlooks_style.c
+@@ -760,9 +760,13 @@ clearlooks_style_draw_box (DRAW_ARGS)
+ #ifdef HAVE_WORKING_ANIMATION
+ 		if(clearlooks_style->animation && CL_IS_PROGRESS_BAR (widget))
+ 		{
++#if 0
+ 			gboolean activity_mode = GTK_PROGRESS_BAR (widget)->activity_mode;
+ 
+ 			if (!activity_mode)
++#else
++#warning Assuming not in activity mode because there is currently no way to query it in GTK+ 3.0.
++#endif
+ 				clearlooks_animation_progressbar_add ((gpointer)widget);
+ 		}
+ 
