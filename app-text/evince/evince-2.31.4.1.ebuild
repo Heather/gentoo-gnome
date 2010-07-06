@@ -78,8 +78,6 @@ src_prepare() {
 
 	# Fix .desktop file so menu item shows up
 	epatch "${FILESDIR}"/${PN}-0.7.1-display-menu.patch
-
-	epatch "${FILESDIR}"/${P}-pdf-build-fix.patch
 }
 
 src_install() {
