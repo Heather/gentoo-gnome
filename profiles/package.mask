@@ -40,6 +40,7 @@ gnome-extra/yelp-xsl
 x11-libs/gdk-pixbuf
 =x11-libs/gtk+-2.21*
 x11-libs/gtk+:3
+x11-libs/gtksourceview:3.0
 =x11-themes/gnome-themes-2.31*
 x11-themes/gtk-engines:3
 
