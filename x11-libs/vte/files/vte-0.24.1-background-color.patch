@@ -1,0 +1,22 @@
+From 430dd34fa9532fa492ea512f226e8483d1393716 Mon Sep 17 00:00:00 2001
+From: Behdad Esfahbod <behdad@behdad.org>
+Date: Wed, 26 May 2010 17:09:25 +0000
+Subject: Fix requires_clear setting
+
+Part of Bug 618749 - [PATCH] set terminal widget background color to terminal
+---
+diff --git a/src/vtedraw.c b/src/vtedraw.c
+index c6971e4..7a0c535 100644
+--- a/src/vtedraw.c
++++ b/src/vtedraw.c
+@@ -873,7 +873,7 @@ _vte_draw_set_background_solid(struct _vte_draw *draw,
+ 			       double blue,
+ 			       double opacity)
+ {
+-	draw->requires_clear = opacity != 0xFFFF;
++	draw->requires_clear = opacity != 1;
+ 
+ 	if (draw->bg_pattern)
+ 		cairo_pattern_destroy (draw->bg_pattern);
+--
+cgit v0.8.3.1

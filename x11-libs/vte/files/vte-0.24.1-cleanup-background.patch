@@ -1,0 +1,166 @@
+From 405ed5bb3151940db0f21ff5b8e96bea94770f96 Mon Sep 17 00:00:00 2001
+From: Behdad Esfahbod <behdad@behdad.org>
+Date: Sat, 12 Jun 2010 02:51:49 +0000
+Subject: Clean up background clearing
+
+Fixes bug where lower border of the screen was not properly painted in
+fullscreen mode.
+---
+diff --git a/src/vte.c b/src/vte.c
+index 545ad1b..9c10804 100644
+--- a/src/vte.c
++++ b/src/vte.c
+@@ -10479,33 +10479,6 @@ vte_terminal_paint_area (VteTerminal *terminal, const GdkRectangle *area)
+ 			row * height + terminal->pvt->inner_border.top,
+ 			(col_stop - col) * width,
+ 			(row_stop - row) * height);
+-	if (!GTK_WIDGET_DOUBLE_BUFFERED (terminal) ||
+-			_vte_draw_requires_clear (terminal->pvt->draw)) {
+-		GdkRectangle rect;
+-
+-		/* expand clear area to cover borders */
+-		if (col == 0)
+-			rect.x = 0;
+-		else
+-			rect.x = area->x;
+-		if (col_stop == terminal->column_count)
+-			rect.width = terminal->widget.allocation.width;
+-		else
+-			rect.width = area->x + area->width;
+-		rect.width -= rect.x;
+-		if (row == 0)
+-			rect.y = 0;
+-		else
+-			rect.y = area->y;
+-		if (row_stop == terminal->row_count)
+-			rect.height = terminal->widget.allocation.height;
+-		else
+-			rect.height = area->y + area->height;
+-		rect.height -= rect.y;
+-
+-		_vte_draw_clear (terminal->pvt->draw,
+-				rect.x, rect.y, rect.width, rect.height);
+-	}
+ 
+ 	/* Now we're ready to draw the text.  Iterate over the rows we
+ 	 * need to draw. */
+@@ -10780,28 +10753,28 @@ vte_terminal_paint(GtkWidget *widget, GdkRegion *region)
+ 				clip.x, clip.y, clip.width, clip.height);
+ 	}
+ 
++	_vte_draw_clip(terminal->pvt->draw, region);
++	_vte_draw_clear (terminal->pvt->draw, 0, 0, terminal->widget.allocation.width, terminal->widget.allocation.height);
++
+ 	/* Calculate the bounding rectangle. */
+-	if (!_vte_draw_clip(terminal->pvt->draw, region)) {
+-		vte_terminal_paint_area (terminal,
+-				&terminal->widget.allocation);
+-	} else {
++	{
+ 		GdkRectangle *rectangles;
+ 		gint n, n_rectangles;
+ 		gdk_region_get_rectangles (region, &rectangles, &n_rectangles);
+ 		/* don't bother to enlarge an invalidate all */
+ 		if (!(n_rectangles == 1
+-				&& rectangles[0].width == terminal->widget.allocation.width
+-				&& rectangles[0].height == terminal->widget.allocation.height)) {
++		      && rectangles[0].width == terminal->widget.allocation.width
++		      && rectangles[0].height == terminal->widget.allocation.height)) {
+ 			GdkRegion *rr = gdk_region_new ();
+-			/* convert pixels into cells */
++			/* convert pixels into whole cells */
+ 			for (n = 0; n < n_rectangles; n++) {
+-				vte_terminal_expand_region (
+-						terminal, rr, rectangles + n);
++				vte_terminal_expand_region (terminal, rr, rectangles + n);
+ 			}
+ 			g_free (rectangles);
+ 			gdk_region_get_rectangles (rr, &rectangles, &n_rectangles);
+ 			gdk_region_destroy (rr);
+ 		}
++
+ 		/* and now paint them */
+ 		for (n = 0; n < n_rectangles; n++) {
+ 			vte_terminal_paint_area (terminal, rectangles + n);
+diff --git a/src/vtedraw.c b/src/vtedraw.c
+index 7a0c535..3c1a13c 100644
+--- a/src/vtedraw.c
++++ b/src/vtedraw.c
+@@ -790,8 +790,6 @@ struct _vte_draw {
+ 
+ 	gint started;
+ 
+-	gboolean requires_clear;
+-
+ 	struct font_info *font;
+ 	struct font_info *font_bold;
+ 	cairo_pattern_t *bg_pattern;
+@@ -807,7 +805,6 @@ _vte_draw_new (GtkWidget *widget)
+ 	/* Create the structure. */
+ 	draw = g_slice_new0 (struct _vte_draw);
+ 	draw->widget = g_object_ref (widget);
+-	draw->requires_clear = FALSE;
+ 
+ 	_vte_debug_print (VTE_DEBUG_DRAW, "draw_new\n");
+ 
+@@ -873,8 +870,6 @@ _vte_draw_set_background_solid(struct _vte_draw *draw,
+ 			       double blue,
+ 			       double opacity)
+ {
+-	draw->requires_clear = opacity != 1;
+-
+ 	if (draw->bg_pattern)
+ 		cairo_pattern_destroy (draw->bg_pattern);
+ 
+@@ -894,9 +889,6 @@ _vte_draw_set_background_image (struct _vte_draw *draw,
+ {
+ 	cairo_surface_t *surface;
+ 
+-	if (type != VTE_BG_SOURCE_NONE)
+-		draw->requires_clear = TRUE;
+-
+ 	/* Need a valid draw->cr for cairo_get_target () */
+ 	_vte_draw_start (draw);
+ 
+@@ -934,14 +926,12 @@ _vte_draw_set_background_scroll (struct _vte_draw *draw,
+ 	cairo_pattern_set_matrix (draw->bg_pattern, &matrix);
+ }
+ 
+-gboolean
++void
+ _vte_draw_clip (struct _vte_draw *draw, GdkRegion *region)
+ {
+ 	_vte_debug_print (VTE_DEBUG_DRAW, "draw_clip\n");
+ 	gdk_cairo_region(draw->cr, region);
+ 	cairo_clip (draw->cr);
+-
+-	return TRUE;
+ }
+ 
+ void
+@@ -1212,9 +1202,3 @@ _vte_draw_fill_rectangle (struct _vte_draw *draw,
+ 	set_source_color_alpha (draw->cr, color, alpha);
+ 	cairo_fill (draw->cr);
+ }
+-
+-gboolean
+-_vte_draw_requires_clear (struct _vte_draw *draw)
+-{
+-	return draw->requires_clear;
+-}
+diff --git a/src/vtedraw.h b/src/vtedraw.h
+index 8b98f72..ea2198b 100644
+--- a/src/vtedraw.h
++++ b/src/vtedraw.h
+@@ -82,8 +82,7 @@ void _vte_draw_set_background_image(struct _vte_draw *draw,
+ void _vte_draw_set_background_scroll(struct _vte_draw *draw,
+ 				     gint x, gint y);
+ 
+-gboolean _vte_draw_clip(struct _vte_draw *draw, GdkRegion *region);
+-gboolean _vte_draw_requires_clear (struct _vte_draw *draw);
++void _vte_draw_clip(struct _vte_draw *draw, GdkRegion *region);
+ void _vte_draw_clear(struct _vte_draw *draw,
+ 		     gint x, gint y, gint width, gint height);
+ 
+--
+cgit v0.8.3.1
