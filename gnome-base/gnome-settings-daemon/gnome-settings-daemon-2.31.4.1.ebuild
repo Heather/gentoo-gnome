@@ -12,11 +12,11 @@ HOMEPAGE="http://www.gnome.org"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
-IUSE="debug libnotify pulseaudio"
+IUSE="debug libnotify policykit pulseaudio"
 
 RDEPEND=">=dev-libs/dbus-glib-0.74
 	>=dev-libs/glib-2.18.0
-	>=x11-libs/gtk+-2.18
+	>=x11-libs/gtk+-2.90:3
 	>=gnome-base/gconf-2.6.1
 	>=gnome-base/libgnomekbd-2.31.2
 	>=gnome-base/gnome-desktop-2.29.92
@@ -30,6 +30,10 @@ RDEPEND=">=dev-libs/dbus-glib-0.74
 	media-libs/fontconfig
 
 	libnotify? ( >=x11-libs/libnotify-0.4.3 )
+	policykit? (
+		>=sys-auth/polkit-0.91
+		>=dev-libs/dbus-glib-0.71
+		>=sys-apps/dbus-1.1.2 )
 	pulseaudio? (
 		>=media-sound/pulseaudio-0.9.15
 		media-libs/libcanberra[gtk] )
@@ -52,6 +56,7 @@ pkg_setup() {
 		--disable-static
 		$(use_enable debug)
 		$(use_with libnotify)
+		$(use_enable policykit polkit)
 		$(use_enable pulseaudio pulse)
 		$(use_enable !pulseaudio gstreamer)"
 
