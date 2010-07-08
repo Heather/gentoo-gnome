@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit gnome.org libtool eutils flag-o-matic
+inherit autotools gnome.org libtool eutils flag-o-matic
 
 DESCRIPTION="The GLib library of C routines"
 HOMEPAGE="http://www.gtk.org/"
@@ -26,6 +26,7 @@ DEPEND="${RDEPEND}
 		~app-text/docbook-xml-dtd-4.1.2 )
 	test? ( >=sys-apps/dbus-1.2.14 )"
 PDEPEND="introspection? ( dev-libs/gobject-introspection )"
+# XXX: Consider adding test? ( sys-devel/gdb ); assert-msg-test tries to use it
 
 src_prepare() {
 	if use ppc64 && use hardened ; then
@@ -49,9 +50,19 @@ src_prepare() {
 	# Fix gmodule issues on fbsd; bug #184301
 	epatch "${FILESDIR}"/${PN}-2.12.12-fbsd.patch
 
+	# Don't check for python, hence removing the build-time python dep.
+	# We remove the gdb python scripts in src_install due to bug 291328
+	epatch "${FILESDIR}/${PN}-2.24-punt-python-check.patch"
+
+	# Fix test failure when upgrading from 2.22 to 2.24, upstream bug 621368
+	epatch "${FILESDIR}/${PN}-2.24-assert-test-failure.patch"
+
 	# Do not try to remove files on live filesystem, bug #XXX ?
 	sed 's:^\(.*"/desktop-app-info/delete".*\):/*\1*/:' \
 		-i "${S}"/gio/tests/desktop-app-info.c || die "sed failed"
+
+	# Needed for the punt-python-check patch.
+	eautoreconf
 
 	[[ ${CHOST} == *-freebsd* ]] && elibtoolize
 
@@ -85,6 +96,9 @@ src_install() {
 
 	# Do not install charset.alias even if generated, leave it to libiconv
 	rm -f "${D}/usr/lib/charset.alias"
+
+	# Don't install gdb python macros, bug 291328
+	rm -rf "${D}/usr/share/gdb/" "${D}/usr/share/glib-2.0/gdb/"
 
 	dodoc AUTHORS ChangeLog* NEWS* README || die "dodoc failed"
 
