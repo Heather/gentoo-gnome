@@ -4,7 +4,7 @@
 
 EAPI="2"
 SUPPORT_PYTHON_ABIS="1"
-PYTHON_DEPEND="2"
+PYTHON_DEPEND="2:2.5"
 inherit alternatives autotools gnome2 python virtualx
 
 DESCRIPTION="GLib's GObject library bindings for Python"
@@ -28,7 +28,7 @@ DEPEND="${RDEPEND}
 	test? ( media-fonts/font-cursor-misc media-fonts/font-misc-misc )
 	>=dev-util/pkgconfig-0.12.0"
 
-RESTRICT_PYTHON_ABIS="3.*"
+RESTRICT_PYTHON_ABIS="2.4 3.*"
 
 DOCS="AUTHORS ChangeLog* NEWS README"
 
