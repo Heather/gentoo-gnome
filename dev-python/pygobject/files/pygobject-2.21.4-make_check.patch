@@ -1,0 +1,55 @@
+--- pygobject-2.21.4.orig/tests/Makefile.am
++++ pygobject-2.21.4/tests/Makefile.am
+@@ -12,7 +12,7 @@ EXTRA_DIST = \
+ 	test-thread.h \
+ 	test-unknown.h
+ 
+-noinst_LTLIBRARIES = testhelper.la
++check_LTLIBRARIES = testhelper.la
+ linked_LIBS = testhelper.la
+ 
+ testhelper_la_LDFLAGS = -module -avoid-version
+@@ -46,13 +46,11 @@ endif
+ testhelper.la: $(testhelper_la_OBJECTS) $(testhelper_la_DEPENDENCIES)
+ 	$(LINK) -rpath $(pkgpyexecdir) $(testhelper_la_LDFLAGS) $(testhelper_la_OBJECTS) $(testhelper_la_LIBADD) $(LIBS)
+ 
+-check-local: $(LTLIBRARIES:.la=.so)
++check-local: $(check_LTLIBRARIES:.la=.so)
+ 	$(EXEC_NAME) $(PYTHON) $(srcdir)/runtests.py $(top_builddir) $(tests)
+ 
+-all: $(LTLIBRARIES:.la=.so)
+-
+ clean-local:
+-	rm -f $(LTLIBRARIES:.la=.so)
++	rm -f $(check_LTLIBRARIES:.la=.so)
+ 
+ .la.so:
+ 	$(LN_S) .libs/$@ $@ || true
+--- pygobject-2.21.4.orig/tests/runtests.py
++++ pygobject-2.21.4/tests/runtests.py
+@@ -6,6 +6,9 @@ import unittest
+ 
+ import common
+ 
++# Some tests fail with translated messages.
++os.environ["LC_ALL"] = "C"
++
+ program = None
+ if len(sys.argv) < 2:
+     raise ValueError('Need at least 2 parameters: runtests.py <build-dir> '
+--- pygobject-2.21.4.orig/tests/test_gio.py
++++ pygobject-2.21.4/tests/test_gio.py
+@@ -410,9 +410,10 @@ class TestFile(unittest.TestCase):
+ 
+     def testQueryWritableNamespaces(self):
+         infolist = self.file.query_writable_namespaces()
+-        for info in infolist:
+-            if info.name == "xattr":
+-                self.assertEqual(info.type, gio.FILE_ATTRIBUTE_TYPE_STRING)
++        if infolist:
++            for info in infolist:
++                if info.name == "xattr":
++                    self.assertEqual(info.type, gio.FILE_ATTRIBUTE_TYPE_STRING)
+ 
+     def testSetAttribute(self):
+         self._f.write("testing attributes")

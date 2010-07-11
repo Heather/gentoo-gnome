@@ -4,7 +4,7 @@
 
 EAPI="2"
 SUPPORT_PYTHON_ABIS="1"
-
+PYTHON_DEPEND="2"
 inherit alternatives autotools gnome2 python virtualx
 
 DESCRIPTION="GLib's GObject library bindings for Python"
@@ -13,11 +13,14 @@ HOMEPAGE="http://www.pygtk.org/"
 LICENSE="LGPL-2.1"
 SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
-IUSE="doc examples libffi test"
+IUSE="doc examples +introspection libffi test"
 
 # FIXME: add introspection support
-RDEPEND=">=dev-lang/python-2.4.4-r5
-	>=dev-libs/glib-2.22.4
+RDEPEND=">=dev-libs/glib-2.22.4
+	introspection? (
+		>=dev-libs/gobject-introspection-0.6.14
+		>=dev-python/pycairo-1.0.2
+	)
 	!<dev-python/pygtk-2.13
 	libffi? ( virtual/libffi )"
 DEPEND="${RDEPEND}
@@ -33,6 +36,7 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-dependency-tracking
 		$(use_enable doc docs)
+		$(use_enable introspection)
 		$(use_with libffi ffi)"
 }
 
@@ -43,7 +47,7 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-2.15.4-fix-codegen-location.patch"
 
 	# Do not build tests if unneeded, bug #226345
-	epatch "${FILESDIR}/${PN}-2.18.0-make_check.patch"
+	epatch "${FILESDIR}/${PN}-2.21.4-make_check.patch"
 
 	# Support installation for multiple Python versions
 	epatch "${FILESDIR}/${PN}-2.18.0-support_multiple_python_versions.patch"
@@ -108,7 +112,7 @@ pkg_postinst() {
 }
 
 pkg_postrm() {
-	python_mod_cleanup
+	python_mod_cleanup gtk-2.0 pygtk.py
 
 	create_symlinks() {
 		alternatives_auto_makesym $(python_get_sitedir)/pygtk.py pygtk.py-[0-9].[0-9]
