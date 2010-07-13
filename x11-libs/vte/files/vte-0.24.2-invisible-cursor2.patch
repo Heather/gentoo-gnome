@@ -1,0 +1,34 @@
+From f412a6f73a7b3a432bb88830b63ee25ea648619d Mon Sep 17 00:00:00 2001
+From: Behdad Esfahbod <behdad@behdad.org>
+Date: Thu, 01 Apr 2010 05:34:18 +0000
+Subject: Followup on Bug 602596 - Cursor can become invisible
+
+Fix invisible attribute.
+---
+diff --git a/src/vte.c b/src/vte.c
+index c6844e9..eddf06b 100644
+--- a/src/vte.c
++++ b/src/vte.c
+@@ -8767,9 +8767,6 @@ vte_terminal_determine_colors(VteTerminal *terminal,
+ 
+ 	/* Handle invisible, bold, and standout text by adjusting colors. */
+ 	if (cell) {
+-		if (cell->attr.invisible) {
+-			*fore = *back;
+-		}
+ 		if (cell->attr.bold) {
+ 			if (*fore == VTE_DEF_FG) {
+ 				*fore = VTE_BOLD_FG;
+@@ -8799,6 +8796,10 @@ vte_terminal_determine_colors(VteTerminal *terminal,
+ 	  *fore = *back;
+ 	  *back = tmp;
+ 	}
++
++	if (cell && cell->attr.invisible) {
++		*fore = *back;
++	}
+ }
+ 
+ /* Check if a unicode character is actually a graphic character we draw
+--
+cgit v0.8.3.1
