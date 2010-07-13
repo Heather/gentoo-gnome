@@ -15,7 +15,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="debug doc glade introspection python"
 
 RDEPEND=">=dev-libs/glib-2.22.0
-	>=x11-libs/gtk+-2.14.0
+	>=x11-libs/gtk+-2.14.0:2
 	>=x11-libs/pango-1.22.0
 	sys-libs/ncurses
 	glade? ( dev-util/glade:3 )

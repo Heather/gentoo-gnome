@@ -22,7 +22,7 @@ RDEPEND=">=dev-libs/glib-2.16
 	dev-db/sqlite:3
 
 	gtk? (
-		>=x11-libs/gtk+-2.10
+		>=x11-libs/gtk+-2.10:2
 		>=media-libs/clutter-gtk-0.10:1.0 )"
 # FIXME: add pyclutter and pyclutter-gtk first
 #	python? (

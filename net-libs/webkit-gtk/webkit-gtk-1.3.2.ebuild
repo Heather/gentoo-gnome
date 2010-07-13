@@ -19,16 +19,16 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd6
 IUSE="coverage debug doc +gstreamer" # aqua
 
 # use sqlite, svg by default
-# dependency on >=x11-libs/gtk+-2.13 for gail
+# dependency on >=x11-libs/gtk+-2.13:2 for gail
 # XXX: Quartz patch does not apply
-# >=x11-libs/gtk+-2.13[aqua=]
+# >=x11-libs/gtk+-2.13:2[aqua=]
 RDEPEND="
 	dev-libs/libxml2
 	dev-libs/libxslt
 	media-libs/jpeg:0
 	media-libs/libpng
 	x11-libs/cairo
-	>=x11-libs/gtk+-2.13
+	>=x11-libs/gtk+-2.13:2
 	>=dev-libs/glib-2.21.3
 	>=dev-libs/icu-3.8.1-r1
 	>=net-libs/libsoup-2.29.90

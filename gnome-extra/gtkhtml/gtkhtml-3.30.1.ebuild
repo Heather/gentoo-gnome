@@ -21,7 +21,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~
 
 # We keep bonobo until we can make sure no apps in tree uses
 # the old composer code.
-RDEPEND=">=x11-libs/gtk+-2.18
+RDEPEND=">=x11-libs/gtk+-2.18:2
 	>=x11-themes/gnome-icon-theme-2.22.0
 	>=gnome-base/orbit-2
 	>=app-text/enchant-1.1.7

@@ -13,7 +13,7 @@ SLOT="1"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="dbus doc exif jpeg lcms python svg tiff xmp"
 
-RDEPEND=">=x11-libs/gtk+-2.18:2
+RDEPEND=">=x11-libs/gtk+-2.18:2[jpeg?,tiff?]
 	>=dev-libs/glib-2.25.9
 	>=dev-libs/libxml2-2
 	>=gnome-base/gconf-2.31.1
@@ -26,15 +26,13 @@ RDEPEND=">=x11-libs/gtk+-2.18:2
 	exif? (
 		>=media-libs/libexif-0.6.14
 		>=media-libs/jpeg-8:0 )
-	jpeg? ( >=media-libs/jpeg-8:0
-			x11-libs/gtk+[jpeg] )
+	jpeg? ( >=media-libs/jpeg-8:0 )
 	lcms? ( =media-libs/lcms-1* )
 	python? (
 		=dev-lang/python-2*
 		>=dev-python/pygobject-2.15.1
 		>=dev-python/pygtk-2.13 )
 	svg? ( >=gnome-base/librsvg-2.26 )
-	tiff? ( >=x11-libs/gtk+-2.15.1[tiff] )
 	xmp? ( >=media-libs/exempi-2 )"
 
 DEPEND="${RDEPEND}

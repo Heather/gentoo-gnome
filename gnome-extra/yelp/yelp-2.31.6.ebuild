@@ -15,7 +15,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-free
 IUSE="lzma"
 
 RDEPEND="
-	>=x11-libs/gtk+-2.18
+	>=x11-libs/gtk+-2.18:2
 	>=dev-libs/glib-2.25.10
 	>=dev-libs/libxml2-2.6.5
 	>=dev-libs/libxslt-1.1.4

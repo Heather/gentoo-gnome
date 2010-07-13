@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux"
 IUSE=""
 
-RDEPEND=">=x11-libs/gtk+-2.18.0
+RDEPEND=">=x11-libs/gtk+-2.18.0:2
 	>=dev-libs/glib-2.25.10
 	dev-libs/libxml2
 	!<gnome-extra/gnome-utils-2.3"

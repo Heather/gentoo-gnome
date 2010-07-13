@@ -18,7 +18,7 @@ RDEPEND=">=net-dns/avahi-0.6[dbus,gtk]
 	>=dev-libs/glib-2.15.1
 	>=net-libs/gnutls-1.4
 	>=sys-libs/e2fsprogs-libs-1.36
-	>=x11-libs/gtk+-2.10
+	>=x11-libs/gtk+-2.10:2
 	>=net-libs/libsoup-2.3:2.4"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.14

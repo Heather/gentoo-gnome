@@ -18,7 +18,7 @@ KEYWORDS="~alpha ~amd64 ~ia64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x
 IUSE="branding doc ipv6 +splash elibc_FreeBSD"
 
 RDEPEND=">=dev-libs/glib-2.16
-	>=x11-libs/gtk+-2.14.0
+	>=x11-libs/gtk+-2.14.0:2
 	>=dev-libs/dbus-glib-0.76
 	>=gnome-base/gconf-2
 	>=x11-libs/startup-notification-0.10

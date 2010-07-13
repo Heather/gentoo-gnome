@@ -16,7 +16,7 @@ IUSE=""
 
 # libgnome needed for some monospace font schema, bug #274638
 RDEPEND=">=dev-libs/glib-2.16.0
-	>=x11-libs/gtk+-2.14.0
+	>=x11-libs/gtk+-2.14.0:2
 	>=gnome-base/gconf-2.14
 	>=x11-libs/vte-0.25.1
 	>=dev-libs/dbus-glib-0.6

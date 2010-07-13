@@ -20,7 +20,7 @@ SLOT="0"
 
 COMMON_DEPEND=">=dev-libs/glib-2.25.6
 	dev-libs/libxml2
-	>=x11-libs/gtk+-2.20
+	>=x11-libs/gtk+-2.20:2
 	>=dev-libs/dbus-glib-0.71
 	>=dev-libs/totem-pl-parser-2.26
 	>=gnome-base/gconf-2

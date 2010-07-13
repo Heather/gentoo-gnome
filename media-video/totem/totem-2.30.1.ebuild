@@ -25,7 +25,7 @@ IUSE="bluetooth debug doc galago iplayer lirc nautilus nsplugin +python tracker 
 # coherence plugin not enabled until we have deps in tree
 # vala ( dev-lang/vala ) requires 0.7.5
 RDEPEND=">=dev-libs/glib-2.22
-	>=x11-libs/gtk+-2.19.5
+	>=x11-libs/gtk+-2.19.5:2
 	>=gnome-base/gconf-2.0
 	>=dev-libs/totem-pl-parser-2.29.1
 	>=x11-themes/gnome-icon-theme-2.16

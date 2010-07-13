@@ -20,7 +20,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="debug doc +introspection ldap policykit"
 
 RDEPEND=">=dev-libs/glib-2.25.9
-	>=x11-libs/gtk+-2.14
+	>=x11-libs/gtk+-2.14:2
 	>=dev-libs/dbus-glib-0.74
 	>=sys-apps/dbus-1
 	>=gnome-base/orbit-2.4

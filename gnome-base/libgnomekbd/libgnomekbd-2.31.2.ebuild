@@ -19,7 +19,7 @@ RDEPEND=">=dev-libs/glib-2.18
 	>=sys-apps/dbus-0.92
 	>=dev-libs/dbus-glib-0.34
 	>=gnome-base/gconf-2.14
-	>=x11-libs/gtk+-2.18
+	>=x11-libs/gtk+-2.18:2
 	>=x11-libs/libxklavier-5.0"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35

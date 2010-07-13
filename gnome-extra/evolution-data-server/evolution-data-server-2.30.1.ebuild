@@ -15,7 +15,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-
 IUSE="doc ipv6 kerberos gnome-keyring ldap nntp ssl"
 
 RDEPEND=">=dev-libs/glib-2.16.1
-	>=x11-libs/gtk+-2.18
+	>=x11-libs/gtk+-2.18:2
 	>=gnome-base/gconf-2
 	>=dev-db/sqlite-3.5
 	>=dev-libs/libxml2-2
