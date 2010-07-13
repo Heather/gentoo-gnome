@@ -15,10 +15,9 @@ SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
 IUSE="doc examples +introspection libffi test"
 
-# FIXME: add introspection support
 RDEPEND=">=dev-libs/glib-2.22.4
 	introspection? (
-		>=dev-libs/gobject-introspection-0.6.14
+		>=dev-libs/gobject-introspection-0.9.1
 		>=dev-python/pycairo-1.0.2
 	)
 	!<dev-python/pygtk-2.13
