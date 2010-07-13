@@ -5,7 +5,7 @@
 EAPI=3
 
 PYTHON_DEPEND="python? 2:2.5"
-inherit python gnome2
+inherit python gnome2 eutils
 
 DESCRIPTION="A GObject plugins library"
 HOMEPAGE="http://www.gnome.org/"
@@ -34,4 +34,12 @@ pkg_setup() {
 		--disable-maintainer-mode
 		--disable-gtk2-test-build
 		--disable-seed"
+}
+
+src_prepare() {
+	if has_version '>=dev-libs/gobject-introspection-0.9.2'; then
+		# Only apply this for new versions of gobject-introspection, because
+		# the API changed in 0.9.2
+		epatch "${FILESDIR}"/${P}-new-gobject-introspection.patch
+	fi
 }

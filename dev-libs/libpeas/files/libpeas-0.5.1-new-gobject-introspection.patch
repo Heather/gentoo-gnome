@@ -1,0 +1,49 @@
+--- libpeas-0.5.1.orig/libpeas/peas-introspection.c
++++ libpeas-0.5.1/libpeas/peas-introspection.c
+@@ -65,46 +65,12 @@ read_next_argument (GArgument *cur_arg,
+     case GI_TYPE_TAG_UINT64:
+       cur_arg->v_uint64 = va_arg (args, guint64);
+       break;
+-    case GI_TYPE_TAG_SHORT:
+-      cur_arg->v_short = va_arg (args, int);
+-      break;
+-    case GI_TYPE_TAG_USHORT:
+-      cur_arg->v_ushort = va_arg (args, int);
+-      break;
+-    case GI_TYPE_TAG_INT:
+-      cur_arg->v_int = va_arg (args, gint);
+-      break;
+-    case GI_TYPE_TAG_UINT:
+-      cur_arg->v_uint = va_arg (args, guint);
+-      break;
+-    case GI_TYPE_TAG_LONG:
+-      cur_arg->v_long = va_arg (args, glong);
+-      break;
+-    case GI_TYPE_TAG_ULONG:
+-      cur_arg->v_ulong = va_arg (args, gulong);
+-      break;
+-    case GI_TYPE_TAG_SSIZE:
+-      cur_arg->v_ssize = va_arg (args, gssize);
+-      break;
+-    case GI_TYPE_TAG_SIZE:
+-      cur_arg->v_size = va_arg (args, gsize);
+-      break;
+     case GI_TYPE_TAG_FLOAT:
+       cur_arg->v_float = va_arg (args, gdouble);
+       break;
+     case GI_TYPE_TAG_DOUBLE:
+       cur_arg->v_double = va_arg (args, gdouble);
+       break;
+-    case GI_TYPE_TAG_TIME_T:
+-      /* borrowed from gfield.c in gobject-introspection */
+-#if SIZEOF_TIME_T == 4
+-      cur_arg->v_int32 = va_arg (args, time_t);
+-#elif SIZEOF_TIME_T == 8
+-      cur_arg->v_int64 = va_arg (args, time_t);
+-#else
+-#  error "Unexpected size for time_t: not 4 or 8"
+-#endif
+-      break;
+     case GI_TYPE_TAG_GTYPE:
+       /* apparently, GType is meant to be a gsize, from gobject/gtype.h in glib */
+       cur_arg->v_size = va_arg (args, GType);
