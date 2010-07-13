@@ -92,6 +92,7 @@ src_configure() {
 }
 
 src_install() {
+	local f
 	emake DESTDIR="${D}" install || die "Installation failed"
 
 	# Do not install charset.alias even if generated, leave it to libiconv
@@ -103,7 +104,9 @@ src_install() {
 	dodoc AUTHORS ChangeLog* NEWS* README || die "dodoc failed"
 
 	insinto /usr/share/bash-completion
-	newins "${D}/etc/bash_completion.d/gdbus-bash-completion.sh" gdbus || die
+	for f in gdbus gsettings; do
+		newins "${D}/etc/bash_completion.d/${f}-bash-completion.sh" ${f} || die
+	done
 	rm -rf "${D}/etc"
 }
 
