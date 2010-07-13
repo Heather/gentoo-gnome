@@ -6,7 +6,12 @@
 # NOTE: Please add your entry at the top!
 #
 
-# Nirbheek Chauhan <nirbheek@gentoo.org> (9 July 2010)
+# Jonathan Callen <abcd@gentoo.org> (13 Jul 2010)
+# Breaks ABI and API with older versions, masked until
+# everything is fixed
+=dev-libs/gobject-introspection-0.9*
+
+# Nirbheek Chauhan <nirbheek@gentoo.org> (9 Jul 2010)
 # New rhythmbox needs libdmapsharing with USE=daap
 # also uses >=dev-libs/glib-2.25.6
 =media-sound/rhythmbox-0.13*
