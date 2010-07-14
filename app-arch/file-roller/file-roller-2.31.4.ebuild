@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux"
 IUSE="nautilus"
 
-RDEPEND=">=dev-libs/glib-2.16.0
+RDEPEND=">=dev-libs/glib-2.25.5
 	>=x11-libs/gtk+-2.19.7:2
 	>=gnome-base/gconf-2.6
 	nautilus? ( >=gnome-base/nautilus-2.22.2 )"
