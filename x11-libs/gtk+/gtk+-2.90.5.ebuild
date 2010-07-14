@@ -26,11 +26,11 @@ RDEPEND="!aqua? (
 		x11-libs/libXfixes
 		x11-libs/libXcomposite
 		x11-libs/libXdamage
-		>=x11-libs/cairo-1.6[X,svg]
+		>=x11-libs/cairo-1.9.10[X,svg]
 		x11-libs/gdk-pixbuf[X,introspection?,jpeg?,jpeg2k?,tiff?]
 	)
 	aqua? (
-		>=x11-libs/cairo-1.6[aqua,svg]
+		>=x11-libs/cairo-1.9.10[aqua,svg]
 		x11-libs/gdk-pixbuf[introspection?,jpeg?,jpeg2k?,tiff?]
 	)
 	xinerama? ( x11-libs/libXinerama )
@@ -40,6 +40,7 @@ RDEPEND="!aqua? (
 	media-libs/fontconfig
 	x11-misc/shared-mime-info
 	cups? ( net-print/cups )
+	introspection? ( >=dev-libs/gobject-introspection-0.9 )
 	!<gnome-base/gail-1000"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9
@@ -57,7 +58,6 @@ DEPEND="${RDEPEND}
 	doc? (
 		>=dev-util/gtk-doc-1.11
 		~app-text/docbook-xml-dtd-4.1.2 )
-	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
 	test? (
 		media-fonts/font-misc-misc
 		media-fonts/font-cursor-misc )"

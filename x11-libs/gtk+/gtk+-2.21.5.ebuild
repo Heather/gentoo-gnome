@@ -34,12 +34,13 @@ RDEPEND="!aqua? (
 		x11-libs/gdk-pixbuf[introspection?,jpeg?,jpeg2k?,tiff?]
 	)
 	xinerama? ( x11-libs/libXinerama )
-	>=dev-libs/glib-2.25.8
+	>=dev-libs/glib-2.25.10
 	>=x11-libs/pango-1.20[introspection?]
 	>=dev-libs/atk-1.29.2[introspection?]
 	media-libs/fontconfig
 	x11-misc/shared-mime-info
 	cups? ( net-print/cups )
+	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
 	!<gnome-base/gail-1000"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9
@@ -57,7 +58,6 @@ DEPEND="${RDEPEND}
 	doc? (
 		>=dev-util/gtk-doc-1.11
 		~app-text/docbook-xml-dtd-4.1.2 )
-	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
 	test? (
 		media-fonts/font-misc-misc
 		media-fonts/font-cursor-misc )"
