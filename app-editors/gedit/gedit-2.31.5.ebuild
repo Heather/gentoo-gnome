@@ -23,7 +23,7 @@ RDEPEND=">=x11-libs/libSM-1.0
 	>=dev-libs/glib-2.25.10
 	>=x11-libs/gtk+-2.90:3[introspection?]
 	>=x11-libs/gtksourceview-2.11.2:3.0[introspection?]
-	>=dev-libs/libpeas-0.5.2
+	>=dev-libs/libpeas-0.5.2[gtk]
 	dev-python/pygobject[introspection]
 	spell? (
 		>=app-text/enchant-1.2

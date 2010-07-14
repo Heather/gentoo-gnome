@@ -28,7 +28,7 @@ RDEPEND=">=dev-libs/glib-2.25.9
 	>=x11-libs/gtk+-2.90.3:3
 	>=gnome-base/gconf-2.0
 	>=dev-libs/totem-pl-parser-2.29.1
-	dev-libs/libpeas
+	dev-libs/libpeas[gtk]
 	>=x11-themes/gnome-icon-theme-2.16
 	x11-libs/cairo
 	>=dev-libs/libxml2-2.6
