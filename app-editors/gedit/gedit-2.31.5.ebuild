@@ -4,8 +4,9 @@
 
 EAPI="2"
 GCONF_DEBUG="no"
+PYTHON_DEPEND="2"
 
-inherit eutils gnome2
+inherit gnome2 python
 
 DESCRIPTION="A text editor for the GNOME desktop"
 HOMEPAGE="http://www.gnome.org/"
@@ -15,12 +16,15 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~ia64-linux ~x86-linux"
 IUSE="doc +introspection spell"
 
+# Note: introspection is *not* optional on pygobject: we need
+# gi.repository.Gtk, etc.
 RDEPEND=">=x11-libs/libSM-1.0
 	>=dev-libs/libxml2-2.5.0
 	>=dev-libs/glib-2.25.10
 	>=x11-libs/gtk+-2.90:3[introspection?]
 	>=x11-libs/gtksourceview-2.11.2:3.0[introspection?]
-	dev-libs/libpeas
+	>=dev-libs/libpeas-0.5.2
+	dev-python/pygobject[introspection]
 	spell? (
 		>=app-text/enchant-1.2
 		>=app-text/iso-codes-0.35
@@ -45,17 +49,19 @@ pkg_setup() {
 		$(use_enable spell)"
 }
 
-src_prepare() {
-	epatch "${FILESDIR}"/${P}-build-without-x11.patch
-
-	sed -i -e 's:--warn-all::g' gedit/Makefile.in || die
-
-	gnome2_src_prepare
-}
-
 src_install() {
 	gnome2_src_install
 
 	# Installed for plugins, but they're dlopen()-ed
 	find "${D}" -name "*.la" -delete || die "remove of la files failed"
+}
+
+pkg_postinst() {
+	gnome2_pkg_postinst
+	python_mod_optimize /usr/$(get_libdir)/gedit-2/plugins
+}
+
+pkg_postrm() {
+	gnome2_pkg_postrm
+	python_mod_cleanup /usr/$(get_libdir)/gedit-2/plugins
 }
