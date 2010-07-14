@@ -17,7 +17,8 @@
 =media-sound/rhythmbox-0.13*
 
 # Jonathan Callen <abcd@gentoo.org> (23 Jun 2010)
-# Mask other dev versions
+# Mask dev version
+=x11-libs/cairo-1.9*
 =x11-misc/alacarte-0.13*
 
 # Jonathan Callen <abcd@gentoo.org> (22 Jun 2010)
