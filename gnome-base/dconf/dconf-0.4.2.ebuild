@@ -17,9 +17,10 @@ IUSE="doc +introspection"
 RDEPEND=">=dev-libs/glib-2.25.10
 	>=dev-libs/libgee-0.5.1
 	>=dev-libs/libxml2-2.7.7
+	x11-libs/gtk+:2
 	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )"
 DEPEND="${RDEPEND}
-	>=dev-lang/vala-0.8
+	>=dev-lang/vala-0.9.2
 	doc? ( >=dev-util/gtk-doc-1.14 )"
 
 pkg_setup() {
