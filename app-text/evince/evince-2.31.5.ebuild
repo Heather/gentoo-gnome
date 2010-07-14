@@ -19,9 +19,9 @@ IUSE="dbus debug djvu doc dvi gnome gnome-keyring +introspection nautilus t1lib 
 # not mature enough
 RDEPEND="
 	>=app-text/libspectre-0.2.0
-	>=dev-libs/glib-2.25.9
+	>=dev-libs/glib-2.25.11
 	>=dev-libs/libxml2-2.5
-	>=x11-libs/gtk+-2.21.2:2[introspection?]
+	>=x11-libs/gtk+-2.90.5:3[introspection?]
 	>=x11-libs/libSM-1
 	>=x11-themes/gnome-icon-theme-2.17.1
 	gnome? ( >=gnome-base/gconf-2[introspection?] )
