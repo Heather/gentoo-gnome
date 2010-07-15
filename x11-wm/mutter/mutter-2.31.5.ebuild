@@ -1,4 +1,4 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -14,7 +14,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="debug +introspection +sound test xinerama"
 
-RDEPEND=">=x11-libs/gtk+-2.18:2[introspection?]
+RDEPEND=">=x11-libs/gtk+-2.90:3[introspection?]
 	>=x11-libs/pango-1.2[X,introspection?]
 	>=gnome-base/gconf-2
 	>=dev-libs/glib-2.14
@@ -32,7 +32,7 @@ RDEPEND=">=x11-libs/gtk+-2.18:2[introspection?]
 	x11-libs/libXrandr
 	x11-libs/libXrender
 
-	sound? ( media-libs/libcanberra[gtk] )
+	sound? ( media-libs/libcanberra[gtk3] )
 	introspection? ( dev-libs/gobject-introspection )
 	xinerama? ( x11-libs/libXinerama )
 	gnome-extra/zenity
@@ -57,6 +57,8 @@ pkg_setup() {
 		--enable-startup-notification
 		--enable-xsync
 		--enable-verbose-mode
+		--enable-compile-warnings
+		--with-gtk=3.0
 		$(use_with sound libcanberra)
 		$(use_with introspection)
 		$(use_enable xinerama)"
