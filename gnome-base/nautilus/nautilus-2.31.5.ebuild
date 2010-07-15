@@ -18,7 +18,7 @@ IUSE="doc gnome introspection xmp"
 RDEPEND=">=dev-libs/glib-2.25.9
 	gnome-base/gnome-desktop:3
 	>=x11-libs/pango-1.1.2
-	>=x11-libs/gtk+-2.90.2:3[introspection?]
+	>=x11-libs/gtk+-2.90.5:3[introspection?]
 	>=dev-libs/libxml2-2.4.7
 	>=media-libs/libexif-0.5.12
 	>=gnome-base/gconf-2.0[introspection?]
