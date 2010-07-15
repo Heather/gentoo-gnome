@@ -47,6 +47,7 @@ gnome-base/gnome-shell
 =gnome-extra/evolution-data-server-2.31*
 =gnome-extra/gcalctool-5.31*
 =gnome-extra/gnome-games-2.31*
+=gnome-extra/gnome-media-2.31*
 =gnome-extra/yelp-2.31*
 gnome-extra/yelp-xsl
 =gnome-extra/zenity-2.31*
