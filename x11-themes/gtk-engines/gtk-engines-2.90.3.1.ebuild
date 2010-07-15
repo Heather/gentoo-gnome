@@ -27,8 +27,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# This has not been submitted upstream yet...
-	epatch "${FILESDIR}"/${P}-gseal-fixes.patch
+	epatch "${FILESDIR}"/${P}-fix-animation.patch
 
 	gnome2_src_prepare
 }

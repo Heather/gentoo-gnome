@@ -1,0 +1,107 @@
+From a484a86cef26420e9278a550d246ff1068a9e88e Mon Sep 17 00:00:00 2001
+From: Benjamin Berg <benjamin@sipsolutions.net>
+Date: Fri, 02 Jul 2010 16:56:24 +0000
+Subject: Fix animation. (bug #622982, #612486)
+
+---
+diff --git a/engines/clearlooks/src/animation.c b/engines/clearlooks/src/animation.c
+index 1f7a41f..d37b85d 100644
+--- a/engines/clearlooks/src/animation.c
++++ b/engines/clearlooks/src/animation.c
+@@ -166,7 +166,7 @@ update_animation_info (gpointer key, gpointer value, gpointer user_data)
+ 	g_assert ((widget != NULL) && (animation_info != NULL));
+ 	
+ 	/* remove the widget from the hash table if it is not drawable */
+-	if (!GTK_WIDGET_DRAWABLE (widget))
++	if (!gtk_widget_is_drawable (widget))
+ 	{
+ 		return TRUE;
+ 	}
+@@ -267,6 +267,20 @@ find_signal_info (gconstpointer signal_info, gconstpointer widget)
+ 
+ /* external interface */
+ 
++#define CL_IS_PROGRESS_BAR(widget) GE_IS_PROGRESS_BAR(widget) && widget->allocation.x != -1 && widget->allocation.y != -1
++gboolean
++clearlooks_animation_is_progressbar (GtkWidget *widget)
++{
++	GtkAllocation allocation;
++	if (!GE_IS_PROGRESS_BAR (widget))
++		return FALSE;
++	gtk_widget_get_allocation (widget, &allocation);
++	if ((allocation.x < 0) || (allocation.y < 0))
++		return FALSE;
++	return TRUE;
++}
++
++
+ /* adds a progress bar */
+ void
+ clearlooks_animation_progressbar_add (GtkWidget *progressbar)
+@@ -331,8 +345,6 @@ clearlooks_animation_cleanup ()
+ 	stop_timer ();
+ }
+ #else /* !HAVE_WORKING_ANIMATION */
+-/* Warn here so the message is only displayed once. */
+-#warning Disabling animation support as it currently needs deprecated symbols and GTK_DISABLE_DEPRECATED is enabled.
+ 
+ static void clearlooks_animation_dummy_function_so_wall_shuts_up_when_animations_is_disabled()
+ {
+diff --git a/engines/clearlooks/src/animation.h b/engines/clearlooks/src/animation.h
+index 4ab6f4e..0307783 100644
+--- a/engines/clearlooks/src/animation.h
++++ b/engines/clearlooks/src/animation.h
+@@ -24,22 +24,20 @@
+ #include <config.h>
+ 
+ #ifdef HAVE_ANIMATION
+-#ifndef GTK_DISABLE_DEPRECATED
+ 
+ #define HAVE_WORKING_ANIMATION 1
+ 
+ #include <gtk/gtk.h>
+ #include <ge-support.h>
+ 
+-#define CL_IS_PROGRESS_BAR(widget) GE_IS_PROGRESS_BAR(widget) && widget->allocation.x != -1 && widget->allocation.y != -1
+ #define ANIMATION_DELAY 100
+ #define CHECK_ANIMATION_TIME 0.5
+ 
++GE_INTERNAL gboolean clearlooks_animation_is_progressbar (GtkWidget *widget);
+ GE_INTERNAL void     clearlooks_animation_progressbar_add (GtkWidget *progressbar);
+ GE_INTERNAL void     clearlooks_animation_connect_checkbox (GtkWidget *widget);
+ GE_INTERNAL gboolean clearlooks_animation_is_animated (GtkWidget *widget);
+ GE_INTERNAL gdouble  clearlooks_animation_elapsed (gpointer data);
+ GE_INTERNAL void     clearlooks_animation_cleanup ();
+-#endif /* GTK_DISABLE_DEPRECATED */
+ #endif /* HAVE_ANIMATION */
+ 
+diff --git a/engines/clearlooks/src/clearlooks_style.c b/engines/clearlooks/src/clearlooks_style.c
+index 1c02499..07d08bd 100644
+--- a/engines/clearlooks/src/clearlooks_style.c
++++ b/engines/clearlooks/src/clearlooks_style.c
+@@ -604,7 +604,6 @@ clearlooks_style_draw_box (DRAW_ARGS)
+ 		}
+ 		else
+ 		{
+-			g_print ("ETCHED IN\n");
+ 			cairo_save (cr);
+ 			cairo_move_to (cr, x, y);
+ 			cairo_line_to (cr, x + width, y);
+@@ -758,12 +757,10 @@ clearlooks_style_draw_box (DRAW_ARGS)
+ 		gdouble               elapsed = 0.0;
+ 
+ #ifdef HAVE_WORKING_ANIMATION
+-		if(clearlooks_style->animation && CL_IS_PROGRESS_BAR (widget))
++		if(clearlooks_style->animation && clearlooks_animation_is_progressbar (widget))
+ 		{
+-			gboolean activity_mode = GTK_PROGRESS_BAR (widget)->activity_mode;
+-
+-			if (!activity_mode)
+-				clearlooks_animation_progressbar_add ((gpointer)widget);
++#warning Assuming non-pulsing progress bars because there is currently no way to query them in GTK+ 3.0.
++			clearlooks_animation_progressbar_add ((gpointer)widget);
+ 		}
+ 
+ 		elapsed = clearlooks_animation_elapsed (widget);
+--
+cgit v0.8.3.1
