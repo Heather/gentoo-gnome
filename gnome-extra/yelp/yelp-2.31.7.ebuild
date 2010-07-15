@@ -15,13 +15,13 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-free
 IUSE="lzma"
 
 RDEPEND="
-	>=x11-libs/gtk+-2.18:2
-	>=dev-libs/glib-2.25.10
+	>=x11-libs/gtk+-2.90.5:3
+	>=dev-libs/glib-2.25.11
 	>=dev-libs/libxml2-2.6.5
 	>=dev-libs/libxslt-1.1.4
 	>=dev-libs/dbus-glib-0.71
 	>=gnome-extra/yelp-xsl-2.31.3
-	>=net-libs/webkit-gtk-1.3.1
+	>=net-libs/webkit-gtk-1.3.2:3.0
 	app-arch/bzip2
 	lzma? ( >=app-arch/xz-utils-4.9 )"
 DEPEND="${RDEPEND}
@@ -39,10 +39,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}"/${P}-gsettings-api-change.patch
-	epatch "${FILESDIR}"/${P}-fix-broken-keyfile-setup.patch
-
-	epatch "${FILESDIR}"/${P}-fix-gsettings-path.patch
+	epatch "${FILESDIR}"/${PN}-2.31.6-fix-gsettings-path.patch
 
 	gnome2_src_prepare
 }
