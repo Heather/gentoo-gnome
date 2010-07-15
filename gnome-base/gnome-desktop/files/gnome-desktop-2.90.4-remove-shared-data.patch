@@ -1,0 +1,69 @@
+--- gnome-desktop-2.90.4.orig/configure.in
++++ gnome-desktop-2.90.4/configure.in
+@@ -176,9 +176,6 @@ AC_SUBST(RANDR_PACKAGE)
+ dnl pkg-config dependency checks
+ 
+ PKG_CHECK_MODULES(GNOME_DESKTOP, gdk-pixbuf-2.0 >= $GDK_PIXBUF_REQUIRED gtk+-3.0 >= $GTK_REQUIRED glib-2.0 >= $GLIB_REQUIRED gio-2.0 >= $GLIB_REQUIRED gconf-2.0 >= $GCONF_REQUIRED $STARTUP_NOTIFICATION_PACKAGE $RANDR_PACKAGE)
+-
+-dnl for gnome-about
+-AM_PATH_PYTHON
+ 
+ dnl gnome-doc-utils stuff
+ 
+@@ -215,9 +212,6 @@ GTK_DOC_CHECK([1.4])
+ 
+ AC_CONFIG_FILES([
+ Makefile
+-gnome-about/Makefile
+-gnome-about/gnome-about.desktop.in
+-gnome-about/headers/Makefile
+ libgnome-desktop/Makefile
+ libgnome-desktop/libgnome/Makefile
+ libgnome-desktop/libgnomeui/Makefile
+@@ -226,14 +220,7 @@ libgnome-desktop/gnome-desktop-3.0-unins
+ docs/Makefile
+ docs/reference/Makefile
+ docs/reference/gnome-desktop3/Makefile
+-gnome-version.xml.in
+ po/Makefile.in
+-pixmaps/Makefile
+-desktop-docs/Makefile
+-desktop-docs/fdl/Makefile
+-desktop-docs/gpl/Makefile
+-desktop-docs/lgpl/Makefile
+-man/Makefile
+ ])
+ 
+ AC_OUTPUT
+--- gnome-desktop-2.90.4.orig/Makefile.am
++++ gnome-desktop-2.90.4/Makefile.am
+@@ -3,28 +3,17 @@ ACLOCAL_AMFLAGS = -I m4
+ SUBDIRS =			\
+ 	po 			\
+ 	libgnome-desktop 	\
+-	gnome-about 		\
+-	pixmaps			\
+-	desktop-docs		\
+-	docs			\
+-	man
++	docs
+ 
+ EXTRA_DIST =			\
+ 	MAINTAINERS		\
+ 	ChangeLog.pre-git	\
+-	gnome-version.xml.in.in	\
+-	gnome-version.xml	\
+ 	COPYING-DOCS		\
+ 	HACKING			\
+ 	gnome-doc-utils.make
+ 
+-versiondir=$(datadir)/gnome-about
+-version_DATA=gnome-version.xml
+-@INTLTOOL_XML_RULE@
+-
+ DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc --disable-scrollkeeper
+ 
+-CLEANFILES = $(version_DATA)
+ DISTCLEANFILES = \
+   gnome-doc-utils.make
+ 

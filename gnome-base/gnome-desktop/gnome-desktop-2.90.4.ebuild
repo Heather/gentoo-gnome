@@ -29,7 +29,8 @@ DEPEND="${RDEPEND}
 	x11-proto/xproto
 	>=x11-proto/randrproto-1.2"
 # Temporarily require the 2.31 version to ensure the proper pixmaps, gnome-about,
-# etc. are installed
+# etc. are installed.  Switch to doing things the other way around once
+# gnome-about no longer uses pygtk 2
 PDEPEND=">=gnome-base/gnome-desktop-2.31:0"
 
 # Includes X11/Xatom.h in libgnome-desktop/gnome-bg.c which comes from xproto
