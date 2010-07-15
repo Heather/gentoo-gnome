@@ -30,6 +30,7 @@
 =app-text/evince-2.31*
 =dev-libs/glib-2.25*
 dev-libs/libpeas
+dev-libs/libunique:3
 =gnome-base/gconf-2.31*
 =gnome-base/gnome-desktop-2.31*:0
 gnome-base/gnome-desktop:3

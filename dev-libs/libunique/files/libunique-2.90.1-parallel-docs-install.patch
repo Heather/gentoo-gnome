@@ -1,0 +1,27 @@
+Upstream bug #623454
+
+From d6363f5bb5aeb58c19fc12ef5b4049a184115950 Mon Sep 17 00:00:00 2001
+From: Maciej Piechotka <uzytkownik2@gmail.com>
+Date: Sat, 3 Jul 2010 12:16:32 +0200
+Subject: [PATCH] Add correct version of module
+
+---
+ doc/reference/Makefile.am |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/doc/reference/Makefile.am b/doc/reference/Makefile.am
+index eb45dfe..a9d3975 100644
+--- a/doc/reference/Makefile.am
++++ b/doc/reference/Makefile.am
+@@ -8,6 +8,8 @@
+ # The name of the module, e.g. 'glib'.
+ DOC_MODULE = unique
+ 
++DOC_MODULE_VERSION=3.0
++
+ # The top-level SGML file. You can change this if you want to.
+ DOC_MAIN_SGML_FILE = $(DOC_MODULE)-docs.xml
+ 
+-- 
+1.7.1.1
+
