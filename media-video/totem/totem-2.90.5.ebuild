@@ -4,8 +4,10 @@
 
 EAPI="2"
 WANT_AUTOMAKE="1.11"
-
-inherit autotools eutils gnome2 multilib python
+#PYTHON_DEPEND="python? 2"
+#PYTHON_USE_WITH="threads"
+#PYTHON_USE_WITH_OPT="python"
+inherit autotools eutils gnome2 multilib #python
 
 DESCRIPTION="Media player for GNOME"
 HOMEPAGE="http://gnome.org/projects/totem/"
@@ -17,18 +19,18 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 # FIXME: Enable for now python USE flag per bug #316409
 # this change should only be noticed by people not following current
 # current linux profiles default
-IUSE="bluetooth debug doc galago lirc nsplugin tracker +youtube" #iplayer nautilus +python vala zeroconf
+IUSE="bluetooth debug doc galago lirc nautilus nsplugin tracker +youtube" #iplayer +python vala zeroconf
 
 # TODO:
 # Cone (VLC) plugin needs someone with the right setup (remi ?)
 # check gmyth requirement ? -> waiting for updates in tree
 # coherence plugin not enabled until we have deps in tree
 # vala ( dev-lang/vala ) requires 0.7.5
-RDEPEND=">=dev-libs/glib-2.25.9
+RDEPEND=">=dev-libs/glib-2.25.11
 	>=x11-libs/gtk+-2.90.3:3
 	>=gnome-base/gconf-2.0
 	>=dev-libs/totem-pl-parser-2.29.1
-	dev-libs/libpeas[gtk]
+	>=dev-libs/libpeas-0.5.2[gtk]
 	>=x11-themes/gnome-icon-theme-2.16
 	x11-libs/cairo
 	>=dev-libs/libxml2-2.6
@@ -57,30 +59,27 @@ RDEPEND=">=dev-libs/glib-2.25.9
 		net-wireless/bluez-libs ) )
 	galago? ( >=dev-libs/libgalago-0.5.2 )
 	lirc? ( app-misc/lirc )
+	nautilus? ( >=gnome-base/nautilus-2.10 )
 	tracker? ( >=app-misc/tracker-0.8.1 )
 	youtube? (
 		>=dev-libs/libgdata-0.4.0
 		media-plugins/gst-plugins-soup )"
-# FIXME: no gtk+:3 version of libnautilus-extension
-#	nautilus? ( >=gnome-base/nautilus-2.10 )
-
-# FIXME: not tested
+# FIXME: no libpeas[vala] yet
 #	vala? ( >=dev-lang/vala-0.7.5 )
 
-# FIXME: disabled upstream (no pygtk for gtk3
+# FIXME: disabled upstream (introspection not quite stable)
 #	python? (
-#		dev-lang/python[threads]
-#		>=dev-python/pygtk-2.12
+#		dev-python/pygobject[introspection]
+#		>=gnome-base/gconf-2.0[introspection]
+#		x11-libs/gtk+-2.90.3:3[introspection]
+#		x11-libs/pango[introspection]
 #		dev-python/pyxdg
 #		dev-python/gst-python
 #		dev-python/dbus-python
-#		dev-python/gconf-python )
-#	iplayer? (
-#		dev-python/pygobject
-#		dev-python/pygtk
-#		dev-python/httplib2
-#		dev-python/feedparser
-#		dev-python/beautifulsoup )
+#		iplayer? (
+#			dev-python/httplib2
+#			dev-python/feedparser
+#			dev-python/beautifulsoup ) )
 
 # FIXME: freezes totem
 #	zeroconf? ( >=net-libs/libepc-0.3 )
@@ -102,6 +101,8 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
 pkg_setup() {
+#	python_set_active_version 2
+
 	G2CONF="${G2CONF}
 		--disable-scrollkeeper
 		--disable-schemas-install
@@ -119,9 +120,9 @@ pkg_setup() {
 	local plugins="thumbnail,screensaver,ontop,gromit,media-player-keys,properties,sidebar-test,skipto,screenshot,brasero-disc-recorder"
 	use bluetooth && plugins="${plugins},bemused"
 	use galago && plugins="${plugins},galago"
-	#use iplayer && plugins="${plugins},iplayer"
+#	use iplayer && plugins="${plugins},iplayer"
 	use lirc && plugins="${plugins},lirc"
-	#use python && plugins="${plugins},pythonconsole,jamendo,opensubtitles,dbus-service"
+#	use python && plugins="${plugins},pythonconsole,jamendo,opensubtitles,dbus-service"
 	use tracker && plugins="${plugins},tracker"
 	use youtube && plugins="${plugins},youtube"
 	#use zeroconf && plugins="${plugins},publish"
@@ -130,23 +131,18 @@ pkg_setup() {
 
 	G2CONF="${G2CONF}
 		$(use_enable debug)
-		--disable-nautilus
-		--disable-python"
-		# $(use_enable nautilus)
-		# $(use_enable python)"
+		$(use_enable nautilus)
+		--disable-python
+		--disable-introspection"
+#		$(use_enable python)
+#		$(use_enable python introspection)"
 }
 
 src_prepare() {
 	gnome2_src_prepare
 
 	# Fix broken smclient option passing
-	epatch "${FILESDIR}/${P}-smclient-target-detection.patch"
-
-	epatch "${FILESDIR}"/${P}-remove-libunique-dep.patch
-	epatch "${FILESDIR}"/${P}-gapplication-fix.patch
-
-	# not yet upstream
-	epatch "${FILESDIR}/${PN}-2.90.0-gtk-api-changes.patch"
+	epatch "${FILESDIR}/${PN}-2.90.0-smclient-target-detection.patch"
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
