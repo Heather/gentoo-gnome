@@ -14,7 +14,7 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux"
 IUSE="+compat libnotify"
 
-RDEPEND=">=x11-libs/gtk+-2.15.2:2
+RDEPEND=">=x11-libs/gtk+-2.90.2:3
 	>=dev-libs/glib-2.8
 	compat? ( >=dev-lang/perl-5 )
 	libnotify? ( >=x11-libs/libnotify-0.4.1 )"
