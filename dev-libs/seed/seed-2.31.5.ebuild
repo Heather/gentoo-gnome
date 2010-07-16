@@ -3,7 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/seed/seed-2.30.0.ebuild,v 1.1 2010/06/29 08:27:36 nirbheek Exp $
 
 EAPI="2"
-
+WANT_AUTOMAKE="1.11"
 inherit autotools gnome2
 
 DESCRIPTION="Javascript bindings for Webkit-GTK and GNOME libraries"
@@ -41,7 +41,7 @@ DOCS="AUTHORS ChangeLog NEWS README"
 # FIXME: tests need all the feature-USE-flags enabled to complete successfully
 RESTRICT="test"
 
-src_prepare() {
+pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_enable dbus dbus-module)
 		$(use_enable mpfr mpfr-module)
@@ -64,4 +64,11 @@ src_prepare() {
 		ewarn "USE=profile behaves very badly with ccache; it tries to create"
 		ewarn "profiling data in CCACHE_DIR. Please disable one of them!"
 	fi
+}
+
+src_prepare() {
+	epatch "${FILESDIR}"/${P}-cleanup-autotools.patch
+
+	intltoolize --automake --copy --force || die "intltoolize failed"
+	eautoreconf
 }

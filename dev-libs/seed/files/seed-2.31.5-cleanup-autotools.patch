@@ -1,0 +1,585 @@
+From 4f52b1ef263df971f677f4ad88f9766c26a15a89 Mon Sep 17 00:00:00 2001
+From: Jonathan Callen <abcd@gentoo.org>
+Date: Fri, 16 Jul 2010 04:41:52 -0400
+Subject: [PATCH] Cleanup autotools
+
+---
+ Makefile.am                         |    2 --
+ configure.ac                        |   30 +++++++++++++++---------------
+ extensions/Makefile.am              |    7 ++++---
+ libseed/Makefile.am                 |    6 ++++--
+ modules/cairo/Makefile.am           |   27 ++++++++++++++-------------
+ modules/canvas/Makefile.am          |    8 +++++---
+ modules/dbus/Makefile.am            |   24 +++++++++++-------------
+ modules/example/Makefile.am         |    6 ++++--
+ modules/ffi/Makefile.am             |    8 +++++---
+ modules/gettext/Makefile.am         |    6 ++++--
+ modules/gtkbuilder/Makefile.am      |    8 +++++---
+ modules/libxml/Makefile.am          |   12 ++++++------
+ modules/mpfr/Makefile.am            |   11 +++++------
+ modules/multiprocessing/Makefile.am |    6 ++++--
+ modules/os/Makefile.am              |    7 ++++---
+ modules/readline/Makefile.am        |    8 +++++---
+ modules/sandbox/Makefile.am         |    6 ++++--
+ modules/sqlite/Makefile.am          |    9 +++++----
+ src/Makefile.am                     |    8 ++++----
+ tests/c/Makefile.am                 |    6 ++----
+ 20 files changed, 110 insertions(+), 95 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 5bfb716..2183798 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -1,7 +1,5 @@
+ ## Process this file with automake to produce Makefile.in
+ 
+-ACLOCAL_AMFLAGS = -I m4
+-
+ SUBDIRS = po \
+ 	libseed \
+ 	src \
+diff --git a/configure.ac b/configure.ac
+index 3bbcccd..fa751a2 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -54,9 +54,9 @@ if test x"$have_ffi_pkgconfig" = xno ; then
+ 
+ 		AC_SEARCH_LIBS(ffi_call,ffi,,AC_MSG_ERROR([libffi not found]),$other_LIBS)
+ 		if test x"$ac_cv_search_ffi_call" = x"none required" ; then
+-			FFI_LDFLAGS=$other_LIBS
++			FFI_LIBS=$other_LIBS
+ 		else
+-			FFI_LDFLAGS="$ac_cv_search_ffi_call $other_LIBS"
++			FFI_LIBS="$ac_cv_search_ffi_call $other_LIBS"
+ 		fi
+ 		LIBS=$save_LIBS
+ 	fi
+@@ -69,18 +69,18 @@ if test x"$have_ffi_pkgconfig" = xno ; then
+ 	AC_MSG_RESULT([$have_ffi_h])
+ fi
+ 
+-AC_SUBST(FFI_LDFLAGS)
++AC_SUBST(FFI_LIBS)
+ AC_SUBST(FFI_CFLAGS)
+ 
+ dnl ==============================WebKit=======================================
+ PKG_CHECK_MODULES(WEBKIT, webkitgtk-3.0)
+ AC_SUBST(WEBKIT_CFLAGS)
+-AC_SUBST(WEBKIT_LDFLAGS)
++AC_SUBST(WEBKIT_LIBS)
+ 
+ dnl =========================Introspection=====================================
+ PKG_CHECK_MODULES(GOBJECT_INTROSPECTION, gobject-introspection-1.0 >= 0.6.14)
+ AC_SUBST(GOBJECT_INTROSPECTION_CFLAGS)
+-AC_SUBST(GOBJECT_INTROSPECTION_LDFLAGS)
++AC_SUBST(GOBJECT_INTROSPECTION_LIBS)
+ 
+ dnl ========================GNOME-js common====================================
+ PKG_CHECK_MODULES(GNOME_JS, gnome-js-common)
+@@ -97,10 +97,10 @@ AC_ARG_ENABLE(canvas-module,
+ if test x"$want_canvas_module" == x"yes" ; then
+ 	PKG_CHECK_MODULES(CAIRO, cairo)
+ 	AC_SUBST(CAIRO_CFLAGS)
+-	AC_SUBST(CAIRO_LDFLAGS)
++	AC_SUBST(CAIRO_LIBS)
+ 	PKG_CHECK_MODULES(GDK, gdk-2.0)
+ 	AC_SUBST(GDK_CFLAGS)
+-	AC_SUBST(GDK_LDFLAGS)
++	AC_SUBST(GDK_LIBS)
+ fi
+ 
+ AM_CONDITIONAL(BUILD_CANVAS_MODULE, test "x$want_canvas_module" = "xyes")
+@@ -137,7 +137,7 @@ AC_ARG_ENABLE(sqlite-module,
+ if test x"$want_sqlite_module" == x"yes" ; then
+ 	PKG_CHECK_MODULES(SQLITE, sqlite3)
+ 	AC_SUBST(SQLITE_CFLAGS)
+-	AC_SUBST(SQLITE_LDFLAGS)
++	AC_SUBST(SQLITE_LIBS)
+ fi
+ 
+ AM_CONDITIONAL(BUILD_SQLITE_MODULE, test "x$want_sqlite_module" = "xyes")
+@@ -165,10 +165,10 @@ AC_SUBST(BUILD_DBUS_MODULE)
+ if test x"$want_dbus_module" == x"yes" ; then
+ 	PKG_CHECK_MODULES(DBUS, dbus-1)
+ 	AC_SUBST(DBUS_CFLAGS)
+-	AC_SUBST(DBUS_LDFLAGS)
++	AC_SUBST(DBUS_LIBS)
+ 	PKG_CHECK_MODULES(DBUSGLIB, dbus-glib-1)
+ 	AC_SUBST(DBUSGLIB_CFLAGS)
+-	AC_SUBST(DBUSGLIB_LDFLAGS)
++	AC_SUBST(DBUSGLIB_LIBS)
+ fi
+ 
+ 
+@@ -202,7 +202,7 @@ AC_ARG_ENABLE(libxml-module,
+ if test x"$want_libxml_module" == x"yes" ; then
+    PKG_CHECK_MODULES(LIBXML, libxml-2.0)
+    AC_SUBST(LIBXML_CFLAGS)
+-   AC_SUBST(LIBXML_LDFLAGS)
++   AC_SUBST(LIBXML_LIBS)
+ fi
+ 
+ AM_CONDITIONAL(BUILD_LIBXML_MODULE, test "x$want_libxml_module" = "xyes")
+@@ -227,7 +227,7 @@ AC_ARG_ENABLE(gtkbuilder-module,
+ if test x"$want_gtkbuilder_module" == x"yes" ; then
+    PKG_CHECK_MODULES(GTK, gtk+-2.0)
+    AC_SUBST(GTK_CFLAGS)
+-   AC_SUBST(GTK_LDFLAGS)
++   AC_SUBST(GTK_LIBS)
+ fi
+ 
+ AM_CONDITIONAL(BUILD_GTKBUILDER_MODULE, test "x$want_gtkbuilder_module" = "xyes")
+@@ -243,7 +243,7 @@ AC_ARG_ENABLE(cairo-module,
+ if test x"$want_cairo_module" == x"yes" ; then
+ 	PKG_CHECK_MODULES(CAIRO, cairo)
+ 	AC_SUBST(CAIRO_CFLAGS)
+-	AC_SUBST(CAIRO_LDFLAGS)
++	AC_SUBST(CAIRO_LIBS)
+ fi
+ 
+ AM_CONDITIONAL(BUILD_CAIRO_MODULE, test "x$want_cairo_module" = "xyes")
+@@ -277,9 +277,9 @@ if test x"$want_mpfr_module" == x"yes" ; then
+ 
+ 		AC_SEARCH_LIBS(mpfr_init2,mpfr,,AC_MSG_ERROR([mpfr not found]),$other_LIBS)
+ 		if test x"$ac_cv_search_mpfr_call" = x"none required" ; then
+-			MPFR_LDFLAGS=$other_LIBS
++			MPFR_LIBS=$other_LIBS
+ 		else
+-			MPFR_LDFLAGS="$other_LIBS"
++			MPFR_LIBS="$other_LIBS"
+ 		fi
+ 		LIBS=$save_LIBS
+ 	fi
+diff --git a/extensions/Makefile.am b/extensions/Makefile.am
+index 6f30f2e..fd5dff0 100644
+--- a/extensions/Makefile.am
++++ b/extensions/Makefile.am
+@@ -1,10 +1,11 @@
+-EXTRA_DIST= Gio.js Seed.js.in Gtk.js GObject.js Clutter.js Gst.js repl.js
++EXTRA_DIST= Seed.js.in
+ 
+ extensiondir=$(datadir)/seed/extensions
+-extension_DATA = Gio.js Seed.js Gtk.js GObject.js Clutter.js Gst.js
++extension_DATA = Seed.js
++dist_extension_DATA = Gio.js Gtk.js GObject.js Clutter.js Gst.js
+ 
+ repldir=$(datadir)/seed
+-repl_DATA = repl.js
++dist_repl_DATA = repl.js
+ 
+ Seed.js: Seed.js.in
+ 	$(AM_V_GEN) $(SED) -e "s|%pkglibdir%|$(pkglibdir)|" -e "s|%pkgdatadir%|$(pkgdatadir)|" -e "s|%gnomejsdir%|$(GNOME_JS_DIR)|" $< > $@
+diff --git a/libseed/Makefile.am b/libseed/Makefile.am
+index 909aa2a..04e263d 100644
+--- a/libseed/Makefile.am
++++ b/libseed/Makefile.am
+@@ -35,12 +35,14 @@ libseed_la_CFLAGS = \
+ 	$(FFI_CFLAGS)
+ 
+ libseed_la_LDFLAGS = \
+-	-no-undefined \
++	-no-undefined
++
++libseed_la_LIBADD = \
+ 	$(GOBJECT_INTROSPECTION_LIBS) \
+ 	$(WEBKIT_LIBS) \
+ 	$(SEED_PROFILE_LIBS) \
+ 	$(SEED_OSX_LIBS) \
+-	$(FFI_LDFLAGS)
++	$(FFI_LIBS)
+ 
+ seedheaders_HEADERS = seed.h seed-debug.h seed-module.h
+ 
+diff --git a/modules/cairo/Makefile.am b/modules/cairo/Makefile.am
+index 139601a..3ea87d5 100644
+--- a/modules/cairo/Makefile.am
++++ b/modules/cairo/Makefile.am
+@@ -1,13 +1,5 @@
+ if BUILD_CAIRO_MODULE
+ 
+-EXTRA_DIST = seed-cairo-enums.h \
+-             seed-cairo.h \
+-             seed-cairo-image-surface.h \
+-             seed-cairo-matrix.h \
+-             seed-cairo-pattern.h \
+-             seed-cairo-pdf-surface.h \
+-             seed-cairo-surface.h
+-
+ seedlibdir = ${libdir}/seed
+ 
+ seedlib_LTLIBRARIES = \
+@@ -15,12 +7,19 @@ seedlib_LTLIBRARIES = \
+ 
+ libseed_cairo_la_SOURCES = \
+ 	seed-cairo.c \
++	seed-cairo.h \
+ 	seed-cairo-surface.c \
++	seed-cairo-surface.h \
+ 	seed-cairo-image-surface.c \
++	seed-cairo-image-surface.h \
+ 	seed-cairo-pdf-surface.c \
++	seed-cairo-pdf-surface.h \
+ 	seed-cairo-matrix.c \
++	seed-cairo-matrix.h \
+ 	seed-cairo-pattern.c \
+-	seed-cairo-enums.c 
++	seed-cairo-pattern.h
++	seed-cairo-enums.c \
++	seed-cairo-enums.h
+ 
+ libseed_cairo_la_CFLAGS = \
+ 	-Wall \
+@@ -32,10 +31,12 @@ libseed_cairo_la_CFLAGS = \
+ 	$(SEED_PROFILE_CFLAGS)
+ 
+ libseed_cairo_la_LDFLAGS = \
+-	-module -avoid-version \
+-	$(GOBJECT_INTROSPECTION_LDFLAGS) \
+-	$(GDK_LDFLAGS) \
+-	$(CAIRO_LDFLAGS) \
++	-shared -module -avoid-version
++
++libseed_cairo_la_LIBADD = \
++	$(GOBJECT_INTROSPECTION_LIBS) \
++	$(GDK_LIBS) \
++	$(CAIRO_LIBS) \
+ 	$(SEED_PROFILE_LIBS)
+ 
+ endif
+diff --git a/modules/canvas/Makefile.am b/modules/canvas/Makefile.am
+index 11a3929..4b28259 100644
+--- a/modules/canvas/Makefile.am
++++ b/modules/canvas/Makefile.am
+@@ -17,9 +17,11 @@ libseed_canvas_la_CFLAGS = \
+ 	$(SEED_PROFILE_CFLAGS)
+ 
+ libseed_canvas_la_LDFLAGS = \
+-	-module -avoid-version \
+-	$(GOBJECT_INTROSPECTION_LDFLAGS) \
+-	$(CAIRO_LDFLAGS) \
++	-shared -module -avoid-version
++
++libseed_canvas_la_LIBADD = \
++	$(GOBJECT_INTROSPECTION_LIBS) \
++	$(CAIRO_LIBS) \
+ 	$(SEED_PROFILE_LIBS)
+ 
+ endif
+diff --git a/modules/dbus/Makefile.am b/modules/dbus/Makefile.am
+index 9f7fdb3..625e99b 100644
+--- a/modules/dbus/Makefile.am
++++ b/modules/dbus/Makefile.am
+@@ -2,14 +2,10 @@ if BUILD_DBUS_MODULE
+ 
+ SUBDIRS = util
+ 
+-EXTRA_DIST = dbus2js.py \
+-			 dbus.js \
+-			 dbus-values.h \
+-			 lang.js \
+-			 dbus-exports.h
++EXTRA_DIST = dbus2js.py
+ 
+ moduledir = $(datadir)/seed
+-module_DATA = dbus.js lang.js
++dist_module_DATA = dbus.js lang.js
+ 
+ seedlibdir = ${libdir}/seed
+ 
+@@ -22,7 +18,9 @@ libseed_dbusnative_la_SOURCES = \
+ 	util/dbus-proxy.c \
+ 	util/dbus-signals.c \
+ 	dbus-values.c  \
+-	dbus-exports.c 
++	dbus-values.h  \
++	dbus-exports.c \
++	dbus-exports.h
+ 
+ 
+ libseed_dbusnative_la_CFLAGS = \
+@@ -35,12 +33,12 @@ libseed_dbusnative_la_CFLAGS = \
+ 
+ 
+ libseed_dbusnative_la_LDFLAGS = \
+-	-module -avoid-version \
+-	$(GOBJECT_INTROSPECTION_LDFLAGS) \
+-	-L/lib \
+-	-ldbus-1 \
+-	$(DBUS_LDFLAGS) \
+-	-ldbus-glib-1 \
++	-shared -module -avoid-version
++
++libseed_dbusnative_la_LIBADD = \
++	$(GOBJECT_INTROSPECTION_LIBS) \
++	$(DBUS_LIBS) \
++	$(DBUS_GLIB_LIBS) \
+ 	$(SEED_PROFILE_LIBS)
+ 
+ 
+diff --git a/modules/example/Makefile.am b/modules/example/Makefile.am
+index d58f8ec..2524e32 100644
+--- a/modules/example/Makefile.am
++++ b/modules/example/Makefile.am
+@@ -15,8 +15,10 @@ AM_CPPFLAGS = \
+ 	$(SEED_PROFILE_CFLAGS)
+ 
+ libseed_example_la_LDFLAGS = \
+-	-module -avoid-version \
+-	$(GOBJECT_INTROSPECTION_LDFLAGS) \
++	-shared -module -avoid-version
++
++libseed_example_la_LIBADD = \
++	$(GOBJECT_INTROSPECTION_LIBS) \
+ 	$(SEED_PROFILE_LIBS)
+ 
+ endif
+diff --git a/modules/ffi/Makefile.am b/modules/ffi/Makefile.am
+index d7e879d..270fb12 100644
+--- a/modules/ffi/Makefile.am
++++ b/modules/ffi/Makefile.am
+@@ -23,10 +23,12 @@ libseed_ffi_la_CFLAGS = \
+ 	$(FFI_CFLAGS)
+ 
+ libseed_ffi_la_LDFLAGS = \
+-	-module -avoid-version \
+-	$(GOBJECT_INTROSPECTION_LDFLAGS) \
++	-shared -module -avoid-version
++
++libseed_ffi_la_LIBADD = \
++	$(GOBJECT_INTROSPECTION_LIBS) \
+ 	$(SEED_PROFILE_LIBS) \
+-	$(FFI_LDFLAGS)
++	$(FFI_LIBS)
+ 
+ endif
+ 
+diff --git a/modules/gettext/Makefile.am b/modules/gettext/Makefile.am
+index a182f4f..4c246d8 100644
+--- a/modules/gettext/Makefile.am
++++ b/modules/gettext/Makefile.am
+@@ -15,8 +15,10 @@ AM_CPPFLAGS = \
+ 	$(SEED_PROFILE_CFLAGS)
+ 
+ libseed_gettext_la_LDFLAGS = \
+-	-module -avoid-version \
+-	$(GOBJECT_INTROSPECTION_LDFLAGS) \
++	-shared -module -avoid-version
++
++libseed_gettext_la_LIBADD = \
++	$(GOBJECT_INTROSPECTION_LIBS) \
+ 	$(SEED_PROFILE_LIBS)
+ 
+ endif
+diff --git a/modules/gtkbuilder/Makefile.am b/modules/gtkbuilder/Makefile.am
+index 972efdc..3998be4 100644
+--- a/modules/gtkbuilder/Makefile.am
++++ b/modules/gtkbuilder/Makefile.am
+@@ -17,9 +17,11 @@ AM_CPPFLAGS = \
+ 	$(SEED_PROFILE_CFLAGS)
+ 
+ libseed_gtkbuilder_la_LDFLAGS = \
+-	-module -avoid-version \
+-	$(GTK_LDFLAGS) \
+-	$(GOBJECT_INTROSPECTION_LDFLAGS) \
++	-shared -module -avoid-version
++
++libseed_gtkbuilder_la_LIBADD = \
++	$(GTK_LIBS) \
++	$(GOBJECT_INTROSPECTION_LIBS) \
+ 	$(SEED_PROFILE_LIBS)
+ 
+ endif
+diff --git a/modules/libxml/Makefile.am b/modules/libxml/Makefile.am
+index a1dba7b..cb0e96d 100644
+--- a/modules/libxml/Makefile.am
++++ b/modules/libxml/Makefile.am
+@@ -1,7 +1,5 @@
+ if BUILD_LIBXML_MODULE
+ 
+-EXTRA_DIST = xml.js
+-
+ seedlibdir = ${libdir}/seed
+ 
+ seedlib_LTLIBRARIES = \
+@@ -18,13 +16,15 @@ AM_CPPFLAGS = \
+ 	$(SEED_PROFILE_CFLAGS)
+ 
+ libseed_libxml_la_LDFLAGS = \
+-	-module -avoid-version \
+-	$(LIBXML_LDFLAGS) \
+-	$(GOBJECT_INTROSPECTION_LDFLAGS) \
++	-shared -module -avoid-version
++
++libseed_libxml_la_LIBADD = \
++	$(LIBXML_LIBS) \
++	$(GOBJECT_INTROSPECTION_LIBS) \
+ 	$(SEED_PROFILE_LIBS)
+ 
+ extensionsdir=$(datadir)/seed/extensions
+-extensions_DATA=xml.js
++dist_extensions_DATA=xml.js
+ 
+ endif
+ 
+diff --git a/modules/mpfr/Makefile.am b/modules/mpfr/Makefile.am
+index d0497ec..06a6c00 100644
+--- a/modules/mpfr/Makefile.am
++++ b/modules/mpfr/Makefile.am
+@@ -7,6 +7,7 @@ seedlib_LTLIBRARIES = \
+ 
+ libseed_mpfr_la_SOURCES = \
+ 	seed-mpfr.c \
++	seed-mpfr.h \
+ 	seed-mpfr-trig.c \
+ 	seed-mpfr-arithmetic.c \
+ 	seed-mpfr-cmp.c
+@@ -18,13 +19,11 @@ AM_CPPFLAGS = \
+ 	$(SEED_PROFILE_CFLAGS)
+ 
+ libseed_mpfr_la_LDFLAGS = \
+-	-module -avoid-version \
+-	$(GOBJECT_INTROSPECTION_LDFLAGS) \
+-	$(SEED_PROFILE_LIBS)
+-
+-libseed_mpfr_la_LIBADD = -lmpfr -lgmp
++	-shared -module -avoid-version
+ 
+-EXTRA_DIST = seed-mpfr.h
++libseed_mpfr_la_LIBADD = -lmpfr -lgmp \
++	$(GOBJECT_INTROSPECTION_LIBS) \
++	$(SEED_PROFILE_LIBS)
+ 
+ endif
+ 
+diff --git a/modules/multiprocessing/Makefile.am b/modules/multiprocessing/Makefile.am
+index 1e39007..cb151f9 100644
+--- a/modules/multiprocessing/Makefile.am
++++ b/modules/multiprocessing/Makefile.am
+@@ -17,8 +17,10 @@ libseed_multiprocessing_la_CFLAGS = \
+ 	$(SEED_PROFILE_CFLAGS)
+ 
+ libseed_multiprocessing_la_LDFLAGS = \
+-	-module -avoid-version \
+-	$(GOBJECT_INTROSPECTION_LDFLAGS) \
++	-shared -module -avoid-version
++
++libseed_multiprocessing_la_LIBADD = \
++	$(GOBJECT_INTROSPECTION_LIBS) \
+ 	$(SEED_PROFILE_LIBS)
+ 
+ endif
+diff --git a/modules/os/Makefile.am b/modules/os/Makefile.am
+index 0781937..b4bdaf4 100644
+--- a/modules/os/Makefile.am
++++ b/modules/os/Makefile.am
+@@ -15,10 +15,11 @@ libseed_os_la_CFLAGS = \
+ 	$(SEED_PROFILE_CFLAGS)
+ 
+ libseed_os_la_LDFLAGS = \
+-	-module -avoid-version \
+-	$(GOBJECT_INTROSPECTION_LDFLAGS) \
++	-shared -module -avoid-version
++
++libseed_os_la_LIBADD = \
++	$(GOBJECT_INTROSPECTION_LIBS) \
+ 	-lutil \
+-	$(SEED_DEBUG_LDFLAGS) \
+ 	$(SEED_PROFILE_LIBS)
+ 
+ endif
+diff --git a/modules/readline/Makefile.am b/modules/readline/Makefile.am
+index 8eff4e8..94965ca 100644
+--- a/modules/readline/Makefile.am
++++ b/modules/readline/Makefile.am
+@@ -16,10 +16,12 @@ libseed_readline_la_CFLAGS = \
+ 	$(SEED_PROFILE_CFLAGS)
+ 
+ libseed_readline_la_LDFLAGS = \
+-	-module -avoid-version \
++	-shared -module -avoid-version
++
++libseed_readline_la_LIBADD = \
+ 	-lreadline \
+-	$(GOBJECT_INTROSPECTION_LDFLAGS) \
+-	$(FFI_LDFLAGS) \
++	$(GOBJECT_INTROSPECTION_LIBS) \
++	$(FFI_LIBS) \
+ 	$(SEED_PROFILE_LIBS) 
+ 
+ endif
+diff --git a/modules/sandbox/Makefile.am b/modules/sandbox/Makefile.am
+index 8a53221..f79149c 100644
+--- a/modules/sandbox/Makefile.am
++++ b/modules/sandbox/Makefile.am
+@@ -14,8 +14,10 @@ AM_CPPFLAGS = \
+ 	$(SEED_PROFILE_CFLAGS)
+ 
+ libseed_sandbox_la_LDFLAGS = \
+-	-module -avoid-version \
+-	$(GOBJECT_INTROSPECTION_LDFLAGS) \
++	-shared -module -avoid-version
++
++libseed_sandbox_la_LIBADD = \
++	$(GOBJECT_INTROSPECTION_LIBS) \
+ 	$(SEED_PROFILE_LIBS)
+ 
+ 
+diff --git a/modules/sqlite/Makefile.am b/modules/sqlite/Makefile.am
+index deedaba..15fedf4 100644
+--- a/modules/sqlite/Makefile.am
++++ b/modules/sqlite/Makefile.am
+@@ -17,10 +17,11 @@ libseed_sqlite_la_CFLAGS = \
+ 	$(SEED_PROFILE_CFLAGS)
+ 
+ libseed_sqlite_la_LDFLAGS = \
+-	-module -avoid-version \
+-	$(GOBJECT_INTROSPECTION_LDFLAGS) \
+-	$(SQLITE_LDFLAGS) \
+-	$(SEED_DEBUG_LDFLAGS) \
++	-shared -module -avoid-version
++
++libseed_sqlite_la_LIBS = \
++	$(GOBJECT_INTROSPECTION_LIBS) \
++	$(SQLITE_LIBS) \
+ 	$(SEED_PROFILE_LIBS)
+ 
+ endif
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 04ee4c8..82c2efc 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -16,11 +16,11 @@ seed_CFLAGS = \
+ 	$(GOBJECT_INTROSPECTION_CFLAGS) \
+ 	$(WEBKIT_CFLAGS)
+ 
+-seed_LDFLAGS = \
++seed_LDADD = \
+ 	$(SEED_PROFILE_LIBS) \
+-	$(LIBFFI_LDFLAGS) \
+-	$(GOBJECT_INTROSPECTION_LDFLAGS) \
+-	$(WEBKIT_LDFLAGS)
++	$(LIBFFI_LIBS) \
++	$(GOBJECT_INTROSPECTION_LIBS) \
++	$(WEBKIT_LIBS)
+ 
+ seed_LDADD = \
+ 	../libseed/libseed.la
+diff --git a/tests/c/Makefile.am b/tests/c/Makefile.am
+index cb72d00..48b1bc2 100644
+--- a/tests/c/Makefile.am
++++ b/tests/c/Makefile.am
+@@ -16,9 +16,7 @@ test_CFLAGS = \
+ 	-Wall \
+ 	$(GOBJECT_INTROSPECTION_CFLAGS)
+ 
+-test_LDFLAGS = \
+-	$(GOBJECT_INTROSPECTION_LIBS)
+-
+ test_LDADD = \
+-	../../libseed/libseed.la
++	../../libseed/libseed.la \
++	$(GOBJECT_INTROSPECTION_LIBS)
+ 
+-- 
+1.7.1.1
+
