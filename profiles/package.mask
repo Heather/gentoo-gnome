@@ -36,6 +36,7 @@ dev-libs/libunique:3
 =gnome-base/gnome-control-center-2.31*
 =gnome-base/gnome-desktop-2.31*:0
 gnome-base/gnome-desktop:3
+gnome-base/gnome-js-common
 =gnome-base/gnome-keyring-2.31*
 =gnome-base/gnome-session-2.31*
 =gnome-base/gnome-settings-daemon-2.31*
