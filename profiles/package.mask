@@ -29,6 +29,7 @@
 =app-editors/gedit-2.31*
 =app-text/evince-2.31*
 =dev-libs/glib-2.25*
+dev-libs/seed
 dev-libs/libpeas
 dev-libs/libunique:3
 =gnome-base/gconf-2.31*
