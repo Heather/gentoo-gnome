@@ -112,7 +112,7 @@ src_configure() {
 src_compile() {
 	# Unfortunately, the parellel make breaks if USE=introspection
 	use introspection && export MAKEOPTS="${MAKEOPTS} -j1"
-	gnome2_src_compile
+	default
 }
 
 src_test() {
