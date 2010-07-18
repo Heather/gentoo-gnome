@@ -20,7 +20,9 @@
 # Mask dev version
 =dev-lang/vala-0.9*
 =x11-libs/cairo-1.9*
+=x11-libs/libnotify-0.5*
 =x11-misc/alacarte-0.13*
+=x11-misc/notification-daemon-0.5*
 
 # Jonathan Callen <abcd@gentoo.org> (22 Jun 2010)
 # Mask GTK+ 2.21 / GTK+ 3 / GLib 2.25 / Gnome 2.31
@@ -63,7 +65,6 @@ x11-libs/gdk-pixbuf
 =x11-libs/gtk+-2.21*
 x11-libs/gtk+:3
 x11-libs/gtksourceview:3.0
-=x11-libs/libnotify-0.5*
 =x11-libs/vte-0.25*
 =x11-terms/gnome-terminal-2.31*
 =x11-themes/gnome-themes-2.31*
