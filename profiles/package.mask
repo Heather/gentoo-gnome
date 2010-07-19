@@ -6,6 +6,10 @@
 # NOTE: Please add your entry at the top!
 #
 
+# Priit Laes <plaes@plaes.org> (19 Jul 2010)
+# Requires gobject-introspection-0.9 which is masked
+=dev-python/pygobject-2.21.5 
+
 # Jonathan Callen <abcd@gentoo.org> (13 Jul 2010)
 # Breaks ABI and API with older versions, masked until
 # everything is fixed
