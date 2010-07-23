@@ -23,7 +23,6 @@ RDEPEND=">=dev-libs/glib-2.18.2:2
 	>=media-libs/gstreamer-0.10.23
 	>=media-libs/gst-plugins-base-0.10.23
 	>=media-libs/gst-plugins-good-0.10
-	dev-libs/libunique:3
 
 	pulseaudio? ( >=media-sound/pulseaudio-0.9.15 )
 	>=media-libs/libcanberra-0.13[gtk3]
@@ -54,8 +53,11 @@ pkg_setup() {
 src_prepare() {
 	gnome2_src_prepare
 
-	# Use libunique:3
-	epatch "${FILESDIR}"/${P}-use-libunique-3.patch
+	# Don't use libunique (use GApplication instead)
+	epatch "${FILESDIR}"/${P}-remove-libunique-dep.patch
+
+	# Run the correct command from the panel applet
+	epatch "${FILESDIR}"/${P}-use-correct-command.patch
 
 	eautoreconf
 }

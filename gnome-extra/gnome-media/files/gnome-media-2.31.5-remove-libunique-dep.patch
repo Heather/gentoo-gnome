@@ -1,0 +1,61 @@
+Combines the following two commits:
+
+From faadc51fb554b90cfd07d108262383e1772f279b Mon Sep 17 00:00:00 2001
+From: Matthias Clasen <mclasen@redhat.com>
+Date: Wed, 14 Jul 2010 00:47:18 +0000
+Subject: Complete the GTK+ 3 port by using unique-3.0
+
+From 7b5a8127cea09779dd172b0b7598d2ad03b2e47b Mon Sep 17 00:00:00 2001
+From: Bastien Nocera <hadess@hadess.net>
+Date: Wed, 21 Jul 2010 14:18:59 +0000
+Subject: Remove libunique-3.0 dependency
+
+And use GApplication instead.
+---
+diff --git a/configure.ac b/configure.ac
+index 7622885..38b6024 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -115,7 +115,6 @@ if test "x$enable_pulseaudio" != "xno"; then
+             gio-2.0
+             gconf-2.0 >= $GCONF_REQUIRED_VERSION
+             libcanberra-gtk3 >= $CANBERRA_REQUIRED_VERSION
+-            unique-1.0
+             libxml-2.0
+     )
+     AC_SUBST(VOLUME_CONTROL_CFLAGS)
+diff --git a/gnome-volume-control/src/applet-main.c b/gnome-volume-control/src/applet-main.c
+index 9ef569a..2c9cc34 100644
+--- a/gnome-volume-control/src/applet-main.c
++++ b/gnome-volume-control/src/applet-main.c
+@@ -29,7 +29,7 @@
+ #include <glib/gi18n.h>
+ #include <glib.h>
+ #include <gtk/gtk.h>
+-#include <unique/uniqueapp.h>
++#include <gio/gio.h>
+ 
+ #include "gvc-applet.h"
+ #include "gvc-log.h"
+@@ -44,7 +44,7 @@ main (int argc, char **argv)
+ {
+         GError             *error;
+         GvcApplet          *applet;
+-        UniqueApp          *app = NULL;
++        GApplication       *app = NULL;
+         static GOptionEntry entries[] = {
+                 { "debug", 0, 0, G_OPTION_ARG_NONE, &debug, N_("Enable debugging code"), NULL },
+                 { "version", 0, 0, G_OPTION_ARG_NONE, &show_version, N_("Version of this application"), NULL },
+@@ -76,8 +76,8 @@ main (int argc, char **argv)
+         gvc_log_set_debug (debug);
+ 
+         if (debug == FALSE) {
+-                app = unique_app_new (GVCA_DBUS_NAME, NULL);
+-                if (unique_app_is_running (app)) {
++                app = g_application_new (GVCA_DBUS_NAME, argc, argv);
++                if (g_application_is_remote (app)) {
+                         g_warning ("Applet is already running, exiting");
+                         return 0;
+                 }
+--
+cgit v0.8.3.1

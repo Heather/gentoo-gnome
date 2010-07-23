@@ -1,0 +1,26 @@
+From 5e6bd29ef12300e47c6f49716fc57a74298666da Mon Sep 17 00:00:00 2001
+From: Bastien Nocera <hadess@hadess.net>
+Date: Wed, 21 Jul 2010 14:45:24 +0100
+Subject: [PATCH] Use correct command for sound preferences
+
+Using gnome-control-center, not gnome-volume-control
+---
+ gnome-volume-control/src/gvc-stream-status-icon.c |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/gnome-volume-control/src/gvc-stream-status-icon.c b/gnome-volume-control/src/gvc-stream-status-icon.c
+index 3254a5b..46619aa 100644
+--- a/gnome-volume-control/src/gvc-stream-status-icon.c
++++ b/gnome-volume-control/src/gvc-stream-status-icon.c
+@@ -219,7 +219,7 @@ on_menu_activate_open_volume_control (GtkMenuItem *item,
+ 
+         error = NULL;
+         gdk_spawn_command_line_on_screen (gtk_widget_get_screen (icon->priv->dock),
+-                                          "gnome-volume-control",
++                                          "gnome-control-center sound",
+                                           &error);
+ 
+         if (error != NULL) {
+-- 
+1.7.1.1
+
