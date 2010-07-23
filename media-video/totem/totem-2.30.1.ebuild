@@ -44,7 +44,7 @@ RDEPEND=">=dev-libs/glib-2.22
 	>=media-plugins/gst-plugins-x-0.10
 	>=media-plugins/gst-plugins-meta-0.10-r2
 
-	dev-libs/libunique
+	dev-libs/libunique:0
 	x11-libs/libSM
 	x11-libs/libX11
 	x11-libs/libXtst
