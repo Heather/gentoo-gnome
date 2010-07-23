@@ -17,6 +17,7 @@ IUSE="+X debug doc +introspection jpeg jpeg2k tiff test"
 RDEPEND="
 	>=dev-libs/glib-2.25.9
 	>=media-libs/libpng-1.2.43-r2:0
+	introspection? ( >=dev-libs/gobject-introspection-0.9.0 )
 	jpeg? ( >=media-libs/jpeg-6b-r9:0 )
 	jpeg2k? ( media-libs/jasper )
 	tiff? ( >=media-libs/tiff-3.9.2 )
@@ -33,15 +34,11 @@ DEPEND="${RDEPEND}
 	>=dev-util/gtk-doc-am-1.11
 	doc? (
 		>=dev-util/gtk-doc-1.11
-		~app-text/docbook-xml-dtd-4.1.2 )
-	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )"
+		~app-text/docbook-xml-dtd-4.1.2 )"
 
 src_prepare() {
-	# From upstream, adds some APIs used by "older" programs
-	epatch "${FILESDIR}"/${P}-readd-deprecated-apis.patch
-
 	# Only build against libX11 if the user wants to do so
-	epatch "${FILESDIR}"/${P}-fix-automagic-x11.patch
+	epatch "${FILESDIR}"/${PN}-2.21.4-fix-automagic-x11.patch
 
 	elibtoolize
 	eautoreconf
