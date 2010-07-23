@@ -30,7 +30,6 @@ RDEPEND="x11-libs/libXft
 	>=gnome-base/gnome-menus-2.11.1
 	gnome-base/gnome-settings-daemon
 
-	dev-libs/libunique
 	x11-libs/pango
 	dev-libs/libxml2
 	media-libs/freetype
