@@ -22,7 +22,6 @@
 
 # Jonathan Callen <abcd@gentoo.org> (23 Jun 2010)
 # Mask dev version
-=dev-lang/vala-0.9*
 =x11-libs/cairo-1.9*
 =x11-libs/libnotify-0.5*
 =x11-misc/alacarte-0.13*
