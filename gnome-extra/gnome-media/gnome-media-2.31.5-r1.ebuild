@@ -29,7 +29,8 @@ RDEPEND=">=dev-libs/glib-2.18.2:2
 	dev-libs/libxml2
 	>=media-libs/gst-plugins-base-0.10.23:0.10
 	>=media-plugins/gst-plugins-meta-0.10-r2:0.10
-	>=media-plugins/gst-plugins-gconf-0.10.1"
+	>=media-plugins/gst-plugins-gconf-0.10.1
+	x11-themes/gnome-icon-theme-symbolic"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9
 	>=app-text/scrollkeeper-0.3.11
