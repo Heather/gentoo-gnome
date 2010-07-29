@@ -56,6 +56,10 @@ src_prepare() {
 	# https://bugs.webkit.org/show_bug.cgi?id=19775
 	use sparc && epatch "${FILESDIR}"/${PN}-1.1.15.2-unaligned.patch
 
+	# Fix invalid? assertion check
+	# https://bugs.webkit.org/show_bug.cgi?id=41454
+	epatch "${FILESDIR}"/${PN}-1.3.x-disable-jsc-assertion.patch
+
 	# Darwin/Aqua build is broken, needs autoreconf
 	# XXX: BROKEN. Patch does not apply anymore.
 	# https://bugs.webkit.org/show_bug.cgi?id=28727
@@ -97,12 +101,12 @@ src_test() {
 	Xemake check || die "Test phase failed"
 }
 
-#src_compile() {
+src_compile() {
 	# Fix sandbox error with USE="introspection"
 	# https://bugs.webkit.org/show_bug.cgi?id=35471
-#	addpredict "$(unset HOME; echo ~)/.local"
-#	emake || die "Compile failed"
-#}
+	addpredict "$(unset HOME; echo ~)/.local"
+	emake || die "Compile failed"
+}
 
 src_install() {
 	emake DESTDIR="${D}" install || die "Install failed"
