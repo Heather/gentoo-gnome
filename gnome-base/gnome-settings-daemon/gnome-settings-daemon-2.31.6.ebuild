@@ -16,10 +16,10 @@ IUSE="debug libnotify policykit pulseaudio"
 
 RDEPEND=">=dev-libs/dbus-glib-0.74
 	>=dev-libs/glib-2.18.0
-	>=x11-libs/gtk+-2.90:3
+	>=x11-libs/gtk+-2.21.2:2
 	>=gnome-base/gconf-2.6.1
 	>=gnome-base/libgnomekbd-2.31.2
-	>=gnome-base/gnome-desktop-2.29.92:3
+	>=gnome-base/gnome-desktop-2.29.92:0
 
 	x11-libs/libX11
 	x11-libs/libXi
