@@ -12,10 +12,13 @@ HOMEPAGE="http://blogs.gnome.org/metacity/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="debug +introspection +sound test xinerama"
+IUSE="debug +gtk3 +introspection +sound test xinerama"
 
-RDEPEND=">=x11-libs/gtk+-2.90:3[introspection?]
-	>=x11-libs/pango-1.2[X,introspection?]
+RDEPEND=">=x11-libs/pango-1.2[X,introspection?]
+	!gtk3? ( >=x11-libs/gtk+-2.18:2[introspection?]
+			sound? (  media-libs/libcanberra[gtk] ) )
+	gtk3? ( >=x11-libs/gtk+-2.90:3[introspection?]
+			sound? (  media-libs/libcanberra[gtk3] ) )
 	>=gnome-base/gconf-2
 	>=dev-libs/glib-2.14
 	>=x11-libs/startup-notification-0.7
@@ -32,7 +35,6 @@ RDEPEND=">=x11-libs/gtk+-2.90:3[introspection?]
 	x11-libs/libXrandr
 	x11-libs/libXrender
 
-	sound? ( media-libs/libcanberra[gtk3] )
 	introspection? ( dev-libs/gobject-introspection )
 	xinerama? ( x11-libs/libXinerama )
 	gnome-extra/zenity
@@ -58,8 +60,13 @@ pkg_setup() {
 		--enable-xsync
 		--enable-verbose-mode
 		--enable-compile-warnings
-		--with-gtk=3.0
 		$(use_with sound libcanberra)
 		$(use_with introspection)
 		$(use_enable xinerama)"
+
+	if use gtk3; then
+		G2CONF="${G2CONF} --with-gtk=3.0"
+	else
+		G2CONF="${G2CONF} --with-gtk=2.0"
+	fi
 }
