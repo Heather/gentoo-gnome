@@ -8,7 +8,9 @@ cd /var/db/pkg
 for lib in $LIBS; do
 	echo -n "${lib}: "
 	lib_owner=`qfile -eCq /usr/lib/${lib}*.so`
-	grep "${lib}" */*/NEEDED.ELF.2 --exclude="${lib_owner}/NEEDED.ELF.2" |wc -l
+	lib_user_file_count=`grep "${lib}" */*/NEEDED.ELF.2 --exclude="${lib_owner}/NEEDED.ELF.2" |wc -l`
+	lib_user_package_count=`grep "${lib}" */*/NEEDED.ELF.2 --exclude="${lib_owner}/NEEDED.ELF.2" -l |wc -l`
+	echo "needed by ${lib_user_file_count} files from ${lib_user_package_count} packages"
 done
 
 popd >/dev/null
