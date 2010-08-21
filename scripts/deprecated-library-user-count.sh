@@ -7,7 +7,8 @@ cd /var/db/pkg
 
 for lib in $LIBS; do
 	echo -n "${lib}: "
-	grep "${lib}" */*/NEEDED.ELF.2 |wc -l
+	lib_owner=`qfile -eCq /usr/lib/${lib}*.so`
+	grep "${lib}" */*/NEEDED.ELF.2 --exclude="${lib_owner}/NEEDED.ELF.2" |wc -l
 done
 
 popd >/dev/null
