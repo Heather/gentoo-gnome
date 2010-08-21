@@ -6,11 +6,11 @@ pushd . >/dev/null
 cd /var/db/pkg
 
 for lib in $LIBS; do
-	echo -n "${lib}: "
+	printf "%22s" "${lib}: "
 	lib_owner=`qfile -eCq /usr/lib/${lib}*.so`
 	lib_user_file_count=`grep "${lib}" */*/NEEDED.ELF.2 --exclude="${lib_owner}/NEEDED.ELF.2" |wc -l`
 	lib_user_package_count=`grep "${lib}" */*/NEEDED.ELF.2 --exclude="${lib_owner}/NEEDED.ELF.2" -l |wc -l`
-	echo "needed by ${lib_user_file_count} files from ${lib_user_package_count} packages"
+	printf "needed by %3d files from %2d packages\n" ${lib_user_file_count} ${lib_user_package_count}
 done
 
 popd >/dev/null
