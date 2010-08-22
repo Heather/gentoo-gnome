@@ -28,6 +28,8 @@ pkg_setup() {
 
 src_prepare() {
 	epatch "${FILESDIR}"/${P}-fix-animation.patch
+	epatch "${FILESDIR}"/${P}-pkgconfig-fix.patch
+	epatch "${FILESDIR}"/${P}-use-cairo.patch
 
 	gnome2_src_prepare
 }

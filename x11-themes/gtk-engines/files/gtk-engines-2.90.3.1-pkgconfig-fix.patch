@@ -1,0 +1,20 @@
+commit 2921ad5cb2d8a5f08c91e1cee1e1f75a74cca508
+Author: Benjamin Berg <benjamin@sipsolutions.net>
+Date:   Fri Jul 2 19:02:08 2010 +0200
+
+    Fix Bug #623311 (patch from Diego Escalante Urrelo).
+
+diff --git a/gtk-engines-3.pc.in b/gtk-engines-3.pc.in
+index 76daf74..dbe0372 100644
+--- a/gtk-engines-3.pc.in
++++ b/gtk-engines-3.pc.in
+@@ -3,7 +3,7 @@ exec_prefix=@exec_prefix@
+ libdir=@libdir@
+ includedir=@includedir@
+ 
+-Name: gtk-engines-2
++Name: gtk-engines-3
+ Description: GTK+ Theme Engines
+ Version: @VERSION@
+-Requires: gtk+-2.0
++Requires: gtk+-3.0

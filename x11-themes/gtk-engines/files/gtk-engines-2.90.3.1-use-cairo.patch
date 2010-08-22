@@ -1,0 +1,1205 @@
+The following 8 commits add support for using cairo to render widgets;
+required for gtk+-2.90.6
+
+From 7b5801707ce5494f7b244da902c75b22b773f1c3 Mon Sep 17 00:00:00 2001
+From: Benjamin Otte <otte@redhat.com>
+Date: Thu, 12 Aug 2010 19:52:24 +0200
+Subject: [PATCH 1/8] support: Add ge_cairo_transform_for_layout()
+
+This function does the voodoo that is required to get a rotated
+PangoLayout to show up just like the GTK2 drawing code expects it. You
+can use the "rotating label" example in GTK source's tests/testgtk to
+reproduce it.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=626678
+---
+ engines/support/cairo-support.c |   32 ++++++++++++++++++++++++++++++++
+ engines/support/cairo-support.h |    2 ++
+ 2 files changed, 34 insertions(+), 0 deletions(-)
+
+diff --git a/engines/support/cairo-support.c b/engines/support/cairo-support.c
+index d20896b..4344a72 100644
+--- a/engines/support/cairo-support.c
++++ b/engines/support/cairo-support.c
+@@ -875,6 +875,38 @@ ge_cairo_pattern_destroy(CairoPattern *pattern)
+ 	}
+ }
+ 
++void
++ge_cairo_transform_for_layout (cairo_t *cr,
++                               PangoLayout *layout,
++                               int x,
++                               int y)
++{
++        const PangoMatrix *matrix;
++
++        matrix = pango_context_get_matrix (pango_layout_get_context (layout));
++        if (matrix)
++        {
++                cairo_matrix_t cairo_matrix;
++                PangoRectangle rect;
++                
++                cairo_matrix_init (&cairo_matrix,
++                                   matrix->xx, matrix->yx,
++                                   matrix->xy, matrix->yy,
++                                   matrix->x0, matrix->y0);
++
++                pango_layout_get_extents (layout, NULL, &rect);
++                pango_matrix_transform_rectangle (matrix, &rect);
++                pango_extents_to_pixels (&rect, NULL);
++                                                    
++                cairo_matrix.x0 += x - rect.x;
++                cairo_matrix.y0 += y - rect.y;
++
++                cairo_set_matrix (cr, &cairo_matrix);
++        }
++        else
++                cairo_translate (cr, x, y);
++}
++
+ /* 
+  * The following function will be called by GTK+ when the module
+  * is loaded and checks to see if we are compatible with the
+diff --git a/engines/support/cairo-support.h b/engines/support/cairo-support.h
+index 60cce1d..4e15c40 100644
+--- a/engines/support/cairo-support.h
++++ b/engines/support/cairo-support.h
+@@ -147,3 +147,5 @@ GE_INTERNAL CairoPattern *ge_cairo_pixbuf_pattern(GdkPixbuf *pixbuf);
+ GE_INTERNAL CairoPattern *ge_cairo_pixmap_pattern(GdkPixmap *pixmap);
+ GE_INTERNAL CairoPattern *ge_cairo_linear_shade_gradient_pattern(CairoColor *base, gdouble shade1, gdouble shade2, gboolean vertical);
+ GE_INTERNAL void ge_cairo_pattern_destroy(CairoPattern *pattern);
++
++GE_INTERNAL void ge_cairo_transform_for_layout (cairo_t *cr, PangoLayout *layout, int x, int y);
+-- 
+1.7.2
+
+From bbf11bbd4bf48abf2ae6656e7071db2a252190cd Mon Sep 17 00:00:00 2001
+From: Benjamin Otte <otte@redhat.com>
+Date: Sat, 31 Jul 2010 10:41:10 +0200
+Subject: [PATCH 2/8] Clearlooks: Port entirely to Cairo drawing
+
+https://bugzilla.gnome.org/show_bug.cgi?id=626678
+---
+ engines/clearlooks/src/clearlooks_style.c |   51 ++++++++++++----------------
+ 1 files changed, 22 insertions(+), 29 deletions(-)
+
+diff --git a/engines/clearlooks/src/clearlooks_style.c b/engines/clearlooks/src/clearlooks_style.c
+index 07d08bd..74ebdfa 100644
+--- a/engines/clearlooks/src/clearlooks_style.c
++++ b/engines/clearlooks/src/clearlooks_style.c
+@@ -1793,49 +1793,43 @@ clearlooks_style_draw_layout (GtkStyle * style,
+                               GtkWidget * widget,
+                               const gchar * detail, gint x, gint y, PangoLayout * layout)
+ {
+-	GdkGC *gc;
++        cairo_t *cr;
+ 
+ 	g_return_if_fail (GTK_IS_STYLE (style));
+ 	g_return_if_fail (window != NULL);
+ 
+-	gc = use_text ? style->text_gc[state_type] : style->fg_gc[state_type];
+-	g_object_ref (gc);
++        cr = gdk_cairo_create (window);
++
++	if (area)
++        {
++                gdk_cairo_rectangle (cr, area);
++                cairo_clip (cr);
++        }
++
++        ge_cairo_transform_for_layout (cr, layout, x, y);
++
++	gdk_cairo_set_source_color (cr, use_text ? &style->text[state_type] : &style->fg[state_type]);
+ 
+ 	if (state_type == GTK_STATE_NORMAL && DETAIL("accellabel")) {
+ 		ClearlooksStyle  *clearlooks_style = CLEARLOOKS_STYLE (style);
+ 		ClearlooksColors *colors = &clearlooks_style->colors;
+-		GdkColor gdk_color;
+-		GdkGC *old_gc = gc;
+ 		CairoColor color;
+ 
+-		g_object_unref (gc);
+-		gc = gdk_gc_new (window);
+-		gdk_gc_copy (gc, old_gc);
+-
+ 		ge_mix_color (use_text ? &colors->base[state_type] : &colors->bg[state_type],
+ 		              use_text ? &colors->text[state_type] : &colors->fg[state_type],
+ 		              clearlooks_style->accel_label_shade,
+ 		              &color);
+ 
+-		gdk_color.red = color.r * 65535;
+-		gdk_color.green = color.g * 65535;
+-		gdk_color.blue = color.b * 65535;
+-
+-		gdk_gc_set_rgb_fg_color (gc, &gdk_color);
++                ge_cairo_set_color (cr, &color);
+ 	}
+ 
+ 
+-
+-	if (area)
+-		gdk_gc_set_clip_rectangle (gc, area);
+-
+ 	if (state_type == GTK_STATE_INSENSITIVE)
+ 	{
+ 		ClearlooksStyle *clearlooks_style = CLEARLOOKS_STYLE (style);
+ 		ClearlooksColors *colors = &clearlooks_style->colors;
+ 
+ 		WidgetParameters params;
+-		GdkColor etched;
+ 		CairoColor temp;
+ 
+ 		clearlooks_set_widget_parameters (widget, style, state_type, &params);
+@@ -1845,19 +1839,18 @@ clearlooks_style_draw_layout (GtkStyle * style,
+ 		else
+ 			ge_shade_color (&colors->bg[gtk_widget_get_state (widget)], 1.2, &temp);
+ 
+-		etched.red = (int) (temp.r * 65535);
+-		etched.green = (int) (temp.g * 65535);
+-		etched.blue = (int) (temp.b * 65535);
++                cairo_save (cr);
++
++                ge_cairo_set_color (cr, &temp);
++                cairo_move_to (cr, 1, 1);
++                pango_cairo_show_layout (cr, layout);
+ 
+-		gdk_draw_layout_with_colors (window, gc, x + 1, y + 1, layout, &etched, NULL);
+-		gdk_draw_layout (window, gc, x, y, layout);
++                cairo_restore (cr);
+ 	}
+-	else
+-		gdk_draw_layout (window, gc, x, y, layout);
+ 
+-	if (area)
+-		gdk_gc_set_clip_rectangle (gc, NULL);
+-	g_object_unref (gc);
++        pango_cairo_show_layout (cr, layout);
++
++        cairo_destroy (cr);
+ }
+ 
+ static GdkPixbuf *
+-- 
+1.7.2
+
+From 97cc40e7e79273d7ad15ce958440e9480ca0d412 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Florian=20M=C3=BCllner?= <fmuellner@gnome.org>
+Date: Thu, 12 Aug 2010 11:06:32 +0200
+Subject: [PATCH 3/8] crux: Replace GDK drawing API with cairo
+
+The GDK drawing API was deprecated/removed.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=626678
+---
+ engines/crux/src/crux-draw.c |   68 ++++++++++++++++++++++++++----------------
+ 1 files changed, 42 insertions(+), 26 deletions(-)
+
+diff --git a/engines/crux/src/crux-draw.c b/engines/crux/src/crux-draw.c
+index 671d343..2f8eb13 100644
+--- a/engines/crux/src/crux-draw.c
++++ b/engines/crux/src/crux-draw.c
+@@ -1935,8 +1935,8 @@ draw_handle (GtkStyle *style,
+ {
+     gint i, yy, xx;
+     gint xthick, ythick;
+-    GdkGC *light_gc, *dark_gc;
+     GdkRectangle dest;
++    cairo_t *cr;
+ 
+     CHECK_ARGS
+     SANITIZE_SIZE
+@@ -1948,9 +1948,6 @@ draw_handle (GtkStyle *style,
+ 	state_type = GTK_STATE_ACTIVE;
+ 
+ 
+-    light_gc = style->light_gc[state_type];
+-    dark_gc = style->dark_gc[state_type];
+-
+     xthick = style->xthickness + 1;
+     ythick = style->ythickness + 1;
+ 
+@@ -1959,8 +1956,13 @@ draw_handle (GtkStyle *style,
+     dest.width = width - (xthick * 2);
+     dest.height = height - (ythick * 2);
+ 
+-    gdk_gc_set_clip_rectangle (light_gc, &dest);
+-    gdk_gc_set_clip_rectangle (dark_gc, &dest);
++    cr = gdk_cairo_create (window);
++    gdk_cairo_rectangle (cr, &dest);
++    cairo_clip (cr);
++
++    cairo_set_line_width (cr, 1.0);
++    /* trick so we don't have to add 0.5 to all the line calls below */
++    cairo_translate (cr, 0.5, 0.5);
+ 
+     /* ORIENTATION parameters is unreliable */
+     if (height > width)
+@@ -1968,10 +1970,15 @@ draw_handle (GtkStyle *style,
+ 	yy = y + height / 2 - 4;
+ 	for (i = 0; i < 8; i += 2)
+ 	{
+-	    gdk_draw_line (window, dark_gc, xthick, yy + i,
+-			   x + width - xthick, yy + i);
+-	    gdk_draw_line (window, light_gc, xthick, yy + i + 1,
+-			   x + width - xthick, yy + i + 1);
++            gdk_cairo_set_source_color (cr, &style->dark[state_type]);
++            cairo_move_to (cr, xthick, yy + i);
++            cairo_line_to (cr, x + width - xthick, yy + i);
++            cairo_stroke (cr);
++
++            gdk_cairo_set_source_color (cr, &style->light[state_type]);
++            cairo_move_to (cr, xthick, yy + i + 1);
++            cairo_line_to (cr, x + width - xthick, yy + i + 1);
++            cairo_stroke (cr);
+ 	}
+     }
+     else
+@@ -1979,15 +1986,19 @@ draw_handle (GtkStyle *style,
+ 	xx = x + width / 2 - 4;
+ 	for (i = 0; i < 8; i += 2)
+ 	{
+-	    gdk_draw_line (window, dark_gc, xx + i, ythick,
+-			   xx + i, y + height - ythick);
+-	    gdk_draw_line (window, light_gc, xx + i + 1, ythick,
+-			   xx + i + 1, y + height - ythick);
++            gdk_cairo_set_source_color (cr, &style->dark[state_type]);
++            cairo_move_to (cr, xx + i, ythick);
++            cairo_line_to (cr, xx + i, y + height - ythick);
++            cairo_stroke (cr);
++
++            gdk_cairo_set_source_color (cr, &style->light[state_type]);
++            cairo_move_to (cr, xx + i + 1, ythick);
++            cairo_line_to (cr, xx + i + 1, y + height - ythick);
++            cairo_stroke (cr);
+ 	}
+     }
+ 
+-    gdk_gc_set_clip_rectangle (light_gc, NULL);
+-    gdk_gc_set_clip_rectangle (dark_gc, NULL);
++    cairo_destroy (cr);
+ }
+ 
+ static void
+@@ -2002,22 +2013,27 @@ draw_layout (GtkStyle        *style,
+ 	     int              y,
+ 	     PangoLayout      *layout)
+ {
+-	GdkGC *gc;
++	cairo_t *cr;
+ 	
+ 	g_return_if_fail (GTK_IS_STYLE (style));
+ 	g_return_if_fail (window != NULL);
+-	
+-	gc = use_text ? style->text_gc[state_type] : style->fg_gc[state_type];
+-	
+-	if (area) {
+-		gdk_gc_set_clip_rectangle (gc, area);
+-	}
+-	
+-	gdk_draw_layout (window, gc, x, y, layout);
++
++	cr = gdk_cairo_create (window);
++
++	if (use_text)
++		gdk_cairo_set_source_color (cr, &style->text[state_type]);
++	else
++		gdk_cairo_set_source_color (cr, &style->fg[state_type]);
+ 	
+ 	if (area) {
+-		gdk_gc_set_clip_rectangle (gc, NULL);
++		gdk_cairo_rectangle (cr, area);
++		cairo_clip (cr);
+ 	}
++
++	ge_cairo_transform_for_layout (cr, layout, x, y);
++	pango_cairo_show_layout (cr, layout);
++
++	cairo_destroy (cr);
+ }
+ 
+ 
+-- 
+1.7.2
+
+From 10257e9a3723f7c6962064604e8b772acbe1ee73 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Florian=20M=C3=BCllner?= <fmuellner@gnome.org>
+Date: Thu, 12 Aug 2010 12:21:57 +0200
+Subject: [PATCH 4/8] redmond: Replace GDK drawing API with cairo
+
+The GDK drawing API was deprecated/removed.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=626678
+
+Reviewed-by: Benjamin Otte <otte@redhat.com>
+---
+ engines/redmond/src/redmond_gtk2_drawing.c |   40 ++++++++++++++++++----------
+ 1 files changed, 26 insertions(+), 14 deletions(-)
+
+diff --git a/engines/redmond/src/redmond_gtk2_drawing.c b/engines/redmond/src/redmond_gtk2_drawing.c
+index c3dc8e3..35dd137 100644
+--- a/engines/redmond/src/redmond_gtk2_drawing.c
++++ b/engines/redmond/src/redmond_gtk2_drawing.c
+@@ -665,10 +665,12 @@ redmond_draw_combobox_button (GtkStyle * style,
+ 	      if (parent_state != GTK_STATE_INSENSITIVE)
+                 parent_state = GTK_STATE_NORMAL;
+ 
+-	      gdk_draw_rectangle (window,
+-	      	                  parent_style->base_gc[parent_state],
+-			          TRUE, x - 2, y, width + 2, height);
+-
++              cr = gdk_cairo_create (window);
++              gdk_cairo_set_source_color (cr,
++                                          &parent_style->base[parent_state]);
++              cairo_rectangle (cr, x - 2, y, width + 2, height);
++              cairo_fill (cr);
++              cairo_destroy (cr);
+             }
+           else
+             gtk_paint_flat_box (style, window, state_type,
+@@ -707,14 +709,18 @@ redmond_draw_combobox_button (GtkStyle * style,
+  
+         ge_cairo_pattern_fill (cr, DEFAULT_BACKGROUND_PATTERN(redmond_style, state_type),
+ 				          x, y + 2, width - 2, height - 4);
+-      cairo_destroy(cr);
+ 
+       if (shadow_type == GTK_SHADOW_IN)
+-        gdk_draw_rectangle (window, style->dark_gc[state_type], FALSE, x,
+-	   		    y + 2, width - 3, height - 5);
++        {
++          gdk_cairo_set_source_color (cr, &style->dark[state_type]);
++          ge_cairo_inner_rectangle (cr, x, y + 2, width - 3, height - 5);
++          cairo_stroke (cr);
++        }
+       else
+         gtk_paint_shadow (style, window, state_type, shadow_type, area,
+ 		          widget, detail, x, y + 2, width - 2, height - 4);
++
++      cairo_destroy (cr);
+     } 
+   else
+     {
+@@ -734,9 +740,12 @@ redmond_draw_combobox_button (GtkStyle * style,
+               if (parent_state != GTK_STATE_INSENSITIVE)
+                 parent_state = GTK_STATE_NORMAL;
+ 
+-	      gdk_draw_rectangle (window,
+-		  	          parent_style->base_gc[parent_state],
+-			          TRUE, x + 2, y, width + 2, height);
++              cr = gdk_cairo_create (window);
++              gdk_cairo_set_source_color (cr,
++                                          &parent_style->base[parent_state]);
++              cairo_rectangle (cr, x + 2, y, width + 2, height);
++              cairo_fill (cr);
++              cairo_destroy (cr);
+             }
+           else
+             gtk_paint_flat_box (style, window, state_type,
+@@ -775,15 +784,18 @@ redmond_draw_combobox_button (GtkStyle * style,
+ 
+       ge_cairo_pattern_fill (cr, DEFAULT_BACKGROUND_PATTERN(redmond_style, state_type),
+ 				          x + 2, y + 2, width - 2, height - 4);
+-
+-      cairo_destroy(cr);
+  
+       if (shadow_type == GTK_SHADOW_IN)
+-        gdk_draw_rectangle (window, style->dark_gc[state_type], FALSE, x + 2,
+-			    y + 2, width - 3, height - 5);
++        {
++          gdk_cairo_set_source_color (cr, &style->dark[state_type]);
++          ge_cairo_inner_rectangle (cr, x + 2, y + 2, width - 3, height - 5);
++          cairo_stroke (cr);
++        }
+       else
+         gtk_paint_shadow (style, window, state_type, shadow_type, area,
+ 		          widget, detail, x + 2, y + 2, width - 2, height - 4);
++
++      cairo_destroy(cr);
+     }
+ }
+  
+-- 
+1.7.2
+
+From 5d2647ff96434f367f43e2be790e182065f3e58b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Florian=20M=C3=BCllner?= <fmuellner@gnome.org>
+Date: Thu, 12 Aug 2010 13:02:36 +0200
+Subject: [PATCH 5/8] glide: Replace GDK drawing API with cairo
+
+The GDK drawing API was deprecated/removed.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=626678
+
+Reviewed-by: Benjamin Otte <otte@redhat.com>
+---
+ engines/glide/src/glide_gtk2_drawing.c |   63 ++++++++++++++++++--------------
+ 1 files changed, 36 insertions(+), 27 deletions(-)
+
+diff --git a/engines/glide/src/glide_gtk2_drawing.c b/engines/glide/src/glide_gtk2_drawing.c
+index 28afed5..129fad9 100644
+--- a/engines/glide/src/glide_gtk2_drawing.c
++++ b/engines/glide/src/glide_gtk2_drawing.c
+@@ -665,11 +665,12 @@ glide_draw_combobox_button (GtkStyle * style,
+ 	      if (parent_state != GTK_STATE_INSENSITIVE)
+                 parent_state = GTK_STATE_NORMAL;
+ 
+-/*#warning FIXME - gdk_draw_rectangle*/
+-	      gdk_draw_rectangle (window,
+-	      	                  parent_style->base_gc[parent_state],
+-			          TRUE, x - 2, y, width + 2, height);
+-
++	      canvas = gdk_cairo_create (window);
++	      gdk_cairo_set_source_color (canvas,
++	                                  &parent_style->base[parent_state]);
++              cairo_rectangle (canvas, x - 2, y, width + 2, height);
++              cairo_fill (canvas);
++              cairo_destroy (canvas);
+             }
+           else
+             glide_draw_flat_box(style, window, parent_state,
+@@ -751,10 +752,16 @@ glide_draw_combobox_button (GtkStyle * style,
+               if (parent_state != GTK_STATE_INSENSITIVE)
+                 parent_state = GTK_STATE_NORMAL;
+ 
+-/*#warning FIXME - gdk_draw_rectangle*/
+-	      gdk_draw_rectangle (window, parent_style->base_gc[parent_state],
+-			          TRUE, x + focus - focus_padding, y + focus - focus_padding, 
+-                                        width + thick*2 - focus + focus_padding*2, height - focus*2 + focus_padding*2);
++	      canvas = gdk_cairo_create (window);
++	      gdk_cairo_set_source_color (canvas,
++	                                  &parent_style->base[parent_state]);
++	      cairo_rectangle (canvas,
++	                       x + focus - focus_padding,
++	                       y + focus - focus_padding,
++	                       width + thick*2 - focus + focus_padding*2,
++	                       height - focus*2 + focus_padding*2);
++	      cairo_fill (canvas);
++	      cairo_destroy (canvas);
+             }
+           else
+             {
+@@ -2284,32 +2291,34 @@ glide_draw_layout (GtkStyle        *style,
+ 	     int              y,
+ 	     PangoLayout      *layout)
+ {
+-	GdkGC *gc;
++	cairo_t *cr;
+ 
+ 	CHECK_ARGS
+ 	use_text &= !ge_is_combo_box(widget, FALSE);
+ 
+-/*	#warning FIXME - gdk gdk gdk*/
++	cr = ge_gdk_drawable_to_cairo (window, area);
+ 
+-	gc = use_text ? style->text_gc[state_type] : style->fg_gc[state_type];
+-	
+-	if (area) 
+-	{
+-		gdk_gc_set_clip_rectangle (gc, area);
+-	}
++	if (use_text)
++		gdk_cairo_set_source_color (cr, &style->text[state_type]);
++	else
++		gdk_cairo_set_source_color (cr, &style->fg[state_type]);
++
++	ge_cairo_transform_for_layout (cr, layout, x, y);
+ 
+ 	if ((state_type==GTK_STATE_INSENSITIVE) && !use_text)
+ 	{
+-		gdk_draw_layout_with_colors(window, gc, x+1, y+1, layout, &style->light[state_type], NULL);
+-		gdk_draw_layout_with_colors(window, gc, x, y, layout, &style->dark[state_type], NULL);	
+-	}
+-	else
+-	{	
+-		gdk_draw_layout (window, gc, x, y, layout);
+-	}
++                cairo_save (cr);
+ 
+-	if (area) 
+-	{
+-		gdk_gc_set_clip_rectangle (gc, NULL);
++		gdk_cairo_set_source_color (cr, &style->light[state_type]);
++                cairo_translate (cr, 1, 1);
++		pango_cairo_show_layout (cr, layout);
++
++                cairo_restore (cr);
++
++		gdk_cairo_set_source_color (cr, &style->dark[state_type]);
+ 	}
++
++	pango_cairo_show_layout (cr, layout);
++
++	cairo_destroy (cr);
+ }
+-- 
+1.7.2
+
+From 102dca03d277130a64cd6f70f21a0037659399c3 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Florian=20M=C3=BCllner?= <fmuellner@gnome.org>
+Date: Thu, 12 Aug 2010 20:45:46 +0200
+Subject: [PATCH 6/8] thinice: Remove draw_polygon() from style class
+
+The hook has been deprecated/removed from GtkStyle.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=626678
+
+Reviewed-by: Benjamin Otte <otte@redhat.com>
+---
+ engines/thinice/src/thinice_theme_draw.c |  127 ------------------------------
+ 1 files changed, 0 insertions(+), 127 deletions(-)
+
+diff --git a/engines/thinice/src/thinice_theme_draw.c b/engines/thinice/src/thinice_theme_draw.c
+index 611d4ba..e63272a 100644
+--- a/engines/thinice/src/thinice_theme_draw.c
++++ b/engines/thinice/src/thinice_theme_draw.c
+@@ -160,132 +160,6 @@ thinice_style_draw_shadow(GtkStyle     *style,
+ }
+ 
+ static void
+-thinice_style_draw_polygon(GtkStyle * style,
+-             GdkWindow * window,
+-             GtkStateType state_type,
+-             GtkShadowType shadow_type,
+-             GdkRectangle * area,
+-             GtkWidget * widget,
+-             const gchar *detail,
+-             GdkPoint * points,
+-             gint npoints,
+-             gint fill)
+-{
+-  static const gdouble pi_over_4 = G_PI_4;
+-  static const gdouble pi_3_over_4 = G_PI_4 * 3;
+-
+-  ThiniceStyle *thinice_style = THINICE_STYLE (style);
+-
+-  CairoColor *color1 = NULL;
+-  CairoColor *color2 = NULL;
+-  CairoColor *color3 = NULL;
+-  CairoColor *color4 = NULL;
+-  cairo_t *cr;
+-
+-  gdouble             angle;
+-  gint                xadjust;
+-  gint                yadjust;
+-  gint                i;
+-
+-  CHECK_ARGS
+-  g_return_if_fail(points != NULL);
+-
+-  switch (shadow_type)
+-    {
+-    case GTK_SHADOW_IN:
+-			color1 = &thinice_style->color_cube.light[state_type];
+-			color2 = &thinice_style->color_cube.dark[state_type];
+-			color3 = &thinice_style->color_cube.light[state_type];
+-			color4 = &thinice_style->color_cube.dark[state_type];
+-      break;
+-    case GTK_SHADOW_ETCHED_IN:
+-			color1 = &thinice_style->color_cube.light[state_type];
+-			color2 = &thinice_style->color_cube.dark[state_type];
+-			color3 = &thinice_style->color_cube.dark[state_type];
+-			color4 = &thinice_style->color_cube.light[state_type];
+-      break;
+-    case GTK_SHADOW_OUT:
+-			color1 = &thinice_style->color_cube.dark[state_type];
+-			color2 = &thinice_style->color_cube.light[state_type];
+-			color3 = &thinice_style->color_cube.dark[state_type];
+-			color4 = &thinice_style->color_cube.light[state_type];
+-      break;
+-    case GTK_SHADOW_ETCHED_OUT:
+-			color1 = &thinice_style->color_cube.dark[state_type];
+-			color2 = &thinice_style->color_cube.light[state_type];
+-			color3 = &thinice_style->color_cube.light[state_type];
+-			color4 = &thinice_style->color_cube.dark[state_type];
+-      break;
+-    default:
+-      return;
+-    }
+-
+-  cr = ge_gdk_drawable_to_cairo (window, area);
+-
+-  if (fill)
+-    ge_cairo_polygon(cr, &thinice_style->color_cube.bg[state_type], points, npoints);
+-
+-  npoints--;
+-
+-  for (i = 0; i < npoints; i++)
+-    {
+-      if ((points[i].x == points[i + 1].x) &&
+-          (points[i].y == points[i + 1].y))
+-        {
+-          angle = 0;
+-        }
+-      else
+-        {
+-          angle = atan2(points[i + 1].y - points[i].y,
+-                        points[i + 1].x - points[i].x);
+-        }
+-
+-      if ((angle > -pi_3_over_4) && (angle < pi_over_4))
+-        {
+-          if (angle > -pi_over_4)
+-            {
+-              xadjust = 0;
+-              yadjust = 1;
+-            }
+-          else
+-            {
+-              xadjust = 1;
+-              yadjust = 0;
+-            }
+-
+-          ge_cairo_line(cr, color1,
+-                        points[i].x - xadjust, points[i].y - yadjust,
+-                        points[i + 1].x - xadjust, points[i + 1].y - yadjust);
+-          ge_cairo_line(cr, color3,
+-                        points[i].x, points[i].y,
+-                        points[i + 1].x, points[i + 1].y);
+-        }
+-      else
+-        {
+-          if ((angle < -pi_3_over_4) || (angle > pi_3_over_4))
+-            {
+-              xadjust = 0;
+-              yadjust = 1;
+-            }
+-          else
+-            {
+-              xadjust = 1;
+-              yadjust = 0;
+-            }
+-
+-          ge_cairo_line(cr, color4,
+-                        points[i].x + xadjust, points[i].y + yadjust,
+-                        points[i + 1].x + xadjust, points[i + 1].y + yadjust);
+-          ge_cairo_line(cr, color2,
+-                        points[i].x, points[i].y,
+-                        points[i + 1].x, points[i + 1].y);
+-        }
+-    }
+-
+-   cairo_destroy(cr);
+-}
+-
+-static void
+ thinice_style_draw_arrow(GtkStyle * style,
+            GdkWindow * window,
+            GtkStateType state_type,
+@@ -1357,7 +1231,6 @@ thinice_style_class_init (ThiniceStyleClass *klass)
+   style_class->draw_hline = thinice_style_draw_hline;
+   style_class->draw_vline = thinice_style_draw_vline;
+   style_class->draw_shadow = thinice_style_draw_shadow;
+-  style_class->draw_polygon = thinice_style_draw_polygon;
+   style_class->draw_arrow = thinice_style_draw_arrow;
+   style_class->draw_diamond = thinice_style_draw_diamond;
+   style_class->draw_box = thinice_style_draw_box;
+-- 
+1.7.2
+
+From 2bf607c9a51474f085b27ce50bb729c19df10067 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Florian=20M=C3=BCllner?= <fmuellner@gnome.org>
+Date: Fri, 13 Aug 2010 00:02:47 +0200
+Subject: [PATCH 7/8] mist: Remove draw_polygon() from style class
+
+The hook has been deprecated/removed from GtkStyle.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=626678
+
+Reviewed-by: Benjamin Otte <otte@redhat.com>
+---
+ engines/mist/src/mist-style.c |  188 +++++++++-------------------------------
+ 1 files changed, 43 insertions(+), 145 deletions(-)
+
+diff --git a/engines/mist/src/mist-style.c b/engines/mist/src/mist-style.c
+index 6d8f187..cb524e9 100644
+--- a/engines/mist/src/mist-style.c
++++ b/engines/mist/src/mist-style.c
+@@ -299,122 +299,6 @@ mist_style_draw_shadow(GtkStyle *style,
+ }
+ 
+ static void
+-mist_style_draw_polygon(GtkStyle *style,
+-             GdkWindow *window,
+-             GtkStateType state_type,
+-             GtkShadowType shadow_type,
+-             GdkRectangle *area,
+-             GtkWidget *widget,
+-             const char *detail,
+-             GdkPoint *points,
+-             int npoints,
+-             int fill)
+-{
+-	MistStyle *mist_style = MIST_STYLE (style);
+-
+-	static const gdouble pi_over_4 = G_PI_4;
+-	static const gdouble pi_3_over_4 = G_PI_4 * 3;
+-	
+-	CairoColor           *color1;
+-	CairoColor           *color2;
+-	CairoColor           *color3;
+-	CairoColor           *color4;
+-	gdouble            angle;
+-	int                xadjust;
+-	int                yadjust;
+-	int                i;
+-	cairo_t           *cr;
+-
+-	CHECK_ARGS
+-	g_return_if_fail(points != NULL);
+-	
+-	switch (shadow_type) {
+-	case GTK_SHADOW_IN:
+-		color1 = &mist_style->color_cube.light[state_type];
+-		color2 = &mist_style->color_cube.dark[state_type];
+-		color3 = &mist_style->color_cube.light[state_type];
+-		color4 = &mist_style->color_cube.dark[state_type];
+-		break;
+-	case GTK_SHADOW_ETCHED_IN:
+-		color1 = &mist_style->color_cube.light[state_type];
+-		color2 = &mist_style->color_cube.dark[state_type];
+-		color3 = &mist_style->color_cube.dark[state_type];
+-		color4 = &mist_style->color_cube.light[state_type];
+-		break;
+-	case GTK_SHADOW_OUT:
+-		color1 = &mist_style->color_cube.dark[state_type];
+-		color2 = &mist_style->color_cube.light[state_type];
+-		color3 = &mist_style->color_cube.dark[state_type];
+-		color4 = &mist_style->color_cube.light[state_type];
+-		break;
+-	case GTK_SHADOW_ETCHED_OUT:
+-		color1 = &mist_style->color_cube.dark[state_type];
+-		color2 = &mist_style->color_cube.light[state_type];
+-		color3 = &mist_style->color_cube.light[state_type];
+-		color4 = &mist_style->color_cube.dark[state_type];
+-		break;
+-	default:
+-		return;
+-	}
+-
+-	cr = ge_gdk_drawable_to_cairo (window, area);
+-	
+-	if (fill)
+-		ge_cairo_polygon(cr, &mist_style->color_cube.bg[state_type], points, npoints);
+-	
+-	npoints--;
+-	
+-	for (i = 0; i < npoints; i++) {
+-		if ((points[i].x == points[i + 1].x) &&
+-		    (points[i].y == points[i + 1].y)) {
+-			angle = 0;
+-		} else {
+-			angle = atan2(points[i + 1].y - points[i].y,
+-				      points[i + 1].x - points[i].x);
+-		}
+-		
+-		if ((angle > -pi_3_over_4) && (angle < pi_over_4)) {
+-			if (angle > -pi_over_4) {
+-				xadjust = 0;
+-				yadjust = 1;
+-			} else {
+-				xadjust = 1;
+-				yadjust = 0;
+-			}
+-
+-			ge_cairo_line(cr, color1,
+-				      points[i].x - xadjust, 
+-				      points[i].y - yadjust,
+-				      points[i + 1].x - xadjust, 
+-				      points[i + 1].y - yadjust);
+-			ge_cairo_line(cr, color3,
+-				      points[i].x, points[i].y,
+-				      points[i + 1].x, points[i + 1].y);
+-		}
+-		else {
+-			if ((angle < -pi_3_over_4) || (angle > pi_3_over_4)) {
+-				xadjust = 0;
+-				yadjust = 1;
+-			} else {
+-				xadjust = 1;
+-				yadjust = 0;
+-			}
+-			
+-			ge_cairo_line(cr, color4,
+-				      points[i].x + xadjust, 
+-				      points[i].y + yadjust,
+-				      points[i + 1].x + xadjust, 
+-				      points[i + 1].y + yadjust);
+-			ge_cairo_line(cr, color2,
+-				      points[i].x, points[i].y,
+-				      points[i + 1].x, points[i + 1].y);
+-		}
+-	}
+-
+-	cairo_destroy(cr);
+-}
+-
+-static void
+ mist_style_draw_diamond(GtkStyle * style,
+              GdkWindow * window,
+              GtkStateType state_type,
+@@ -691,28 +575,38 @@ mist_style_draw_check(GtkStyle *style,
+ 	} else if (shadow_type == GTK_SHADOW_ETCHED_IN) { /* inconsistent */
+ #define gray50_width 2
+ #define gray50_height 2
+-		GdkBitmap *stipple;
+-		GdkGC *gc = style->base_gc[GTK_STATE_SELECTED];
+-		static const char gray50_bits[] = {
+-			0x02, 0x01
++		cairo_surface_t *surface;
++		cairo_pattern_t *pattern;
++		static guchar gray50_bits[] = {
++			/* pixman expects strides to be multiples of 4 */
++			0x02, 0x01, 0x00, 0x00,
++			0x02, 0x01, 0x00, 0x00
+ 		};
+ 
+-		stipple = gdk_bitmap_create_from_data (window,
+-						       gray50_bits, 
+-						       gray50_width,
+-						       gray50_height);
+-  
+-		if (area)
+-			gdk_gc_set_clip_rectangle (gc, area);
++		surface = cairo_image_surface_create_for_data (gray50_bits,
++		                                               CAIRO_FORMAT_A8,
++		                                               gray50_width,
++		                                               gray50_height,
++		                                               4);
++		pattern = cairo_pattern_create_for_surface (surface);
+ 
+-		gdk_gc_set_fill (gc, GDK_STIPPLED);
+-		gdk_gc_set_stipple (gc, stipple);
+-		gdk_draw_rectangle(window, gc,
+-				   TRUE, x + 2, y + 2, width - 5, height - 5);
+-		gdk_gc_set_fill (gc, GDK_SOLID);
++		cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
++		cairo_pattern_set_filter (pattern, CAIRO_FILTER_NEAREST);
+ 
+-		if (area)
+-			gdk_gc_set_clip_rectangle (gc, NULL);
++		gdk_cairo_set_source_color (cr,
++		                            &style->base[GTK_STATE_SELECTED]);
++
++		if (area) {
++			gdk_cairo_rectangle (cr, area);
++			cairo_clip (cr);
++		}
++
++		cairo_mask (cr, pattern);
++		cairo_rectangle (cr, x + 2, y + 2, width - 5, height - 5);
++		cairo_fill (cr);
++
++		cairo_surface_destroy (surface);
++		cairo_pattern_destroy (pattern);
+ #undef gray50_width
+ #undef gray50_height 
+ 	}
+@@ -1174,21 +1068,26 @@ mist_style_draw_layout (GtkStyle        *style,
+ 	     int              y,
+ 	     PangoLayout      *layout)
+ {
+-	GdkGC *gc;
++	cairo_t *cr;
+ 	
+ 	CHECK_ARGS
+-	
+-	gc = use_text ? style->text_gc[state_type] : style->fg_gc[state_type];
+-	
+-	if (area) {
+-		gdk_gc_set_clip_rectangle (gc, area);
+-	}
+-	
+-	gdk_draw_layout (window, gc, x, y, layout);
++
++	cr = gdk_cairo_create (window);
++
++	if (use_text)
++		gdk_cairo_set_source_color (cr, &style->text[state_type]);
++	else
++		gdk_cairo_set_source_color (cr, &style->fg[state_type]);
+ 	
+ 	if (area) {
+-		gdk_gc_set_clip_rectangle (gc, NULL);
++		gdk_cairo_rectangle (cr, area);
++		cairo_clip (cr);
+ 	}
++
++	ge_cairo_transform_for_layout (cr, layout, x, y);
++	pango_cairo_show_layout (cr, layout);
++
++	cairo_destroy (cr);
+ }
+ 
+ static GdkPixbuf *
+@@ -1372,7 +1271,6 @@ mist_style_class_init (MistStyleClass *klass)
+ 	style_class->draw_hline = mist_style_draw_hline;
+ 	style_class->draw_vline = mist_style_draw_vline;
+ 	style_class->draw_shadow = mist_style_draw_shadow;
+-	style_class->draw_polygon = mist_style_draw_polygon;
+ 	style_class->draw_diamond = mist_style_draw_diamond;
+ 	style_class->draw_box = mist_style_draw_box;
+ 	style_class->draw_tab = mist_style_draw_box;
+-- 
+1.7.2
+
+From b4769269cf0f4d49d4c883a7a533d046589f46dc Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Florian=20M=C3=BCllner?= <fmuellner@gnome.org>
+Date: Thu, 12 Aug 2010 11:30:39 +0200
+Subject: [PATCH 8/8] hc: Replace GDK drawing API with cairo
+
+The GDK drawing API was deprecated/removed.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=626678
+
+Reviewed-by: Benjamin Otte <otte@redhat.com>
+---
+ engines/hc/src/hc-style.c        |  133 +++-----------------------------------
+ engines/hc/src/hc_gtk2_drawing.h |   12 ----
+ engines/hc/src/hc_gtk2_engine.c  |   37 -----------
+ 3 files changed, 9 insertions(+), 173 deletions(-)
+
+diff --git a/engines/hc/src/hc-style.c b/engines/hc/src/hc-style.c
+index 8e959fc..8b7d248 100644
+--- a/engines/hc/src/hc-style.c
++++ b/engines/hc/src/hc-style.c
+@@ -888,19 +888,21 @@ hc_draw_layout (GtkStyle        *style,
+ 		gint             y,
+ 		PangoLayout     *layout)
+ {
+-	GdkGC *gc;
++	cairo_t *cr;
+ 
+ 	CHECK_ARGS
+ 
+-	gc = use_text ? style->text_gc[state_type] : style->fg_gc[state_type];
++	cr = ge_gdk_drawable_to_cairo (window, area);
+ 
+-	if (area)
+-		gdk_gc_set_clip_rectangle (gc, area);
++	if (use_text)
++		gdk_cairo_set_source_color (cr, &style->text[state_type]);
++	else
++		gdk_cairo_set_source_color (cr, &style->fg[state_type]);
+ 
+-	gdk_draw_layout (window, gc, x, y, layout);
++	ge_cairo_transform_for_layout (cr, layout, x, y);
++	pango_cairo_show_layout (cr, layout);
+ 
+-	if (area)
+-		gdk_gc_set_clip_rectangle (gc, NULL);
++	cairo_destroy (cr);
+ }
+ 
+ void
+@@ -1286,120 +1288,3 @@ hc_draw_diamond (GtkStyle      *style,
+ 
+ 	cairo_destroy(cr);
+ }
+-
+-void
+-hc_draw_polygon (GtkStyle      *style,
+-		 GdkWindow     *window,
+-		 GtkStateType   state_type,
+-		 GtkShadowType  shadow_type,
+-		 GdkRectangle  *area,
+-		 GtkWidget     *widget,
+-		 const gchar   *detail,
+-		 GdkPoint      *points,
+-		 gint           npoints,
+-		 gboolean       fill)
+-{
+-	HcStyle *hc_style = HC_STYLE (style);
+-
+-	static const gdouble pi_over_4 = G_PI_4;
+-	static const gdouble pi_3_over_4 = G_PI_4 * 3;
+-	
+-	CairoColor           *color1;
+-	CairoColor           *color2;
+-	CairoColor           *color3;
+-	CairoColor           *color4;
+-	gdouble            angle;
+-	int                xadjust;
+-	int                yadjust;
+-	int                i;
+-	cairo_t           *cr;
+-
+-	g_return_if_fail(style != NULL);
+-	g_return_if_fail(window != NULL);
+-	g_return_if_fail(points != NULL);
+-	
+-	switch (shadow_type) {
+-	case GTK_SHADOW_IN:
+-		color1 = &hc_style->color_cube.light[state_type];
+-		color2 = &hc_style->color_cube.dark[state_type];
+-		color3 = &hc_style->color_cube.light[state_type];
+-		color4 = &hc_style->color_cube.dark[state_type];
+-		break;
+-	case GTK_SHADOW_ETCHED_IN:
+-		color1 = &hc_style->color_cube.light[state_type];
+-		color2 = &hc_style->color_cube.dark[state_type];
+-		color3 = &hc_style->color_cube.dark[state_type];
+-		color4 = &hc_style->color_cube.light[state_type];
+-		break;
+-	case GTK_SHADOW_OUT:
+-		color1 = &hc_style->color_cube.dark[state_type];
+-		color2 = &hc_style->color_cube.light[state_type];
+-		color3 = &hc_style->color_cube.dark[state_type];
+-		color4 = &hc_style->color_cube.light[state_type];
+-		break;
+-	case GTK_SHADOW_ETCHED_OUT:
+-		color1 = &hc_style->color_cube.dark[state_type];
+-		color2 = &hc_style->color_cube.light[state_type];
+-		color3 = &hc_style->color_cube.light[state_type];
+-		color4 = &hc_style->color_cube.dark[state_type];
+-		break;
+-	default:
+-		return;
+-	}
+-
+-	cr = ge_gdk_drawable_to_cairo (window, area);
+-	
+-	if (fill)
+-		ge_cairo_polygon(cr, &hc_style->color_cube.bg[state_type], points, npoints);
+-	
+-	npoints--;
+-	
+-	for (i = 0; i < npoints; i++) {
+-		if ((points[i].x == points[i + 1].x) &&
+-		    (points[i].y == points[i + 1].y)) {
+-			angle = 0;
+-		} else {
+-			angle = atan2(points[i + 1].y - points[i].y,
+-				      points[i + 1].x - points[i].x);
+-		}
+-		
+-		if ((angle > -pi_3_over_4) && (angle < pi_over_4)) {
+-			if (angle > -pi_over_4) {
+-				xadjust = 0;
+-				yadjust = 1;
+-			} else {
+-				xadjust = 1;
+-				yadjust = 0;
+-			}
+-
+-			ge_cairo_line(cr, color1,
+-				      points[i].x - xadjust, 
+-				      points[i].y - yadjust,
+-				      points[i + 1].x - xadjust, 
+-				      points[i + 1].y - yadjust);
+-			ge_cairo_line(cr, color3,
+-				      points[i].x, points[i].y,
+-				      points[i + 1].x, points[i + 1].y);
+-		}
+-		else {
+-			if ((angle < -pi_3_over_4) || (angle > pi_3_over_4)) {
+-				xadjust = 0;
+-				yadjust = 1;
+-			} else {
+-				xadjust = 1;
+-				yadjust = 0;
+-			}
+-			
+-			ge_cairo_line(cr, color4,
+-				      points[i].x + xadjust, 
+-				      points[i].y + yadjust,
+-				      points[i + 1].x + xadjust, 
+-				      points[i + 1].y + yadjust);
+-			ge_cairo_line(cr, color2,
+-				      points[i].x, points[i].y,
+-				      points[i + 1].x, points[i + 1].y);
+-		}
+-	}
+-
+-	cairo_destroy(cr);
+-}
+diff --git a/engines/hc/src/hc_gtk2_drawing.h b/engines/hc/src/hc_gtk2_drawing.h
+index 7ff44f1..692b9b6 100644
+--- a/engines/hc/src/hc_gtk2_drawing.h
++++ b/engines/hc/src/hc_gtk2_drawing.h
+@@ -258,15 +258,3 @@ hc_draw_diamond (GtkStyle      *style,
+ 		 gint           width,
+ 		 gint           height);
+ 
+-GE_INTERNAL void
+-hc_draw_polygon (GtkStyle      *style,
+-		 GdkWindow     *window,
+-		 GtkStateType   state_type,
+-		 GtkShadowType  shadow_type,
+-		 GdkRectangle  *area,
+-		 GtkWidget     *widget,
+-		 const gchar   *detail,
+-		 GdkPoint      *points,
+-		 gint           npoints,
+-		 gboolean       fill);
+-
+diff --git a/engines/hc/src/hc_gtk2_engine.c b/engines/hc/src/hc_gtk2_engine.c
+index 1d6a107..4962e20 100644
+--- a/engines/hc/src/hc_gtk2_engine.c
++++ b/engines/hc/src/hc_gtk2_engine.c
+@@ -222,10 +222,6 @@ static void
+ hc_style_realize (GtkStyle *style)
+ {
+   HcStyle *hc_style = HC_STYLE (style);
+-
+-  GdkGCValues gc_values;
+-  GdkGCValuesMask gc_values_mask;
+-  
+   gint i;
+ 
+   for (i = 0; i < 5; i++)
+@@ -257,14 +253,6 @@ hc_style_realize (GtkStyle *style)
+   style->white.blue = 0xffff;
+   gdk_colormap_alloc_color (style->colormap, &style->white, FALSE, TRUE);
+ 
+-  gc_values_mask = GDK_GC_FOREGROUND;
+-  
+-  gc_values.foreground = style->black;
+-  style->black_gc = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+-  
+-  gc_values.foreground = style->white;
+-  style->white_gc = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+-  
+   for (i = 0; i < 5; i++)
+     {
+       if (!gdk_colormap_alloc_color (style->colormap, &style->fg[i], FALSE, TRUE))
+@@ -291,30 +279,6 @@ hc_style_realize (GtkStyle *style)
+       if (!gdk_colormap_alloc_color (style->colormap, &style->text_aa[i], FALSE, TRUE))
+         g_warning ("unable to allocate color: ( %d %d %d )",
+                    style->text_aa[i].red, style->text_aa[i].green, style->text_aa[i].blue);
+-      
+-      gc_values.foreground = style->fg[i];
+-      style->fg_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+-      
+-      gc_values.foreground = style->bg[i];
+-      style->bg_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+-      
+-      gc_values.foreground = style->light[i];
+-      style->light_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+-      
+-      gc_values.foreground = style->dark[i];
+-      style->dark_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+-      
+-      gc_values.foreground = style->mid[i];
+-      style->mid_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+-      
+-      gc_values.foreground = style->text[i];
+-      style->text_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+-      
+-      gc_values.foreground = style->base[i];
+-      style->base_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+-
+-      gc_values.foreground = style->text_aa[i];
+-      style->text_aa_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+     }
+ 
+   ge_gtk_style_to_cairo_color_cube (style, &hc_style->color_cube);
+@@ -377,7 +341,6 @@ hc_style_class_init (HcStyleClass *klass)
+   style_class->draw_vline = hc_draw_vline; 
+   style_class->draw_expander = hc_draw_expander;
+   style_class->draw_diamond = hc_draw_diamond;
+-  style_class->draw_polygon = hc_draw_polygon;
+ }
+ 
+ static void
+-- 
+1.7.2
+
