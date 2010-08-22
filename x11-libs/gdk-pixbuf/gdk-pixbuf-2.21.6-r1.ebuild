@@ -40,6 +40,9 @@ src_prepare() {
 	# Only build against libX11 if the user wants to do so
 	epatch "${FILESDIR}"/${PN}-2.21.4-fix-automagic-x11.patch
 
+	# Upstream patch for API compatiblity with older gtk+-2
+	epatch "${FILESDIR}"/${P}-includes.patch
+
 	elibtoolize
 	eautoreconf
 }
