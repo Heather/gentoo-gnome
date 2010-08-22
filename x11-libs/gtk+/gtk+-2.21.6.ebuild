@@ -77,9 +77,6 @@ src_prepare() {
 	# Don't break inclusion of gtkclist.h, upstream bug 536767
 	epatch "${FILESDIR}/${PN}-2.14.3-limit-gtksignal-includes.patch"
 
-	# add correct framework linking options, for aqua
-	epatch "${FILESDIR}/${PN}-2.21.3-macosx-aqua.patch"
-
 	# -O3 and company cause random crashes in applications. Bug #133469
 	replace-flags -O3 -O2
 	strip-flags

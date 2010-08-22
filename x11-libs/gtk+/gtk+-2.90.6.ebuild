@@ -16,7 +16,6 @@ IUSE="aqua cups debug doc +introspection jpeg jpeg2k tiff test vim-syntax xinera
 
 # NOTE: cairo[svg] dep is due to bug 291283 (not patched to avoid eautoreconf)
 RDEPEND="!aqua? (
-		x11-libs/libXrender
 		x11-libs/libX11
 		x11-libs/libXi
 		x11-libs/libXt
@@ -34,7 +33,7 @@ RDEPEND="!aqua? (
 		x11-libs/gdk-pixbuf[introspection?,jpeg?,jpeg2k?,tiff?]
 	)
 	xinerama? ( x11-libs/libXinerama )
-	>=dev-libs/glib-2.25.9
+	>=dev-libs/glib-2.25.11
 	>=x11-libs/pango-1.20[introspection?]
 	>=dev-libs/atk-1.29.2[introspection?]
 	media-libs/fontconfig
@@ -64,9 +63,6 @@ DEPEND="${RDEPEND}
 PDEPEND="vim-syntax? ( app-vim/gtk-syntax )"
 
 src_prepare() {
-	# add correct framework linking options, for aqua
-	epatch "${FILESDIR}/${PN}-2.90.4-macosx-aqua.patch"
-
 	# -O3 and company cause random crashes in applications. Bug #133469
 	replace-flags -O3 -O2
 	strip-flags
