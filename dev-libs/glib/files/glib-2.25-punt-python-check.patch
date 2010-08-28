@@ -5,8 +5,8 @@ upstreamed yet.
 https://bugs.gentoo.org/291328
 https://bugzilla.gnome.org/623552
 ---
---- configure.in
-+++ configure.in
+--- configure.ac
++++ configure.ac
 @@ -379,10 +379,6 @@ if test "x$PERL_PATH" = x ; then
  fi
  AC_SUBST(PERL_PATH)

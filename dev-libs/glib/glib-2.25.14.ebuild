@@ -52,12 +52,18 @@ src_prepare() {
 
 	# Don't check for python, hence removing the build-time python dep.
 	# We remove the gdb python scripts in src_install due to bug 291328
-	epatch "${FILESDIR}/${PN}-2.24-punt-python-check.patch"
+	epatch "${FILESDIR}/${PN}-2.25-punt-python-check.patch"
 
 	# Fix test failure when upgrading from 2.22 to 2.24, upstream bug 621368
 	epatch "${FILESDIR}/${PN}-2.24-assert-test-failure.patch"
 
-	# Do not try to remove files on live filesystem, bug #XXX ?
+	# 'gdbus-peer' test fails, upstream bug #628084
+	epatch "${FILESDIR}/${PN}-2.25-fix-gdbus-peer-test.patch"
+
+	# skip tests that require writing to /root/.dbus, upstream bug ???
+	epatch "${FILESDIR}/${PN}-2.25-skip-tests-with-dbus-keyring.patch"
+
+	# Do not try to remove files on live filesystem, upstream bug #619274
 	sed 's:^\(.*"/desktop-app-info/delete".*\):/*\1*/:' \
 		-i "${S}"/gio/tests/desktop-app-info.c || die "sed failed"
 
