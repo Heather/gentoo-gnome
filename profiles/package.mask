@@ -47,12 +47,14 @@ gnome-base/gnome-shell
 =gnome-extra/gcalctool-5.31*
 =gnome-extra/gnome-games-2.31*
 =gnome-extra/gnome-media-2.31*
+=gnome-extra/gtkhtml-3.31*
 =gnome-extra/yelp-2.31*
 gnome-extra/yelp-xsl
 =gnome-extra/zenity-2.31*
 =media-gfx/eog-2.31*
 =media-sound/sound-juicer-2.31*
 =media-video/totem-2.90*
+=mail-client/evolution-2.31*
 net-libs/webkit-gtk:3.0
 =www-client/epiphany-2.31*
 x11-libs/gdk-pixbuf
