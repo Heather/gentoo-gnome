@@ -1,10 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-session/gnome-session-2.30.0-r1.ebuild,v 1.1 2010/06/13 18:13:42 pacho Exp $
+# $Header: $
 
 EAPI="3"
 
-inherit eutils gnome2
+inherit autotools eutils gnome2
 
 DESCRIPTION="Gnome session manager"
 HOMEPAGE="http://www.gnome.org/"
@@ -15,14 +15,14 @@ LICENSE="GPL-2 LGPL-2 FDL-1.1"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ia64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 
-IUSE="branding doc ipv6 +splash elibc_FreeBSD"
+IUSE="branding doc ipv6 elibc_FreeBSD"
 
+# TODO: gtk3 support
 RDEPEND=">=dev-libs/glib-2.16
 	>=x11-libs/gtk+-2.14.0:2
 	>=dev-libs/dbus-glib-0.76
 	>=gnome-base/gconf-2
-	>=x11-libs/startup-notification-0.10
-	|| ( sys-power/upower >=sys-apps/devicekit-power-008 )
+	sys-power/upower
 	elibc_FreeBSD? ( dev-libs/libexecinfo )
 
 	x11-libs/libSM
@@ -51,15 +51,8 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--docdir=${EPREFIX}/usr/share/doc/${PF}
 		--with-default-wm=gnome-wm
-		$(use_enable splash)
 		$(use_enable doc docbook-docs)
 		$(use_enable ipv6)"
-
-	if use branding && ! use splash; then
-		ewarn "You have disabled splash but enabled branding support"
-		ewarn "splash support has been auto-enabled for branding"
-		G2CONF="${G2CONF} --enable-splash"
-	fi
 }
 
 src_prepare() {
@@ -73,10 +66,9 @@ src_prepare() {
 	#epatch "${FILESDIR}/${PN}-2.26.2-shutdown.patch"
 
 	# Add "session saving" button back, upstream bug #575544
-	epatch "${FILESDIR}/${PN}-2.30.0-session-saving-button.patch"
+	epatch "${FILESDIR}/${PN}-2.31.x-session-saving-button.patch"
 
-	# Fix intltoolize broken file, see upstream #577133
-	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
+	eautoreconf
 }
 
 src_install() {
