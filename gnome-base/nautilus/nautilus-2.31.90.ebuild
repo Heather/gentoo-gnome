@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/nautilus/nautilus-2.30.1-r1.ebuild,v 1.1 2010/06/13 17:44:02 pacho Exp $
+# $Header: $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -16,9 +16,9 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~
 IUSE="doc gnome introspection xmp"
 
 RDEPEND=">=dev-libs/glib-2.25.9
-	gnome-base/gnome-desktop:3
+	>=gnome-base/gnome-desktop-2.29.91:0
 	>=x11-libs/pango-1.1.2
-	>=x11-libs/gtk+-2.90.5:3[introspection?]
+	>=x11-libs/gtk+-2.21.2:2[introspection?]
 	>=dev-libs/libxml2-2.4.7
 	>=media-libs/libexif-0.5.12
 	>=gnome-base/gconf-2.0[introspection?]
