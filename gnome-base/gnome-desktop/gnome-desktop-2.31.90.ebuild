@@ -14,6 +14,7 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~x86-solaris"
 IUSE="doc"
 
+# TODO: Add RDEPEND on pciutils (requires support for reading gzipped pnp.ids)
 RDEPEND=">=x11-libs/gtk+-2.18.0:2
 	>=dev-libs/glib-2.19.1
 	>=x11-libs/libXrandr-1.2
