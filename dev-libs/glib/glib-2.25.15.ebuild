@@ -57,9 +57,6 @@ src_prepare() {
 	# Fix test failure when upgrading from 2.22 to 2.24, upstream bug 621368
 	epatch "${FILESDIR}/${PN}-2.24-assert-test-failure.patch"
 
-	# 'gdbus-peer' test fails, upstream bug #628084
-	epatch "${FILESDIR}/${PN}-2.25-fix-gdbus-peer-test.patch"
-
 	# skip tests that require writing to /root/.dbus, upstream bug ???
 	epatch "${FILESDIR}/${PN}-2.25-skip-tests-with-dbus-keyring.patch"
 
