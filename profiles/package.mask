@@ -32,6 +32,7 @@
 dev-libs/seed
 dev-libs/libpeas
 dev-libs/libunique:3
+=dev-util/devhelp-2.31*
 =gnome-base/gconf-2.31*
 =gnome-base/gnome-applets-2.31*
 =gnome-base/gnome-control-center-2.31*
