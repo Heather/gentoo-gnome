@@ -6,6 +6,10 @@
 # NOTE: Please add your entry at the top!
 #
 
+# Arun Raghavan <ford_prefect@gentoo.org> (10 Sep 2010)
+# Development version of sysprof.
+=dev-util/sysprof-1.1*
+
 # Nirbheek Chauhan <nirbheek@gentoo.org> (9 Jul 2010)
 # New rhythmbox needs libdmapsharing with USE=daap
 # also uses >=dev-libs/glib-2.25.6
