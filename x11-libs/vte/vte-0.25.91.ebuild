@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/vte/vte-0.24.2.ebuild,v 1.1 2010/06/23 15:01:20 pacho Exp $
+# $Header: $
 
 EAPI="2"
 
@@ -12,10 +12,11 @@ HOMEPAGE="http://www.gnome.org/"
 LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="debug doc glade +introspection python"
+IUSE="debug doc glade gtk3 +introspection python"
 
 RDEPEND=">=dev-libs/glib-2.22.0
-	>=x11-libs/gtk+-2.14.0:2[introspection?]
+	!gtk3? ( >=x11-libs/gtk+-2.20:2[introspection?] )
+	gtk3? ( >=x11-libs/gtk+-2.90:3[introspection?] )
 	>=x11-libs/pango-1.22.0
 	sys-libs/ncurses
 	glade? ( dev-util/glade:3 )
@@ -40,21 +41,10 @@ pkg_setup() {
 		$(use_enable introspection)
 		$(use_enable python)
 		--with-html-dir=/usr/share/doc/${PF}/html"
-}
 
-src_prepare() {
-	gnome2_src_prepare
-
-	# Fix ugly artifacts with upstream patches from bgo#618749
-	# FIXME: Second patch needs to be skipped since it causes problems with
-	# x11-terms/terminal, see bug #324631. If this is not solved by upstream,
-	# the problem could reappear with >=x11-libs/vte-0.25.2
-	epatch "${FILESDIR}/${PN}-0.24.1-background-color.patch"
-#	epatch "${FILESDIR}/${PN}-0.24.1-background-color2.patch"
-	epatch "${FILESDIR}/${PN}-0.24.1-cleanup-background.patch"
-
-	# Prevent cursor from become invisible, bgo#602596
-	# FIXME: The following patches cannot be applied until bug #323443 is solved.
-#	epatch "${FILESDIR}/${PN}-0.24.2-invisible-cursor.patch"
-#	epatch "${FILESDIR}/${PN}-0.24.2-invisible-cursor2.patch"
+		if use gtk3; then
+			G2CONF="${G2CONF} --with-gtk=3.0"
+		else
+			G2CONF="${G2CONF} --with-gtk=2.0"
+		fi
 }
