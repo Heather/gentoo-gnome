@@ -13,16 +13,17 @@ HOMEPAGE="http://www.gnome.org/projects/brasero"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86"
-IUSE="beagle +cdr +css doc +introspection +libburn nautilus playlist test"
+IUSE="beagle +cdr +css doc gtk3 +introspection +libburn nautilus playlist test"
 
 COMMON_DEPEND=">=dev-libs/glib-2.25.10
-	>=x11-libs/gtk+-2.90.2:3[introspection?]
+	gtk3? ( >=x11-libs/gtk+-2.90.2:3[introspection?] )
+	!gtk3? ( >=x11-libs/gtk+-2.19.7:2[introspection?] )
 	>=gnome-base/gconf-2.31.1[introspection?]
 	>=media-libs/gstreamer-0.10.15
 	>=media-libs/gst-plugins-base-0.10
 	>=dev-libs/libxml2-2.6
 	>=dev-libs/dbus-glib-0.7.2
-	media-libs/libcanberra[gtk3]
+	media-libs/libcanberra[gtk3?]
 	x11-libs/libSM
 	beagle? ( >=dev-libs/libbeagle-0.3 )
 	introspection? ( >=dev-libs/gobject-introspection-0.6.3 )
@@ -55,11 +56,11 @@ pkg_setup() {
 		--disable-scrollkeeper
 		--disable-caches
 		--disable-dependency-tracking
-		--enable-gtk3
 		$(use_enable beagle search beagle)
 		$(use_enable cdr cdrtools)
 		$(use_enable cdr cdrkit)
 		$(use_enable introspection)
+		$(use_enable gtk3)
 		$(use_enable libburn libburnia)
 		$(use_enable nautilus)
 		$(use_enable playlist)"
