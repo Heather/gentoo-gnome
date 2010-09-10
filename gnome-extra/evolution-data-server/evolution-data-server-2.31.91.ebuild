@@ -13,17 +13,18 @@ LICENSE="LGPL-2 BSD DB"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-solaris"
 
-IUSE="doc ipv6 kerberos gnome-keyring ldap ssl"
+IUSE="doc ipv6 kerberos gnome-keyring gtk3 ldap ssl"
 
 
-# TODO: Handle gtk+-3.0
 RDEPEND=">=dev-libs/glib-2.25.12
-	>=x11-libs/gtk+-2.20:2
+	!gtk3? ( >=x11-libs/gtk+-2.20:2 
+			 >=dev-libs/libgweather-2.25.4 )
+	gtk3? ( >=x11-libs/gtk+-2.90.4:3 
+		 	>=dev-libs/libgweather-2.90.0 )
 	>=gnome-base/gconf-2
 	>=dev-db/sqlite-3.5
 	>=dev-libs/libxml2-2
 	>=net-libs/libsoup-2.4
-	>=dev-libs/libgweather-2.25.4
 	>=dev-libs/libical-0.43
 	>=dev-libs/dbus-glib-0.6
 	>=sys-libs/db-4
@@ -51,6 +52,7 @@ pkg_setup() {
 		$(use_with kerberos krb5 /usr)
 		$(use_with ldap openldap)
 		$(use_enable gnome-keyring)
+		$(use_enable gtk3)
 		$(use_enable ipv6)
 		$(use_enable ssl ssl)
 		$(use_enable ssl smime)
