@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/sound-juicer/sound-juicer-2.28.2-r1.ebuild,v 1.4 2010/06/04 21:16:24 maekke Exp $
+# $Header: $
 
 EAPI="2"
 
@@ -12,22 +12,22 @@ HOMEPAGE="http://www.burtonini.com/blog/computers/sound-juicer/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc x86 ~x86-fbsd"
-IUSE="test"
+IUSE="gtk3 test"
 
 # FIXME: possibly automagic dual slot dep on musicbrainz, bug #275798
 COMMON_DEPEND=">=dev-libs/glib-2.18
-	x11-libs/gtk+:3
-
+	gtk3? ( x11-libs/gtk+:3 )
+	!gtk3? ( >=x11-libs/gtk+-2.20:2 )
 	>=gnome-base/libglade-2
 	>=gnome-base/gconf-2
-	media-libs/libcanberra[gtk3]
+	media-libs/libcanberra[gtk3?]
 	sys-apps/dbus
 	dev-libs/dbus-glib
 
 	>=media-libs/musicbrainz-3.0.2:3
 	>=dev-libs/libcdio-0.70[-minimal]
-	>=gnome-extra/gnome-media-2.11.91
-	>=app-cdr/brasero-2.31.5
+	>=gnome-extra/gnome-media-2.11.91[gtk3?]
+	>=app-cdr/brasero-2.31.5[gtk3?]
 
 	>=media-libs/gstreamer-0.10.15:0.10
 	>=media-libs/gst-plugins-base-0.10:0.10"
@@ -51,6 +51,12 @@ DOCS="AUTHORS ChangeLog NEWS README TODO"
 
 pkg_setup() {
 	G2CONF="${G2CONF} --disable-scrollkeeper"
+
+	if use gtk3; then
+		G2CONF="${G2CONF} --with-gtk=3.0"
+	else
+		G2CONF="${G2CONF} --with-gtk=2.0"
+	fi
 
 	# needed to get around some sandboxing checks
 	export GST_INSPECT=/bin/true
