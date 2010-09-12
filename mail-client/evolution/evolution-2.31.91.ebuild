@@ -13,30 +13,34 @@ HOMEPAGE="http://www.gnome.org/projects/evolution/"
 LICENSE="GPL-2 LGPL-2 OPENLDAP"
 SLOT="2.0"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
-IUSE="crypt doc gstreamer kerberos ldap networkmanager nntp pda profile python ssl"
+IUSE="crypt doc gstreamer gtk3 kerberos ldap networkmanager nntp pda profile python ssl"
 # pst
 # mono - disabled because it just crashes on startup :S
 
 # Pango dependency required to avoid font rendering problems
 # We need a graphical pinentry frontend to be able to ask for the GPG
 # password from inside evolution, bug 160302
-# TODO: gtk3 support
+# TODO: gtk3 support might be still missing some deps
 RDEPEND=">=dev-libs/glib-2.25.12
-	>=x11-libs/gtk+-2.20
-	>=gnome-extra/evolution-data-server-$(get_version_component_range 1-2)
-	>=gnome-base/gnome-desktop-2.26.0
+	!gtk3? ( >=x11-libs/gtk+-2.20:2
+			 >=dev-libs/libunique-1.1.2
+			 >=gnome-base/gnome-desktop-2.26.0
+			 >=dev-libs/libgweather-2.25.3 )
+	gtk3? ( >=x11-libs/gtk+-2.90.4:3
+			>=dev-libs/libunique-2.90
+			>=dev-libs/libgweather-2.90
+			>=gnome-base/gnome-desktop-2.90 )
+	>=gnome-extra/evolution-data-server-$(get_version_component_range 1-2)[gtk3?]
 	>=gnome-extra/gtkhtml-3.31.90
 	>=gnome-base/gconf-2
 	>=gnome-base/libgnomecanvas-2
 	dev-libs/atk
 	>=dev-libs/dbus-glib-0.74
-	>=dev-libs/libunique-1.1.2
 	>=dev-libs/libxml2-2.7.3
-	>=dev-libs/libgweather-2.25.3
 	>=net-libs/libsoup-2.4
 	>=media-gfx/gtkimageview-1.6
-	media-libs/libcanberra[gtk]
-	x11-libs/libnotify
+	media-libs/libcanberra[gtk,gtk3?]
+	>=x11-libs/libnotify-0.5.1[gtk3?]
 	>=x11-misc/shared-mime-info-0.22
 	>=x11-themes/gnome-icon-theme-2.30.2.1
 
