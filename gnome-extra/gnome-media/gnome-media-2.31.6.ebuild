@@ -16,7 +16,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~
 IUSE="pulseaudio"
 
 RDEPEND=">=dev-libs/glib-2.18.2:2
-	x11-libs/gtk+:3
+	>=x11-libs/gtk+-2.18.2:2
 	>=gnome-base/libglade-2
 	>=gnome-base/gconf-2.6.1
 	>=gnome-base/gnome-control-center-2.31.5
@@ -25,7 +25,7 @@ RDEPEND=">=dev-libs/glib-2.18.2:2
 	>=media-libs/gst-plugins-good-0.10
 
 	pulseaudio? ( >=media-sound/pulseaudio-0.9.15 )
-	>=media-libs/libcanberra-0.13[gtk3]
+	>=media-libs/libcanberra-0.13
 	dev-libs/libxml2
 	>=media-libs/gst-plugins-base-0.10.23:0.10
 	>=media-plugins/gst-plugins-meta-0.10-r2:0.10

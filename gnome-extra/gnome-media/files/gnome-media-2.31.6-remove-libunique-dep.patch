@@ -19,7 +19,7 @@ index 7622885..38b6024 100644
 @@ -115,7 +115,6 @@ if test "x$enable_pulseaudio" != "xno"; then
              gio-2.0
              gconf-2.0 >= $GCONF_REQUIRED_VERSION
-             libcanberra-gtk3 >= $CANBERRA_REQUIRED_VERSION
+             libcanberra-gtk >= $CANBERRA_REQUIRED_VERSION
 -            unique-1.0
              libxml-2.0
      )
