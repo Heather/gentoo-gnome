@@ -22,6 +22,7 @@ RDEPEND=">=dev-libs/glib-2.25.9
 	>=dev-libs/libxml2-2.4.7
 	>=media-libs/libexif-0.5.12
 	>=gnome-base/gconf-2.0[introspection?]
+	dev-libs/libunique
 	x11-libs/libXext
 	x11-libs/libXrender
 	introspection? ( >=dev-libs/gobject-introspection-0.6.4 )
