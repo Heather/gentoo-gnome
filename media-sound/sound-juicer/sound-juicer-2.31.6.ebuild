@@ -26,7 +26,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.18
 
 	>=media-libs/musicbrainz-3.0.2:3
 	>=dev-libs/libcdio-0.70[-minimal]
-	>=gnome-extra/gnome-media-2.11.91[gtk3?]
+	>=gnome-extra/gnome-media-2.11.91
 	>=app-cdr/brasero-2.31.5[gtk3?]
 
 	>=media-libs/gstreamer-0.10.15:0.10
