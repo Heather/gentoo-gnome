@@ -1,0 +1,22 @@
+https://bugs.gentoo.org/show_bug.cgi?id=309457
+https://bugs.freedesktop.org/show_bug.cgi?id=27081
+
+--- src/programs/pkexec.c.old	2010-03-15 08:49:30.000000000 +0100
++++ src/programs/pkexec.c	2010-03-15 08:54:16.000000000 +0100
+@@ -375,6 +375,7 @@
+   gchar *path;
+   struct passwd pwstruct;
+   gchar pwbuf[8192];
++  gchar cwdbuf[PATH_MAX];
+   gchar *s;
+   const gchar *environment_variables_to_save[] = {
+     "SHELL",
+@@ -438,7 +439,7 @@
+       goto out;
+     }
+ 
+-  original_cwd = g_strdup (get_current_dir_name ());
++  original_cwd = g_strdup (getcwd(cwdbuf,PATH_MAX));
+   if (original_cwd == NULL)
+     {
+       g_printerr ("Error getting cwd.\n");

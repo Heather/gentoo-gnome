@@ -6,6 +6,11 @@
 # NOTE: Please add your entry at the top!
 #
 
+# Nirbheek Chauhan <nirbheek@gentoo.org> (16 Sep 2010)
+# Needs new glib-2.25 API gdbus
+>=sys-auth/polkit-0.97
+>=gnome-extra/polkit-gnome-0.97
+
 # Arun Raghavan <ford_prefect@gentoo.org> (10 Sep 2010)
 # Development version of sysprof.
 =dev-util/sysprof-1.1*
