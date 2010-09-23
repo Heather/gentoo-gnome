@@ -66,6 +66,8 @@ gnome-extra/yelp-xsl
 =media-sound/sound-juicer-2.31*
 =media-video/totem-2.90*
 =mail-client/evolution-2.31*
+=net-libs/libsoup-2.31*
+=net-libs/libsoup-gnome-2.31*
 net-libs/webkit-gtk:3.0
 =www-client/epiphany-2.31*
 x11-libs/gdk-pixbuf

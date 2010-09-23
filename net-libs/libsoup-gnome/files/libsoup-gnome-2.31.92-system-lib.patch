@@ -1,0 +1,239 @@
+Split support for libgnome-soup.
+
+Original patch by Romain Perier.
+
+---
+--- configure.ac
++++ configure.ac
+@@ -72,6 +72,14 @@
+ dnl *** Checks for glib ***
+ dnl ***********************
+ 
++PKG_PROG_PKG_CONFIG
++enable_ssl=no
++AC_ARG_WITH(libsoup-system,
++   AS_HELP_STRING([--with-libsoup-system], [Use libsoup system library to build(default=no)]),
++   [with_libsoup_system=$withval], [with_libsoup_system=no])
++
++if test "$with_libsoup_system" = "no"; then
++
+ AM_PATH_GLIB_2_0(2.21.3,,,gobject gthread gio)
+ if test "$GLIB_LIBS" = ""; then
+    AC_MSG_ERROR(GLIB 2.21.3 or later is required to build libsoup)
+@@ -82,23 +90,6 @@
+ AC_SUBST(XML_CFLAGS)
+ AC_SUBST(XML_LIBS)
+ 
+-dnl ***********************
+-dnl *** Check for Win32 ***
+-dnl ***********************
+-
+-AC_MSG_CHECKING([for Win32])
+-case "$host" in
+-  *-*-mingw*)
+-    os_win32=yes
+-    CFLAGS="$CFLAGS -D_REENTRANT"
+-    ;;
+-  *)
+-    os_win32=no
+-    ;;
+-esac
+-AC_MSG_RESULT([$os_win32])
+-AM_CONDITIONAL(OS_WIN32, [test $os_win32 = yes])
+-
+ dnl *******************
+ dnl *** Misc checks ***
+ dnl *******************
+@@ -135,8 +126,28 @@
+ AC_SUBST(LIBGNUTLS_LIBS)
+ AC_SUBST(SSL_REQUIREMENT)
+ 
++fi
++
+ dnl This is not supposed to be conditional, but...
+ AM_CONDITIONAL(HAVE_SSL, test $enable_ssl != no)
++AM_CONDITIONAL(BUILD_LIBSOUP, test $with_libsoup_system = no)
++
++dnl ***********************
++dnl *** Check for Win32 ***
++dnl ***********************
++
++AC_MSG_CHECKING([for Win32])
++case "$host" in
++  *-*-mingw*)
++    os_win32=yes
++    CFLAGS="$CFLAGS -D_REENTRANT"
++    ;;
++  *)
++    os_win32=no
++    ;;
++esac
++AC_MSG_RESULT([$os_win32])
++AM_CONDITIONAL(OS_WIN32, [test $os_win32 = yes])
+ 
+ 
+ dnl *********************
+@@ -163,6 +174,10 @@
+ if test $with_gnome != no; then
+ 	AC_DEFINE(HAVE_GNOME, 1, [Defined if GNOME support is enabled])
+ 
++    if test $with_libsoup_system != no; then
++       PKG_CHECK_MODULES(LIBSOUP, libsoup-$SOUP_API_VERSION = $VERSION)
++    fi
++
+ 	PKG_CHECK_MODULES(LIBPROXY, libproxy-1.0, :, [AC_MSG_ERROR(dnl
+ [Could not find libproxy:
+ 
+--- libsoup/Makefile.am
++++ libsoup/Makefile.am
+@@ -4,17 +4,18 @@
+ LIBWS2_32 = -lws2_32
+ endif
+ 
+-INCLUDES = 				\
++INCLUDES =
++lib_LTLIBRARIES =
++CLEANFILES =
++
++if BUILD_LIBSOUP
++INCLUDES +=                \
+ 	-DG_LOG_DOMAIN=\"libsoup\" 	\
+ 	-I$(top_srcdir)			\
+ 	$(SOUP_DEBUG_FLAGS)		\
+ 	$(SOUP_MAINTAINER_FLAGS)	\
+ 	$(GLIB_CFLAGS)			\
+ 	$(XML_CFLAGS)			\
+-	$(GCONF_CFLAGS)			\
+-	$(LIBPROXY_CFLAGS)		\
+-	$(SQLITE_CFLAGS)		\
+-	$(GNOME_KEYRING_CFLAGS)		\
+ 	$(LIBGCRYPT_CFLAGS)		\
+ 	$(LIBGNUTLS_CFLAGS)
+ 
+@@ -45,7 +46,7 @@
+ 
+ BUILT_SOURCES = $(MARSHAL_GENERATED) $(MKENUMS_GENERATED)
+ 
+-CLEANFILES = $(MARSHAL_GENERATED) $(MKENUMS_GENERATED)
++CLEANFILES += $(MARSHAL_GENERATED) $(MKENUMS_GENERATED)
+ 
+ libsoupincludedir = $(includedir)/libsoup-2.4/libsoup
+ 
+@@ -91,7 +92,7 @@
+ 	$(soup_headers)		\
+ 	soup-enum-types.h
+ 
+-lib_LTLIBRARIES = libsoup-2.4.la
++lib_LTLIBRARIES += libsoup-2.4.la
+ 
+ libsoup_2_4_la_LDFLAGS =	\
+ 	-version-info $(SOUP_CURRENT):$(SOUP_REVISION):$(SOUP_AGE) -no-undefined
+@@ -171,10 +172,18 @@
+ 	soup-value-utils.c		\
+ 	soup-xmlrpc.c
+ 
++endif
++
+ if BUILD_LIBSOUP_GNOME
+ 
+ libsoupgnomeincludedir = $(includedir)/libsoup-gnome-2.4/libsoup
+ 
++INCLUDES += $(LIBSOUP_CFLAGS)  \
++    $(GCONF_CFLAGS)     \
++    $(LIBPROXY_CFLAGS)  \
++    $(SQLITE_CFLAGS)    \
++    $(GNOME_KEYRING_CFLAGS)
++
+ libsoupgnomeinclude_HEADERS =	\
+ 	soup-cookie-jar-sqlite.h\
+ 	soup-gnome.h		\
+@@ -182,16 +191,26 @@
+ 
+ lib_LTLIBRARIES += libsoup-gnome-2.4.la
+ 
+-libsoup_gnome_2_4_la_LDFLAGS = $(libsoup_2_4_la_LDFLAGS)
++if BUILD_LIBSOUP
++   libsoup_gnome_2_4_la_LDFLAGS = $(libsoup_2_4_la_LDFLAGS)
++else
++  libsoup_gnome_2_4_la_LDFLAGS =        \
++	-version-info $(SOUP_CURRENT):$(SOUP_REVISION):$(SOUP_AGE) -no-undefined
++endif
+ 
+ libsoup_gnome_2_4_la_LIBADD =		\
+-	libsoup-2.4.la			\
+ 	$(GLIB_LIBS)			\
+ 	$(GCONF_LIBS)			\
+ 	$(LIBPROXY_LIBS)		\
+ 	$(SQLITE_LIBS)			\
+ 	$(GNOME_KEYRING_LIBS)
+ 
++if BUILD_LIBSOUP
++  libsoup_gnome_2_4_la_LIBADD += libsoup-2.4.la
++else
++  libsoup_gnome_2_4_la_LIBADD += $(LIBSOUP_LIBS)
++endif
++
+ libsoup_gnome_2_4_la_SOURCES =		\
+ 	soup-cookie-jar-sqlite.c	\
+ 	soup-gnome-features.c		\
+@@ -212,6 +231,8 @@
+ 
+ if HAVE_INTROSPECTION
+ 
++if BUILD_LIBSOUP
++
+ # Core library
+ gi_soup_files = \
+ 	$(filter-out soup.h soup-enum-types.% soup-marshal.%,\
+@@ -231,13 +252,21 @@
+ 
+ INTROSPECTION_GIRS += Soup-2.4.gir
+ 
++endif
++
+ if BUILD_LIBSOUP_GNOME
+ 
++if BUILD_LIBSOUP
++SOUP_GIR = Soup-2.4.gir
++else
++SOUP_GIR =
++endif
++
+ # GNOME extensions
+ gi_soup_gnome_files = $(filter-out soup-gnome.h,\
+ 		          $(libsoupgnomeinclude_HEADERS) \
+ 	                  $(filter-out %.h, $(libsoup_gnome_2_4_la_SOURCES)))
+-SoupGNOME-2.4.gir: libsoup-gnome-2.4.la Soup-2.4.gir
++SoupGNOME-2.4.gir: libsoup-gnome-2.4.la $(SOUP_GIR)
+ SoupGNOME_2_4_gir_SCANNERFLAGS = --identifier-prefix=Soup --symbol-prefix=soup
+ SoupGNOME_2_4_gir_INCLUDES = Soup-2.4
+ SoupGNOME_2_4_gir_CFLAGS = $(INCLUDES)
+--- Makefile.am
++++ Makefile.am
+@@ -1,7 +1,12 @@
+ ## Process this file with automake to produce Makefile.in
+ ACLOCAL_AMFLAGS = -I m4
+ 
+-SUBDIRS = libsoup tests docs
++SUBDIRS = libsoup
++
++if BUILD_LIBSOUP
++SUBDIRS += tests docs
++endif
++
+ 
+ EXTRA_DIST =			\
+ 	libsoup-2.4.pc.in	\
+@@ -14,8 +19,10 @@
+ 
+ pkgconfigdir = $(libdir)/pkgconfig
+ 
+-pkgconfig_DATA = libsoup-2.4.pc
+-
++pkgconfig_DATA=
++if BUILD_LIBSOUP
++pkgconfig_DATA += libsoup-2.4.pc
++endif
+ if BUILD_LIBSOUP_GNOME
+ pkgconfig_DATA += libsoup-gnome-2.4.pc
+ endif
