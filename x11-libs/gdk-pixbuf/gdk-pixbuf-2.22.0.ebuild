@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.20.1-r1.ebuild,v 1.2 2010/06/20 11:15:18 nirbheek Exp $
+# $Header: $
 
 EAPI="3"
 
@@ -39,9 +39,6 @@ DEPEND="${RDEPEND}
 src_prepare() {
 	# Only build against libX11 if the user wants to do so
 	epatch "${FILESDIR}"/${PN}-2.21.4-fix-automagic-x11.patch
-
-	# Upstream patch for API compatiblity with older gtk+-2
-	epatch "${FILESDIR}"/${P}-includes.patch
 
 	elibtoolize
 	eautoreconf
