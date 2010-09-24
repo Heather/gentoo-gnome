@@ -28,7 +28,7 @@ RDEPEND="
 	media-libs/libpng
 	x11-libs/cairo
 	>=x11-libs/gtk+-2.90.4:3[introspection?]
-	>=dev-libs/glib-2.21.3
+	>=dev-libs/glib-2.25
 	>=dev-libs/icu-3.8.1-r1
 	>=net-libs/libsoup-2.29.90[introspection?]
 	>=dev-db/sqlite-3
@@ -39,7 +39,7 @@ RDEPEND="
 		media-libs/gstreamer:0.10
 		>=media-libs/gst-plugins-base-0.10.25:0.10 )
 	introspection? (
-		>=dev-libs/gobject-introspection-0.6.15 )"
+		>=dev-libs/gobject-introspection-0.9.5 )"
 
 DEPEND="${RDEPEND}
 	>=sys-devel/flex-2.5.33
