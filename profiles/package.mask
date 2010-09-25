@@ -6,11 +6,6 @@
 # NOTE: Please add your entry at the top!
 #
 
-# Nirbheek Chauhan <nirbheek@gentoo.org> (16 Sep 2010)
-# Needs new glib-2.25 API gdbus
->=sys-auth/polkit-0.97
->=gnome-extra/polkit-gnome-0.97
-
 # Arun Raghavan <ford_prefect@gentoo.org> (10 Sep 2010)
 # Development version of sysprof.
 =dev-util/sysprof-1.1*
@@ -33,7 +28,6 @@
 =app-cdr/brasero-2.31*
 =app-editors/gedit-2.31*
 =app-text/evince-2.31*
-=dev-libs/glib-2.25*
 dev-libs/seed
 dev-libs/libpeas
 dev-libs/libunique:3
@@ -50,7 +44,6 @@ gnome-base/gnome-js-common
 =gnome-base/gnome-settings-daemon-2.31*
 gnome-base/gnome-shell
 =gnome-base/libgnomekbd-2.31*
-=gnome-base/librsvg-2.31*
 =gnome-base/nautilus-2.31*
 =gnome-base/libgnomekbd-2.31*
 =gnome-extra/bug-buddy-2.31*
@@ -70,8 +63,6 @@ gnome-extra/yelp-xsl
 =net-libs/libsoup-gnome-2.31*
 net-libs/webkit-gtk:3.0
 =www-client/epiphany-2.31*
-x11-libs/gdk-pixbuf
-=x11-libs/gtk+-2.21*
 x11-libs/gtk+:3
 x11-libs/gtksourceview:3.0
 =x11-libs/vte-0.25*

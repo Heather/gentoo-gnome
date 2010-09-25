@@ -59,6 +59,14 @@ src_prepare() {
 	eautoreconf
 }
 
+src_install() {
+	gnome2_src_install
+
+	# Remove .la files, these libraries are dlopen()-ed.
+	rm -vf "${D}"/usr/lib*/gtk*/*/engines/libsvg.la
+	rm -vf "${D}"/usr/lib*/gdk-pixbuf-2.0/*/loaders/libpixbufloader-svg.la
+}
+
 pkg_postinst() {
 	gdk-pixbuf-query-loaders > "${EROOT}/usr/$(get_libdir)/gdk-pixbuf-2.0/2.10.0/loaders.cache"
 }
