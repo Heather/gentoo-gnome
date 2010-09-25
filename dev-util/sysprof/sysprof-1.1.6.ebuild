@@ -23,12 +23,6 @@ DEPEND="${RDEPEND}
 pkg_setup() {
 	kernel_is -ge 2 6 31 || \
 		die "Sysprof will not work with a kernel version less than 2.6.31"
-
-	CONFIG_CHECK="SYSPROF_TRACER"
-	ERROR_SYSPROF_TRACER="You need to enable the Sysprof tracer in your kernel.\
- You can find the option under Kernel Hacking -> Tracers. It is marked as\
- CONFIG_SYSPROF_TRACER in the config file."
-	linux-info_pkg_setup
 }
 
 src_install() {
