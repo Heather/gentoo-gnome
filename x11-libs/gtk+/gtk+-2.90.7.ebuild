@@ -16,6 +16,7 @@ KEYWORDS=""
 IUSE="aqua cups debug doc +introspection jpeg jpeg2k tiff test vim-syntax xinerama"
 
 # NOTE: cairo[svg] dep is due to bug 291283 (not patched to avoid eautoreconf)
+# glib-2.27.0 is required for GApplication
 RDEPEND="!aqua? (
 		x11-libs/libX11
 		x11-libs/libXi
@@ -34,7 +35,7 @@ RDEPEND="!aqua? (
 		x11-libs/gdk-pixbuf[introspection?,jpeg?,jpeg2k?,tiff?]
 	)
 	xinerama? ( x11-libs/libXinerama )
-	>=dev-libs/glib-2.25.15
+	>=dev-libs/glib-2.27.0
 	>=x11-libs/pango-1.20[introspection?]
 	>=dev-libs/atk-1.29.2[introspection?]
 	media-libs/fontconfig
@@ -67,8 +68,6 @@ src_prepare() {
 	# -O3 and company cause random crashes in applications. Bug #133469
 	replace-flags -O3 -O2
 	strip-flags
-
-	use ppc64 && append-flags -mminimal-toc
 
 	# Non-working test in gentoo's env
 	sed 's:\(g_test_add_func ("/ui-tests/keys-events.*\):/*\1*/:g' \
@@ -132,7 +131,7 @@ src_install() {
 	dodoc AUTHORS ChangeLog* HACKING NEWS* README* || die "dodoc failed"
 
 	# Remove unneeded *.la files
-	find "${D}" -name "*.la" -delete
+	find "${ED}" -name "*.la" -delete
 
 	# add -framework Carbon to the .pc files
 	use aqua && for i in gtk+-3.0.pc gtk+-quartz-3.0.pc gtk+-unix-print-3.0.pc; do
