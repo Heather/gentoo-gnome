@@ -12,7 +12,7 @@ HOMEPAGE="http://www.webkitgtk.org/"
 SRC_URI="http://www.webkitgtk.org/${MY_P}.tar.gz"
 
 LICENSE="LGPL-2 LGPL-2.1 BSD"
-SLOT="3.0"
+SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-macos"
 # geoclue
 IUSE="coverage debug doc +gstreamer +introspection" # aqua
@@ -22,6 +22,7 @@ IUSE="coverage debug doc +gstreamer +introspection" # aqua
 # XXX: Quartz patch does not apply
 # >=x11-libs/gtk+-2.13:2[aqua=]
 RDEPEND="
+	!=net-libs/webkit-gtk-1.3.4
 	dev-libs/libxml2
 	dev-libs/libxslt
 	media-libs/jpeg:0
@@ -84,7 +85,6 @@ src_configure() {
 	local myconf
 
 	myconf="
-		--with-gtk=3.0
 		$(use_enable coverage)
 		$(use_enable debug)
 		$(use_enable introspection)
