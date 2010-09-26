@@ -15,12 +15,13 @@ LICENSE="LGPL-2 LGPL-2.1 BSD"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-macos"
 # geoclue
-IUSE="coverage debug doc +gstreamer +introspection" # aqua
+IUSE="coverage debug doc +gstreamer " # aqua, introspection
 
 # use sqlite, svg by default
 # dependency on >=x11-libs/gtk+-2.13:2 for gail
 # XXX: Quartz patch does not apply
 # >=x11-libs/gtk+-2.13:2[aqua=]
+#	>=dev-libs/glib-2.25 (only needed when using gsettings)
 RDEPEND="
 	!=net-libs/webkit-gtk-1.3.4
 	dev-libs/libxml2
@@ -28,19 +29,16 @@ RDEPEND="
 	media-libs/jpeg:0
 	media-libs/libpng
 	x11-libs/cairo
-	>=x11-libs/gtk+-2.90.4:3[introspection?]
-	>=dev-libs/glib-2.25
+	>=x11-libs/gtk+-2.10
 	>=dev-libs/icu-3.8.1-r1
-	>=net-libs/libsoup-2.29.90[introspection?]
+	>=net-libs/libsoup-2.29.90
 	>=dev-db/sqlite-3
 	>=app-text/enchant-0.22
 	>=x11-libs/pango-1.12
 
 	gstreamer? (
 		media-libs/gstreamer:0.10
-		>=media-libs/gst-plugins-base-0.10.25:0.10 )
-	introspection? (
-		>=dev-libs/gobject-introspection-0.9.5 )"
+		>=media-libs/gst-plugins-base-0.10.25:0.10 )"
 
 DEPEND="${RDEPEND}
 	>=sys-devel/flex-2.5.33
@@ -87,7 +85,7 @@ src_configure() {
 	myconf="
 		$(use_enable coverage)
 		$(use_enable debug)
-		$(use_enable introspection)
+		--disable-introspection
 		$(use_enable gstreamer video)"
 		# quartz patch above does not apply anymore
 		#$(use aqua && echo "--with-target=quartz")"
