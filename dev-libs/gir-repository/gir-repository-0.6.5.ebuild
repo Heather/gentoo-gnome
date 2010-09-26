@@ -13,7 +13,7 @@ HOMEPAGE="http://live.gnome.org/GObjectIntrospection/"
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+#KEYWORDS="~amd64 ~x86"
 IUSE="avahi babl dbus gconf gnome-keyring goocanvas gtksourceview libnotify
 libwnck nautilus poppler vte"
 
