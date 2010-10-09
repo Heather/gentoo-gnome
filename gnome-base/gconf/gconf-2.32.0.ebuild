@@ -3,6 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gconf/gconf-2.28.1.ebuild,v 1.5 2010/06/04 19:51:46 maekke Exp $
 
 EAPI="2"
+GCONF_DEBUG="yes"
 
 inherit eutils gnome2
 
@@ -25,9 +26,10 @@ RDEPEND=">=dev-libs/glib-2.25.9
 	>=sys-apps/dbus-1
 	>=gnome-base/orbit-2.4
 	>=dev-libs/libxml2-2
+	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 	ldap? ( net-nds/openldap )
 	policykit? ( sys-auth/polkit )
-	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )"
+"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
 	>=dev-util/pkgconfig-0.9
@@ -53,13 +55,13 @@ pkg_setup() {
 }
 
 src_prepare() {
+	gnome2_src_prepare
+
 	# Do not start gconfd when installing schemas, fix bug #238276, upstream ?
 	epatch "${FILESDIR}/${PN}-2.24.0-no-gconfd.patch"
 
 	# Do not crash in gconf_entry_set_value() when entry pointer is NULL
 	epatch "${FILESDIR}/${PN}-2.28.0-entry-set-value-sigsegv.patch"
-
-	gnome2_src_prepare
 }
 
 # Can't run tests, missing script.
@@ -78,7 +80,7 @@ src_install() {
 
 	echo 'CONFIG_PROTECT_MASK="/etc/gconf"' > 50gconf
 	doenvd 50gconf || die "doenv failed"
-	dodir /root/.gconfd
+	dodir /root/.gconfd || die "dodir failed"
 }
 
 pkg_preinst() {
