@@ -6,6 +6,59 @@
 # NOTE: Please add your entry at the top!
 #
 
+# Gilles Dartiguelongue <eva@gentoo.org> (10 Oct 2010)
+# BEGIN GNOME 2.31 mask
+# FIXME: New libbonobo breaks all applets must double
+# check code changes.
+=gnome-base/libbonobo-2.32*
+# END GNOME 2.32 mask
+
+# Gilles Dartiguelongue <eva@gentoo.org> (10 Oct 2010)
+# BEGIN GNOME 3.0 mask
+>=dev-libs/libunique-2.90
+>=x11-themes/gtk-engines-2.90
+>=gnome-base/gnome-desktop-2.90
+>=gnome-base/nautilus-2.90
+>=x11-libs/gtk+-2.90
+>=x11-libs/gtksourceview-2.90
+>=media-video/totem-2.90
+# END GNOME 3.0 mask
+
+# Gilles Dartiguelongue <eva@gentoo.org> (10 Oct 2010)
+# BEGIN GNOME 2.31 mask
+=dev-libs/seed-2.31*
+=gnome-extra/evolution-data-server-2.31*
+=gnome-extra/gnome-games-2.31*
+=gnome-extra/gnome-media-2.31*
+=gnome-extra/gnome-power-manager-2.31*
+=gnome-extra/yelp-2.31*
+=gnome-extra/zenity-2.31*
+=gnome-extra/yelp-xsl-2.31*
+=www-client/epiphany-2.31*
+=net-libs/libsoup-gnome-2.31*
+=net-libs/libsoup-2.31*
+=app-editors/gedit-2.31*
+=media-gfx/eog-2.31*
+=x11-themes/gnome-themes-2.31*
+=media-sound/sound-juicer-2.31*
+=dev-util/devhelp-2.31*
+=gnome-base/gnome-shell-2.31*
+=gnome-base/gnome-applets-2.31*
+=gnome-base/gnome-control-center-2.31*
+=gnome-base/gnome-desktop-2.31*
+=gnome-base/gnome-keyring-2.31*
+=gnome-base/gnome-session-2.31*
+=gnome-base/gnome-settings-daemon-2.31*
+=gnome-base/libgnomekbd-2.31*
+=gnome-base/librsvg-2.31*
+=gnome-base/gnome-panel-2.31*
+=app-arch/file-roller-2.31*
+=mail-client/evolution-2.31*
+=app-text/evince-2.31*
+=x11-wm/mutter-2.31*
+=x11-terms/gnome-terminal-2.31*
+# END GNOME 2.31 mask
+
 # Arun Raghavan <ford_prefect@gentoo.org> (10 Sep 2010)
 # Development version of sysprof.
 =dev-util/sysprof-1.1*
@@ -20,55 +73,6 @@
 =x11-libs/libnotify-0.5*
 =x11-misc/notification-daemon-0.5*
 
-# Jonathan Callen <abcd@gentoo.org> (22 Jun 2010)
-# Mask GTK+ 2.21 / GTK+ 3 / GLib 2.25 / Gnome 2.31
-=app-arch/file-roller-2.31*
-=app-cdr/brasero-2.31*
-=app-editors/gedit-2.31*
-=app-text/evince-2.31*
-dev-libs/seed
-dev-libs/libpeas
-dev-libs/libunique:3
-=dev-util/devhelp-2.31*
-=gnome-base/gconf-2.31*
-=gnome-base/gnome-applets-2.31*
-=gnome-base/gnome-control-center-2.31*
-=gnome-base/gnome-desktop-2.31*:0
-gnome-base/gnome-desktop:3
-gnome-base/gnome-js-common
-=gnome-base/gnome-keyring-2.31*
-=gnome-base/gnome-panel-2.31*
-=gnome-base/gnome-session-2.31*
-=gnome-base/gnome-settings-daemon-2.31*
-gnome-base/gnome-shell
-=gnome-base/libgnomekbd-2.31*
-=gnome-base/nautilus-2.31*
-=gnome-base/libgnomekbd-2.31*
-=gnome-extra/bug-buddy-2.31*
-=gnome-extra/evolution-data-server-2.31*
-=gnome-extra/gcalctool-5.31*
-=gnome-extra/gnome-games-2.31*
-=gnome-extra/gnome-media-2.31*
-=gnome-extra/gnome-power-manager-2.31*
-=gnome-extra/gtkhtml-3.31*
-=gnome-extra/yelp-2.31*
-gnome-extra/yelp-xsl
-=gnome-extra/zenity-2.31*
-=media-gfx/eog-2.31*
-=media-sound/sound-juicer-2.31*
-=media-video/totem-2.90*
-=mail-client/evolution-2.31*
-=net-libs/libsoup-2.31*
-=net-libs/libsoup-gnome-2.31*
-net-libs/webkit-gtk:3.0
-=www-client/epiphany-2.31*
-x11-libs/gtk+:3
-x11-libs/gtksourceview:3.0
-=x11-libs/vte-0.25*
-=x11-terms/gnome-terminal-2.31*
-=x11-themes/gnome-themes-2.31*
-x11-themes/gtk-engines:3
-
 # Steev Klimaszewski <steev@gentoo.org> (14 Apr 2010)
 # Upstream says this should not be used, and isn't ready.
 net-im/telepathy-logger
@@ -76,3 +80,4 @@ net-im/telepathy-logger
 # Arun Raghavan <ford_prefect@gentoo.org> (23 Jun 2010)
 # We don't actually want gir-repository being used.
 dev-libs/gir-repository
+
