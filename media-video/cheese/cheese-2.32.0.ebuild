@@ -2,10 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/cheese/cheese-2.30.1.ebuild,v 1.9 2010/10/09 14:42:36 ssuominen Exp $
 
-EAPI="2"
+EAPI="3"
 GCONF_DEBUG="no"
 
-inherit gnome2 eutils
+inherit gnome2
 
 DESCRIPTION="A cheesy program to take pictures and videos from your webcam"
 HOMEPAGE="http://www.gnome.org/projects/cheese/"
@@ -16,15 +16,15 @@ KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 IUSE="doc v4l"
 
 COMMON_DEPEND=">=dev-libs/dbus-glib-0.7
-	>=dev-libs/glib-2.16.0
-	>=x11-libs/gtk+-2.19.1
-	>=x11-libs/cairo-1.4.0
-	>=x11-libs/pango-1.18.0
+	>=dev-libs/glib-2.16:2
+	>=x11-libs/gtk+-2.19.1:2
+	>=x11-libs/cairo-1.4
+	>=x11-libs/pango-1.18
 	>=sys-apps/dbus-1[X]
 	>=sys-fs/udev-145-r1[extras]
-	>=gnome-base/gconf-2.16.0
+	>=gnome-base/gconf-2.16
 	>=gnome-base/gnome-desktop-2.26
-	>=gnome-base/librsvg-2.18.0
+	>=gnome-base/librsvg-2.18
 	>=media-libs/libcanberra-0.11[gtk]
 
 	>=media-libs/gstreamer-0.10.23
@@ -49,8 +49,7 @@ DEPEND="${COMMON_DEPEND}
 	app-text/docbook-xml-dtd:4.3
 	doc? ( >=dev-util/gtk-doc-1.11 )"
 
-DOCS="AUTHORS ChangeLog NEWS README"
-
 pkg_setup() {
 	G2CONF="${G2CONF} --disable-scrollkeeper"
+	DOCS="AUTHORS ChangeLog NEWS README"
 }
