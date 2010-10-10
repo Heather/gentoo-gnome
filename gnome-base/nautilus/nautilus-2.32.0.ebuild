@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="2"
+EAPI="3"
 GCONF_DEBUG="no"
 
 inherit eutils gnome2 virtualx
@@ -13,15 +13,15 @@ HOMEPAGE="http://www.gnome.org/projects/nautilus/"
 LICENSE="GPL-2 LGPL-2 FDL-1.1"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux"
-IUSE="doc gnome introspection xmp"
+IUSE="doc gnome +introspection xmp"
 
 RDEPEND=">=dev-libs/glib-2.25.9
 	>=gnome-base/gnome-desktop-2.29.91:0
 	>=x11-libs/pango-1.1.2
-	>=x11-libs/gtk+-2.21.2:2[introspection?]
+	>=x11-libs/gtk+-2.22:2[introspection?]
 	>=dev-libs/libxml2-2.4.7
 	>=media-libs/libexif-0.5.12
-	>=gnome-base/gconf-2.0[introspection?]
+	>=gnome-base/gconf-2
 	dev-libs/libunique
 	x11-libs/libXext
 	x11-libs/libXrender
@@ -54,18 +54,9 @@ pkg_setup() {
 src_prepare() {
 	gnome2_src_prepare
 
-	# FIXME: tarball generated with broken gtk-doc, revisit me.
-	if use doc; then
-		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/usr/bin/gtkdoc-rebase" \
-			-i gtk-doc.make || die "sed 1 failed"
-	else
-		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/bin/true" \
-			-i gtk-doc.make || die "sed 2 failed"
-	fi
-
 	# Remove crazy CFLAGS
 	sed 's:-DG.*DISABLE_DEPRECATED::g' -i configure.in configure \
-		|| die "sed 4 failed"
+		|| die "sed 1 failed"
 
 	# Fix nautilus flipping-out with --no-desktop -- bug 266398
 	epatch "${FILESDIR}/${PN}-2.27.4-change-reg-desktop-file-with-no-desktop.patch"
@@ -81,7 +72,7 @@ src_test() {
 
 src_install() {
 	gnome2_src_install
-	find "${D}" -name "*.la" -delete || die "remove of la files failed"
+	find "${ED}" -name "*.la" -delete || die "remove of la files failed"
 }
 
 pkg_postinst() {
