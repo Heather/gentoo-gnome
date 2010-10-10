@@ -19,7 +19,7 @@ RDEPEND="dev-lang/python
 	>=gnome-base/gnome-desktop-2.26
 	>=x11-libs/pango-1.15.4
 	>=dev-libs/glib-2.25.12:2
-	>=x11-libs/gtk+-2.19.7:2
+	>=x11-libs/gtk+-2.22:2
 	>=dev-libs/libgweather-2.27.90
 	dev-libs/libxml2
 	>=gnome-base/libbonoboui-2.1.1
