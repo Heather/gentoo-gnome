@@ -7,10 +7,12 @@
 #
 
 # Gilles Dartiguelongue <eva@gentoo.org> (10 Oct 2010)
-# BEGIN GNOME 2.31 mask
+# BEGIN GNOME 2.32 mask
 # FIXME: New libbonobo breaks all applets must double
 # check code changes.
 =gnome-base/libbonobo-2.32*
+# FIXME: switched to waf build system, needs rewrite
+=gnome-extra/hamster-applet-2.32*
 # END GNOME 2.32 mask
 
 # Gilles Dartiguelongue <eva@gentoo.org> (10 Oct 2010)
@@ -25,41 +27,33 @@
 # END GNOME 3.0 mask
 
 # Gilles Dartiguelongue <eva@gentoo.org> (10 Oct 2010)
-# BEGIN GNOME 2.3[12] mask
+# BEGIN GNOME 2.31 mask
 =app-arch/file-roller-2.31*
-=app-cdr/brasero-2.32*
 =app-editors/gedit-2.31*
 =app-text/evince-2.31*
 =dev-libs/seed-2.31*
 =dev-util/devhelp-2.31*
-=gnome-base/gconf-2.32*
 =gnome-base/gnome-shell-2.31*
 =gnome-base/gnome-applets-2.31*
 =gnome-base/gnome-control-center-2.31*
 =gnome-base/gnome-desktop-2.31*
 =gnome-base/gnome-keyring-2.31*
-=gnome-base/gnome-panel-2.32*
 =gnome-base/gnome-session-2.31*
 =gnome-base/gnome-settings-daemon-2.31*
-=gnome-base/libgnome-2.32*
 =gnome-base/libgnomekbd-2.31*
 =gnome-base/librsvg-2.31*
-=gnome-base/nautilus-2.32*
-=gnome-extra/bug-buddy-2.32*
 =gnome-extra/evolution-data-server-2.31*
 =gnome-extra/gcalctool-5.31*
 =gnome-extra/gnome-games-2.31*
 =gnome-extra/gnome-media-2.31*
 =gnome-extra/gnome-power-manager-2.31*
 =gnome-extra/gtkhtml-3.31*
-=gnome-extra/hamster-applet-2.32*
 =gnome-extra/yelp-2.31*
 =gnome-extra/yelp-xsl-2.31*
 =gnome-extra/zenity-2.31*
 =mail-client/evolution-2.31*
 =media-gfx/eog-2.31*
 =media-sound/sound-juicer-2.31*
-=media-video/cheese-2.32*
 =net-libs/libsoup-gnome-2.31*
 =net-libs/libsoup-2.31*
 =www-client/epiphany-2.31*
