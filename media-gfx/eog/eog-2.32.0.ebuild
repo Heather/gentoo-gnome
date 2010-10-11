@@ -2,8 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-gfx/eog/eog-2.30.1.ebuild,v 1.2 2010/06/21 11:48:28 ssuominen Exp $
 
-EAPI=2
-inherit gnome2
+EAPI="3"
+GCONF_DEBUG="yes"
+PYTHON_DEPEND="2:2.4"
+
+inherit gnome2 python
 
 DESCRIPTION="The Eye of GNOME image viewer"
 HOMEPAGE="http://www.gnome.org/projects/eog/"
@@ -29,7 +32,6 @@ RDEPEND=">=x11-libs/gtk+-2.18:2[jpeg?,tiff?]
 	jpeg? ( >=media-libs/jpeg-8:0 )
 	lcms? ( =media-libs/lcms-1* )
 	python? (
-		=dev-lang/python-2*
 		>=dev-python/pygobject-2.15.1
 		>=dev-python/pygtk-2.13 )
 	svg? ( >=gnome-base/librsvg-2.26 )
@@ -55,4 +57,9 @@ pkg_setup() {
 		$(use_with svg librsvg)
 		--disable-scrollkeeper
 		--disable-schemas-install"
+}
+
+src_install() {
+	gnome2_src_install
+	find "${ED}" -name "*.la" -delete || die "la files removal failed"
 }
