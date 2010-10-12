@@ -92,17 +92,17 @@ src_install() {
 pkg_preinst() {
 	gnome2_pkg_preinst
 
-	preserve_old_lib_notify /usr/$(get_libdir)/libbrasero-burn.so.0
-	preserve_old_lib_notify /usr/$(get_libdir)/libbrasero-media.so.0
-	preserve_old_lib_notify /usr/$(get_libdir)/libbrasero-utils.so.0
+	preserve_old_lib /usr/$(get_libdir)/libbrasero-burn.so.0
+	preserve_old_lib /usr/$(get_libdir)/libbrasero-media.so.0
+	preserve_old_lib /usr/$(get_libdir)/libbrasero-utils.so.0
 }
 
 pkg_postinst() {
 	gnome2_pkg_postinst
 
-	preserve_old_lib /usr/$(get_libdir)/libbrasero-burn.so.0
-	preserve_old_lib /usr/$(get_libdir)/libbrasero-media.so.0
-	preserve_old_lib /usr/$(get_libdir)/libbrasero-utils.so.0
+	preserve_old_lib_notify /usr/$(get_libdir)/libbrasero-burn.so.0
+	preserve_old_lib_notify /usr/$(get_libdir)/libbrasero-media.so.0
+	preserve_old_lib_notify /usr/$(get_libdir)/libbrasero-utils.so.0
 
 	echo
 	elog "If ${PN} doesn't handle some music or video format, please check"
