@@ -77,10 +77,6 @@
 =x11-libs/libnotify-0.5*
 =x11-misc/notification-daemon-0.5*
 
-# Steev Klimaszewski <steev@gentoo.org> (14 Apr 2010)
-# Upstream says this should not be used, and isn't ready.
-net-im/telepathy-logger
-
 # Arun Raghavan <ford_prefect@gentoo.org> (23 Jun 2010)
 # We don't actually want gir-repository being used.
 dev-libs/gir-repository
