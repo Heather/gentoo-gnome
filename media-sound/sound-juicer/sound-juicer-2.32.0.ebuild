@@ -2,7 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="2"
+EAPI="3"
+GCONF_DEBUG="yes"
 
 inherit gnome2
 
@@ -11,23 +12,27 @@ HOMEPAGE="http://www.burtonini.com/blog/computers/sound-juicer/"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="gtk3 test"
 
 # FIXME: possibly automagic dual slot dep on musicbrainz, bug #275798
 COMMON_DEPEND=">=dev-libs/glib-2.18
-	gtk3? ( x11-libs/gtk+:3 )
-	!gtk3? ( >=x11-libs/gtk+-2.20:2 )
+	gtk3? (
+		x11-libs/gtk+:3
+		media-libs/libcanberra[gtk3]
+		>=app-cdr/brasero-2.31.5[gtk3] )
+	!gtk3? (
+		>=x11-libs/gtk+-2.20:2
+		media-libs/libcanberra[gtk]
+		>=app-cdr/brasero-2.26 )
 	>=gnome-base/libglade-2
 	>=gnome-base/gconf-2
-	media-libs/libcanberra[gtk3?]
 	sys-apps/dbus
 	dev-libs/dbus-glib
 
 	>=media-libs/musicbrainz-3.0.2:3
 	>=dev-libs/libcdio-0.70[-minimal]
 	>=gnome-extra/gnome-media-2.11.91
-	>=app-cdr/brasero-2.31.5[gtk3?]
 
 	>=media-libs/gstreamer-0.10.15:0.10
 	>=media-libs/gst-plugins-base-0.10:0.10"
@@ -50,16 +55,14 @@ DEPEND="${COMMON_DEPEND}
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
 pkg_setup() {
-	G2CONF="${G2CONF} --disable-scrollkeeper"
+	# GST_INSPECT needed to get around some sandboxing checks
+	G2CONF="${G2CONF} --disable-scrollkeeper GST_INSPECT=/bin/true"
 
 	if use gtk3; then
 		G2CONF="${G2CONF} --with-gtk=3.0"
 	else
 		G2CONF="${G2CONF} --with-gtk=2.0"
 	fi
-
-	# needed to get around some sandboxing checks
-	export GST_INSPECT=/bin/true
 }
 
 pkg_postinst() {
