@@ -24,6 +24,7 @@ RDEPEND=">=dev-libs/glib-2.24:2
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.21
 	dev-lang/vala:0.10[vapigen]
+	>=dev-libs/gobject-introspection-0.9.6
 "
 
 pkg_setup() {
