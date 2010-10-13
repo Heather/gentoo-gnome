@@ -96,7 +96,7 @@ gnome2_src_install() {
 	# if this is not present, scrollkeeper-update may segfault and
 	# create bogus directories in /var/lib/
 	local sk_tmp_dir="/var/lib/scrollkeeper"
-	dodir "${sk_tmp_dir}"
+	dodir "${sk_tmp_dir}" || die "dodir failed"
 
 	# we must delay gconf schema installation due to sandbox
 	export GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL="1"
@@ -112,7 +112,9 @@ gnome2_src_install() {
 	unset GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL
 
 	# Manual document installation
-	[[ -n "${DOCS}" ]] && dodoc ${DOCS}
+	if [[ -n "${DOCS}" ]]; then
+		dodoc ${DOCS} || die "dodoc failed"
+	fi
 
 	# Do not keep /var/lib/scrollkeeper because:
 	# 1. The scrollkeeper database is regenerated at pkg_postinst()
