@@ -47,6 +47,8 @@ DEPEND="${COMMON_DEPEND}
 	dev-util/pkgconfig
 	sys-devel/gettext
 	dev-util/intltool
+	gnome-base/gnome-common
+	>=dev-util/gtk-doc-am-1.12
 	doc? ( >=dev-util/gtk-doc-1.12 )
 	test? ( app-text/docbook-xml-dtd:4.3 )"
 # eautoreconf deps
@@ -78,6 +80,16 @@ pkg_setup() {
 	fi
 
 	DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README"
+}
+
+src_prepare() {
+	gnome2_src_prepare
+
+	# Fix link against installed libraries, bug #340767
+	epatch "${FILESDIR}/${PN}-2.32.0-build-plugins-against-local-library.patch"
+
+	intltoolize --force --copy --automake || die "intltoolize failed"
+	eautoreconf
 }
 
 src_install() {
