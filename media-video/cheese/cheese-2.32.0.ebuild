@@ -50,6 +50,11 @@ DEPEND="${COMMON_DEPEND}
 	doc? ( >=dev-util/gtk-doc-1.11 )"
 
 pkg_setup() {
-	G2CONF="${G2CONF} --disable-scrollkeeper"
+	G2CONF="${G2CONF} --disable-scrollkeeper --disable-static"
 	DOCS="AUTHORS ChangeLog NEWS README"
+}
+
+src_install() {
+	gnome2_src_install
+	find "${ED}" -name "*.la" -delete || die "la files removal failed"
 }
