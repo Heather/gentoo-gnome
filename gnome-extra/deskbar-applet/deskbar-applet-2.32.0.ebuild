@@ -69,6 +69,7 @@ src_compile() {
 src_install() {
 	gnome2_src_install
 	python_clean_installation_image
+	python_convert_shebangs 2 "${ED}"usr/libexec/${PN}/${PN}
 }
 
 pkg_postinst() {
