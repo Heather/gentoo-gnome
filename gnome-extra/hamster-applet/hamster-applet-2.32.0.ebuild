@@ -42,6 +42,12 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS NEWS README"
 
+src_install() {
+	waf-utils_src_install
+	python_convert_shebangs 2 "${ED}"usr/bin/*
+	python_convert_shebangs 2 "${ED}"usr/$(get_libdir)/${PN}/${PN}
+}
+
 pkg_postinst() {
 	gnome2_pkg_postinst
 
