@@ -11,8 +11,6 @@
 # FIXME: New libbonobo breaks all applets must double
 # check code changes.
 =gnome-base/libbonobo-2.32*
-# FIXME: switched to waf build system, needs rewrite
-=gnome-extra/hamster-applet-2.32*
 # Makes empathy build fail
 =dev-libs/folks-0.3*
 # END GNOME 2.32 mask

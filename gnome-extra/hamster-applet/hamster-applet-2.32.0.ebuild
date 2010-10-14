@@ -2,11 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/hamster-applet/hamster-applet-2.30.2-r1.ebuild,v 1.7 2010/10/09 14:35:40 ssuominen Exp $
 
-EAPI="2"
+EAPI="3"
 GCONF_DEBUG="no"
 SCROLLKEEPER_UPDATE="no"
 
-inherit eutils gnome2 python
+inherit gnome2 python waf-utils
 
 DESCRIPTION="Time tracking for the masses, in a GNOME applet"
 HOMEPAGE="http://projecthamster.wordpress.com/"
@@ -25,13 +25,14 @@ RDEPEND=">=dev-lang/python-2.5[sqlite]
 	dev-python/gnome-desktop-python
 	dev-python/dbus-python
 	dev-python/pyxdg
-	eds? ( dev-python/evolution-python )
-	libnotify? ( dev-python/notify-python )
 	>=dev-python/pygobject-2.14
 	>=dev-python/pygtk-2.12
 	>=x11-libs/gtk+-2.12
-	x11-libs/libXScrnSaver"
+	x11-libs/libXScrnSaver
 
+	eds? ( dev-python/evolution-python )
+	libnotify? ( dev-python/notify-python )
+"
 DEPEND="${RDEPEND}
 	x11-proto/scrnsaverproto
 	>=dev-util/intltool-0.40
@@ -39,27 +40,16 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=app-text/gnome-doc-utils-0.17.3"
 
-DOCS="AUTHORS ChangeLog NEWS README"
-
-src_prepare() {
-	gnome2_src_prepare
-
-	# Fix import in some setups, upstream bug #623336, bug #329171
-	epatch "${FILESDIR}/${PN}-2.30.2-fix-import.patch"
-
-	# disable pyc compiling
-	mv py-compile py-compile.orig
-	ln -s $(type -P true) py-compile
-}
+DOCS="AUTHORS NEWS README"
 
 pkg_postinst() {
 	gnome2_pkg_postinst
 
 	python_need_rebuild
-	python_mod_optimize $(python_get_sitedir)/hamster
+	python_mod_optimize hamster
 }
 
 pkg_postrm() {
 	gnome2_pkg_postrm
-	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages/hamster
+	python_mod_cleanup hamster
 }
