@@ -81,6 +81,9 @@ pkg_setup() {
 		$(use_enable spell)
 		$(use_enable test coding-style-checks)
 		$(use_enable webkit)"
+
+	# Build time python tools needs python2
+	python_set_active_version 2
 }
 
 src_test() {
