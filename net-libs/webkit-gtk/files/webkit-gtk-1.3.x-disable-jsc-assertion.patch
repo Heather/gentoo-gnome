@@ -1,31 +1,14 @@
-From 0c0ee9075ff74eca8fbd3c81356954d443e5c3c1 Mon Sep 17 00:00:00 2001
-From: Priit Laes <plaes@plaes.org>
-Date: Tue, 13 Jul 2010 15:23:20 +0300
-Subject: [PATCH] Crashfix
-
-https://bugs.webkit.org/show_bug.cgi?id=41454
-
----
- JavaScriptCore/jit/JITStubs.cpp |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
-
-diff --git a/JavaScriptCore/jit/JITStubs.cpp b/JavaScriptCore/jit/JITStubs.cpp
-index 85bd54f..595a066 100644
---- a/JavaScriptCore/jit/JITStubs.cpp
-+++ b/JavaScriptCore/jit/JITStubs.cpp
-@@ -2232,10 +2232,12 @@ DEFINE_STUB_FUNCTION(EncodedJSValue, op_construct_NotJSConstruct)
-         int argCount = stackFrame.args[2].int32();
-         CallFrame* previousCallFrame = stackFrame.callFrame;
-         CallFrame* callFrame = CallFrame::create(previousCallFrame->registers() + registerOffset);
-+#if 0
-         if (!stackFrame.registerFile->grow(callFrame->registers())) {
-             throwStackOverflowError(previousCallFrame, stackFrame.globalData, callFrame->returnPC(), STUB_RETURN_ADDRESS);
-             VM_THROW_EXCEPTION();
-         }
-+#endif
+diff --git a/JavaScriptCore/interpreter/Interpreter.cpp b/JavaScriptCore/interpreter/Interpreter.cpp
+index ecff7d6..4a82a88 100644
+--- a/JavaScriptCore/interpreter/Interpreter.cpp
++++ b/JavaScriptCore/interpreter/Interpreter.cpp
+@@ -662,9 +662,6 @@ NEVER_INLINE HandlerInfo* Interpreter::throwException(CallFrame*& callFrame, JSV
+             return 0;
+     }
  
-         callFrame->init(0, static_cast<Instruction*>((STUB_RETURN_ADDRESS).value()), previousCallFrame->scopeChain(), previousCallFrame, argCount, asObject(constrVal));
-         stackFrame.callFrame = callFrame;
--- 
-1.7.1.1
-
+-    // Shrink the JS stack, in case stack overflow made it huge.
+-    m_registerFile.shrink(callFrame->registers() + callFrame->codeBlock()->m_numCalleeRegisters);
+-
+     // Unwind the scope chain within the exception handler's call frame.
+     ScopeChainNode* scopeChain = callFrame->scopeChain();
+     ScopeChain sc(scopeChain);
