@@ -18,12 +18,12 @@ KEYWORDS="~amd64 ~x86"
 IUSE="doc gtk python" # seed
 
 RDEPEND=">=dev-libs/glib-2.23.6:2
-	>=dev-libs/gobject-introspection-0.9.0
+	>=dev-libs/gobject-introspection-0.9.6
 	gtk? ( >=x11-libs/gtk+-2.90:3[introspection] )
 	python? ( >=dev-python/pygobject-2.20 )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
-	sys-devel/gettext
+	>=sys-devel/gettext-0.17
 	>=sys-devel/libtool-2.2.6
 	doc? ( >=dev-util/gtk-doc-1.11 )"
 
