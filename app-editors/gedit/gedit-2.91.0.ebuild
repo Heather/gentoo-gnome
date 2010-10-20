@@ -6,7 +6,7 @@ EAPI="2"
 GCONF_DEBUG="no"
 PYTHON_DEPEND="2"
 
-inherit gnome2 python
+inherit gnome2 python eutils
 
 DESCRIPTION="A text editor for the GNOME desktop"
 HOMEPAGE="http://www.gnome.org/"
@@ -20,11 +20,13 @@ IUSE="doc +introspection spell"
 # gi.repository.Gtk, etc.
 RDEPEND=">=x11-libs/libSM-1.0
 	>=dev-libs/libxml2-2.5.0
-	>=dev-libs/glib-2.25.10
-	>=x11-libs/gtk+-2.90:3[introspection?]
+	>=dev-libs/glib-2.25.15
+	>=x11-libs/gtk+-2.91:3[introspection?]
 	>=x11-libs/gtksourceview-2.11.2:3.0[introspection?]
-	>=dev-libs/libpeas-0.5.2[gtk]
+	>=dev-libs/libpeas-0.7.0[gtk]
 	dev-python/pygobject[introspection]
+	gnome-base/gsettings-desktop-schemas
+	introspection? ( >=dev-libs/gobject-introspection-0.9.3 )
 	spell? (
 		>=app-text/enchant-1.2
 		>=app-text/iso-codes-0.35
@@ -46,7 +48,14 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-scrollkeeper
 		--disable-updater
+		$(use_enable introspection)
 		$(use_enable spell)"
+}
+
+src_prepare() {
+	epatch "${FILESDIR}/${P}-drop-has-resize-grip.patch"
+
+	gnome2_src_prepare
 }
 
 src_install() {
@@ -58,10 +67,10 @@ src_install() {
 
 pkg_postinst() {
 	gnome2_pkg_postinst
-	python_mod_optimize /usr/$(get_libdir)/gedit-2/plugins
+	python_mod_optimize /usr/$(get_libdir)/gedit/plugins
 }
 
 pkg_postrm() {
 	gnome2_pkg_postrm
-	python_mod_cleanup /usr/$(get_libdir)/gedit-2/plugins
+	python_mod_cleanup /usr/$(get_libdir)/gedit/plugins
 }

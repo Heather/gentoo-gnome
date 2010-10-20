@@ -23,6 +23,7 @@
 
 # Gilles Dartiguelongue <eva@gentoo.org> (10 Oct 2010)
 # BEGIN GNOME 3.0 mask
+>=app-editors/gedit-2.90
 >=dev-libs/libunique-2.90
 >=x11-themes/gtk-engines-2.90
 >=gnome-base/gnome-desktop-2.90
@@ -35,7 +36,6 @@
 # Gilles Dartiguelongue <eva@gentoo.org> (10 Oct 2010)
 # BEGIN GNOME 2.31 mask
 =app-arch/file-roller-2.31*
-=app-editors/gedit-2.31*
 =app-text/evince-2.31*
 =dev-libs/seed-2.31*
 =dev-util/devhelp-2.31*

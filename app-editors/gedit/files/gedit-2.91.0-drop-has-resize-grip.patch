@@ -1,0 +1,345 @@
+From 97ad874a79fd1e937a9f660e4c8fae9d1dcb37fb Mon Sep 17 00:00:00 2001
+From: Paolo Borelli <pborelli@gnome.org>
+Date: Fri, 08 Oct 2010 08:30:29 +0000
+Subject: Drop the special handling of has-resize-grip from GeditStatusbar
+
+The property is now handled automatically by GtkWindow. Note however
+that the new code still misses some proper padding in the corner when
+the window is maximized.
+---
+diff --git a/gedit/gedit-statusbar.c b/gedit/gedit-statusbar.c
+index ae9f427..92a6f23 100644
+--- a/gedit/gedit-statusbar.c
++++ b/gedit/gedit-statusbar.c
+@@ -44,8 +44,8 @@
+ 
+ struct _GeditStatusbarPrivate
+ {
+-	GtkWidget     *overwrite_mode_statusbar;
+-	GtkWidget     *cursor_position_statusbar;
++	GtkWidget     *overwrite_mode_label;
++	GtkWidget     *cursor_position_label;
+ 
+ 	GtkWidget     *state_frame;
+ 	GtkWidget     *load_image;
+@@ -63,7 +63,6 @@ struct _GeditStatusbarPrivate
+ 
+ G_DEFINE_TYPE(GeditStatusbar, gedit_statusbar, GTK_TYPE_STATUSBAR)
+ 
+-
+ static gchar *
+ get_overwrite_mode_string (gboolean overwrite)
+ {
+@@ -77,31 +76,17 @@ get_overwrite_mode_length (void)
+ }
+ 
+ static void
+-gedit_statusbar_notify (GObject    *object,
+-			GParamSpec *pspec)
+-{
+-	/* don't allow gtk_statusbar_set_has_resize_grip to mess with us.
+-	 * See _gedit_statusbar_set_has_resize_grip for an explanation.
+-	 */
+-	if (strcmp (g_param_spec_get_name (pspec), "has-resize-grip") == 0)
+-	{
+-		gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (object), FALSE);
+-		return;
+-	}
+-
+-	if (G_OBJECT_CLASS (gedit_statusbar_parent_class)->notify)
+-		G_OBJECT_CLASS (gedit_statusbar_parent_class)->notify (object, pspec);
+-}
+-
+-static void
+-gedit_statusbar_finalize (GObject *object)
++gedit_statusbar_dispose (GObject *object)
+ {
+ 	GeditStatusbar *statusbar = GEDIT_STATUSBAR (object);
+ 
+ 	if (statusbar->priv->flash_timeout > 0)
++	{
+ 		g_source_remove (statusbar->priv->flash_timeout);
++		statusbar->priv->flash_timeout = 0;
++	}
+ 
+-	G_OBJECT_CLASS (gedit_statusbar_parent_class)->finalize (object);
++	G_OBJECT_CLASS (gedit_statusbar_parent_class)->dispose (object);
+ }
+ 
+ static void
+@@ -109,45 +94,12 @@ gedit_statusbar_class_init (GeditStatusbarClass *klass)
+ {
+ 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+ 
+-	object_class->notify = gedit_statusbar_notify;
+-	object_class->finalize = gedit_statusbar_finalize;
++	object_class->dispose = gedit_statusbar_dispose;
+ 
+ 	g_type_class_add_private (object_class, sizeof (GeditStatusbarPrivate));
+ }
+ 
+-#define RESIZE_GRIP_EXTRA_WIDTH 30
+-
+-static void
+-set_statusbar_width_chars (GtkWidget *statusbar,
+-			   gint       n_chars,
+-			   gboolean   has_resize_grip)
+-{
+-	PangoContext *context;
+-	PangoFontMetrics *metrics;
+-	gint char_width, digit_width, width;
+-	GtkStyle *style;
+-
+-	context = gtk_widget_get_pango_context (statusbar);
+-	style = gtk_widget_get_style (GTK_WIDGET (statusbar));
+-	metrics = pango_context_get_metrics (context,
+-					     style->font_desc,
+-					     pango_context_get_language (context));
+-
+-	char_width = pango_font_metrics_get_approximate_digit_width (metrics);
+-	digit_width = pango_font_metrics_get_approximate_char_width (metrics);
+-
+-	width = PANGO_PIXELS (MAX (char_width, digit_width) * n_chars);
+-
+-	pango_font_metrics_unref (metrics);
+-
+-	/* If there is a resize grip, allocate some extra width.
+-	 * It would be nice to calculate the exact size programmatically
+-	 * but I could not find out how to do it */
+-	if (has_resize_grip)
+-		width += RESIZE_GRIP_EXTRA_WIDTH;
+-
+-	gtk_widget_set_size_request (statusbar, width, -1);
+-}
++#define CURSOR_POSITION_LABEL_WIDTH_CHARS 18
+ 
+ static void
+ gedit_statusbar_init (GeditStatusbar *statusbar)
+@@ -157,30 +109,25 @@ gedit_statusbar_init (GeditStatusbar *statusbar)
+ 
+ 	statusbar->priv = GEDIT_STATUSBAR_GET_PRIVATE (statusbar);
+ 
+-	gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (statusbar), FALSE);
+-
+-	statusbar->priv->overwrite_mode_statusbar = gtk_statusbar_new ();
+-	gtk_widget_show (statusbar->priv->overwrite_mode_statusbar);
+-	gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (statusbar->priv->overwrite_mode_statusbar),
+-					   TRUE);
+-	set_statusbar_width_chars (statusbar->priv->overwrite_mode_statusbar,
+-				   get_overwrite_mode_length (),
+-				   TRUE);
++	statusbar->priv->overwrite_mode_label = gtk_label_new (NULL);
++	gtk_label_set_width_chars (GTK_LABEL (statusbar->priv->overwrite_mode_label),
++				   get_overwrite_mode_length ());
++	gtk_widget_show (statusbar->priv->overwrite_mode_label);
+ 	gtk_box_pack_end (GTK_BOX (statusbar),
+-			  statusbar->priv->overwrite_mode_statusbar,
++			  statusbar->priv->overwrite_mode_label,
+ 			  FALSE, TRUE, 0);
+ 
+-	statusbar->priv->cursor_position_statusbar = gtk_statusbar_new ();
+-	gtk_widget_show (statusbar->priv->cursor_position_statusbar);
+-	gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (statusbar->priv->cursor_position_statusbar),
+-					   FALSE);
+-	set_statusbar_width_chars (statusbar->priv->cursor_position_statusbar, 18, FALSE);
++	statusbar->priv->cursor_position_label = gtk_label_new (NULL);
++	gtk_label_set_width_chars (GTK_LABEL (statusbar->priv->cursor_position_label),
++				  CURSOR_POSITION_LABEL_WIDTH_CHARS);
++	gtk_widget_show (statusbar->priv->cursor_position_label);
+ 	gtk_box_pack_end (GTK_BOX (statusbar),
+-			  statusbar->priv->cursor_position_statusbar,
++			  statusbar->priv->cursor_position_label,
+ 			  FALSE, TRUE, 0);
+ 
+ 	statusbar->priv->state_frame = gtk_frame_new (NULL);
+-	gtk_frame_set_shadow_type (GTK_FRAME (statusbar->priv->state_frame), GTK_SHADOW_IN);
++	gtk_frame_set_shadow_type (GTK_FRAME (statusbar->priv->state_frame),
++				   GTK_SHADOW_IN);
+ 
+ 	hbox = gtk_hbox_new (FALSE, 0);
+ 	gtk_container_add (GTK_CONTAINER (statusbar->priv->state_frame), hbox);
+@@ -206,9 +153,11 @@ gedit_statusbar_init (GeditStatusbar *statusbar)
+ 			    FALSE, TRUE, 0);
+ 
+ 	statusbar->priv->error_frame = gtk_frame_new (NULL);
+-	gtk_frame_set_shadow_type (GTK_FRAME (statusbar->priv->error_frame), GTK_SHADOW_IN);
++	gtk_frame_set_shadow_type (GTK_FRAME (statusbar->priv->error_frame),
++				   GTK_SHADOW_IN);
+ 
+-	error_image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_ERROR, GTK_ICON_SIZE_MENU);
++	error_image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_ERROR,
++					        GTK_ICON_SIZE_MENU);
+ 	gtk_misc_set_padding (GTK_MISC (error_image), 4, 0);
+ 	gtk_widget_show (error_image);
+ 
+@@ -245,35 +194,6 @@ gedit_statusbar_new (void)
+ }
+ 
+ /**
+- * gedit_set_has_resize_grip:
+- * @statusbar: a #GeditStatusbar
+- * @show: if the resize grip is shown
+- *
+- * Sets if a resize grip showld be shown.
+- *
+- **/
+- /*
+-  * I don't like this much, in a perfect world it would have been
+-  * possible to override the parent property and use
+-  * gtk_statusbar_set_has_resize_grip. Unfortunately this is not
+-  * possible and it's not even possible to intercept the notify signal
+-  * since the parent property should always be set to false thus when
+-  * using set_resize_grip (FALSE) the property doesn't change and the
+-  * notification is not emitted.
+-  * For now just add this private method; if needed we can turn it into
+-  * a property.
+-  */
+-void
+-_gedit_statusbar_set_has_resize_grip (GeditStatusbar *bar,
+-				      gboolean        show)
+-{
+-	g_return_if_fail (GEDIT_IS_STATUSBAR (bar));
+-
+-	gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (bar->priv->overwrite_mode_statusbar),
+-					   show);
+-}
+-
+-/**
+  * gedit_statusbar_set_overwrite:
+  * @statusbar: a #GeditStatusbar
+  * @overwrite: if the overwrite mode is set
+@@ -288,13 +208,11 @@ gedit_statusbar_set_overwrite (GeditStatusbar *statusbar,
+ 
+ 	g_return_if_fail (GEDIT_IS_STATUSBAR (statusbar));
+ 
+-	gtk_statusbar_pop (GTK_STATUSBAR (statusbar->priv->overwrite_mode_statusbar), 0);
+-
+ 	msg = get_overwrite_mode_string (overwrite);
+ 
+-	gtk_statusbar_push (GTK_STATUSBAR (statusbar->priv->overwrite_mode_statusbar), 0, msg);
++	gtk_label_set_text (GTK_LABEL (statusbar->priv->overwrite_mode_label), msg);
+ 
+-      	g_free (msg);
++	g_free (msg);
+ }
+ 
+ void
+@@ -302,7 +220,7 @@ gedit_statusbar_clear_overwrite (GeditStatusbar *statusbar)
+ {
+ 	g_return_if_fail (GEDIT_IS_STATUSBAR (statusbar));
+ 
+-	gtk_statusbar_pop (GTK_STATUSBAR (statusbar->priv->overwrite_mode_statusbar), 0);
++	gtk_label_set_text (GTK_LABEL (statusbar->priv->overwrite_mode_label), NULL);
+ }
+ 
+ /**
+@@ -318,22 +236,20 @@ gedit_statusbar_set_cursor_position (GeditStatusbar *statusbar,
+ 				     gint            line,
+ 				     gint            col)
+ {
+-	gchar *msg;
++	gchar *msg = NULL;
+ 
+ 	g_return_if_fail (GEDIT_IS_STATUSBAR (statusbar));
+ 
+-	gtk_statusbar_pop (GTK_STATUSBAR (statusbar->priv->cursor_position_statusbar), 0);
+-
+-	if ((line == -1) && (col == -1))
+-		return;
+-
+-	/* Translators: "Ln" is an abbreviation for "Line", Col is an abbreviation for "Column". Please,
+-	use abbreviations if possible to avoid space problems. */
+-	msg = g_strdup_printf (_("  Ln %d, Col %d"), line, col);
++	if ((line >= 0) || (col >= 0))
++	{
++		/* Translators: "Ln" is an abbreviation for "Line", Col is an abbreviation for "Column". Please,
++		use abbreviations if possible to avoid space problems. */
++		msg = g_strdup_printf (_("  Ln %d, Col %d"), line, col);
++	}
+ 
+-	gtk_statusbar_push (GTK_STATUSBAR (statusbar->priv->cursor_position_statusbar), 0, msg);
++	gtk_label_set_text (GTK_LABEL (statusbar->priv->cursor_position_label), msg);
+ 
+-      	g_free (msg);
++	g_free (msg);
+ }
+ 
+ static gboolean
+@@ -418,13 +334,11 @@ gedit_statusbar_set_window_state (GeditStatusbar   *statusbar,
+ 		gtk_widget_show (statusbar->priv->state_frame);
+ 		gtk_widget_show (statusbar->priv->load_image);
+ 	}
+-
+ 	if (state & GEDIT_WINDOW_STATE_PRINTING)
+ 	{
+ 		gtk_widget_show (statusbar->priv->state_frame);
+ 		gtk_widget_show (statusbar->priv->print_image);
+ 	}
+-
+ 	if (state & GEDIT_WINDOW_STATE_ERROR)
+ 	{
+ 	 	gchar *tip;
+@@ -446,5 +360,4 @@ gedit_statusbar_set_window_state (GeditStatusbar   *statusbar,
+ 	}
+ }
+ 
+-
+ /* ex:ts=8:noet: */
+diff --git a/gedit/gedit-statusbar.h b/gedit/gedit-statusbar.h
+index 984887a..1f90e0a 100644
+--- a/gedit/gedit-statusbar.h
++++ b/gedit/gedit-statusbar.h
+@@ -47,15 +47,15 @@ typedef struct _GeditStatusbarClass	GeditStatusbarClass;
+ 
+ struct _GeditStatusbar
+ {
+-        GtkStatusbar parent;
++	GtkStatusbar parent;
+ 
+ 	/* <private/> */
+-        GeditStatusbarPrivate *priv;
++	GeditStatusbarPrivate *priv;
+ };
+ 
+ struct _GeditStatusbarClass
+ {
+-        GtkStatusbarClass parent_class;
++	GtkStatusbarClass parent_class;
+ };
+ 
+ GType		 gedit_statusbar_get_type		(void) G_GNUC_CONST;
+@@ -81,18 +81,6 @@ void		 gedit_statusbar_flash_message		(GeditStatusbar   *statusbar,
+ 							 guint             context_id,
+ 							 const gchar      *format,
+ 							 ...) G_GNUC_PRINTF(3, 4);
+-/* FIXME: these would be nice for plugins...
+-void		 gedit_statusbar_add_widget		(GeditStatusbar   *statusbar,
+-							 GtkWidget        *widget);
+-void		 gedit_statusbar_remove_widget		(GeditStatusbar   *statusbar,
+-							 GtkWidget        *widget);
+-*/
+-
+-/*
+- * Non exported functions
+- */
+-void		_gedit_statusbar_set_has_resize_grip	(GeditStatusbar   *statusbar,
+-							 gboolean          show);
+ 
+ G_END_DECLS
+ 
+diff --git a/gedit/gedit-window.c b/gedit/gedit-window.c
+index 3f34ebb..ad78806 100644
+--- a/gedit/gedit-window.c
++++ b/gedit/gedit-window.c
+@@ -383,9 +383,6 @@ gedit_window_window_state_event (GtkWidget           *widget,
+ 		show = !(event->new_window_state &
+ 			(GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_FULLSCREEN));
+ 
+-		_gedit_statusbar_set_has_resize_grip (GEDIT_STATUSBAR (window->priv->statusbar),
+-						      show);
+-
+ 		gedit_multi_notebook_collapse_notebook_border (window->priv->multi_notebook,
+ 							       !show);
+ 	}
+--
+cgit v0.8.3.1
