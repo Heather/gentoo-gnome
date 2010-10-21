@@ -54,11 +54,12 @@ gnome2_gconf_install() {
 	local updater="${EROOT}${GCONFTOOL_BIN}"
 
 	if [[ ! -x "${updater}" ]]; then
+		debug-print "${updater} is not executable"
 		return
 	fi
 
 	if [[ -z "${GNOME2_ECLASS_SCHEMAS}" ]]; then
-		einfo "No GNOME 2 GConf schemas found"
+		debug-print "No GNOME 2 GConf schemas found"
 		return
 	fi
 
@@ -93,11 +94,12 @@ gnome2_gconf_uninstall() {
 	local updater="${EROOT}${GCONFTOOL_BIN}"
 
 	if [[ ! -x "${updater}" ]]; then
+		debug-print "${updater} is not executable"
 		return
 	fi
 
 	if [[ -z "${GNOME2_ECLASS_SCHEMAS}" ]]; then
-		einfo "No GNOME 2 GConf schemas found"
+		debug-print "No GNOME 2 GConf schemas found"
 		return
 	fi
 
@@ -147,9 +149,9 @@ gnome2_icon_cache_update() {
 	fi
 
 	if [[ -z "${GNOME2_ECLASS_ICONS}" ]]; then
+		debug-print "No icon cache to update"
 		return
 	fi
-
 
 	ebegin "Updating icons cache"
 
