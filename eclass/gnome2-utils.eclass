@@ -14,13 +14,13 @@
 
 
 # Path to gconftool-2
-: ${GCONFTOOL_BIN:="${ROOT}usr/bin/gconftool-2"}
+: ${GCONFTOOL_BIN:="/usr/bin/gconftool-2"}
 
 # Directory where scrollkeeper-update should do its work
-: ${SCROLLKEEPER_DIR:="${ROOT}var/lib/scrollkeeper"}
+: ${SCROLLKEEPER_DIR:="/var/lib/scrollkeeper"}
 
 # Path to scrollkeeper-update
-: ${SCROLLKEEPER_UPDATE_BIN:="${ROOT}usr/bin/scrollkeeper-update"}
+: ${SCROLLKEEPER_UPDATE_BIN:="/usr/bin/scrollkeeper-update"}
 
 # Path to gtk-update-icon-cache
 : ${GTK_UPDATE_ICON_CACHE:="/usr/bin/gtk-update-icon-cache"}
@@ -46,9 +46,10 @@ gnome2_gconf_savelist() {
 # Applies any schema files installed by the current ebuild to Gconf's database
 # using gconftool-2
 gnome2_gconf_install() {
+	local updater="${ROOT}${GCONFTOOL_BIN}"
 	local F
 
-	if [[ ! -x "${GCONFTOOL_BIN}" ]]; then
+	if [[ ! -x "${updater}" ]]; then
 		return
 	fi
 
@@ -59,14 +60,14 @@ gnome2_gconf_install() {
 
 	# We are ready to install the GCONF Scheme now
 	unset GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL
-	export GCONF_CONFIG_SOURCE="$("${GCONFTOOL_BIN}" --get-default-source | sed "s;:/;:${ROOT};")"
+	export GCONF_CONFIG_SOURCE="$("${updater}" --get-default-source | sed "s;:/;:${ROOT};")"
 
 	einfo "Installing GNOME 2 GConf schemas"
 
 	for F in ${GNOME2_ECLASS_SCHEMAS}; do
 		if [[ -e "${ROOT}${F}" ]]; then
 			# echo "DEBUG::gconf install  ${F}"
-			"${GCONFTOOL_BIN}" --makefile-install-rule "${ROOT}${F}" 1>/dev/null
+			"${updater}" --makefile-install-rule "${ROOT}${F}" 1>/dev/null
 		fi
 	done
 
@@ -83,9 +84,10 @@ gnome2_gconf_install() {
 # Removes schema files previously installed by the current ebuild from Gconf's
 # database.
 gnome2_gconf_uninstall() {
+	local updater="${ROOT}${GCONFTOOL_BIN}"
 	local F
 
-	if [[ ! -x "${GCONFTOOL_BIN}" ]]; then
+	if [[ ! -x "${updater}" ]]; then
 		return
 	fi
 
@@ -95,14 +97,14 @@ gnome2_gconf_uninstall() {
 	fi
 
 	unset GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL
-	export GCONF_CONFIG_SOURCE="$("${GCONFTOOL_BIN}" --get-default-source | sed "s;:/;:${ROOT};")"
+	export GCONF_CONFIG_SOURCE="$("${updater}" --get-default-source | sed "s;:/;:${ROOT};")"
 
 	einfo "Uninstalling GNOME 2 GConf schemas"
 
 	for F in ${GNOME2_ECLASS_SCHEMAS}; do
 		if [[ -e "${ROOT}${F}" ]]; then
 			# echo "DEBUG::gconf uninstall  ${F}"
-			"${GCONFTOOL_BIN}" --makefile-uninstall-rule "${ROOT}${F}" 1>/dev/null
+			"${updater}" --makefile-uninstall-rule "${ROOT}${F}" 1>/dev/null
 		fi
 	done
 
@@ -222,9 +224,9 @@ gnome2_omf_fix() {
 
 # Updates the global scrollkeeper database.
 gnome2_scrollkeeper_update() {
-	if [[ -x "${SCROLLKEEPER_UPDATE_BIN}" ]]; then
+	if [[ -x "${ROOT}${SCROLLKEEPER_UPDATE_BIN}" ]]; then
 		einfo "Updating scrollkeeper database ..."
-		"${SCROLLKEEPER_UPDATE_BIN}" -q -p "${SCROLLKEEPER_DIR}"
+		"${ROOT}${SCROLLKEEPER_UPDATE_BIN}" -q -p "${ROOT}${SCROLLKEEPER_DIR}"
 	fi
 }
 
