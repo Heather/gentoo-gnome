@@ -22,6 +22,12 @@
 # Path to scrollkeeper-update
 : ${SCROLLKEEPER_UPDATE_BIN:="${ROOT}usr/bin/scrollkeeper-update"}
 
+# Path to gtk-update-icon-cache
+: ${GTK_UPDATE_ICON_CACHE:="/usr/bin/gtk-update-icon-cache"}
+
+# Path to glib-compile-schemas
+: ${GLIB_COMPILE_SCHEMAS:="/usr/bin/glib-compile-schemas"}
+
 
 
 DEPEND=">=sys-apps/sed-4"
@@ -123,7 +129,7 @@ gnome2_icon_savelist() {
 # Updates Gtk+ icon cache files under /usr/share/icons if the current ebuild
 # have installed anything under that location.
 gnome2_icon_cache_update() {
-	local updater="$(type -p gtk-update-icon-cache 2> /dev/null)"
+	local updater="${ROOT}${GTK_UPDATE_ICON_CACHE}"
 
 	if [[ ! -x "${updater}" ]] ; then
 		debug-print "${updater} is not executable"
@@ -229,7 +235,7 @@ gnome2_schemas_savelist() {
 }
 
 gnome2_schemas_update() {
-	local updater="$(type -P glib-compile-schemas 2>/dev/null)"
+	local updater="${ROOT}${GLIB_COMPILE_SCHEMAS}"
 
 	if [[ ! -x ${updater} ]]; then
 		debug-print "${updater} is not executable"
