@@ -47,7 +47,6 @@ gnome2_gconf_savelist() {
 # using gconftool-2
 gnome2_gconf_install() {
 	local updater="${ROOT}${GCONFTOOL_BIN}"
-	local F
 
 	if [[ ! -x "${updater}" ]]; then
 		return
@@ -64,9 +63,10 @@ gnome2_gconf_install() {
 
 	einfo "Installing GNOME 2 GConf schemas"
 
+	local F
 	for F in ${GNOME2_ECLASS_SCHEMAS}; do
 		if [[ -e "${ROOT}${F}" ]]; then
-			# echo "DEBUG::gconf install  ${F}"
+			debug-print "Installing schema: ${F}"
 			"${updater}" --makefile-install-rule "${ROOT}${F}" 1>/dev/null
 		fi
 	done
@@ -85,7 +85,6 @@ gnome2_gconf_install() {
 # database.
 gnome2_gconf_uninstall() {
 	local updater="${ROOT}${GCONFTOOL_BIN}"
-	local F
 
 	if [[ ! -x "${updater}" ]]; then
 		return
@@ -101,9 +100,10 @@ gnome2_gconf_uninstall() {
 
 	einfo "Uninstalling GNOME 2 GConf schemas"
 
+	local F
 	for F in ${GNOME2_ECLASS_SCHEMAS}; do
 		if [[ -e "${ROOT}${F}" ]]; then
-			# echo "DEBUG::gconf uninstall  ${F}"
+			debug-print "Uninstalling gconf schema: ${F}"
 			"${updater}" --makefile-uninstall-rule "${ROOT}${F}" 1>/dev/null
 		fi
 	done
@@ -245,7 +245,7 @@ gnome2_schemas_update() {
 	fi
 
 	if [[ -z ${GNOME2_ECLASS_GLIB_SCHEMAS} ]]; then
-		debug-print "no schemas to update"
+		debug-print "No GSettings schemas to update"
 		return
 	fi
 
