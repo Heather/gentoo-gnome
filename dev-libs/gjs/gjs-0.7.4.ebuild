@@ -2,9 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="2"
+EAPI="3"
+GCONF_DEBUG="no"
+PYTHON_DEPEND="2"
 
-inherit gnome2
+inherit gnome2 python
 
 DESCRIPTION="Javascript bindings for GNOME"
 HOMEPAGE="http://live.gnome.org/Gjs"
@@ -14,8 +16,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="coverage examples"
 
-RDEPEND=">=dev-libs/glib-2.16.0
-	>=dev-libs/gobject-introspection-0.9.1
+RDEPEND=">=dev-libs/glib-2.16:2
+	>=dev-libs/gobject-introspection-0.9.5
 
 	dev-libs/dbus-glib
 	x11-libs/cairo
@@ -26,15 +28,20 @@ DEPEND="${RDEPEND}
 	coverage? (
 		sys-devel/gcc
 		dev-util/lcov )"
-# AUTHORS, ChangeLog are empty
-DOCS="NEWS README"
 
 # tests fail and upstream does not support anything but git master
 RESTRICT="test"
 
 pkg_setup() {
+	# AUTHORS, ChangeLog are empty
+	DOCS="NEWS README"
 	G2CONF="${G2CONF}
 		$(use_enable coverage)"
+}
+
+src_prepare() {
+	gnome2_src_prepare
+	python_convert_shebangs 2 "${S}"/scripts/make-tests
 }
 
 src_install() {
@@ -44,4 +51,6 @@ src_install() {
 		insinto /usr/share/doc/${PF}/examples
 		doins ${S}/examples/* || die "doins examples failed!"
 	fi
+
+	find "${ED}" -name "*.la" -delete || die "la files removal failed"
 }
