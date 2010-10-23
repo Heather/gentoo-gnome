@@ -16,8 +16,7 @@ SRC_URI="http://www.packagekit.org/releases/${MY_P}.tar.gz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~ppc ~x86"
-IUSE="connman +consolekit cron gtk networkmanager nls nsplugin pm-utils
-+policykit qt4 static-libs test udev"
+IUSE="connman +consolekit cron gtk networkmanager nls nsplugin pm-utils +policykit qt4 static-libs test udev"
 
 CDEPEND="
 	connman? ( net-misc/connman )
@@ -32,7 +31,7 @@ CDEPEND="
 		x11-libs/cairo
 		>=x11-libs/gtk+-2.14.0:2
 		x11-libs/pango )
-	policykit? ( >=sys-auth/polkit-0.92 )
+	policykit? ( >=sys-auth/polkit-0.97 )
 	qt4? ( >=x11-libs/qt-core-4.4.0
 		>=x11-libs/qt-dbus-4.4.0
 		>=x11-libs/qt-sql-4.4.0 )
@@ -119,6 +118,7 @@ src_configure() {
 		--disable-dummy \
 		--enable-portage \
 		--with-default-backend=portage \
+		--disable-introspection \
 		$(use_enable connman) \
 		$(use_enable cron) \
 		$(use_enable gtk gtk-module) \
