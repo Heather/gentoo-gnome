@@ -5,7 +5,7 @@
 EAPI="2"
 GCONF_DEBUG="no"
 
-inherit gnome2
+inherit autotools gnome2
 
 DESCRIPTION="Provides core UI functions for the GNOME 3 desktop"
 HOMEPAGE="http://live.gnome.org/GnomeShell"
@@ -15,8 +15,9 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
+# Need latest mutter snapshot
 RDEPEND=">=dev-libs/glib-2.25.9
-	>=x11-libs/gtk+-2.90.4:3[introspection]
+	>=x11-libs/gtk+-2.90.7:3[introspection]
 	>=media-libs/gstreamer-0.10.16
 	>=media-libs/gst-plugins-base-0.10.16
 	>=gnome-base/gnome-desktop-2.90:3
@@ -25,7 +26,7 @@ RDEPEND=">=dev-libs/glib-2.25.9
 	dev-libs/dbus-glib
 	>=dev-libs/gjs-0.7
 	x11-libs/pango[introspection]
-	>=media-libs/clutter-1.2.8[introspection]
+	>=media-libs/clutter-1.3.14[introspection]
 	dev-libs/libcroco:0.6
 
 	>=gnome-base/dconf-0.4.1
@@ -35,7 +36,7 @@ RDEPEND=">=dev-libs/glib-2.25.9
 
 	x11-libs/startup-notification
 	x11-libs/libXfixes
-	>=x11-wm/mutter-2.31.5[gtk3,introspection]
+	>x11-wm/mutter-2.91.0[gtk3,introspection]
 	x11-apps/mesa-progs
 
 	dev-python/dbus-python
@@ -49,3 +50,15 @@ DEPEND="${RDEPEND}
 	gnome-base/gnome-common
 "
 DOCS="AUTHORS README"
+
+src_prepare() {
+	# Don't error out on warnings
+	G2CONF="--enable-compile-warnings=maximum"
+
+	# Create AC_CONFIG_MACRO_DIR
+	mkdir m4
+
+	# git snapshot
+	eautoreconf
+	intltoolize --force
+}
