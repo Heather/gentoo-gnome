@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit gnome2
+inherit autotools gnome2
 
 DESCRIPTION="Upcoming GNOME 3 window manager (derived from metacity)"
 HOMEPAGE="http://blogs.gnome.org/metacity/"
@@ -15,10 +15,11 @@ KEYWORDS="~amd64 ~x86"
 IUSE="debug +gtk3 +introspection +sound test xinerama"
 
 RDEPEND=">=x11-libs/pango-1.2[X,introspection?]
+	>=x11-libs/cairo-1.10[X]
 	!gtk3? ( >=x11-libs/gtk+-2.18:2[introspection?]
-			sound? (  media-libs/libcanberra[gtk] ) )
-	gtk3? ( >=x11-libs/gtk+-2.90:3[introspection?]
-			sound? (  media-libs/libcanberra[gtk3] ) )
+			sound? (  >=media-libs/libcanberra-0.24[gtk] ) )
+	gtk3? ( >=x11-libs/gtk+-2.90.7:3[introspection?]
+			sound? (  >=media-libs/libcanberra-0.26[gtk3] ) )
 	>=gnome-base/gconf-2
 	>=dev-libs/glib-2.14
 	>=x11-libs/startup-notification-0.7
@@ -35,7 +36,7 @@ RDEPEND=">=x11-libs/pango-1.2[X,introspection?]
 	x11-libs/libXrandr
 	x11-libs/libXrender
 
-	introspection? ( dev-libs/gobject-introspection )
+	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 	xinerama? ( x11-libs/libXinerama )
 	gnome-extra/zenity
 	!x11-misc/expocity"
@@ -51,7 +52,7 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README *.txt doc/*.txt"
 
-pkg_setup() {
+src_prepare() {
 	G2CONF="${G2CONF}
 		--enable-gconf
 		--enable-shape
@@ -69,4 +70,10 @@ pkg_setup() {
 	else
 		G2CONF="${G2CONF} --with-gtk=2.0"
 	fi
+
+	# git snapshot
+	eautoreconf
+	gnome-doc-common
+	gnome-doc-prepare --automake
+	intltoolize --force
 }
