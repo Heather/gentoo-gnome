@@ -15,6 +15,9 @@ SLOT="2"
 #KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="debug doc fam hardened +introspection selinux static-libs test xattr"
 
+# Due to removal of gio API, gnome bug 631398, tests will fail with:
+# symbol lookup error: /usr/lib64/gio/modules/libgiogconf.so: undefined symbol: g_desktop_app_info_lookup_get_type
+# That library is installed by gvfs, gvfs-1.6.4-r99* has a patch to remove it
 RDEPEND="virtual/libiconv
 	sys-libs/zlib
 	xattr? ( sys-apps/attr )
@@ -27,7 +30,8 @@ DEPEND="${RDEPEND}
 		>=dev-util/gtk-doc-1.11
 		~app-text/docbook-xml-dtd-4.1.2 )
 	test? ( >=sys-apps/dbus-1.2.14 )"
-PDEPEND="introspection? ( dev-libs/gobject-introspection )"
+PDEPEND="introspection? ( dev-libs/gobject-introspection )
+	!<gnome-base/gvfs-1.6.4-r990" # Earlier versions do not work with glib
 # XXX: Consider adding test? ( sys-devel/gdb ); assert-msg-test tries to use it
 
 src_prepare() {
@@ -54,8 +58,8 @@ src_prepare() {
 	# Fix test failure when upgrading from 2.22 to 2.24, upstream bug 621368
 	epatch "${FILESDIR}/${PN}-2.24-assert-test-failure.patch"
 
-	# skip tests that require writing to /root/.dbus, upstream bug ???
-	epatch "${FILESDIR}/${PN}-2.25-skip-tests-with-dbus-keyring.patch"
+	# skip tests that require writing to /root/.dbus, upstream bug 631379
+	#epatch "${FILESDIR}/${PN}-2.25-skip-tests-with-dbus-keyring.patch"
 
 	# Do not try to remove files on live filesystem, upstream bug #619274
 	sed 's:^\(.*"/desktop-app-info/delete".*\):/*\1*/:' \
