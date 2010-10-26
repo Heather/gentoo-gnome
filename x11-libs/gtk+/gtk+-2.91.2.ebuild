@@ -27,21 +27,21 @@ RDEPEND="!aqua? (
 		x11-libs/libXfixes
 		x11-libs/libXcomposite
 		x11-libs/libXdamage
-		>=x11-libs/cairo-1.9.10[X,svg]
-		x11-libs/gdk-pixbuf[X,introspection?,jpeg?,jpeg2k?,tiff?]
+		>=x11-libs/cairo-1.10.0[X,svg]
+		>=x11-libs/gdk-pixbuf-2.21[X,introspection?,jpeg?,jpeg2k?,tiff?]
 	)
 	aqua? (
-		>=x11-libs/cairo-1.9.10[aqua,svg]
-		x11-libs/gdk-pixbuf[introspection?,jpeg?,jpeg2k?,tiff?]
+		>=x11-libs/cairo-1.10.0[aqua,svg]
+		>=x11-libs/gdk-pixbuf-2.21[introspection?,jpeg?,jpeg2k?,tiff?]
 	)
 	xinerama? ( x11-libs/libXinerama )
-	>=dev-libs/glib-2.27.0
+	>=dev-libs/glib-2.27.1
 	>=x11-libs/pango-1.20[introspection?]
 	>=dev-libs/atk-1.29.2[introspection?]
 	media-libs/fontconfig
 	x11-misc/shared-mime-info
 	cups? ( net-print/cups )
-	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
+	introspection? ( >=dev-libs/gobject-introspection-0.9.3 )
 	!<gnome-base/gail-1000"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9
