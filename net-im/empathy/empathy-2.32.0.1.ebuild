@@ -18,6 +18,8 @@ KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~sparc ~x86"
 IUSE="eds nautilus networkmanager spell test webkit" # map
 
 # FIXME: libnotify & libcanberra hard deps
+# gst-plugins-bad is required for the valve plugin. This should move to good
+# eventually at which point the dep can be dropped
 RDEPEND=">=dev-libs/glib-2.25.9:2
 	>=x11-libs/gtk+-2.22:2
 	>=dev-libs/dbus-glib-0.51
@@ -33,6 +35,8 @@ RDEPEND=">=dev-libs/glib-2.25.9:2
 	net-libs/farsight2
 	media-libs/gstreamer:0.10
 	media-libs/gst-plugins-base:0.10
+	media-libs/gst-plugins-bad
+	media-plugins/gst-plugins-gconf
 	>=net-libs/telepathy-farsight-0.0.14
 	dev-libs/libxml2
 	x11-libs/libX11
