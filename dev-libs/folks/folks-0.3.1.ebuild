@@ -16,7 +16,7 @@ KEYWORDS="~amd64"
 IUSE="doc"
 
 RDEPEND=">=dev-libs/glib-2.24:2
-	>=net-libs/telepathy-glib-0.11.16[vala]
+	>=net-libs/telepathy-glib-0.13.1[vala]
 	dev-libs/dbus-glib
 	<dev-libs/libgee-0.7
 	dev-libs/libxml2
@@ -28,6 +28,7 @@ DEPEND="${RDEPEND}
 "
 
 pkg_setup() {
+	DOCS="AUTHORS ChangeLog NEWS README"
 	G2CONF="${G2CONF}
 		VALAC=$(type -p valac-0.10)
 		VAPIGEN=$(type -p vapigen-0.10)
