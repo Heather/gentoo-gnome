@@ -34,12 +34,18 @@ RDEPEND=">=dev-libs/glib-2.25.12:2
 		>=x11-libs/gtk+-2.20:2
 		>=dev-libs/libunique-1.1.2
 		>=gnome-base/gnome-desktop-2.26
-		>=dev-libs/libgweather-2.25.3 )
+		>=dev-libs/libgweather-2.25.3
+		media-libs/libcanberra[gtk]
+		>=x11-libs/libnotify-0.3
+	)
 	gtk3? (
 		>=x11-libs/gtk+-2.90.4:3
 		>=dev-libs/libunique-2.90
 		>=dev-libs/libgweather-2.90
-		>=gnome-base/gnome-desktop-2.90 )
+		>=gnome-base/gnome-desktop-2.90
+		media-libs/libcanberra[gtk3]
+		>=x11-libs/libnotify-0.5.1[gtk3]
+	)
 	>=gnome-extra/evolution-data-server-${MY_MAJORV}[weather,gtk3?]
 	>=gnome-extra/gtkhtml-3.31.90
 	>=gnome-base/gconf-2
@@ -49,8 +55,6 @@ RDEPEND=">=dev-libs/glib-2.25.12:2
 	>=dev-libs/libxml2-2.7.3
 	>=net-libs/libsoup-2.4:2.4
 	>=media-gfx/gtkimageview-1.6
-	media-libs/libcanberra[gtk,gtk3?]
-	>=x11-libs/libnotify-0.5.1[gtk3?]
 	>=x11-misc/shared-mime-info-0.22
 	>=x11-themes/gnome-icon-theme-2.30.2.1
 
