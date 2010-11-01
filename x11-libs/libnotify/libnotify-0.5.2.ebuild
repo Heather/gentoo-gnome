@@ -18,8 +18,7 @@ RDEPEND=">=dev-libs/glib-2.6:2
 	>=dev-libs/dbus-glib-0.76"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
-	>=x11-libs/gtk+-2.6:2
-	x11-libs/gtk+:3"
+	>=x11-libs/gtk+-2.6:2"
 PDEPEND="|| ( x11-misc/notification-daemon
 	xfce-extra/xfce4-notifyd )"
 
