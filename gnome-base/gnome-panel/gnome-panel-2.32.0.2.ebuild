@@ -16,7 +16,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-in
 IUSE="+bonobo doc eds +introspection networkmanager"
 
 RDEPEND="dev-lang/python
-	>=gnome-base/gnome-desktop-2.26
+	>=gnome-base/gnome-desktop-2.26:2
 	>=x11-libs/pango-1.15.4
 	>=dev-libs/glib-2.25.12:2
 	>=x11-libs/gtk+-2.22:2
