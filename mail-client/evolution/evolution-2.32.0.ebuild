@@ -33,7 +33,7 @@ RDEPEND=">=dev-libs/glib-2.25.12:2
 	!gtk3? (
 		>=x11-libs/gtk+-2.20:2
 		>=dev-libs/libunique-1.1.2
-		>=gnome-base/gnome-desktop-2.26
+		>=gnome-base/gnome-desktop-2.26:2
 		>=dev-libs/libgweather-2.25.3
 		media-libs/libcanberra[gtk]
 		>=x11-libs/libnotify-0.3
