@@ -13,7 +13,7 @@ SRC_URI="http://telepathy.freedesktop.org/releases/${PN}/${P}.tar.bz2"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="debug doc test"
+IUSE="doc test"
 
 RDEPEND=">=dev-libs/glib-2.25.11:2
 	>=sys-apps/dbus-1.1
@@ -39,7 +39,7 @@ DOCS="AUTHORS ChangeLog NEWS README"
 src_configure() {
 	econf \
 		$(use_enable doc gtk-doc) \
-		$(use_enable debug) \
+		--enable-debug \
 		--enable-public-extensions \
 		--disable-coding-style-checks \
 		--disable-Werror \
