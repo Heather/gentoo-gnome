@@ -16,10 +16,8 @@ IUSE="debug +gtk3 +introspection +sound test xinerama"
 
 RDEPEND=">=x11-libs/pango-1.2[X,introspection?]
 	>=x11-libs/cairo-1.10[X]
-	!gtk3? ( >=x11-libs/gtk+-2.18:2[introspection?]
-			sound? (  >=media-libs/libcanberra-0.24[gtk] ) )
-	gtk3? ( >=x11-libs/gtk+-2.90.7:3[introspection?]
-			sound? (  >=media-libs/libcanberra-0.26[gtk3] ) )
+	>=x11-libs/gtk+-2.90.7:3[introspection?]
+	sound? (  >=media-libs/libcanberra-0.26[gtk3] )
 	>=gnome-base/gconf-2
 	>=dev-libs/glib-2.14
 	>=x11-libs/startup-notification-0.7
@@ -64,16 +62,4 @@ src_prepare() {
 		$(use_with sound libcanberra)
 		$(use_with introspection)
 		$(use_enable xinerama)"
-
-	if use gtk3; then
-		G2CONF="${G2CONF} --with-gtk=3.0"
-	else
-		G2CONF="${G2CONF} --with-gtk=2.0"
-	fi
-
-	# git snapshot
-	eautoreconf
-	gnome-doc-common
-	gnome-doc-prepare --automake
-	intltoolize --force
 }
