@@ -76,7 +76,6 @@ pkg_setup() {
 		--disable-map
 		--disable-control-center-embedding
 		--disable-Werror
-		--disable-favourite_contacts
 		--disable-gtk3
 		$(use_enable debug)
 		$(use_with eds)
