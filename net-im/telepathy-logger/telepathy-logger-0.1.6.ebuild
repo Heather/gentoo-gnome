@@ -3,8 +3,9 @@
 # $Header: $
 
 EAPI="3"
+PYTHON_DEPEND="2:2.5"
 
-inherit base
+inherit base python
 
 DESCRIPTION="Telepathy Logger is a session daemon that should be activated whenever telepathy is being used (similar to mission control lifetime)."
 HOMEPAGE="http://telepathy.freedesktop.org/wiki/Logger"
@@ -26,15 +27,16 @@ RDEPEND=">=dev-libs/glib-2.25.11:2
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
 	doc? ( >=dev-util/gtk-doc-1.10 )
-	test? (
-		>=dev-lang/python-2.5
-		dev-python/twisted )
+	test? ( dev-python/twisted )
 "
 
 # FIXME: does not pass yet
 RESTRICT="test"
 
-DOCS="AUTHORS ChangeLog NEWS README"
+pkg_setup() {
+	DOCS="AUTHORS ChangeLog NEWS README"
+	python_set_active_version 2
+}
 
 src_configure() {
 	econf \
