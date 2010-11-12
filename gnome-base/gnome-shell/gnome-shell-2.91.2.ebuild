@@ -15,7 +15,6 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-# Need latest mutter snapshot
 RDEPEND=">=dev-libs/glib-2.25.9
 	>=x11-libs/gtk+-2.90.7:3[introspection]
 	>=media-libs/gstreamer-0.10.16
@@ -36,7 +35,7 @@ RDEPEND=">=dev-libs/glib-2.25.9
 
 	x11-libs/startup-notification
 	x11-libs/libXfixes
-	>x11-wm/mutter-2.91.0[gtk3,introspection]
+	>x11-wm/mutter-2.91.0[introspection]
 	x11-apps/mesa-progs
 
 	dev-python/dbus-python
@@ -50,15 +49,5 @@ DEPEND="${RDEPEND}
 	gnome-base/gnome-common
 "
 DOCS="AUTHORS README"
-
-src_prepare() {
-	# Don't error out on warnings
-	G2CONF="--enable-compile-warnings=maximum"
-
-	# Create AC_CONFIG_MACRO_DIR
-	mkdir m4
-
-	# git snapshot
-	eautoreconf
-	intltoolize --force
-}
+# Don't error out on warnings
+G2CONF="--enable-compile-warnings=maximum"
