@@ -55,15 +55,6 @@ src_prepare() {
 	# https://bugs.webkit.org/show_bug.cgi?id=19775
 	use sparc && epatch "${FILESDIR}"/${PN}-1.1.15.2-unaligned.patch
 
-	# Registerfile can be unwound too far following an exception 
-	# https://bugs.webkit.org/show_bug.cgi?id=41454
-	# https://bugs.webkit.org/show_bug.cgi?id=41948
-	epatch "${FILESDIR}"/${PN}-1.3.x-fix-jsc-assertion.patch
-
-	# Random crasher in 'cairo_scaled_font_destroy'
-	# https://bugs.webkit.org/show_bug.cgi?id=46794
-	epatch "${FILESDIR}"/${PN}-1.3.x-platformref-crasher.patch
-
 	# Darwin/Aqua build is broken, needs autoreconf
 	# XXX: BROKEN. Patch does not apply anymore.
 	# https://bugs.webkit.org/show_bug.cgi?id=28727
