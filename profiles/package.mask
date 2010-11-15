@@ -6,12 +6,6 @@
 # NOTE: Please add your entry at the top!
 #
 
-# Nirbheek Chauhan <nirbheek@gentoo.org> (25 Oct 2010)
-# Mask snapshot of gjs from the xulrunner-2 development branch
-# Needs xulrunner-2 aka firefox-4
-# Older versions do not compile with firefox-4
-=dev-libs/gjs-0.7.5_p2010*
-
 # Gilles Dartiguelongue <eva@gentoo.org> (10 Oct 2010)
 # BEGIN GNOME 2.32 mask
 # FIXME: New libbonobo breaks all applets must double
