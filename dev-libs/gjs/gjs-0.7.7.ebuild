@@ -21,7 +21,7 @@ RDEPEND=">=dev-libs/glib-2.18:2
 
 	dev-libs/dbus-glib
 	x11-libs/cairo
-	>=net-libs/xulrunner-2:1.9"
+	>=net-libs/xulrunner-1.9.2:1.9"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.9
