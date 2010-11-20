@@ -18,4 +18,4 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/intltool-0.40"
 
-DOCS="AUTHORS ChangeLog HACKING NEWS README"
+DOCS="AUTHORS HACKING NEWS README"
