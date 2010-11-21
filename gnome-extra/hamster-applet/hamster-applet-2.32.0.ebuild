@@ -4,7 +4,6 @@
 
 EAPI="3"
 GCONF_DEBUG="no"
-SCROLLKEEPER_UPDATE="no"
 
 inherit gnome2 python waf-utils
 
@@ -27,6 +26,7 @@ RDEPEND=">=dev-lang/python-2.5[sqlite]
 	dev-python/pyxdg
 	>=dev-python/pygobject-2.14
 	>=dev-python/pygtk-2.12
+	gnome-base/gnome-control-center
 	>=x11-libs/gtk+-2.12
 	x11-libs/libXScrnSaver
 
