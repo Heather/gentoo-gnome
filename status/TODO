@@ -2,57 +2,40 @@ THIS FILE IS AUTO GENERATED, DO NOT MODIFY BY HAND
 
 Ebuild Notices:
 ===============
-app-text/gnome-doc-utils-0.19.5
- * Highly broken with parallel make, see bug #286889
-dev-libs/atk-1.30.0
- * This package also supports introspection
 dev-libs/gir-repository-0.6.5
  * installs even disabled stuff if it's a dependency of something enabled
- * these dependencies are incomplete
-dev-libs/libgweather-2.30.0
+ * these dependencies are probably incomplete
+dev-libs/seed-2.31.5
+ * tests need all the feature-USE-flags enabled to complete successfully
+gnome-base/nautilus-2.90.1
  * tarball generated with broken gtk-doc, revisit me.
-dev-libs/totem-pl-parser-2.30.0
- * testsuite does not work, please fix them and report on upstream
- * tarball generated with broken gtk-doc, revisit me.
-dev-util/gnome-devel-docs-2.28.1
- * Find a better fix for the failure with parallel install.
-gnome-base/gdm-2.30.0
- * gdm has a strange behaviour on reboot (from runlevel), especially when xdm tries to stop it (its blocks).
-gnome-base/gnome-panel-2.30.0
- * tarball generated with broken gtk-doc, revisit me.
-gnome-base/gnome-session-2.30.0-r1
- * Needs updating for 2.27.91 (package is currently masked)
-gnome-base/nautilus-2.30.0
- * tarball generated with broken gtk-doc, revisit me.
-gnome-extra/evolution-data-server-2.30.0
+gnome-extra/evolution-exchange-2.32.0
  * Fix compilation flags crazyness
-gnome-extra/gnome-power-manager-2.30.0
- * Interactive testsuite (upstream ? I'm so...pessimistic)
-gnome-extra/gnome-user-docs-2.30.0
- * Parallel make is badly broken, bug #260827 and #296375
-gnome-extra/gtkhtml-3.30.0
- * Fix compilation flags crazyness
-gnome-extra/gucharmap-2.30.0
- * add gobject-introspection support once available
-mail-client/evolution-2.30.0.1-r1
- * Fix compilation flags crazyness
-media-libs/libchamplain-0.4.2
- * add pyclutter and pyclutter-gtk first
- * add clutter-sharp first
-media-video/totem-2.30.0
+gnome-extra/gnome-color-manager-2.32.0
+ * run test-suite with files on live file-system
+gnome-extra/libgda-9999
+ * sqlite is automagic, but maybe it is a hard-dep
+ * autoconf is a hell of inconsistencies
+media-sound/rhythmbox-0.13.0
+ * double check what to do with fm-radio plugin
+media-sound/sound-juicer-2.32.0
+ * possibly automagic dual slot dep on musicbrainz, bug #275798
+media-video/totem-2.90.5
+ * Enable for now python USE flag per bug #316409
+ * no libpeas[vala] yet
+ * disabled upstream (introspection not quite stable)
  * freezes totem
  * why does it need write access here, probably need to set up a fake
-net-im/empathy-2.30.0
+net-im/empathy-2.32.0.1
  * Add location support once geoclue stops being idiotic with automagic deps
  * libnotify & libcanberra hard deps
+net-im/telepathy-logger-0.1.6
+ * does not pass yet
 net-libs/libepc-0.3.11
  * 2 out of 16 tests fail, upstream bug #578792
-net-libs/webkit-gtk-1.2.0
+net-libs/webkit-gtk-1.3.6
  * Fix unaligned accesses on ARM, IA64 and SPARC
-www-client/epiphany-extensions-2.29.6
- * Open security issues:
- * - adblock ( https://bugzilla.gnome.org/show_bug.cgi?id=595255 )
- * broken extensions:
- * - session-saver ( https://bugzilla.gnome.org/show_bug.cgi?id=316245 )
-x11-themes/gnome-icon-theme-2.30.0
+x11-themes/gnome-icon-theme-symbolic-2.30.0
+ * double check potential LINGUAS problem
+x11-themes/gnome-icon-theme-symbolic-2.31.0
  * double check potential LINGUAS problem
