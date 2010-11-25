@@ -1,0 +1,27 @@
+From 9f219a98731085ef9588622ecdc9d7ba93de92bb Mon Sep 17 00:00:00 2001
+From: Gilles Dartiguelongue <eva@gentoo.org>
+Date: Wed, 29 Sep 2010 23:53:54 +0200
+Subject: [PATCH] Fix missing include in keyword_hash generator
+
+---
+ libgda/sqlite/mkkeywordhash.c |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/libgda/sqlite/mkkeywordhash.c b/libgda/sqlite/mkkeywordhash.c
+index dc6ce89..28f4f83 100644
+--- a/libgda/sqlite/mkkeywordhash.c
++++ b/libgda/sqlite/mkkeywordhash.c
+@@ -370,6 +370,10 @@ main (int argc, char **argv)
+ 	}
+ 
+ 	/* Begin generating code */
++	printf("#include <stdio.h>\n");
++	printf("#include <string.h>\n");
++	printf("#include <glib.h>\n");
++
+ 	printf("/* Hash score: %d */\n", bestCount);
+ 	printf("static int %skeywordCode(const char *z, int n){\n", prefix ? prefix : "");
+ 	printf("  /* zText[] encodes %d bytes of keywords in %d bytes */\n",
+-- 
+1.7.3
+

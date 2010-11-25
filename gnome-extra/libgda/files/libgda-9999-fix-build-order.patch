@@ -1,0 +1,14 @@
+diff --git a/libgda/sqlite/Makefile.am b/libgda/sqlite/Makefile.am
+index b3bf302..c7be5e1 100644
+--- a/libgda/sqlite/Makefile.am
++++ b/libgda/sqlite/Makefile.am
+@@ -58,7 +58,8 @@ sqlitesources = \
+ 	gda-sqlite.h \
+ 	keywords_hash.h \
+ 	gda-symbols-util.h \
+-	gda-symbols-util.c
++	gda-symbols-util.c \
++	$(BUILT_SOURCES)
+ 
+ BUILT_SOURCES = xml_embedded.h keywords_hash.c
+ 
