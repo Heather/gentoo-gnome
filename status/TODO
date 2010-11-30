@@ -11,8 +11,6 @@ gnome-base/nautilus-2.90.1
  * tarball generated with broken gtk-doc, revisit me.
 gnome-extra/evolution-exchange-2.32.0
  * Fix compilation flags crazyness
-gnome-extra/gnome-color-manager-2.32.0
- * run test-suite with files on live file-system
 gnome-extra/libgda-9999
  * sqlite is automagic, but maybe it is a hard-dep
  * autoconf is a hell of inconsistencies
