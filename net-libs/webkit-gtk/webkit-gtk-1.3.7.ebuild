@@ -15,7 +15,7 @@ LICENSE="LGPL-2 LGPL-2.1 BSD"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-macos"
 # geoclue
-IUSE="coverage debug doc +gstreamer " # aqua, introspection
+IUSE="coverage debug doc +gstreamer introspection" # aqua
 
 # use sqlite, svg by default
 # dependency on >=x11-libs/gtk+-2.13:2 for gail
@@ -38,7 +38,10 @@ RDEPEND="
 
 	gstreamer? (
 		media-libs/gstreamer:0.10
-		>=media-libs/gst-plugins-base-0.10.25:0.10 )"
+		>=media-libs/gst-plugins-base-0.10.25:0.10 )
+
+	introspection? (
+		>=dev-libs/gobject-introspection-0.9.5 )"
 
 DEPEND="${RDEPEND}
 	>=sys-devel/flex-2.5.33
@@ -81,7 +84,7 @@ src_configure() {
 	myconf="
 		$(use_enable coverage)
 		$(use_enable debug)
-		--disable-introspection
+		$(use_enable introspection)
 		$(use_enable gstreamer video)"
 		# quartz patch above does not apply anymore
 		#$(use aqua && echo "--with-target=quartz")"
@@ -96,10 +99,7 @@ src_test() {
 }
 
 src_compile() {
-	# Fix sandbox error with USE="introspection"
-	# https://bugs.webkit.org/show_bug.cgi?id=35471
-	addpredict "$(unset HOME; echo ~)/.local"
-	emake || die "Compile failed"
+	emake XDG_DATA_HOME="${T}/.local" || die "Compile failed"
 }
 
 src_install() {
