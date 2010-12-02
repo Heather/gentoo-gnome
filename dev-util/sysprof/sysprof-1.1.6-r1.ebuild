@@ -28,7 +28,15 @@ pkg_setup() {
 src_install() {
 	make install DESTDIR="${D}" || die
 	dodoc AUTHORS ChangeLog NEWS README TODO
-	make_desktop_entry sysprof Sysprof sysprof-icon
+
+	# Insert icons in the proper place
+	for i in 16 24 32 48; do
+		insinto "/usr/share/icons/hicolor/${i}x${i}/apps"
+		newins "${S}/sysprof-icon-${i}.png" sysprof.png
+		rm "${D}/usr/share/pixmaps/sysprof-icon-${i}.png" || die "rm $i failed!"
+	done
+	newicon "${S}/sysprof-icon-48.png" sysprof.png
+	make_desktop_entry sysprof Sysprof sysprof
 }
 
 pkg_postinst() {
