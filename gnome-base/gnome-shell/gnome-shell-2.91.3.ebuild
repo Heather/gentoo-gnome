@@ -12,14 +12,22 @@ HOMEPAGE="http://live.gnome.org/GnomeShell"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
 IUSE=""
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+	KEYWORDS=""
+else
+	KEYWORDS="~amd64 ~x86"
+fi
 
+# The GNOME Shell guys are really lazy at updating dependencies, eh?
+# gnome-desktop-2.91.2 is needed due to header changes, db82a33 in gnome-desktop
+# mutter-2.91.3 is needed for meta_plugin_get_background_actor(), 07e6c5a in mutter
 RDEPEND=">=dev-libs/glib-2.25.9
 	>=x11-libs/gtk+-2.90.7:3[introspection]
 	>=media-libs/gstreamer-0.10.16
 	>=media-libs/gst-plugins-base-0.10.16
-	>=gnome-base/gnome-desktop-2.90:3
+	>=gnome-base/gnome-desktop-2.91.2:3
 	>=dev-libs/gobject-introspection-0.6.11
 
 	dev-libs/dbus-glib
@@ -35,7 +43,7 @@ RDEPEND=">=dev-libs/glib-2.25.9
 
 	x11-libs/startup-notification
 	x11-libs/libXfixes
-	>x11-wm/mutter-2.91.0[introspection]
+	>=x11-wm/mutter-2.91.3[introspection]
 	x11-apps/mesa-progs
 
 	dev-python/dbus-python
