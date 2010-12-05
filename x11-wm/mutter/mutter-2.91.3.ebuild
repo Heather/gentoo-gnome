@@ -58,7 +58,7 @@ src_prepare() {
 		--enable-startup-notification
 		--enable-xsync
 		--enable-verbose-mode
-		--enable-compile-warnings
+		--enable-compile-warnings=maximum
 		$(use_with sound libcanberra)
 		$(use_with introspection)
 		$(use_enable xinerama)"
