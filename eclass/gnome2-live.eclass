@@ -61,6 +61,12 @@ gnome2-live_src_prepare() {
 		epatch "${i}"
 	done
 
+	# Find and create macro dirs
+	macro_dirs=($(sed -ne 's/AC_CONFIG_MACRO_DIR(\(.*\))/\1/p' configure.* | tr -d '[]'))
+	for i in "${macro_dirs[@]}"; do
+		mkdir -p "$i"
+	done
+
 	if grep -qe 'GTK_DOC' configure.*; then
 		gtkdocize
 	fi
@@ -88,7 +94,7 @@ gnome2-live_src_prepare() {
 	# Prevent scrollkeeper access violations
 	gnome2_omf_fix
 
-	# Run libtoolize
+	# Libtool patching
 	elibtoolize ${ELTCONF}
 }
 
