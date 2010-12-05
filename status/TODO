@@ -27,8 +27,6 @@ media-video/totem-2.90.5
 net-im/empathy-2.32.0.1
  * Add location support once geoclue stops being idiotic with automagic deps
  * libnotify & libcanberra hard deps
-net-im/telepathy-logger-0.1.6
- * does not pass yet
 net-libs/libepc-0.3.11
  * 2 out of 16 tests fail, upstream bug #578792
 net-libs/webkit-gtk-1.3.6
