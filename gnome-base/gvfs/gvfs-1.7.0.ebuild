@@ -14,12 +14,10 @@ LICENSE="LGPL-2"
 SLOT="0"
 # Needs glib-2.27, which is unkeyworded
 #KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="archive avahi bluetooth cdda doc fuse gdu gnome gnome-keyring gphoto2 hal
-+http iphone samba +udev"
+IUSE="archive avahi bluetooth cdda doc fuse gdu gnome-keyring gphoto2 hal +http
+iphone samba +udev"
 
-# Need newer glib for gnome bug 631398
-# patch applied below
-RDEPEND=">=dev-libs/glib-2.27.1
+RDEPEND=">=dev-libs/glib-2.27.4
 	>=sys-apps/dbus-1.0
 	dev-libs/libxml2
 	net-misc/openssh
@@ -33,7 +31,6 @@ RDEPEND=">=dev-libs/glib-2.27.1
 		dev-libs/expat )
 	fuse? ( sys-fs/fuse )
 	gdu? ( >=sys-apps/gnome-disk-utility-2.29 )
-	gnome? ( >=gnome-base/gconf-2.0 )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-1.0 )
 	gphoto2? ( >=media-libs/libgphoto2-2.4.7 )
 	iphone? ( app-pda/libimobiledevice )
@@ -64,13 +61,13 @@ pkg_setup() {
 		--enable-udev
 		--disable-bash-completion
 		--with-dbus-service-dir=/usr/share/dbus-1/services
+		--disable-schemas-compile
 		$(use_enable archive)
 		$(use_enable avahi)
 		$(use_enable bluetooth obexftp)
 		$(use_enable cdda)
 		$(use_enable fuse)
 		$(use_enable gdu)
-		$(use_enable gnome gconf)
 		$(use_enable gphoto2)
 		$(use_enable iphone afc)
 		$(use_enable udev gudev)
