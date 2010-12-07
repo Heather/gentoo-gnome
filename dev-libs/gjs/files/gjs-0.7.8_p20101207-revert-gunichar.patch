@@ -1,0 +1,160 @@
+From 236bfe7ae26a0cd20dc0624b2bf3d46a87bec8d6 Mon Sep 17 00:00:00 2001
+From: Nirbheek Chauhan <nirbheek.chauhan@gmail.com>
+Date: Tue, 7 Dec 2010 16:09:08 +0530
+Subject: [PATCH] Revert "Support gunichar"
+
+This reverts commit 34fdc293117109f003967aec397b0e87a33c9f53.
+
+Conflicts:
+
+        gi/arg.c
+        gjs/jsapi-util-string.c
+        gjs/jsapi-util.h
+---
+ gi/arg.c                       |   30 ------------------------------
+ gi/boxed.c                     |    1 -
+ gjs/jsapi-util-string.c        |   25 -------------------------
+ gjs/jsapi-util.h               |    8 +-------
+ test/js/testEverythingBasic.js |    4 ----
+ 5 files changed, 1 insertions(+), 67 deletions(-)
+
+diff --git a/gi/arg.c b/gi/arg.c
+index b79f743..0663a12 100644
+--- a/gi/arg.c
++++ b/gi/arg.c
+@@ -790,16 +790,6 @@ gjs_value_to_g_argument(JSContext      *context,
+             wrong = TRUE;
+         break;
+ 
+-    case GI_TYPE_TAG_UNICHAR:
+-        if (JSVAL_IS_STRING(value)) {
+-            if (!gjs_unichar_from_string(context, value, &arg->v_uint32))
+-                wrong = TRUE;
+-        } else {
+-            wrong = TRUE;
+-            report_type_mismatch = TRUE;
+-        }
+-        break;
+-
+     case GI_TYPE_TAG_FILENAME:
+         nullable_type = TRUE;
+         if (JSVAL_IS_NULL(value)) {
+@@ -1272,7 +1262,6 @@ gjs_g_argument_init_default(JSContext      *context,
+         break;
+ 
+     case GI_TYPE_TAG_UINT32:
+-    case GI_TYPE_TAG_UNICHAR:
+         arg->v_uint32 = 0;
+         break;
+ 
+@@ -1659,25 +1648,6 @@ gjs_value_from_g_argument (JSContext  *context,
+     case GI_TYPE_TAG_DOUBLE:
+         return JS_NewNumberValue(context, arg->v_double, value_p);
+ 
+-    case GI_TYPE_TAG_UNICHAR:
+-        {
+-            char utf8[7];
+-            gint bytes;
+-
+-            /* Preserve the bidirectional mapping between 0 and "" */
+-            if (arg->v_uint32 == 0) {
+-                return gjs_string_from_utf8 (context, "", 0, value_p);
+-            } else if (!g_unichar_validate (arg->v_uint32)) {
+-                gjs_throw(context,
+-                          "Invalid unicode codepoint %" G_GUINT32_FORMAT,
+-                          arg->v_uint32);
+-                return JS_FALSE;
+-            } else {
+-                bytes = g_unichar_to_utf8 (arg->v_uint32, utf8);
+-                return gjs_string_from_utf8 (context, (char*)utf8, bytes, value_p);
+-            }
+-        }
+-
+     case GI_TYPE_TAG_FILENAME:
+         if (arg->v_pointer)
+             return gjs_string_from_filename(context, arg->v_pointer, -1, value_p);
+diff --git a/gi/boxed.c b/gi/boxed.c
+index bd554f0..bb54183 100644
+--- a/gi/boxed.c
++++ b/gi/boxed.c
+@@ -1054,7 +1054,6 @@ struct_is_simple(GIStructInfo *info)
+             case GI_TYPE_TAG_UINT64:
+             case GI_TYPE_TAG_FLOAT:
+             case GI_TYPE_TAG_DOUBLE:
+-            case GI_TYPE_TAG_UNICHAR:
+                 break;
+             case GI_TYPE_TAG_VOID:
+             case GI_TYPE_TAG_GTYPE:
+diff --git a/gjs/jsapi-util-string.c b/gjs/jsapi-util-string.c
+index c1af3bc..abc0385 100644
+--- a/gjs/jsapi-util-string.c
++++ b/gjs/jsapi-util-string.c
+@@ -471,31 +471,6 @@ gjs_get_string_id (JSContext       *context,
+     }
+ }
+ 
+-/**
+- * gjs_unichar_from_string:
+- * @string: A string
+- * @result: (out): A unicode character
+- *
+- * If successful, @result is assigned the Unicode codepoint
+- * corresponding to the first full character in @string.  This
+- * function handles characters outside the BMP.
+- *
+- * If @string is empty, @result will be 0.  An exception will
+- * be thrown if @string can not be represented as UTF-8.
+- */
+-gboolean
+-gjs_unichar_from_string (JSContext *context,
+-                         jsval      value,
+-                         gunichar  *result)
+-{
+-    char *utf8_str;
+-    if (gjs_string_to_utf8(context, value, &utf8_str)) {
+-        *result = g_utf8_get_char(utf8_str);
+-        g_free(utf8_str);
+-        return TRUE;
+-    }
+-    return FALSE;
+-}
+ 
+ #if GJS_BUILD_TESTS
+ #include "unit-test-utils.h"
+diff --git a/gjs/jsapi-util.h b/gjs/jsapi-util.h
+index e75561e..9170de4 100644
+--- a/gjs/jsapi-util.h
++++ b/gjs/jsapi-util.h
+@@ -327,13 +327,7 @@ JSBool      gjs_string_get_uint16_data       (JSContext       *context,
+                                               gsize           *len_p);
+ JSBool      gjs_get_string_id                (JSContext       *context,
+                                               jsid             id,
+-                                              char           **name_p);
+-
+-
+-gboolean    gjs_unichar_from_string          (JSContext       *context,
+-                                              jsval            string,
+-                                              gunichar        *result);
+-
++					      char           **name_p);
+ const char* gjs_get_type_name                (jsval            value);
+ 
+ jsval       gjs_date_from_time_t             (JSContext *context, time_t time);
+diff --git a/test/js/testEverythingBasic.js b/test/js/testEverythingBasic.js
+index 0730eba..2a9982b 100644
+--- a/test/js/testEverythingBasic.js
++++ b/test/js/testEverythingBasic.js
+@@ -74,10 +74,6 @@ function testLifeUniverseAndEverything() {
+     assertEquals(42, Everything.test_double(42));
+     assertEquals(-42, Everything.test_double(-42));
+ 
+-    assertEquals("c", Everything.test_unichar("c"));
+-    assertEquals("", Everything.test_unichar(""));
+-    assertEquals("\u2665", Everything.test_unichar("\u2665"));
+-
+     let now = Math.floor(new Date().getTime() / 1000);
+     let bounced = Math.floor(Everything.test_timet(now));
+     assertEquals(bounced, now);
+-- 
+1.7.2.2
+
