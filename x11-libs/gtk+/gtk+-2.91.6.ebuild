@@ -85,11 +85,13 @@ src_prepare() {
 }
 
 src_configure() {
+	# FIXME: PackageKit support
 	# png always on to display icons (foser)
 	local myconf="$(use_enable doc gtk-doc)
 		$(use_enable xinerama)
 		$(use_enable cups cups auto)
 		$(use_enable introspection)
+		--disable-packagekit
 		--disable-papi"
 	if use aqua; then
 		myconf="${myconf} --with-gdktarget=quartz"
