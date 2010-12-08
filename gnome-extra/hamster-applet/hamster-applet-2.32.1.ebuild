@@ -4,6 +4,9 @@
 
 EAPI="3"
 GCONF_DEBUG="no"
+PYTHON_DEPEND="2:2.5"
+SUPPORT_PYTHON_ABIS="1"
+RESTRICT_PYTHON_ABIS="3.*"
 
 inherit gnome2 python waf-utils
 
@@ -13,7 +16,7 @@ HOMEPAGE="http://projecthamster.wordpress.com/"
 # license on homepage is out-of-date, was changed to GPL-2 on 2008-04-16
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~ia64 ppc ppc64 ~sparc x86"
+KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 IUSE="eds libnotify"
 
 RDEPEND=">=dev-lang/python-2.5[sqlite]
@@ -24,10 +27,10 @@ RDEPEND=">=dev-lang/python-2.5[sqlite]
 	dev-python/gnome-desktop-python
 	dev-python/dbus-python
 	dev-python/pyxdg
-	>=dev-python/pygobject-2.14
-	>=dev-python/pygtk-2.12
+	>=dev-python/pygobject-2.14:2
+	>=dev-python/pygtk-2.12:2
 	gnome-base/gnome-control-center
-	>=x11-libs/gtk+-2.12
+	>=x11-libs/gtk+-2.12:2
 	x11-libs/libXScrnSaver
 
 	eds? ( dev-python/evolution-python )
@@ -40,18 +43,32 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=app-text/gnome-doc-utils-0.17.3"
 
-DOCS="AUTHORS NEWS README"
+pkg_setup() {
+	DOCS="AUTHORS NEWS README"
+	python_pkg_setup
+}
+
+src_prepare() {
+	gnome2_src_prepare
+	python_copy_sources
+}
+
+src_configure() {
+	python_execute_function -s waf-utils_src_configure
+}
+
+src_compile() {
+	python_execute_function -s waf-utils_src_compile
+}
 
 src_install() {
-	waf-utils_src_install
+	python_execute_function -s waf-utils_src_install
 	python_convert_shebangs 2 "${ED}"usr/bin/*
 	python_convert_shebangs 2 "${ED}"usr/$(get_libdir)/${PN}/${PN}
 }
 
 pkg_postinst() {
 	gnome2_pkg_postinst
-
-	python_need_rebuild
 	python_mod_optimize hamster
 }
 
