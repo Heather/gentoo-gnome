@@ -33,7 +33,7 @@ RDEPEND=">=dev-libs/glib-2.25.9
 	dev-libs/dbus-glib
 	>=dev-libs/gjs-0.7
 	x11-libs/pango[introspection]
-	>=media-libs/clutter-1.3.14[introspection]
+	>=media-libs/clutter-1.5.8[introspection]
 	dev-libs/libcroco:0.6
 
 	>=gnome-base/dconf-0.4.1
