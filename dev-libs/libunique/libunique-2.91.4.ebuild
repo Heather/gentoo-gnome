@@ -15,7 +15,6 @@ SLOT="3"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-solaris"
 IUSE="dbus doc +introspection"
 
-# maybe disable dbus-glib completely and just use gdbus? (the default)
 RDEPEND=">=dev-libs/glib-2.25.7
 	>=x11-libs/gtk+-2.90.0:3[introspection?]
 	x11-libs/libX11
@@ -33,10 +32,7 @@ src_prepare() {
 	gnome2_src_prepare
 
 	# Put docs in a versioned directory, from upstream bug #623454
-	epatch "${FILESDIR}"/${P}-parallel-docs-install.patch
-
-	# Use introspection from Gtk-3.0, not -2.0
-	epatch "${FILESDIR}"/${P}-fix-introspection.patch
+	epatch "${FILESDIR}/${PN}-2.90.1-parallel-docs-install.patch"
 
 	eautoreconf
 }
@@ -56,9 +52,10 @@ src_test() {
 }
 
 pkg_setup() {
+	# --disable-dbus means gdbus is used instead of dbus-glib
 	G2CONF="${G2CONF}
 		--disable-static
 		--disable-maintainer-flags
-		$(use_enable introspection)
-		$(use_enable dbus)"
+		--disable-dbus
+		$(use_enable introspection)"
 }
