@@ -85,7 +85,8 @@ src_configure() {
 		$(use_enable coverage)
 		$(use_enable debug)
 		$(use_enable introspection)
-		$(use_enable gstreamer video)"
+		$(use_enable gstreamer video)
+		--disable-web-sockets"
 		# quartz patch above does not apply anymore
 		#$(use aqua && echo "--with-target=quartz")"
 
