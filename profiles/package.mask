@@ -28,7 +28,6 @@
 >=app-editors/gedit-2.90
 >=dev-libs/libunique-2.90
 >=gnome-base/nautilus-2.90
->=gnome-extra/gnome-games-2.31
 >=gnome-extra/yelp-2.31
 >=media-video/totem-2.90
 >=www-client/epiphany-2.31

@@ -8,7 +8,7 @@ WANT_AUTOMAKE="1.11"
 
 # make sure games is inherited first so that the gnome2
 # functions will be called if they are not overridden
-inherit games games-ggz eutils gnome2 python virtualx
+inherit autotools games games-ggz eutils gnome2 python virtualx
 
 DESCRIPTION="Collection of games for the GNOME desktop"
 HOMEPAGE="http://live.gnome.org/GnomeGames/"
@@ -16,7 +16,7 @@ HOMEPAGE="http://live.gnome.org/GnomeGames/"
 LICENSE="GPL-2 GPL-3 FDL-1.1"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="artworkextra +clutter guile +introspection opengl sound test"
+IUSE="artworkextra +clutter guile opengl seed +sound test"
 
 RDEPEND="
 	>=dev-games/libggz-0.0.14
@@ -28,10 +28,10 @@ RDEPEND="
 	>=dev-python/pygobject-2
 	>=dev-python/pygtk-2.14
 	>=dev-python/pycairo-1
-	>=gnome-base/gconf-2.31.1[introspection?]
+	>=gnome-base/gconf-2.31.1
 	>=gnome-base/librsvg-2.14
 	>=x11-libs/cairo-1
-	>=x11-libs/gtk+-2.16:2[introspection?]
+	>=x11-libs/gtk+-2.16:2
 	x11-libs/libSM
 
 	sound? ( media-libs/libcanberra[gtk] )
@@ -40,9 +40,12 @@ RDEPEND="
 	opengl? (
 		dev-python/pygtkglext
 		>=dev-python/pyopengl-3 )
-	clutter? ( >=media-libs/clutter-1.0[gtk,introspection?]
-		>=media-libs/clutter-gtk-0.10[introspection?] )
-	introspection? ( >=dev-libs/gobject-introspection-0.6.3 )
+	clutter? (
+		>=dev-libs/gobject-introspection-0.6.3
+		>=x11-libs/gtk+-2.16:2[introspection]
+		>=gnome-base/gconf-2.31.1[introspection]
+		>=media-libs/clutter-gtk-0.10.2[introspection]
+		seed? ( dev-libs/seed ) )
 	!games-board/glchess"
 
 DEPEND="${RDEPEND}
@@ -73,36 +76,47 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_enable sound)
 		$(use_enable introspection)
+		$(use_enable clutter introspection)
 		--with-scores-group=${GAMES_GROUP}
 		--with-platform=gnome
-		--with-card-theme-formats=all
+		--with-card-theme-formats=default
 		--with-smclient
 		--with-gtk=2.0
 		--enable-omitgames=none" # This line should be last for _omitgame
 
 	# Needs seed, always disable till we can have that
-	_omitgame swell-foop
-	_omitgame lightsoff
 
 	if ! use clutter; then
-		ewarn "USE='-clutter' implies that quadrapassel and gnibbles won't be installed"
+		ewarn "USE='-clutter' => quadrapassel, swell-foop, lightsoff, gnibbles won't be installed"
 		_omitgame quadrapassel
 		_omitgame gnibbles
+		_omitgame swell-foop
+		_omitgame lightsoff
+		use seed && ewarn "USE='seed' has no effect with USE='-clutter'"
+	elif ! use seed; then
+		ewarn "USE='-seed' => swell-foop, lightsoff won't be installed"
+		_omitgame swell-foop
+		_omitgame lightsoff
 	fi
 
 	if ! use guile; then
-		ewarn "USE='-guile' implies that Aisleriot won't be installed"
+		ewarn "USE='-guile' => Aisleriot won't be installed"
 		_omitgame aisleriot
 	fi
 
 	if ! use opengl; then
-		ewarn "USE=-opengl implies that glchess won't be installed"
+		ewarn "USE='-opengl' => glchess won't be installed"
 		_omitgame glchess
 	fi
 }
 
 src_prepare() {
 	gnome2_src_prepare
+
+	# TODO: File upstream bug for this
+	epatch "${FILESDIR}/${P}-fix-conditional-ac-prog-cxx.patch"
+
+	eautoreconf
 
 	# disable pyc compiling
 	mv py-compile py-compile.orig
