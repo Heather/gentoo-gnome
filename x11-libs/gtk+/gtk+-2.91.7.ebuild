@@ -139,6 +139,10 @@ src_install() {
 	use aqua && for i in gtk+-3.0.pc gtk+-quartz-3.0.pc gtk+-unix-print-3.0.pc; do
 		sed -i -e "s:Libs\: :Libs\: -framework Carbon :" "${ED}"usr/$(get_libdir)/pkgconfig/$i || die "sed failed"
 	done
+
+	# XXX: Install gdk-$TARGET-3.0.pc; commit 62cbc1ac. Remove for next release.
+	insinto /usr/$(get_libdir)/pkgconfig
+	newins gdk-3.0.pc gdk-x11-3.0.pc
 }
 
 pkg_postinst() {
