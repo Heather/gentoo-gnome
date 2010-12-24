@@ -6,6 +6,13 @@
 # NOTE: Please add your entry at the top!
 #
 
+# Nirbheek Chauhan <nirbheek@gentoo.org> (24 Dec 2010)
+# Stuff that directly or indirectly needs libnotify-0.6
+# (versions are approximate)
+>=gnome-base/libgnomekbd-2.91
+>=gnome-base/gnome-settings-daemon-2.91
+>=gnome-base/gnome-control-center-2.91
+
 # Gilles Dartiguelongue <eva@gentoo.org> (10 Oct 2010)
 # BEGIN GNOME 2.32 mask
 # FIXME: New libbonobo breaks all applets must double
