@@ -33,7 +33,9 @@ RDEPEND=">=dev-libs/glib-2.27.4
 	gdu? ( >=sys-apps/gnome-disk-utility-2.29 )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-1.0 )
 	gphoto2? ( >=media-libs/libgphoto2-2.4.7 )
-	iphone? ( app-pda/libimobiledevice )
+	iphone? (
+		>=app-pda/libimobiledevice-1.1.0
+		>=app-pda/libplist-0.15 )
 	udev? (
 		cdda? ( >=dev-libs/libcdio-0.78.2[-minimal] )
 		>=sys-fs/udev-145[extras] )
