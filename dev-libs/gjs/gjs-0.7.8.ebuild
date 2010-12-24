@@ -6,12 +6,10 @@ EAPI="3"
 GCONF_DEBUG="no"
 PYTHON_DEPEND="2"
 
-inherit autotools eutils gnome2 python
+inherit gnome2 python
 
 DESCRIPTION="Javascript bindings for GNOME"
 HOMEPAGE="http://live.gnome.org/Gjs"
-# XXX: Temporary SRC_URI for git snapshot (to build w/ latest xul-2 snapshot)
-SRC_URI="mirror://gentoo/${P}_e5096b09.tar.bz2"
 
 LICENSE="MIT MPL-1.1 LGPL-2 GPL-2"
 SLOT="0"
@@ -46,20 +44,8 @@ src_prepare() {
 	G2CONF="${G2CONF}
 		$(use_enable coverage)"
 
-	# Needs trunk gtk+/glib/g-i
-	epatch "${FILESDIR}/${P}-revert-gunichar.patch"
-
-	# Needs trunk glib/g-i
-	epatch "${FILESDIR}/${P}-revert-use-g_object_info_find_method_using_interface.patch"
-
-	# Needs trunk g-i
-	epatch "${FILESDIR}/${P}-revert-support-signals-with-G_TYPE_POINTER-argument.patch"
-
 	gnome2_src_prepare
 	python_convert_shebangs 2 "${S}"/scripts/make-tests
-
-	# Needed because it's a git snapshot
-	eautoreconf
 }
 
 src_install() {
