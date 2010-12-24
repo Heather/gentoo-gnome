@@ -21,7 +21,7 @@ fi
 
 RDEPEND=">=x11-libs/pango-1.2[X,introspection?]
 	>=x11-libs/cairo-1.10[X]
-	>=x11-libs/gtk+-2.90.7:3[introspection?]
+	>=x11-libs/gtk+-2.91.7:3[introspection?]
 	sound? (  >=media-libs/libcanberra-0.26[gtk3] )
 	>=gnome-base/gconf-2
 	>=dev-libs/glib-2.14
