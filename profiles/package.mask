@@ -17,18 +17,15 @@
 
 # Gilles Dartiguelongue <eva@gentoo.org> (10 Oct 2010)
 # BEGIN GNOME 3.0 mask
+# NOTE: remove stuff from the mask when bumped to latest 2.91.x (nirbheek)
 >=app-editors/gedit-2.90
 >=dev-libs/libunique-2.90
->=gnome-base/gnome-desktop-2.90
 >=gnome-base/nautilus-2.90
 >=gnome-extra/gnome-games-2.31
->=gnome-extra/gtkhtml-3.90
 >=gnome-extra/yelp-2.31
 >=media-video/totem-2.90
 >=www-client/epiphany-2.31
->=x11-libs/gtk+-2.90
 >=x11-libs/gtksourceview-2.90
->=x11-themes/gtk-engines-2.90
 # END GNOME 3.0 mask
 
 # Arun Raghavan <ford_prefect@gentoo.org> (10 Sep 2010)
