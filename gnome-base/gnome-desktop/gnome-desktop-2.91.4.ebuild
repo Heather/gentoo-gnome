@@ -14,7 +14,8 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~
 IUSE="doc"
 
 # TODO: Add RDEPEND on pciutils (requires support for reading gzipped pnp.ids)
-RDEPEND=">=x11-libs/gtk+-2.90.2:3
+# XXX: gtk+-2.91.6 is needed for gdk_x11_window_get_xid()
+RDEPEND=">=x11-libs/gtk+-2.91.6:3
 	>=dev-libs/glib-2.19.1
 	>=x11-libs/libXrandr-1.2
 	>=gnome-base/gconf-2
@@ -31,10 +32,6 @@ DEPEND="${RDEPEND}
 	~app-text/docbook-xml-dtd-4.1.2
 	x11-proto/xproto
 	>=x11-proto/randrproto-1.2"
-# Temporarily require the 2.31 version to ensure the proper pixmaps, gnome-about,
-# etc. are installed.  Switch to doing things the other way around once
-# gnome-about no longer uses pygtk 2
-PDEPEND=">=gnome-base/gnome-desktop-2.31:2"
 
 # Includes X11/Xatom.h in libgnome-desktop/gnome-bg.c which comes from xproto
 # Includes X11/extensions/Xrandr.h that includes randr.h from randrproto (and
@@ -44,10 +41,8 @@ DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
 pkg_setup() {
 	G2CONF="${G2CONF}
-		--with-gnome-distributor=Gentoo
 		--disable-scrollkeeper
 		--disable-static
-		--disable-gnome-about
 		--disable-desktop-docs
 		--with-pnp-ids-path=/usr/share/libgnome-desktop/pnp.ids"
 }
