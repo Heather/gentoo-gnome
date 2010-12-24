@@ -21,7 +21,7 @@ RDEPEND="
 	virtual/libffi
 	x11-libs/cairo
 	x11-libs/gtk+:2[introspection]
-	net-libs/webkit-gtk:3.0
+	net-libs/webkit-gtk
 	gnome-base/gnome-js-common
 
 	dbus? (
@@ -43,6 +43,7 @@ RESTRICT="test"
 
 pkg_setup() {
 	G2CONF="${G2CONF}
+		--with-webkit=1.0
 		$(use_enable dbus dbus-module)
 		$(use_enable mpfr mpfr-module)
 		$(use_enable sqlite sqlite-module)
@@ -66,9 +67,10 @@ pkg_setup() {
 	fi
 }
 
-src_prepare() {
-	epatch "${FILESDIR}"/${P}-cleanup-autotools.patch
-
-	intltoolize --automake --copy --force || die "intltoolize failed"
-	eautoreconf
-}
+#src_prepare() {
+	# I've no idea what abcd did here; the patch doesn't apply anymore (nirbheek)
+#	epatch "${FILESDIR}/${PN}-2.31.5-cleanup-autotools.patch"
+#
+#	intltoolize --automake --copy --force || die "intltoolize failed"
+#	eautoreconf
+#}
