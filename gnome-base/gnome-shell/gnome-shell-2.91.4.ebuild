@@ -23,7 +23,7 @@ fi
 
 # gnome-desktop-2.91.2 is needed due to header changes, db82a33 in gnome-desktop
 # FIXME: Automagic gnome-bluetooth[introspection] support
-RDEPEND=">=dev-libs/glib-2.25.9
+COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	>=x11-libs/gtk+-2.91.7:3[introspection]
 	>=media-libs/clutter-1.5.8[introspection]
 	>=gnome-base/gnome-desktop-2.91.2:3
@@ -34,7 +34,6 @@ RDEPEND=">=dev-libs/glib-2.25.9
 	x11-libs/pango[introspection]
 	dev-libs/libcroco:0.6
 
-	>=gnome-base/dconf-0.4.1
 	gnome-base/gconf[introspection]
 	gnome-base/gnome-menus
 	gnome-base/librsvg
@@ -48,14 +47,17 @@ RDEPEND=">=dev-libs/glib-2.25.9
 	>=x11-wm/mutter-2.91.4[introspection]
 	x11-apps/mesa-progs
 
-	dev-python/dbus-python
-"
-DEPEND="${RDEPEND}
+	dev-python/dbus-python"
+# Runtime-only deps are probably incomplete
+RDEPEND="${COMMON_DEPEND}
+	x11-libs/gdk-pixbuf[introspection]
+	>=gnome-base/dconf-0.4.1
+	>=gnome-base/gnome-settings-daemon-2.91"
+DEPEND="${COMMON_DEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.22
 	>=dev-util/intltool-0.26
-	gnome-base/gnome-common
-"
+	gnome-base/gnome-common"
 DOCS="AUTHORS README"
 # Don't error out on warnings
 G2CONF="--enable-compile-warnings=maximum
