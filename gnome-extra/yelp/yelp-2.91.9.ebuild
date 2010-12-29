@@ -11,8 +11,8 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
-IUSE="lzma"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~sparc ~x86 ~x86-freebsd ~amd64-linux ~x86-linux"
+IUSE="doc lzma"
 
 RDEPEND="
 	>=x11-libs/gtk+-2.90.5:3
@@ -21,13 +21,14 @@ RDEPEND="
 	>=dev-libs/libxslt-1.1.4
 	>=dev-libs/dbus-glib-0.71
 	>=gnome-extra/yelp-xsl-2.31.3
-	>=net-libs/webkit-gtk-1.3.2:3.0
+	>=net-libs/webkit-gtk-1.3.2:3
 	app-arch/bzip2
 	lzma? ( >=app-arch/xz-utils-4.9 )"
 DEPEND="${RDEPEND}
-	sys-devel/gettext
-	>=dev-util/intltool-0.41
-	>=dev-util/pkgconfig-0.9"
+	>=sys-devel/gettext-0.17
+	>=dev-util/intltool-0.41.0
+	>=dev-util/pkgconfig-0.9
+	doc? ( >=dev-util/gtk-doc-1.13 )"
 # If eautoreconf:
 #	gnome-base/gnome-common
 
@@ -35,11 +36,7 @@ DOCS="AUTHORS ChangeLog NEWS README TODO"
 
 pkg_setup() {
 	G2CONF="${G2CONF}
+		--disable-schemas-compile
+		--enable-bz2
 		$(use_enable lzma)"
-}
-
-src_prepare() {
-	epatch "${FILESDIR}"/${PN}-2.31.6-fix-gsettings-path.patch
-
-	gnome2_src_prepare
 }
