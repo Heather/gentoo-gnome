@@ -62,6 +62,9 @@ src_prepare() {
 	# https://bugs.webkit.org/show_bug.cgi?id=28727
 	#epatch "${FILESDIR}"/${PN}-1.1.15.4-darwin-quartz.patch
 
+	# http://bugs.gentoo.org/show_bug.cgi?id=349855
+	epatch "${FILESDIR}"/${PN}-wrong-ifdef-check.patch
+
 	# Make it libtool-1 compatible
 	rm -v autotools/lt* autotools/libtool.m4 \
 		|| die "removing libtool macros failed"
