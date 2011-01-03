@@ -11,7 +11,7 @@ HOMEPAGE="http://blogs.gnome.org/metacity/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="debug +gtk3 +introspection +sound test xinerama"
+IUSE="debug +introspection +sound test xinerama"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
@@ -22,7 +22,6 @@ fi
 RDEPEND=">=x11-libs/pango-1.2[X,introspection?]
 	>=x11-libs/cairo-1.10[X]
 	>=x11-libs/gtk+-2.91.7:3[introspection?]
-	sound? (  >=media-libs/libcanberra-0.26[gtk3] )
 	>=gnome-base/gconf-2
 	>=dev-libs/glib-2.14
 	>=x11-libs/startup-notification-0.7
@@ -40,6 +39,7 @@ RDEPEND=">=x11-libs/pango-1.2[X,introspection?]
 	x11-libs/libXrender
 
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
+	sound? (  >=media-libs/libcanberra-0.26[gtk3] )
 	xinerama? ( x11-libs/libXinerama )
 	gnome-extra/zenity
 	!x11-misc/expocity"
