@@ -15,8 +15,9 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-
 IUSE="+X debug doc +introspection jpeg jpeg2k tiff test"
 
 # librsvg blocker is for the new pixbuf loader API, you lose icons otherwise
+# FIXME: stab upstream to raise glib dependendy, bug #350235
 RDEPEND="
-	>=dev-libs/glib-2.25.15
+	>=dev-libs/glib-2.27
 	>=media-libs/libpng-1.2.43-r2:0
 	introspection? ( >=dev-libs/gobject-introspection-0.9.3 )
 	jpeg? ( virtual/jpeg )
