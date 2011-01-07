@@ -14,8 +14,8 @@ SRC_URI="http://www.webkitgtk.org/${MY_P}.tar.gz"
 LICENSE="LGPL-2 LGPL-2.1 BSD"
 SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-macos"
-# geoclue
-IUSE="coverage debug doc +gstreamer +introspection" # aqua
+# aqua, geoclue
+IUSE="coverage debug doc +gstreamer +introspection +jit"
 
 # use sqlite, svg by default
 # dependency on >=x11-libs/gtk+-2.13:2 for gail
@@ -84,11 +84,13 @@ src_configure() {
 	local myconf
 
 	# XXX: Check Web Audio support
+	# XXX: websockets disabled due to security issue in protocol
 	myconf="
 		$(use_enable coverage)
 		$(use_enable debug)
 		$(use_enable introspection)
 		$(use_enable gstreamer video)
+		$(use_enable jit)
 		--with-gtk=2.0
 		--disable-web-sockets"
 		# quartz patch above does not apply anymore
