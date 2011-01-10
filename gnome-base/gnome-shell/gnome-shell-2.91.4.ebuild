@@ -30,7 +30,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	>=dev-libs/gobject-introspection-0.6.11
 
 	dev-libs/dbus-glib
-	>=dev-libs/gjs-0.7
+	>=dev-libs/gjs-0.7.5
 	x11-libs/pango[introspection]
 	dev-libs/libcroco:0.6
 
@@ -52,7 +52,8 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9
 RDEPEND="${COMMON_DEPEND}
 	x11-libs/gdk-pixbuf[introspection]
 	>=gnome-base/dconf-0.4.1
-	>=gnome-base/gnome-settings-daemon-2.91"
+	>=gnome-base/gnome-settings-daemon-2.91
+	x11-themes/gnome-themes-standard"
 DEPEND="${COMMON_DEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.22
