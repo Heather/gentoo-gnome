@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -11,12 +11,15 @@ HOMEPAGE="http://www.gtk.org/"
 
 LICENSE="LGPL-2"
 SLOT="3"
+# NOTE: *-macos support is BROKEN. See `quartz-backend` etc in configure
+# NOTE: This gtk+ has multi-gdk-backend support, see:
+#  * http://blogs.gnome.org/kris/2010/12/29/gdk-3-0-on-mac-os-x/
+#  * http://mail.gnome.org/archives/gtk-devel-list/2010-November/msg00099.html
+# NOTE: Lots of aqua stuff in this ebuild is probably very broken
 #KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 KEYWORDS=""
 IUSE="aqua cups debug doc +introspection jpeg jpeg2k tiff test vim-syntax xinerama"
 
-# NOTE: cairo[svg] dep is due to bug 291283 (not patched to avoid eautoreconf)
-# glib-2.27.0 is required for GApplication
 RDEPEND="!aqua? (
 		x11-libs/libX11
 		x11-libs/libXi
@@ -35,7 +38,7 @@ RDEPEND="!aqua? (
 		>=x11-libs/gdk-pixbuf-2.21[introspection?,jpeg?,jpeg2k?,tiff?]
 	)
 	xinerama? ( x11-libs/libXinerama )
-	>=dev-libs/glib-2.27.3
+	>=dev-libs/glib-2.27.5
 	>=x11-libs/pango-1.20[introspection?]
 	>=dev-libs/atk-1.29.2[introspection?]
 	media-libs/fontconfig
@@ -93,10 +96,12 @@ src_configure() {
 		$(use_enable introspection)
 		--disable-packagekit
 		--disable-papi"
+	
+	# XXX: Maybe with multi-backend we should enable x11 all the time?
 	if use aqua; then
-		myconf="${myconf} --with-gdktarget=quartz"
+		myconf="${myconf} --enable-quartz-backend --disable-xinput"
 	else
-		myconf="${myconf} --with-gdktarget=x11 --with-xinput"
+		myconf="${myconf} --enable-x11-backend --enable-xinput"
 	fi
 
 	# Passing --disable-debug is not recommended for production use
@@ -135,14 +140,14 @@ src_install() {
 	# Remove unneeded *.la files
 	find "${ED}" -name "*.la" -delete
 
+	# gtk-update-icon-cache and gtk-builder-convert are provided by gtk+:2 now
+	# XXX: Make sure the gtk+:2 and gtk+:3 versions haven't diverged!
+	rm -v "${ED}"/usr/bin/gtk-{builder-convert,update-icon-cache} || die
+
 	# add -framework Carbon to the .pc files
 	use aqua && for i in gtk+-3.0.pc gtk+-quartz-3.0.pc gtk+-unix-print-3.0.pc; do
 		sed -i -e "s:Libs\: :Libs\: -framework Carbon :" "${ED}"usr/$(get_libdir)/pkgconfig/$i || die "sed failed"
 	done
-
-	# XXX: Install gdk-$TARGET-3.0.pc; commit 62cbc1ac. Remove for next release.
-	insinto /usr/$(get_libdir)/pkgconfig
-	newins gdk-3.0.pc gdk-x11-3.0.pc
 }
 
 pkg_postinst() {
