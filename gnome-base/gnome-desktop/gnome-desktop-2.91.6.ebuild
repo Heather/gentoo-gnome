@@ -11,18 +11,18 @@ HOMEPAGE="http://www.gnome.org/"
 LICENSE="GPL-2 FDL-1.1 LGPL-2"
 SLOT="3"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~x86-solaris"
-IUSE="doc"
+IUSE="doc +introspection"
 
 # TODO: Add RDEPEND on pciutils (requires support for reading gzipped pnp.ids)
 # XXX: gtk+-2.91.6 is needed for gdk_x11_window_get_xid()
 RDEPEND=">=x11-libs/gtk+-2.91.6:3
 	>=dev-libs/glib-2.19.1
 	>=x11-libs/libXrandr-1.2
-	>=gnome-base/gconf-2
 	>=x11-libs/gdk-pixbuf-2.21.3
 	>=x11-libs/startup-notification-0.5
 	x11-libs/libX11
-	gnome-base/gsettings-desktop-schemas"
+	>=gnome-base/gsettings-desktop-schemas-0.1.4
+	introspection? ( >=dev-libs/gobject-introspection-0.9.7 )"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/intltool-0.40
@@ -44,6 +44,8 @@ pkg_setup() {
 		--disable-scrollkeeper
 		--disable-static
 		--disable-desktop-docs
-		--with-pnp-ids-path=/usr/share/libgnome-desktop/pnp.ids"
+		--with-pnp-ids-path=/usr/share/libgnome-desktop/pnp.ids
+		--with-distributor=Gentoo
+		$(use_enable introspection)"
 }
 
