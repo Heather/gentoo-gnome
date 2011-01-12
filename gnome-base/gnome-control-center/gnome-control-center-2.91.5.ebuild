@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-control-center/gnome-control-center-2.32.1.ebuild,v 1.1 2010/12/04 00:46:57 pacho Exp $
 
@@ -11,27 +11,25 @@ DESCRIPTION="The gnome2 Desktop configuration tool"
 HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2"
-SLOT="3"
+SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 IUSE="doc"
 
 # TODO: appindicator
-# WTF: pulseaudio is compulsary now
+# WTF: pulseaudio is compulsary now for gnome-volume-control
 # XXX: libXft is checked for, but not used anywhere?
-# XXX: gnome-settings-daemon-2.91.0 is needed for gsd-enums.h; commit 07902dd0
-RDEPEND="x11-libs/libXft
-	>=x11-libs/libXi-1.2
+# FIXME: Cheese is optional, but automagic => force-enabled
+RDEPEND="
+	>=dev-libs/glib-2.25.11
 	>=x11-libs/gdk-pixbuf-2.23.0
 	>=x11-libs/gtk+-2.91.6:3
-	>=dev-libs/glib-2.25.11
 	>=gnome-base/gsettings-desktop-schemas-0.1.3
 	>=gnome-base/gconf-2.0
 	>=dev-libs/dbus-glib-0.73
-	>=x11-libs/libxklavier-4.0
-	>=gnome-base/libgnomekbd-2.31.2
+	>=gnome-base/libgnomekbd-2.91.2
 	gnome-base/gnome-desktop:3
 	gnome-base/gnome-menus
-	>=gnome-base/gnome-settings-daemon-2.91.0
+	>=gnome-base/gnome-settings-daemon-2.91.2
 
 	app-text/iso-codes
 	dev-libs/libxml2
@@ -45,7 +43,14 @@ RDEPEND="x11-libs/libXft
 
 	x11-apps/xmodmap
 	x11-libs/libX11
-	x11-libs/libXxf86misc"
+	x11-libs/libXft
+	x11-libs/libXxf86misc
+	>=x11-libs/libxklavier-4.0
+	>=x11-libs/libXi-1.2
+
+	!!gnome-extra/gnome-media[pulseaudio]
+	!!<gnome-extra/gnome-media-2.32.0-r300
+"
 DEPEND="${RDEPEND}
 	x11-proto/xproto
 	x11-proto/xf86miscproto
