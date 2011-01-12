@@ -17,23 +17,23 @@ SRC_URI="${SRC_URI}
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
-IUSE="debug libnotify policykit pulseaudio smartcard"
+IUSE="debug policykit pulseaudio smartcard"
 
 RDEPEND=">=dev-libs/dbus-glib-0.74
 	>=dev-libs/glib-2.26.0
 	>=x11-libs/gtk+-2.91.6
 	>=gnome-base/gconf-2.6.1
 	>=gnome-base/libgnomekbd-2.91.1
-	>=gnome-base/gnome-desktop-2.91.3:3
+	>=gnome-base/gnome-desktop-2.91.5:3
 	>=gnome-base/gsettings-desktop-schemas-0.1.2
 	media-libs/fontconfig
 
+	>=x11-libs/libnotify-0.6.1
 	x11-libs/libXi
 	x11-libs/libXext
 	x11-libs/libXxf86misc
 	>=x11-libs/libxklavier-5.0
 
-	libnotify? ( >=x11-libs/libnotify-0.6.1 )
 	policykit? (
 		>=sys-auth/polkit-0.97
 		>=sys-apps/dbus-1.1.2 )
@@ -58,10 +58,9 @@ pkg_setup() {
 	DOCS="AUTHORS NEWS ChangeLog MAINTAINERS"
 	G2CONF="${G2CONF}
 		--disable-static
-		--disable-schemas-install
+		--disable-schemas-compile
 		--enable-gconf-bridge
 		$(use_enable debug)
-		$(use_with libnotify)
 		$(use_enable policykit polkit)
 		$(use_enable pulseaudio pulse)
 		$(use_enable !pulseaudio gstreamer)
