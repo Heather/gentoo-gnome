@@ -20,6 +20,7 @@
 >=gnome-base/libgnomekbd-2.91
 >=gnome-base/gnome-settings-daemon-2.91
 >=gnome-base/gnome-control-center-2.91
+>=gnome-extra/zenity-2.91
 >=sys-apps/gnome-disk-utility-2.32.1
 
 # Gilles Dartiguelongue <eva@gentoo.org> (10 Oct 2010)
