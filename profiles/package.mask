@@ -6,6 +6,12 @@
 # NOTE: Please add your entry at the top!
 #
 
+# Nirbheek Chauhan <nirbheek@gentoo.org> (11 Jan 2011)
+# Don't use this, use >=gnome-media-2.32.0-r300 instead
+# we can't use this until everything that uses libgnome-media-profiles.so is
+# ported to gtk+:3 (this includes rhythmbox, at least)
+>=gnome-base/gnome-media-2.91
+
 # Nirbheek Chauhan <nirbheek@gentoo.org> (24 Dec 2010)
 # Stuff that directly or indirectly needs libnotify-0.6
 # (versions are approximate)
