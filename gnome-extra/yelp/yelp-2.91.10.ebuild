@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/yelp/yelp-2.30.1-r1.ebuild,v 1.1 2010/06/13 20:04:06 pacho Exp $
 
@@ -15,12 +15,12 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~sparc ~x86 ~x86-freebsd ~amd64-linux ~x
 IUSE="doc lzma"
 
 RDEPEND="
-	>=x11-libs/gtk+-2.90.5:3
+	>=x11-libs/gtk+-2.91.8:3
 	>=dev-libs/glib-2.25.11
 	>=dev-libs/libxml2-2.6.5
 	>=dev-libs/libxslt-1.1.4
 	>=dev-libs/dbus-glib-0.71
-	>=gnome-extra/yelp-xsl-2.31.3
+	>=gnome-extra/yelp-xsl-2.91.9
 	>=net-libs/webkit-gtk-1.3.2:3
 	app-arch/bzip2
 	lzma? ( >=app-arch/xz-utils-4.9 )"
