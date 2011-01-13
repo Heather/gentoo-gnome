@@ -62,16 +62,10 @@ src_prepare() {
 	# https://bugs.webkit.org/show_bug.cgi?id=28727
 	#epatch "${FILESDIR}"/${PN}-1.1.15.4-darwin-quartz.patch
 
-	# http://bugs.gentoo.org/show_bug.cgi?id=349855
-	epatch "${FILESDIR}"/${PN}-wrong-ifdef-check.patch
-
-	# Make it libtool-1 compatible
-	rm -v autotools/lt* autotools/libtool.m4 \
-		|| die "removing libtool macros failed"
 	# Don't force -O2
 	sed -i 's/-O2//g' "${S}"/configure.ac || die "sed failed"
 	# Prevent maintainer mode from being triggered during make
-	AT_M4DIR=autotools eautoreconf
+	AT_M4DIR=Source/autotools eautoreconf
 }
 
 src_configure() {
@@ -85,13 +79,18 @@ src_configure() {
 
 	# XXX: Check Web Audio support
 	# XXX: websockets disabled due to security issue in protocol
+	# XXX: Wtf is WebKit2?
+	# XXX: 3D canvas fails to compile
 	myconf="
 		$(use_enable coverage)
 		$(use_enable debug)
 		$(use_enable introspection)
 		$(use_enable gstreamer video)
 		$(use_enable jit)
+		--disable-3D-canvas
+		--enable-blob
 		--with-gtk=3.0
+		--disable-webkit2
 		--disable-web-sockets"
 		# quartz patch above does not apply anymore
 		#$(use aqua && echo "--with-target=quartz")"
