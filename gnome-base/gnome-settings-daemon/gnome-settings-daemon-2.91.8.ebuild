@@ -87,6 +87,13 @@ src_prepare() {
 	eautoreconf
 }
 
+src_install() {
+	gnome2_src_install
+
+	echo 'GSETTINGS_BACKEND="dconf"' >> 51gsettings-dconf
+	doenvd 51gsettings-dconf || die "doenvd failed"
+}
+
 pkg_postinst() {
 	gnome2_pkg_postinst
 
