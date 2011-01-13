@@ -32,6 +32,11 @@ DEPEND="${COMMON_DEPEND}
 src_prepare() {
 	# Run elibtoolize for ~x86-fbsd.
 	use x86-fbsd && elibtoolize
+
+	# Comment out gtk_quit_add which was removed in gtk+:3
+	# Wrong solution, but this is what is used in jhbuild right now
+	# https://bugs.freedesktop.org//show_bug.cgi?id=32839
+	sed -e 's:\(gtk_quit_add\)://\1:' -i "${S}/src/canberra-gtk-module.c" || die
 }
 
 src_configure() {
