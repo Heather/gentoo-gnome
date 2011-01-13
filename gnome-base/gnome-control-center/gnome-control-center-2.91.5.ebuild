@@ -62,7 +62,7 @@ DEPEND="${RDEPEND}
 
 	app-text/scrollkeeper
 	>=app-text/gnome-doc-utils-0.10.1
-	doc? ( >=dev-utils/gtk-doc-1.9 )"
+	doc? ( >=dev-util/gtk-doc-1.9 )"
 # Needed for autoreconf
 #	gnome-base/gnome-common
 
