@@ -17,6 +17,8 @@
 # (versions are approximate)
 # DO NOT UNMASK unless you're fine with everything breaking
 >=x11-libs/libnotify-0.6
+>=app-crypt/seahorse-2.91
+>=app-crypt/seahorse-plugins-2.91
 >=gnome-base/libgnomekbd-2.91
 >=gnome-base/gnome-settings-daemon-2.91
 >=gnome-base/gnome-control-center-2.91
