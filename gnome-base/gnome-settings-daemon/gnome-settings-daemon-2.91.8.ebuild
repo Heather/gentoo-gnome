@@ -19,7 +19,7 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 IUSE="debug policykit pulseaudio smartcard"
 
-RDEPEND=">=dev-libs/dbus-glib-0.74
+COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	>=dev-libs/glib-2.26.0
 	>=x11-libs/gtk+-2.91.6
 	>=gnome-base/gconf-2.6.1
@@ -44,8 +44,12 @@ RDEPEND=">=dev-libs/dbus-glib-0.74
 		>=media-libs/gstreamer-0.10.1.2
 		>=media-libs/gst-plugins-base-0.10.1.2 )
 	smartcard? ( >=dev-libs/nss-3.11.2 )"
-
-DEPEND="${RDEPEND}
+# Themes needed by g-s-d, gnome-shell, gtk+:3 apps to work properly
+RDEPEND="${COMMON_DEPEND}
+	>=x11-themes/gnome-themes-standard-2.91
+	>=x11-themes/gnome-icon-theme-2.91
+	>=x11-themes/gnome-icon-theme-symbolic-2.91"
+DEPEND="${COMMON_DEPEND}
 	!<gnome-base/gnome-control-center-2.22
 	sys-devel/gettext
 	>=dev-util/intltool-0.40
