@@ -17,6 +17,7 @@
 # (versions are approximate)
 # DO NOT UNMASK unless you're fine with everything breaking
 >=x11-libs/libnotify-0.6
+>=x11-misc/notification-daemon-0.5
 >=app-crypt/seahorse-2.91
 >=app-crypt/seahorse-plugins-2.91
 >=gnome-base/libgnomekbd-2.91
@@ -53,10 +54,6 @@
 # New rhythmbox needs libdmapsharing with USE=daap
 # also uses >=dev-libs/glib-2.25.6
 =media-sound/rhythmbox-0.13*
-
-# Jonathan Callen <abcd@gentoo.org> (23 Jun 2010)
-# Mask dev version
-=x11-misc/notification-daemon-0.5*
 
 # Arun Raghavan <ford_prefect@gentoo.org> (23 Jun 2010)
 # We don't actually want gir-repository being used.
