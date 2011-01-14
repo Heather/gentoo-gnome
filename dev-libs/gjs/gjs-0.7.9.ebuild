@@ -23,7 +23,7 @@ else
 fi
 
 RDEPEND=">=dev-libs/glib-2.18:2
-	>=dev-libs/gobject-introspection-0.9.5
+	>=dev-libs/gobject-introspection-0.10.1
 
 	dev-libs/dbus-glib
 	x11-libs/cairo
