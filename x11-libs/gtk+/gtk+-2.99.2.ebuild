@@ -16,7 +16,7 @@ SLOT="3"
 #  * http://blogs.gnome.org/kris/2010/12/29/gdk-3-0-on-mac-os-x/
 #  * http://mail.gnome.org/archives/gtk-devel-list/2010-November/msg00099.html
 # NOTE: Lots of aqua stuff in this ebuild is probably very broken
-#KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 KEYWORDS=""
 IUSE="aqua cups debug doc +introspection jpeg jpeg2k tiff test vim-syntax xinerama"
 
