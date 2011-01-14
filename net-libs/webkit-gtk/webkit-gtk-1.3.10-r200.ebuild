@@ -73,7 +73,7 @@ src_configure() {
 	use alpha && append-ldflags "-Wl,--no-relax"
 
 	# Sigbuses on SPARC with mcpu
-	use sparc && filter-flags "-mcpu=*" "-mtune=*"
+	use sparc && filter-flags "-mcpu=*" "-mvis" "-mtune=*"
 
 	local myconf
 
