@@ -57,7 +57,7 @@ pkg_setup() {
 		$(use_enable debug)
 		$(use_with opengl gl)
 		$(use_enable pam locking)
-		--with-pam-prefix=/etc/pam.d
+		--with-pam-prefix=/etc
 		--with-xf86gamma-ext
 		--with-kbd-layout-indicator
 		--with-xscreensaverdir=/usr/share/xscreensaver/config
