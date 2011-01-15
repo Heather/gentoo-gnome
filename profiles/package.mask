@@ -26,6 +26,7 @@
 >=gnome-extra/zenity-2.91
 >=net-wireless/gnome-bluetooth-2.91
 >=sys-apps/gnome-disk-utility-2.32.1
+>=x11-plugins/pidgin-libnotify-0.14-r300
 
 # Gilles Dartiguelongue <eva@gentoo.org> (10 Oct 2010)
 # BEGIN GNOME 2.32 mask
