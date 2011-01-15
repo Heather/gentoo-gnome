@@ -1,0 +1,50 @@
+From 68459b6b864ad45a842bfd1bdc80f126829ef596 Mon Sep 17 00:00:00 2001
+From: Dan Williams <dcbw@redhat.com>
+Date: Fri, 05 Nov 2010 18:26:49 +0000
+Subject: core: fixes for libnotify >= 0.7 (bgo #632327)
+
+---
+diff --git a/configure.ac b/configure.ac
+index acb39a2..f8d6819 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -117,6 +117,12 @@ esac
+ 
+ AM_CONDITIONAL(HAVE_GBT, test x"$have_gbt" = "xyes")
+ 
++# Check for libnotify >= 0.7
++PKG_CHECK_MODULES(LIBNOTIFY_07, [libnotify >= 0.7], [have_libnotify_07=yes],[have_libnotify_07=no])
++if test x"$have_libnotify_07" = "xyes"; then
++	AC_DEFINE(HAVE_LIBNOTIFY_07, 1, [Define if you have libnotify 0.7 or later])
++fi
++
+ AC_PATH_PROG(GLIB_GENMARSHAL, glib-genmarshal)
+ 
+ dnl GConf stuff
+diff --git a/src/applet.c b/src/applet.c
+index e451f75..2d7835e 100644
+--- a/src/applet.c
++++ b/src/applet.c
+@@ -622,12 +622,18 @@ applet_do_notify (NMApplet *applet,
+ 	escaped = utils_escape_notify_message (message);
+ 	notify = notify_notification_new (summary,
+ 	                                  escaped,
+-	                                  icon ? icon : GTK_STOCK_NETWORK,
+-	                                  NULL);
++	                                  icon ? icon : GTK_STOCK_NETWORK
++#if HAVE_LIBNOTIFY_07
++	                                  );
++#else
++	                                  , NULL);
++#endif
+ 	g_free (escaped);
+ 	applet->notification = notify;
+ 
++#if !HAVE_LIBNOTIFY_07
+ 	notify_notification_attach_to_status_icon (notify, applet->status_icon);
++#endif
+ 	notify_notification_set_urgency (notify, urgency);
+ 	notify_notification_set_timeout (notify, NOTIFY_EXPIRES_DEFAULT);
+ 
+--
+cgit v0.8.3.1
