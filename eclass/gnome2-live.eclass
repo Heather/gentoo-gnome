@@ -68,18 +68,26 @@ gnome2-live_src_prepare() {
 	done
 
 	if grep -qe 'GTK_DOC' configure.*; then
+		ebegin "Running gtkdocize"
 		gtkdocize
+		eend $?
 	fi
 	if grep -qe 'GNOME_DOC_INIT' configure.*; then
+		ebegin "Running gnome-doc-common"
 		gnome-doc-common
+		eend $?
+		ebegin "Running gnome-doc-prepare --automake"
 		gnome-doc-prepare --automake
+		eend $?
 	fi
 	if grep -qe "IT_PROG_INTLTOOL" -e "AC_PROG_INTLTOOL" configure.*; then
 		if grep -qe "AC_PROG_INTLTOOL" configure.*; then
 			eqawarn "This package is using deprecated AC_PROG_INTLTOOL macro."
 			eqawarn "Please fill a bug to the upstream of this package."
 		fi
+		ebegin "Running intltoolize --force"
 		intltoolize --force
+		eend $?
 	fi
 	if test -e m4; then
 		AT_M4DIR=m4 eautoreconf
