@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libgweather/libgweather-2.30.3.ebuild,v 1.3 2010/11/14 23:05:07 eva Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -19,7 +19,7 @@ IUSE="+introspection doc"
 # get libsoup-gnome installed by the time ${P} is built
 #
 # Need libgweather:2 for the icons, see src_install below
-RDEPEND=">=x11-libs/gtk+-2.90.0:3[introspection]
+RDEPEND=">=x11-libs/gtk+-2.90.0:3
 	>=dev-libs/glib-2.13
 	>=gnome-base/gconf-2.8
 	>=net-libs/libsoup-gnome-2.25.1:2.4
@@ -36,7 +36,7 @@ DEPEND="${RDEPEND}
 	>=dev-util/gtk-doc-am-1.9
 	sys-devel/gettext
 	doc? ( >=dev-util/gtk-doc-1.9 )"
-PDEPEND="dev-libs/libgweather:2"
+
 DOCS="AUTHORS ChangeLog MAINTAINERS NEWS"
 
 pkg_setup() {
@@ -45,16 +45,4 @@ pkg_setup() {
 		--disable-maintainer-mode
 		--disable-all-translations-in-one-xml
 		--disable-static"
-}
-
-src_install() {
-	gnome2_src_install
-
-	# Don't install these here, libgweather:2 also provides them
-	# IMPORTANT: Don't let the files diverge
-	rm -rf "${D}"/usr/share/icons || die "Removing icons failed"
-	rm -rf "${D}"/usr/share/libgweather || die "Removing locations failed"
-	rm -rf "${D}"/etc/gconf/schemas/gweather.schemas || die "Removing schemas failed"
-
-	python_clean_installation_image
 }
