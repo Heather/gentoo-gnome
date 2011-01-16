@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libgweather/libgweather-2.30.3.ebuild,v 1.3 2010/11/14 23:05:07 eva Exp $
+# $Header: $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -33,7 +33,6 @@ DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.19
 	>=dev-util/gtk-doc-am-1.9
 	doc? ( >=dev-util/gtk-doc-1.9 )"
-PDEPEND="dev-libs/libgweather:3"
 DOCS="AUTHORS ChangeLog MAINTAINERS NEWS"
 
 pkg_setup() {
@@ -55,14 +54,3 @@ src_prepare() {
 	eautoreconf
 }
 
-src_install() {
-	gnome2_src_install
-
-	# Don't install these here, libgweather:2 also provides them
-	# IMPORTANT: Don't let the files diverge
-	rm -rf "${D}"/usr/share/icons || die "Removing icons failed"
-	rm -rf "${D}"/usr/share/libgweather || die "Removing locations failed"
-	rm -rf "${D}"/etc/gconf/schemas/gweather.schemas || die "Removing schemas failed"
-
-	python_clean_installation_image
-}
