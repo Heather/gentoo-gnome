@@ -24,7 +24,7 @@ RDEPEND=">=dev-libs/glib-2.27.5
 	>=x11-libs/pango-1.1.2
 	>=x11-libs/gtk+-2.99.0:3[introspection?]
 	>=dev-libs/libxml2-2.4.7
-	>=gnome-base/gconf-2.0[introspection?]
+	>=gnome-base/gconf-2.0
 	>=gnome-base/gnome-desktop-2.91.2:3
 
 	gnome-base/gsettings-desktop-schemas
