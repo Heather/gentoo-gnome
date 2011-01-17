@@ -44,7 +44,6 @@
 >=dev-libs/libunique-2.90
 >=media-video/totem-2.90
 >=www-client/epiphany-2.31
->=x11-libs/gtksourceview-2.90
 # END GNOME 3.0 mask
 
 # Arun Raghavan <ford_prefect@gentoo.org> (10 Sep 2010)

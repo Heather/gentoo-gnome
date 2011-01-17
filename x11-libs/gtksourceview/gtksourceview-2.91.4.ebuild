@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/gtksourceview/gtksourceview-2.10.4.ebuild,v 1.1 2010/06/23 12:08:34 pacho Exp $
 
@@ -12,10 +12,16 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2"
 SLOT="3.0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc glade +introspection"
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+	KEYWORDS=""
+else
+	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+fi
 
-RDEPEND=">=x11-libs/gtk+-2.91:3[introspection?]
+# Note: has native OSX support, prefix teams, attack!
+RDEPEND=">=x11-libs/gtk+-2.99.0:3[introspection?]
 	>=dev-libs/libxml2-2.6
 	>=dev-libs/glib-2.14
 	glade? ( >=dev-util/glade-3.2 )
@@ -24,12 +30,14 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/intltool-0.40
 	>=dev-util/pkgconfig-0.9
-	doc? ( >=dev-util/gtk-doc-1 )"
+	doc? ( >=dev-util/gtk-doc-1.11 )"
 
 DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README"
 
 pkg_config() {
 	G2CONF="${G2CONF}
+		--disable-deprecations
+		--enable-completion-providers
 		$(use_enable glade glade-catalog)
 		$(use_enable introspection)"
 }
