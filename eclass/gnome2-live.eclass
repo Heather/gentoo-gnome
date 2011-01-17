@@ -32,7 +32,8 @@ DEPEND="${DEPEND}
 	app-text/gnome-doc-utils
 	dev-util/gtk-doc
 	dev-util/intltool
-	gnome-base/gnome-common"
+	gnome-base/gnome-common
+	sys-devel/gettext"
 
 # Extra options passed to elibtoolize
 ELTCONF=${ELTCONF:-}
@@ -73,8 +74,10 @@ gnome2-live_src_prepare() {
 		mkdir -p "$i"
 	done
 
+	# We don't run gettextize because that does too much stuff
 	if grep -qe 'GETTEXT' configure.*; then
 		test -e config.rpath || echo > config.rpath
+		test -e ABOUT-NLS || cp ${ROOT}/usr/share/gettext/ABOUT-NLS .
 	fi
 
 	if grep -qe 'GTK_DOC' configure.*; then
