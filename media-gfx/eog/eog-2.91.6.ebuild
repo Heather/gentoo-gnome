@@ -20,7 +20,7 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 fi
 
-RDEPEND=">=x11-libs/gtk+-2.91.7:3[jpeg?,tiff?]
+RDEPEND=">=x11-libs/gtk+-2.91.7:3[introspection?,jpeg?,tiff?]
 	>=dev-libs/glib-2.25.15
 	>=dev-libs/libxml2-2
 	>=dev-libs/libpeas-0.7.0[gtk]
