@@ -29,10 +29,10 @@ EXPORT_FUNCTIONS ${EXPORTED_FUNCTIONS}
 # dev-util/intltool for intltoolize
 # gnome-base/gnome-common for GNOME_COMMON_INIT
 DEPEND="${DEPEND}
-	gnome-base/gnome-common
 	app-text/gnome-doc-utils
 	dev-util/gtk-doc
-	dev-util/intltool"
+	dev-util/intltool
+	gnome-base/gnome-common"
 
 # Extra options passed to elibtoolize
 ELTCONF=${ELTCONF:-}
@@ -72,6 +72,10 @@ gnome2-live_src_prepare() {
 	for i in "${macro_dirs[@]}"; do
 		mkdir -p "$i"
 	done
+
+	if grep -qe 'GETTEXT' configure.*; then
+		test -e config.rpath || echo > config.rpath
+	fi
 
 	if grep -qe 'GTK_DOC' configure.*; then
 		ebegin "Running gtkdocize"
