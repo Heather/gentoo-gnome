@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-text/evince/evince-2.32.0.ebuild,v 1.2 2010/12/07 19:38:52 eva Exp $
 
@@ -12,9 +12,13 @@ HOMEPAGE="http://www.gnome.org/projects/evince/"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~x64-solaris"
-
-IUSE="dbus debug djvu doc dvi gnome gnome-keyring +introspection nautilus t1lib tiff"
+IUSE="dbus debug djvu doc dvi gnome-keyring +introspection nautilus t1lib tiff"
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+	KEYWORDS=""
+else
+	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~x64-solaris"
+fi
 
 # Since 2.26.2, can handle poppler without cairo support. Make it optional ?
 # not mature enough
@@ -29,15 +33,14 @@ RDEPEND="
 		>=x11-themes/gnome-icon-theme-2.17.1
 		>=x11-themes/hicolor-icon-theme-0.10 )
 	>=x11-libs/cairo-1.10.0
-	>=app-text/poppler-0.14[cairo]
+	>=app-text/poppler-0.16[cairo]
 	djvu? ( >=app-text/djvu-3.5.17 )
 	dvi? (
 		virtual/tex-base
 		t1lib? ( >=media-libs/t1lib-5.0.0 ) )
-	gnome? ( >=gnome-base/gconf-2[introspection?] )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-2.22.0 )
 	introspection? ( >=dev-libs/gobject-introspection-0.6 )
-	nautilus? ( >=gnome-base/nautilus-2.10[introspection?] )
+	nautilus? ( >=gnome-base/nautilus-2.91.4[introspection?] )
 	tiff? ( >=media-libs/tiff-3.6 )
 "
 DEPEND="${RDEPEND}
@@ -62,6 +65,8 @@ pkg_setup() {
 	#
 	# FIXME: XPS support needs >=libgxps-0.0.1
 	G2CONF="${G2CONF}
+		--disable-maintainer-mode
+		--disable-schemas-compile
 		--disable-scrollkeeper
 		--disable-static
 		--disable-tests
@@ -71,11 +76,9 @@ pkg_setup() {
 		--with-smclient=xsmp
 		--with-platform=gnome
 		--enable-help
-		--disable-maintainer-mode
 		$(use_enable dbus)
 		$(use_enable djvu)
 		$(use_enable dvi)
-		$(use_with gnome gconf)
 		$(use_with gnome-keyring keyring)
 		$(use_enable introspection)
 		$(use_enable nautilus)
@@ -86,17 +89,18 @@ pkg_setup() {
 }
 
 src_prepare() {
-	gnome2_src_prepare
-
-	# Fix intltoolize broken file, see upstream #577133
-	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in \
-		|| die "intltoolize sed failed"
-
 	# Do not depend on gnome-icon-theme, bug #326855
-	sed 's/gnome-icon-theme//' -i configure.ac configure || die "sed failed"
+	sed 's/gnome-icon-theme//' -i configure.ac || die "sed failed"
 
 	# Fix .desktop file so menu item shows up
 	epatch "${FILESDIR}"/${PN}-0.7.1-display-menu.patch
+
+	# Fix building of EvinceView-3.0.gir, needs eautoreconf
+	epatch "${FILESDIR}"/${PN}-2.91.5-fix-evinceview-introspection.patch
+
+	[[ ${PV} != 9999 ]] && eautoreconf
+
+	gnome2_src_prepare
 }
 
 src_install() {

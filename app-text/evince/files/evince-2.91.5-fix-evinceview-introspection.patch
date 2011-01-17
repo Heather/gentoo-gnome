@@ -1,0 +1,18 @@
+Fix building of EvinceView-3.0.gir
+
+* Without the library-path directive, it cannot find libevdocument3
+* The devs missed it because it tries to pick up the system libevdocument3
+  - That's wrong too, because it'll build the current version's introspection
+    against the previous version's library, etc.
+
+---
+--- libview/Makefile.am
++++ libview/Makefile.am
+@@ -122,6 +122,7 @@
+ 	$(AM_V_GEN) PKG_CONFIG_PATH=$(top_builddir):$$PKG_CONFIG_PATH \
+ 	$(G_IR_SCANNER) -v --namespace EvinceView \
+ 	--add-include-path=$(top_builddir)/libdocument \
++	--library-path=$(top_builddir)/libdocument \
+ 	--strip-prefix=Ev \
+ 	--nsversion=$(EV_API_VERSION) \
+ 	--include=GLib-2.0 \
