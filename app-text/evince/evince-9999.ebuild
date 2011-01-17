@@ -26,6 +26,7 @@ RDEPEND="
 	>=app-text/libspectre-0.2.0
 	>=dev-libs/glib-2.25.11:2
 	>=dev-libs/libxml2-2.5
+	>=x11-libs/gdk-pixbuf-2.22:2[introspection?]
 	>=x11-libs/gtk+-2.91.7:3[introspection?]
 	>=x11-libs/libSM-1
 	gnome-base/gsettings-desktop-schemas
@@ -40,7 +41,7 @@ RDEPEND="
 		t1lib? ( >=media-libs/t1lib-5.0.0 ) )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-2.22.0 )
 	introspection? ( >=dev-libs/gobject-introspection-0.6 )
-	nautilus? ( >=gnome-base/nautilus-2.91.4[introspection?] )
+	nautilus? ( >=gnome-base/nautilus-2.10[introspection?] )
 	tiff? ( >=media-libs/tiff-3.6 )
 "
 DEPEND="${RDEPEND}

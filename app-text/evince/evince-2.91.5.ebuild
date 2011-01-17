@@ -26,6 +26,7 @@ RDEPEND="
 	>=app-text/libspectre-0.2.0
 	>=dev-libs/glib-2.25.11:2
 	>=dev-libs/libxml2-2.5
+	>=x11-libs/gdk-pixbuf-2.22:2[introspection?]
 	>=x11-libs/gtk+-2.91.7:3[introspection?]
 	>=x11-libs/libSM-1
 	gnome-base/gsettings-desktop-schemas
