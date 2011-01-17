@@ -41,7 +41,6 @@
 # BEGIN GNOME 3.0 mask
 # NOTE: remove stuff from the mask when bumped to latest 2.91.x (nirbheek)
 >=dev-libs/libunique-2.90
->=media-video/totem-2.90
 >=www-client/epiphany-2.31
 # END GNOME 3.0 mask
 
