@@ -49,7 +49,7 @@ pkg_setup() {
 		$(use_enable test tests)
 		$(use_enable pam)
 		$(use_with pam pam-dir $(getpam_mod_dir))
-		--with-root-certs=/etc/ssl/certs/
+		--with-root-certs=${ROOT}/etc/ssl/certs/
 		--enable-acl-prompts
 		--enable-ssh-agent
 		--enable-gpg-agent
