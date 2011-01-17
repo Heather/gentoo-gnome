@@ -1,0 +1,12 @@
+diff '--exclude-from=/home/dang/.scripts/diffrc' -up -ruN pygobject-2.26.0.orig/gi/pygi.h pygobject-2.26.0/gi/pygi.h
+--- pygobject-2.26.0.orig/gi/pygi.h	2010-09-14 11:53:21.000000000 -0400
++++ pygobject-2.26.0/gi/pygi.h	2010-11-08 08:16:13.360808932 -0500
+@@ -152,7 +152,7 @@ static inline PyObject *
+ pygi_get_property_value (PyGObject *instance,
+                          const gchar *attr_name)
+ {
+-    return -1;
++    return NULL;
+ }
+ 
+ static inline gint
