@@ -12,7 +12,8 @@ HOMEPAGE="http://live.gnome.org/dconf"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-IUSE="doc vala"
+#IUSE="doc vala"
+IUSE="doc"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
@@ -25,20 +26,23 @@ RDEPEND=">=dev-libs/glib-2.25.16
 	>=dev-libs/libxml2-2.7.7
 	x11-libs/gtk+:3"
 DEPEND="${RDEPEND}
-	vala? ( >=dev-lang/vala-0.11.4:0.11 )
+	>=dev-lang/vala-0.11.4:0.12
 	doc? ( >=dev-util/gtk-doc-1.15 )"
+#vala? ( >=dev-lang/vala-0.11.4:0.12 )
 
 src_prepare() {
 	G2CONF="${G2CONF}
-		$(use_enable vala)
 		VALAC=$(type -p valac-0.12)"
+		#$(use_enable vala)
 
 	# This needs eautoreconf
+	# XXX: file a bug for this
 	sed -e 's:^include gtk-doc.make:include $(top_srcdir)/gtk-doc.make:g' \
 		-i docs/Makefile.am || die "Fixing gtk-doc.make failed"
 
 	# Fix vala automagic support, upstream bug #634171
-	epatch "${FILESDIR}/${PN}-automagic-vala.patch"
+	# FIXME: patch doesn't actually work, forcing vala support above
+	#epatch "${FILESDIR}/${PN}-automagic-vala.patch"
 
 	[[ ${PV} != 9999 ]] && AT_M4DIR=. eautoreconf
 
