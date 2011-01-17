@@ -48,11 +48,6 @@
 # Development version of sysprof.
 =dev-util/sysprof-1.1*
 
-# Nirbheek Chauhan <nirbheek@gentoo.org> (9 Jul 2010)
-# New rhythmbox needs libdmapsharing with USE=daap
-# also uses >=dev-libs/glib-2.25.6
-=media-sound/rhythmbox-0.13*
-
 # Arun Raghavan <ford_prefect@gentoo.org> (23 Jun 2010)
 # We don't actually want gir-repository being used.
 dev-libs/gir-repository
