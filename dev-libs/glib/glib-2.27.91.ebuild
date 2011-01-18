@@ -36,7 +36,7 @@ PDEPEND="introspection? ( dev-libs/gobject-introspection )
 # XXX: Consider adding test? ( sys-devel/gdb ); assert-msg-test tries to use it
 
 src_prepare() {
-	gnome2_src_prepare
+	[[ ${PV} = 9999 ]] && gnome2-live_src_prepare
 	if use ia64 ; then
 		# Only apply for < 4.1
 		local major=$(gcc-major-version)
@@ -107,6 +107,8 @@ src_install() {
 	# Don't install gdb python macros, bug 291328
 	rm -rf "${D}/usr/share/gdb/" "${D}/usr/share/glib-2.0/gdb/"
 
+	# This is there for git snapshots and the live ebuild, bug 351966
+	emake README || die 
 	dodoc AUTHORS ChangeLog* NEWS* README || die "dodoc failed"
 
 	insinto /usr/share/bash-completion
