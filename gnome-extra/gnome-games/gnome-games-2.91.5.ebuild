@@ -34,18 +34,19 @@ RDEPEND="
 	>=x11-libs/gtk+-2.90:3
 	x11-libs/libSM
 
-	sound? ( media-libs/libcanberra[gtk3] )
-	guile? ( >=dev-scheme/guile-1.6.5[deprecated,regex] )
 	artworkextra? ( gnome-extra/gnome-games-extra-data )
-	opengl? (
-		dev-python/pygtkglext
-		>=dev-python/pyopengl-3 )
 	clutter? (
 		>=dev-libs/gobject-introspection-0.6.3
 		>=x11-libs/gtk+-2.16:2[introspection]
 		>=gnome-base/gconf-2.31.1[introspection]
 		>=media-libs/clutter-gtk-0.91.6:1.0[introspection]
 		seed? ( dev-libs/seed ) )
+	guile? ( >=dev-scheme/guile-1.6.5[deprecated,regex] )
+	introspection? ( >=dev-libs/gobject-introspection-0.6.3 )
+	opengl? (
+		dev-python/pygtkglext
+		>=dev-python/pyopengl-3 )
+	sound? ( media-libs/libcanberra[gtk3] )
 	!games-board/glchess"
 
 DEPEND="${RDEPEND}
@@ -73,13 +74,17 @@ pkg_setup() {
 	# create the games user / group
 	games_pkg_setup
 
-	# Staging games are needed for sudoku, glchess, swell-foop, and lightsoff
 	G2CONF="${G2CONF}
-		$(use_enable sound)
-		$(use_enable introspection)
-		$(use_enable clutter introspection)
 		--disable-maintainer-mode
 		--disable-schemas-compile
+		$(use_enable sound)
+		$(use_enable introspection)"
+	
+	# Should be after $(use_enable introspection), but before --enable-omitgames
+	use clutter && G2CONF="${G2CONF} --enable-introspection"
+
+	# Staging games are needed for sudoku, glchess, swell-foop, and lightsoff
+	G2CONF="${G2CONF}
 		--enable-staging
 		--with-scores-group=${GAMES_GROUP}
 		--with-platform=gnome
@@ -104,7 +109,7 @@ pkg_setup() {
 	fi
 
 	if ! use guile; then
-		ewarn "USE='-guile' => Aisleriot won't be installed"
+		ewarn "USE='-guile' => aisleriot won't be installed"
 		_omitgame aisleriot
 	fi
 
@@ -119,6 +124,9 @@ src_prepare() {
 
 	# TODO: File upstream bug for this
 	epatch "${FILESDIR}/${PN}-2.32.1-fix-conditional-ac-prog-cxx.patch"
+
+	# Without this, --enable-staging enables all those games unconditionally
+	epatch "${FILESDIR}/${PN}-fix-staging-games.patch"
 
 	eautoreconf
 
