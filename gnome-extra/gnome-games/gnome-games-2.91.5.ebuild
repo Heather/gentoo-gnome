@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/gnome-games/gnome-games-2.30.1.ebuild,v 1.1 2010/06/13 21:47:18 pacho Exp $
 
@@ -16,7 +16,7 @@ HOMEPAGE="http://live.gnome.org/GnomeGames/"
 LICENSE="GPL-2 GPL-3 FDL-1.1"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="artworkextra +clutter guile opengl seed +sound test"
+IUSE="artworkextra +clutter guile +introspection opengl seed +sound test"
 
 RDEPEND="
 	>=dev-games/libggz-0.0.14
@@ -29,12 +29,12 @@ RDEPEND="
 	>=dev-python/pygtk-2.14
 	>=dev-python/pycairo-1
 	>=gnome-base/gconf-2.31.1
-	>=gnome-base/librsvg-2.14
+	>=gnome-base/librsvg-2.32
 	>=x11-libs/cairo-1
-	>=x11-libs/gtk+-2.16:2
+	>=x11-libs/gtk+-2.90:3
 	x11-libs/libSM
 
-	sound? ( media-libs/libcanberra[gtk] )
+	sound? ( media-libs/libcanberra[gtk3] )
 	guile? ( >=dev-scheme/guile-1.6.5[deprecated,regex] )
 	artworkextra? ( gnome-extra/gnome-games-extra-data )
 	opengl? (
@@ -44,7 +44,7 @@ RDEPEND="
 		>=dev-libs/gobject-introspection-0.6.3
 		>=x11-libs/gtk+-2.16:2[introspection]
 		>=gnome-base/gconf-2.31.1[introspection]
-		>=media-libs/clutter-gtk-0.10.2[introspection]
+		>=media-libs/clutter-gtk-0.91.6:1.0[introspection]
 		seed? ( dev-libs/seed ) )
 	!games-board/glchess"
 
@@ -73,15 +73,19 @@ pkg_setup() {
 	# create the games user / group
 	games_pkg_setup
 
+	# Staging games are needed for sudoku, glchess, swell-foop, and lightsoff
 	G2CONF="${G2CONF}
 		$(use_enable sound)
 		$(use_enable introspection)
 		$(use_enable clutter introspection)
+		--disable-maintainer-mode
+		--disable-schemas-compile
+		--enable-staging
 		--with-scores-group=${GAMES_GROUP}
 		--with-platform=gnome
 		--with-card-theme-formats=default
 		--with-smclient
-		--with-gtk=2.0
+		--with-gtk=3.0
 		--enable-omitgames=none" # This line should be last for _omitgame
 
 	# Needs seed, always disable till we can have that
@@ -114,7 +118,7 @@ src_prepare() {
 	gnome2_src_prepare
 
 	# TODO: File upstream bug for this
-	epatch "${FILESDIR}/${P}-fix-conditional-ac-prog-cxx.patch"
+	epatch "${FILESDIR}/${PN}-2.32.1-fix-conditional-ac-prog-cxx.patch"
 
 	eautoreconf
 
