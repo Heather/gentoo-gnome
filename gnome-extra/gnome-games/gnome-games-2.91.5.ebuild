@@ -31,18 +31,20 @@ RDEPEND="
 	>=gnome-base/gconf-2.31.1
 	>=gnome-base/librsvg-2.32
 	>=x11-libs/cairo-1
-	>=x11-libs/gtk+-2.90:3
+	>=x11-libs/gtk+-2.90:3[introspection?]
 	x11-libs/libSM
 
 	artworkextra? ( gnome-extra/gnome-games-extra-data )
 	clutter? (
 		>=dev-libs/gobject-introspection-0.6.3
-		>=x11-libs/gtk+-2.16:2[introspection]
+		>=x11-libs/gtk+-2.90:3[introspection]
 		>=gnome-base/gconf-2.31.1[introspection]
 		>=media-libs/clutter-gtk-0.91.6:1.0[introspection]
 		seed? ( dev-libs/seed ) )
 	guile? ( >=dev-scheme/guile-1.6.5[deprecated,regex] )
-	introspection? ( >=dev-libs/gobject-introspection-0.6.3 )
+	introspection? (
+		>=dev-libs/gobject-introspection-0.6.3
+		media-libs/clutter:1.0[introspection] )
 	opengl? (
 		dev-python/pygtkglext
 		>=dev-python/pyopengl-3 )
