@@ -5,7 +5,7 @@
 EAPI="2"
 GCONF_DEBUG="no"
 
-inherit eutils gnome2 virtualx
+inherit autotools eutils gnome2 virtualx
 
 DESCRIPTION="A file manager for the GNOME desktop"
 HOMEPAGE="http://www.gnome.org/projects/nautilus/"
@@ -80,6 +80,9 @@ src_prepare() {
 
 	# Fix nautilus flipping-out with --no-desktop -- bug 266398
 	#epatch "${FILESDIR}/${PN}-2.27.4-change-reg-desktop-file-with-no-desktop.patch"
+
+	epatch "${FILESDIR}/${P}-missing-conditional.patch"
+	eautoreconf
 }
 
 src_test() {

@@ -1,0 +1,23 @@
+From f2533adf30822d3839b67c5f81e410b5e212f7a7 Mon Sep 17 00:00:00 2001
+From: Maciej Piechotka <uzytkownik2@gmail.com>
+Date: Tue, 11 Jan 2011 17:13:29 +0000
+Subject: Fix handling of AM_CONDITIONAL
+
+---
+diff --git a/configure.in b/configure.in
+index 2a51405..6167a92 100644
+--- a/configure.in
++++ b/configure.in
+@@ -116,9 +116,9 @@ AC_ARG_ENABLE(nst_extension,
+ 	AC_HELP_STRING([--disable-nst-extension],
+ 			[build without nautilus-sendto extension]))
+ if test "x$enable_nst_extension" != "xno"; then
+-	AM_CONDITIONAL(ENABLE_NST_EXTENSION, true)
+ 	enable_nst_extension=yes
+ fi
++AM_CONDITIONAL(ENABLE_NST_EXTENSION, test "x$enable_nst_extension" != "xno")
+ 
+ dnl ==========================================================================
+ 
+--
+cgit v0.8.3.1
