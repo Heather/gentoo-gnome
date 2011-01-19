@@ -19,7 +19,7 @@ IUSE="doc"
 # WTF: pulseaudio is compulsary now for gnome-volume-control
 # XXX: libXft is checked for, but not used anywhere?
 # FIXME: Cheese is optional, but automagic => force-enabled
-RDEPEND="
+COMMON_DEPEND="
 	>=dev-libs/glib-2.25.11
 	>=x11-libs/gdk-pixbuf-2.23.0
 	>=x11-libs/gtk+-2.91.6:3
@@ -49,9 +49,10 @@ RDEPEND="
 	>=x11-libs/libXi-1.2
 
 	!!gnome-extra/gnome-media[pulseaudio]
-	!!<gnome-extra/gnome-media-2.32.0-r300
-"
-DEPEND="${RDEPEND}
+	!!<gnome-extra/gnome-media-2.32.0-r300"
+RDEPEND="${COMMON_DEPEND}
+	sys-apps/accountsservice"
+DEPEND="${COMMON_DEPEND}
 	x11-proto/xproto
 	x11-proto/xf86miscproto
 	x11-proto/kbproto
