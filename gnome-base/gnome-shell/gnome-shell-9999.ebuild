@@ -22,15 +22,16 @@ else
 fi
 
 # gnome-desktop-2.91.2 is needed due to header changes, db82a33 in gnome-desktop
-# FIXME: Automagic gnome-bluetooth[introspection] support
+# FIXME: Automagic gnome-bluetooth[introspection] support. Also gnome bug 637935
 COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	>=x11-libs/gtk+-2.91.7:3[introspection]
 	>=media-libs/clutter-1.5.8[introspection]
 	>=gnome-base/gnome-desktop-2.91.2:3
-	>=dev-libs/gobject-introspection-0.6.11
+	>=dev-libs/gobject-introspection-0.10.1
 
 	dev-libs/dbus-glib
-	>=dev-libs/gjs-0.7
+	>=dev-libs/gjs-0.7.8
+	dev-libs/libxml2:2
 	x11-libs/pango[introspection]
 	dev-libs/libcroco:0.6
 
@@ -41,6 +42,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	>=media-libs/gst-plugins-base-0.10.16
 	media-libs/libcanberra
 	media-sound/pulseaudio
+	net-wireless/gnome-bluetooth[introspection]
 
 	x11-libs/startup-notification
 	x11-libs/libXfixes
@@ -48,11 +50,13 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	x11-apps/mesa-progs
 
 	dev-python/dbus-python"
-# Runtime-only deps are probably incomplete
+# Runtime-only deps are probably incomplete and approximate
 RDEPEND="${COMMON_DEPEND}
 	x11-libs/gdk-pixbuf[introspection]
 	>=gnome-base/dconf-0.4.1
-	>=gnome-base/gnome-settings-daemon-2.91"
+	>=gnome-base/gnome-settings-daemon-2.91
+	>=gnome-base/gnome-control-center-2.91
+	>=gnome-base/libgnomekbd-2.91.4[introspection]"
 DEPEND="${COMMON_DEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.22

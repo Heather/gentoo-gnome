@@ -22,7 +22,7 @@ else
 fi
 
 # gnome-desktop-2.91.2 is needed due to header changes, db82a33 in gnome-desktop
-# FIXME: Automagic gnome-bluetooth[introspection] support
+# FIXME: Automagic gnome-bluetooth[introspection] support. Also gnome bug 637935
 COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	>=x11-libs/gtk+-2.91.7:3[introspection]
 	>=media-libs/clutter-1.5.8[introspection]
@@ -41,6 +41,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	>=media-libs/gst-plugins-base-0.10.16
 	media-libs/libcanberra
 	media-sound/pulseaudio
+	net-wireless/gnome-bluetooth[introspection]
 
 	x11-libs/startup-notification
 	x11-libs/libXfixes
