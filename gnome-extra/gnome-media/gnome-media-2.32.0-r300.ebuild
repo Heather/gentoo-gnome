@@ -13,9 +13,17 @@ HOMEPAGE="http://ronald.bitfreak.net/gnome-media.php"
 LICENSE="LGPL-2 GPL-2 FDL-1.1"
 SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
-IUSE="pulseaudio"
+IUSE=""
 
-# FIXME: automagic dev-util/glade:3 support
+# NOTE: This package provides the following:
+#  * libgnome-media-profiles.so.0
+#  * gstreamer-properties
+#  * gnome-sound-recorder
+#  * gnome-audio-profiles
+# NOTE: It has /stopped/ providing the following:
+#  * gnome-volume-control (moved to gnome-control-center)
+#  * gstmixer (won't work under GNOME 3, even in classic-gnome)
+#  * gnome-audio-profile-properties (moved to libgnome-media-profiles)
 RDEPEND=">=dev-libs/glib-2.18.2:2
 	>=x11-libs/gtk+-2.18.0:2
 	>=gnome-base/gconf-2.6.1
@@ -24,7 +32,6 @@ RDEPEND=">=dev-libs/glib-2.18.2:2
 	>=media-libs/gst-plugins-good-0.10
 	>=dev-libs/libunique-1
 
-	pulseaudio? ( >=media-sound/pulseaudio-0.9.16[glib] )
 	>=media-libs/libcanberra-0.13[gtk]
 	dev-libs/libxml2
 	>=media-libs/gst-plugins-base-0.10.23:0.10
@@ -37,8 +44,6 @@ DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35.0"
 
 src_prepare() {
-	# FIXME: gstmix will not work with gnome-shell and will clash with g-v-c,
-	#        so disable it till we can figure out gnome-shell vs fallback etc.
 	G2CONF="${G2CONF}
 		--disable-static
 		--disable-scrollkeeper
@@ -46,7 +51,7 @@ src_prepare() {
 		--enable-gstprops
 		--enable-grecord
 		--enable-profiles
-		$(use_enable pulseaudio)
+		--disable-pulseaudio
 		--disable-gstmix"
 	DOCS="AUTHORS ChangeLog* NEWS MAINTAINERS README"
 
@@ -59,11 +64,9 @@ src_prepare() {
 src_install() {
 	gnome2_src_install
 
-	if ! use pulseaudio; then
-		# These files are now provided by gnome-control-center-2.91's sound applet
-		# These won't be used if gnome-volume-control is not installed
-		rm -v "${ED}"/usr/share/sounds/gnome/default/alerts/*.ogg || die
-	fi
+	# These files are now provided by gnome-control-center-2.91's sound applet
+	# These won't be used if gnome-volume-control is not installed
+	rm -v "${ED}"/usr/share/sounds/gnome/default/alerts/*.ogg || die
 }
 
 pkg_postinst() {
