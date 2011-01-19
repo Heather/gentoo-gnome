@@ -5,7 +5,7 @@
 EAPI="3"
 GCONF_DEBUG="yes"
 
-inherit eutils gnome2
+inherit autotools eutils gnome2
 
 DESCRIPTION="Simple document viewer for GNOME"
 HOMEPAGE="http://www.gnome.org/projects/evince/"
