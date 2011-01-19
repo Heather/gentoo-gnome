@@ -68,9 +68,8 @@ Split support for libsoup-gnome, original patch by Romain Perier.
  	PKG_CHECK_MODULES(LIBPROXY, libproxy-1.0, :, [AC_MSG_ERROR(dnl
  [Could not find libproxy:
  
-diff -Naur libsoup-2.33.5/libsoup/Makefile.am libsoup-2.33.5.new/libsoup/Makefile.am
---- libsoup-2.33.5/libsoup/Makefile.am	2011-01-07 22:58:42.000000000 +0530
-+++ libsoup-2.33.5.new/libsoup/Makefile.am	2011-01-19 05:13:36.446000077 +0530
+--- libsoup/Makefile.am
++++ libsoup/Makefile.am
 @@ -4,17 +4,18 @@
  LIBWS2_32 = -lws2_32
  endif
@@ -193,9 +192,8 @@ diff -Naur libsoup-2.33.5/libsoup/Makefile.am libsoup-2.33.5.new/libsoup/Makefil
  SoupGNOME_2_4_gir_SCANNERFLAGS = --identifier-prefix=Soup --symbol-prefix=soup --c-include "libsoup/soup-gnome.h"
  SoupGNOME_2_4_gir_INCLUDES = Soup-2.4
  SoupGNOME_2_4_gir_CFLAGS = $(INCLUDES)
-diff -Naur libsoup-2.33.5/Makefile.am libsoup-2.33.5.new/Makefile.am
---- libsoup-2.33.5/Makefile.am	2010-11-23 21:15:20.000000000 +0530
-+++ libsoup-2.33.5.new/Makefile.am	2011-01-19 05:15:05.685000082 +0530
+--- Makefile.am
++++ Makefile.am
 @@ -1,7 +1,11 @@
  ## Process this file with automake to produce Makefile.in
  ACLOCAL_AMFLAGS = -I m4
