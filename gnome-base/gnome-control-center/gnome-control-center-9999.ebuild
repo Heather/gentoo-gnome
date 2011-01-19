@@ -12,13 +12,19 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2"
 SLOT="2"
-KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 IUSE="doc"
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+	KEYWORDS=""
+else
+	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
+fi
 
 # TODO: appindicator
 # WTF: pulseaudio is compulsary now for gnome-volume-control
 # XXX: libXft is checked for, but not used anywhere?
-# FIXME: Cheese is optional, but automagic => force-enabled
+# FIXME: Cheese is optional, but automagic => force-enabled for now
+# FIXME: Cups is optional, but automagic => force-enabled for now
 # XXX: gnome-desktop-2.91.5 is needed for upstream commit c67f7efb
 COMMON_DEPEND="
 	>=dev-libs/glib-2.25.11
@@ -27,20 +33,23 @@ COMMON_DEPEND="
 	>=gnome-base/gsettings-desktop-schemas-0.1.3
 	>=gnome-base/gconf-2.0
 	>=dev-libs/dbus-glib-0.73
-	>=gnome-base/libgnomekbd-2.91.2
 	>=gnome-base/gnome-desktop-2.91.5:3
-	gnome-base/gnome-menus
 	>=gnome-base/gnome-settings-daemon-2.91.2
+	>=gnome-base/libgnomekbd-2.91.2
 
 	app-text/iso-codes
-	dev-libs/libxml2
+	dev-libs/libxml2:2
+	gnome-base/gnome-menus
+	gnome-base/libgtop:2
 	media-libs/fontconfig
+	media-libs/gstreamer:0.10
+	net-print/cups
+
 	>=media-libs/libcanberra-0.13[gtk3]
 	>=media-sound/pulseaudio-0.9.16
-	>=sys-power/upower-0.9.1
-	>=sys-auth/polkit-0.97
 	>=media-video/cheese-2.29.90
-	media-libs/gstreamer:0.10
+	>=sys-auth/polkit-0.97
+	>=sys-power/upower-0.9.1
 
 	x11-apps/xmodmap
 	x11-libs/libX11
