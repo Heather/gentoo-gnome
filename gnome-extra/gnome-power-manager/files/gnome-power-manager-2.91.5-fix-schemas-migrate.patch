@@ -1,0 +1,41 @@
+From 40f32d9a78c334605ee5ff0dced2c85b0e837f5c Mon Sep 17 00:00:00 2001
+From: Nirbheek Chauhan <nirbheek@gentoo.org>
+Date: Wed, 19 Jan 2011 20:44:58 +0530
+Subject: [PATCH] gschema.migrate: button keys moved to gnome-settings-daemon, fix typo
+
+* hibernate/power/suspend button keys moved to gnome-settings-daemon,
+  fix the migration schema to point there
+* Fix typo in brightness-ac schema key
+
+https://bugzilla.gnome.org/show_bug.cgi?id=639956
+---
+ data/org.gnome.power-manager.gschema.migrate |    9 +++++----
+ 1 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/data/org.gnome.power-manager.gschema.migrate b/data/org.gnome.power-manager.gschema.migrate
+index d767fe5..c562857 100644
+--- a/data/org.gnome.power-manager.gschema.migrate
++++ b/data/org.gnome.power-manager.gschema.migrate
+@@ -2,10 +2,7 @@
+ backlight-enable = /apps/gnome-power-manager/backlight/enable
+ backlight-battery-reduce = /apps/gnome-power-manager/backlight/battery_reduce
+ brightness-dim-battery = /apps/gnome-power-manager/backlight/brightness_dim_battery
+-brightness-ac" = /apps/gnome-power-manager/backlight/brightness_ac
+-button-suspend = /apps/gnome-power-manager/buttons/suspend
+-button-hibernate = /apps/gnome-power-manager/buttons/hibernate
+-button-power = /apps/gnome-power-manager/buttons/power
++brightness-ac = /apps/gnome-power-manager/backlight/brightness_ac
+ use-time-for-policy = /apps/gnome-power-manager/general/use_time_for_policy
+ lock-use-screensaver = /apps/gnome-power-manager/lock/use_screensaver_settings
+ lock-blank-screen = /apps/gnome-power-manager/lock/blank_screen
+@@ -37,3 +34,7 @@ time-action = /apps/gnome-power-manager/thresholds/time_action
+ enable-sound = /apps/gnome-power-manager/ui/enable_sound
+ show-actions = /apps/gnome-power-manager/ui/show_actions
+ icon-policy = /apps/gnome-power-manager/ui/icon_policy
++[org.gnome.settings-daemon.plugins.power]
++button-suspend = /apps/gnome-power-manager/buttons/suspend
++button-hibernate = /apps/gnome-power-manager/buttons/hibernate
++button-power = /apps/gnome-power-manager/buttons/power
+-- 
+1.7.3.4
+

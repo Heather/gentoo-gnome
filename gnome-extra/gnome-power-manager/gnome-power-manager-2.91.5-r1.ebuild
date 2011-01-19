@@ -12,8 +12,13 @@ HOMEPAGE="http://www.gnome.org/projects/gnome-power-manager/"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="doc test"
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+	KEYWORDS=""
+else
+	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+fi
 
 # FIXME: Interactive testsuite (upstream ? I'm so...pessimistic)
 RESTRICT="test"
@@ -56,17 +61,17 @@ DEPEND="${COMMON_DEPEND}
 # (files under ${S}/man).
 # docbook-xml-dtd-4.4 and -4.1.2 are used by the xml files under ${S}/docs.
 
-pkg_setup() {
+src_prepare() {
 	G2CONF="${G2CONF}
 		$(use_enable test tests)
 		$(use_enable doc docbook-docs)
 		--enable-compile-warnings=minimum
 		--disable-schemas-compile"
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
-}
 
-src_prepare() {
-	gnome2_src_prepare
+	# Should get merged soonish, remove from live version after that
+	# https://bugzilla.gnome.org/show_bug.cgi?id=639956
+	epatch "${FILESDIR}/${P}-fix-schemas-migrate.patch"
 
 	# Drop debugger CFLAGS from configure
 	sed -e 's:^CPPFLAGS="$CPPFLAGS -g"$::g' \
@@ -86,9 +91,13 @@ src_prepare() {
 			-i configure.ac configure || die "resolv sed failed"
 	fi
 
-	# FIXME: This is required to prevent maintainer mode after "debugger sed"
-	intltoolize --force --copy --automake || die "intltoolize failed"
-	eautoreconf
+	if [[ ${PV} != 9999 ]]; then
+		# FIXME: This is required to prevent maintainer mode after "debugger sed"
+		intltoolize --force --copy --automake || die "intltoolize failed"
+		eautoreconf
+	fi
+
+	gnome2_src_prepare
 }
 
 src_test() {
