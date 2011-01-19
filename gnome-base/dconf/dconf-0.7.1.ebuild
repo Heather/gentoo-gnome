@@ -36,19 +36,16 @@ src_prepare() {
 		VALAC=$(type -p valac-0.12)"
 		#$(use_enable vala)
 
-	# This needs eautoreconf
-	# XXX: file a bug for this
-	sed -e 's:^include gtk-doc.make:include $(top_srcdir)/gtk-doc.make:' \
-		-i docs/Makefile.am || die "Fixing gtk-doc.make failed"
+	if [[ ${PV} = 9999 ]]; then
+		# XXX: gtk-doc.make should be in top_srcdir -- file a bug for this
+		# Let's only do this in the live version to avoid gtkdocize in releases
+		sed -e 's:^include gtk-doc.make:include $(top_srcdir)/gtk-doc.make:' \
+			-i docs/Makefile.am || die "Fixing gtk-doc.make failed"
+	fi
 
 	# Fix vala automagic support, upstream bug #634171
 	# FIXME: patch doesn't actually work, forcing vala support above
 	#epatch "${FILESDIR}/${PN}-automagic-vala.patch"
-
-	if [[ ${PV} != 9999 ]]; then
-		gtkdocize
-		eautoreconf
-	fi
 
 	gnome2_src_prepare
 }
