@@ -16,7 +16,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebs
 
 IUSE="doc ipv6 elibc_FreeBSD"
 
-RDEPEND=">=dev-libs/glib-2.16:2
+COMMON_DEPEND=">=dev-libs/glib-2.16:2
 	>=x11-libs/gtk+-2.90.7:3
 	>=dev-libs/dbus-glib-0.76
 	>=gnome-base/gconf-2
@@ -31,7 +31,14 @@ RDEPEND=">=dev-libs/glib-2.16:2
 	x11-libs/libXext
 	x11-libs/libXtst
 	x11-apps/xdpyinfo"
-DEPEND="${RDEPEND}
+# Pure-runtime deps from the session files
+# Don't add nautilus because that has been removed in trunk
+# gnome-panel is used by classic-gnome
+RDEPEND="${COMMON_DEPEND}
+	gnome-base/gnome-panel
+	gnome-base/gnome-settings-daemon
+	gnome-base/gnome-shell"
+DEPEND="${COMMON_DEPEND}
 	>=dev-lang/perl-5
 	>=sys-devel/gettext-0.10.40
 	>=dev-util/pkgconfig-0.17
