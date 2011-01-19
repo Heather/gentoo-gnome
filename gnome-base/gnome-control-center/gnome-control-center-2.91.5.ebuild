@@ -19,6 +19,7 @@ IUSE="doc"
 # WTF: pulseaudio is compulsary now for gnome-volume-control
 # XXX: libXft is checked for, but not used anywhere?
 # FIXME: Cheese is optional, but automagic => force-enabled
+# XXX: gnome-desktop-2.91.5 is needed for upstream commit c67f7efb
 COMMON_DEPEND="
 	>=dev-libs/glib-2.25.11
 	>=x11-libs/gdk-pixbuf-2.23.0
@@ -27,7 +28,7 @@ COMMON_DEPEND="
 	>=gnome-base/gconf-2.0
 	>=dev-libs/dbus-glib-0.73
 	>=gnome-base/libgnomekbd-2.91.2
-	gnome-base/gnome-desktop:3
+	>=gnome-base/gnome-desktop-2.91.5:3
 	gnome-base/gnome-menus
 	>=gnome-base/gnome-settings-daemon-2.91.2
 
