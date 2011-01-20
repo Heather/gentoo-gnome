@@ -20,7 +20,7 @@ COMMON_DEPEND="
 	>=gnome-base/gconf-2
 	>=dev-libs/dbus-glib-0.78
 	>=sys-apps/dbus-1
-	>=media-libs/libcanberra-0.4[gtk]
+	>=media-libs/libcanberra-0.4[gtk3]
 	x11-libs/libwnck
 	x11-libs/libX11
 	x11-libs/libnotify"
