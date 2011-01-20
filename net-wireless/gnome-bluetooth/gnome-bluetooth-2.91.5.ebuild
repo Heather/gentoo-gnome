@@ -24,7 +24,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.7:2
 	>=x11-libs/gtk+-2.91.3:3[introspection?]
 	>=x11-libs/libnotify-0.7.0
 	>=dev-libs/dbus-glib-0.74
-	gnome-base/gnome-control-center
+	>=gnome-base/gnome-control-center-2.91
 
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 	nautilus? (
