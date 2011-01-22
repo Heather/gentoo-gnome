@@ -1,0 +1,34 @@
+From ba169973b875f90bf787158588ee4258b71a6ba6 Mon Sep 17 00:00:00 2001
+From: Sébastien Granjoux <seb.sfo@free.fr>
+Date: Thu, 13 Jan 2011 16:36:33 +0000
+Subject: Fix setup of 'shared flag' when opening connection
+
+The VncDisplay class forgot to pass the 'shared flag' onto
+the VncConnection class when establishing a connection
+---
+diff --git a/src/vncdisplay.c b/src/vncdisplay.c
+index deab4d8..f8ee9ea 100644
+--- a/src/vncdisplay.c
++++ b/src/vncdisplay.c
+@@ -1407,6 +1407,9 @@ gboolean vnc_display_open_fd(VncDisplay *obj, int fd)
+ 	if (vnc_connection_is_open(priv->conn))
+ 		return FALSE;
+ 
++	if (!vnc_connection_set_shared(priv->conn, priv->shared_flag))
++		return FALSE;
++
+ 	if (!vnc_connection_open_fd(priv->conn, fd))
+ 		return FALSE;
+ 
+@@ -1422,6 +1425,9 @@ gboolean vnc_display_open_host(VncDisplay *obj, const char *host, const char *po
+ 	if (vnc_connection_is_open(priv->conn))
+ 		return FALSE;
+ 
++	if (!vnc_connection_set_shared(priv->conn, priv->shared_flag))
++		return FALSE;
++
+ 	if (!vnc_connection_open_host(priv->conn, host, port))
+ 		return FALSE;
+ 
+--
+cgit v0.8.3.1

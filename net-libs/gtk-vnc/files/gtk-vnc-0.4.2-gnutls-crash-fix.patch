@@ -1,0 +1,62 @@
+From 5760a2a28d85cb79e39063cfd8ee8aee975caf24 Mon Sep 17 00:00:00 2001
+From: Daniel P. Berrange <dan@berrange.com>
+Date: Mon, 22 Nov 2010 21:44:56 +0000
+Subject: Avoid crash in TLS cleanup code on shutdown
+
+The gnutls_bye() method may try to send data on the socket todo
+graceful TLS shutdown. The priv->sock variable is possibly
+already NULL at this point if the close was triggered via the
+vnc_connection_shutdown() method. Change the latter so that
+it only calls g_socket_close, not actually free'ing the
+priv->sock object immediately. Also put sanity check code in
+the TLS push/pull functions to catch future bugs in this area
+---
+diff --git a/src/vncconnection.c b/src/vncconnection.c
+index 4a0c53c..433256a 100644
+--- a/src/vncconnection.c
++++ b/src/vncconnection.c
+@@ -939,6 +939,12 @@ static ssize_t vnc_connection_tls_push(gnutls_transport_ptr_t transport,
+ 	int ret;
+ 	GError *error = NULL;
+ 
++	if (!priv->sock) {
++		VNC_DEBUG("Unexpected TLS push on closed socket");
++		errno = EBADF;
++		return -1;
++	}
++
+ 	ret = g_socket_send(priv->sock, data, len, NULL, &error);
+ 	if (ret < 0) {
+ 		if (error) {
+@@ -962,6 +968,12 @@ static ssize_t vnc_connection_tls_pull(gnutls_transport_ptr_t transport,
+ 	int ret;
+ 	GError *error = NULL;
+ 
++	if (!priv->sock) {
++		VNC_DEBUG("Unexpected TLS pull on closed socket");
++		errno = EBADF;
++		return -1;
++	}
++
+ 	ret = g_socket_receive(priv->sock, data, len, NULL, &error);
+ 	if (ret < 0) {
+ 		if (error) {
+@@ -4461,11 +4473,12 @@ void vnc_connection_shutdown(VncConnection *conn)
+ 	VNC_DEBUG("Waking up couroutine to shutdown gracefully");
+ 	g_io_wakeup(&priv->wait);
+ 
+-	if (priv->sock) {
++	/* Closing the socket triggers an I/O error in the
++	 * event loop resulting...eventually.. in a call
++	 * to vnc_connection_close for full cleanup
++	 */
++	if (priv->sock)
+ 		g_socket_close(priv->sock, NULL);
+-		g_object_unref(priv->sock);
+-		priv->sock = NULL;
+-	}
+ }
+ 
+ gboolean vnc_connection_is_open(VncConnection *conn)
+--
+cgit v0.8.3.1
