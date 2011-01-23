@@ -3,8 +3,9 @@
 # $Header: $
 
 EAPI="3"
+PYTHON_DEPEND="2:2.4"
 
-inherit gnome.org flag-o-matic eutils libtool virtualx
+inherit eutils flag-o-matic gnome.org libtool virtualx autotools
 
 DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="http://www.gtk.org/"
@@ -16,7 +17,7 @@ SLOT="3"
 #  * http://blogs.gnome.org/kris/2010/12/29/gdk-3-0-on-mac-os-x/
 #  * http://mail.gnome.org/archives/gtk-devel-list/2010-November/msg00099.html
 # NOTE: Lots of aqua stuff in this ebuild is probably very broken
-IUSE="aqua cups debug doc +introspection jpeg jpeg2k tiff test vim-syntax xinerama"
+IUSE="aqua cups debug doc examples +introspection jpeg jpeg2k tiff test vim-syntax xinerama"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
@@ -24,7 +25,9 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 fi
 
+# NOTE: cairo[svg] dep is due to bug 291283 (not patched to avoid eautoreconf)
 RDEPEND="!aqua? (
+		x11-libs/libXrender
 		x11-libs/libX11
 		x11-libs/libXi
 		x11-libs/libXt
@@ -35,11 +38,11 @@ RDEPEND="!aqua? (
 		x11-libs/libXcomposite
 		x11-libs/libXdamage
 		>=x11-libs/cairo-1.10.0[X,svg]
-		>=x11-libs/gdk-pixbuf-2.21[X,introspection?,jpeg?,jpeg2k?,tiff?]
+		>=x11-libs/gdk-pixbuf-2.21:2[X,introspection?,jpeg?,jpeg2k?,tiff?]
 	)
 	aqua? (
 		>=x11-libs/cairo-1.10.0[aqua,svg]
-		>=x11-libs/gdk-pixbuf-2.21[introspection?,jpeg?,jpeg2k?,tiff?]
+		>=x11-libs/gdk-pixbuf-2.21:2[introspection?,jpeg?,jpeg2k?,tiff?]
 	)
 	xinerama? ( x11-libs/libXinerama )
 	>=dev-libs/glib-2.27.5
@@ -71,6 +74,15 @@ DEPEND="${RDEPEND}
 		media-fonts/font-cursor-misc )"
 PDEPEND="vim-syntax? ( app-vim/gtk-syntax )"
 
+strip_builddir() {
+	local rule=$1
+	shift
+	local directory=$1
+	shift
+	sed -e "s/^\(${rule} =.*\)${directory}\(.*\)$/\1\2/" -i $@ \
+		|| die "Could not strip director ${directory} from build."
+}
+
 src_prepare() {
 	# -O3 and company cause random crashes in applications. Bug #133469
 	replace-flags -O3 -O2
@@ -88,6 +100,16 @@ src_prepare() {
 		append-ldflags "-L${EPREFIX}/usr/lib/bind"
 	fi
 
+	if ! use test; then
+		# don't waste time building tests
+		strip_builddir SRC_SUBDIRS tests Makefile.am Makefile.in
+	fi
+
+	if ! use examples; then
+		# don't waste time building demos
+		strip_builddir SRC_SUBDIRS demos Makefile.am Makefile.in
+	fi
+
 	gnome2_src_prepare
 }
 
@@ -100,7 +122,7 @@ src_configure() {
 		$(use_enable introspection)
 		--disable-packagekit
 		--disable-papi"
-	
+
 	# XXX: Maybe with multi-backend we should enable x11 all the time?
 	if use aqua; then
 		myconf="${myconf} --enable-quartz-backend --disable-xinput"
@@ -124,7 +146,10 @@ src_compile() {
 
 src_test() {
 	unset DBUS_SESSION_BUS_ADDRESS
-	Xemake check || die "tests failed"
+	# Exporting HOME fixes tests using XDG directories spec since all defaults
+	# are based on $HOME. It is also backward compatible with functions not
+	# yet ported to this spec.
+	XDG_DATA_HOME="${T}" HOME="${T}" Xemake check || die "tests failed"
 }
 
 src_install() {
@@ -133,11 +158,11 @@ src_install() {
 	# see bug #133241
 	echo 'gtk-fallback-icon-theme = "gnome"' > "${T}/gtkrc"
 	insinto /etc/gtk-3.0
-	doins "${T}"/gtkrc
+	doins "${T}"/gtkrc || die "doins gtkrc failed"
 
 	# Enable xft in environment as suggested by <utx@gentoo.org>
 	echo "GDK_USE_XFT=1" > "${T}"/50gtk3
-	doenvd "${T}"/50gtk3
+	doenvd "${T}"/50gtk3 || die "doenvd failed"
 
 	dodoc AUTHORS ChangeLog* HACKING NEWS* README* || die "dodoc failed"
 
@@ -156,17 +181,12 @@ src_install() {
 
 pkg_postinst() {
 	local GTK3_MODDIR="${EROOT}usr/$(get_libdir)/gtk-3.0/3.0.0"
-	if [[ -d ${GTK3_MODDIR} ]]; then
-		gtk-query-immodules-3.0      > "${GTK3_MODDIR}/immodules.cache"
-	else
-		ewarn "The destination path ${GTK3_MODDIR} doesn't exist;"
-		ewarn "to complete the installation of GTK+, please create the"
-		ewarn "directory and then manually run:"
-		ewarn "  cd ${GTK3_MODDIR}"
-		ewarn "  gtk-query-immodules-3.0      > immodules.cache"
-	fi
+	gtk-query-immodules-3.0  > "${GTK3_MODDIR}/immodules.cache" \
+		|| ewarn "Failed to run gtk-query-immodules-3.0"
 
-	elog "Please install app-text/evince for print preview functionality."
-	elog "Alternatively, check \"gtk-print-preview-command\" documentation and"
-	elog "add it to your gtkrc."
+	if ! has_version "app-text/evince"; then
+		elog "Please install app-text/evince for print preview functionality."
+		elog "Alternatively, check \"gtk-print-preview-command\" documentation and"
+		elog "add it to your gtkrc."
+	fi
 }
