@@ -5,7 +5,7 @@
 EAPI="3"
 PYTHON_DEPEND="2:2.4"
 
-inherit eutils flag-o-matic gnome.org libtool virtualx autotools
+inherit eutils flag-o-matic gnome.org gnome2-utils libtool virtualx autotools
 
 DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="http://www.gtk.org/"
@@ -179,7 +179,13 @@ src_install() {
 	done
 }
 
+pkg_preinst() {
+	gnome2_schemas_savelist
+}
+
 pkg_postinst() {
+	gnome2_schemas_update
+
 	local GTK3_MODDIR="${EROOT}usr/$(get_libdir)/gtk-3.0/3.0.0"
 	gtk-query-immodules-3.0  > "${GTK3_MODDIR}/immodules.cache" \
 		|| ewarn "Failed to run gtk-query-immodules-3.0"
@@ -189,4 +195,8 @@ pkg_postinst() {
 		elog "Alternatively, check \"gtk-print-preview-command\" documentation and"
 		elog "add it to your gtkrc."
 	fi
+}
+
+pkg_postrm() {
+	gnome2_schemas_update --uninstall
 }
