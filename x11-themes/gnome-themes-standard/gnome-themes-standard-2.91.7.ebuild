@@ -12,8 +12,13 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
 IUSE=""
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+	KEYWORDS=""
+else
+	KEYWORDS="~amd64 ~x86"
+fi
 
 # Double-check gtk/gtk-engines/metacity/mutter dependencies
 RDEPEND=">=x11-libs/gtk+-2.91.6:3
