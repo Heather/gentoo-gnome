@@ -1,11 +1,11 @@
-weii# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
 EAPI="3"
 PYTHON_DEPEND="2"
 
-inherit autotools gnome.org libtool eutils flag-o-matic pax-utils python
+inherit autotools gnome.org libtool eutils flag-o-matic pax-utils python virtualx
 
 DESCRIPTION="The GLib library of C routines"
 HOMEPAGE="http://www.gtk.org/"
@@ -79,6 +79,11 @@ src_prepare() {
 			|| die "sed failed"
 	fi
 
+	## Don't skip these in development versions
+	# Gsettings tests are broken, see bug #352451
+	#sed -e '/gsettings/d' \
+	#	-i gio/tests/Makefile.* || die "sed gsettings failed"
+
 	# Needed for the punt-python-check patch.
 	# Also needed to prevent croscompile failures, see bug #267603
 	eautoreconf
@@ -149,11 +154,12 @@ src_test() {
 			|| die "Hardened adjustment failed"
 	fi
 
-	emake check || die "tests failed"
+	# Need X for dbus-launch session X11 initialization
+	Xemake check || die "tests failed"
 }
 
 pkg_preinst() {
-	# Only give the introspection message if: 
+	# Only give the introspection message if:
 	# * The user has it enabled
 	# * Has glib already installed
 	# * Previous version was different from new version
