@@ -12,7 +12,7 @@ HOMEPAGE="http://live.gnome.org/GnomeBluetooth"
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="2"
-IUSE="doc +introspection nautilus"
+IUSE="doc +introspection" #nautilus
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
@@ -26,10 +26,12 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.7:2
 	>=dev-libs/dbus-glib-0.74
 	>=gnome-base/gnome-control-center-2.91
 
-	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
-	nautilus? (
-		>=gnome-extra/nautilus-sendto-2.31.7
-		<gnome-extra/nautilus-sendto-2.91.0 )"
+	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )"
+#	nautilus? (
+#		|| ( >=gnome-base/nautilus-2.91
+#			 >=gnome-extra/nautilus-sendto-2.31.7 ) )"
+# New nautilus provides nautilus-sendto
+# sendto support doesn't work with newer nautilus
 RDEPEND="${COMMON_DEPEND}
 	>=net-wireless/bluez-4.34
 	app-mobilephone/obexd
@@ -53,12 +55,13 @@ DEPEND="${COMMON_DEPEND}
 pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_enable introspection)
-		$(use_enable nautilus nautilus-sendto)
+		--disable-nautilus-sendto
 		--disable-maintainer-mode
 		--disable-moblin
 		--disable-desktop-update
 		--disable-icon-update
 		--disable-schemas-compile"
+		#$(use_enable nautilus nautilus-sendto)
 	DOCS="AUTHORS README NEWS ChangeLog"
 
 	enewgroup plugdev
@@ -68,10 +71,10 @@ src_install() {
 	gnome2_src_install
 	find "${ED}"/usr/$(get_libdir)/${PN}/plugins -name "*.la" -delete \
 		|| die "la file removal failed (1)"
-	if use nautilus; then
-		find "${ED}"/usr/$(get_libdir)/nautilus-sendto/plugins -name "*.la" -delete \
-			|| die "la file removal failed (1)"
-	fi
+	#if use nautilus; then
+	#	find "${ED}"/usr/$(get_libdir)/nautilus-sendto/plugins -name "*.la" -delete \
+	#		|| die "la file removal failed (1)"
+	#fi
 
 	insinto /$(get_libdir)/udev/rules.d
 	doins "${FILESDIR}"/80-rfkill.rules || die "udev rules installation failed"
