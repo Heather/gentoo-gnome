@@ -1,10 +1,11 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
 EAPI="3"
 GCONF_DEBUG="no"
 PYTHON_DEPEND="python? 2:2.5"
+WANT_AUTOMAKE="1.11"
 
 inherit gnome2 python
 
@@ -13,9 +14,13 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
-
 IUSE="doc gtk python" # seed
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+	KEYWORDS=""
+else
+	KEYWORDS="~amd64 ~x86"
+fi
 
 RDEPEND=">=dev-libs/glib-2.23.6:2
 	>=dev-libs/gobject-introspection-0.9.6
