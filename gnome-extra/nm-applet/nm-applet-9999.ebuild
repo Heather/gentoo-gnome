@@ -4,21 +4,22 @@
 
 EAPI="2"
 
-inherit gnome2 eutils autotools
+inherit gnome2
 
 MY_PN="${PN/nm-applet/network-manager-applet}"
 
 DESCRIPTION="Gnome applet for NetworkManager."
 HOMEPAGE="http://projects.gnome.org/NetworkManager/"
-SRC_URI="${SRC_URI//${PN}/${MY_PN}}"
 
 LICENSE="GPL-2"
 SLOT="0"
 IUSE="bluetooth"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
+	EGIT_REPO_URI="${EGIT_REPO_URI//${PN}/${MY_PN}}"
 	KEYWORDS=""
 else
+	SRC_URI="${SRC_URI//${PN}/${MY_PN}}"
 	KEYWORDS="~amd64 ~ppc ~x86"
 fi
 
@@ -26,11 +27,10 @@ fi
 RDEPEND=">=dev-libs/glib-2.16
 	>=dev-libs/dbus-glib-0.74
 	>=sys-apps/dbus-1.2.6
-	>=x11-libs/gtk+-2.18
+	>=x11-libs/gtk+-2.91.4:3
 	>=gnome-base/gconf-2.20
 	>=gnome-extra/polkit-gnome-0.92
 	>=x11-libs/libnotify-0.7.0
-	>=gnome-base/libglade-2
 	>=gnome-base/gnome-keyring-2.20
 
 	>=dev-libs/libnl-1.1
@@ -50,14 +50,9 @@ DOCS="AUTHORS ChangeLog NEWS README"
 
 S="${WORKDIR}/${MY_PN}-${PV}"
 
-src_prepare() {
-	gnome2_src_prepare
-
+pkg_setup() {
 	G2CONF="${G2CONF}
+		--without-gtk2
 		--disable-more-warnings
 		--localstatedir=/var"
-
-	# Taken from upstream trunk, won't be needed next release
-	epatch "${FILESDIR}/${PN}-port-to-libnotify-0.7.patch"
-	eautoreconf
 }
