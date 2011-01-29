@@ -15,7 +15,7 @@ HOMEPAGE="http://gnome.org/projects/totem/"
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
 IUSE="bluetooth debug doc galago lirc +introspection iplayer nautilus nsplugin
-+python tracker +youtube zeroconf"
++python tracker +youtube vala zeroconf"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
@@ -27,14 +27,13 @@ fi
 # Cone (VLC) plugin needs someone with the right setup (remi ?)
 # check gmyth requirement ? -> waiting for updates in tree
 # coherence plugin broken upstream
-# vala ( dev-lang/vala ) requires 0.7.5 <-- removed from source
 #
 # FIXME: Automagic tracker-0.9.0
-RDEPEND=">=dev-libs/glib-2.25.11
+RDEPEND=">=dev-libs/glib-2.27.92
 	>=x11-libs/gdk-pixbuf-2.23.0
-	>=x11-libs/gtk+-2.91.7:3[introspection?]
-	>=dev-libs/totem-pl-parser-2.29.1[introspection?]
-	>=dev-libs/libpeas-0.7.0[gtk]
+	>=x11-libs/gtk+-2.99.2:3[introspection?]
+	>=dev-libs/totem-pl-parser-2.32.2[introspection?]
+	>=dev-libs/libpeas-0.7.1[gtk]
 	>=x11-themes/gnome-icon-theme-2.16
 	x11-libs/cairo
 	>=dev-libs/libxml2-2.6
@@ -64,7 +63,7 @@ RDEPEND=">=dev-libs/glib-2.25.11
 	galago? ( >=dev-libs/libgalago-0.5.2 )
 	lirc? ( app-misc/lirc )
 	nautilus? ( >=gnome-base/nautilus-2.91.3 )
-	tracker? ( >=app-misc/tracker-0.8.1 )
+	tracker? ( >=app-misc/tracker-0.9.34 )
 	youtube? (
 		>=dev-libs/libgdata-0.7.0
 		net-libs/libsoup:2.4
@@ -80,6 +79,7 @@ RDEPEND=">=dev-libs/glib-2.25.11
 			dev-python/httplib2
 			dev-python/feedparser
 			dev-python/beautifulsoup ) )
+	vala? ( >=dev-lang/vala-0.11.1:0.12 )
 	zeroconf? ( >=net-libs/libepc-0.3 )"
 
 DEPEND="${RDEPEND}
@@ -117,6 +117,7 @@ pkg_setup() {
 		$(use_enable nsplugin browser-plugins)
 		$(use_enable python)
 		$(use_enable python introspection)
+		$(use_enable vala)
 		BROWSER_PLUGIN_DIR=/usr/$(get_libdir)/nsbrowser/plugins"
 
 	local plugins="brasero-disc-recorder,chapters,gromit,media-player-keys,ontop,properties,sidebar-test,skipto,screenshot,thumbnail"
@@ -139,9 +140,6 @@ src_prepare() {
 	# Fix broken smclient option passing
 	# FIXME: File a bug for this
 	epatch "${FILESDIR}/${PN}-2.90.0-smclient-target-detection.patch"
-
-	# Completely wrong fix, but it works for now
-	epatch "${FILESDIR}/${PN}-2.91.4-fix-gdk-targets-incorrectly.patch"
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
