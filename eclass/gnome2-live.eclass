@@ -47,6 +47,13 @@ EGIT_REPO_URI="${EGIT_REPO_URI:-"git://git.gnome.org/${MODPATH}"}"
 # Unset SRC_URI auto-set by gnome2.eclass
 SRC_URI=""
 
+gnome2-live_get_var() {
+	local var f
+	var="$1"
+	f="$2"
+	echo $(sed -ne "s/${var}(\(.*\))/\1/p" "${f}" | tr -d '[]')
+}
+
 gnome2-live_src_unpack() {
 	if test -n "${A}"; then
 		unpack ${A}
@@ -69,15 +76,17 @@ gnome2-live_src_prepare() {
 	fi
 
 	# Find and create macro dirs
-	macro_dirs=($(sed -ne 's/AC_CONFIG_MACRO_DIR(\(.*\))/\1/p' configure.* | tr -d '[]'))
+	local macro_dirs=($(gnome2-live_get_var AC_CONFIG_MACRO_DIR configure.*))
 	for i in "${macro_dirs[@]}"; do
 		mkdir -p "$i"
 	done
 
 	# We don't run gettextize because that does too much stuff
 	if grep -qe 'GETTEXT' configure.*; then
-		test -e config.rpath || echo > config.rpath
-		test -e ABOUT-NLS || cp ${ROOT}/usr/share/gettext/ABOUT-NLS .
+		local aux_dir=${S}/$(gnome2-live_get_var AC_CONFIG_AUX_DIR configure.*)
+		mkdir -p "${aux_dir}"
+		test -e "${aux_dir}/config.rpath" || :> "${aux_dir}/config.rpath"
+		test -e "${aux_dir}/ABOUT-NLS" || cp "${ROOT}/usr/share/gettext/ABOUT-NLS" "${aux_dir}"
 	fi
 
 	if grep -qe 'GTK_DOC' configure.*; then
