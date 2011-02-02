@@ -5,7 +5,7 @@
 EAPI="3"
 PYTHON_DEPEND="2:2.4"
 
-inherit eutils flag-o-matic gnome.org gnome2-utils libtool virtualx autotools
+inherit eutils flag-o-matic gnome.org gnome2-utils libtool virtualx
 
 DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="http://www.gtk.org/"
@@ -26,6 +26,7 @@ else
 fi
 
 # NOTE: cairo[svg] dep is due to bug 291283 (not patched to avoid eautoreconf)
+# Use gtk+:2 for gtk-update-icon-cache and gtk-builder-convert
 RDEPEND="!aqua? (
 		x11-libs/libXrender
 		x11-libs/libX11
@@ -49,9 +50,10 @@ RDEPEND="!aqua? (
 	>=x11-libs/pango-1.20[introspection?]
 	>=dev-libs/atk-1.29.2[introspection?]
 	media-libs/fontconfig
+	x11-libs/gtk+:2
 	x11-misc/shared-mime-info
 	cups? ( net-print/cups )
-	introspection? ( >=dev-libs/gobject-introspection-0.9.3 )
+	introspection? ( >=dev-libs/gobject-introspection-0.10.1 )
 	!<gnome-base/gail-1000"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9
@@ -102,15 +104,17 @@ src_prepare() {
 
 	if ! use test; then
 		# don't waste time building tests
-		strip_builddir SRC_SUBDIRS tests Makefile.am Makefile.in
+		strip_builddir SRC_SUBDIRS tests Makefile.am
+		[[ ${PV} != 9999 ]] && strip_builddir SRC_SUBDIRS tests Makefile.in
 	fi
 
 	if ! use examples; then
 		# don't waste time building demos
-		strip_builddir SRC_SUBDIRS demos Makefile.am Makefile.in
+		strip_builddir SRC_SUBDIRS demos Makefile.am
+		[[ ${PV} != 9999 ]] && strip_builddir SRC_SUBDIRS demos Makefile.in
 	fi
 
-	gnome2_src_prepare
+	[[ ${PV} = 9999 ]] && gnome2-live_src_prepare
 }
 
 src_configure() {
@@ -121,7 +125,10 @@ src_configure() {
 		$(use_enable cups cups auto)
 		$(use_enable introspection)
 		--disable-packagekit
-		--disable-papi"
+		--disable-papi
+		--disable-gtk2-dependency"
+	# ARGH. --enable-gtk2-dependency doesn't actually work.
+	# We remove the utilities manually below.
 
 	# XXX: Maybe with multi-backend we should enable x11 all the time?
 	if use aqua; then
@@ -160,18 +167,14 @@ src_install() {
 	insinto /etc/gtk-3.0
 	doins "${T}"/gtkrc || die "doins gtkrc failed"
 
-	# Enable xft in environment as suggested by <utx@gentoo.org>
-	echo "GDK_USE_XFT=1" > "${T}"/50gtk3
-	doenvd "${T}"/50gtk3 || die "doenvd failed"
-
 	dodoc AUTHORS ChangeLog* HACKING NEWS* README* || die "dodoc failed"
 
 	# Remove unneeded *.la files
 	find "${ED}" -name "*.la" -delete
 
 	# gtk-update-icon-cache and gtk-builder-convert are provided by gtk+:2 now
-	# XXX: Make sure the gtk+:2 and gtk+:3 versions haven't diverged!
-	rm -v "${ED}"/usr/bin/gtk-{builder-convert,update-icon-cache} || die
+	# Remove this once --enable-gtk2-dependency works
+	rm -v "${ED}"/usr/bin/gtk-update-icon-cache || die
 
 	# add -framework Carbon to the .pc files
 	use aqua && for i in gtk+-3.0.pc gtk+-quartz-3.0.pc gtk+-unix-print-3.0.pc; do
