@@ -33,9 +33,8 @@ RDEPEND=">=dev-libs/glib-2.27.5
 
 	exif? ( >=media-libs/libexif-0.5.12 )
 	introspection? ( >=dev-libs/gobject-introspection-0.6.4 )
-	xmp? ( >=media-libs/exempi-1.99.5 )
-	
-	!!gnome-extra/nautilus-sendto"
+	sendto? ( !!gnome-extra/nautilus-sendto )
+	xmp? ( >=media-libs/exempi-1.99.5 )"
 DEPEND="${RDEPEND}
 	>=dev-lang/perl-5
 	>=dev-util/pkgconfig-0.9
