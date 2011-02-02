@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/gtkhtml/gtkhtml-3.32.1.ebuild,v 1.1 2010/11/28 14:43:21 pacho Exp $
 
@@ -22,9 +22,9 @@ COMMON_DEPEND=">=x11-libs/gtk+-2.20:2
 	gnome-base/gconf:2
 	>=app-text/iso-codes-0.49
 	>=net-libs/libsoup-2.26.0:2.4"
-# Depend on the 3.15 slot for the files removed below
+# Depend on the 4.0 slot for the files removed below
 RDEPEND="${COMMON_DEPEND}
-	gnome-extra/gtkhtml:3.15"
+	gnome-extra/gtkhtml:4.0"
 DEPEND="${COMMON_DEPEND}
 	x11-proto/xproto
 	sys-devel/gettext
@@ -42,10 +42,8 @@ pkg_setup() {
 src_install() {
 	gnome2_src_install
 
-	# Don't clash with gtkhtml:3.15
-	rm -vf ${ED}/usr/bin/gtkhtml-editor-test || die
-	rm -vf ${ED}/usr/lib*/libgtkhtml-editor-3.14.so* || die
-	rm -vf ${ED}/usr/lib*/pkgconfig/gtkhtml-editor-3.14.pc || die
+	# Don't clash with gtkhtml:4.0
+	rm -vf "${ED}/usr/bin/gtkhtml-editor-test" || die
 
 	# Remove .la files since old will be removed anyway while updating
 	find "${ED}" -name "*.la" -delete || die "remove of la files failed"

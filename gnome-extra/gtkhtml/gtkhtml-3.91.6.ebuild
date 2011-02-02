@@ -11,11 +11,11 @@ DESCRIPTION="Lightweight HTML Rendering/Printing/Editing Engine"
 HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2 LGPL-2"
-SLOT="3.15"
+SLOT="4.0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux"
 IUSE=""
 
-RDEPEND=">=x11-libs/gtk+-2.22:2
+RDEPEND=">=x11-libs/gtk+-2.99.2:3
 	>=x11-libs/cairo-1.10
 	>=x11-themes/gnome-icon-theme-2.22.0
 	>=gnome-base/orbit-2
@@ -23,7 +23,7 @@ RDEPEND=">=x11-libs/gtk+-2.22:2
 	gnome-base/gconf:2
 	>=app-text/iso-codes-0.49
 	>=net-libs/libsoup-2.26.0:2.4
-	
+
 	!!<gnome-extra/gtkhtml-3.32.1-r200:3.14"
 DEPEND="${RDEPEND}
 	x11-proto/xproto
