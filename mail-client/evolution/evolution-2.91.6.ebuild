@@ -15,8 +15,13 @@ HOMEPAGE="http://www.gnome.org/projects/evolution/"
 
 LICENSE="GPL-2 LGPL-2 OPENLDAP"
 SLOT="2.0"
-KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="clutter connman crypt doc gstreamer kerberos ldap networkmanager python ssl"
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+	KEYWORDS=""
+else
+	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+fi
 
 # We need a graphical pinentry frontend to be able to ask for the GPG
 # password from inside evolution, bug 160302
@@ -28,24 +33,26 @@ PINENTRY_DEPEND="|| ( app-crypt/pinentry[gtk] app-crypt/pinentry-qt app-crypt/pi
 # pst is not mature enough and changes API/ABI frequently
 RDEPEND=">=dev-libs/glib-2.26.0:2
 	>=x11-libs/cairo-1.9.15
-	>=x11-libs/gtk+-2.22.0:2
-	>=dev-libs/libunique-1.1.2
-	>=gnome-base/gnome-desktop-2.26:2
-	>=dev-libs/libgweather-2.25.3:2
-	media-libs/libcanberra[gtk]
+	>=x11-libs/gtk+-2.99.2:3
+	>=dev-libs/libunique-2.91.4:3
+	>=gnome-base/gnome-desktop-2.91.3:3
+	>=dev-libs/libgweather-2.90.0:3
+	media-libs/libcanberra[gtk3]
 	>=x11-libs/libnotify-0.7
 	>=gnome-extra/evolution-data-server-${PV}[weather]
-	>=gnome-extra/gtkhtml-3.31.90:3.15
+	>=gnome-extra/gtkhtml-3.31.3:4.0
 	>=gnome-base/gconf-2
 	dev-libs/atk
 	>=dev-libs/libxml2-2.7.3
 	>=net-libs/libsoup-2.4:2.4
-	>=media-gfx/gtkimageview-1.6
 	>=x11-misc/shared-mime-info-0.22
 	>=x11-themes/gnome-icon-theme-2.30.2.1
 	>=dev-libs/libgdata-0.4
 
-	clutter? ( media-libs/clutter:1.0[gtk] )
+	clutter? (
+		>=media-libs/clutter-1.0.0:1.0[gtk]
+		>=media-libs/clutter-gtk-0.90:1.0
+		x11-libs/mx )
 	connman? ( net-misc/connman )
 	crypt? ( || (
 				  ( >=app-crypt/gnupg-2.0.1-r2
@@ -84,7 +91,7 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--without-kde-applnk-path
 		--enable-plugins=experimental
-		--enable-image-inline
+		--disable-image-inline
 		--enable-canberra
 		--enable-weather
 		$(use_enable ssl nss)
@@ -100,8 +107,8 @@ pkg_setup() {
 		$(use_with kerberos krb5 /usr)
 		--disable-contacts-map
 		--without-glade-catalog
-		--disable-mono
-		--disable-gtk3"
+		--disable-mono"
+	# image-inline plugin needs a gtk+:3 gtkimageview, which does not exist yet
 
 	# dang - I've changed this to do --enable-plugins=experimental.  This will
 	# autodetect new-mail-notify and exchange, but that cannot be helped for the
@@ -129,24 +136,29 @@ pkg_setup() {
 }
 
 src_prepare() {
-	gnome2_src_prepare
-
 	# Fix invalid use of la file in contact-editor, upstream bug #635002
 	epatch "${FILESDIR}/${PN}-2.32.0-wrong-lafile-usage.patch"
+
+	# Fix capplet build failure, from upstream, won't need next release
+	epatch "${FILESDIR}/${PN}-2.91.6-fix-build-failure.patch"
 
 	# Use NSS/NSPR only if 'ssl' is enabled.
 	if use ssl ; then
 		sed -e 's|mozilla-nss|nss|' \
 			-e 's|mozilla-nspr|nspr|' \
-			-i configure.ac configure || die "sed 2 failed"
+			-i configure.ac || die "sed 2 failed"
 	fi
 
 	# Fix compilation flags crazyness
 	sed -e 's/CFLAGS="$CFLAGS $WARNING_FLAGS"//' \
-		-i configure.ac configure || die "sed 1 failed"
+		-i configure.ac || die "sed 1 failed"
 
-	intltoolize --force --copy --automake || die "intltoolize failed"
-	eautoreconf
+	if [[ ${PV} != 9999 ]]; then
+		intltoolize --force --copy --automake || die "intltoolize failed"
+		eautoreconf
+	fi
+
+	gnome2_src_prepare
 }
 
 src_install() {
