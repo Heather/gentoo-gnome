@@ -5,7 +5,7 @@
 EAPI="3"
 GCONF_DEBUG="yes"
 
-inherit eutils gnome2
+inherit gnome2
 
 DESCRIPTION="The gnome2 Desktop configuration tool"
 HOMEPAGE="http://www.gnome.org/"
@@ -23,7 +23,8 @@ fi
 # TODO: appindicator
 # WTF: pulseaudio is compulsary now for gnome-volume-control
 # XXX: libXft is checked for, but not used anywhere?
-# FIXME: Cheese is optional, but automagic => force-enabled
+# FIXME: Cheese is optional, but automagic => force-enabled for now
+# FIXME: Cups is optional, but automagic => force-enabled for now
 # XXX: gnome-desktop-2.91.5 is needed for upstream commit c67f7efb
 COMMON_DEPEND="
 	>=dev-libs/glib-2.25.11
@@ -32,20 +33,23 @@ COMMON_DEPEND="
 	>=gnome-base/gsettings-desktop-schemas-0.1.3
 	>=gnome-base/gconf-2.0
 	>=dev-libs/dbus-glib-0.73
-	>=gnome-base/libgnomekbd-2.91.2
 	>=gnome-base/gnome-desktop-2.91.5:3
-	gnome-base/gnome-menus
 	>=gnome-base/gnome-settings-daemon-2.91.2
+	>=gnome-base/libgnomekbd-2.91.2
 
 	app-text/iso-codes
-	dev-libs/libxml2
+	dev-libs/libxml2:2
+	gnome-base/gnome-menus
+	gnome-base/libgtop:2
 	media-libs/fontconfig
+	media-libs/gstreamer:0.10
+	net-print/cups
+
 	>=media-libs/libcanberra-0.13[gtk3]
 	>=media-sound/pulseaudio-0.9.16
-	>=sys-power/upower-0.9.1
-	>=sys-auth/polkit-0.97
 	>=media-video/cheese-2.29.90
-	media-libs/gstreamer:0.10
+	>=sys-auth/polkit-0.97
+	>=sys-power/upower-0.9.1
 
 	x11-apps/xmodmap
 	x11-libs/libX11
@@ -73,17 +77,13 @@ DEPEND="${COMMON_DEPEND}
 # Needed for autoreconf
 #	gnome-base/gnome-common
 
-src_prepare() {
+pkg_setup() {
 	# TODO: libsocialweb
 	G2CONF="${G2CONF}
 		--disable-update-mimedb
 		--disable-static
 		--disable-schemas-install"
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
-
-	# Already pushed upstream, remove for next release
-	# https://bugzilla.gnome.org/show_bug.cgi?id=639951
-	epatch "${FILESDIR}/${P}-fix-keyboard-infinite-loop.patch"
 }
 
 src_install() {
