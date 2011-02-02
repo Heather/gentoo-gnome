@@ -20,7 +20,6 @@ fi
 
 # TODO: Add RDEPEND on pciutils (requires support for reading gzipped pnp.ids)
 # XXX: gtk+-2.91.6 is needed for gdk_x11_window_get_xid()
-# XXX: introspection needs gconf[introspection]? I think it's wrong.
 RDEPEND="
 	>=dev-libs/glib-2.19.1
 	>=x11-libs/gdk-pixbuf-2.21.3[introspection?]
