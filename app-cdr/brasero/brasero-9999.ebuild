@@ -29,6 +29,7 @@ COMMON_DEPEND="
 	>=dev-libs/libxml2-2.6
 
 	media-libs/libcanberra[gtk3]
+	x11-libs/libICE
 	x11-libs/libSM
 
 	beagle? ( >=dev-libs/libbeagle-0.3 )
@@ -83,7 +84,7 @@ pkg_setup() {
 
 src_prepare() {
 	# Fix link against installed libraries, bug #340767
-	epatch "${FILESDIR}/${PN}-2.32.0-build-plugins-against-local-library.patch"
+	epatch "${FILESDIR}/${PN}-2.91.6-build-plugins-against-local-library.patch"
 
 	if [[ ${PV} != 9999 ]]; then
 		intltoolize --force --copy --automake || die "intltoolize failed"
@@ -97,8 +98,7 @@ src_install() {
 	gnome2_src_install
 
 	# Remove useless .la files
-	rm -f "${ED}"/usr/$(get_libdir)/brasero/plugins/*.la
-	rm -f "${ED}"/usr/$(get_libdir)/nautilus/extensions-2.0/*.la
+	find "${ED}" -iname '*.la' || die
 }
 
 pkg_postinst() {

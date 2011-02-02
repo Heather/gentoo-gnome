@@ -1,0 +1,257 @@
+diff -Naur brasero-2.91.6/nautilus/Makefile.am brasero-2.91.6.new/nautilus/Makefile.am
+--- brasero-2.91.6/nautilus/Makefile.am	2011-01-31 21:31:58.000000000 +0530
++++ brasero-2.91.6.new/nautilus/Makefile.am	2011-02-02 15:03:48.225000228 +0530
+@@ -9,7 +9,6 @@
+ 	-I$(top_builddir)/libbrasero-burn/	\
+ 	-I$(top_srcdir)/src/			\
+ 	-I$(top_builddir)/src/			\
+-	$(NAUTILUS_EXTENSION_CFLAGS)		\
+ 	$(WARN_CFLAGS)							\
+ 	$(WERROR)				\
+ 	-D_FILE_OFFSET_BITS=64			\
+@@ -22,6 +21,7 @@
+ 	-DLIBEXECDIR=\""$(libexecdir)"\"	\
+ 	-DSHAREDIR=\""$(datadir)"\"		\
+ 	-DDATADIR=\""$(datadir)/brasero"\"	\
++	$(NAUTILUS_EXTENSION_CFLAGS)		\
+ 	$(DISABLE_DEPRECATED)
+ 
+ @INTLTOOL_DESKTOP_RULE@
+diff -Naur brasero-2.91.6/plugins/audio2cue/Makefile.am brasero-2.91.6.new/plugins/audio2cue/Makefile.am
+--- brasero-2.91.6/plugins/audio2cue/Makefile.am	2011-01-31 21:31:58.000000000 +0530
++++ brasero-2.91.6.new/plugins/audio2cue/Makefile.am	2011-02-02 15:04:18.699000229 +0530
+@@ -18,7 +18,7 @@
+ audio2cuedir = $(BRASERO_PLUGIN_DIRECTORY)
+ audio2cue_LTLIBRARIES = libbrasero-audio2cue.la
+ libbrasero_audio2cue_la_SOURCES = burn-audio2cue.c
+-libbrasero_audio2cue_la_LIBADD = $(BRASERO_GLIB_LIBS) ../../libbrasero-burn/libbrasero-burn3.la
++libbrasero_audio2cue_la_LIBADD = ../../libbrasero-burn/libbrasero-burn3.la $(BRASERO_GLIB_LIBS)
+ libbrasero_audio2cue_la_LDFLAGS = -module -avoid-version
+ 
+ -include $(top_srcdir)/git.mk
+diff -Naur brasero-2.91.6/plugins/cdrdao/Makefile.am brasero-2.91.6.new/plugins/cdrdao/Makefile.am
+--- brasero-2.91.6/plugins/cdrdao/Makefile.am	2011-01-31 21:31:58.000000000 +0530
++++ brasero-2.91.6.new/plugins/cdrdao/Makefile.am	2011-02-02 15:04:35.805000231 +0530
+@@ -18,7 +18,7 @@
+ cdrdaodir = $(BRASERO_PLUGIN_DIRECTORY)
+ cdrdao_LTLIBRARIES = libbrasero-cdrdao.la
+ libbrasero_cdrdao_la_SOURCES = burn-cdrdao.c 
+-libbrasero_cdrdao_la_LIBADD = $(BRASERO_GLIB_LIBS) ../../libbrasero-media/libbrasero-media3.la ../../libbrasero-burn/libbrasero-burn3.la
++libbrasero_cdrdao_la_LIBADD = ../../libbrasero-media/libbrasero-media3.la ../../libbrasero-burn/libbrasero-burn3.la $(BRASERO_GLIB_LIBS)
+ libbrasero_cdrdao_la_LDFLAGS = -module -avoid-version
+ 
+ -include $(top_srcdir)/git.mk
+diff -Naur brasero-2.91.6/plugins/cdrkit/Makefile.am brasero-2.91.6.new/plugins/cdrkit/Makefile.am
+--- brasero-2.91.6/plugins/cdrkit/Makefile.am	2011-01-31 21:31:58.000000000 +0530
++++ brasero-2.91.6.new/plugins/cdrkit/Makefile.am	2011-02-02 15:05:10.718000255 +0530
+@@ -19,7 +19,7 @@
+ wodim_LTLIBRARIES = libbrasero-wodim.la
+ libbrasero_wodim_la_SOURCES = burn-wodim.c \
+ 	burn-cdrkit.h 
+-libbrasero_wodim_la_LIBADD = $(BRASERO_GLIB_LIBS) ../../libbrasero-media/libbrasero-media3.la ../../libbrasero-burn/libbrasero-burn3.la
++libbrasero_wodim_la_LIBADD = ../../libbrasero-media/libbrasero-media3.la ../../libbrasero-burn/libbrasero-burn3.la $(BRASERO_GLIB_LIBS)
+ libbrasero_wodim_la_LDFLAGS = -module -avoid-version
+ 
+ #genisoimage
+@@ -27,7 +27,7 @@
+ genisoimage_LTLIBRARIES = libbrasero-genisoimage.la
+ libbrasero_genisoimage_la_SOURCES = burn-genisoimage.c \
+ 	burn-cdrkit.h 
+-libbrasero_genisoimage_la_LIBADD = $(BRASERO_GLIB_LIBS) ../../libbrasero-burn/libbrasero-burn3.la
++libbrasero_genisoimage_la_LIBADD = ../../libbrasero-burn/libbrasero-burn3.la $(BRASERO_GLIB_LIBS)
+ libbrasero_genisoimage_la_LDFLAGS = -module -avoid-version
+ 
+ #readom
+@@ -35,7 +35,7 @@
+ readom_LTLIBRARIES = libbrasero-readom.la
+ libbrasero_readom_la_SOURCES = burn-readom.c \
+ 	burn-cdrkit.h 
+-libbrasero_readom_la_LIBADD = $(BRASERO_GLIB_LIBS) ../../libbrasero-media/libbrasero-media3.la ../../libbrasero-burn/libbrasero-burn3.la
++libbrasero_readom_la_LIBADD = ../../libbrasero-media/libbrasero-media3.la ../../libbrasero-burn/libbrasero-burn3.la $(BRASERO_GLIB_LIBS)
+ libbrasero_readom_la_LDFLAGS = -module -avoid-version
+ 
+ -include $(top_srcdir)/git.mk
+diff -Naur brasero-2.91.6/plugins/cdrtools/Makefile.am brasero-2.91.6.new/plugins/cdrtools/Makefile.am
+--- brasero-2.91.6/plugins/cdrtools/Makefile.am	2011-01-31 21:31:58.000000000 +0530
++++ brasero-2.91.6.new/plugins/cdrtools/Makefile.am	2011-02-02 15:05:56.066000219 +0530
+@@ -19,7 +19,7 @@
+ cdrecord_LTLIBRARIES = libbrasero-cdrecord.la
+ libbrasero_cdrecord_la_SOURCES = burn-cdrecord.c \
+ 	burn-cdrtools.h 
+-libbrasero_cdrecord_la_LIBADD = $(BRASERO_GLIB_LIBS) ../../libbrasero-burn/libbrasero-burn3.la
++libbrasero_cdrecord_la_LIBADD = ../../libbrasero-burn/libbrasero-burn3.la $(BRASERO_GLIB_LIBS)
+ libbrasero_cdrecord_la_LDFLAGS = -module -avoid-version
+ 
+ #mkisofs
+@@ -27,7 +27,7 @@
+ mkisofs_LTLIBRARIES = libbrasero-mkisofs.la
+ libbrasero_mkisofs_la_SOURCES = burn-mkisofs.c \
+ 	burn-cdrtools.h 
+-libbrasero_mkisofs_la_LIBADD = $(BRASERO_GLIB_LIBS) ../../libbrasero-burn/libbrasero-burn3.la
++libbrasero_mkisofs_la_LIBADD = ../../libbrasero-burn/libbrasero-burn3.la $(BRASERO_GLIB_LIBS)
+ libbrasero_mkisofs_la_LDFLAGS = -module -avoid-version
+ 
+ #readcd
+@@ -35,14 +35,14 @@
+ readcd_LTLIBRARIES = libbrasero-readcd.la
+ libbrasero_readcd_la_SOURCES = burn-readcd.c \
+ 	burn-cdrtools.h 
+-libbrasero_readcd_la_LIBADD = $(BRASERO_GLIB_LIBS) ../../libbrasero-media/libbrasero-media3.la ../../libbrasero-burn/libbrasero-burn3.la
++libbrasero_readcd_la_LIBADD = ../../libbrasero-media/libbrasero-media3.la ../../libbrasero-burn/libbrasero-burn3.la $(BRASERO_GLIB_LIBS)
+ libbrasero_readcd_la_LDFLAGS = -module -avoid-version
+ 
+ #cdda2wav
+ cdda2wavdir = $(BRASERO_PLUGIN_DIRECTORY)
+ cdda2wav_LTLIBRARIES = libbrasero-cdda2wav.la
+ libbrasero_cdda2wav_la_SOURCES = burn-cdda2wav.c burn-cdrtools.h 
+-libbrasero_cdda2wav_la_LIBADD = $(BRASERO_GLIB_LIBS) ../../libbrasero-media/libbrasero-media3.la ../../libbrasero-burn/libbrasero-burn3.la
++libbrasero_cdda2wav_la_LIBADD = ../../libbrasero-media/libbrasero-media3.la ../../libbrasero-burn/libbrasero-burn3.la $(BRASERO_GLIB_LIBS)
+ libbrasero_cdda2wav_la_LDFLAGS = -module -avoid-version
+ 
+ -include $(top_srcdir)/git.mk
+diff -Naur brasero-2.91.6/plugins/checksum/Makefile.am brasero-2.91.6.new/plugins/checksum/Makefile.am
+--- brasero-2.91.6/plugins/checksum/Makefile.am	2011-01-31 21:31:58.000000000 +0530
++++ brasero-2.91.6.new/plugins/checksum/Makefile.am	2011-02-02 15:07:03.706000199 +0530
+@@ -20,7 +20,7 @@
+ libbrasero_checksum_la_SOURCES = burn-checksum-image.c	
+ 
+ libbrasero_checksum_la_LDFLAGS = -module -avoid-version
+-libbrasero_checksum_la_LIBADD = $(BRASERO_GLIB_LIBS) ../../libbrasero-media/libbrasero-media3.la ../../libbrasero-burn/libbrasero-burn3.la
++libbrasero_checksum_la_LIBADD = ../../libbrasero-media/libbrasero-media3.la ../../libbrasero-burn/libbrasero-burn3.la $(BRASERO_GLIB_LIBS)
+ 
+ checksumfiledir = $(BRASERO_PLUGIN_DIRECTORY)
+ checksumfile_LTLIBRARIES = libbrasero-checksum-file.la
+@@ -29,6 +29,6 @@
+ 				      burn-volume-read.h
+ 
+ libbrasero_checksum_file_la_LDFLAGS = -module -avoid-version
+-libbrasero_checksum_file_la_LIBADD = $(BRASERO_GLIB_LIBS) $(BRASERO_GTK_LIBS) ../../libbrasero-media/libbrasero-media3.la ../../libbrasero-burn/libbrasero-burn3.la
++libbrasero_checksum_file_la_LIBADD = ../../libbrasero-media/libbrasero-media3.la ../../libbrasero-burn/libbrasero-burn3.la $(BRASERO_GLIB_LIBS) $(BRASERO_GTK_LIBS)
+ 
+ -include $(top_srcdir)/git.mk
+diff -Naur brasero-2.91.6/plugins/dvdauthor/Makefile.am brasero-2.91.6.new/plugins/dvdauthor/Makefile.am
+--- brasero-2.91.6/plugins/dvdauthor/Makefile.am	2011-01-31 21:31:58.000000000 +0530
++++ brasero-2.91.6.new/plugins/dvdauthor/Makefile.am	2011-02-02 15:07:21.702000242 +0530
+@@ -19,7 +19,7 @@
+ dvdauthor_LTLIBRARIES = libbrasero-dvdauthor.la
+ 
+ libbrasero_dvdauthor_la_SOURCES = burn-dvdauthor.c 
+-libbrasero_dvdauthor_la_LIBADD = $(BRASERO_GLIB_LIBS) $(BRASERO_LIBXML_LIBS) ../../libbrasero-burn/libbrasero-burn3.la
++libbrasero_dvdauthor_la_LIBADD = ../../libbrasero-burn/libbrasero-burn3.la $(BRASERO_GLIB_LIBS) $(BRASERO_LIBXML_LIBS)
+ libbrasero_dvdauthor_la_LDFLAGS = -module -avoid-version
+ 
+ 
+diff -Naur brasero-2.91.6/plugins/dvdcss/Makefile.am brasero-2.91.6.new/plugins/dvdcss/Makefile.am
+--- brasero-2.91.6/plugins/dvdcss/Makefile.am	2011-01-31 21:31:58.000000000 +0530
++++ brasero-2.91.6.new/plugins/dvdcss/Makefile.am	2011-02-02 15:07:34.776000232 +0530
+@@ -17,7 +17,7 @@
+ plugin_LTLIBRARIES = libbrasero-dvdcss.la
+ libbrasero_dvdcss_la_SOURCES = burn-dvdcss.c \
+ 	burn-dvdcss-private.h 
+-libbrasero_dvdcss_la_LIBADD = $(BRASERO_GLIB_LIBS) $(BRASERO_GMODULE_LIBS) ../../libbrasero-media/libbrasero-media3.la ../../libbrasero-burn/libbrasero-burn3.la
++libbrasero_dvdcss_la_LIBADD = ../../libbrasero-media/libbrasero-media3.la ../../libbrasero-burn/libbrasero-burn3.la $(BRASERO_GLIB_LIBS) $(BRASERO_GMODULE_LIBS)
+ libbrasero_dvdcss_la_LDFLAGS = -module -avoid-version
+ 
+ -include $(top_srcdir)/git.mk
+diff -Naur brasero-2.91.6/plugins/growisofs/Makefile.am brasero-2.91.6.new/plugins/growisofs/Makefile.am
+--- brasero-2.91.6/plugins/growisofs/Makefile.am	2011-01-31 21:31:58.000000000 +0530
++++ brasero-2.91.6.new/plugins/growisofs/Makefile.am	2011-02-02 15:07:55.359000227 +0530
+@@ -19,14 +19,14 @@
+ growisofs_LTLIBRARIES = libbrasero-growisofs.la
+ libbrasero_growisofs_la_SOURCES = burn-growisofs.c \
+ 	burn-growisofs-common.h 
+-libbrasero_growisofs_la_LIBADD = $(BRASERO_GLIB_LIBS) ../../libbrasero-burn/libbrasero-burn3.la
++libbrasero_growisofs_la_LIBADD = ../../libbrasero-burn/libbrasero-burn3.la $(BRASERO_GLIB_LIBS)
+ libbrasero_growisofs_la_LDFLAGS = -module -avoid-version
+ 
+ #dvdrwformat
+ dvdrwformatdir = $(BRASERO_PLUGIN_DIRECTORY)
+ dvdrwformat_LTLIBRARIES = libbrasero-dvdrwformat.la
+ libbrasero_dvdrwformat_la_SOURCES = burn-dvd-rw-format.c 
+-libbrasero_dvdrwformat_la_LIBADD = $(BRASERO_GLIB_LIBS) ../../libbrasero-burn/libbrasero-burn3.la
++libbrasero_dvdrwformat_la_LIBADD = ../../libbrasero-burn/libbrasero-burn3.la $(BRASERO_GLIB_LIBS)
+ libbrasero_dvdrwformat_la_LDFLAGS = -module -avoid-version
+ 
+ -include $(top_srcdir)/git.mk
+diff -Naur brasero-2.91.6/plugins/libburnia/Makefile.am brasero-2.91.6.new/plugins/libburnia/Makefile.am
+--- brasero-2.91.6/plugins/libburnia/Makefile.am	2011-01-31 21:31:58.000000000 +0530
++++ brasero-2.91.6.new/plugins/libburnia/Makefile.am	2011-02-02 15:08:17.969000228 +0530
+@@ -23,7 +23,7 @@
+ 				burn-libburn-common.c	\
+ 				burn-libburn-common.h  \
+ 				burn-libburnia.h 
+-libbrasero_libburn_la_LIBADD = $(BRASERO_GLIB_LIBS) $(BRASERO_LIBBURNIA_LIBS) ../../libbrasero-burn/libbrasero-burn3.la
++libbrasero_libburn_la_LIBADD = ../../libbrasero-burn/libbrasero-burn3.la $(BRASERO_GLIB_LIBS) $(BRASERO_LIBBURNIA_LIBS)
+ libbrasero_libburn_la_LDFLAGS = -module -avoid-version
+ 
+ #libisofs (apparently libisofs needs one libburn function)
+@@ -32,7 +32,7 @@
+ libbrasero_libisofs_la_SOURCES = burn-libisofs.c                       \
+ 	burn-libburn-common.c burn-libburn-common.h			\
+ 	burn-libburnia.h 
+-libbrasero_libisofs_la_LIBADD = $(BRASERO_GLIB_LIBS) $(BRASERO_LIBBURNIA_LIBS) ../../libbrasero-burn/libbrasero-burn3.la
++libbrasero_libisofs_la_LIBADD = ../../libbrasero-burn/libbrasero-burn3.la $(BRASERO_GLIB_LIBS) $(BRASERO_LIBBURNIA_LIBS)
+ libbrasero_libisofs_la_LDFLAGS = -module -avoid-version
+ 
+ -include $(top_srcdir)/git.mk
+diff -Naur brasero-2.91.6/plugins/local-track/Makefile.am brasero-2.91.6.new/plugins/local-track/Makefile.am
+--- brasero-2.91.6/plugins/local-track/Makefile.am	2011-01-31 21:31:58.000000000 +0530
++++ brasero-2.91.6.new/plugins/local-track/Makefile.am	2011-02-02 15:08:40.289000226 +0530
+@@ -20,7 +20,7 @@
+ local_track_LTLIBRARIES = libbrasero-local-track.la
+ 
+ libbrasero_local_track_la_SOURCES = burn-local-image.c 
+-libbrasero_local_track_la_LIBADD = $(BRASERO_GLIB_LIBS) $(BRASERO_GIO_LIBS) ../../libbrasero-burn/libbrasero-burn3.la
++libbrasero_local_track_la_LIBADD = ../../libbrasero-burn/libbrasero-burn3.la $(BRASERO_GLIB_LIBS) $(BRASERO_GIO_LIBS)
+ libbrasero_local_track_la_LDFLAGS = -module -avoid-version
+ 
+ #burn-uri
+@@ -28,7 +28,7 @@
+ burn_uri_LTLIBRARIES = libbrasero-burn-uri.la
+ 
+ libbrasero_burn_uri_la_SOURCES = burn-uri.c 
+-libbrasero_burn_uri_la_LIBADD = $(BRASERO_GLIB_LIBS) $(BRASERO_GIO_LIBS) ../../libbrasero-burn/libbrasero-burn3.la
++libbrasero_burn_uri_la_LIBADD = ../../libbrasero-burn/libbrasero-burn3.la $(BRASERO_GLIB_LIBS) $(BRASERO_GIO_LIBS)
+ libbrasero_burn_uri_la_LDFLAGS = -module -avoid-version
+ 
+ -include $(top_srcdir)/git.mk
+diff -Naur brasero-2.91.6/plugins/transcode/Makefile.am brasero-2.91.6.new/plugins/transcode/Makefile.am
+--- brasero-2.91.6/plugins/transcode/Makefile.am	2011-01-31 21:31:58.000000000 +0530
++++ brasero-2.91.6.new/plugins/transcode/Makefile.am	2011-02-02 15:09:17.202000235 +0530
+@@ -19,21 +19,21 @@
+ transcode_LTLIBRARIES = libbrasero-transcode.la
+ 
+ libbrasero_transcode_la_SOURCES = burn-transcode.c burn-normalize.h 
+-libbrasero_transcode_la_LIBADD = $(BRASERO_GLIB_LIBS) $(BRASERO_GSTREAMER_LIBS) ../../libbrasero-burn/libbrasero-burn3.la
++libbrasero_transcode_la_LIBADD = ../../libbrasero-burn/libbrasero-burn3.la $(BRASERO_GLIB_LIBS) $(BRASERO_GSTREAMER_LIBS)
+ libbrasero_transcode_la_LDFLAGS = -module -avoid-version
+ 
+ normalizedir = $(BRASERO_PLUGIN_DIRECTORY)
+ normalize_LTLIBRARIES = libbrasero-normalize.la
+ 
+ libbrasero_normalize_la_SOURCES = burn-normalize.c burn-normalize.h
+-libbrasero_normalize_la_LIBADD = $(BRASERO_GLIB_LIBS) $(BRASERO_GSTREAMER_LIBS) ../../libbrasero-burn/libbrasero-burn3.la
++libbrasero_normalize_la_LIBADD = ../../libbrasero-burn/libbrasero-burn3.la $(BRASERO_GLIB_LIBS) $(BRASERO_GSTREAMER_LIBS)
+ libbrasero_normalize_la_LDFLAGS = -module -avoid-version
+ 
+ vobdir = $(BRASERO_PLUGIN_DIRECTORY)
+ vob_LTLIBRARIES = libbrasero-vob.la
+ 
+ libbrasero_vob_la_SOURCES = burn-vob.c 
+-libbrasero_vob_la_LIBADD = $(BRASERO_GLIB_LIBS) $(BRASERO_GSTREAMER_LIBS) ../../libbrasero-burn/libbrasero-burn3.la
++libbrasero_vob_la_LIBADD = ../../libbrasero-burn/libbrasero-burn3.la $(BRASERO_GLIB_LIBS) $(BRASERO_GSTREAMER_LIBS)
+ libbrasero_vob_la_LDFLAGS = -module -avoid-version
+ 
+ -include $(top_srcdir)/git.mk
+diff -Naur brasero-2.91.6/plugins/vcdimager/Makefile.am brasero-2.91.6.new/plugins/vcdimager/Makefile.am
+--- brasero-2.91.6/plugins/vcdimager/Makefile.am	2011-01-31 21:31:58.000000000 +0530
++++ brasero-2.91.6.new/plugins/vcdimager/Makefile.am	2011-02-02 15:09:30.816000220 +0530
+@@ -19,7 +19,7 @@
+ vcdimager_LTLIBRARIES = libbrasero-vcdimager.la
+ 
+ libbrasero_vcdimager_la_SOURCES = burn-vcdimager.c 
+-libbrasero_vcdimager_la_LIBADD = $(BRASERO_GLIB_LIBS) $(BRASERO_LIBXML_LIBS) ../../libbrasero-burn/libbrasero-burn3.la
++libbrasero_vcdimager_la_LIBADD = ../../libbrasero-burn/libbrasero-burn3.la $(BRASERO_GLIB_LIBS) $(BRASERO_LIBXML_LIBS)
+ libbrasero_vcdimager_la_LDFLAGS = -module -avoid-version
+ 
+ 
