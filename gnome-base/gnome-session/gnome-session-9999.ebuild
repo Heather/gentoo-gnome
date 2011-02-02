@@ -12,9 +12,13 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2 LGPL-2 FDL-1.1"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
-
 IUSE="doc ipv6 elibc_FreeBSD"
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+	KEYWORDS=""
+else
+	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
+fi
 
 COMMON_DEPEND=">=dev-libs/glib-2.16:2
 	>=x11-libs/gtk+-2.90.7:3
@@ -54,22 +58,22 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-deprecation-flags
 		--disable-maintainer-mode
+		--disable-schemas-compile
 		--docdir="${EPREFIX}/usr/share/doc/${PF}"
-		--with-default-wm=gnome-wm
 		--with-gtk=3.0
 		$(use_enable doc docbook-docs)
 		$(use_enable ipv6)"
 	DOCS="AUTHORS ChangeLog NEWS README"
-}
-
-src_prepare() {
-	gnome2_src_prepare
 
 	# Add "session saving" button back, upstream bug #575544
 	epatch "${FILESDIR}/${PN}-2.32.0-session-saving-button.patch"
 
-	intltoolize --force --copy --automake || die "intltoolize failed"
-	eautoreconf
+	if [[ ${PV} != 9999 ]]; then
+		intltoolize --force --copy --automake || die "intltoolize failed"
+		eautoreconf
+	fi
+
+	gnome2_src_prepare
 }
 
 src_install() {
