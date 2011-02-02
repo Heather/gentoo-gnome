@@ -26,7 +26,7 @@ fi
 # X libs are not needed for OSX (aqua)
 RDEPEND=">=x11-libs/libSM-1.0
 	>=dev-libs/libxml2-2.5.0
-	>=dev-libs/glib-2.25.15
+	>=dev-libs/glib-2.27.92
 	>=x11-libs/gtk+-2.99.0:3[introspection?]
 	>=x11-libs/gtksourceview-2.91.1:3.0[introspection?]
 	>=dev-libs/libpeas-0.7.0[gtk]
@@ -34,6 +34,7 @@ RDEPEND=">=x11-libs/libSM-1.0
 	dev-python/pygobject[introspection]
 	gnome-base/gsettings-desktop-schemas
 	x11-libs/libX11
+	x11-libs/libICE
 	x11-libs/libSM
 
 	gvfs? ( gnome-base/gvfs )
