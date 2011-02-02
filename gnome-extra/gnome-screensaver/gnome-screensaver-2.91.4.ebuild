@@ -13,12 +13,17 @@ SRC_URI="${SRC_URI}
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="branding debug doc opengl pam"
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+	KEYWORDS=""
+else
+	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+fi
 
 RDEPEND="
 	>=dev-libs/glib-2.15
-	>=x11-libs/gtk+-2.91.7:3
+	>=x11-libs/gtk+-2.99.3:3
 	>=gnome-base/gnome-desktop-2.91.5:3
 	>=gnome-base/gnome-menus-2.12
 	>=gnome-base/libgnomekbd-0.1
