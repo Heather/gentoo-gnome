@@ -16,17 +16,23 @@ SRC_URI="${SRC_URI}
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 IUSE="debug policykit pulseaudio smartcard"
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+	KEYWORDS=""
+else
+	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
+fi
 
 COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	>=dev-libs/glib-2.26.0
-	>=x11-libs/gtk+-2.91.6
+	>=x11-libs/gtk+-2.99.3
 	>=gnome-base/gconf-2.6.1
 	>=gnome-base/libgnomekbd-2.91.1
 	>=gnome-base/gnome-desktop-2.91.5:3
 	>=gnome-base/gsettings-desktop-schemas-0.1.2
 	media-libs/fontconfig
+	net-print/cups
 
 	>=x11-libs/libnotify-0.6.1
 	x11-libs/libXi
@@ -78,8 +84,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	gnome2_src_prepare
-
 	# Restore gstreamer volume control support, upstream bug #571145
 	# Keep using old patch as it doesn't cause problems like bug #339732
 	#epatch "${WORKDIR}/${PN}-2.30.2-gst-vol-control-support.patch"
@@ -87,8 +91,12 @@ src_prepare() {
 
 	epatch "${DISTDIR}/${PN}-2.30.0-gst-vol-control-support.patch"
 
-	intltoolize --force --copy --automake || die "intltoolize failed"
-	eautoreconf
+	if [[ ${PV} != 9999 ]]; then
+		intltoolize --force --copy --automake || die "intltoolize failed"
+		eautoreconf
+	fi
+
+	gnome2_src_prepare
 }
 
 src_install() {
