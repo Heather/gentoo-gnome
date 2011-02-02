@@ -12,7 +12,7 @@ HOMEPAGE="http://projects.gnome.org/brasero/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="beagle +cdr +css doc +introspection +libburn +libnotify nautilus playlist test"
+IUSE="beagle +cdr +css doc +introspection +libburn nautilus playlist test"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
@@ -27,6 +27,7 @@ COMMON_DEPEND="
 	>=media-libs/gstreamer-0.10.15
 	>=media-libs/gst-plugins-base-0.10
 	>=dev-libs/libxml2-2.6
+	>=x11-libs/libnotify-0.6.1
 
 	media-libs/libcanberra[gtk3]
 	x11-libs/libICE
@@ -37,7 +38,6 @@ COMMON_DEPEND="
 	libburn? (
 		>=dev-libs/libburn-0.4
 		>=dev-libs/libisofs-0.6.4 )
-	libnotify? ( >=x11-libs/libnotify-0.6.1 )
 	nautilus? ( >=gnome-base/nautilus-2.31.3 )
 	playlist? ( >=dev-libs/totem-pl-parser-2.29.1 )"
 RDEPEND="${COMMON_DEPEND}
@@ -71,7 +71,6 @@ pkg_setup() {
 		$(use_enable cdr cdrkit)
 		$(use_enable introspection)
 		$(use_enable libburn libburnia)
-		$(use_enable libnotify)
 		$(use_enable nautilus)
 		$(use_enable playlist)"
 
@@ -83,7 +82,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# Fix link against installed libraries, bug #340767
+	# Fix linking against installed libraries, bug #340767, gnome #641233
 	epatch "${FILESDIR}/${PN}-2.91.6-build-plugins-against-local-library.patch"
 
 	if [[ ${PV} != 9999 ]]; then
