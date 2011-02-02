@@ -20,11 +20,13 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-solaris"
 fi
 
+# GNOME3: How do we slot libedataserverui-3.0.so?
+# Also, libedata-cal-1.2.so and libecal-1.2.so use gtk-3, but aren't slotted
 RDEPEND=">=dev-libs/glib-2.25.12:2
-	>=x11-libs/gtk+-2.22:2
+	>=x11-libs/gtk+-2.99.2:3
 	>=gnome-base/gconf-2
 	>=dev-db/sqlite-3.5
-	>=dev-libs/libgdata-0.7
+	>=dev-libs/libgdata-0.7.0
 	>=gnome-base/gnome-keyring-2.20.1
 	>=dev-libs/libical-0.43
 	>=net-libs/libsoup-2.4:2.4
@@ -38,7 +40,7 @@ RDEPEND=">=dev-libs/glib-2.25.12:2
 	ssl? (
 		>=dev-libs/nspr-4.4
 		>=dev-libs/nss-3.9 )
-	weather? ( >=dev-libs/libgweather-2.25.4:2 )
+	weather? ( >=dev-libs/libgweather-2.90.0:3 )
 "
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9
@@ -61,7 +63,6 @@ pkg_setup() {
 		$(use_enable ssl ssl)
 		$(use_enable ssl smime)
 		$(use_enable weather)
-		--disable-gtk3
 		--enable-calendar
 		--enable-nntp
 		--enable-largefile
