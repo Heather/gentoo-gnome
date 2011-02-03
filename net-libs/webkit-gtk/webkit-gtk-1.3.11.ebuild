@@ -12,7 +12,7 @@ HOMEPAGE="http://www.webkitgtk.org/"
 SRC_URI="http://www.webkitgtk.org/${MY_P}.tar.gz"
 
 LICENSE="LGPL-2 LGPL-2.1 BSD"
-SLOT="2"
+SLOT="3"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-macos"
 # aqua, geoclue
 IUSE="coverage debug doc +gstreamer +introspection +jit"
@@ -21,16 +21,16 @@ IUSE="coverage debug doc +gstreamer +introspection +jit"
 # dependency on >=x11-libs/gtk+-2.13:2 for gail
 # XXX: Quartz patch does not apply
 # >=x11-libs/gtk+-2.13:2[aqua=]
-#	>=dev-libs/glib-2.25 (only needed when using gsettings)
 RDEPEND="
 	dev-libs/libxml2
 	dev-libs/libxslt
 	media-libs/jpeg:0
 	media-libs/libpng
 	x11-libs/cairo
-	>=x11-libs/gtk+-2.13:2
+	>=dev-libs/glib-2.27.90
+	>=x11-libs/gtk+-2.91.7:3
 	>=dev-libs/icu-3.8.1-r1
-	>=net-libs/libsoup-2.29.90
+	>=net-libs/libsoup-2.33.4
 	>=dev-db/sqlite-3
 	>=app-text/enchant-0.22
 	>=x11-libs/pango-1.12
@@ -79,17 +79,17 @@ src_configure() {
 
 	# XXX: Check Web Audio support
 	# XXX: websockets disabled due to security issue in protocol
+	# XXX: WebGL fails compilation
 	# XXX: Wtf is WebKit2?
-	# XXX: 3D canvas fails to compile
 	myconf="
 		$(use_enable coverage)
 		$(use_enable debug)
 		$(use_enable introspection)
 		$(use_enable gstreamer video)
 		$(use_enable jit)
-		--disable-3D-canvas
 		--enable-blob
-		--with-gtk=2.0
+		--with-gtk=3.0
+		--disable-WebGL
 		--disable-webkit2
 		--disable-web-sockets"
 		# quartz patch above does not apply anymore
@@ -105,10 +105,12 @@ src_test() {
 }
 
 src_compile() {
+	# XXX: This step is required so we properly build gettext catalogs
+	emake update-po || die "Compile failed"
 	emake XDG_DATA_HOME="${T}/.local" || die "Compile failed"
 }
 
 src_install() {
 	emake DESTDIR="${D}" install || die "Install failed"
-	dodoc WebKit/gtk/{NEWS,ChangeLog} || die "dodoc failed"
+	dodoc Source/WebKit/gtk/{NEWS,ChangeLog} || die "dodoc failed"
 }
