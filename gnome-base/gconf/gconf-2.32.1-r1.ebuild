@@ -71,7 +71,6 @@ src_install() {
 	keepdir /etc/gconf/gconf.xml.system
 
 	echo 'CONFIG_PROTECT_MASK="/etc/gconf"' > 50gconf
-	echo 'GSETTINGS_BACKEND="gconf"' >> 50gconf
 	doenvd 50gconf || die "doenv failed"
 	dodir /root/.gconfd || die
 }
