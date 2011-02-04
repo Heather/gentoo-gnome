@@ -16,7 +16,6 @@
 # Stuff that directly or indirectly needs libnotify-0.6
 # (versions are approximate)
 # DO NOT UNMASK unless you're fine with everything breaking
->=x11-libs/libnotify-0.6
 >=x11-misc/notification-daemon-0.5
 >=app-crypt/seahorse-2.91
 >=app-crypt/seahorse-plugins-2.91
