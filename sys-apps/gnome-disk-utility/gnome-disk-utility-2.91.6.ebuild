@@ -18,15 +18,15 @@ IUSE="avahi doc fat gnome-keyring nautilus remote-access"
 CDEPEND="
 	>=dev-libs/glib-2.22:2
 	>=dev-libs/dbus-glib-0.74
-	>=dev-libs/libunique-1
-	>=x11-libs/gtk+-2.20:2
+	>=dev-libs/libunique-2.90.1:3
+	>=x11-libs/gtk+-2.90.7:3
 	=sys-fs/udisks-1.0*[remote-access?]
 	>=dev-libs/libatasmart-0.14
 	>=x11-libs/libnotify-0.6.1
 
 	>=gnome-base/nautilus-2.24
 
-	avahi? ( >=net-dns/avahi-0.6.25[gtk] )
+	avahi? ( >=net-dns/avahi-0.6.25[gtk3] )
 	gnome-keyring? ( || (
 		gnome-base/libgnome-keyring
 		<gnome-base/gnome-keyring-2.29.4 ) )
@@ -58,7 +58,7 @@ pkg_setup() {
 
 src_prepare() {
 	# Keep avahi optional, upstream bug #631986
-	epatch "${FILESDIR}/${PN}-2.30.1-optional-avahi.patch"
+	epatch "${FILESDIR}/${PN}-2.91.6-optional-avahi.patch"
 
 	intltoolize --force --copy --automake || die
 	eautoreconf
