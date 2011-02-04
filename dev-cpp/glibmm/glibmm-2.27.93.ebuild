@@ -14,7 +14,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-
 IUSE="doc examples test"
 
 RDEPEND=">=dev-libs/libsigc++-2.2
-	>=dev-libs/glib-2.27.91"
+	>=dev-libs/glib-2.27.93"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	doc? ( app-doc/doxygen )"
