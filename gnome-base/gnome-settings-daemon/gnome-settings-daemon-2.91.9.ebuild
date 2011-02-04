@@ -31,6 +31,7 @@ COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	>=gnome-base/libgnomekbd-2.91.1
 	>=gnome-base/gnome-desktop-2.91.5:3
 	>=gnome-base/gsettings-desktop-schemas-0.1.2
+	media-fonts/cantarell
 	media-libs/fontconfig
 	net-print/cups
 
