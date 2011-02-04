@@ -11,14 +11,15 @@ DESCRIPTION="C++ interface for GTK+2"
 HOMEPAGE="http://www.gtkmm.org"
 
 LICENSE="LGPL-2.1"
-SLOT="2.4"
+SLOT="3.0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 IUSE="doc examples test"
 
-RDEPEND=">=dev-cpp/glibmm-2.24:2
-	>=x11-libs/gtk+-2.23.90:2
-	>=dev-cpp/atkmm-2.22.1
-	>=dev-cpp/cairomm-1.2.2
+RDEPEND=">=dev-cpp/glibmm-2.27.93:2
+	>=x11-libs/gtk+-2.99.1:3
+	>=x11-libs/gdk-pixbuf-2.22.1
+	>=dev-cpp/atkmm-2.22.2
+	>=dev-cpp/cairomm-1.9.2.2
 	>=dev-cpp/pangomm-2.27.1:2.4
 	dev-libs/libsigc++:2"
 DEPEND="${RDEPEND}
@@ -37,6 +38,8 @@ pkg_setup() {
 }
 
 src_prepare() {
+	gnome2_src_prepare
+
 	if ! use test; then
 		# don't waste time building tests
 		sed 's/^\(SUBDIRS =.*\)tests\(.*\)$/\1\2/' -i Makefile.am Makefile.in \
@@ -48,6 +51,4 @@ src_prepare() {
 		sed 's/^\(SUBDIRS =.*\)demos\(.*\)$/\1\2/' -i Makefile.am Makefile.in \
 			|| die "sed 2 failed"
 	fi
-
-	gnome2_src_prepare
 }
