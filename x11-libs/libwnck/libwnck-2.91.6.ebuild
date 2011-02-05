@@ -11,7 +11,7 @@ DESCRIPTION="A window navigation construction kit"
 HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="LGPL-2"
-SLOT="2.90"
+SLOT="3"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~x86-solaris"
 
 IUSE="doc +introspection startup-notification"
@@ -22,7 +22,9 @@ RDEPEND=">=x11-libs/gtk+-2.91.5:3[introspection?]
 	x11-libs/libXres
 	x11-libs/libXext
 	introspection? ( >=dev-libs/gobject-introspection-0.6.14 )
-	startup-notification? ( >=x11-libs/startup-notification-0.4 )"
+	startup-notification? ( >=x11-libs/startup-notification-0.4 )
+	
+	!!<x11-libs/libwnck-2.30.6-r200:0"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.9

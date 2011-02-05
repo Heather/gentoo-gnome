@@ -24,7 +24,7 @@ COMMON_DEPEND=">=x11-libs/gtk+-2.19.7:2[introspection?]
 	introspection? ( >=dev-libs/gobject-introspection-0.6.14 )
 	startup-notification? ( >=x11-libs/startup-notification-0.4 )"
 RDEPEND="${COMMON_DEPEND}
-	x11-libs/libwnck:2.90"
+	x11-libs/libwnck:3"
 
 DEPEND="${RDEPEND}
 	sys-devel/gettext
@@ -57,7 +57,7 @@ src_prepare() {
 src_install() {
 	gnome2_src_install
 
-	# Avoid clash with 2.9x slot
-	rm "${ED}/usr/bin/wnck-urgency-monitor" || die
-	rm "${ED}/usr/bin/wnckprop" || die
+	# Avoid clash with x11-libs/libwnck:3 slot
+	rm -v "${ED}/usr/bin/wnck-urgency-monitor" || die
+	rm -v "${ED}/usr/bin/wnckprop" || die
 }
