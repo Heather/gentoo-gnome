@@ -32,3 +32,18 @@ DEPEND="${RDEPEND}
 RESTRICT="binchecks strip"
 G2CONF="--disable-static"
 DOCS="ChangeLog NEWS"
+
+src_prepare() {
+	# Install cursors in the right place
+	sed -e 's:^\(cursordir.*\)icons\(.*\):\1cursors/xorg-x11\2:' \
+		-i themes/Adwaita/cursors/Makefile.am \
+		-i themes/Adwaita/cursors/Makefile.in || die
+}
+
+src_install() {
+	gnome2_src_install
+
+	# Make it the default cursor theme
+	cd "${ED}/usr/share/cursors/xorg-x11" || die
+	ln -sfn Adwaita default || die
+}
