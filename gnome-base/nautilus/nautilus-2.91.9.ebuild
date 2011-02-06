@@ -27,6 +27,7 @@ RDEPEND=">=dev-libs/glib-2.27.5
 	>=gnome-base/gnome-desktop-2.91.2:3
 
 	gnome-base/gsettings-desktop-schemas
+	x11-libs/libnotify
 	x11-libs/libX11
 	x11-libs/libXext
 	x11-libs/libXrender
