@@ -61,7 +61,8 @@ pkg_setup() {
 		--disable-moblin
 		--disable-desktop-update
 		--disable-icon-update
-		--disable-schemas-compile"
+		--disable-schemas-compile
+		--disable-static"
 		#$(use_enable nautilus nautilus-sendto)
 	DOCS="AUTHORS README NEWS ChangeLog"
 

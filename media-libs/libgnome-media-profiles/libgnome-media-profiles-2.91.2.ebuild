@@ -34,3 +34,4 @@ DEPEND="${COMMON_DEPEND}
 	>=dev-util/pkgconfig-0.19
 	sys-devel/gettext"
 DOCS="ChangeLog NEWS README"
+G2CONF="--disable-static"

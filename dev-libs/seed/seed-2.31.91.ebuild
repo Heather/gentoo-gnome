@@ -23,7 +23,7 @@ RDEPEND="
 	virtual/libffi
 	x11-libs/cairo
 	x11-libs/gtk+:2[introspection]
-	net-libs/webkit-gtk
+	net-libs/webkit-gtk:2
 	gnome-base/gnome-js-common
 
 	dbus? (
@@ -45,6 +45,7 @@ RESTRICT="test"
 
 pkg_setup() {
 	G2CONF="${G2CONF}
+		--disable-static
 		--with-webkit=1.0
 		$(use_enable dbus dbus-module)
 		$(use_enable mpfr mpfr-module)
