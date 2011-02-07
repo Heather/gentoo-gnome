@@ -53,7 +53,7 @@ pkg_setup() {
 		--disable-static
 		--disable-desktop-docs
 		--with-pnp-ids-path=/usr/share/libgnome-desktop/pnp.ids
-		--with-distributor=Gentoo
+		--with-gnome-distributor=Gentoo
 		$(use_enable introspection)"
 }
 
