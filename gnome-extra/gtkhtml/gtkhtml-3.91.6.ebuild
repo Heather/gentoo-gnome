@@ -25,7 +25,7 @@ RDEPEND=">=x11-libs/gtk+-2.99.2:3
 	>=app-text/iso-codes-0.49
 	>=net-libs/libsoup-2.26.0:2.4
 
-	!!<gnome-extra/gtkhtml-3.32.1-r200:3.14"
+	!!<gnome-extra/gtkhtml-3.32.2-r200:3.14"
 DEPEND="${RDEPEND}
 	x11-proto/xproto
 	sys-devel/gettext
