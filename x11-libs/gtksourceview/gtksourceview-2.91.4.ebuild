@@ -4,6 +4,7 @@
 
 EAPI="2"
 GCONF_DEBUG="no"
+GNOME2_LA_PUNT="yes"
 
 inherit gnome2 virtualx
 

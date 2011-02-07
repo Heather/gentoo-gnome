@@ -1,9 +1,10 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-crypt/seahorse/seahorse-2.32.0.ebuild,v 1.1 2010/10/17 19:12:26 pacho Exp $
 
 EAPI="3"
 GCONF_DEBUG="yes"
+GNOME2_LA_PUNT="yes"
 
 inherit gnome2
 
@@ -12,8 +13,13 @@ HOMEPAGE="http://www.gnome.org/projects/seahorse/index.html"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="avahi debug doc +introspection ldap libnotify test"
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+	KEYWORDS=""
+else
+	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+fi
 
 # Pull in libnotify-0.7 because it's controlled via an automagic ifdef
 # Need seahorse-plugins git snapshot
@@ -73,11 +79,6 @@ src_prepare() {
 	sed -e '/CFLAGS="$CFLAGS -g -O0/d' \
 		-e 's/-Werror//' \
 		-i configure.in configure || die "sed failed"
-}
-
-src_install() {
-	gnome2_src_install
-	find "${ED}" -name "*.la" -delete || die "remove of la files failed"
 }
 
 pkg_postinst() {

@@ -3,6 +3,8 @@
 # $Header: /var/cvsroot/gentoo-x86/media-libs/libcanberra/libcanberra-0.25.ebuild,v 1.1 2010/06/18 10:11:15 pacho Exp $
 
 EAPI="3"
+GNOME2_LA_PUNT="yes"
+
 inherit gnome2
 
 DESCRIPTION="GNOME Media Profiles library"

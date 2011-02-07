@@ -3,7 +3,9 @@
 # $Header: $
 
 EAPI="2"
-inherit gnome2 autotools eutils
+GNOME2_LA_PUNT="yes"
+
+inherit gnome2
 
 DESCRIPTION="Libraries for the gnome desktop that are not part of the UI"
 HOMEPAGE="http://www.gnome.org/"

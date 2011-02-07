@@ -4,6 +4,7 @@
 
 EAPI="2"
 GCONF_DEBUG="no"
+GNOME2_LA_PUNT="yes" # plugins are dlopened
 PYTHON_DEPEND="2"
 
 inherit gnome2 python eutils
@@ -26,7 +27,7 @@ fi
 # X libs are not needed for OSX (aqua)
 RDEPEND=">=x11-libs/libSM-1.0
 	>=dev-libs/libxml2-2.5.0
-	>=dev-libs/glib-2.25.15
+	>=dev-libs/glib-2.27.92
 	>=x11-libs/gtk+-2.99.0:3[introspection?]
 	>=x11-libs/gtksourceview-2.91.1:3.0[introspection?]
 	>=dev-libs/libpeas-0.7.0[gtk]
@@ -34,6 +35,7 @@ RDEPEND=">=x11-libs/libSM-1.0
 	dev-python/pygobject[introspection]
 	gnome-base/gsettings-desktop-schemas
 	x11-libs/libX11
+	x11-libs/libICE
 	x11-libs/libSM
 
 	gvfs? ( gnome-base/gvfs )
@@ -65,13 +67,6 @@ pkg_setup() {
 		$(use_enable gvfs gvfs-metadata)
 		$(use_enable introspection)
 		$(use_enable spell)"
-}
-
-src_install() {
-	gnome2_src_install
-
-	# Installed for plugins, but they're dlopen()-ed
-	find "${D}" -name "*.la" -delete || die "remove of la files failed"
 }
 
 pkg_postinst() {

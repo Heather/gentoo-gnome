@@ -1,9 +1,10 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
 EAPI="3"
 GCONF_DEBUG="no"
+GNOME2_LA_PUNT="yes"
 MY_PN="gtk-theme-engine-clearlooks"
 
 inherit gnome2
@@ -32,9 +33,3 @@ G2CONF="${G2CONF}
 --disable-animation
 --disable-paranoia
 --disable-deprecated"
-
-src_install() {
-	gnome2_src_install
-
-	find "${ED}" -name "*.la" -delete || die "la file removal failed"
-}

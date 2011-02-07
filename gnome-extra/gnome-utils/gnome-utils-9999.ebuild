@@ -4,6 +4,7 @@
 
 EAPI="3"
 GCONF_DEBUG="yes"
+GNOME2_LA_PUNT="yes"
 
 inherit gnome2
 
@@ -71,9 +72,4 @@ src_prepare() {
 	if ! use test ; then
 		sed -e 's/ tests//' -i logview/Makefile.{am,in} || die "sed 2 failed"
 	fi
-}
-
-src_install() {
-	gnome2_src_install
-	find "${ED}" -name "*.la" -delete || die "remove of la files failed"
 }

@@ -4,6 +4,7 @@
 
 EAPI="3"
 GCONF_DEBUG="no"
+GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="python? 2:2.4"
 
 inherit autotools flag-o-matic gnome2 python versionator
@@ -156,12 +157,6 @@ src_prepare() {
 	fi
 
 	gnome2_src_prepare
-}
-
-src_install() {
-	gnome2_src_install
-
-	find "${ED}" -name "*.la" -delete || die "la files removal failed"
 }
 
 pkg_postinst() {

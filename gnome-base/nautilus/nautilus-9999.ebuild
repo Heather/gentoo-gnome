@@ -4,6 +4,7 @@
 
 EAPI="2"
 GCONF_DEBUG="no"
+GNOME2_LA_PUNT="yes"
 
 inherit autotools eutils gnome2 virtualx
 
@@ -89,11 +90,6 @@ src_test() {
 	unset ORBIT_SOCKETDIR
 	unset DBUS_SESSION_BUS_ADDRESS
 	Xemake check || die "Test phase failed"
-}
-
-src_install() {
-	gnome2_src_install
-	find "${D}" -name "*.la" -delete || die "remove of la files failed"
 }
 
 pkg_postinst() {

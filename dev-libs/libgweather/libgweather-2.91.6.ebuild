@@ -2,10 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/libgweather/libgweather-2.30.3.ebuild,v 1.3 2010/11/14 23:05:07 eva Exp $
 
-EAPI="2"
+EAPI="3"
 GCONF_DEBUG="no"
+GNOME2_LA_PUNT="yes"
 
-inherit autotools gnome2
+inherit gnome2
 
 DESCRIPTION="Library to access weather information from online services"
 HOMEPAGE="http://www.gnome.org/"
@@ -22,8 +23,6 @@ fi
 
 # libsoup-gnome is to be used because libsoup[gnome] might not
 # get libsoup-gnome installed by the time ${P} is built
-#
-# Need libgweather:2 for the icons, see src_install below
 RDEPEND=">=x11-libs/gtk+-2.90.0:3[introspection?]
 	>=dev-libs/glib-2.13
 	>=gnome-base/gconf-2.8
@@ -44,10 +43,8 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog MAINTAINERS NEWS"
 
-pkg_setup() {
-	G2CONF="${G2CONF}
-		--enable-locations-compression
-		--disable-maintainer-mode
-		--disable-all-translations-in-one-xml
-		--disable-static"
-}
+G2CONF="${G2CONF}
+	--enable-locations-compression
+	--disable-maintainer-mode
+	--disable-all-translations-in-one-xml
+	--disable-static"

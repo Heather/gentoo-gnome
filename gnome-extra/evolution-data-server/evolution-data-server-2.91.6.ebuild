@@ -4,6 +4,7 @@
 
 EAPI="3"
 GCONF_DEBUG="no"
+GNOME2_LA_PUNT="yes"
 
 inherit autotools db-use eutils flag-o-matic gnome2 versionator virtualx
 
@@ -100,7 +101,6 @@ src_prepare() {
 
 src_install() {
 	gnome2_src_install
-	find "${ED}" -name "*.la" -delete || die "la files removal failed"
 
 	if use ldap; then
 		MY_MAJORV=$(get_version_component_range 1-2)

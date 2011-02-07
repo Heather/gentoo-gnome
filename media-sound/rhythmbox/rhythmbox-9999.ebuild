@@ -3,6 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/media-sound/rhythmbox/rhythmbox-0.12.8-r1.ebuild,v 1.2 2010/07/06 15:46:43 ssuominen Exp $
 
 EAPI="2"
+GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="python? 2:2.5"
 
 inherit eutils gnome2 python multilib virtualx
@@ -173,13 +174,6 @@ src_test() {
 	unset SESSION_MANAGER
 	unset DBUS_SESSION_BUS_ADDRESS
 	Xemake check || die "test failed"
-}
-
-src_install() {
-	gnome2_src_install
-
-	find "${D}/usr/$(get_libdir)/rhythmbox/plugins" -name "*.la" -delete \
-		|| die "failed to remove *.la files"
 }
 
 pkg_postinst() {

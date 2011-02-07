@@ -1,8 +1,9 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-crypt/seahorse-plugins/seahorse-plugins-2.30.1-r1.ebuild,v 1.7 2010/10/17 15:26:51 armin76 Exp $
 
 EAPI="2"
+GNOME2_LA_PUNT="yes"
 
 inherit eutils gnome2
 
@@ -62,8 +63,6 @@ src_prepare() {
 
 src_install() {
 	gnome2_src_install
-
-	find "${D}" -name "*.la" -delete || die "remove of la files failed"
 
 	exeinto /etc/X11/xinit/xinitrc.d/
 	doexe "${FILESDIR}/70-seahorse-agent" || die "doexe failed"

@@ -27,6 +27,10 @@ esac
 # Extra configure opts passed to econf
 G2CONF=${G2CONF:-""}
 
+# Should we delete all the .la files?
+# Do NOT use without due consideration
+GNOME2_LA_PUNT=${GNOME2_LA_PUNT:-"no"}
+
 # Extra options passed to elibtoolize
 ELTCONF=${ELTCONF:-""}
 
@@ -128,6 +132,13 @@ gnome2_src_install() {
 
 	# Make sure this one doesn't get in the portage db
 	rm -fr "${ED}/usr/share/applications/mimeinfo.cache"
+
+	# Delete all .la files
+	if [[ "${GNOME2_LA_PUNT}" != "no" ]]; then
+		ebegin "Removing .la files"
+		find "${D}" -name '*.la' -exec rm -f '{}' + || die
+		eend
+	fi
 }
 
 gnome2_pkg_preinst() {

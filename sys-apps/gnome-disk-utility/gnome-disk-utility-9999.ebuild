@@ -52,7 +52,7 @@ DEPEND="${CDEPEND}
 
 	doc? ( >=dev-util/gtk-doc-1.3 )"
 
-pkg_setup() {
+src_prepare() {
 	G2CONF="${G2CONF}
 		--disable-static
 		$(use_enable avahi avahi-ui)
@@ -60,12 +60,14 @@ pkg_setup() {
 		$(use_enable remote-access)
 		$(use_enable gnome-keyring)"
 	DOCS="AUTHORS NEWS README TODO"
-}
 
-src_prepare() {
 	# Keep avahi optional, upstream bug #631986
 	epatch "${FILESDIR}/${PN}-2.91.6-optional-avahi.patch"
 
-	intltoolize --force --copy --automake || die
-	eautoreconf
+	if [[ ${PV} != 9999 ]]; then
+		intltoolize --force --copy --automake || die
+		eautoreconf
+	fi
+
+	gnome2_src_prepare
 }

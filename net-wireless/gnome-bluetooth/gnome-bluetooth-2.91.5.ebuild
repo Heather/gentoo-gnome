@@ -4,6 +4,7 @@
 
 EAPI="3"
 GCONF_DEBUG="yes"
+GNOME2_LA_PUNT="yes"
 
 inherit eutils gnome2 multilib
 
@@ -69,12 +70,6 @@ pkg_setup() {
 
 src_install() {
 	gnome2_src_install
-	find "${ED}"/usr/$(get_libdir)/${PN}/plugins -name "*.la" -delete \
-		|| die "la file removal failed (1)"
-	#if use nautilus; then
-	#	find "${ED}"/usr/$(get_libdir)/nautilus-sendto/plugins -name "*.la" -delete \
-	#		|| die "la file removal failed (1)"
-	#fi
 
 	insinto /$(get_libdir)/udev/rules.d
 	doins "${FILESDIR}"/80-rfkill.rules || die "udev rules installation failed"

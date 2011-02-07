@@ -3,6 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/media-video/totem/totem-2.30.0-r1.ebuild,v 1.1 2010/06/13 20:36:55 pacho Exp $
 
 EAPI="2"
+GNOME2_LA_PUNT="yes" # plugins are dlopened
 WANT_AUTOMAKE="1.11"
 PYTHON_DEPEND="python? 2:2.4"
 PYTHON_USE_WITH="threads"
@@ -118,6 +119,7 @@ pkg_setup() {
 		$(use_enable python)
 		$(use_enable python introspection)
 		$(use_enable vala)
+		VALAC=$(type -P valac-0.12)
 		BROWSER_PLUGIN_DIR=/usr/$(get_libdir)/nsbrowser/plugins"
 
 	local plugins="brasero-disc-recorder,chapters,gromit,media-player-keys,ontop,properties,sidebar-test,skipto,screenshot,thumbnail"
@@ -147,13 +149,6 @@ src_prepare() {
 	# disable pyc compiling
 	mv py-compile py-compile.orig
 	ln -s $(type -P true) py-compile
-}
-
-src_install() {
-	gnome2_src_install
-	# Installed for plugins, but they're dlopen()-ed
-	# firefox, totem as well as nautilus
-	find "${D}" -name "*.la" -delete || die "remove of la files failed"
 }
 
 pkg_postinst() {

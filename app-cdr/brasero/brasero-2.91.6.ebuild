@@ -4,6 +4,7 @@
 
 EAPI="3"
 GCONF_DEBUG="no"
+GNOME2_LA_PUNT="yes"
 
 inherit autotools eutils gnome2 multilib
 
@@ -91,13 +92,6 @@ src_prepare() {
 	fi
 
 	gnome2_src_prepare
-}
-
-src_install() {
-	gnome2_src_install
-
-	# Remove useless .la files
-	find "${ED}" -iname '*.la' || die
 }
 
 pkg_postinst() {

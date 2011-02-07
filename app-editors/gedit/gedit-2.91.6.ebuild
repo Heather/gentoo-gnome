@@ -4,6 +4,7 @@
 
 EAPI="2"
 GCONF_DEBUG="no"
+GNOME2_LA_PUNT="yes" # plugins are dlopened
 PYTHON_DEPEND="2"
 
 inherit gnome2 python eutils
@@ -66,13 +67,6 @@ pkg_setup() {
 		$(use_enable gvfs gvfs-metadata)
 		$(use_enable introspection)
 		$(use_enable spell)"
-}
-
-src_install() {
-	gnome2_src_install
-
-	# Installed for plugins, but they're dlopen()-ed
-	find "${D}" -name "*.la" -delete || die "remove of la files failed"
 }
 
 pkg_postinst() {

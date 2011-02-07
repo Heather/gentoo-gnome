@@ -4,6 +4,7 @@
 
 EAPI="2"
 WANT_AUTOMAKE="1.11"
+GNOME2_LA_PUNT="yes"
 
 inherit gnome2 virtualx autotools
 
@@ -31,6 +32,13 @@ DOCS="AUTHORS NEWS ChangeLog README TODO"
 src_prepare() {
 	gnome2_src_prepare
 
+	# --disable-dbus means gdbus is used instead of dbus-glib
+	G2CONF="${G2CONF}
+		--disable-static
+		--disable-maintainer-flags
+		--disable-dbus
+		$(use_enable introspection)"
+
 	# Put docs in a versioned directory, from upstream bug #623454
 	epatch "${FILESDIR}/${PN}-2.90.1-parallel-docs-install.patch"
 
@@ -49,13 +57,4 @@ src_test() {
 
 	cp "${FILESDIR}/run-tests" . || die "Unable to cp \${FILESDIR}/run-tests"
 	Xemake -f run-tests || die "Tests failed"
-}
-
-pkg_setup() {
-	# --disable-dbus means gdbus is used instead of dbus-glib
-	G2CONF="${G2CONF}
-		--disable-static
-		--disable-maintainer-flags
-		--disable-dbus
-		$(use_enable introspection)"
 }

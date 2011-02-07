@@ -3,6 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/nm-applet/nm-applet-0.8.2.ebuild,v 1.1 2010/11/10 13:05:32 dagger Exp $
 
 EAPI="2"
+GNOME2_LA_PUNT="yes"
 
 inherit gnome2
 

@@ -3,6 +3,7 @@
 # $Header: $
 
 EAPI="2"
+GNOME2_LA_PUNT="yes"
 
 inherit gnome2
 

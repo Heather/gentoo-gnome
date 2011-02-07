@@ -65,4 +65,7 @@ src_install() {
 	MAKEOPTS="${MAKEOPTS} -j1" \
 		base_src_install
 	dodoc AUTHORS ChangeLog NEWS README || die
+
+	# Remove .la files
+	find "${D}" -name '*.la' -exec rm -f '{}' + || die
 }

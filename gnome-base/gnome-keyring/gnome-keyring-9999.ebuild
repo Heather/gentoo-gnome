@@ -4,6 +4,7 @@
 
 EAPI="3"
 GCONF_DEBUG="yes"
+GNOME2_LA_PUNT="yes"
 
 inherit gnome2 multilib pam virtualx
 
@@ -12,7 +13,6 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
-
 IUSE="debug doc pam test"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
@@ -74,14 +74,6 @@ src_prepare() {
 	# Remove DISABLE_DEPRECATED flags
 	sed -e '/-D[A-Z_]*DISABLE_DEPRECATED/d' \
 		-i configure.in configure || die "sed 2 failed"
-}
-
-src_install() {
-	gnome2_src_install
-	if use pam; then
-		find "${ED}"/$(get_libdir)/security -name "*.la" -delete \
-			|| die "la file removal failed"
-	fi
 }
 
 src_test() {

@@ -4,7 +4,9 @@
 
 EAPI="2"
 WANT_AUTOMAKE="1.11"
-inherit autotools gnome2
+GNOME2_LA_PUNT="yes"
+
+inherit gnome2
 
 DESCRIPTION="Javascript bindings for Webkit-GTK and GNOME libraries"
 HOMEPAGE="http://live.gnome.org/Seed"

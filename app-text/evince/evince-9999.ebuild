@@ -4,6 +4,7 @@
 
 EAPI="3"
 GCONF_DEBUG="yes"
+GNOME2_LA_PUNT="yes"
 
 inherit autotools eutils gnome2
 
@@ -102,9 +103,4 @@ src_prepare() {
 	[[ ${PV} != 9999 ]] && eautoreconf
 
 	gnome2_src_prepare
-}
-
-src_install() {
-	gnome2_src_install
-	find "${ED}" -name "*.la" -delete || die "remove of lafiles failed"
 }

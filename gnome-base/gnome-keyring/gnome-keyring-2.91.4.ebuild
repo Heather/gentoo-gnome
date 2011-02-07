@@ -4,6 +4,7 @@
 
 EAPI="3"
 GCONF_DEBUG="yes"
+GNOME2_LA_PUNT="yes"
 
 inherit gnome2 multilib pam virtualx
 
@@ -12,8 +13,14 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86"
 IUSE="debug doc pam test"
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+	KEYWORDS=""
+else
+	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86"
+fi
+
 # USE=valgrind is probably not a good idea for the tree
 
 RDEPEND=">=dev-libs/glib-2.25:2
@@ -67,14 +74,6 @@ src_prepare() {
 	# Remove DISABLE_DEPRECATED flags
 	sed -e '/-D[A-Z_]*DISABLE_DEPRECATED/d' \
 		-i configure.in configure || die "sed 2 failed"
-}
-
-src_install() {
-	gnome2_src_install
-	if use pam; then
-		find "${ED}"/$(get_libdir)/security -name "*.la" -delete \
-			|| die "la file removal failed"
-	fi
 }
 
 src_test() {

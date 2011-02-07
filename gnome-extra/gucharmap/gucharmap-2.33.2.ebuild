@@ -4,6 +4,7 @@
 
 EAPI="3"
 GCONF_DEBUG="yes"
+GNOME2_LA_PUNT="yes"
 
 inherit gnome2
 
@@ -44,9 +45,4 @@ pkg_setup() {
 		$(use_enable introspection)
 		$(use_enable cjk unihan)"
 	DOCS="ChangeLog NEWS README TODO"
-}
-
-src_install() {
-	gnome2_src_install
-	find "${ED}" -name "*.la" -delete || die "remove of la files failed"
 }

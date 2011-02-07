@@ -3,6 +3,7 @@
 # $Header: $
 
 EAPI="3"
+CLUTTER_LA_PUNT="yes"
 
 inherit clutter
 

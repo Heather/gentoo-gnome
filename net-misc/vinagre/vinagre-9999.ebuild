@@ -4,6 +4,7 @@
 
 EAPI="2"
 GCONF_DEBUG="no"
+GNOME2_LA_PUNT="yes"
 
 inherit gnome2
 
@@ -62,8 +63,6 @@ pkg_setup() {
 
 src_install() {
 	gnome2_src_install
-
-	find "${D}" -name "*.la" -delete || die "remove of la files failed"
 
 	# Remove it's own installation of DOCS that go to $PN instead of $P and aren't ecompressed
 	rm -rf "${D}"/usr/share/doc/vinagre

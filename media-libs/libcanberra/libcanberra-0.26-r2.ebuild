@@ -57,6 +57,7 @@ src_configure() {
 		--with-html-dir=/usr/share/doc/${PF}/html
 }
 
+# TODO: check which la files are really needed
 src_install() {
 	# Disable parallel installation until bug #253862 is solved
 	emake -j1 DESTDIR="${ED}" install || die

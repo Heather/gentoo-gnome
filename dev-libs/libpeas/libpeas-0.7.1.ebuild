@@ -4,6 +4,7 @@
 
 EAPI="3"
 GCONF_DEBUG="no"
+GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="python? 2:2.5"
 WANT_AUTOMAKE="1.11"
 
@@ -41,9 +42,4 @@ pkg_setup() {
 		--disable-maintainer-mode
 		--disable-gtk2-test-build
 		--disable-seed"
-}
-
-src_install() {
-	gnome2_src_install
-	find "${ED}" -name "*.la" -delete || die "la files removal failed"
 }

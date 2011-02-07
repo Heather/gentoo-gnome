@@ -4,6 +4,7 @@
 
 EAPI="2"
 GCONF_DEBUG="no"
+GNOME2_LA_PUNT="yes"
 
 inherit gnome2
 
@@ -24,10 +25,4 @@ DOCS="AUTHORS ChangeLog NEWS README"
 
 pkg_setup() {
 	G2CONF="${G2CONF} --enable-animation $(use_enable accessibility hc)"
-}
-
-src_install() {
-	gnome2_src_install
-
-	find "${D}" -name "*.la" -delete
 }

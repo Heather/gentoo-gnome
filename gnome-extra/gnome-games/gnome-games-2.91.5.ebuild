@@ -4,6 +4,7 @@
 
 EAPI="3"
 GCONF_DEBUG="no"
+GNOME2_LA_PUNT="yes"
 WANT_AUTOMAKE="1.11"
 
 # make sure games is inherited first so that the gnome2
@@ -81,7 +82,7 @@ pkg_setup() {
 		--disable-schemas-compile
 		$(use_enable sound)
 		$(use_enable introspection)"
-	
+
 	# Should be after $(use_enable introspection), but before --enable-omitgames
 	use clutter && G2CONF="${G2CONF} --enable-introspection"
 

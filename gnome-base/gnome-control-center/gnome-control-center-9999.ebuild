@@ -4,6 +4,7 @@
 
 EAPI="3"
 GCONF_DEBUG="yes"
+GNOME2_LA_PUNT="yes" # gmodule is used, which uses dlopen
 
 inherit gnome2
 
@@ -84,11 +85,4 @@ pkg_setup() {
 		--disable-static
 		--disable-schemas-install"
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
-}
-
-src_install() {
-	gnome2_src_install
-	# gmodule is used to load plugins
-	# (on POSIX systems gmodule uses dlopen)
-	find "${ED}" -name "*.la" -delete || die "remove of la files failed"
 }

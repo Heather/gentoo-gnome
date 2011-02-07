@@ -1,9 +1,10 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
 EAPI="3"
 GCONF_DEBUG="no"
+GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2"
 
 inherit gnome2 python
@@ -55,6 +56,4 @@ src_install() {
 		insinto /usr/share/doc/${PF}/examples
 		doins ${S}/examples/* || die "doins examples failed!"
 	fi
-
-	find "${ED}" -name "*.la" -delete || die "la files removal failed"
 }

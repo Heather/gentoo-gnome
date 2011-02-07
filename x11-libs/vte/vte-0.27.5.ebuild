@@ -4,6 +4,7 @@
 
 EAPI="3"
 GCONF_DEBUG="yes"
+GNOME2_LA_PUNT="yes"
 #PYTHON_DEPEND="python? 2:2.4"
 
 inherit autotools eutils gnome2 #python

@@ -4,6 +4,7 @@
 
 EAPI="3"
 GCONF_DEBUG="no"
+GNOME2_LA_PUNT="yes"
 
 inherit eutils gnome2
 
@@ -51,14 +52,6 @@ src_prepare() {
 	# Use absolute path to GNU tar since star doesn't have the same
 	# options. On Gentoo, star is /usr/bin/tar, GNU tar is /bin/tar
 	epatch "${FILESDIR}"/${PN}-2.10.3-use_bin_tar.patch
-}
-
-src_install() {
-	gnome2_src_install
-	if use nautilus; then
-		find "${ED}"usr/$(get_libdir)/nautilus -name "*.la" -delete \
-			|| die "la file removal failed"
-	fi
 }
 
 pkg_postinst() {

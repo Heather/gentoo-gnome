@@ -1,9 +1,10 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
 EAPI="3"
 GCONF_DEBUG="yes"
+GNOME2_LA_PUNT="yes"
 
 inherit gnome2
 
@@ -42,9 +43,4 @@ src_prepare() {
 
 	# Test suite is badly broken, even from git repo
 	sed 's/tests//' -i Makefile.am Makefile.in || die "sed failed"
-}
-
-src_install() {
-	gnome2_src_install
-	find "${ED}" -name "*.la" -delete || die "la files removal failed"
 }

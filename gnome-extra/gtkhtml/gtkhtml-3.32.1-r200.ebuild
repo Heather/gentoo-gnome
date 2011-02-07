@@ -4,6 +4,7 @@
 
 EAPI="3"
 GCONF_DEBUG="no"
+GNOME2_LA_PUNT="yes"
 
 inherit gnome2 eutils
 
@@ -44,7 +45,4 @@ src_install() {
 
 	# Don't clash with gtkhtml:4.0
 	rm -vf "${ED}/usr/bin/gtkhtml-editor-test" || die
-
-	# Remove .la files since old will be removed anyway while updating
-	find "${ED}" -name "*.la" -delete || die "remove of la files failed"
 }

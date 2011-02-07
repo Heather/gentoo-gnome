@@ -113,4 +113,7 @@ src_compile() {
 src_install() {
 	emake DESTDIR="${D}" install || die "Install failed"
 	dodoc Source/WebKit/gtk/{NEWS,ChangeLog} || die "dodoc failed"
+
+	# Remove .la files
+	find "${D}" -name '*.la' -exec rm -f '{}' + || die
 }
