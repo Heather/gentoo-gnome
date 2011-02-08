@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/gnome-utils/gnome-utils-2.32.0-r1.ebuild,v 1.1 2010/12/04 18:08:10 pacho Exp $
 
@@ -22,7 +22,7 @@ else
 fi
 
 # libcanberra 0.26-r2 is needed for gtk+:3 fixes
-RDEPEND=">=dev-libs/glib-2.20:2
+RDEPEND=">=dev-libs/glib-2.26.0:2
 	>=x11-libs/gtk+-2.91.1:3
 	>=gnome-base/gconf-2
 	>=gnome-base/gnome-panel-2.13.4
