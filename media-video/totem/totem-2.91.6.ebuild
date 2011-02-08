@@ -32,7 +32,7 @@ fi
 # FIXME: Automagic tracker-0.9.0
 RDEPEND=">=dev-libs/glib-2.27.92
 	>=x11-libs/gdk-pixbuf-2.23.0
-	>=x11-libs/gtk+-2.99.2:3[introspection?]
+	>=x11-libs/gtk+-2.99.3:3[introspection?]
 	>=dev-libs/totem-pl-parser-2.32.2[introspection?]
 	>=dev-libs/libpeas-0.7.1[gtk]
 	>=x11-themes/gnome-icon-theme-2.16
@@ -137,14 +137,18 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# AC_CONFIG_AUX_DIR_DEFAULT doesn't exist, and eautoreconf/aclocal fails
+	mkdir -p m4
 	gnome2_src_prepare
 
 	# Fix broken smclient option passing
 	# FIXME: File a bug for this
 	epatch "${FILESDIR}/${PN}-2.90.0-smclient-target-detection.patch"
 
-	intltoolize --force --copy --automake || die "intltoolize failed"
-	eautoreconf
+	if [[ ${PV} != 9999 ]]; then
+		intltoolize --force --copy --automake || die "intltoolize failed"
+		eautoreconf
+	fi
 
 	# disable pyc compiling
 	mv py-compile py-compile.orig
