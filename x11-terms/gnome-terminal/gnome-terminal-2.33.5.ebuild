@@ -21,13 +21,13 @@ else
 fi
 
 # libgnome needed for some monospace font schema, bug #274638
-RDEPEND=">=dev-libs/glib-2.25.12:2
-	>=x11-libs/gtk+-2.91.6:3
-	>=gnome-base/gconf-2.31.3
+RDEPEND=">=dev-libs/glib-2.26.0:2
+	>=x11-libs/gtk+-2.99.3:3
 	>=x11-libs/vte-0.27.3:2.90
+	>=gnome-base/gconf-2.31.3
+	>=gnome-base/gsettings-desktop-schemas-0.1.0
 	x11-libs/libSM
-	x11-libs/libX11
-	gnome-base/libgnome"
+	x11-libs/libICE"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
 	>=dev-util/pkgconfig-0.9
@@ -45,7 +45,8 @@ src_prepare() {
 	# Use login shell by default (#12900)
 	epatch "${FILESDIR}"/${PN}-2.22.0-default_shell.patch
 
-	epatch "${FILESDIR}"/${PN}-2.33.4-fix-gdk-targets.patch
+	# Remove libgnome dep, taken from upstream, not needed for next release
+	epatch "${FILESDIR}"/${P}-remove-libgnome-dep.patch
 
 	[[ ${PV} != 9999 ]] && eautoreconf
 
