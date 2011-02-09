@@ -34,7 +34,7 @@ PINENTRY_DEPEND="|| ( app-crypt/pinentry[gtk] app-crypt/pinentry-qt app-crypt/pi
 # pst is not mature enough and changes API/ABI frequently
 RDEPEND=">=dev-libs/glib-2.26.0:2
 	>=x11-libs/cairo-1.9.15
-	>=x11-libs/gtk+-2.99.2:3
+	>=x11-libs/gtk+-2.99.3:3
 	>=dev-libs/libunique-2.91.4:3
 	>=gnome-base/gnome-desktop-2.91.3:3
 	>=dev-libs/libgweather-2.90.0:3

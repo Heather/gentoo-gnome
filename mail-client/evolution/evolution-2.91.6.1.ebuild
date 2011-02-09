@@ -34,13 +34,13 @@ PINENTRY_DEPEND="|| ( app-crypt/pinentry[gtk] app-crypt/pinentry-qt app-crypt/pi
 # pst is not mature enough and changes API/ABI frequently
 RDEPEND=">=dev-libs/glib-2.26.0:2
 	>=x11-libs/cairo-1.9.15
-	>=x11-libs/gtk+-2.99.2:3
+	>=x11-libs/gtk+-2.99.3:3
 	>=dev-libs/libunique-2.91.4:3
 	>=gnome-base/gnome-desktop-2.91.3:3
 	>=dev-libs/libgweather-2.90.0:3
 	media-libs/libcanberra[gtk3]
 	>=x11-libs/libnotify-0.7
-	>=gnome-extra/evolution-data-server-${PV}[weather]
+	>=gnome-extra/evolution-data-server-${MY_MAJORV}[weather]
 	>=gnome-extra/gtkhtml-3.31.3:4.0
 	>=gnome-base/gconf-2
 	dev-libs/atk
@@ -139,9 +139,6 @@ pkg_setup() {
 src_prepare() {
 	# Fix invalid use of la file in contact-editor, upstream bug #635002
 	epatch "${FILESDIR}/${PN}-2.32.0-wrong-lafile-usage.patch"
-
-	# Fix capplet build failure, from upstream, won't need next release
-	epatch "${FILESDIR}/${PN}-2.91.6-fix-build-failure.patch"
 
 	# Use NSS/NSPR only if 'ssl' is enabled.
 	if use ssl ; then
