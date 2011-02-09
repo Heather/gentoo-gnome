@@ -11,7 +11,7 @@ DESCRIPTION="A window navigation construction kit"
 HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="LGPL-2"
-SLOT="0"
+SLOT="1"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~x86-solaris"
 
 IUSE="doc +introspection startup-notification"
