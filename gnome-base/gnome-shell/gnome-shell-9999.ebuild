@@ -23,16 +23,16 @@ fi
 
 # gnome-desktop-2.91.2 is needed due to header changes, db82a33 in gnome-desktop
 # FIXME: Automagic gnome-bluetooth[introspection] support. Also gnome bug 637935
-# gtk+-2.99.3 is needed for gtk/gtkx.h
 COMMON_DEPEND=">=dev-libs/glib-2.25.9
-	>=x11-libs/gtk+-2.99.3:3[introspection]
+	>=x11-libs/gtk+-3.0.0:3[introspection]
 	>=media-libs/clutter-1.5.15[introspection]
 	>=gnome-base/gnome-desktop-2.91.2:3
+	>=gnome-base/gsettings-desktop-schemas-0.1.7
 	>=dev-libs/gobject-introspection-0.10.1
 	>=gnome-extra/evolution-data-server-2.91.6
 
 	dev-libs/dbus-glib
-	>=dev-libs/gjs-0.7.8
+	>=dev-libs/gjs-0.7.11
 	dev-libs/libxml2:2
 	x11-libs/pango[introspection]
 	dev-libs/libcroco:0.6
