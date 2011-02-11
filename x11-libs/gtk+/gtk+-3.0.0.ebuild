@@ -39,16 +39,16 @@ RDEPEND="!aqua? (
 		x11-libs/libXcomposite
 		x11-libs/libXdamage
 		>=x11-libs/cairo-1.10.0[X,svg]
-		>=x11-libs/gdk-pixbuf-2.21:2[X,introspection?,jpeg?,jpeg2k?,tiff?]
+		>=x11-libs/gdk-pixbuf-2.22.0:2[X,introspection?,jpeg?,jpeg2k?,tiff?]
 	)
 	aqua? (
 		>=x11-libs/cairo-1.10.0[aqua,svg]
-		>=x11-libs/gdk-pixbuf-2.21:2[introspection?,jpeg?,jpeg2k?,tiff?]
+		>=x11-libs/gdk-pixbuf-2.22.0:2[introspection?,jpeg?,jpeg2k?,tiff?]
 	)
 	xinerama? ( x11-libs/libXinerama )
-	>=dev-libs/glib-2.27.5
+	>=dev-libs/glib-2.28.0
 	>=x11-libs/pango-1.20[introspection?]
-	>=dev-libs/atk-1.29.2[introspection?]
+	>=dev-libs/atk-1.30[introspection?]
 	media-libs/fontconfig
 	x11-libs/gtk+:2
 	x11-misc/shared-mime-info
@@ -126,9 +126,7 @@ src_configure() {
 		$(use_enable introspection)
 		--disable-packagekit
 		--disable-papi
-		--disable-gtk2-dependency"
-	# ARGH. --enable-gtk2-dependency doesn't actually work.
-	# We remove the utilities manually below.
+		--enable-gtk2-dependency"
 
 	# XXX: Maybe with multi-backend we should enable x11 all the time?
 	if use aqua; then
@@ -171,10 +169,6 @@ src_install() {
 
 	# Remove unneeded *.la files
 	find "${ED}" -name "*.la" -delete
-
-	# gtk-update-icon-cache and gtk-builder-convert are provided by gtk+:2 now
-	# Remove this once --enable-gtk2-dependency works
-	rm -v "${ED}"/usr/bin/gtk-update-icon-cache || die
 
 	# add -framework Carbon to the .pc files
 	use aqua && for i in gtk+-3.0.pc gtk+-quartz-3.0.pc gtk+-unix-print-3.0.pc; do
