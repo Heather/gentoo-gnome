@@ -52,7 +52,8 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	>=x11-wm/mutter-2.91.4[introspection]
 	x11-apps/mesa-progs
 
-	dev-python/dbus-python"
+	dev-python/dbus-python
+	dev-python/gconf-python"
 # Runtime-only deps are probably incomplete and approximate
 RDEPEND="${COMMON_DEPEND}
 	x11-libs/gdk-pixbuf[introspection]
