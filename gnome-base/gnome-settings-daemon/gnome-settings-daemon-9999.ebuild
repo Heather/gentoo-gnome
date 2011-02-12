@@ -25,6 +25,7 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 fi
 
+# Cups-1.4 is needed due to bug 353724
 COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	>=dev-libs/glib-2.26.0
 	>=x11-libs/gtk+-2.99.3
@@ -34,7 +35,7 @@ COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	>=gnome-base/gsettings-desktop-schemas-0.1.2
 	media-fonts/cantarell
 	media-libs/fontconfig
-	net-print/cups
+	>=net-print/cups-1.4
 
 	>=x11-libs/libnotify-0.6.1
 	x11-libs/libXi
