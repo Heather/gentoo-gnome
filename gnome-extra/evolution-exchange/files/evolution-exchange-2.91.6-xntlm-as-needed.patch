@@ -1,0 +1,11 @@
+--- server/lib/Makefile.am
++++ server/lib/Makefile.am
+@@ -71,6 +71,8 @@
+ 	$(EVOLUTION_DATA_SERVER_CFLAGS)
+ 
+ libexchange_la_LIBADD = \
++	-L$(top_srcdir)/server/xntlm \
++	-lxntlm \
+ 	$(EVOLUTION_DATA_SERVER_LIBS) \
+ 	$(GNOME_PLATFORM_LIBS) \
+ 	$(SOUP_LIBS) \
