@@ -13,7 +13,8 @@ HOMEPAGE="http://telepathy.freedesktop.org/wiki/Folks"
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS="~amd64"
+# Broke API, empathy refuses to compile
+#KEYWORDS="~amd64 ~x86"
 IUSE="doc"
 
 RDEPEND=">=dev-libs/glib-2.24:2
@@ -21,20 +22,26 @@ RDEPEND=">=dev-libs/glib-2.24:2
 	dev-libs/dbus-glib
 	<dev-libs/libgee-0.7
 	dev-libs/libxml2
+	sys-libs/ncurses
+	sys-libs/readline
 "
 DEPEND="${RDEPEND}
+	>=dev-util/intltool-0.35.0
 	>=dev-util/pkgconfig-0.21
-	dev-lang/vala:0.10[vapigen]
-	>=dev-libs/gobject-introspection-0.9.6
+	>=dev-lang/vala-0.11.6:0.12[vapigen]
+	>=dev-libs/gobject-introspection-0.9.12
+	sys-devel/gettext
 "
 
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS README"
 	G2CONF="${G2CONF}
-		VALAC=$(type -p valac-0.10)
-		VAPIGEN=$(type -p vapigen-0.10)
-		$(use_enable doc docs)
 		--enable-import-tool
+		--enable-inspect-tool
+		--enable-vala
+		VALAC=$(type -p valac-0.12)
+		VAPIGEN=$(type -p vapigen-0.12)
+		$(use_enable doc docs)
 		--disable-Werror"
 }
 
