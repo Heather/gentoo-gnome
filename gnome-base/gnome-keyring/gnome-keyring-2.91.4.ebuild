@@ -47,6 +47,8 @@ DOCS="AUTHORS ChangeLog NEWS README"
 
 # tests fail in several ways, they should be fixed in the next cycle (bug #340283),
 # revisit then.
+# UPDATE: tests use system-installed libraries, fail with:
+# ** WARNING **: couldn't load PKCS#11 module: /usr/lib64/pkcs11/gnome-keyring-pkcs11.so: Couldn't initialize module: The device was removed or unplugged 
 RESTRICT="test"
 
 pkg_setup() {
