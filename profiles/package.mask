@@ -12,30 +12,6 @@
 # ported to gtk+:3 (this includes rhythmbox, at least)
 >=gnome-base/gnome-media-2.91
 
-# Nirbheek Chauhan <nirbheek@gentoo.org> (24 Dec 2010)
-# Stuff that directly or indirectly needs libnotify-0.6
-# (versions are approximate)
-# DO NOT UNMASK unless you're fine with everything breaking
->=x11-misc/notification-daemon-0.5
->=app-crypt/seahorse-2.91
->=app-crypt/seahorse-plugins-2.91
->=gnome-base/libgnomekbd-2.91
->=gnome-base/gnome-settings-daemon-2.91
->=gnome-base/gnome-control-center-2.91
->=gnome-extra/zenity-2.91
->=net-wireless/gnome-bluetooth-2.91
->=sys-apps/gnome-disk-utility-2.32.1
->=x11-plugins/pidgin-libnotify-0.14-r300
-
-# Gilles Dartiguelongue <eva@gentoo.org> (10 Oct 2010)
-# BEGIN GNOME 2.32 mask
-# FIXME: New libbonobo breaks all applets must double
-# check code changes.
-=gnome-base/libbonobo-2.32*
-# Makes empathy build fail
-=dev-libs/folks-0.3*
-# END GNOME 2.32 mask
-
 # Arun Raghavan <ford_prefect@gentoo.org> (10 Sep 2010)
 # Development version of sysprof.
 =dev-util/sysprof-1.1*
