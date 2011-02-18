@@ -31,6 +31,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	>=gnome-base/gsettings-desktop-schemas-0.1.7
 	>=dev-libs/gobject-introspection-0.10.1
 	>=gnome-extra/evolution-data-server-2.91.6
+	>=net-libs/telepathy-glib-0.13.12[introspection]
 
 	dev-libs/dbus-glib
 	>=dev-libs/gjs-0.7.11
