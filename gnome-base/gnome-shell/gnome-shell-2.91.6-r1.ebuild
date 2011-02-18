@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -26,6 +26,7 @@ fi
 # FIXME: Automagic gnome-bluetooth[introspection] support. Also gnome bug 637935
 # gtk+-2.99.3 is needed for gtk/gtkx.h
 COMMON_DEPEND=">=dev-libs/glib-2.25.9
+	x11-libs/gdk-pixbuf:2[introspection]
 	>=x11-libs/gtk+-2.99.3:3[introspection]
 	>=media-libs/clutter-1.5.15[introspection]
 	>=gnome-base/gnome-desktop-2.91.2:3
@@ -45,7 +46,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	>=media-libs/gst-plugins-base-0.10.16
 	media-libs/libcanberra
 	media-sound/pulseaudio
-	net-wireless/gnome-bluetooth[introspection]
+	>=net-wireless/gnome-bluetooth-2.90.0[introspection]
 
 	x11-libs/startup-notification
 	x11-libs/libXfixes
@@ -70,3 +71,10 @@ DOCS="AUTHORS README"
 # Don't error out on warnings
 G2CONF="--enable-compile-warnings=maximum
 --disable-schemas-compile"
+
+src_prepare() {
+	gnome2_src_prepare
+
+	# Taken from upstream, remove for next release, bug 352466
+	epatch "${FILESDIR}/${P}-as-needed.patch"
+}
