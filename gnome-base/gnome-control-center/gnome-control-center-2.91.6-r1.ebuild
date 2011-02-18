@@ -6,7 +6,7 @@ EAPI="3"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes" # gmodule is used, which uses dlopen
 
-inherit gnome2
+inherit eutils gnome2
 
 DESCRIPTION="The gnome2 Desktop configuration tool"
 HOMEPAGE="http://www.gnome.org/"
@@ -78,11 +78,14 @@ DEPEND="${COMMON_DEPEND}
 # Needed for autoreconf
 #	gnome-base/gnome-common
 
-pkg_setup() {
+src_prepare() {
 	# TODO: libsocialweb
 	G2CONF="${G2CONF}
 		--disable-update-mimedb
 		--disable-static
 		--disable-schemas-install"
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
+
+	# Taken from upstream, remove for next release, bug 353684
+	epatch "${FILESDIR}/${P}-port-to-gtkstyle-context.patch"
 }
