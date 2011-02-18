@@ -4,7 +4,8 @@
 
 EAPI="3"
 GCONF_DEBUG="yes"
-GNOME2_LA_PUNT="yes"
+# libgnome-bluetooth-applet.la is needed by gnome-shell during compilation
+GNOME2_LA_PUNT="no"
 
 inherit eutils gnome2 multilib
 
@@ -71,6 +72,13 @@ pkg_setup() {
 
 src_install() {
 	gnome2_src_install
+
+	local la
+	for la in gnome-bluetooth/plugins/libgbtgeoclue.la \
+			 control-center-1/panels/libbluetooth.la \
+			 libgnome-bluetooth.la; do
+		rm -v "${ED}/usr/$(get_libdir)/${la}" || die
+	done
 
 	insinto /$(get_libdir)/udev/rules.d
 	doins "${FILESDIR}"/80-rfkill.rules || die "udev rules installation failed"
