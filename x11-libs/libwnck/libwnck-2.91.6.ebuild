@@ -25,7 +25,7 @@ RDEPEND=">=x11-libs/gtk+-2.91.5:3[introspection?]
 	introspection? ( >=dev-libs/gobject-introspection-0.6.14 )
 	startup-notification? ( >=x11-libs/startup-notification-0.4 )
 	
-	!!<x11-libs/libwnck-2.30.6-r200:0"
+	!!<x11-libs/libwnck-2.30.6-r200:1"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.9
