@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # vim: set sw=4 sts=4 et :
 # Author(s): Nirbheek Chauhan <nirbheek@gentoo.org>
 #

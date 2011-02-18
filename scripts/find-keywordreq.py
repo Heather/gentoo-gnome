@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python2
 
 """ Helper module to print a list of needed keywords provided a list of cpv.
 
