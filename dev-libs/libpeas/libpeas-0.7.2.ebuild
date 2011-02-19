@@ -15,16 +15,16 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="LGPL-2"
 SLOT="0"
-IUSE="doc gtk python" # seed
+IUSE="doc gtk python" # glade, seed
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 fi
 
 RDEPEND=">=dev-libs/glib-2.23.6:2
-	>=dev-libs/gobject-introspection-0.9.6
+	>=dev-libs/gobject-introspection-0.10.1
 	gtk? ( >=x11-libs/gtk+-2.90:3[introspection] )
 	python? ( >=dev-python/pygobject-2.20 )"
 DEPEND="${RDEPEND}
