@@ -11,9 +11,7 @@ HOMEPAGE="http://live.gnome.org/gtk-vnc"
 
 LICENSE="GPL-2"
 SLOT="3"
-# Add unkeyworded because the latest vinagre fails to compile,
-# and the old one doesn't work with this
-#KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="examples +introspection sasl"
 
 # libview is used in examples/gvncviewer -- no need
@@ -30,22 +28,9 @@ RDEPEND=">=dev-libs/glib-2.10:2
 	!!net-libs/gtk-vnc:0" # It's okay there aren't many users of gtk-vnc in-tree
 DEPEND="${RDEPEND}
 	>=dev-lang/perl-5
-	dev-perl/Text-CSV
 	dev-util/pkgconfig
 	sys-devel/gettext
 	>=dev-util/intltool-0.40"
-
-src_prepare() {
-	epatch "${FILESDIR}"/${P}-pre-conn-crash-fix.patch
-	epatch "${FILESDIR}"/${P}-gnutls-crash-fix.patch
-	epatch "${FILESDIR}"/${P}-fb-bounds-fix.patch
-	epatch "${FILESDIR}"/${P}-memory-leak-fix.patch
-	epatch "${FILESDIR}"/${P}-shared-flag.patch
-
-	# Taken from upstream, don't need for next version
-	epatch "${FILESDIR}/${P}-port-to-gtk3.patch"
-	epatch "${FILESDIR}/${P}-refactor-keymap-gtk-backends.patch"
-}
 
 src_configure() {
 	# No python support with gtk+:3
@@ -53,7 +38,7 @@ src_configure() {
 		$(use_with examples) \
 		$(use_enable introspection) \
 		$(use_with sasl) \
-		--disable-python \
+		--with-python=no \
 		--with-coroutine=gthread \
 		--without-libview \
 		--with-gtk=3.0 \
