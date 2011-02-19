@@ -16,19 +16,19 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="applet avahi +ssh +telepathy test"
 
-RDEPEND=">=dev-libs/glib-2.25.11
+RDEPEND=">=dev-libs/glib-2.25.11:2
 	dev-libs/dbus-glib
 	>=x11-libs/gtk+-2.99.3:3
-	>=gnome-base/gconf-2.16
+	>=gnome-base/gconf-2.16:2
 	>=dev-libs/libpeas-0.7.2[gtk]
-	>=dev-libs/libxml2-2.6.31
-	>=net-libs/gtk-vnc-0.4.3:3
+	>=dev-libs/libxml2-2.6.31:2
+	>=net-libs/gtk-vnc-0.4.3:0
 
 	gnome-base/gnome-keyring
 
 	applet? ( || ( gnome-base/gnome-panel[bonobo] <gnome-base/gnome-panel-2.32 ) )
 	avahi? ( >=net-dns/avahi-0.6.26[dbus,gtk3] )
-	ssh? ( >=x11-libs/vte-0.20 )
+	ssh? ( >=x11-libs/vte-0.20:2.90 )
 	telepathy? ( >=net-libs/telepathy-glib-0.11.6 )"
 
 DEPEND="${RDEPEND}

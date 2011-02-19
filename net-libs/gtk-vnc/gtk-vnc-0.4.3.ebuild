@@ -10,7 +10,7 @@ DESCRIPTION="VNC viewer widget for GTK"
 HOMEPAGE="http://live.gnome.org/gtk-vnc"
 
 LICENSE="GPL-2"
-SLOT="3"
+SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="examples +introspection sasl"
 
@@ -25,7 +25,7 @@ RDEPEND=">=dev-libs/glib-2.10:2
 	introspection? ( >=dev-libs/gobject-introspection-0.9.4 )
 	sasl? ( dev-libs/cyrus-sasl )
 	
-	!!net-libs/gtk-vnc:0" # It's okay there aren't many users of gtk-vnc in-tree
+	!!net-libs/gtk-vnc:3"
 DEPEND="${RDEPEND}
 	>=dev-lang/perl-5
 	dev-util/pkgconfig
