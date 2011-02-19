@@ -26,7 +26,7 @@ RDEPEND=">=dev-libs/glib-2.25.11
 	dev-libs/dbus-glib
 	>=x11-libs/gtk+-2.99.3:3
 	>=gnome-base/gconf-2.16
-	>=dev-libs/libpeas-0.7.3[gtk]
+	>=dev-libs/libpeas-0.7.2[gtk]
 	>=dev-libs/libxml2-2.6.31
 	>=net-libs/gtk-vnc-0.4.3:3
 
