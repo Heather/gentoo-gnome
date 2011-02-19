@@ -1,0 +1,47 @@
+From 6da33d0d064e7dd6b5144d01ea1d73a8cde5b02d Mon Sep 17 00:00:00 2001
+From: Steve Frécinaux <code@istique.net>
+Date: Sun, 13 Feb 2011 23:41:22 +0000
+Subject: Update totem against latest libpeas API changes.
+
+---
+diff --git a/configure.in b/configure.in
+index 641f18f..ec129c7 100644
+--- a/configure.in
++++ b/configure.in
+@@ -48,7 +48,7 @@ TOTEM_PLPARSER_REQS=2.32.2
+ GNOMEICON_REQS=2.15.90
+ DBUS_REQS=0.82
+ VALA_REQS=0.11.1
+-PEAS_REQS=0.7.1
++PEAS_REQS=0.7.2
+ PYTHON_REQS=2.3
+ PYGOBJECT_REQS=2.27.0
+ 
+diff --git a/src/plugins/totem-plugins-engine.c b/src/plugins/totem-plugins-engine.c
+index cdff0bf..4518fe2 100644
+--- a/src/plugins/totem-plugins-engine.c
++++ b/src/plugins/totem-plugins-engine.c
+@@ -120,6 +120,8 @@ totem_plugins_engine_get_default (TotemObject *totem)
+ 	}
+ 	g_strfreev (paths);
+ 
++	peas_engine_enable_loader (PEAS_ENGINE (engine), "python");
++
+ 	g_object_add_weak_pointer (G_OBJECT (engine),
+ 				   (gpointer) &engine);
+ 
+diff --git a/src/totem-menu.c b/src/totem-menu.c
+index 6e76184..1a2e54e 100644
+--- a/src/totem-menu.c
++++ b/src/totem-menu.c
+@@ -1234,7 +1234,7 @@ plugins_action_callback (GtkAction *action, Totem *totem)
+ 					 G_CALLBACK (totem_plugins_response_cb),
+ 					 NULL, 0);
+ 
+-		manager = peas_gtk_plugin_manager_new ();
++		manager = peas_gtk_plugin_manager_new (NULL);
+ 		gtk_widget_show_all (GTK_WIDGET (manager));
+ 		gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (totem->plugins))),
+ 				    manager, TRUE, TRUE, 0);
+--
+cgit v0.8.3.4
