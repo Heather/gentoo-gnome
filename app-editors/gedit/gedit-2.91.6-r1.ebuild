@@ -30,7 +30,7 @@ RDEPEND=">=x11-libs/libSM-1.0
 	>=dev-libs/glib-2.27.92
 	>=x11-libs/gtk+-2.99.0:3[introspection?]
 	>=x11-libs/gtksourceview-2.91.1:3.0[introspection?]
-	>=dev-libs/libpeas-0.7.0[gtk]
+	>=dev-libs/libpeas-0.7.2[gtk]
 
 	dev-python/pygobject[introspection]
 	gnome-base/gsettings-desktop-schemas
@@ -77,4 +77,8 @@ pkg_postinst() {
 pkg_postrm() {
 	gnome2_pkg_postrm
 	python_mod_cleanup /usr/$(get_libdir)/gedit/plugins
+}
+
+src_prepare() {
+	epatch "${FILESDIR}/${PN}-libpeas-compat.patch"
 }

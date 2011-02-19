@@ -1,0 +1,49 @@
+From 9201fe7bfe6ab36830cb0660be449b0a90d6c55e Mon Sep 17 00:00:00 2001
+From: Garrett Regier <alias301@gmail.com>
+Date: Mon, 14 Feb 2011 13:23:11 +0000
+Subject: Update to latest libpeas API changes
+
+---
+diff --git a/configure.ac b/configure.ac
+index e7d6563..9e42175 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -307,8 +307,8 @@ PKG_CHECK_MODULES(GEDIT, [
+ 	gio-2.0 >= 2.25.11
+ 	gtk+-3.0 >= 2.99.0
+ 	gtksourceview-3.0 >= 2.91.1
+-	libpeas-1.0 >= 0.7.0
+-	libpeas-gtk-1.0 >= 0.7.0
++	libpeas-1.0 >= 0.7.2
++	libpeas-gtk-1.0 >= 0.7.2
+ 	gsettings-desktop-schemas
+ ])
+ 
+diff --git a/gedit/dialogs/gedit-preferences-dialog.c b/gedit/dialogs/gedit-preferences-dialog.c
+index 816f73d..ec1e3f7 100644
+--- a/gedit/dialogs/gedit-preferences-dialog.c
++++ b/gedit/dialogs/gedit-preferences-dialog.c
+@@ -904,7 +904,7 @@ setup_plugins_page (GeditPreferencesDialog *dlg)
+ 
+ 	gedit_debug (DEBUG_PREFS);
+ 
+-	page_content = peas_gtk_plugin_manager_new ();
++	page_content = peas_gtk_plugin_manager_new (NULL);
+ 	g_return_if_fail (page_content != NULL);
+ 
+ 	gtk_box_pack_start (GTK_BOX (dlg->priv->plugin_manager_place_holder),
+diff --git a/gedit/gedit-plugins-engine.c b/gedit/gedit-plugins-engine.c
+index 807bbc2..93596f4 100644
+--- a/gedit/gedit-plugins-engine.c
++++ b/gedit/gedit-plugins-engine.c
+@@ -66,6 +66,8 @@ gedit_plugins_engine_init (GeditPluginsEngine *engine)
+ 	                                            GEDIT_TYPE_PLUGINS_ENGINE,
+ 	                                            GeditPluginsEnginePrivate);
+ 
++  peas_engine_enable_loader (PEAS_ENGINE (engine), "python");
++
+ 	engine->priv->plugin_settings = g_settings_new ("org.gnome.gedit.plugins");
+ 	
+ 	/* Require gedit's typelib. */
+--
+cgit v0.8.3.4
