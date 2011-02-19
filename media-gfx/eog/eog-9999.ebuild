@@ -24,7 +24,7 @@ fi
 RDEPEND=">=x11-libs/gtk+-2.91.7:3[introspection?,jpeg?,tiff?]
 	>=dev-libs/glib-2.25.15
 	>=dev-libs/libxml2-2
-	>=dev-libs/libpeas-0.7.0[gtk]
+	>=dev-libs/libpeas-0.7.2[gtk]
 	>=gnome-base/gnome-desktop-2.91.2:3
 	>=gnome-base/gsettings-desktop-schemas-0.1.0
 	>=x11-themes/gnome-icon-theme-2.19.1

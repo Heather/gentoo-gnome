@@ -1,0 +1,54 @@
+From 06d62c58d18a82974c6ef3d909d6056786015f23 Mon Sep 17 00:00:00 2001
+From: Garrett Regier <alias301@gmail.com>
+Date: Mon, 14 Feb 2011 13:27:42 +0000
+Subject: Update to latest libpeas API changes
+
+Plugin loaders now must be enabled
+not disabled.
+---
+diff --git a/configure.ac b/configure.ac
+index 69097bf..cc257a5 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -104,8 +104,8 @@ EOG_MODULES="gtk+-3.0 >= $GTK_REQUIRED \
+              gnome-icon-theme >= $GNOME_ICON_THEME_REQUIRED \
+              shared-mime-info >= $SHARED_MIME_INFO_REQUIRED \
+              gsettings-desktop-schemas >= $DESKTOP_SCHEMAS_REQUIRED \
+-             libpeas-1.0 >= 0.7.0 \
+-             libpeas-gtk-1.0 >= 0.7.0"
++             libpeas-1.0 >= 0.7.2 \
++             libpeas-gtk-1.0 >= 0.7.2"
+ 
+ # Introspection
+ GOBJECT_INTROSPECTION_CHECK([0.9.3])
+diff --git a/src/eog-plugin-engine.c b/src/eog-plugin-engine.c
+index dfd0862..7997684 100644
+--- a/src/eog-plugin-engine.c
++++ b/src/eog-plugin-engine.c
+@@ -124,10 +124,8 @@ eog_plugin_engine_new (void)
+ 	engine = EOG_PLUGIN_ENGINE (g_object_new (EOG_TYPE_PLUGIN_ENGINE,
+ 						  NULL));
+ 
+-	/* Disable python and seed bindings as they are not working very
++	/* Don't enable python and seed bindings as they are not working very
+ 	 * well with eog yet (e.g. are having ref counting issues). */
+-	peas_engine_disable_loader (PEAS_ENGINE (engine), "python");
+-	peas_engine_disable_loader (PEAS_ENGINE (engine), "seed");
+ 
+ 	user_plugin_path = g_build_filename (eog_util_dot_dir (),
+ 					     USER_EOG_PLUGINS_LOCATION, NULL);
+diff --git a/src/eog-preferences-dialog.c b/src/eog-preferences-dialog.c
+index 260f29b..f5e9c87 100644
+--- a/src/eog-preferences-dialog.c
++++ b/src/eog-preferences-dialog.c
+@@ -255,7 +255,7 @@ eog_preferences_dialog_constructor (GType type,
+ 	g_settings_bind (priv->fullscreen_settings, EOG_CONF_FULLSCREEN_SECONDS,
+ 			 seconds_spin, "value", G_SETTINGS_BIND_DEFAULT);
+ 
+-        plugin_manager = peas_gtk_plugin_manager_new ();
++        plugin_manager = peas_gtk_plugin_manager_new (NULL);
+ 
+         g_assert (plugin_manager != NULL);
+ 
+--
+cgit v0.8.3.4
