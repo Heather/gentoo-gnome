@@ -20,6 +20,9 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 fi
 
+# x11-misc/xdg-user-dirs{,-gtk} are needed to create the various XDG_*_DIRs, and
+# create .config/user-dirs.dirs which is read by glib to get G_USER_DIRECTORY_*
+# xdg-user-dirs-update is run during login (see 10-user-dirs-update below).
 COMMON_DEPEND=">=dev-libs/glib-2.16:2
 	>=x11-libs/gtk+-2.90.7:3
 	>=dev-libs/dbus-glib-0.76
@@ -34,6 +37,8 @@ COMMON_DEPEND=">=dev-libs/glib-2.16:2
 	x11-libs/libXcomposite
 	x11-libs/libXext
 	x11-libs/libXtst
+	x11-misc/xdg-user-dirs
+	x11-misc/xdg-user-dirs-gtk
 	x11-apps/xdpyinfo"
 # Pure-runtime deps from the session files
 # Don't add nautilus because that has been removed in trunk
@@ -66,12 +71,13 @@ pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS README"
 
 	# Add "session saving" button back, upstream bug #575544
-	epatch "${FILESDIR}/${PN}-2.32.0-session-saving-button.patch"
-
-	if [[ ${PV} != 9999 ]]; then
-		intltoolize --force --copy --automake || die "intltoolize failed"
-		eautoreconf
-	fi
+	# FIXME: Doesn't apply anymore
+#	epatch "${FILESDIR}/${PN}-2.32.0-session-saving-button.patch"
+#
+#	if [[ ${PV} != 9999 ]]; then
+#		intltoolize --force --copy --automake || die "intltoolize failed"
+#		eautoreconf
+#	fi
 
 	gnome2_src_prepare
 }
@@ -82,4 +88,13 @@ src_install() {
 	dodir /etc/X11/Sessions || die "dodir failed"
 	exeinto /etc/X11/Sessions
 	doexe "${FILESDIR}/Gnome" || die "doexe failed"
+	exeinto /etc/X11/xinit/xinitrc.d/
+	doexe "${FILESDIR}/10-user-dirs-update" || die "doexe failed"
+}
+
+pkg_postinst() {
+	if ! has_version gnome-base/gdm && ! has_version kde-base/kdm; then
+		ewarn "If you use a custom .xinitrc for your X session,"
+		ewarn "make sure that the commands in the xinitrc.d scripts are run."
+	fi
 }
