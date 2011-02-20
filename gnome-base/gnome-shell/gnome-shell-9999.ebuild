@@ -7,7 +7,7 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2:2.5"
 
-inherit autotools gnome2 python
+inherit eutils gnome2 python
 
 DESCRIPTION="Provides core UI functions for the GNOME 3 desktop"
 HOMEPAGE="http://live.gnome.org/GnomeShell"
@@ -47,7 +47,8 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	>=media-libs/gst-plugins-base-0.10.16
 	media-libs/libcanberra
 	media-sound/pulseaudio
-	net-wireless/gnome-bluetooth[introspection]
+	>=net-misc/networkmanager-9999
+	>=net-wireless/gnome-bluetooth-2.90.0[introspection]
 
 	x11-libs/startup-notification
 	x11-libs/libXfixes
@@ -56,13 +57,15 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9
 
 	dev-python/dbus-python
 	dev-python/gconf-python"
-# Runtime-only deps are probably incomplete and approximate
+# Runtime-only deps are probably incomplete and approximate.
+# nm-applet is only needed temporarily for the secrets and wireless dialogs.
 RDEPEND="${COMMON_DEPEND}
 	x11-libs/gdk-pixbuf[introspection]
 	>=gnome-base/dconf-0.4.1
 	>=gnome-base/gnome-settings-daemon-2.91
 	>=gnome-base/gnome-control-center-2.91
-	>=gnome-base/libgnomekbd-2.91.4[introspection]"
+	>=gnome-base/libgnomekbd-2.91.4[introspection]
+	>=gnome-extra/nm-applet-9999"
 DEPEND="${COMMON_DEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.22
@@ -72,3 +75,15 @@ DOCS="AUTHORS README"
 # Don't error out on warnings
 G2CONF="--enable-compile-warnings=maximum
 --disable-schemas-compile"
+
+src_prepare() {
+	# See https://bugzilla.gnome.org/show_bug.cgi?id=621707"
+	ewarn "Adding support for the experimental NetworkManager applet."
+	ewarn "This needs the latest NetworkManager & nm-applet trunk."
+	ewarn "Report bugs about this to 'nirbheek' on #gentoo-desktop @ FreeNode."
+	epatch "${FILESDIR}/${PN}-nm-1.patch"
+	epatch "${FILESDIR}/${PN}-nm-2.patch"
+	epatch "${FILESDIR}/${PN}-nm-3.patch"
+
+	gnome2_src_prepare
+}

@@ -16,8 +16,8 @@ HOMEPAGE="http://www.gnome.org/projects/NetworkManager/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="avahi bluetooth doc nss gnutls dhclient dhcpcd kernel_linux resolvconf
-connection-sharing wimax"
+IUSE="avahi bluetooth doc nss gnutls dhclient dhcpcd +introspection kernel_linux
+resolvconf connection-sharing wimax"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	EGIT_REPO_URI="git://anongit.freedesktop.org/${MY_PN}/${MY_PN}"
@@ -27,6 +27,7 @@ else
 	KEYWORDS="~amd64 ~arm ~ppc ~ppc64 ~x86"
 fi
 
+# gobject-introspection-0.10.2-r1 is needed due to gnome bug 642300
 RDEPEND=">=sys-apps/dbus-1.2
 	>=dev-libs/dbus-glib-0.75
 	>=net-wireless/wireless-tools-28_pre9
@@ -48,6 +49,7 @@ RDEPEND=">=sys-apps/dbus-1.2
 		dhcpcd? ( >=net-misc/dhcpcd-4.0.0_rc3 )
 		!dhcpcd? ( net-misc/dhcp ) )
 	!dhclient? ( >=net-misc/dhcpcd-4.0.0_rc3 )
+	introspection? ( >=dev-libs/gobject-introspection-0.10.2-r1 )
 	resolvconf? ( net-dns/openresolv )
 	connection-sharing? (
 		net-dns/dnsmasq
@@ -96,6 +98,7 @@ pkg_setup() {
 		--with-iptables=/sbin/iptables
 		$(use_with doc docs)
 		$(use_with resolvconf)
+		$(use_enable introspection)
 		$(use_enable wimax)"
 
 	# default is dhcpcd (if none or both are specified), ISC dchclient otherwise
@@ -127,7 +130,11 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-0.8.2-confchanges.patch"
 	# fix shared connection wrt bug #350476
 	# fix parsing dhclient.conf wrt bug #352638
-	epatch "${FILESDIR}/${PN}-0.8.2-shared-connection.patch"
+	# FIXME: does not apply
+	#epatch "${FILESDIR}/${PN}-0.8.2-shared-connection.patch"
+
+	# https://bugzilla.gnome.org/show_bug.cgi?id=637032
+	epatch "${FILESDIR}/${PN}-introspection-fixes.patch"
 
 	gnome2_src_prepare
 }
