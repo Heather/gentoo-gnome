@@ -28,6 +28,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.16:2
 	>=dev-libs/dbus-glib-0.76
 	>=gnome-base/gconf-2
 	>=sys-power/upower-0.9.0
+	gnome-base/librsvg:2
 	elibc_FreeBSD? ( dev-libs/libexecinfo )
 
 	virtual/opengl
