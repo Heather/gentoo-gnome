@@ -21,10 +21,10 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux"
 fi
 
-RDEPEND=">=dev-libs/glib-2.27.5
+RDEPEND=">=dev-libs/glib-2.28.0:2
 	>=x11-libs/pango-1.1.2
-	>=x11-libs/gtk+-2.99.0:3[introspection?]
-	>=dev-libs/libxml2-2.4.7
+	>=x11-libs/gtk+-3.0:3[introspection?]
+	>=dev-libs/libxml2-2.4.7:2
 	>=gnome-base/gnome-desktop-2.91.2:3
 
 	gnome-base/gsettings-desktop-schemas
@@ -77,9 +77,6 @@ src_prepare() {
 	# Remove crazy CFLAGS
 	sed 's:-DG.*DISABLE_DEPRECATED::g' -i configure.in \
 		|| die "sed 4 failed"
-
-	# Fix nautilus flipping-out with --no-desktop -- bug 266398
-	#epatch "${FILESDIR}/${PN}-2.27.4-change-reg-desktop-file-with-no-desktop.patch"
 
 	eautoreconf
 }
