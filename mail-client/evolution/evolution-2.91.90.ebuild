@@ -51,7 +51,7 @@ RDEPEND=">=dev-libs/glib-2.28:2
 	>=dev-libs/libgdata-0.4
 
 	clutter? (
-		>=media-libs/clutter-1.0.0:1.0[gtk]
+		>=media-libs/clutter-1.0.0:1.0
 		>=media-libs/clutter-gtk-0.90:1.0
 		x11-libs/mx )
 	connman? ( net-misc/connman )
