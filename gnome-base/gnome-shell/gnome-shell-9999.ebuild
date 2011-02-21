@@ -23,7 +23,8 @@ else
 fi
 
 # gnome-desktop-2.91.2 is needed due to header changes, db82a33 in gnome-desktop
-# FIXME: Automagic gnome-bluetooth[introspection] support. Also gnome bug 637935
+# FIXME: Automagic gnome-bluetooth[introspection] support.
+# mutter-2.91.7 is needed, but not checked for in configure
 COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	x11-libs/gdk-pixbuf:2[introspection]
 	>=x11-libs/gtk+-3.0.0:3[introspection]
@@ -51,7 +52,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9
 
 	x11-libs/startup-notification
 	x11-libs/libXfixes
-	>=x11-wm/mutter-2.91.4[introspection]
+	>=x11-wm/mutter-2.91.7[introspection]
 	x11-apps/mesa-progs
 
 	dev-python/dbus-python
