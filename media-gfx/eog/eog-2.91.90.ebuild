@@ -61,7 +61,3 @@ pkg_setup() {
 		--disable-schemas-compile"
 	DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README THANKS TODO"
 }
-
-src_prepare() {
-	epatch "${FILESDIR}/${PN}-libpeas-compat.patch"
-}
