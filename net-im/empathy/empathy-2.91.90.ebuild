@@ -4,6 +4,7 @@
 
 EAPI="3"
 GCONF_DEBUG="yes"
+GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2:2.4"
 
 inherit eutils gnome2 multilib python
@@ -19,17 +20,15 @@ IUSE="+gnome eds sendto networkmanager spell test webkit" # map
 
 # FIXME: gst-plugins-bad is required for the valve plugin. This should move to good
 # eventually at which point the dep can be dropped
-# XXX: dbus-glib is for dbus-binding-tool, but it's not actually used anywhere?
-# NOTE: ~folks-0.3.4 is required. 0.3.6 broke API.
 RDEPEND=">=dev-libs/glib-2.27.2:2
 	>=x11-libs/gtk+-2.99.0:3
 	>=dev-libs/dbus-glib-0.51
-	>=net-libs/telepathy-glib-0.13.11
+	>=net-libs/telepathy-glib-0.13.12
 	>=media-libs/libcanberra-0.25[gtk3]
 	>=x11-libs/libnotify-0.7.0
 	>=gnome-base/gnome-keyring-2.91.4-r300
 	>=net-libs/gnutls-2.8.5
-	~dev-libs/folks-0.3.4
+	>=dev-libs/folks-0.3.5
 
 	gnome-base/gsettings-desktop-schemas
 	net-libs/farsight2
@@ -51,8 +50,8 @@ RDEPEND=">=dev-libs/glib-2.27.2:2
 		>=app-text/iso-codes-0.35 )
 	webkit? ( >=net-libs/webkit-gtk-1.3.2:3 )"
 #	map? (
-#		>=media-libs/libchamplain-0.7.1[gtk]
-#		>=media-libs/clutter-gtk-0.90.3:1.0 )
+#		media-libs/libchamplain[gtk]:0.10
+#		media-libs/clutter-gtk:1.0 )
 DEPEND="${RDEPEND}
 	app-text/scrollkeeper
 	>=app-text/gnome-doc-utils-0.17.3
@@ -73,7 +72,7 @@ pkg_setup() {
 src_prepare() {
 	DOCS="CONTRIBUTORS AUTHORS ChangeLog NEWS README"
 
-	# Hard disable favourite_contacts and tpl, TpLogger is buggy.
+	# TODO: Re-add map/location support
 	G2CONF="${G2CONF}
 		--disable-static
 		--disable-location

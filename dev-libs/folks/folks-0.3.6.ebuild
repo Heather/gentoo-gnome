@@ -13,10 +13,10 @@ HOMEPAGE="http://telepathy.freedesktop.org/wiki/Folks"
 
 LICENSE="LGPL-2"
 SLOT="0"
-# Broke API, empathy refuses to compile
-#KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~x86"
 IUSE="doc"
 
+# FIXME: links against system libfolks instead of the built one
 RDEPEND=">=dev-libs/glib-2.24:2
 	>=net-libs/telepathy-glib-0.13.1[vala]
 	dev-libs/dbus-glib
@@ -43,11 +43,4 @@ pkg_setup() {
 		VAPIGEN=$(type -p vapigen-0.12)
 		$(use_enable doc docs)
 		--disable-Werror"
-}
-
-src_prepare() {
-	gnome2_src_prepare
-
-	# Test suite is badly broken, even from git repo
-	sed 's/tests//' -i Makefile.am Makefile.in || die "sed failed"
 }
