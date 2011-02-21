@@ -5,7 +5,7 @@
 EAPI="3"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
-PYTHON_DEPEND="2"
+PYTHON_DEPEND="2:2.6"
 
 inherit gnome2 python
 
@@ -28,7 +28,6 @@ RDEPEND=">=dev-libs/glib-2.10
 
 	dev-python/pygobject
 	dev-python/pycairo
-	dev-python/pyyaml
 	dev-python/pyxdg
 	>=dev-python/dbus-python-0.83
 	>=dev-python/pygtk-2.12
