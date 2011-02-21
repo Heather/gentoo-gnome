@@ -37,7 +37,6 @@ COMMON_DEPEND="
 	>=gnome-base/gconf-2.0
 	>=dev-libs/dbus-glib-0.73
 	>=gnome-base/gnome-desktop-2.91.5:3
-	>=gnome-base/gnome-session-2.91.6-r1
 	>=gnome-base/gnome-settings-daemon-2.91.2
 	>=gnome-base/libgnomekbd-2.91.2
 
@@ -66,6 +65,8 @@ COMMON_DEPEND="
 	!!<gnome-extra/gnome-media-2.32.0-r300"
 RDEPEND="${COMMON_DEPEND}
 	sys-apps/accountsservice"
+# PDEPEND to avoid circular dependency
+PDEPEND=">=gnome-base/gnome-session-2.91.6-r1"
 DEPEND="${COMMON_DEPEND}
 	x11-proto/xproto
 	x11-proto/xf86miscproto

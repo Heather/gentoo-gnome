@@ -45,8 +45,9 @@ COMMON_DEPEND=">=dev-libs/glib-2.16:2
 # gnome-panel is used by classic-gnome
 RDEPEND="${COMMON_DEPEND}
 	gnome-base/gnome-panel
-	gnome-base/gnome-settings-daemon
-	gnome-base/gnome-shell"
+	gnome-base/gnome-settings-daemon"
+# PDEPEND to avoid circular dependency
+PDEPEND="gnome-base/gnome-shell"
 DEPEND="${COMMON_DEPEND}
 	>=dev-lang/perl-5
 	>=sys-devel/gettext-0.10.40
