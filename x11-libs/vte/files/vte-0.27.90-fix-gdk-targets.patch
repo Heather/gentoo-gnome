@@ -15,7 +15,7 @@ no longer works. So, sort of hack around it for now?
 @@ -62,6 +63,7 @@
         VTE_SEAL_CFLAGS="-DVTE_SEAL_ENABLE"
         GTK_API_VERSION=3.0
-        GTK_REQUIRED=2.91.6
+        GTK_REQUIRED=3.0.0
 +       GDK_TARGETS=$($PKG_CONFIG --variable targets gdk-$GTK_API_VERSION)
         ;;
  esac

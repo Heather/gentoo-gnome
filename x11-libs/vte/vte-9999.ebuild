@@ -9,8 +9,8 @@ GNOME2_LA_PUNT="yes"
 
 inherit autotools eutils gnome2 #python
 
-DESCRIPTION="Gnome terminal widget"
-HOMEPAGE="http://www.gnome.org/"
+DESCRIPTION="GNOME terminal widget"
+HOMEPAGE="http://git.gnome.org/browse/vte"
 
 LICENSE="LGPL-2"
 SLOT="2.90"
@@ -23,8 +23,9 @@ else
 fi
 
 # No python bindings (yet) with gtk+:3
+PDEPEND="x11-libs/gnome-pty-helper"
 RDEPEND=">=dev-libs/glib-2.26:2
-	>=x11-libs/gtk+-2.91.6:3
+	>=x11-libs/gtk+-3.0:3
 	>=x11-libs/pango-1.22.0
 
 	sys-libs/ncurses
@@ -32,9 +33,7 @@ RDEPEND=">=dev-libs/glib-2.26:2
 	x11-libs/libXft
 
 	glade? ( dev-util/glade:3 )
-	introspection? ( >=dev-libs/gobject-introspection-0.9.0 )
-
-	!!<x11-libs/vte-0.26.2-r200"
+	introspection? ( >=dev-libs/gobject-introspection-0.9.0 )"
 DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1.13 )
 	>=dev-util/intltool-0.35
@@ -44,9 +43,9 @@ DEPEND="${RDEPEND}
 
 src_prepare() {
 	G2CONF="${G2CONF}
+		--disable-gnome-pty-helper
 		--disable-deprecation
 		--disable-maintainer-mode
-		--disable-schemas-compile
 		--disable-static
 		$(use_enable debug)
 		$(use_enable glade glade-catalogue)
@@ -57,7 +56,7 @@ src_prepare() {
 	DOCS="AUTHORS ChangeLog HACKING NEWS README"
 	#use python && python_set_active_version 2
 
-	epatch "${FILESDIR}/${PN}-0.27.4-fix-gdk-targets.patch"
+	epatch "${FILESDIR}/${PN}-0.27.90-fix-gdk-targets.patch"
 
 	[[ ${PV} != 9999 ]] && eautoreconf
 
