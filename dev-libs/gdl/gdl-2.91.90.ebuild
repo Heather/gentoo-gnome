@@ -18,7 +18,7 @@ IUSE="+introspection doc"
 
 # TODO: slotmove gdl:0 to gdl:1
 RDEPEND=">=dev-libs/glib-2:2
-	>=x11-libs/gtk+-2.90.4:3[introspection?]
+	>=x11-libs/gtk+-3.0.0:3[introspection?]
 	>=dev-libs/libxml2-2.4:2
 	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )"
 DEPEND="${RDEPEND}
@@ -30,8 +30,8 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README"
 
 src_prepare() {
-	# Prevent file collisions with gdl:0
-	epatch "${FILESDIR}/${PN}-2.91.4-parallel-install.patch"
+	# Fix parallel installation issue
+	grep -lre 'layout\.ui' . | xargs sed -ie 's/layout\.ui/layout-3\.ui/' || die
 	mv gdl/layout{,-3}.ui || die
 
 	gnome2_src_prepare
