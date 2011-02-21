@@ -30,6 +30,7 @@ fi
 # coherence plugin broken upstream
 #
 # FIXME: Automagic tracker-0.9.0
+# XXX: Add Zeitgeist support when it gets added to GNOME 3 (3.2?)
 RDEPEND=">=dev-libs/glib-2.27.92
 	>=x11-libs/gdk-pixbuf-2.23.0
 	>=x11-libs/gtk+-2.99.3:3[introspection?]
@@ -144,8 +145,6 @@ src_prepare() {
 	# Fix broken smclient option passing
 	# FIXME: File a bug for this
 	epatch "${FILESDIR}/${PN}-2.90.0-smclient-target-detection.patch"
-
-	epatch "${FILESDIR}/${PN}-libpeas-compat.patch"
 
 	if [[ ${PV} != 9999 ]]; then
 		intltoolize --force --copy --automake || die "intltoolize failed"
