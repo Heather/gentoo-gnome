@@ -23,6 +23,7 @@ fi
 
 RDEPEND=">=dev-libs/glib-2.25.5
 	>=x11-libs/gtk+-2.91.1:3
+	sys-apps/file
 	nautilus? ( >=gnome-base/nautilus-2.22.2 )"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
@@ -42,6 +43,7 @@ pkg_setup() {
 		--disable-packagekit
 		--disable-deprecations
 		--disable-schemas-compile
+		--enable-magic
 		$(use_enable nautilus nautilus-actions)"
 	DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README TODO"
 }
