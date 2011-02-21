@@ -27,8 +27,8 @@ fi
 # X libs are not needed for OSX (aqua)
 RDEPEND=">=x11-libs/libSM-1.0
 	>=dev-libs/libxml2-2.5.0
-	>=dev-libs/glib-2.27.92
-	>=x11-libs/gtk+-2.99.0:3[introspection?]
+	>=dev-libs/glib-2.26
+	>=x11-libs/gtk+-3.0:3[introspection?]
 	>=x11-libs/gtksourceview-2.91.1:3.0[introspection?]
 	>=dev-libs/libpeas-0.7.2[gtk]
 
@@ -58,7 +58,9 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS BUGS ChangeLog MAINTAINERS NEWS README"
 
 pkg_setup() {
+	# TODO: Zeitgeist support, if GNOME 3 adds it to moduleset (3.2?)
 	G2CONF="${G2CONF}
+		--disable-indicator
 		--disable-deprecations
 		--disable-maintainer-mode
 		--disable-schemas-compile
@@ -77,8 +79,4 @@ pkg_postinst() {
 pkg_postrm() {
 	gnome2_pkg_postrm
 	python_mod_cleanup /usr/$(get_libdir)/gedit/plugins
-}
-
-src_prepare() {
-	epatch "${FILESDIR}/${PN}-libpeas-compat.patch"
 }
