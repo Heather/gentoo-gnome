@@ -22,9 +22,9 @@ else
 fi
 
 # Note: has native OSX support, prefix teams, attack!
-RDEPEND=">=x11-libs/gtk+-2.99.0:3[introspection?]
+RDEPEND=">=x11-libs/gtk+-3.0:3[introspection?]
 	>=dev-libs/libxml2-2.6
-	>=dev-libs/glib-2.14
+	>=dev-libs/glib-2.28
 	glade? ( >=dev-util/glade-3.2 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.0 )"
 DEPEND="${RDEPEND}
