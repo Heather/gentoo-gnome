@@ -23,9 +23,7 @@ RDEPEND=">=x11-libs/gtk+-2.91.5:3[introspection?]
 	x11-libs/libXres
 	x11-libs/libXext
 	introspection? ( >=dev-libs/gobject-introspection-0.6.14 )
-	startup-notification? ( >=x11-libs/startup-notification-0.4 )
-	
-	!!<x11-libs/libwnck-2.30.6-r200:1"
+	startup-notification? ( >=x11-libs/startup-notification-0.4 )"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.9
@@ -52,4 +50,14 @@ src_prepare() {
 		append-flags "-I${EPREFIX}/usr/include/bind"
 		append-ldflags "-L${EPREFIX}/usr/lib/bind"
 	fi
+}
+
+src_install() {
+	gnome2_src_install
+
+	elog "wnckprop is now called wnckprop-${SLOT}"
+	elog "wnck-urgency-monitor is now called wnck-urgency-monitor-${SLOT}"
+	# Don't collide with SLOT=1
+	mv "${ED}"/usr/bin/wnckprop{,-${SLOT}} || die
+	mv "${ED}"/usr/bin/wnck-urgency-monitor{,-${SLOT}} || die
 }
