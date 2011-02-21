@@ -32,9 +32,9 @@ PINENTRY_DEPEND="|| ( app-crypt/pinentry[gtk] app-crypt/pinentry-qt app-crypt/pi
 # glade-3 support is for maintainers only per configure.ac
 # mono plugin disabled as it's incompatible with 2.8 and lacks maintainance (see bgo#634571)
 # pst is not mature enough and changes API/ABI frequently
-RDEPEND=">=dev-libs/glib-2.26.0:2
+RDEPEND=">=dev-libs/glib-2.28:2
 	>=x11-libs/cairo-1.9.15
-	>=x11-libs/gtk+-2.99.3:3
+	>=x11-libs/gtk+-3.0:3
 	>=dev-libs/libunique-2.91.4:3
 	>=gnome-base/gnome-desktop-2.91.3:3
 	>=dev-libs/libgweather-2.90.0:3
@@ -45,7 +45,7 @@ RDEPEND=">=dev-libs/glib-2.26.0:2
 	>=gnome-base/gconf-2
 	dev-libs/atk
 	>=dev-libs/libxml2-2.7.3
-	>=net-libs/libsoup-2.4:2.4
+	>=net-libs/libsoup-gnome-2.4:2.4
 	>=x11-misc/shared-mime-info-0.22
 	>=x11-themes/gnome-icon-theme-2.30.2.1
 	>=dev-libs/libgdata-0.4

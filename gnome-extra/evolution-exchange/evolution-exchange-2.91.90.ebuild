@@ -6,23 +6,28 @@ EAPI="3"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit autotools gnome2
+inherit gnome2
 
 DESCRIPTION="Evolution module for connecting to Microsoft Exchange"
 HOMEPAGE="http://projects.gnome.org/evolution/"
 LICENSE="GPL-2"
 
 SLOT="2.0"
-KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 IUSE="debug doc static"
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+	KEYWORDS=""
+else
+	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+fi
 
 RDEPEND="
 	>=mail-client/evolution-${PV}:2.0
 	>=gnome-extra/evolution-data-server-${PV}[ldap,kerberos]
-	>=dev-libs/glib-2.16:2
-	>=x11-libs/gtk+-2.99.2:3
-	>=gnome-base/gconf-2
-	dev-libs/libxml2
+	>=dev-libs/glib-2.28:2
+	>=x11-libs/gtk+-3.0:3
+	>=gnome-base/gconf-2:2
+	dev-libs/libxml2:2
 	net-libs/libsoup:2.4
 	>=net-nds/openldap-2.1.30-r2
 	virtual/krb5"
@@ -46,13 +51,7 @@ pkg_setup() {
 src_prepare() {
 	gnome2_src_prepare
 
-	# Fix compilation failure with as-needed
-	epatch "${FILESDIR}/${P}-xntlm-as-needed.patch"
-
 	# FIXME: Fix compilation flags crazyness
 	sed 's/^\(AM_CPPFLAGS="\)$WARNING_FLAGS/\1/' \
 		-i configure.ac configure || die "sed 1 failed"
-
-	# Needed for the as-needed patch
-	eautoreconf
 }

@@ -23,8 +23,8 @@ fi
 
 # GNOME3: How do we slot libedataserverui-3.0.so?
 # Also, libedata-cal-1.2.so and libecal-1.2.so use gtk-3, but aren't slotted
-RDEPEND=">=dev-libs/glib-2.25.12:2
-	>=x11-libs/gtk+-2.99.2:3
+RDEPEND=">=dev-libs/glib-2.28:2
+	>=x11-libs/gtk+-3.0:3
 	>=gnome-base/gconf-2
 	>=dev-db/sqlite-3.5
 	>=dev-libs/libgdata-0.7.0
@@ -57,6 +57,7 @@ DEPEND="${RDEPEND}
 
 pkg_setup() {
 	DOCS="ChangeLog MAINTAINERS NEWS TODO"
+	# Uh, what to do about dbus-call-timeout ?
 	G2CONF="${G2CONF}
 		$(use_enable ipv6)
 		$(use_with kerberos krb5 /usr)
