@@ -36,6 +36,7 @@ S=${WORKDIR}/${MY_P}
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-static
+		--disable-tls-check
 		$(use_enable introspection)
 		--with-libsoup-system
 		--with-gnome"

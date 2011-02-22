@@ -18,7 +18,7 @@ IUSE="debug doc +introspection test"
 
 RDEPEND=">=dev-libs/glib-2.27.5
 	>=dev-libs/libxml2-2
-	net-libs/glib-networking
+	net-libs/glib-networking[gnutls]
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9
@@ -35,6 +35,7 @@ pkg_setup() {
 	DOCS="AUTHORS NEWS README"
 	G2CONF="${G2CONF}
 		--disable-static
+		--disable-tls-check
 		--without-gnome
 		--with-apache-module-dir="${T}"
 		$(use_enable introspection)"
