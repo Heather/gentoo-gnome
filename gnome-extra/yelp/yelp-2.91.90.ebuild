@@ -24,6 +24,7 @@ RDEPEND="
 	>=gnome-extra/yelp-xsl-2.91.9
 	>=net-libs/webkit-gtk-1.3.2:3
 	app-arch/bzip2
+	dev-db/sqlite:3
 	lzma? ( >=app-arch/xz-utils-4.9 )"
 DEPEND="${RDEPEND}
 	>=sys-devel/gettext-0.17
