@@ -16,7 +16,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~sparc ~x86"
 # FIXME: Add location support once geoclue stops being idiotic with automagic deps
-IUSE="+gnome eds sendto networkmanager spell test webkit" # map
+IUSE="+gnome eds +map +networkmanager sendto spell test webkit"
 
 # FIXME: gst-plugins-bad is required for the valve plugin. This should move to good
 # eventually at which point the dep can be dropped
@@ -48,10 +48,10 @@ RDEPEND=">=dev-libs/glib-2.27.2:2
 	spell? (
 		>=app-text/enchant-1.2
 		>=app-text/iso-codes-0.35 )
-	webkit? ( >=net-libs/webkit-gtk-1.3.2:3 )"
-#	map? (
-#		media-libs/libchamplain[gtk]:0.10
-#		media-libs/clutter-gtk:1.0 )
+	webkit? ( >=net-libs/webkit-gtk-1.3.2:3 )
+	map? (
+		media-libs/libchamplain:0.10[gtk]
+		media-libs/clutter-gtk:1.0 )"
 DEPEND="${RDEPEND}
 	app-text/scrollkeeper
 	>=app-text/gnome-doc-utils-0.17.3
@@ -72,17 +72,18 @@ pkg_setup() {
 src_prepare() {
 	DOCS="CONTRIBUTORS AUTHORS ChangeLog NEWS README"
 
-	# TODO: Re-add map/location support
+	# TODO: Re-add location support
 	G2CONF="${G2CONF}
 		--disable-static
+		--disable-meego
 		--disable-location
-		--disable-map
 		--disable-Werror
 		$(use_enable debug)
 		$(use_enable gnome control-center-embedding)
 		$(use_with eds)
-		$(use_enable sendto nautilus-sendto)
+		$(use_enable map)
 		$(use_with networkmanager connectivity nm)
+		$(use_enable sendto nautilus-sendto)
 		$(use_enable spell)
 		$(use_enable test coding-style-checks)
 		$(use_enable webkit)"
