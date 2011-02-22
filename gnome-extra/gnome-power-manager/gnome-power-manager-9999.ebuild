@@ -55,7 +55,8 @@ DEPEND="${COMMON_DEPEND}
 		app-text/docbook-sgml-utils
 		app-text/docbook-xml-dtd:4.4
 		app-text/docbook-sgml-dtd:4.1
-		app-text/docbook-xml-dtd:4.1.2 )"
+		app-text/docbook-xml-dtd:4.1.2 )
+	test? ( sys-apps/dbus )"
 
 # docbook-sgml-utils and docbook-sgml-dtd-4.1 used for creating man pages
 # (files under ${S}/man).
@@ -89,5 +90,5 @@ src_prepare() {
 
 src_test() {
 	unset DBUS_SESSION_BUS_ADDRESS
-	dbus-launch Xemake check || die "Test phase failed"
+	Xemake check || die "Test phase failed"
 }
