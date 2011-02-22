@@ -9,10 +9,9 @@ Usually this means the macro was only invoked conditionally.
 
 When need_cxx=no because quadrapassel isn't being built.
 
----
 --- configure.in
 +++ configure.in
-@@ -201,13 +201,12 @@
+@@ -227,6 +227,7 @@
  PKG_PROG_PKG_CONFIG([0.15])
  
  AC_PROG_CC
@@ -20,6 +19,8 @@ When need_cxx=no because quadrapassel isn't being built.
  AC_PROG_CPP
  AC_PROG_LN_S
  AC_PROG_SED
+@@ -236,8 +237,6 @@
+ fi
  
  if test "$need_cxx" = "yes"; then
 -  AC_PROG_CXX

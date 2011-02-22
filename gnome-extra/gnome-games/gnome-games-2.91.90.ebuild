@@ -17,24 +17,23 @@ HOMEPAGE="http://live.gnome.org/GnomeGames/"
 LICENSE="GPL-2 GPL-3 FDL-1.1"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="artworkextra +clutter guile +introspection opengl seed +sound test"
+IUSE="+aisleriot artworkextra +clutter +introspection glchess seed +sudoku test"
 
-RDEPEND="
+COMMON_DEPEND="
 	>=dev-games/libggz-0.0.14
 	>=dev-games/ggz-client-libs-0.0.14
 	>=dev-libs/dbus-glib-0.75
 	>=dev-libs/glib-2.25.7
 	>=dev-libs/libxml2-2.4.0
-	>=dev-python/gconf-python-2.17.3
-	>=dev-python/pygobject-2
-	>=dev-python/pygtk-2.14
-	>=dev-python/pycairo-1
 	>=gnome-base/gconf-2.31.1
 	>=gnome-base/librsvg-2.32
 	>=x11-libs/cairo-1
-	>=x11-libs/gtk+-2.90:3[introspection?]
+	>=x11-libs/gtk+-2.91.7:3[introspection?]
+
+	media-libs/libcanberra[gtk3]
 	x11-libs/libSM
 
+	aisleriot? ( >=dev-scheme/guile-1.6.5[deprecated,regex] )
 	artworkextra? ( gnome-extra/gnome-games-extra-data )
 	clutter? (
 		>=dev-libs/gobject-introspection-0.6.3
@@ -42,17 +41,22 @@ RDEPEND="
 		>=gnome-base/gconf-2.31.1[introspection]
 		>=media-libs/clutter-gtk-0.91.6:1.0[introspection]
 		seed? ( dev-libs/seed ) )
-	guile? ( >=dev-scheme/guile-1.6.5[deprecated,regex] )
 	introspection? (
 		>=dev-libs/gobject-introspection-0.6.3
 		media-libs/clutter:1.0[introspection] )
-	opengl? (
-		dev-python/pygtkglext
-		>=dev-python/pyopengl-3 )
-	sound? ( media-libs/libcanberra[gtk3] )
-	!games-board/glchess"
-
-DEPEND="${RDEPEND}
+	glchess? (
+		dev-db/sqlite:3
+		>=dev-lang/vala-0.11.6:0.12
+		>=gnome-base/librsvg-2.32
+		virtual/opengl
+		x11-libs/libX11 )"
+RDEPEND="${COMMON_DEPEND}
+	sudoku? (
+		>=dev-python/gconf-python-2.17.3
+		>=dev-python/pygobject-2
+		>=dev-python/pygtk-2.14
+		>=dev-python/pycairo-1 )"
+DEPEND="${COMMON_DEPEND}
 	sys-apps/lsb-release
 	>=dev-util/pkgconfig-0.15
 	>=dev-util/intltool-0.40.4
@@ -80,7 +84,7 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-maintainer-mode
 		--disable-schemas-compile
-		$(use_enable sound)
+		--enable-sound
 		$(use_enable introspection)"
 
 	# Should be after $(use_enable introspection), but before --enable-omitgames
@@ -96,8 +100,6 @@ pkg_setup() {
 		--with-gtk=3.0
 		--enable-omitgames=none" # This line should be last for _omitgame
 
-	# Needs seed, always disable till we can have that
-
 	if ! use clutter; then
 		ewarn "USE='-clutter' => quadrapassel, swell-foop, lightsoff, gnibbles won't be installed"
 		_omitgame quadrapassel
@@ -111,14 +113,16 @@ pkg_setup() {
 		_omitgame lightsoff
 	fi
 
-	if ! use guile; then
-		ewarn "USE='-guile' => aisleriot won't be installed"
+	if ! use aisleriot; then
 		_omitgame aisleriot
 	fi
 
-	if ! use opengl; then
-		ewarn "USE='-opengl' => glchess won't be installed"
+	if ! use glchess; then
 		_omitgame glchess
+	fi
+
+	if ! use sudoku; then
+		_omitgame sudoku
 	fi
 }
 
@@ -126,7 +130,7 @@ src_prepare() {
 	gnome2_src_prepare
 
 	# TODO: File upstream bug for this
-	epatch "${FILESDIR}/${PN}-2.32.1-fix-conditional-ac-prog-cxx.patch"
+	epatch "${FILESDIR}/${PN}-2.91.90-fix-conditional-ac-prog-cxx.patch"
 
 	# Without this, --enable-staging enables all those games unconditionally
 	epatch "${FILESDIR}/${PN}-fix-staging-games.patch"
