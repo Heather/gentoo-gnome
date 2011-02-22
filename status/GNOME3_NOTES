@@ -1,8 +1,3 @@
-* Latest vinagre 2.31 release and trunk fail to compile, only live version added
-* telepathy-glib-0.13.11 doesn't compile with USE=introspection and latest glib
-  - This means empathy can't be added
-* libchamplain:0.9 from trunk doesn't compile with latest gtk+:3
-  - This also means empathy can't be added
 * hamster-applet 2.91 is still an applet; useless with GNOME Shell
 * Cheese hasn't been ported to GNOME 3 libraries; no point adding it
 * GStreamer is waiting on Ford_Prefect/leio getting time to do it
