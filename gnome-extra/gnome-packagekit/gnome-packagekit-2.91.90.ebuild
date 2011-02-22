@@ -1,4 +1,4 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -23,7 +23,6 @@ RDEPEND="
 	>=dev-libs/dbus-glib-0.73
 
 	>=app-portage/packagekit-0.6.5
-	>=gnome-base/gnome-control-center-2.31.4
 	>=gnome-base/gnome-menus-2.24.1
 	>=media-libs/libcanberra-0.10[gtk3]
 	>=sys-apps/dbus-1.1.2
