@@ -46,11 +46,11 @@ src_prepare() {
 pkg_postinst() {
 	gnome2_pkg_postinst
 	python_need_rebuild
-	python_mod_optimize /usr/$(get_libdir)/gedit-2/plugins/devhelp
+	python_mod_optimize /usr/$(get_libdir)/gedit-2/plugins
 	preserve_old_lib_notify /usr/$(get_libdir)/libdevhelp-1.so.1
 }
 
 pkg_postrm() {
 	gnome2_pkg_postrm
-	python_mod_cleanup /usr/$(get_libdir)/gedit-2/plugins/devhelp
+	python_mod_cleanup /usr/$(get_libdir)/gedit-2/plugins
 }
