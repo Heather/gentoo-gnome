@@ -26,6 +26,7 @@ RDEPEND="
 	>=x11-libs/gtk+-2.99.3:3
 	>=gnome-base/gnome-desktop-2.91.5:3
 	>=gnome-base/gnome-menus-2.12
+	>=gnome-base/gsettings-desktop-schemas-0.1.7
 	>=gnome-base/libgnomekbd-0.1
 	>=dev-libs/dbus-glib-0.71
 
@@ -70,14 +71,6 @@ pkg_setup() {
 		--disable-schemas-compile"
 }
 
-src_prepare() {
-	gnome2_src_prepare
-
-	# Fix intltoolize broken file, see upstream #577133
-	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in \
-		|| die "sed failed"
-}
-
 src_install() {
 	gnome2_src_install
 
@@ -100,12 +93,6 @@ src_install() {
 
 pkg_postinst() {
 	gnome2_pkg_postinst
-
-	if has_version "<x11-base/xorg-server-1.5.3-r4" ; then
-		ewarn "You have a too old xorg-server installation. This will cause"
-		ewarn "gnome-screensaver to eat up your CPU. Please consider upgrading."
-		echo
-	fi
 
 	if has_version "<x11-misc/xscreensaver-4.22-r2" ; then
 		ewarn "You have xscreensaver installed, you probably want to disable it."
