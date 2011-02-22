@@ -20,15 +20,15 @@ else
 fi
 
 # XXX: Should we add seed support? Seed seems to be unmaintained now.
-RDEPEND=">=dev-libs/glib-2.25.3
-	>=x11-libs/gtk+-2.99.0:3[introspection?]
+RDEPEND=">=dev-libs/glib-2.25.3:2
+	>=x11-libs/gtk+-3.0.0:3[introspection?]
 	>=dev-libs/libxml2-2.6.12
 	>=dev-libs/libxslt-1.1.7
 	>=x11-libs/startup-notification-0.5
 	>=dev-libs/dbus-glib-0.71
 	>=app-text/iso-codes-0.35
 	>=net-libs/webkit-gtk-1.3.11:3[introspection?]
-	>=net-libs/libsoup-gnome-2.33.1
+	>=net-libs/libsoup-gnome-2.33.1:2.4
 	>=gnome-base/gnome-keyring-2.26.0
 	>=gnome-base/gsettings-desktop-schemas-0.0.1
 
