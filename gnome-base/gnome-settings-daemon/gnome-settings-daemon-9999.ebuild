@@ -6,7 +6,7 @@ EAPI="3"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit autotools eutils gnome2
+inherit gnome2
 
 DESCRIPTION="Gnome Settings Daemon"
 HOMEPAGE="http://www.gnome.org"
@@ -17,7 +17,7 @@ HOMEPAGE="http://www.gnome.org"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="debug policykit smartcard"
+IUSE="debug +udev packagekit policykit smartcard"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
@@ -25,7 +25,7 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 fi
 
-# Cups-1.4 is needed due to bug 353724
+# TODO: cups is optional, but automagic
 COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	>=dev-libs/glib-2.26.0
 	>=x11-libs/gtk+-2.99.3
@@ -45,10 +45,15 @@ COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	>=media-sound/pulseaudio-0.9.16
 	media-libs/libcanberra[gtk3]
 
+	packagekit? (
+		dev-libs/glib:2
+		>=app-portage/packagekit-0.6.4
+		>=sys-power/upower-0.9.1 )
 	policykit? (
 		>=sys-auth/polkit-0.97
 		>=sys-apps/dbus-1.1.2 )
-	smartcard? ( >=dev-libs/nss-3.11.2 )"
+	smartcard? ( >=dev-libs/nss-3.11.2 )
+	udev? ( sys-fs/udev[extras] )"
 #	!pulseaudio? (
 #		>=media-libs/gstreamer-0.10.1.2
 #		>=media-libs/gst-plugins-base-0.10.1.2 )"
@@ -73,8 +78,10 @@ pkg_setup() {
 		--disable-schemas-compile
 		--enable-gconf-bridge
 		$(use_enable debug)
+		$(use_enable packagekit)
 		$(use_enable policykit polkit)
-		$(use_enable smartcard smartcard-support)"
+		$(use_enable smartcard smartcard-support)
+		$(use_enable udev gudev)"
 		#$(use_enable pulseaudio pulse)
 		#$(use_enable !pulseaudio gstreamer)
 
