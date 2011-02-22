@@ -13,7 +13,7 @@ HOMEPAGE="http://projects.gnome.org/brasero/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="beagle +cdr +css doc +introspection +libburn nautilus playlist test"
+IUSE="beagle +cdr +css doc +introspection +libburn nautilus packagekit playlist test"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
@@ -23,8 +23,8 @@ fi
 
 COMMON_DEPEND="
 	>=dev-libs/glib-2.27.5
-	>=x11-libs/gtk+-2.91.7:3[introspection?]
-	>=gnome-base/gconf-2.31.1
+	>=x11-libs/gtk+-3.0.0:3[introspection?]
+	>=gnome-base/gconf-2.32.0
 	>=media-libs/gstreamer-0.10.15
 	>=media-libs/gst-plugins-base-0.10
 	>=dev-libs/libxml2-2.6
@@ -39,7 +39,7 @@ COMMON_DEPEND="
 	libburn? (
 		>=dev-libs/libburn-0.4
 		>=dev-libs/libisofs-0.6.4 )
-	nautilus? ( >=gnome-base/nautilus-2.31.3 )
+	nautilus? ( >=gnome-base/nautilus-2.91.90 )
 	playlist? ( >=dev-libs/totem-pl-parser-2.29.1 )"
 RDEPEND="${COMMON_DEPEND}
 	app-cdr/cdrdao
@@ -47,7 +47,8 @@ RDEPEND="${COMMON_DEPEND}
 	media-plugins/gst-plugins-meta
 	css? ( media-libs/libdvdcss )
 	cdr? ( virtual/cdrtools )
-	!libburn? ( virtual/cdrtools )"
+	!libburn? ( virtual/cdrtools )
+	packagekit? ( app-portage/packagekit )"
 DEPEND="${COMMON_DEPEND}
 	app-text/gnome-doc-utils
 	dev-util/pkgconfig
