@@ -133,9 +133,6 @@ src_prepare() {
 	# FIXME: does not apply
 	#epatch "${FILESDIR}/${PN}-0.8.2-shared-connection.patch"
 
-	# https://bugzilla.gnome.org/show_bug.cgi?id=637032
-	epatch "${FILESDIR}/${PN}-introspection-fixes.patch"
-
 	gnome2_src_prepare
 }
 
