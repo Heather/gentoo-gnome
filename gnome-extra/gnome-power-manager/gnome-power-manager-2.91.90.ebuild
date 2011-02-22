@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/gnome-power-manager/gnome-power-manager-2.32.0.ebuild,v 1.5 2010/12/12 16:53:55 armin76 Exp $
 
@@ -62,20 +62,21 @@ DEPEND="${COMMON_DEPEND}
 # docbook-xml-dtd-4.4 and -4.1.2 are used by the xml files under ${S}/docs.
 
 src_prepare() {
+	gnome2_src_prepare
+
 	G2CONF="${G2CONF}
 		$(use_enable test tests)
 		$(use_enable doc docbook-docs)
+		--disable-strict
 		--enable-compile-warnings=minimum
 		--disable-schemas-compile"
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
 
-	# Should get merged soonish, remove from live version after that
-	# https://bugzilla.gnome.org/show_bug.cgi?id=639956
-	epatch "${FILESDIR}/${P}-fix-schemas-migrate.patch"
-
 	# Drop debugger CFLAGS from configure
+	# XXX: touch configure.ac only if running eautoreconf, otherwise
+	# maintainer mode gets triggered -- even if the order is correct
 	sed -e 's:^CPPFLAGS="$CPPFLAGS -g"$::g' \
-		-i configure.ac configure || die "debugger sed failed"
+		-i configure || die "debugger sed failed"
 
 	if ! use doc; then
 		# Remove the docbook2man rules here since it's not handled by a proper
@@ -84,20 +85,6 @@ src_prepare() {
 			-i man/Makefile.am man/Makefile.in \
 			|| die "docbook sed failed"
 	fi
-
-	# glibc splits this out, whereas other libc's do not tend to
-	if use elibc_glibc; then
-		sed -e 's/-lresolv//' \
-			-i configure.ac configure || die "resolv sed failed"
-	fi
-
-	if [[ ${PV} != 9999 ]]; then
-		# FIXME: This is required to prevent maintainer mode after "debugger sed"
-		intltoolize --force --copy --automake || die "intltoolize failed"
-		eautoreconf
-	fi
-
-	gnome2_src_prepare
 }
 
 src_test() {
