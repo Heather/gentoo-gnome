@@ -28,8 +28,9 @@ RDEPEND="
 	>=dev-libs/glib-2.25.11:2
 	>=dev-libs/libxml2-2.5
 	>=x11-libs/gdk-pixbuf-2.22:2[introspection?]
-	>=x11-libs/gtk+-2.91.7:3[introspection?]
+	>=x11-libs/gtk+-3.0.0:3[introspection?]
 	>=x11-libs/libSM-1
+	x11-libs/libICE
 	gnome-base/gsettings-desktop-schemas
 	|| (
 		>=x11-themes/gnome-icon-theme-2.17.1
@@ -66,6 +67,7 @@ pkg_setup() {
 	# with helps of the most of Gnome apps that doesn't require network for that.
 	#
 	# FIXME: XPS support needs >=libgxps-0.0.1
+	# http://git.gnome.org/browse/libgxps <-- no releases
 	G2CONF="${G2CONF}
 		--disable-maintainer-mode
 		--disable-schemas-compile
