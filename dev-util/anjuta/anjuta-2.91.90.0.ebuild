@@ -18,27 +18,27 @@ SLOT="0"
 KEYWORDS="~amd64 ~ppc ~sparc ~x86 ~x86-fbsd"
 IUSE="debug devhelp doc glade graphviz +introspection subversion test vala"
 
-RDEPEND=">=dev-libs/glib-2.25.15:2
+RDEPEND=">=dev-libs/glib-2.28.0:2
 	x11-libs/gdk-pixbuf:2
-	>=x11-libs/gtk+-2.29.4:3
+	>=x11-libs/gtk+-3.0.0:3
 	>=dev-libs/dbus-glib-0.70
-	>=x11-libs/vte-0.13.1:2.90
+	>=x11-libs/vte-0.27.6:2.90
 	>=dev-libs/libxml2-2.4.23
-	>=dev-libs/gdl-2.91.1
-	>=x11-libs/gtksourceview-2.90.6:3.0
+	>=dev-libs/gdl-2.91.4
+	>=x11-libs/gtksourceview-2.91.5:3.0
 
 	dev-libs/libxslt
 	>=dev-lang/perl-5
 	dev-perl/Locale-gettext
 	sys-devel/autogen
 
-	>=gnome-extra/libgda-4.1.6:4
+	>=gnome-extra/libgda-4.2.0:4
 	dev-util/ctags
 
 	x11-libs/libXft
 	x11-libs/libXrender
 
-	devhelp? ( >=dev-util/devhelp-2.91 )
+	devhelp? ( >=dev-util/devhelp-2.91.6 )
 	glade? ( >=dev-util/glade-3.9.0 )
 	graphviz? ( >=media-gfx/graphviz-2.6 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
