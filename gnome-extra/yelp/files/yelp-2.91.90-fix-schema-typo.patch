@@ -1,0 +1,12 @@
+diff -Naur yelp-2.91.90/src/yelp-application.c yelp-2.91.90.new/src/yelp-application.c
+--- yelp-2.91.90/src/yelp-application.c	2011-02-22 02:37:18.000000000 +0530
++++ yelp-2.91.90.new/src/yelp-application.c	2011-02-22 06:15:33.135000075 +0530
+@@ -582,7 +582,7 @@
+                                                              priv->backend,
+                                                              settings_path);
+         else
+-            settings = g_settings_new_with_path ("org.gnome.yelp.document",
++            settings = g_settings_new_with_path ("org.gnome.yelp.documents",
+                                                  settings_path);
+         key = g_strdup (doc_uri);
+         g_hash_table_insert (priv->docsettings, key, settings);

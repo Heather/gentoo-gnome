@@ -5,7 +5,7 @@
 EAPI="2"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
+inherit eutils gnome2
 
 DESCRIPTION="Help browser for GNOME"
 HOMEPAGE="http://www.gnome.org/"
@@ -36,9 +36,11 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
-pkg_setup() {
+src_prepare() {
 	G2CONF="${G2CONF}
 		--disable-schemas-compile
 		--enable-bz2
 		$(use_enable lzma)"
+
+	epatch "${FILESDIR}/${P}-fix-schema-typo.patch"
 }
