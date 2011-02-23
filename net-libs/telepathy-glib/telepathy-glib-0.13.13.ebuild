@@ -5,7 +5,7 @@
 EAPI="3"
 PYTHON_DEPEND="2:2.5"
 
-inherit python
+inherit python virtualx
 
 DESCRIPTION="GLib bindings for the Telepathy D-Bus protocol."
 HOMEPAGE="http://telepathy.freedesktop.org"
@@ -21,8 +21,7 @@ RDEPEND=">=dev-libs/glib-2.25.16
 	introspection? ( >=dev-libs/gobject-introspection-0.9.6 )
 	vala? (
 		dev-lang/vala:0.12[vapigen]
-		>=dev-libs/gobject-introspection-0.9.6 )
-"
+		>=dev-libs/gobject-introspection-0.9.6 )"
 DEPEND="${RDEPEND}
 	dev-libs/libxslt
 	>=dev-util/pkgconfig-0.21"
@@ -44,15 +43,15 @@ src_configure() {
 	econf \
 		$(use_enable debug backtrace) \
 		$(use_enable debug handle-leak-debug) \
+		$(use_enable debug debug-cache) \
 		$(use_enable introspection) \
 		$(use_enable vala vala-bindings) \
 		${myconf}
 }
 
 src_test() {
-	if ! dbus-launch emake -j1 check; then
-		die "Make check failed. See above for details."
-	fi
+	# Needs dbus for tests (auto-launched)
+	Xemake -j1 check
 }
 
 src_install() {
