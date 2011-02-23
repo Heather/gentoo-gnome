@@ -27,7 +27,7 @@ else
 	KEYWORDS="~amd64 ~arm ~ppc ~ppc64 ~x86"
 fi
 
-# gobject-introspection-0.10.2-r1 is needed due to gnome bug 642300
+# gobject-introspection-0.10.3 is needed due to gnome bug 642300
 RDEPEND=">=sys-apps/dbus-1.2
 	>=dev-libs/dbus-glib-0.75
 	>=net-wireless/wireless-tools-28_pre9
@@ -49,7 +49,7 @@ RDEPEND=">=sys-apps/dbus-1.2
 		dhcpcd? ( >=net-misc/dhcpcd-4.0.0_rc3 )
 		!dhcpcd? ( net-misc/dhcp ) )
 	!dhclient? ( >=net-misc/dhcpcd-4.0.0_rc3 )
-	introspection? ( >=dev-libs/gobject-introspection-0.10.2-r1 )
+	introspection? ( >=dev-libs/gobject-introspection-0.10.3 )
 	resolvconf? ( net-dns/openresolv )
 	connection-sharing? (
 		net-dns/dnsmasq
