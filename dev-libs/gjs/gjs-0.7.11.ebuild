@@ -40,9 +40,6 @@ DEPEND="${RDEPEND}
 		sys-devel/gcc
 		dev-util/lcov )"
 
-# tests fail and upstream does not support anything but git master
-RESTRICT="test"
-
 src_prepare() {
 	# AUTHORS, ChangeLog are empty
 	DOCS="NEWS README"
