@@ -15,7 +15,7 @@ LICENSE="LGPL-2 LGPL-2.1 BSD"
 SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-macos"
 # aqua, geoclue
-IUSE="coverage debug doc +gstreamer +introspection +jit"
+IUSE="coverage debug doc spell +gstreamer +introspection +jit"
 
 # use sqlite, svg by default
 # dependency on >=x11-libs/gtk+-2.13:2 for gail
@@ -30,9 +30,8 @@ RDEPEND="
 	>=dev-libs/glib-2.27.90
 	>=x11-libs/gtk+-2.13:2
 	>=dev-libs/icu-3.8.1-r1
-	>=net-libs/libsoup-2.33.4
+	>=net-libs/libsoup-2.33.6
 	>=dev-db/sqlite-3
-	>=app-text/enchant-0.22
 	>=x11-libs/pango-1.12
 
 	gstreamer? (
@@ -40,7 +39,10 @@ RDEPEND="
 		>=media-libs/gst-plugins-base-0.10.25:0.10 )
 
 	introspection? (
-		>=dev-libs/gobject-introspection-0.9.5 )"
+		>=dev-libs/gobject-introspection-0.9.5 )
+
+	spell? (
+		>=app-text/enchant-0.22 )"
 
 DEPEND="${RDEPEND}
 	>=sys-devel/flex-2.5.33
@@ -84,12 +86,12 @@ src_configure() {
 	myconf="
 		$(use_enable coverage)
 		$(use_enable debug)
+		$(use_enable spell spellcheck)
 		$(use_enable introspection)
 		$(use_enable gstreamer video)
 		$(use_enable jit)
-		--enable-blob
 		--with-gtk=2.0
-		--disable-WebGL
+		--disable-webgl
 		--disable-webkit2
 		--disable-web-sockets"
 		# quartz patch above does not apply anymore
