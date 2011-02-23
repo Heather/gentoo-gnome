@@ -91,7 +91,7 @@ src_prepare() {
 		ewarn "Adding support for the experimental NetworkManager applet."
 		ewarn "This needs the latest NetworkManager & nm-applet trunk."
 		ewarn "Report bugs about this to 'nirbheek' on #gentoo-desktop @ FreeNode."
-		epatch "${FILESDIR}/${PN}-experimental-nm-applet.patch"
+		epatch "${FILESDIR}/${PN}-experimental-nm-applet-1.0.patch"
 	fi
 
 	gnome2_src_prepare

@@ -1,0 +1,43 @@
+From a420d59ea24a1eb82a7c1dc96e3cf5b38b0fd757 Mon Sep 17 00:00:00 2001
+From: Giovanni Campagna <gcampagna@src.gnome.org>
+Date: Tue, 22 Feb 2011 23:34:41 +0100
+Subject: [PATCH] libnm-util: another introspection annotation
+
+nm_utils_ssid_to_utf8 has gchar* in the signature, but it accepts
+an array of bytes, not a string. Fix with the appropriate
+annotation.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=643011
+---
+ libnm-util/nm-utils.c |    9 +++++----
+ 1 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/libnm-util/nm-utils.c b/libnm-util/nm-utils.c
+index 87c5d5f..c2134db 100644
+--- a/libnm-util/nm-utils.c
++++ b/libnm-util/nm-utils.c
+@@ -304,7 +304,8 @@ nm_utils_deinit (void)
+ 
+ /**
+  * nm_utils_ssid_to_utf8:
+- * @ssid: pointer to a buffer containing the SSID data
++ * @ssid: (array length=len) (element-type guint8): pointer to a buffer
++ *   containing the SSID data
+  * @len: length of the SSID data in @ssid
+  *
+  * WiFi SSIDs are byte arrays, they are _not_ strings.  Thus, an SSID may
+@@ -330,9 +331,9 @@ nm_utils_deinit (void)
+  * Again, this function should be used for debugging and display purposes
+  * _only_.
+  *
+- * Returns: an allocated string containing a UTF-8 representation of the
+- * SSID, which must be freed by the caller using g_free().  Returns NULL
+- * on errors.
++ * Returns: (transfer full): an allocated string containing a UTF-8 representation
++ *   of the SSID, which must be freed by the caller using g_free().  Returns
++ *   NULL on errors.
+  **/
+ char *
+ nm_utils_ssid_to_utf8 (const char *ssid, guint32 len)
+-- 
+1.7.4

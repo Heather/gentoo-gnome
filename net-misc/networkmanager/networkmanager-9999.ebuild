@@ -133,6 +133,9 @@ src_prepare() {
 	# FIXME: does not apply
 	#epatch "${FILESDIR}/${PN}-0.8.2-shared-connection.patch"
 
+	# https://bugzilla.gnome.org/show_bug.cgi?id=643011
+	epatch "${FILESDIR}/${PN}-more-gi-annotations.patch"
+
 	gnome2_src_prepare
 }
 
