@@ -27,7 +27,9 @@ RDEPEND=">=dev-libs/glib-2.26.0:2
 	>=gnome-base/gsettings-desktop-schemas-0.1.0
 	x11-libs/libSM
 	x11-libs/libICE"
+# gtk+:2 needed for gtk-builder-convert, bug 356239
 DEPEND="${RDEPEND}
+	x11-libs/gtk+:2
 	>=dev-util/intltool-0.40
 	>=dev-util/pkgconfig-0.9
 	>=app-text/gnome-doc-utils-0.3.2
