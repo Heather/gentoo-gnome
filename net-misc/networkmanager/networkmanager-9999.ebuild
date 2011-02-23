@@ -17,7 +17,7 @@ HOMEPAGE="http://www.gnome.org/projects/NetworkManager/"
 LICENSE="GPL-2"
 SLOT="0"
 IUSE="avahi bluetooth doc nss gnutls dhclient dhcpcd +introspection kernel_linux
-resolvconf connection-sharing wimax"
+resolvconf connection-sharing wimax +ppp"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	EGIT_REPO_URI="git://anongit.freedesktop.org/${MY_PN}/${MY_PN}"
@@ -54,12 +54,12 @@ RDEPEND=">=sys-apps/dbus-1.2
 	connection-sharing? (
 		net-dns/dnsmasq
 		net-firewall/iptables )
-	wimax? ( >=net-wireless/wimax-1.5.1 )"
+	wimax? ( >=net-wireless/wimax-1.5.1 )
+	ppp? ( >=net-dialup/ppp-2.4.5 )"
 
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	dev-util/intltool
-	>=net-dialup/ppp-2.4.5
 	doc? ( >=dev-util/gtk-doc-1.8 )"
 
 S=${WORKDIR}/${MY_P}
@@ -99,7 +99,8 @@ pkg_setup() {
 		$(use_with doc docs)
 		$(use_with resolvconf)
 		$(use_enable introspection)
-		$(use_enable wimax)"
+		$(use_enable wimax)
+		$(use_enable ppp)"
 
 	# default is dhcpcd (if none or both are specified), ISC dchclient otherwise
 	if use dhclient ; then
