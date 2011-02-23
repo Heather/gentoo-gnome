@@ -7,14 +7,14 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2:2.5"
 
-inherit eutils gnome2 python
+inherit gnome2 python
 
 DESCRIPTION="Provides core UI functions for the GNOME 3 desktop"
 HOMEPAGE="http://live.gnome.org/GnomeShell"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="nm-applet"
+IUSE=""
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
@@ -25,13 +25,13 @@ fi
 # gnome-desktop-2.91.2 is needed due to header changes, db82a33 in gnome-desktop
 # FIXME: Automagic gnome-bluetooth[introspection] support.
 COMMON_DEPEND=">=dev-libs/glib-2.25.9
-	>=dev-libs/gjs-0.7.11
-	>=dev-libs/gobject-introspection-0.10.1
 	x11-libs/gdk-pixbuf:2[introspection]
 	>=x11-libs/gtk+-3.0.0:3[introspection]
 	>=media-libs/clutter-1.5.15[introspection]
 	>=gnome-base/gnome-desktop-2.91.2:3
 	>=gnome-base/gsettings-desktop-schemas-0.1.7
+	>=dev-libs/gjs-0.7.11
+	>=dev-libs/gobject-introspection-0.10.1
 	>=gnome-extra/evolution-data-server-2.91.6
 	>=media-libs/gstreamer-0.10.16
 	>=media-libs/gst-plugins-base-0.10.16
@@ -53,11 +53,8 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9
 
 	x11-libs/startup-notification
 	x11-libs/libXfixes
-	x11-apps/mesa-progs
-
-	nm-applet? ( >=net-misc/networkmanager-9999[introspection] )"
+	x11-apps/mesa-progs"
 # Runtime-only deps are probably incomplete and approximate.
-# nm-applet is only needed temporarily for the secrets and wireless dialogs.
 RDEPEND="${COMMON_DEPEND}
 	dev-python/dbus-python
 	dev-python/gconf-python
@@ -66,9 +63,7 @@ RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/gnome-settings-daemon-2.91
 	>=gnome-base/gnome-control-center-2.91
 	>=gnome-base/libgnomekbd-2.91.4[introspection]
-	sys-power/upower[introspection]
-
-	nm-applet? ( >=gnome-extra/nm-applet-9999 )"
+	sys-power/upower[introspection]"
 DEPEND="${COMMON_DEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.22
@@ -85,15 +80,6 @@ pkg_setup() {
 
 src_prepare() {
 	python_convert_shebangs --recursive 2 .
-
-	if use nm-applet; then
-		# See https://bugzilla.gnome.org/show_bug.cgi?id=621707"
-		ewarn "Adding support for the experimental NetworkManager applet."
-		ewarn "This needs the latest NetworkManager & nm-applet trunk."
-		ewarn "Report bugs about this to 'nirbheek' on #gentoo-desktop @ FreeNode."
-		epatch "${FILESDIR}/${PN}-experimental-nm-applet.patch"
-	fi
-
 	gnome2_src_prepare
 }
 
