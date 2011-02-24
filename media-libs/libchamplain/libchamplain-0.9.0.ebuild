@@ -17,12 +17,12 @@ IUSE="doc +gtk html +introspection"
 RDEPEND="
 	>=dev-libs/glib-2.16:2
 	>=x11-libs/cairo-1.4
-	>=media-libs/clutter-1.2:1.0
-	>=media-libs/memphis-0.2.1:0.2
+	>=media-libs/clutter-1.2:1.0[introspection?]
+	>=media-libs/memphis-0.2.1:0.2[introspection?]
 	>=net-libs/libsoup-gnome-2.4.1:2.4
 	dev-db/sqlite:3
 	gtk? (
-		>=x11-libs/gtk+-2.90:3
+		>=x11-libs/gtk+-2.90:3[introspection?]
 		>=media-libs/clutter-gtk-0.90:1.0 )
 	introspection? ( >=dev-libs/gobject-introspection-0.6.3 )"
 DEPEND="${RDEPEND}
