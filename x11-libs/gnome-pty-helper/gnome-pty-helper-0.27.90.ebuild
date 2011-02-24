@@ -19,6 +19,6 @@ IUSE=""
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 
 # gnome-pty-helper was spit out with 0.27.90
-RDEPEND="!!<x11-libs/vte-0.27.90"
-DEPEND="${RDEPEND}"
+DEPEND=""
+RDEPEND="!<x11-libs/vte-0.27.90"
 S="${WORKDIR}/vte-${VTE_PV}/gnome-pty-helper"
