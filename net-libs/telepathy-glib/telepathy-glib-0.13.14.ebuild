@@ -40,7 +40,7 @@ src_configure() {
 			VAPIGEN=$(type -p vapigen-0.12)"
 	fi
 
-	econf \
+	econf --disable-static \
 		$(use_enable debug backtrace) \
 		$(use_enable debug handle-leak-debug) \
 		$(use_enable debug debug-cache) \
@@ -57,4 +57,6 @@ src_test() {
 src_install() {
 	emake install DESTDIR="${D}" || die "emake install failed"
 	dodoc AUTHORS ChangeLog NEWS README || die "dodoc failed"
+
+	find "${D}" -name '*.la' -exec rm -f '{}' + || die
 }
