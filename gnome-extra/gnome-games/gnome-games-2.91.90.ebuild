@@ -135,6 +135,9 @@ src_prepare() {
 	# Without this, --enable-staging enables all those games unconditionally
 	epatch "${FILESDIR}/${PN}-fix-staging-games.patch"
 
+	# Fixed upstream, remove in next release
+	epatch "${FILESDIR}/${P}-fix-header-collisions.patch"
+
 	eautoreconf
 
 	# disable pyc compiling
