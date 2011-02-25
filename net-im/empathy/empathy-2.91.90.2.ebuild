@@ -39,7 +39,7 @@ RDEPEND=">=dev-libs/glib-2.27.2:2
 	dev-libs/libxml2
 	x11-libs/libX11
 	net-voip/telepathy-connection-managers
-	>=net-im/telepathy-logger-0.1.5
+	>=net-im/telepathy-logger-0.2.0
 
 	gnome? ( >=gnome-base/gnome-control-center-2.31.4 )
 	eds? ( >=gnome-extra/evolution-data-server-1.2 )
@@ -60,8 +60,7 @@ DEPEND="${RDEPEND}
 	test? (
 		sys-apps/grep
 		>=dev-libs/check-0.9.4 )
-	dev-libs/libxslt
-"
+	dev-libs/libxslt"
 PDEPEND=">=net-im/telepathy-mission-control-5"
 
 pkg_setup() {
@@ -88,7 +87,7 @@ src_prepare() {
 		$(use_enable test coding-style-checks)
 		$(use_enable webkit)"
 
-	python_convert_shebangs -r 2 .
+	python_convert_shebangs -r 2 tools
 
 	gnome2_src_prepare
 }
