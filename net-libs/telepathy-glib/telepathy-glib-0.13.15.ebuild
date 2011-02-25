@@ -31,6 +31,11 @@ pkg_setup() {
 	python_pkg_setup
 }
 
+src_prepare() {
+	python_convert_shebangs -r examples tests tools
+	default_src_prepare
+}
+
 src_configure() {
 	local myconf
 
