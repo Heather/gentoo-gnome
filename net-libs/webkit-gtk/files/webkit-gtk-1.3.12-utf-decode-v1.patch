@@ -1,0 +1,392 @@
+commit a4853e0b12ad2305ba7c3593a08f7f366dee5eaf
+Author: darin@apple.com <darin@apple.com@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
+Date:   Wed Feb 23 20:00:25 2011 +0000
+
+    2011-02-23  Darin Adler  <darin@apple.com>
+    
+            Reviewed by Alexey Proskuryakov.
+    
+            REGRESSION (new UTF-8 decoder): Reproducible crash on alltommac.se
+            https://bugs.webkit.org/show_bug.cgi?id=54862
+    
+            Correct handling of end of buffer partial sequence in UTF-8 and UTF-16 decoders when flushing with zero length
+            https://bugs.webkit.org/show_bug.cgi?id=54444
+    
+            No new tests at this time. I will add some tests later, but since multiple
+            people are hitting this I wanted to get it in as quickly as possible.
+    
+            * platform/text/TextCodecUTF16.cpp:
+            (WebCore::TextCodecUTF16::decode): Tweaked coding style quite a bit.
+            Removed special case for zero length now that main code handles it
+            correctly. Used words instead of abbreviations for local variable names.
+            Added error handling for a trailing byte.
+    
+            * platform/text/TextCodecUTF8.cpp:
+            (WebCore::TextCodecUTF8::consumePartialSequenceByte): Added. Helper function
+            to make the handleError and handlePartialSequence functions clearer.
+            (WebCore::TextCodecUTF8::handleError): Added. Helper function to make the
+            handlePartialSequence clearer.
+            (WebCore::TextCodecUTF8::handlePartialSequence): Added. Factored out code for
+            the partial sequence case. Making this a separate function probably helps make
+            the fast case a little faster. This new version handles more cases correctly,
+            which is what fixes the crashes we were seeing. In particular, it no longer
+            assumes that the partial sequence is truly partial, because there are cases
+            where we end up handling complete sequences here, such as when a complete
+            sequence is inside a malformed partial sequence.
+            (WebCore::TextCodecUTF8::decode): Removed partial sequence code and made this
+            call handlePartialSequence instead. Could be streamlined if we double checked
+            that passing a reference to "destination" and "source" doesn't harm code
+            generation too much, so perhaps someone can do that research on a few compilers
+            later and clean this up. Removed special case for zero length now that the
+            main code handles that correctly.
+    
+            * platform/text/TextCodecUTF8.h: Added declarations for new functions.
+            Made partial sequence buffer large enough to hold a whole sequence so we can
+            use it to complete and decode a sequence in place.
+    
+    
+    git-svn-id: http://svn.webkit.org/repository/webkit/trunk@79466 268f45cc-cd09-0410-ab3c-d52691b4dbfc
+
+diff --git a/Source/WebCore/platform/text/TextCodecUTF16.cpp b/Source/WebCore/platform/text/TextCodecUTF16.cpp
+index 4ceed23..f5dd59c 100644
+--- a/Source/WebCore/platform/text/TextCodecUTF16.cpp
++++ b/Source/WebCore/platform/text/TextCodecUTF16.cpp
+@@ -1,5 +1,5 @@
+ /*
+- * Copyright (C) 2004, 2006, 2008, 2010 Apple Inc. All rights reserved.
++ * Copyright (C) 2004, 2006, 2008, 2010, 2011 Apple Inc. All rights reserved.
+  *
+  * Redistribution and use in source and binary forms, with or without
+  * modification, are permitted provided that the following conditions
+@@ -27,10 +27,12 @@
+ #include "TextCodecUTF16.h"
+ 
+ #include "PlatformString.h"
++#include <wtf/PassOwnPtr.h>
+ #include <wtf/text/CString.h>
+ #include <wtf/text/StringBuffer.h>
+-#include <wtf/PassOwnPtr.h>
++#include <wtf/unicode/CharacterNames.h>
+ 
++using namespace WTF::Unicode;
+ using namespace std;
+ 
+ namespace WebCore {
+@@ -52,12 +54,12 @@ void TextCodecUTF16::registerEncodingNames(EncodingNameRegistrar registrar)
+ 
+ static PassOwnPtr<TextCodec> newStreamingTextDecoderUTF16LE(const TextEncoding&, const void*)
+ {
+-    return new TextCodecUTF16(true);
++    return adoptPtr(new TextCodecUTF16(true));
+ }
+ 
+ static PassOwnPtr<TextCodec> newStreamingTextDecoderUTF16BE(const TextEncoding&, const void*)
+ {
+-    return new TextCodecUTF16(false);
++    return adoptPtr(new TextCodecUTF16(false));
+ }
+ 
+ void TextCodecUTF16::registerCodecs(TextCodecRegistrar registrar)
+@@ -66,53 +68,56 @@ void TextCodecUTF16::registerCodecs(TextCodecRegistrar registrar)
+     registrar("UTF-16BE", newStreamingTextDecoderUTF16BE, 0);
+ }
+ 
+-String TextCodecUTF16::decode(const char* bytes, size_t length, bool, bool, bool&)
++String TextCodecUTF16::decode(const char* bytes, size_t length, bool flush, bool stopOnError, bool& sawError)
+ {
+-    if (!length)
+-        return String();
+-
+-    // FIXME: This should generate an error if there is an unpaired surrogate.
++    // FIXME: This should buffer surrogates, not just single bytes,
++    // and should generate an error if there is an unpaired surrogate.
+ 
+-    const unsigned char* p = reinterpret_cast<const unsigned char*>(bytes);
++    const uint8_t* source = reinterpret_cast<const uint8_t*>(bytes);
+     size_t numBytes = length + m_haveBufferedByte;
+-    size_t numChars = numBytes / 2;
+-
+-    StringBuffer buffer(numChars);
+-    UChar* q = buffer.characters();
+-
+-    if (m_haveBufferedByte) {
+-        UChar c;
+-        if (m_littleEndian)
+-            c = m_bufferedByte | (p[0] << 8);
+-        else
+-            c = (m_bufferedByte << 8) | p[0];
+-        *q++ = c;
+-        m_haveBufferedByte = false;
+-        p += 1;
+-        numChars -= 1;
+-    }
+-
+-    if (m_littleEndian) {
+-        for (size_t i = 0; i < numChars; ++i) {
+-            UChar c = p[0] | (p[1] << 8);
+-            p += 2;
+-            *q++ = c;
++    size_t numCharacters = numBytes / 2;
++
++    StringBuffer buffer(numCharacters + (flush && (numBytes & 1)));
++    UChar* destination = buffer.characters();
++
++    if (length) {
++        if (m_haveBufferedByte) {
++            UChar character;
++            if (m_littleEndian)
++                *destination++ = m_bufferedByte | (source[0] << 8);
++            else
++                *destination++ = (m_bufferedByte << 8) | source[0];
++            m_haveBufferedByte = false;
++            ++source;
++            --numCharacters;
+         }
+-    } else {
+-        for (size_t i = 0; i < numChars; ++i) {
+-            UChar c = (p[0] << 8) | p[1];
+-            p += 2;
+-            *q++ = c;
++
++        if (m_littleEndian) {
++            for (size_t i = 0; i < numCharacters; ++i) {
++                *destination++ = source[0] | (source[1] << 8);
++                source += 2;
++            }
++        } else {
++            for (size_t i = 0; i < numCharacters; ++i) {
++                *destination++ = (source[0] << 8) | source[1];
++                source += 2;
++            }
+         }
+     }
+ 
+     if (numBytes & 1) {
+-        ASSERT(!m_haveBufferedByte);
+-        m_haveBufferedByte = true;
+-        m_bufferedByte = p[0];
++        if (flush) {
++            sawError = true;
++            if (!stopOnError)
++                *destination++ = replacementCharacter;
++        } else {
++            ASSERT(!m_haveBufferedByte);
++            m_haveBufferedByte = true;
++            m_bufferedByte = source[0];
++        }
+     }
+-
+-    buffer.shrink(q - buffer.characters());
++    
++    buffer.shrink(destination - buffer.characters());
+ 
+     return String::adopt(buffer);
+ }
+@@ -134,15 +139,15 @@ CString TextCodecUTF16::encode(const UChar* characters, size_t length, Unencodab
+     // null characters inside it. Perhaps the result of encode should not be a CString.
+     if (m_littleEndian) {
+         for (size_t i = 0; i < length; ++i) {
+-            UChar c = characters[i];
+-            bytes[i * 2] = c;
+-            bytes[i * 2 + 1] = c >> 8;
++            UChar character = characters[i];
++            bytes[i * 2] = character;
++            bytes[i * 2 + 1] = character >> 8;
+         }
+     } else {
+         for (size_t i = 0; i < length; ++i) {
+-            UChar c = characters[i];
+-            bytes[i * 2] = c >> 8;
+-            bytes[i * 2 + 1] = c;
++            UChar character = characters[i];
++            bytes[i * 2] = character >> 8;
++            bytes[i * 2 + 1] = character;
+         }
+     }
+ 
+diff --git a/Source/WebCore/platform/text/TextCodecUTF8.cpp b/Source/WebCore/platform/text/TextCodecUTF8.cpp
+index 2466e8c..29426ad 100644
+--- a/Source/WebCore/platform/text/TextCodecUTF8.cpp
++++ b/Source/WebCore/platform/text/TextCodecUTF8.cpp
+@@ -150,11 +150,71 @@ static inline UChar* appendCharacter(UChar* destination, int character)
+     return destination;
+ }
+ 
+-String TextCodecUTF8::decode(const char* bytes, size_t length, bool flush, bool stopOnError, bool& sawError)
++void TextCodecUTF8::consumePartialSequenceByte()
+ {
+-    if (!length)
+-        return String();
++    --m_partialSequenceSize;
++    memmove(m_partialSequence, m_partialSequence + 1, m_partialSequenceSize);
++}
+ 
++void TextCodecUTF8::handleError(UChar*& destination, bool stopOnError, bool& sawError)
++{
++    sawError = true;
++    if (stopOnError)
++        return;
++    // Each error generates a replacement character and consumes one byte.
++    *destination++ = replacementCharacter;
++    consumePartialSequenceByte();
++}
++
++void TextCodecUTF8::handlePartialSequence(UChar*& destination, const uint8_t*& source, const uint8_t* end, bool flush, bool stopOnError, bool& sawError)
++{
++    ASSERT(m_partialSequenceSize);
++    do {
++        if (isASCII(m_partialSequence[0])) {
++            *destination++ = m_partialSequence[0];
++            consumePartialSequenceByte();
++            continue;
++        }
++        int count = nonASCIISequenceLength(m_partialSequence[0]);
++        if (!count) {
++            handleError(destination, stopOnError, sawError);
++            if (stopOnError)
++                return;
++            continue;
++        }
++        if (count > m_partialSequenceSize) {
++            if (count - m_partialSequenceSize > end - source) {
++                if (!flush) {
++                    // The new data is not enough to complete the sequence, so
++                    // add it to the existing partial sequence.
++                    memcpy(m_partialSequence + m_partialSequenceSize, source, end - source);
++                    m_partialSequenceSize += end - source;
++                    return;
++                }
++                // An incomplete partial sequence at the end is an error.
++                handleError(destination, stopOnError, sawError);
++                if (stopOnError)
++                    return;
++                continue;
++            }
++            memcpy(m_partialSequence + m_partialSequenceSize, source, count - m_partialSequenceSize);
++            source += count - m_partialSequenceSize;
++            m_partialSequenceSize = count;
++        }
++        int character = decodeNonASCIISequence(m_partialSequence, count);
++        if (character == nonCharacter) {
++            handleError(destination, stopOnError, sawError);
++            if (stopOnError)
++                return;
++            continue;
++        }
++        m_partialSequenceSize -= count;
++        destination = appendCharacter(destination, character);
++    } while (m_partialSequenceSize);
++}
++
++String TextCodecUTF8::decode(const char* bytes, size_t length, bool flush, bool stopOnError, bool& sawError)
++{
+     // Each input byte might turn into a character.
+     // That includes all bytes in the partial-sequence buffer because
+     // each byte in an invalid sequence will turn into a replacement character.
+@@ -166,52 +226,19 @@ String TextCodecUTF8::decode(const char* bytes, size_t length, bool flush, bool
+     UChar* destination = buffer.characters();
+ 
+     do {
+-        while (m_partialSequenceSize) {
+-            int count = nonASCIISequenceLength(m_partialSequence[0]);
+-            ASSERT(count > m_partialSequenceSize);
+-            ASSERT(count >= 2);
+-            ASSERT(count <= 4);
+-            if (count - m_partialSequenceSize > end - source) {
+-                if (!flush) {
+-                    // We have an incomplete partial sequence, so put it all in the partial
+-                    // sequence buffer, and break out of this loop so we can exit the function.
+-                    memcpy(m_partialSequence + m_partialSequenceSize, source, end - source);
+-                    m_partialSequenceSize += end - source;
+-                    source = end;
+-                    break;
+-                }
+-                // We have an incomplete partial sequence at the end of the buffer.
+-                // That is an error.
+-                sawError = true;
+-                if (stopOnError) {
+-                    source = end;
+-                    break;
+-                }
+-                // Each error consumes one byte and generates one replacement character.
+-                --m_partialSequenceSize;
+-                memmove(m_partialSequence, m_partialSequence + 1, m_partialSequenceSize);
+-                *destination++ = replacementCharacter;
+-                continue;
++        if (m_partialSequenceSize) {
++            // Explicitly copy destination and source to avoid taking a pointer to them,
++            // which may harm code generation.
++            UChar* destinationForHandlePartialSequence = destination;
++            const uint8_t* sourceForHandlePartialSequence = source;
++            handlePartialSequence(destinationForHandlePartialSequence, sourceForHandlePartialSequence, end, flush, stopOnError, sawError);
++            destination = destinationForHandlePartialSequence;
++            source = sourceForHandlePartialSequence;
++            if (m_partialSequenceSize) {
++                ASSERT(stopOnError);
++                ASSERT(sawError);
++                break;
+             }
+-            uint8_t completeSequence[U8_MAX_LENGTH];
+-            memcpy(completeSequence, m_partialSequence, m_partialSequenceSize);
+-            memcpy(completeSequence + m_partialSequenceSize, source, count - m_partialSequenceSize);
+-            source += count - m_partialSequenceSize;
+-            int character = decodeNonASCIISequence(completeSequence, count);
+-            if (character == nonCharacter) {
+-                sawError = true;
+-                if (stopOnError) {
+-                    source = end;
+-                    break;
+-                }
+-                // Each error consumes one byte and generates one replacement character.
+-                memcpy(m_partialSequence, completeSequence + 1, count - 1);
+-                m_partialSequenceSize = count - 1;
+-                *destination++ = replacementCharacter;
+-                continue;
+-            }
+-            m_partialSequenceSize = 0;
+-            destination = appendCharacter(destination, character);
+         }
+ 
+         while (source < end) {
+@@ -239,10 +266,8 @@ String TextCodecUTF8::decode(const char* bytes, size_t length, bool flush, bool
+             if (!count)
+                 character = nonCharacter;
+             else {
+-                ASSERT(count >= 2);
+-                ASSERT(count <= 4);
+                 if (count > end - source) {
+-                    ASSERT(end - source <= static_cast<ptrdiff_t>(sizeof(m_partialSequence)));
++                    ASSERT(end - source < static_cast<ptrdiff_t>(sizeof(m_partialSequence)));
+                     ASSERT(!m_partialSequenceSize);
+                     m_partialSequenceSize = end - source;
+                     memcpy(m_partialSequence, source, m_partialSequenceSize);
+@@ -255,9 +280,9 @@ String TextCodecUTF8::decode(const char* bytes, size_t length, bool flush, bool
+                 sawError = true;
+                 if (stopOnError)
+                     break;
+-                // Each error consumes one byte and generates one replacement character.
+-                ++source;
++                // Each error generates a replacement character and consumes one byte.
+                 *destination++ = replacementCharacter;
++                ++source;
+                 continue;
+             }
+             source += count;
+diff --git a/Source/WebCore/platform/text/TextCodecUTF8.h b/Source/WebCore/platform/text/TextCodecUTF8.h
+index 2bbb31e..39fd753 100644
+--- a/Source/WebCore/platform/text/TextCodecUTF8.h
++++ b/Source/WebCore/platform/text/TextCodecUTF8.h
+@@ -42,8 +42,12 @@ private:
+     virtual String decode(const char*, size_t length, bool flush, bool stopOnError, bool& sawError);
+     virtual CString encode(const UChar*, size_t length, UnencodableHandling);
+ 
++    void handlePartialSequence(UChar*& destination, const uint8_t*& source, const uint8_t* end, bool flush, bool stopOnError, bool& sawError);
++    void handleError(UChar*& destination, bool stopOnError, bool& sawError);
++    void consumePartialSequenceByte();
++
+     int m_partialSequenceSize;
+-    char m_partialSequence[U8_MAX_LENGTH - 1];
++    uint8_t m_partialSequence[U8_MAX_LENGTH];
+     
+ };
+ 

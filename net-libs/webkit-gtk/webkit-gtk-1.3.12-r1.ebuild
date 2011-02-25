@@ -60,6 +60,9 @@ src_prepare() {
 	# https://bugs.webkit.org/show_bug.cgi?id=19775
 	use sparc && epatch "${FILESDIR}"/${PN}-1.1.15.2-unaligned.patch
 
+	epatch "${FILESDIR}/${P}-utf-decode-v1.patch"
+	epatch "${FILESDIR}/${P}-utf-decode-v2.patch"
+
 	# Darwin/Aqua build is broken, needs autoreconf
 	# XXX: BROKEN. Patch does not apply anymore.
 	# https://bugs.webkit.org/show_bug.cgi?id=28727
