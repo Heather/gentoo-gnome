@@ -25,13 +25,13 @@ fi
 # gnome-desktop-2.91.2 is needed due to header changes, db82a33 in gnome-desktop
 # FIXME: Automagic gnome-bluetooth[introspection] support.
 COMMON_DEPEND=">=dev-libs/glib-2.25.9
+	>=dev-libs/gjs-0.7.11
+	>=dev-libs/gobject-introspection-0.10.1
 	x11-libs/gdk-pixbuf:2[introspection]
 	>=x11-libs/gtk+-3.0.0:3[introspection]
 	>=media-libs/clutter-1.5.15[introspection]
 	>=gnome-base/gnome-desktop-2.91.2:3
 	>=gnome-base/gsettings-desktop-schemas-0.1.7
-	>=dev-libs/gjs-0.7.11
-	>=dev-libs/gobject-introspection-0.10.1
 	>=gnome-extra/evolution-data-server-2.91.6
 	>=media-libs/gstreamer-0.10.16
 	>=media-libs/gst-plugins-base-0.10.16
@@ -79,8 +79,12 @@ pkg_setup() {
 }
 
 src_prepare() {
-	python_convert_shebangs --recursive 2 .
 	gnome2_src_prepare
+}
+
+src_install() {
+	python_convert_shebangs 2 tools/check-for-missing.py src/gnome-shell
+	gnome2_src_install
 }
 
 pkg_postinst() {

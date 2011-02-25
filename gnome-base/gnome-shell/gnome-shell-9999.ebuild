@@ -54,10 +54,9 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	x11-libs/startup-notification
 	x11-libs/libXfixes
 	x11-apps/mesa-progs
-
+	
 	nm-applet? ( >=net-misc/networkmanager-9999[introspection] )"
 # Runtime-only deps are probably incomplete and approximate.
-# nm-applet is only needed temporarily for the secrets and wireless dialogs.
 RDEPEND="${COMMON_DEPEND}
 	dev-python/dbus-python
 	dev-python/gconf-python
@@ -67,7 +66,7 @@ RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/gnome-control-center-2.91
 	>=gnome-base/libgnomekbd-2.91.4[introspection]
 	sys-power/upower[introspection]
-
+	
 	nm-applet? ( >=gnome-extra/nm-applet-9999 )"
 DEPEND="${COMMON_DEPEND}
 	sys-devel/gettext
@@ -84,8 +83,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	python_convert_shebangs --recursive 2 .
-
 	if use nm-applet; then
 		# See https://bugzilla.gnome.org/show_bug.cgi?id=621707"
 		ewarn "Adding support for the experimental NetworkManager applet."
@@ -95,6 +92,11 @@ src_prepare() {
 	fi
 
 	gnome2_src_prepare
+}
+
+src_install() {
+	python_convert_shebangs 2 tools/check-for-missing.py src/gnome-shell
+	gnome2_src_install
 }
 
 pkg_postinst() {
