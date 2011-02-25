@@ -55,6 +55,10 @@ gnome2_src_unpack() {
 }
 
 gnome2_src_prepare() {
+	# Don't use the session bus address inherited via the environment
+	# causes test and introspection-building failures
+	unset DBUS_SESSION_BUS_ADDRESS
+
 	# Prevent scrollkeeper access violations
 	gnome2_omf_fix
 
@@ -63,6 +67,7 @@ gnome2_src_prepare() {
 }
 
 gnome2_src_configure() {
+	einfo dbus:$DBUS_SESSION_BUS_ADDRESS
 	# Update the GNOME configuration options
 	if [[ ${GCONF_DEBUG} != 'no' ]] ; then
 		if use debug ; then

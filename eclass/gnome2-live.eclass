@@ -121,6 +121,11 @@ gnome2-live_src_prepare() {
 	ln -sf $(type -P true) py-compile
 
 	### Keep this in-sync with gnome2.eclass!
+
+	# Don't use the session bus address inherited via the environment
+	# causes test and introspection-building failures
+	unset DBUS_SESSION_BUS_ADDRESS
+
 	# Prevent scrollkeeper access violations
 	gnome2_omf_fix
 
