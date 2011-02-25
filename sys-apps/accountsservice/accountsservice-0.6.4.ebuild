@@ -7,20 +7,20 @@ EAPI="3"
 inherit gnome2
 
 DESCRIPTION="D-Bus interfaces for querying and manipulating user account information"
-# Let's not even talk about why a GNOME dependency is hosted on fedora space.
 HOMEPAGE="http://www.fedoraproject.org/wiki/Features/UserAccountDialog"
-SRC_URI="http://mclasen.fedorapeople.org/accounts/${P}.tar.bz2"
-# ... yes I know the git repo is at http://cgit.freedesktop.org/accountsservice/
+SRC_URI="http://www.freedesktop.org/software/${PN}/${P}.tar.bz2"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="debug doc"
+IUSE="doc +introspection"
 
 RDEPEND="
 	dev-libs/glib:2
 	dev-libs/dbus-glib
-	sys-auth/polkit"
+	sys-auth/polkit
+
+	introspection? ( >=dev-libs/gobject-introspection-0.9.12 )"
 DEPEND="${RDEPEND}
 	dev-libs/libxslt
 	dev-util/pkgconfig
@@ -32,10 +32,15 @@ DEPEND="${RDEPEND}
 
 	doc? ( app-text/xmlto )"
 
+# Documentaton doesn't validate
+RESTRICT="test"
+
 pkg_setup() {
 	# Can configure systemdsystemunitdir
 	G2CONF="${G2CONF}
 		--disable-maintainer-mode
-		$(use_enable doc docbook-docs)"
+		--disable-more-warnings
+		$(use_enable doc docbook-docs)
+		$(use_enable introspection)"
 	DOCS="AUTHORS NEWS README TODO"
 }
