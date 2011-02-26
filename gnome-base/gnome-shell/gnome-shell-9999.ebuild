@@ -57,16 +57,25 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	
 	nm-applet? ( >=net-misc/networkmanager-9999[introspection] )"
 # Runtime-only deps are probably incomplete and approximate.
+# Each block:
+# 1. *-python are for /usr/bin/gnome-shell
+# 2. Introspection stuff + dconf needed via imports.gi.*
+# 3. gnome-session is needed for gnome-session-quit
+# 4. Don't remember
+# 5. nm-applet is needed for auth prompting and the wireless connection dialog
 RDEPEND="${COMMON_DEPEND}
 	dev-python/dbus-python
 	dev-python/gconf-python
 
 	>=gnome-base/dconf-0.4.1
-	>=gnome-base/gnome-settings-daemon-2.91
-	>=gnome-base/gnome-control-center-2.91
 	>=gnome-base/libgnomekbd-2.91.4[introspection]
 	sys-power/upower[introspection]
 	
+	>=gnome-base/gnome-session-2.91.91
+
+	>=gnome-base/gnome-settings-daemon-2.91
+	>=gnome-base/gnome-control-center-2.91
+
 	nm-applet? ( >=gnome-extra/nm-applet-9999 )"
 DEPEND="${COMMON_DEPEND}
 	sys-devel/gettext

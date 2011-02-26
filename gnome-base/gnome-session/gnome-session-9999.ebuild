@@ -60,7 +60,7 @@ DEPEND="${COMMON_DEPEND}
 		dev-libs/libxslt )"
 # gnome-base/gdm does not provide gnome.desktop anymore
 
-pkg_setup() {
+src_prepare() {
 	# TODO: convert libnotify to a configure option
 	G2CONF="${G2CONF}
 		--disable-deprecation-flags
