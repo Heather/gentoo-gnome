@@ -32,7 +32,7 @@ RDEPEND=">=x11-libs/gtk+-2.90.0:3[introspection?]
 
 	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
 
-	!!<dev-libs/libgweather-2.30.3-r200
+	!<dev-libs/libgweather-2.30.3-r200
 	!<gnome-base/gnome-applets-2.22.0"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40.3
