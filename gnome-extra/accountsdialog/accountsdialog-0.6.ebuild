@@ -17,8 +17,8 @@ IUSE=""
 RDEPEND="
 	dev-libs/glib:2
 	x11-libs/gtk+:2
-	>=gnome-base/gnome-desktop-2
-	>=dev-libs/libunique-1
+	>=gnome-base/gnome-desktop-2:2
+	>=dev-libs/libunique-1:1
 	gnome-extra/polkit-gnome
 	>=gnome-base/gconf-2[policykit]
 	>=media-video/cheese-2.30
