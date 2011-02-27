@@ -28,7 +28,7 @@ RDEPEND="
 	>=dev-libs/glib-2.16:2
 	>=dev-libs/libxml2-2
 	dev-libs/libxslt
-	dev-libs/libunique
+	dev-libs/libunique:1
 	sys-libs/readline
 	sys-libs/ncurses
 	berkdb?   ( sys-libs/db )
