@@ -52,6 +52,8 @@ src_configure() {
 
 src_test() {
 	unset DBUS_SESSION_BUS_ADDRESS
+	mkdir -p "${T}/home/cache"
+	export XDG_CACHE_HOME="${T}/home/cache"
 	Xemake check || die "make check failed"
 }
 
