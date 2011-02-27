@@ -30,7 +30,6 @@ RDEPEND=">=gnome-base/gnome-desktop-2.91:3
 	gnome-base/librsvg
 	>=dev-libs/dbus-glib-0.80
 	>=sys-apps/dbus-1.1.2
-	dev-libs/eggdbus
 	>=x11-libs/cairo-1
 	x11-libs/libXau
 	>=x11-libs/libXrandr-1.2
