@@ -62,7 +62,8 @@ src_prepare() {
 }
 
 src_install() {
-	gnome2_src_install
+	# installation sometimes fails in parallel
+	gnome2_src_install -j1
 
 	if use examples; then
 		insinto /usr/share/doc/${PF}/examples
