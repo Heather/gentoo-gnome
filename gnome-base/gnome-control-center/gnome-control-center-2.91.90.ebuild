@@ -61,8 +61,8 @@ COMMON_DEPEND="
 	networkmanager? ( >=net-misc/networkmanager-0.8.992 )
 	socialweb? ( net-libs/libsocialweb )
 
-	!!gnome-extra/gnome-media[pulseaudio]
-	!!<gnome-extra/gnome-media-2.32.0-r300"
+	!gnome-extra/gnome-media[pulseaudio]
+	!<gnome-extra/gnome-media-2.32.0-r300"
 RDEPEND="${COMMON_DEPEND}
 	sys-apps/accountsservice"
 # PDEPEND to avoid circular dependency
