@@ -40,6 +40,10 @@ DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9
 	doc? ( >=dev-util/gtk-doc-1.10 )"
 
+# file collisions
+RDEPEND="${RDEPEND}
+	!<gnome-base/gnome-control-center-2.90"
+
 pkg_setup() {
 	if ! use debug; then
 		G2CONF="${G2CONF} --enable-debug=minimum"
