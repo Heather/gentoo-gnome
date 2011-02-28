@@ -90,8 +90,5 @@ src_prepare() {
 		$(use_with socialweb libsocialweb)"
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
 
-	# bug 356729
-	epatch "${FILESDIR}/${PN}-fix-networkmanager-api.patch"
-
 	gnome2_src_prepare
 }
