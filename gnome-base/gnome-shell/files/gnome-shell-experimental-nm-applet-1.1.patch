@@ -1,4 +1,4 @@
-From f8a4fa0646aa4ab620331c0bbcae4334173b614d Mon Sep 17 00:00:00 2001
+From 9fb864ff75921974ad1f09ae75dcd6cc94ac90ef Mon Sep 17 00:00:00 2001
 From: Giovanni Campagna <gcampagna@src.gnome.org>
 Date: Tue, 25 Jan 2011 22:08:12 +0100
 Subject: [PATCH] Status area: add NetworkManager indicator
@@ -14,17 +14,17 @@ https://bugzilla.gnome.org/show_bug.cgi?id=621707
  js/Makefile.am                  |    2 +
  js/misc/modemManager.js         |  103 +++
  js/ui/panel.js                  |    3 +-
- js/ui/status/network.js         | 1754 +++++++++++++++++++++++++++++++++++++++
+ js/ui/status/network.js         | 1780 +++++++++++++++++++++++++++++++++++++++
  tools/build/gnome-shell.modules |   17 +
- 6 files changed, 1886 insertions(+), 1 deletions(-)
+ 6 files changed, 1912 insertions(+), 1 deletions(-)
  create mode 100644 js/misc/modemManager.js
  create mode 100644 js/ui/status/network.js
 
 diff --git a/data/theme/gnome-shell.css b/data/theme/gnome-shell.css
-index 1da6619..8f0fb52 100644
+index c7d875a..78f1361 100644
 --- a/data/theme/gnome-shell.css
 +++ b/data/theme/gnome-shell.css
-@@ -154,6 +154,14 @@ StTooltip StLabel {
+@@ -158,6 +158,14 @@ StTooltip StLabel {
      spacing: .5em;
  }
  
@@ -40,7 +40,7 @@ index 1da6619..8f0fb52 100644
      icon-size: 1.14em;
  }
 diff --git a/js/Makefile.am b/js/Makefile.am
-index e4a4145..53f80d4 100644
+index 55bb111..a085bfc 100644
 --- a/js/Makefile.am
 +++ b/js/Makefile.am
 @@ -8,6 +8,7 @@ nobase_dist_js_DATA = 	\
@@ -51,7 +51,7 @@ index e4a4145..53f80d4 100644
  	misc/params.js		\
  	misc/util.js		\
  	perf/core.js		\
-@@ -49,6 +50,7 @@ nobase_dist_js_DATA = 	\
+@@ -50,6 +51,7 @@ nobase_dist_js_DATA = 	\
  	ui/statusMenu.js	\
  	ui/status/accessibility.js	\
  	ui/status/keyboard.js	\
@@ -169,7 +169,7 @@ index 0000000..b368511
 +};
 +Signals.addSignalMethods(ModemCdma.prototype);
 diff --git a/js/ui/panel.js b/js/ui/panel.js
-index 1c23ae8..ab7a656 100644
+index d1bf3fd..76c10f1 100644
 --- a/js/ui/panel.js
 +++ b/js/ui/panel.js
 @@ -38,7 +38,8 @@ const STANDARD_TRAY_ICON_SHELL_IMPLEMENTATION = {
@@ -184,10 +184,10 @@ index 1c23ae8..ab7a656 100644
  if (Config.HAVE_BLUETOOTH)
 diff --git a/js/ui/status/network.js b/js/ui/status/network.js
 new file mode 100644
-index 0000000..04e9c87
+index 0000000..ecc80cc
 --- /dev/null
 +++ b/js/ui/status/network.js
-@@ -0,0 +1,1754 @@
+@@ -0,0 +1,1780 @@
 +// -*- mode: js2; indent-tabs-mode: nil; js2-basic-offset: 4 -*-
 +const ByteArray = imports.byteArray;
 +const DBus = imports.dbus;
@@ -282,7 +282,7 @@ index 0000000..04e9c87
 +        this.bestAP = accessPoints[0];
 +
 +        let ssid = this.bestAP.get_ssid();
-+        title = title || NetworkManager.utils_ssid_to_utf8(ssid, ssid.length) || _("<unknown>");
++        title = title || NetworkManager.utils_ssid_to_utf8(ssid) || _("<unknown>");
 +
 +        PopupMenu.PopupImageMenuItem.prototype._init.call(this, title, this._getIcon(), params);
 +
@@ -697,40 +697,59 @@ index 0000000..04e9c87
 +    }
 +};
 +
-+function NMDeviceWWAN() {
++function NMDeviceModem() {
 +    this._init.apply(this, arguments);
 +}
 +
-+NMDeviceWWAN.prototype = {
++NMDeviceModem.prototype = {
 +    __proto__: NMDevice.prototype,
 +
 +    _init: function(client, device, connections) {
-+        this._autoConnectionName = _("New Mobile Broadband connection...");
-+        this.category = NMConnectionCategory.WWAN;
++        let is_wwan = false;
 +
-+        if (device instanceof NMClient.GsmDevice) {
++        this.mobileDevice = null;
++        this._connecitonType = 'ppp';
++
++        // FIXME: listen for this property changing and recreate modem stuff
++        this._capabilities = device.current_capabilites;
++        if (this._capabilities & NetworkManager.DeviceModemCapabilities.GSM_UMTS) {
++            is_wwan = true;
 +            this.mobileDevice = new ModemManager.ModemGsm(device.udi);
 +            this._connectionType = NetworkManager.SETTING_GSM_SETTING_NAME;
-+        } else if (device instanceof NMClient.CdmaDevice) {
++        } else if (this._capabilities & NetworkManager.DeviceModemCapabilities.CDMA_EVDO) {
++            is_wwan = true;
 +            this.mobileDevice = new ModemManager.ModemCdma(device.udi);
 +            this._connectionType = NetworkManager.SETTING_CDMA_SETTING_NAME;
++        } else if (this._capabilites & NetworkManager.DeviceModemCapabilites.LTE) {
++            is_wwan = true;
++            // FIXME: support signal quality
 +        }
 +
-+        this.mobileDevice.connect('notify::operator-name', Lang.bind(this, function() {
-+            if (this._operatorItem) {
-+                let name = this.mobileDevice.operator_name;
-+                if (name) {
-+                    this._operatorItem.label.text = name;
-+                    this._operatorItem.actor.show();
-+                } else
-+                    this._operatorItem.actor.hide();
-+            }
-+        }));
-+        this.mobileDevice.connect('notify::signal-quality', Lang.bind(this, function() {
-+            if (this._operatorItem) {
-+                this._operatorItem.setIcon(this._getSignalIcon());
-+            }
-+        }));
++        if (is_wwan) {
++            this.category = NMConnectionCategory.WWAN;
++            this._autoConnectionName = _("New Mobile Broadband connection...");
++        } else {
++            this.category = NMConnectionCategory.WIRED;
++            this._autoConnectionName = _("Auto dial-up");
++        }
++
++        if (this.mobileDevice) {
++            this.mobileDevice.connect('notify::operator-name', Lang.bind(this, function() {
++                if (this._operatorItem) {
++                    let name = this.mobileDevice.operator_name;
++                    if (name) {
++                        this._operatorItem.label.text = name;
++                        this._operatorItem.actor.show();
++                    } else
++                        this._operatorItem.actor.hide();
++                }
++            }));
++            this.mobileDevice.connect('notify::signal-quality', Lang.bind(this, function() {
++                if (this._operatorItem) {
++                    this._operatorItem.setIcon(this._getSignalIcon());
++                }
++            }));
++        }
 +
 +        NMDevice.prototype._init.call(this, client, device, connections, 1);
 +    },
@@ -740,12 +759,14 @@ index 0000000..04e9c87
 +    },
 +
 +    _createSection: function() {
-+        NMDevice.prototype._createSection.call(this);
++        if (this.mobileDevice) {
++            this._operatorItem = new PopupMenu.PopupImageMenuItem(this.mobileDevice.operator_name || '',
++                                                                  this._getSignalIcon(),
++                                                                  { reactive: false });
++            this.section.addMenuItem(this._operatorItem);
++        }
 +
-+        this._operatorItem = new PopupMenu.PopupImageMenuItem(this.mobileDevice.operator_name || '',
-+                                                              this._getSignalIcon(),
-+                                                              { reactive: false });
-+        this.section.addMenuItem(this._operatorItem, 0);
++        NMDevice.prototype._createSection.call(this);
 +    },
 +
 +    clearSection: function() {
@@ -762,6 +783,7 @@ index 0000000..04e9c87
 +        // FIXME: we need to summon the mobile wizard here
 +        // or NM will not have the necessary parameters to complete the connection
 +        // (the same FIXME is currently in nm-applet, actually)
++        // (this does not apply to dial-up)
 +
 +        let connection = new NetworkManager.Connection;
 +        connection._uuid = NetworkManager.utils_uuid_generate();
@@ -1218,7 +1240,7 @@ index 0000000..04e9c87
 +                if (apObj.connections.length == 1)
 +                    apObj.item = this._createAPItem(apObj.connections[0], apObj, false);
 +                else {
-+                    let title = NetworkManager.utils_ssid_to_utf8(apObj.ssid, apObj.ssid.length) || _("<unknown>");
++                    let title = NetworkManager.utils_ssid_to_utf8(apObj.ssid) || _("<unknown>");
 +                    apObj.item = new PopupMenu.PopupSubMenuMenuItem(title);
 +                    apObj.item._apObj = apObj;
 +                    for (let i = 0; i < apObj.connections.length; i++)
@@ -1229,7 +1251,7 @@ index 0000000..04e9c87
 +                apObj.item._apObj = apObj;
 +                apObj.item.connect('activate', Lang.bind(this, function() {
 +                    let name;
-+                    let ssid = NetworkManager.utils_ssid_to_utf8(apObj.ssid, apObj.ssid.length);
++                    let ssid = NetworkManager.utils_ssid_to_utf8(apObj.ssid);
 +                    if (ssid) {
 +                        /* TRANSLATORS: this the automatic wireless connection name (including the network name) */
 +                        name = _("Auto %s").format(ssid);
@@ -1356,16 +1378,16 @@ index 0000000..04e9c87
 +        this._dtypes = { };
 +        this._dtypes[NetworkManager.DeviceType.ETHERNET] = NMDeviceWired;
 +        this._dtypes[NetworkManager.DeviceType.WIFI] = NMDeviceWireless;
-+        this._dtypes[NetworkManager.DeviceType.GSM] = NMDeviceWWAN;
-+        this._dtypes[NetworkManager.DeviceType.CDMA] = NMDeviceWWAN;
++        this._dtypes[NetworkManager.DeviceType.MODEM] = NMDeviceModem;
 +        this._dtypes[NetworkManager.DeviceType.BT] = NMDeviceBluetooth;
-+        // FIXME: WWAN support (if enabled)
++        // FIXME: WiMax support (if enabled)
 +
 +        // Connection types
 +        this._ctypes = { };
 +        this._ctypes[NetworkManager.SETTING_WIRELESS_SETTING_NAME] = NMConnectionCategory.WIRELESS;
 +        this._ctypes[NetworkManager.SETTING_WIRED_SETTING_NAME] = NMConnectionCategory.WIRED;
 +        this._ctypes[NetworkManager.SETTING_PPPOE_SETTING_NAME] = NMConnectionCategory.WIRED;
++        this._ctypes[NetworkManager.SETTING_PPP_SETTING_NAME] = NMConnectionCategory.WIRED;
 +        this._ctypes[NetworkManager.SETTING_BLUETOOTH_SETTING_NAME] = NMConnectionCategory.WWAN;
 +        this._ctypes[NetworkManager.SETTING_CDMA_SETTING_NAME] = NMConnectionCategory.WWAN;
 +        this._ctypes[NetworkManager.SETTING_GSM_SETTING_NAME] = NMConnectionCategory.WWAN;
@@ -1631,42 +1653,46 @@ index 0000000..04e9c87
 +
 +    _notifyActiveConnection: function(active) {
 +        if (active.state == NetworkManager.ActiveConnectionState.ACTIVATED) {
-+            this._ensureSource();
 +
-+            let icon;
-+            let banner;
-+            switch (active._section) {
-+            case NMConnectionCategory.WWAN:
-+                icon = 'network-cellular-signal-excellent';
-+                banner = _("You're now connected to mobile broadband connection '%s'").format(active._connection._name);
-+                break;
-+            case NMConnectionCategory.WIRELESS:
-+                icon = 'network-wireless-signal-excellent';
-+                banner = _("You're now connected to wireless network '%s'").format(active._connection._name);
-+                break;
-+            case NMConnectionCategory.WIRED:
-+                icon = 'network-wired';
-+                banner = _("You're now connected to wired network '%s'").format(active._connection._name);
-+                break;
-+            case NMConnectionCategory.VPN:
-+                icon = 'network-vpn';
-+                banner = _("You're now connected to VPN network '%s'").format(active._connection._name);
-+                break;
-+            default:
-+                // a fallback for a generic 'connected' icon
-+                icon = 'network-transmit-receive';
-+                banner = _("You're now connected to '%s'").format(active._connection._name);
++            // notify only connections that are visible
++            if (active._connection) {
++                this._ensureSource();
++
++                let icon;
++                let banner;
++                switch (active._section) {
++                case NMConnectionCategory.WWAN:
++                    icon = 'network-cellular-signal-excellent';
++                    banner = _("You're now connected to mobile broadband connection '%s'").format(active._connection._name);
++                    break;
++                case NMConnectionCategory.WIRELESS:
++                    icon = 'network-wireless-signal-excellent';
++                    banner = _("You're now connected to wireless network '%s'").format(active._connection._name);
++                    break;
++                case NMConnectionCategory.WIRED:
++                    icon = 'network-wired';
++                    banner = _("You're now connected to wired network '%s'").format(active._connection._name);
++                    break;
++                case NMConnectionCategory.VPN:
++                    icon = 'network-vpn';
++                    banner = _("You're now connected to VPN network '%s'").format(active._connection._name);
++                    break;
++                default:
++                    // a fallback for a generic 'connected' icon
++                    icon = 'network-transmit-receive';
++                    banner = _("You're now connected to '%s'").format(active._connection._name);
++                }
++
++                let iconActor = new St.Icon({ icon_name: icon,
++                                              icon_type: St.IconType.SYMBOLIC,
++                                              icon_size: this._source.ICON_SIZE
++                                            });
++                let notification = new MessageTray.Notification(this._source,
++                                                                _("Connection estabilished"),
++                                                                banner,
++                                                                { icon: iconActor });
++                this._source.notify(notification);
 +            }
-+
-+            let iconActor = new St.Icon({ icon_name: icon,
-+                                          icon_type: St.IconType.SYMBOLIC,
-+                                          icon_size: this._source.ICON_SIZE
-+                                        });
-+            let notification = new MessageTray.Notification(this._source,
-+                                                            _("Connection estabilished"),
-+                                                            banner,
-+                                                            { icon: iconActor });
-+            this._source.notify(notification);
 +
 +            if (active._stateChangeId) {
 +                active.disconnect(active._stateChangeId);
@@ -1943,7 +1969,7 @@ index 0000000..04e9c87
 +    }
 +};
 diff --git a/tools/build/gnome-shell.modules b/tools/build/gnome-shell.modules
-index e8b5493..2f44c5d 100644
+index 778db20..6ad230d 100644
 --- a/tools/build/gnome-shell.modules
 +++ b/tools/build/gnome-shell.modules
 @@ -9,6 +9,8 @@
@@ -1955,7 +1981,7 @@ index e8b5493..2f44c5d 100644
    <repository type="tarball" name="cairo.org"
        href="http://cairographics.org/"/>
    <repository type="tarball" name="0pointer.de"
-@@ -315,4 +317,19 @@
+@@ -329,4 +331,19 @@
      </dependencies>
  </autotools>
  

@@ -24,6 +24,7 @@ fi
 
 # gnome-desktop-2.91.2 is needed due to header changes, db82a33 in gnome-desktop
 # FIXME: Automagic gnome-bluetooth[introspection] support.
+# latest mutter is needed due to commit 474ff2e997
 COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	>=dev-libs/gjs-0.7.11
 	>=dev-libs/gobject-introspection-0.10.1
@@ -38,7 +39,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	>=net-libs/telepathy-glib-0.13.12[introspection]
 	>=net-wireless/gnome-bluetooth-2.90.0[introspection]
 	>=sys-auth/polkit-0.100[introspection]
-	>=x11-wm/mutter-2.91.90[introspection]
+	>=x11-wm/mutter-2.91.90.1[introspection]
 
 	dev-libs/dbus-glib
 	dev-libs/libxml2:2
@@ -97,7 +98,7 @@ src_prepare() {
 		ewarn "Adding support for the experimental NetworkManager applet."
 		ewarn "This needs the latest NetworkManager & nm-applet trunk."
 		ewarn "Report bugs about this to 'nirbheek' on #gentoo-desktop @ FreeNode."
-		epatch "${FILESDIR}/${PN}-experimental-nm-applet-1.0.patch"
+		epatch "${FILESDIR}/${PN}-experimental-nm-applet-1.1.patch"
 	fi
 
 	gnome2_src_prepare
@@ -114,6 +115,6 @@ pkg_postinst() {
 		ewarn "To make use of GNOME Shell's built-in screen recording utility,"
 		ewarn "you need to either install >=media-libs/gst-plugins-good-0.10.23"
 		ewarn "and media-plugins/gst-plugins-vp8, or use dconf-editor to change"
-		ewarn "/apps/gnome-shell/recorder/pipeline to what you want to use."
+		ewarn "apps.gnome-shell.recorder/pipeline to what you want to use."
 	fi
 }

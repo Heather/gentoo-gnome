@@ -93,6 +93,6 @@ pkg_postinst() {
 		ewarn "To make use of GNOME Shell's built-in screen recording utility,"
 		ewarn "you need to either install >=media-libs/gst-plugins-good-0.10.23"
 		ewarn "and media-plugins/gst-plugins-vp8, or use dconf-editor to change"
-		ewarn "/apps/gnome-shell/recorder/pipeline to what you want to use."
+		ewarn "apps.gnome-shell.recorder/pipeline to what you want to use."
 	fi
 }
