@@ -27,6 +27,7 @@ fi
 # XXX: gnome-desktop-2.91.5 is needed for upstream commit c67f7efb
 #
 # gnome-session-2.91.6-r1 is needed so that 10-user-dirs-update is run at login
+# g-s-d-2.91.90.1 is needed for magnifier schema updates
 COMMON_DEPEND="
 	>=dev-libs/glib-2.25.11
 	>=x11-libs/gdk-pixbuf-2.23.0
@@ -35,7 +36,7 @@ COMMON_DEPEND="
 	>=gnome-base/gconf-2.0
 	>=dev-libs/dbus-glib-0.73
 	>=gnome-base/gnome-desktop-2.91.5:3
-	>=gnome-base/gnome-settings-daemon-2.91.9
+	>=gnome-base/gnome-settings-daemon-2.91.90.1
 	>=gnome-base/libgnomekbd-2.91.2
 
 	app-text/iso-codes
