@@ -67,7 +67,6 @@ gnome2_src_prepare() {
 }
 
 gnome2_src_configure() {
-	einfo dbus:$DBUS_SESSION_BUS_ADDRESS
 	# Update the GNOME configuration options
 	if [[ ${GCONF_DEBUG} != 'no' ]] ; then
 		if use debug ; then
