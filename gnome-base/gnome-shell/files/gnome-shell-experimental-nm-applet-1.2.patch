@@ -218,10 +218,10 @@ index 0000000..ecc80cc
 +};
 +
 +const NMAppletIface = {
-+    name: 'org.freedesktop.NetworkManager.Applet',
++    name: 'org.gnome.network-manager-applet',
 +    methods: [
 +        { name: 'ConnectToHiddenNetwork', outSignature: '', inSignature: '' },
-+        { name: 'CreateWirelessNetwork', outSignature: '', inSignature: '' },
++        { name: 'CreateWifiNetwork', outSignature: '', inSignature: '' },
 +    ]
 +};
 +const NMAppletProxy = DBus.makeProxyClass(NMAppletIface);
@@ -1295,7 +1295,7 @@ index 0000000..ecc80cc
 +        PanelMenu.SystemStatusButton.prototype._init.call(this, 'network-error');
 +
 +        this._client = NMClient.Client.new();
-+        this._nmApplet = new NMAppletProxy(DBus.session, 'org.freedesktop.NetworkManager.Applet', '/org/freedesktop/NetworkManager/Applet');
++        this._nmApplet = new NMAppletProxy(DBus.session, 'org.gnome.network-manager-applet', '/org/gnome/network-manager-applet');
 +
 +        this._statusSection = new PopupMenu.PopupMenuSection();
 +        this._statusItem = new PopupMenu.PopupMenuItem('', { style_class: 'popup-inactive-menu-item', reactive: false });

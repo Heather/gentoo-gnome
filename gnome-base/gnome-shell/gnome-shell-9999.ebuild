@@ -86,7 +86,8 @@ DEPEND="${COMMON_DEPEND}
 DOCS="AUTHORS README"
 # Don't error out on warnings
 G2CONF="--enable-compile-warnings=maximum
---disable-schemas-compile"
+--disable-schemas-compile
+--disable-jhbuild-wrapper-script"
 
 pkg_setup() {
 	python_set_active_version 2
@@ -98,7 +99,7 @@ src_prepare() {
 		ewarn "Adding support for the experimental NetworkManager applet."
 		ewarn "This needs the latest NetworkManager & nm-applet trunk."
 		ewarn "Report bugs about this to 'nirbheek' on #gentoo-desktop @ FreeNode."
-		epatch "${FILESDIR}/${PN}-experimental-nm-applet-1.1.patch"
+		epatch "${FILESDIR}/${PN}-experimental-nm-applet-1.2.patch"
 	fi
 
 	gnome2_src_prepare
