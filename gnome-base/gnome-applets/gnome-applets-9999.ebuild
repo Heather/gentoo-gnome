@@ -24,10 +24,12 @@ fi
 
 # XXX: invest applet not yet ported to GNOME 3, disabled upstream
 # null applet still needs bonobo support for gnome-panel?
+#
+# Latest gnome-panel needed due to commit 45a4988a6
 RDEPEND=">=x11-libs/gtk+-2.20:3
 	>=dev-libs/glib-2.22:2
 	>=gnome-base/gconf-2.8:2
-	>=gnome-base/gnome-panel-2.91.4
+	>=gnome-base/gnome-panel-2.91.91
 	>=x11-libs/libxklavier-4.0
 	>=x11-libs/libwnck-2.91.0:3
 	>=x11-libs/libnotify-0.7
