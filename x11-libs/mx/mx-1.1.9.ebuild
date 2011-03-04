@@ -13,7 +13,7 @@ HOMEPAGE="http://clutter-project.org/"
 LICENSE="LGPL-2.1"
 SLOT="1.0"
 KEYWORDS="~amd64 ~x86"
-IUSE="dbus debug doc glade gtk +introspection startup-notification"
+IUSE="dbus debug doc glade +gtk +introspection startup-notification"
 
 RDEPEND="
 	>=dev-libs/glib-2.26.0:2
@@ -23,7 +23,9 @@ RDEPEND="
 	x11-libs/gdk-pixbuf:2
 
 	dbus? ( >=dev-libs/dbus-glib-0.82 )
-	glade? ( >=dev-util/glade-3.4.5:3 )
+	glade? (
+		>=dev-util/glade-3.4.5:3
+		<dev-util/glade-3.9.1:3 )
 	gtk? ( >=x11-libs/gtk+-2.20:2 )
 	introspection? ( >=dev-libs/gobject-introspection-0.6.4 )
 	startup-notification? ( >=x11-libs/startup-notification-0.9 )"
@@ -45,9 +47,13 @@ src_configure() {
 	myconf="--enable-maintainer-flags=no
 		--with-winsys=x11
 		$(use_with dbus)
-		$(use_with glade)
 		$(use_enable gtk gtk-widgets)
 		$(use_with startup-notification)"
+
+	# configure is broken, and enables glade if anything is passed
+	if use glade; then
+		myconf="${myconf} --enable-glade"
+	fi
 
 	econf ${myconf}
 }
