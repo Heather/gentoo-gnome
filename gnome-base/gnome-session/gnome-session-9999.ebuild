@@ -5,7 +5,7 @@
 EAPI="3"
 GCONF_DEBUG="yes"
 
-inherit autotools eutils gnome2
+inherit eutils gnome2
 
 DESCRIPTION="Gnome session manager"
 HOMEPAGE="http://www.gnome.org/"
@@ -67,19 +67,9 @@ src_prepare() {
 		--disable-maintainer-mode
 		--disable-schemas-compile
 		--docdir="${EPREFIX}/usr/share/doc/${PF}"
-		--with-gtk=3.0
 		$(use_enable doc docbook-docs)
 		$(use_enable ipv6)"
 	DOCS="AUTHORS ChangeLog NEWS README"
-
-	# Add "session saving" button back, upstream bug #575544
-	# FIXME: Doesn't apply anymore
-#	epatch "${FILESDIR}/${PN}-2.32.0-session-saving-button.patch"
-#
-#	if [[ ${PV} != 9999 ]]; then
-#		intltoolize --force --copy --automake || die "intltoolize failed"
-#		eautoreconf
-#	fi
 
 	gnome2_src_prepare
 }
