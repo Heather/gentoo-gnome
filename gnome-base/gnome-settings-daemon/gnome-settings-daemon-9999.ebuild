@@ -17,7 +17,7 @@ HOMEPAGE="http://www.gnome.org"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="debug +udev packagekit policykit smartcard"
+IUSE="+cups debug +udev packagekit policykit smartcard"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
@@ -25,17 +25,16 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 fi
 
-# TODO: cups is optional, but automagic
+# Latest gsettings-desktop-schemas is needed due to commit e8d1de92
 COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	>=dev-libs/glib-2.26.0
 	>=x11-libs/gtk+-2.99.3
 	>=gnome-base/gconf-2.6.1
 	>=gnome-base/libgnomekbd-2.91.1
 	>=gnome-base/gnome-desktop-2.91.5:3
-	>=gnome-base/gsettings-desktop-schemas-0.1.2
+	>=gnome-base/gsettings-desktop-schemas-0.1.7.1
 	media-fonts/cantarell
 	media-libs/fontconfig
-	>=net-print/cups-1.4
 
 	>=x11-libs/libnotify-0.6.1
 	x11-libs/libXi
@@ -45,6 +44,7 @@ COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	>=media-sound/pulseaudio-0.9.16
 	media-libs/libcanberra[gtk3]
 
+	cups? ( >=net-print/cups-1.4 )
 	packagekit? (
 		dev-libs/glib:2
 		sys-fs/udev[extras]
@@ -55,9 +55,6 @@ COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 		>=sys-apps/dbus-1.1.2 )
 	smartcard? ( >=dev-libs/nss-3.11.2 )
 	udev? ( sys-fs/udev[extras] )"
-#	!pulseaudio? (
-#		>=media-libs/gstreamer-0.10.1.2
-#		>=media-libs/gst-plugins-base-0.10.1.2 )"
 # Themes needed by g-s-d, gnome-shell, gtk+:3 apps to work properly
 RDEPEND="${COMMON_DEPEND}
 	>=x11-themes/gnome-themes-standard-2.91
@@ -78,37 +75,15 @@ pkg_setup() {
 		--disable-static
 		--disable-schemas-compile
 		--enable-gconf-bridge
+		$(use_enable cups)
 		$(use_enable debug)
+		$(use_enable debug more-warnings)
 		$(use_enable packagekit)
 		$(use_enable policykit polkit)
 		$(use_enable smartcard smartcard-support)
 		$(use_enable udev gudev)"
-		#$(use_enable pulseaudio pulse)
-		#$(use_enable !pulseaudio gstreamer)
-
-#	if use pulseaudio; then
-#		elog "Building volume media keys using Pulseaudio"
-#	else
-#		elog "Building volume media keys using GStreamer"
-#	fi
 }
 
-#src_prepare() {
-	# Restore gstreamer volume control support, upstream bug #571145
-	# Keep using old patch as it doesn't cause problems like bug #339732
-	#epatch "${WORKDIR}/${PN}-2.30.2-gst-vol-control-support.patch"
-	#echo "plugins/media-keys/cut-n-paste/gvc-gstreamer-acme-vol.c" >> po/POTFILES.in
-
-	# NOTE: No point having a gst vol control. PA is a hard dep of GNOME 3.
-	#epatch "${DISTDIR}/${PN}-2.30.0-gst-vol-control-support.patch"
-#
-#	if [[ ${PV} != 9999 ]]; then
-#		intltoolize --force --copy --automake || die "intltoolize failed"
-#		eautoreconf
-#	fi
-#
-#	gnome2_src_prepare
-#}
 
 src_install() {
 	gnome2_src_install
@@ -116,12 +91,3 @@ src_install() {
 	echo 'GSETTINGS_BACKEND="dconf"' >> 51gsettings-dconf
 	doenvd 51gsettings-dconf || die "doenvd failed"
 }
-
-#pkg_postinst() {
-#	gnome2_pkg_postinst
-#
-#	if ! use pulseaudio; then
-#		elog "GStreamer volume control support is a feature powered by Gentoo GNOME Team"
-#		elog "PLEASE DO NOT report bugs upstream, report on https://bugs.gentoo.org instead"
-#	fi
-#}
