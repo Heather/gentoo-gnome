@@ -13,7 +13,8 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2"
 SLOT="2"
-IUSE="doc +networkmanager +socialweb"
+# Make it +cheese once cheese is ported to gtk+3, and added to overlay
+IUSE="doc cheese +cups +networkmanager +socialweb"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
@@ -22,34 +23,31 @@ else
 fi
 
 # WTF: pulseaudio is compulsary now for gnome-volume-control
-# FIXME: Cheese is optional, but automagic => force-enabled for now
-# FIXME: Cups is optional, but automagic => force-enabled for now
 # XXX: gnome-desktop-2.91.5 is needed for upstream commit c67f7efb
+# XXX: NetworkManager-0.9 support is automagic, make hard-dep once it's released
 #
 # gnome-session-2.91.6-r1 is needed so that 10-user-dirs-update is run at login
 # g-s-d-2.91.90.1 is needed for magnifier schema updates
+# Latest gsettings-desktop-schemas is needed for commit f6b0ae89
 COMMON_DEPEND="
 	>=dev-libs/glib-2.25.11
 	>=x11-libs/gdk-pixbuf-2.23.0
 	>=x11-libs/gtk+-2.91.6:3
-	>=gnome-base/gsettings-desktop-schemas-0.1.7
+	>=gnome-base/gsettings-desktop-schemas-0.1.7.1
 	>=gnome-base/gconf-2.0
 	>=dev-libs/dbus-glib-0.73
 	>=gnome-base/gnome-desktop-2.91.5:3
 	>=gnome-base/gnome-settings-daemon-2.91.90.1
-	>=gnome-base/libgnomekbd-2.91.2
+	>=gnome-base/libgnomekbd-2.91.90
 
 	app-text/iso-codes
 	dev-libs/libxml2:2
 	gnome-base/gnome-menus
 	gnome-base/libgtop:2
 	media-libs/fontconfig
-	media-libs/gstreamer:0.10
 
 	>=media-libs/libcanberra-0.13[gtk3]
 	>=media-sound/pulseaudio-0.9.16
-	>=media-video/cheese-2.29.90
-	>=net-print/cups-1.4
 	>=sys-auth/polkit-0.97
 	>=sys-power/upower-0.9.1
 
@@ -59,6 +57,10 @@ COMMON_DEPEND="
 	>=x11-libs/libxklavier-5.1
 	>=x11-libs/libXi-1.2
 
+	cheese? (
+		media-libs/gstreamer:0.10
+		>=media-video/cheese-2.91.5 )
+	cups? ( >=net-print/cups-1.4 )
 	networkmanager? ( >=net-misc/networkmanager-0.8.992 )
 	socialweb? ( net-libs/libsocialweb )
 
@@ -88,6 +90,8 @@ src_prepare() {
 		--disable-update-mimedb
 		--disable-static
 		--disable-schemas-install
+		$(use_with cheese)
+		$(use_enable cups)
 		$(use_with socialweb libsocialweb)"
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
 
