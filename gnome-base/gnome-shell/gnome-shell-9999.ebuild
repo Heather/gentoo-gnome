@@ -25,6 +25,7 @@ fi
 # gnome-desktop-2.91.2 is needed due to header changes, db82a33 in gnome-desktop
 # FIXME: Automagic gnome-bluetooth[introspection] support.
 # latest mutter is needed due to commit 474ff2e997
+# latest gsettings-desktop-schemas is needed due to commit 602fa1c6
 COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	>=dev-libs/gjs-0.7.11
 	>=dev-libs/gobject-introspection-0.10.1
@@ -32,7 +33,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	>=x11-libs/gtk+-3.0.0:3[introspection]
 	>=media-libs/clutter-1.5.15[introspection]
 	>=gnome-base/gnome-desktop-2.91.2:3
-	>=gnome-base/gsettings-desktop-schemas-0.1.7
+	>=gnome-base/gsettings-desktop-schemas-0.1.7.1
 	>=gnome-extra/evolution-data-server-2.91.6
 	>=media-libs/gstreamer-0.10.16
 	>=media-libs/gst-plugins-base-0.10.16
@@ -59,14 +60,11 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	nm-applet? ( >=net-misc/networkmanager-9999[introspection] )"
 # Runtime-only deps are probably incomplete and approximate.
 # Each block:
-# 1. *-python are for /usr/bin/gnome-shell
-# 2. Introspection stuff + dconf needed via imports.gi.*
-# 3. gnome-session is needed for gnome-session-quit
-# 4. Don't remember
-# 5. nm-applet is needed for auth prompting and the wireless connection dialog
+# 1. Introspection stuff + dconf needed via imports.gi.*
+# 2. gnome-session is needed for gnome-session-quit
+# 3. Don't remember
+# 4. nm-applet is needed for auth prompting and the wireless connection dialog
 RDEPEND="${COMMON_DEPEND}
-	dev-python/dbus-python
-	dev-python/gconf-python
 
 	>=gnome-base/dconf-0.4.1
 	>=gnome-base/libgnomekbd-2.91.4[introspection]
