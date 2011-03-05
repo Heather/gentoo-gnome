@@ -5,7 +5,7 @@
 EAPI="3"
 GCONF_DEBUG="yes"
 
-inherit eutils gnome2
+inherit gnome2
 
 DESCRIPTION="Gnome session manager"
 HOMEPAGE="http://www.gnome.org/"
@@ -58,6 +58,7 @@ DEPEND="${COMMON_DEPEND}
 	doc? (
 		app-text/xmlto
 		dev-libs/libxslt )"
+# gnome-common needed for eautoreconf
 # gnome-base/gdm does not provide gnome.desktop anymore
 
 src_prepare() {

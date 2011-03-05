@@ -5,7 +5,7 @@
 EAPI="3"
 GCONF_DEBUG="yes"
 
-inherit autotools eutils gnome2
+inherit gnome2
 
 DESCRIPTION="Gnome session manager"
 HOMEPAGE="http://www.gnome.org/"
@@ -58,6 +58,7 @@ DEPEND="${COMMON_DEPEND}
 	doc? (
 		app-text/xmlto
 		dev-libs/libxslt )"
+# gnome-common needed for eautoreconf
 # gnome-base/gdm does not provide gnome.desktop anymore
 
 src_prepare() {
@@ -71,15 +72,6 @@ src_prepare() {
 		$(use_enable doc docbook-docs)
 		$(use_enable ipv6)"
 	DOCS="AUTHORS ChangeLog NEWS README"
-
-	# Add "session saving" button back, upstream bug #575544
-	# FIXME: Doesn't apply anymore
-#	epatch "${FILESDIR}/${PN}-2.32.0-session-saving-button.patch"
-#
-#	if [[ ${PV} != 9999 ]]; then
-#		intltoolize --force --copy --automake || die "intltoolize failed"
-#		eautoreconf
-#	fi
 
 	gnome2_src_prepare
 }
