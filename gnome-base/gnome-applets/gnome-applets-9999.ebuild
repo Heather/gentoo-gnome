@@ -4,7 +4,7 @@
 
 EAPI="3"
 GCONF_DEBUG="no"
-GNOME2_LA_PUNT="yes"
+GNOME2_LA_PUNT="no" # bug 340725, no other la files
 #PYTHON_DEPEND="2:2.4"
 
 inherit eutils gnome2 #python
@@ -26,7 +26,7 @@ fi
 # null applet still needs bonobo support for gnome-panel?
 #
 # Latest gnome-panel needed due to commit 45a4988a6
-RDEPEND=">=x11-libs/gtk+-2.20:3
+RDEPEND=">=x11-libs/gtk+-3.0.0:3
 	>=dev-libs/glib-2.22:2
 	>=gnome-base/gconf-2.8:2
 	>=gnome-base/gnome-panel-2.91.91
