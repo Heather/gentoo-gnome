@@ -2,18 +2,16 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/gnome-screensaver/gnome-screensaver-2.30.2.ebuild,v 1.2 2010/11/02 02:33:58 ford_prefect Exp $
 
-EAPI="2"
+EAPI="3"
 
-inherit eutils gnome2 multilib
+inherit gnome2
 
 DESCRIPTION="Replaces xscreensaver, integrating with the desktop."
 HOMEPAGE="http://live.gnome.org/GnomeScreensaver"
-SRC_URI="${SRC_URI}
-	branding? ( http://www.gentoo.org/images/gentoo-logo.svg )"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="branding debug doc opengl pam"
+IUSE="debug doc pam"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
@@ -39,7 +37,6 @@ RDEPEND="
 	x11-libs/libXxf86misc
 	x11-libs/libXxf86vm
 
-	opengl? ( virtual/opengl )
 	pam? ( virtual/pam )
 "
 DEPEND="${RDEPEND}
@@ -55,54 +52,17 @@ DEPEND="${RDEPEND}
 	x11-proto/scrnsaverproto
 	x11-proto/xf86miscproto
 "
-DOCS="AUTHORS ChangeLog HACKING NEWS README TODO"
+DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
 pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_enable doc docbook-docs)
 		$(use_enable debug)
-		$(use_with opengl gl)
 		$(use_enable pam locking)
 		--with-pam-prefix=/etc
 		--with-xf86gamma-ext
 		--with-kbd-layout-indicator
-		--with-xscreensaverdir=/usr/share/xscreensaver/config
-		--with-xscreensaverhackdir=/usr/$(get_libdir)/misc/xscreensaver
 		--disable-schemas-compile"
-}
-
-src_install() {
-	gnome2_src_install
-
-	# Install the conversion script in the documentation
-	dodoc "${S}/data/migrate-xscreensaver-config.sh" || die
-	dodoc "${S}/data/xscreensaver-config.xsl" || die
-
-	# Conversion information
-	sed -e "s:\${PF}:${PF}:" < "${FILESDIR}/xss-conversion-2.txt" \
-		> "${S}/xss-conversion.txt" || die "sed failed"
-	dodoc "${S}/xss-conversion.txt" || die
-
-	if use branding ; then
-		insinto /usr/share/pixmaps/
-		doins "${DISTDIR}/gentoo-logo.svg" || die "doins 1 failed"
-		insinto /usr/share/applications/screensavers/
-		doins "${FILESDIR}/gentoologo-floaters.desktop" || die "doins 2 failed"
-	fi
-}
-
-pkg_postinst() {
-	gnome2_pkg_postinst
-
-	if has_version "<x11-misc/xscreensaver-4.22-r2" ; then
-		ewarn "You have xscreensaver installed, you probably want to disable it."
-		ewarn "To prevent a duplicate screensaver entry in the menu, you need to"
-		ewarn "build xscreensaver with -gnome in the USE flags."
-		ewarn "echo \"x11-misc/xscreensaver -gnome\" >> /etc/portage/package.use"
-
-		echo
-	fi
-
-	elog "Information for converting screensavers is located in "
-	elog "/usr/share/doc/${PF}/xss-conversion.txt.${PORTAGE_COMPRESS}"
+	# xscreensaver and custom screensaver capability removed
+	# poke and inhibit commands were also removed, bug 579430
 }
