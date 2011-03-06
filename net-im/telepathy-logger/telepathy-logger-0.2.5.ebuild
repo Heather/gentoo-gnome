@@ -13,8 +13,8 @@ SRC_URI="http://telepathy.freedesktop.org/releases/${PN}/${P}.tar.bz2"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~ia64 ~ppc ~sparc ~x86"
-IUSE="doc test"
+KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~sparc ~x86"
+IUSE="doc +introspection test"
 
 RDEPEND=">=dev-libs/glib-2.25.11:2
 	>=sys-apps/dbus-1.1
@@ -23,6 +23,8 @@ RDEPEND=">=dev-libs/glib-2.25.11:2
 	dev-libs/libxml2
 	dev-libs/libxslt
 	dev-db/sqlite:3
+
+	introspection? ( >=dev-libs/gobject-introspection-0.9.6 )
 "
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
