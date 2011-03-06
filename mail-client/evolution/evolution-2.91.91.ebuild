@@ -137,9 +137,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# Fix invalid use of la file in contact-editor, upstream bug #635002
-	epatch "${FILESDIR}/${PN}-2.32.0-wrong-lafile-usage.patch"
-
 	# Use NSS/NSPR only if 'ssl' is enabled.
 	if use ssl ; then
 		sed -e 's|mozilla-nss|nss|' \
@@ -162,12 +159,13 @@ src_prepare() {
 pkg_postinst() {
 	gnome2_pkg_postinst
 
-	elog "To change the default browser if you are not using GNOME, do:"
-	elog "gconftool-2 --set /desktop/gnome/url-handlers/http/command -t string 'firefox %s'"
-	elog "gconftool-2 --set /desktop/gnome/url-handlers/https/command -t string 'firefox %s'"
-	elog ""
-	elog "Replace 'firefox %s' with which ever browser you use."
-	elog ""
+	# FIXME: This has changed with GNOME 3, revisit
+	#elog "To change the default browser if you are not using GNOME, do:"
+	#elog "gconftool-2 --set /desktop/gnome/url-handlers/http/command -t string 'firefox %s'"
+	#elog "gconftool-2 --set /desktop/gnome/url-handlers/https/command -t string 'firefox %s'"
+	#elog ""
+	#elog "Replace 'firefox %s' with which ever browser you use."
+	#elog ""
 	elog "Junk filters are now a run-time choice. You will get a choice of"
 	elog "bogofilter or spamassassin based on which you have installed"
 	elog ""
