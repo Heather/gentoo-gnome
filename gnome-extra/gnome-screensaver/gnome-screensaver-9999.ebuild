@@ -59,6 +59,7 @@ pkg_setup() {
 		$(use_enable doc docbook-docs)
 		$(use_enable debug)
 		$(use_enable pam locking)
+		--with-mit-ext
 		--with-pam-prefix=/etc
 		--with-xf86gamma-ext
 		--with-kbd-layout-indicator
