@@ -31,7 +31,7 @@ RDEPEND=">=dev-libs/glib-2.26:2
 	x11-libs/libX11
 	x11-libs/libXft
 
-	glade? ( dev-util/glade:3 )
+	glade? ( <dev-util/glade-3.9.1:3 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.0 )
 	python? ( >=dev-python/pygtk-2.4 ) "
 DEPEND="${RDEPEND}

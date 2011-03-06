@@ -14,7 +14,7 @@ HOMEPAGE="http://git.gnome.org/browse/vte"
 
 LICENSE="LGPL-2"
 SLOT="2.90"
-IUSE="debug doc glade +introspection" #python
+IUSE="debug doc +introspection" #python
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
@@ -32,7 +32,6 @@ RDEPEND=">=dev-libs/glib-2.26:2
 	x11-libs/libX11
 	x11-libs/libXft
 
-	glade? ( dev-util/glade:3 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.0 )"
 DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1.13 )
@@ -42,13 +41,14 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext"
 
 src_prepare() {
+	# Glade is disabled because it needs gladeui-1.0 & gtk3 glade is gladeui-2.0
 	G2CONF="${G2CONF}
+		--disable-glade-catalogue
 		--disable-gnome-pty-helper
 		--disable-deprecation
 		--disable-maintainer-mode
 		--disable-static
 		$(use_enable debug)
-		$(use_enable glade glade-catalogue)
 		$(use_enable introspection)
 		--with-html-dir=${ROOT}/usr/share/doc/${PF}/html
 		--with-gtk=3.0"
