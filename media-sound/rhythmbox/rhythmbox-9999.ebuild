@@ -13,7 +13,7 @@ HOMEPAGE="http://www.rhythmbox.org/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="+brasero cdr daap dbus doc gnome-keyring html ipod +lastfm libnotify lirc
+IUSE="cdr daap dbus doc gnome-keyring html ipod +lastfm libnotify lirc
 musicbrainz mtp nsplugin python test udev upnp vala webkit"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
@@ -24,27 +24,30 @@ fi
 
 # FIXME: double check what to do with fm-radio plugin
 # TODO: watchout for udev use flag changes
-COMMON_DEPEND=">=dev-libs/glib-2.25.12
-	dev-libs/libxml2
-	>=x11-libs/gtk+-2.20:2
+# FIXME: Zeitgesti python plugin
+# NOTE:: Rhythmbox Uses dbus-glib, gdbus, and dbus-python right now
+COMMON_DEPEND=">=dev-libs/glib-2.26.0:2
+	dev-libs/libxml2:2
+	>=x11-libs/gtk+-2.91.4:3[introspection]
+	>=x11-libs/gdk-pixbuf-2.18.0
 	>=dev-libs/dbus-glib-0.71
+	>=dev-libs/gobject-introspection-0.10.0
 	>=dev-libs/totem-pl-parser-2.32.1
-	>=gnome-base/gconf-2
-	>=gnome-extra/gnome-media-2.14
+	>=gnome-base/gconf-2:2
+	>=media-libs/libgnome-media-profiles-2.91.0:3
 	>=net-libs/libsoup-2.26:2.4
 	>=net-libs/libsoup-gnome-2.26:2.4
-	>=media-libs/gst-plugins-base-0.10.24
+	>=media-libs/gst-plugins-base-0.10.24:0.10
+	media-libs/gstreamer:0.10[introspection]
 
-	cdr? (
-		brasero? ( >=app-cdr/brasero-0.9.1 )
-		!brasero? ( >=gnome-extra/nautilus-cd-burner-2.21.6 ) )
+	cdr? ( >=app-cdr/brasero-2.91.90 )
 	daap? (
-		>=media-libs/libdmapsharing-2.1.6
+		media-libs/libdmapsharing:3.0
 		>=net-dns/avahi-0.6 )
-	html? ( >=net-libs/webkit-gtk-1.1.17 )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-0.4.9 )
+	html? ( >=net-libs/webkit-gtk-1.3.9:3 )
 	lastfm? ( dev-libs/json-glib )
-	libnotify? ( >=x11-libs/libnotify-0.4.1 )
+	libnotify? ( >=x11-libs/libnotify-0.5.1 )
 	lirc? ( app-misc/lirc )
 	musicbrainz? ( media-libs/musicbrainz:3 )
 	udev? (
@@ -63,16 +66,19 @@ RDEPEND="${COMMON_DEPEND}
 
 	nsplugin? ( net-libs/xulrunner )
 	python? (
-		>=dev-python/pygtk-2.8
 		>=dev-python/pygobject-2.15.4
-		>=dev-python/gconf-python-2.22
-		>=dev-python/libgnome-python-2.22
-		>=dev-python/gnome-keyring-python-2.22
 		>=dev-python/gst-python-0.10.8
+
+		x11-libs/gdk-pixbuf:2[introspection]
+		x11-libs/gtk+:3[introspection]
+		x11-libs/pango[introspection]
+		gnome-base/gconf:2[introspection]
+
 		dbus? ( dev-python/dbus-python )
+		gnome-keyring? ( dev-python/gnome-keyring-python )
 		webkit? (
 			dev-python/mako
-			dev-python/pywebkitgtk )
+			net-libs/webkit-gtk:3[introspection] )
 		upnp? (
 			dev-python/louie
 			media-video/coherence
@@ -87,7 +93,7 @@ DEPEND="${COMMON_DEPEND}
 	>=app-text/gnome-doc-utils-0.9.1
 	doc? ( >=dev-util/gtk-doc-1.4 )
 	test? ( dev-libs/check )
-	vala? ( >=dev-lang/vala-0.1.0:0.12 )
+	vala? ( >=dev-lang/vala-0.9.4:0.10 )
 "
 DOCS="AUTHORS ChangeLog DOCUMENTERS INTERNALS \
 	  MAINTAINERS MAINTAINERS.old NEWS README THANKS"
@@ -125,15 +131,13 @@ pkg_setup() {
 		fi
 	fi
 
-	if use brasero; then
-		G2CONF="${G2CONF} $(use_with cdr libbrasero-media) --without-libnautilus-burn"
-	else
-		G2CONF="${G2CONF} $(use_with cdr libnautilus-burn) --without-libbrasero-media"
+	if use gnome-keyring && ! use python; then
+		ewarn "The magnatune plugin requires USE='python gnome-keyring'"
 	fi
 
 	G2CONF="${G2CONF}
 		MOZILLA_PLUGINDIR=/usr/$(get_libdir)/nsbrowser/plugins
-		VALAC=$(type -P valac-0.12)
+		VALAC=$(type -P valac-0.10)
 		--enable-mmkeys
 		--disable-scrollkeeper
 		--disable-schemas-install
@@ -146,6 +150,7 @@ pkg_setup() {
 		$(use_enable nsplugin browser-plugin)
 		$(use_enable python)
 		$(use_enable vala)
+		$(use_with cdr brasero)
 		$(use_with daap mdns avahi)
 		$(use_with gnome-keyring)
 		$(use_with html webkit)
