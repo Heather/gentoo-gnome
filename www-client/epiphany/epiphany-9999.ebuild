@@ -21,8 +21,8 @@ fi
 
 # XXX: Should we add seed support? Seed seems to be unmaintained now.
 RDEPEND=">=dev-libs/glib-2.25.3:2
-	>=x11-libs/gtk+-3.0.0:3[introspection?]
-	>=dev-libs/libxml2-2.6.12
+	>=x11-libs/gtk+-3.0.2:3[introspection?]
+	>=dev-libs/libxml2-2.6.12:2
 	>=dev-libs/libxslt-1.1.7
 	>=x11-libs/startup-notification-0.5
 	>=dev-libs/dbus-glib-0.71
