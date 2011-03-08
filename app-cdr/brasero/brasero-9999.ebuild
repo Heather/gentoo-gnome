@@ -13,7 +13,7 @@ HOMEPAGE="http://projects.gnome.org/brasero/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="beagle +cdr +css doc +introspection +libburn nautilus packagekit playlist test"
+IUSE="beagle cdr +css doc +introspection +libburn nautilus packagekit playlist test"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
@@ -22,12 +22,12 @@ else
 fi
 
 COMMON_DEPEND="
-	>=dev-libs/glib-2.27.5
+	>=dev-libs/glib-2.27.5:2
 	>=x11-libs/gtk+-3.0.0:3[introspection?]
-	>=gnome-base/gconf-2.32.0
-	>=media-libs/gstreamer-0.10.15
-	>=media-libs/gst-plugins-base-0.10
-	>=dev-libs/libxml2-2.6
+	>=gnome-base/gconf-2.32.0:2
+	>=media-libs/gstreamer-0.10.15:0.10
+	>=media-libs/gst-plugins-base-0.10:0.10
+	>=dev-libs/libxml2-2.6:2
 	>=x11-libs/libnotify-0.6.1
 
 	media-libs/libcanberra[gtk3]
