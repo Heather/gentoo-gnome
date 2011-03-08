@@ -16,20 +16,22 @@ KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE=""
 
 RDEPEND=">=dev-libs/glib-2.28:2
-	>=x11-libs/libwnck-2.91.0
-	>=gnome-base/libgtop-2.28.2
+	>=x11-libs/libwnck-2.91.0:3
+	>=gnome-base/libgtop-2.28.2:2
 	>=x11-libs/gtk+-3.0:3
 	>=x11-themes/gnome-icon-theme-2.31
 	>=dev-cpp/gtkmm-2.99:3.0
 	>=dev-cpp/glibmm-2.27:2
 	>=dev-libs/libxml2-2.0:2
-	>=gnome-base/librsvg-2.12"
+	>=gnome-base/librsvg-2.12:2"
 
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.19
-	>=app-text/scrollkeeper-0.3.11
-	>=dev-util/intltool-0.35
-	app-text/gnome-doc-utils"
+	>=dev-util/intltool-0.41.0
+	>=sys-devel/gettext-0.17
+	>=app-text/gnome-doc-utils-0.20"
 
 DOCS="AUTHORS ChangeLog NEWS README"
-G2CONF="${G2CONF} --disable-scrollkeeper"
+G2CONF="${G2CONF}
+--disable-schemas-compile
+--disable-scrollkeeper"
