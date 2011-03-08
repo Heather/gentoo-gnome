@@ -25,7 +25,7 @@ fi
 RDEPEND=">=x11-libs/gtk+-3.0:3[introspection?]
 	>=dev-libs/libxml2-2.6
 	>=dev-libs/glib-2.28
-	glade? ( >=dev-util/glade-3.2 )
+	glade? ( >=dev-util/glade-3.9 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.0 )"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
