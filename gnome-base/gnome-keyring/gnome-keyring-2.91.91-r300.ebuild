@@ -6,7 +6,7 @@ EAPI="3"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2 multilib pam virtualx
+inherit autotools gnome2 multilib pam virtualx
 
 DESCRIPTION="Password and keyring managing daemon"
 HOMEPAGE="http://www.gnome.org/"
@@ -38,6 +38,7 @@ RDEPEND=">=dev-libs/glib-2.25:2
 #	valgrind? ( dev-util/valgrind )
 DEPEND="${RDEPEND}
 	sys-devel/gettext
+	>=dev-util/gtk-doc-am-1.9
 	>=dev-util/intltool-0.35
 	>=dev-util/pkgconfig-0.9
 	doc? ( >=dev-util/gtk-doc-1.9 )"
@@ -49,7 +50,7 @@ DOCS="AUTHORS ChangeLog NEWS README"
 
 # tests fail in several ways, they should be fixed in the next cycle (bug #340283),
 # revisit then.
-# UPDATE: tests use system-installed libraries, fail with:
+# UPDATE: gcr tests fail with:
 # ** WARNING **: couldn't load PKCS#11 module: /usr/lib64/pkcs11/gnome-keyring-pkcs11.so: Couldn't initialize module: The device was removed or unplugged 
 RESTRICT="test"
 
@@ -61,7 +62,6 @@ pkg_setup() {
 		$(use_enable pam)
 		$(use_with pam pam-dir $(getpam_mod_dir))
 		--with-root-certs=${ROOT}/etc/ssl/certs/
-		--enable-acl-prompts
 		--enable-ssh-agent
 		--enable-gpg-agent
 		--with-gtk=3.0"
@@ -69,8 +69,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	gnome2_src_prepare
-
 	# Remove silly CFLAGS
 	sed 's:CFLAGS="$CFLAGS -Werror:CFLAGS="$CFLAGS:' \
 		-i configure.in configure || die "sed failed"
@@ -78,6 +76,14 @@ src_prepare() {
 	# Remove DISABLE_DEPRECATED flags
 	sed -e '/-D[A-Z_]*DISABLE_DEPRECATED/d' \
 		-i configure.in configure || die "sed 2 failed"
+
+	for i in 1 2 3 4 5 6; do
+		epatch "${FILESDIR}/${PN}-trunk-$i.patch"
+	done
+
+	eautoreconf
+
+	gnome2_src_prepare
 }
 
 src_test() {

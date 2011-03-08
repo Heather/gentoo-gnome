@@ -61,7 +61,6 @@ pkg_setup() {
 		$(use_enable pam)
 		$(use_with pam pam-dir $(getpam_mod_dir))
 		--with-root-certs=${ROOT}/etc/ssl/certs/
-		--enable-acl-prompts
 		--enable-ssh-agent
 		--enable-gpg-agent
 		--with-gtk=3.0"

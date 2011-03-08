@@ -1,0 +1,21 @@
+From ced422b8770ba321ae0c3271b8344ee031d55748 Mon Sep 17 00:00:00 2001
+From: Stef Walter <stefw@collabora.co.uk>
+Date: Wed, 09 Mar 2011 09:29:55 +0000
+Subject: Change warning on bad certificate data to a simple message.
+
+---
+diff --git a/pkcs11/gkm/gkm-certificate.c b/pkcs11/gkm/gkm-certificate.c
+index 866e703..256c747 100644
+--- a/pkcs11/gkm/gkm-certificate.c
++++ b/pkcs11/gkm/gkm-certificate.c
+@@ -380,7 +380,7 @@ gkm_certificate_real_load (GkmSerializable *base, GkmSecret *login, gconstpointe
+ 	/* Parse the ASN1 data */
+ 	res = gkm_data_der_read_certificate (copy, n_data, &asn1);
+ 	if (res != GKM_DATA_SUCCESS) {
+-		g_warning ("couldn't parse certificate data");
++		g_message ("couldn't parse certificate data");
+ 		g_free (copy);
+ 		return FALSE;
+ 	}
+--
+cgit v0.8.3.4

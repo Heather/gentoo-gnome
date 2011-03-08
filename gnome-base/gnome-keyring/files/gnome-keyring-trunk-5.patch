@@ -1,0 +1,1538 @@
+From 655e0e90a4f96de76348f84cab0c64014078fdbb Mon Sep 17 00:00:00 2001
+From: Stef Walter <stefw@collabora.co.uk>
+Date: Wed, 09 Mar 2011 09:41:42 +0000
+Subject: Merge branch 'with-hkdf'
+
+---
+diff --git a/daemon/dbus/gkd-secret-session.c b/daemon/dbus/gkd-secret-session.c
+index 8c99373..81648b9 100644
+--- a/daemon/dbus/gkd-secret-session.c
++++ b/daemon/dbus/gkd-secret-session.c
+@@ -119,20 +119,52 @@ aes_derive_key (GckSession *session, GckObject *priv_key,
+                 gconstpointer input, gsize n_input, GckObject **aes_key)
+ {
+ 	GError *error = NULL;
+-	GckMechanism mech = { CKM_DH_PKCS_DERIVE, input, n_input };
++	GckMechanism mech;
+ 	GckAttributes *attrs;
++	GckObject *dh_key;
++
++	/*
++	 * First we have to generate a secret key from the DH key. The
++	 * length of this key depends on the size of our DH prime
++	 */
++
++	mech.type = CKM_DH_PKCS_DERIVE;
++	mech.parameter = input;
++	mech.n_parameter = n_input;
++
++	attrs = gck_attributes_new ();
++	gck_attributes_add_ulong (attrs, CKA_CLASS, CKO_SECRET_KEY);
++	gck_attributes_add_ulong (attrs, CKA_KEY_TYPE, CKK_GENERIC_SECRET);
++
++	dh_key = gck_session_derive_key_full (session, priv_key, &mech, attrs, NULL, &error);
++
++	gck_attributes_unref (attrs);
++
++	if (!dh_key) {
++		g_warning ("couldn't derive key from dh key pair: %s", egg_error_message (error));
++		g_clear_error (&error);
++		return FALSE;
++	}
++
++	/*
++	 * Now use HKDF to generate our AES key.
++	 */
++
++	mech.type = CKM_G_HKDF_SHA256_DERIVE;
++	mech.parameter = NULL;
++	mech.n_parameter = 0;
+ 
+ 	attrs = gck_attributes_new ();
+ 	gck_attributes_add_ulong (attrs, CKA_VALUE_LEN, 16UL);
+ 	gck_attributes_add_ulong (attrs, CKA_CLASS, CKO_SECRET_KEY);
+ 	gck_attributes_add_ulong (attrs, CKA_KEY_TYPE, CKK_AES);
+ 
+-	*aes_key = gck_session_derive_key_full (session, priv_key, &mech, attrs, NULL, &error);
+-
++	*aes_key = gck_session_derive_key_full (session, dh_key, &mech, attrs, NULL, &error);
+ 	gck_attributes_unref (attrs);
++	g_object_unref (dh_key);
+ 
+ 	if (!*aes_key) {
+-		g_warning ("couldn't derive aes key from dh key pair: %s", egg_error_message (error));
++		g_warning ("couldn't derive aes key from dh key: %s", egg_error_message (error));
+ 		g_clear_error (&error);
+ 		return FALSE;
+ 	}
+@@ -529,7 +561,7 @@ gkd_secret_session_handle_open (GkdSecretSession *self, DBusMessage *message)
+ 			                               "The session algorithm input argument was invalid");
+ 		reply = plain_negotiate (self, message);
+ 
+-	} else if (g_str_equal (algorithm, "dh-ietf1024-aes128-cbc-pkcs7")) {
++	} else if (g_str_equal (algorithm, "dh-ietf1024-sha256-aes128-cbc-pkcs7")) {
+ 		if (!g_str_equal ("ay", dbus_message_iter_get_signature (&variant)))
+ 			return dbus_message_new_error (message, DBUS_ERROR_INVALID_ARGS,
+ 			                               "The session algorithm input argument was invalid");
+@@ -538,7 +570,7 @@ gkd_secret_session_handle_open (GkdSecretSession *self, DBusMessage *message)
+ 		reply = aes_negotiate (self, message, input, n_input);
+ 
+ 	} else {
+-		reply = dbus_message_new_error_printf (message, SECRET_ERROR_NOT_SUPPORTED,
++		reply = dbus_message_new_error_printf (message, DBUS_ERROR_NOT_SUPPORTED,
+ 		                                       "The algorithm '%s' is not supported", algorithm);
+ 	}
+ 
+diff --git a/daemon/dbus/gkd-secret-types.h b/daemon/dbus/gkd-secret-types.h
+index 3b6aed1..176c92f 100644
+--- a/daemon/dbus/gkd-secret-types.h
++++ b/daemon/dbus/gkd-secret-types.h
+@@ -42,7 +42,6 @@
+ 
+ #define SECRET_ERROR_ALREADY_EXISTS    "org.freedesktop.Secret.Error.AlreadyExists"
+ #define SECRET_ERROR_IS_LOCKED         "org.freedesktop.Secret.Error.IsLocked"
+-#define SECRET_ERROR_NOT_SUPPORTED     "org.freedesktop.Secret.Error.NotSupported"
+ #define SECRET_ERROR_NO_SESSION        "org.freedesktop.Secret.Error.NoSession"
+ #define SECRET_ERROR_NO_SUCH_OBJECT    "org.freedesktop.Secret.Error.NoSuchObject"
+ 
+diff --git a/egg/Makefile.am b/egg/Makefile.am
+index 8b3bd24..3d8e149 100644
+--- a/egg/Makefile.am
++++ b/egg/Makefile.am
+@@ -30,6 +30,7 @@ libegg_la_SOURCES = \
+ 	egg-dn.c egg-dn.h \
+ 	egg-error.h \
+ 	egg-hex.c egg-hex.h \
++	egg-hkdf.c egg-hkdf.h \
+ 	egg-libgcrypt.c egg-libgcrypt.h \
+ 	egg-mkdtemp.c egg-mkdtemp.h \
+ 	egg-oid.c egg-oid.h \
+@@ -98,6 +99,7 @@ libegg_dbus_la_LIBADD = \
+ libegg_prompt_la_SOURCES = \
+ 	egg-dh.c egg-dh.h \
+ 	egg-hex.c egg-hex.h \
++	egg-hkdf.c egg-hkdf.h \
+ 	egg-libgcrypt.c egg-libgcrypt.h \
+ 	egg-padding.c egg-padding.h \
+ 	egg-secure-memory.c egg-secure-memory.h
+diff --git a/egg/egg-dh.c b/egg/egg-dh.c
+index d192aeb..bed524e 100644
+--- a/egg/egg-dh.c
++++ b/egg/egg-dh.c
+@@ -306,12 +306,11 @@ egg_dh_gen_pair (gcry_mpi_t prime, gcry_mpi_t base, guint bits,
+ 
+ gpointer
+ egg_dh_gen_secret (gcry_mpi_t peer, gcry_mpi_t priv,
+-                   gcry_mpi_t prime, gsize bytes)
++                   gcry_mpi_t prime, gsize *bytes)
+ {
+ 	gcry_error_t gcry;
+ 	guchar *value;
+ 	gsize n_value;
+-	gsize offset = 0;
+ 	gcry_mpi_t k;
+ 	gint bits;
+ 
+@@ -329,11 +328,8 @@ egg_dh_gen_secret (gcry_mpi_t peer, gcry_mpi_t priv,
+ 	/* Write out the secret */
+ 	gcry = gcry_mpi_print (GCRYMPI_FMT_USG, NULL, 0, &n_value, k);
+ 	g_return_val_if_fail (gcry == 0, NULL);
+-	if (n_value < bytes)
+-		offset = bytes - n_value;
+-	value = egg_secure_alloc (n_value + offset);
+-	memset (value, 0, n_value + offset);
+-	gcry = gcry_mpi_print (GCRYMPI_FMT_USG, value + offset, n_value, &n_value, k);
++	value = egg_secure_alloc (n_value);
++	gcry = gcry_mpi_print (GCRYMPI_FMT_USG, value, n_value, &n_value, k);
+ 	g_return_val_if_fail (gcry == 0, NULL);
+ 
+ #if DEBUG_DH_SECRET
+@@ -342,11 +338,7 @@ egg_dh_gen_secret (gcry_mpi_t peer, gcry_mpi_t priv,
+ 	gcry_mpi_release (k);
+ #endif
+ 
+-	if (bytes != 0 && bytes < n_value) {
+-		offset = n_value - bytes;
+-		memmove (value, value + offset, bytes);
+-		egg_secure_clear (value + bytes, offset);
+-	}
++	*bytes = n_value;
+ 
+ #if DEBUG_DH_SECRET
+ 	gcry_mpi_scan (&k, GCRYMPI_FMT_USG, value, bytes, NULL);
+diff --git a/egg/egg-dh.h b/egg/egg-dh.h
+index cfdb3d0..ee315e2 100644
+--- a/egg/egg-dh.h
++++ b/egg/egg-dh.h
+@@ -45,6 +45,6 @@ gboolean   egg_dh_gen_pair                                    (gcry_mpi_t prime,
+ gpointer   egg_dh_gen_secret                                  (gcry_mpi_t peer,
+                                                                gcry_mpi_t priv,
+                                                                gcry_mpi_t prime,
+-                                                               gsize bytes);
++                                                               gsize *bytes);
+ 
+ #endif /* EGG_DH_H_ */
+diff --git a/egg/egg-hkdf.c b/egg/egg-hkdf.c
+new file mode 100644
+index 0000000..eaa90fc
+--- a/dev/null
++++ b/egg/egg-hkdf.c
+@@ -0,0 +1,109 @@
++/*
++ * gnome-keyring
++ *
++ * Copyright (C) 2011 Collabora Ltd.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU Lesser General  License as
++ * published by the Free Software Foundation; either version 2.1 of
++ * the License, or (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful, but
++ * WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General  License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General
++ * License along with this program; if not, write to the Free Software
++ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
++ * 02111-1307, USA.
++ *
++ * Author: Stef Walter <stefw@collabora.co.uk>
++ */
++
++#include "config.h"
++
++#include "egg-hkdf.h"
++#include "egg-secure-memory.h"
++
++#include <gcrypt.h>
++
++#include <string.h>
++
++gboolean
++egg_hkdf_perform (const gchar *hash_algo, gconstpointer input, gsize n_input,
++                  gconstpointer salt, gsize n_salt, gconstpointer info,
++                  gsize n_info, gpointer output, gsize n_output)
++{
++	gpointer alloc = NULL;
++	gpointer buffer = NULL;
++	gcry_md_hd_t md1, md2;
++	guint hash_len;
++	guchar i;
++	gint flags, algo;
++	gsize step, n_buffer;
++	guchar *at;
++	gcry_error_t gcry;
++
++	algo = gcry_md_map_name (hash_algo);
++	g_return_val_if_fail (algo != 0, FALSE);
++
++	hash_len = gcry_md_get_algo_dlen (algo);
++	g_return_val_if_fail (hash_len != 0, FALSE);
++	g_return_val_if_fail (n_output <= 255 * hash_len, FALSE);
++
++	/* Buffer we need to for intermediate stuff */
++	if (gcry_is_secure (input)) {
++		flags = GCRY_MD_FLAG_SECURE;
++		buffer = gcry_malloc_secure (hash_len);
++	} else {
++		flags = 0;
++		buffer = gcry_malloc (hash_len);
++	}
++
++	g_return_val_if_fail (buffer, FALSE);
++	n_buffer = 0;
++
++	/* Salt defaults to hash_len zeros */
++	if (!salt) {
++		salt = alloc = g_malloc0 (hash_len);
++		n_salt = hash_len;
++	}
++
++	/* Step 1: Extract */
++	gcry = gcry_md_open (&md1, algo, GCRY_MD_FLAG_HMAC);
++	g_return_val_if_fail (gcry == 0, FALSE);
++	gcry = gcry_md_setkey (md1, salt, n_salt);
++	g_return_val_if_fail (gcry == 0, FALSE);
++	gcry_md_write (md1, input, n_input);
++
++	/* Step 2: Expand */
++	gcry = gcry_md_open (&md2, algo, GCRY_MD_FLAG_HMAC);
++	g_return_val_if_fail (gcry == 0, FALSE);
++	gcry = gcry_md_setkey (md2, gcry_md_read (md1, algo), hash_len);
++	g_return_val_if_fail (gcry == 0, FALSE);
++	gcry_md_close (md1);
++
++	at = output;
++	for (i = 1; i < 256; ++i) {
++		gcry_md_reset (md2);
++		gcry_md_write (md2, buffer, n_buffer);
++		gcry_md_write (md2, info, n_info);
++		gcry_md_write (md2, &i, 1);
++
++		n_buffer = hash_len;
++		memcpy (buffer, gcry_md_read (md2, algo), n_buffer);
++
++		step = MIN (n_buffer, n_output);
++		memcpy (at, buffer, step);
++		n_output -= step;
++		at += step;
++
++		if (!n_output)
++			break;
++	}
++
++	g_free (alloc);
++	gcry_free (buffer);
++	return TRUE;
++}
+diff --git a/egg/tests/test-dh.c b/egg/tests/test-dh.c
+index 6a2b37f..13e9c70 100644
+--- a/egg/tests/test-dh.c
++++ b/egg/tests/test-dh.c
+@@ -31,6 +31,7 @@
+ #include <stdio.h>
+ #include <string.h>
+ 
++#include <glib.h>
+ #include <gcrypt.h>
+ 
+ EGG_SECURE_GLIB_DEFINITIONS ();
+@@ -43,6 +44,7 @@ test_perform (void)
+ 	gcry_mpi_t x2, X2;
+ 	gpointer k1, k2;
+ 	gboolean ret;
++	gsize n1, n2;
+ 
+ 	/* Load up the parameters */
+ 	if (!egg_dh_default_params ("ietf-ike-grp-modp-768", &p, &g))
+@@ -55,13 +57,14 @@ test_perform (void)
+ 	g_assert (ret);
+ 
+ 	/* Calculate keys */
+-	k1 = egg_dh_gen_secret (X2, x1, p, 96);
++	k1 = egg_dh_gen_secret (X2, x1, p, &n1);
+ 	g_assert (k1);
+-	k2 = egg_dh_gen_secret (X1, x2, p, 96);
++	k2 = egg_dh_gen_secret (X1, x2, p, &n2);
+ 	g_assert (k2);
+ 
+ 	/* Keys must be the same */
+-	g_assert (memcmp (k1, k2, 96) == 0);
++	egg_assert_cmpsize (n1, ==, n2);
++	g_assert (memcmp (k1, k2, n1) == 0);
+ 
+ 	gcry_mpi_release (p);
+ 	gcry_mpi_release (g);
+@@ -97,7 +100,7 @@ test_short_pair (void)
+ }
+ 
+ static void
+-test_dh_default (const gchar *name, guint bits)
++check_dh_default (const gchar *name, guint bits)
+ {
+ 	gboolean ret;
+ 	gcry_mpi_t p, g, check;
+@@ -134,44 +137,43 @@ test_dh_default (const gchar *name, guint bits)
+ static void
+ test_default_768 (void)
+ {
+-	test_dh_default ("ietf-ike-grp-modp-768", 768);
++	check_dh_default ("ietf-ike-grp-modp-768", 768);
+ }
+ 
+ static void
+ test_default_1024 (void)
+ {
+-	test_dh_default ("ietf-ike-grp-modp-1024", 1024);
++	check_dh_default ("ietf-ike-grp-modp-1024", 1024);
+ }
+ 
+ static void
+ test_default_1536 (void)
+ {
+-	test_dh_default ("ietf-ike-grp-modp-1536", 1536);
++	check_dh_default ("ietf-ike-grp-modp-1536", 1536);
+ }
+ 
+-
+ static void
+ test_default_2048 (void)
+ {
+-	test_dh_default ("ietf-ike-grp-modp-2048", 2048);
++	check_dh_default ("ietf-ike-grp-modp-2048", 2048);
+ }
+ 
+ static void
+ test_default_3072 (void)
+ {
+-	test_dh_default ("ietf-ike-grp-modp-3072", 3072);
++	check_dh_default ("ietf-ike-grp-modp-3072", 3072);
+ }
+ 
+ static void
+ test_default_4096 (void)
+ {
+-	test_dh_default ("ietf-ike-grp-modp-4096", 4096);
++	check_dh_default ("ietf-ike-grp-modp-4096", 4096);
+ }
+ 
+ static void
+ test_default_8192 (void)
+ {
+-	test_dh_default ("ietf-ike-grp-modp-8192", 8192);
++	check_dh_default ("ietf-ike-grp-modp-8192", 8192);
+ }
+ 
+ static void
+diff --git a/egg/tests/test-hkdf.c b/egg/tests/test-hkdf.c
+new file mode 100644
+index 0000000..44c463d
+--- a/dev/null
++++ b/egg/tests/test-hkdf.c
+@@ -0,0 +1,345 @@
++/* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 8; tab-width: 8 -*- */
++/* test-hkdf.c: Test egg-hkdf.c
++
++   Copyright (C) 2011 Collabora Ltd.
++
++   The Gnome Keyring Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Library General Public License as
++   published by the Free Software Foundation; either version 2 of the
++   License, or (at your option) any later version.
++
++   The Gnome Keyring Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Library General Public License for more details.
++
++   You should have received a copy of the GNU Library General Public
++   License along with the Gnome Library; see the file COPYING.LIB.  If not,
++   write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
++   Boston, MA 02111-1307, USA.
++
++   Author: Stef Walter <stef@collabora.co.uk>
++*/
++
++#include "config.h"
++
++#include <stdlib.h>
++#include <stdio.h>
++#include <string.h>
++
++#include "egg-hkdf.h"
++#include "egg-secure-memory.h"
++#include "egg-testing.h"
++
++#include <gcrypt.h>
++
++EGG_SECURE_GLIB_DEFINITIONS ();
++
++static void
++test_hkdf_test_case_1 (void)
++{
++	/* RFC 5869: A.1 Test Case 1 */
++	const guchar ikm[] = { 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b,
++	                       0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b,
++	                       0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b };
++	const guchar salt[] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
++	                        0x08, 0x09, 0x0a, 0x0b, 0x0c };
++	const guchar info[] = { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7,
++	                        0xf8, 0xf9 };
++	const guchar okm[] = { 0x3c, 0xb2, 0x5f, 0x25, 0xfa, 0xac, 0xd5, 0x7a,
++	                       0x90, 0x43, 0x4f, 0x64, 0xd0, 0x36, 0x2f, 0x2a,
++	                       0x2d, 0x2d, 0x0a, 0x90, 0xcf, 0x1a, 0x5a, 0x4c,
++	                       0x5d, 0xb0, 0x2d, 0x56, 0xec, 0xc4, 0xc5, 0xbf,
++	                       0x34, 0x00, 0x72, 0x08, 0xd5, 0xb8, 0x87, 0x18,
++	                       0x58, 0x65 };
++	guchar buffer[sizeof (okm)];
++	gboolean ret;
++
++	egg_assert_cmpsize (sizeof (ikm), ==, 22);
++	egg_assert_cmpsize (sizeof (salt), ==, 13);
++	egg_assert_cmpsize (sizeof (info), ==, 10);
++	egg_assert_cmpsize (sizeof (okm), ==, 42);
++
++	memset (buffer, 0, sizeof (buffer));
++	ret = egg_hkdf_perform ("sha256",
++	                        ikm, sizeof (ikm),
++	                        salt, sizeof (salt),
++	                        info, sizeof (info),
++	                        buffer, sizeof (buffer));
++	g_assert (ret);
++	egg_assert_cmpmem (buffer, sizeof (buffer), ==, okm, sizeof (okm));
++}
++
++static void
++test_hkdf_test_case_2 (void)
++{
++	/* RFC 5869: A.2 Test Case 2 */
++	const guchar ikm[] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
++	                       0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
++	                       0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
++	                       0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f,
++	                       0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27,
++	                       0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f,
++	                       0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37,
++	                       0x38, 0x39, 0x3a, 0x3b, 0x3c, 0x3d, 0x3e, 0x3f,
++	                       0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47,
++	                       0x48, 0x49, 0x4a, 0x4b, 0x4c, 0x4d, 0x4e, 0x4f };
++	const guchar salt[] = { 0x60, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67,
++	                        0x68, 0x69, 0x6a, 0x6b, 0x6c, 0x6d, 0x6e, 0x6f,
++	                        0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77,
++	                        0x78, 0x79, 0x7a, 0x7b, 0x7c, 0x7d, 0x7e, 0x7f,
++	                        0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87,
++	                        0x88, 0x89, 0x8a, 0x8b, 0x8c, 0x8d, 0x8e, 0x8f,
++	                        0x90, 0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97,
++	                        0x98, 0x99, 0x9a, 0x9b, 0x9c, 0x9d, 0x9e, 0x9f,
++	                        0xa0, 0xa1, 0xa2, 0xa3, 0xa4, 0xa5, 0xa6, 0xa7,
++	                        0xa8, 0xa9, 0xaa, 0xab, 0xac, 0xad, 0xae, 0xaf };
++	const guchar info[] = { 0xb0, 0xb1, 0xb2, 0xb3, 0xb4, 0xb5, 0xb6, 0xb7,
++	                        0xb8, 0xb9, 0xba, 0xbb, 0xbc, 0xbd, 0xbe, 0xbf,
++	                        0xc0, 0xc1, 0xc2, 0xc3, 0xc4, 0xc5, 0xc6, 0xc7,
++	                        0xc8, 0xc9, 0xca, 0xcb, 0xcc, 0xcd, 0xce, 0xcf,
++	                        0xd0, 0xd1, 0xd2, 0xd3, 0xd4, 0xd5, 0xd6, 0xd7,
++	                        0xd8, 0xd9, 0xda, 0xdb, 0xdc, 0xdd, 0xde, 0xdf,
++	                        0xe0, 0xe1, 0xe2, 0xe3, 0xe4, 0xe5, 0xe6, 0xe7,
++	                        0xe8, 0xe9, 0xea, 0xeb, 0xec, 0xed, 0xee, 0xef,
++	                        0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7,
++	                        0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
++	const guchar okm[] = { 0xb1, 0x1e, 0x39, 0x8d, 0xc8, 0x03, 0x27, 0xa1,
++	                       0xc8, 0xe7, 0xf7, 0x8c, 0x59, 0x6a, 0x49, 0x34,
++	                       0x4f, 0x01, 0x2e, 0xda, 0x2d, 0x4e, 0xfa, 0xd8,
++	                       0xa0, 0x50, 0xcc, 0x4c, 0x19, 0xaf, 0xa9, 0x7c,
++	                       0x59, 0x04, 0x5a, 0x99, 0xca, 0xc7, 0x82, 0x72,
++	                       0x71, 0xcb, 0x41, 0xc6, 0x5e, 0x59, 0x0e, 0x09,
++	                       0xda, 0x32, 0x75, 0x60, 0x0c, 0x2f, 0x09, 0xb8,
++	                       0x36, 0x77, 0x93, 0xa9, 0xac, 0xa3, 0xdb, 0x71,
++	                       0xcc, 0x30, 0xc5, 0x81, 0x79, 0xec, 0x3e, 0x87,
++	                       0xc1, 0x4c, 0x01, 0xd5, 0xc1, 0xf3, 0x43, 0x4f,
++	                       0x1d, 0x87 };
++	guchar buffer[sizeof (okm)];
++	gboolean ret;
++
++	egg_assert_cmpsize (sizeof (ikm), ==, 80);
++	egg_assert_cmpsize (sizeof (salt), ==, 80);
++	egg_assert_cmpsize (sizeof (info), ==, 80);
++	egg_assert_cmpsize (sizeof (okm), ==, 82);
++
++	memset (buffer, 0, sizeof (buffer));
++	ret = egg_hkdf_perform ("sha256",
++	                        ikm, sizeof (ikm),
++	                        salt, sizeof (salt),
++	                        info, sizeof (info),
++	                        buffer, sizeof (buffer));
++	g_assert (ret);
++	egg_assert_cmpmem (buffer, sizeof (buffer), ==, okm, sizeof (okm));
++}
++
++static void
++test_hkdf_test_case_3 (void)
++{
++	/* RFC 5869: A.3 Test Case 3 */
++	const guchar ikm[] = { 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b,
++	                       0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b,
++	                       0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b,};
++	const guchar salt[] = { };
++	const guchar info[] = { };
++	const guchar okm[] = { 0x8d, 0xa4, 0xe7, 0x75, 0xa5, 0x63, 0xc1, 0x8f,
++	                       0x71, 0x5f, 0x80, 0x2a, 0x06, 0x3c, 0x5a, 0x31,
++	                       0xb8, 0xa1, 0x1f, 0x5c, 0x5e, 0xe1, 0x87, 0x9e,
++	                       0xc3, 0x45, 0x4e, 0x5f, 0x3c, 0x73, 0x8d, 0x2d,
++	                       0x9d, 0x20, 0x13, 0x95, 0xfa, 0xa4, 0xb6, 0x1a,
++	                       0x96, 0xc8 };
++	guchar buffer[sizeof (okm)];
++	gboolean ret;
++
++	egg_assert_cmpsize (sizeof (ikm), ==, 22);
++	egg_assert_cmpsize (sizeof (salt), ==, 0);
++	egg_assert_cmpsize (sizeof (info), ==, 0);
++	egg_assert_cmpsize (sizeof (okm), ==, 42);
++
++	memset (buffer, 0, sizeof (buffer));
++	ret = egg_hkdf_perform ("sha256",
++	                        ikm, sizeof (ikm),
++	                        salt, sizeof (salt),
++	                        info, sizeof (info),
++	                        buffer, sizeof (buffer));
++	g_assert (ret);
++	egg_assert_cmpmem (buffer, sizeof (buffer), ==, okm, sizeof (okm));
++}
++
++static void
++test_hkdf_test_case_4 (void)
++{
++	/* RFC 5869: A.4 Test Case 4 */
++	const guchar ikm[] = { 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b,
++	                       0x0b, 0x0b, 0x0b };
++	const guchar salt[] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
++	                        0x08, 0x09, 0x0a, 0x0b, 0x0c };
++	const guchar info[] = { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7,
++	                        0xf8, 0xf9 };
++	const guchar okm[] = { 0x08, 0x5a, 0x01, 0xea, 0x1b, 0x10, 0xf3, 0x69,
++	                       0x33, 0x06, 0x8b, 0x56, 0xef, 0xa5, 0xad, 0x81,
++	                       0xa4, 0xf1, 0x4b, 0x82, 0x2f, 0x5b, 0x09, 0x15,
++	                       0x68, 0xa9, 0xcd, 0xd4, 0xf1, 0x55, 0xfd, 0xa2,
++	                       0xc2, 0x2e, 0x42, 0x24, 0x78, 0xd3, 0x05, 0xf3,
++	                       0xf8, 0x96 };
++	guchar buffer[sizeof (okm)];
++	gboolean ret;
++
++	egg_assert_cmpsize (sizeof (ikm), ==, 11);
++	egg_assert_cmpsize (sizeof (salt), ==, 13);
++	egg_assert_cmpsize (sizeof (info), ==, 10);
++	egg_assert_cmpsize (sizeof (okm), ==, 42);
++
++	memset (buffer, 0, sizeof (buffer));
++	ret = egg_hkdf_perform ("sha1",
++	                        ikm, sizeof (ikm),
++	                        salt, sizeof (salt),
++	                        info, sizeof (info),
++	                        buffer, sizeof (buffer));
++	g_assert (ret);
++	egg_assert_cmpmem (buffer, sizeof (buffer), ==, okm, sizeof (okm));
++}
++
++static void
++test_hkdf_test_case_5 (void)
++{
++	/* RFC 5869: A.5 Test Case 5 */
++	const guchar ikm[] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
++	                       0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
++	                       0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
++	                       0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f,
++	                       0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27,
++	                       0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f,
++	                       0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37,
++	                       0x38, 0x39, 0x3a, 0x3b, 0x3c, 0x3d, 0x3e, 0x3f,
++	                       0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47,
++	                       0x48, 0x49, 0x4a, 0x4b, 0x4c, 0x4d, 0x4e, 0x4f };
++	const guchar salt[] = { 0x60, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67,
++	                        0x68, 0x69, 0x6a, 0x6b, 0x6c, 0x6d, 0x6e, 0x6f,
++	                        0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77,
++	                        0x78, 0x79, 0x7a, 0x7b, 0x7c, 0x7d, 0x7e, 0x7f,
++	                        0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87,
++	                        0x88, 0x89, 0x8a, 0x8b, 0x8c, 0x8d, 0x8e, 0x8f,
++	                        0x90, 0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97,
++	                        0x98, 0x99, 0x9a, 0x9b, 0x9c, 0x9d, 0x9e, 0x9f,
++	                        0xa0, 0xa1, 0xa2, 0xa3, 0xa4, 0xa5, 0xa6, 0xa7,
++	                        0xa8, 0xa9, 0xaa, 0xab, 0xac, 0xad, 0xae, 0xaf };
++	const guchar info[] = { 0xb0, 0xb1, 0xb2, 0xb3, 0xb4, 0xb5, 0xb6, 0xb7,
++	                        0xb8, 0xb9, 0xba, 0xbb, 0xbc, 0xbd, 0xbe, 0xbf,
++	                        0xc0, 0xc1, 0xc2, 0xc3, 0xc4, 0xc5, 0xc6, 0xc7,
++	                        0xc8, 0xc9, 0xca, 0xcb, 0xcc, 0xcd, 0xce, 0xcf,
++	                        0xd0, 0xd1, 0xd2, 0xd3, 0xd4, 0xd5, 0xd6, 0xd7,
++	                        0xd8, 0xd9, 0xda, 0xdb, 0xdc, 0xdd, 0xde, 0xdf,
++	                        0xe0, 0xe1, 0xe2, 0xe3, 0xe4, 0xe5, 0xe6, 0xe7,
++	                        0xe8, 0xe9, 0xea, 0xeb, 0xec, 0xed, 0xee, 0xef,
++	                        0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7,
++	                        0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
++	const guchar okm[] = { 0x0b, 0xd7, 0x70, 0xa7, 0x4d, 0x11, 0x60, 0xf7,
++	                       0xc9, 0xf1, 0x2c, 0xd5, 0x91, 0x2a, 0x06, 0xeb,
++	                       0xff, 0x6a, 0xdc, 0xae, 0x89, 0x9d, 0x92, 0x19,
++	                       0x1f, 0xe4, 0x30, 0x56, 0x73, 0xba, 0x2f, 0xfe,
++	                       0x8f, 0xa3, 0xf1, 0xa4, 0xe5, 0xad, 0x79, 0xf3,
++	                       0xf3, 0x34, 0xb3, 0xb2, 0x02, 0xb2, 0x17, 0x3c,
++	                       0x48, 0x6e, 0xa3, 0x7c, 0xe3, 0xd3, 0x97, 0xed,
++	                       0x03, 0x4c, 0x7f, 0x9d, 0xfe, 0xb1, 0x5c, 0x5e,
++	                       0x92, 0x73, 0x36, 0xd0, 0x44, 0x1f, 0x4c, 0x43,
++	                       0x00, 0xe2, 0xcf, 0xf0, 0xd0, 0x90, 0x0b, 0x52,
++	                       0xd3, 0xb4 };
++	guchar buffer[sizeof (okm)];
++	gboolean ret;
++
++	egg_assert_cmpsize (sizeof (ikm), ==, 80);
++	egg_assert_cmpsize (sizeof (salt), ==, 80);
++	egg_assert_cmpsize (sizeof (info), ==, 80);
++	egg_assert_cmpsize (sizeof (okm), ==, 82);
++
++	memset (buffer, 0, sizeof (buffer));
++	ret = egg_hkdf_perform ("sha1",
++	                        ikm, sizeof (ikm),
++	                        salt, sizeof (salt),
++	                        info, sizeof (info),
++	                        buffer, sizeof (buffer));
++	g_assert (ret);
++	egg_assert_cmpmem (buffer, sizeof (buffer), ==, okm, sizeof (okm));
++}
++
++static void
++test_hkdf_test_case_6 (void)
++{
++	/* RFC 5869: A.6 Test Case 6 */
++	const guchar ikm[] = { 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b,
++	                       0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b,
++	                       0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b };
++	const guchar salt[] = { };
++	const guchar info[] = { };
++	const guchar okm[] = { 0x0a, 0xc1, 0xaf, 0x70, 0x02, 0xb3, 0xd7, 0x61,
++	                       0xd1, 0xe5, 0x52, 0x98, 0xda, 0x9d, 0x05, 0x06,
++	                       0xb9, 0xae, 0x52, 0x05, 0x72, 0x20, 0xa3, 0x06,
++	                       0xe0, 0x7b, 0x6b, 0x87, 0xe8, 0xdf, 0x21, 0xd0,
++	                       0xea, 0x00, 0x03, 0x3d, 0xe0, 0x39, 0x84, 0xd3,
++	                       0x49, 0x18 };
++	guchar buffer[sizeof (okm)];
++	gboolean ret;
++
++	egg_assert_cmpsize (sizeof (ikm), ==, 22);
++	egg_assert_cmpsize (sizeof (salt), ==, 0);
++	egg_assert_cmpsize (sizeof (info), ==, 0);
++	egg_assert_cmpsize (sizeof (okm), ==, 42);
++
++	memset (buffer, 0, sizeof (buffer));
++	ret = egg_hkdf_perform ("sha1",
++	                        ikm, sizeof (ikm),
++	                        salt, sizeof (salt),
++	                        info, sizeof (info),
++	                        buffer, sizeof (buffer));
++	g_assert (ret);
++	egg_assert_cmpmem (buffer, sizeof (buffer), ==, okm, sizeof (okm));
++}
++
++static void
++test_hkdf_test_case_7 (void)
++{
++	/* RFC 5869: A.7 Test Case 7 */
++	const guchar ikm[] = { 0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c,
++	                       0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c,
++	                       0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c };
++	const guchar *salt = NULL;
++	const guchar info[] = { };
++	const guchar okm[] = { 0x2c, 0x91, 0x11, 0x72, 0x04, 0xd7, 0x45, 0xf3,
++	                       0x50, 0x0d, 0x63, 0x6a, 0x62, 0xf6, 0x4f, 0x0a,
++	                       0xb3, 0xba, 0xe5, 0x48, 0xaa, 0x53, 0xd4, 0x23,
++	                       0xb0, 0xd1, 0xf2, 0x7e, 0xbb, 0xa6, 0xf5, 0xe5,
++	                       0x67, 0x3a, 0x08, 0x1d, 0x70, 0xcc, 0xe7, 0xac,
++	                       0xfc, 0x48 };
++	guchar buffer[sizeof (okm)];
++	gboolean ret;
++
++	egg_assert_cmpsize (sizeof (ikm), ==, 22);
++	egg_assert_cmpsize (sizeof (info), ==, 0);
++	egg_assert_cmpsize (sizeof (okm), ==, 42);
++
++	memset (buffer, 0, sizeof (buffer));
++	ret = egg_hkdf_perform ("sha1",
++	                        ikm, sizeof (ikm),
++	                        salt, sizeof (salt),
++	                        info, sizeof (info),
++	                        buffer, sizeof (buffer));
++	g_assert (ret);
++	egg_assert_cmpmem (buffer, sizeof (buffer), ==, okm, sizeof (okm));
++}
++
++int
++main (int argc, char **argv)
++{
++	g_test_init (&argc, &argv, NULL);
++
++	g_test_add_func ("/hkdf/test-case-1", test_hkdf_test_case_1);
++	g_test_add_func ("/hkdf/test-case-2", test_hkdf_test_case_2);
++	g_test_add_func ("/hkdf/test-case-3", test_hkdf_test_case_3);
++	g_test_add_func ("/hkdf/test-case-4", test_hkdf_test_case_4);
++	g_test_add_func ("/hkdf/test-case-5", test_hkdf_test_case_5);
++	g_test_add_func ("/hkdf/test-case-6", test_hkdf_test_case_6);
++	g_test_add_func ("/hkdf/test-case-7", test_hkdf_test_case_7);
++
++	return g_test_run ();
++}
+diff --git a/pkcs11/gkm/Makefile.am b/pkcs11/gkm/Makefile.am
+index 1d4516c..bf6a1c8 100644
+--- a/pkcs11/gkm/Makefile.am
++++ b/pkcs11/gkm/Makefile.am
+@@ -35,6 +35,8 @@ libgkm_la_SOURCES = \
+ 	gkm-dsa-mechanism.c gkm-dsa-mechanism.h \
+ 	gkm-factory.c gkm-factory.h \
+ 	gkm-file-tracker.c gkm-file-tracker.h \
++	gkm-generic-key.c gkm-generic-key.h \
++	gkm-hkdf-mechanism.c gkm-hkdf-mechanism.h \
+ 	gkm-manager.c gkm-manager.h \
+ 	gkm-memory-store.c gkm-memory-store.h \
+ 	gkm-mock.c gkm-mock.h \
+diff --git a/pkcs11/gkm/gkm-aes-key.c b/pkcs11/gkm/gkm-aes-key.c
+index d53e911..71f9e08 100644
+--- a/pkcs11/gkm/gkm-aes-key.c
++++ b/pkcs11/gkm/gkm-aes-key.c
+@@ -22,6 +22,7 @@
+ #include "config.h"
+ 
+ #include "pkcs11/pkcs11.h"
++#include "pkcs11/pkcs11i.h"
+ 
+ #include "gkm-aes-mechanism.h"
+ #include "gkm-attributes.h"
+@@ -41,6 +42,11 @@ struct _GkmAesKey {
+ 
+ G_DEFINE_TYPE (GkmAesKey, gkm_aes_key, GKM_TYPE_SECRET_KEY);
+ 
++static const CK_MECHANISM_TYPE GKM_AES_MECHANISMS[] = {
++	CKM_AES_CBC_PAD,
++	CKM_G_HKDF_SHA256_DERIVE
++};
++
+ /* -----------------------------------------------------------------------------
+  * INTERNAL
+  */
+@@ -139,7 +145,7 @@ factory_create_aes_key (GkmSession *session, GkmTransaction *transaction,
+  */
+ 
+ static CK_RV
+-gkm_aes_key_real_get_attribute (GkmObject *base, GkmSession *session, CK_ATTRIBUTE *attr)
++gkm_aes_key_get_attribute (GkmObject *base, GkmSession *session, CK_ATTRIBUTE *attr)
+ {
+ 	GkmAesKey *self = GKM_AES_KEY (base);
+ 
+@@ -148,6 +154,9 @@ gkm_aes_key_real_get_attribute (GkmObject *base, GkmSession *session, CK_ATTRIBU
+ 	case CKA_KEY_TYPE:
+ 		return gkm_attribute_set_ulong (attr, CKK_AES);
+ 
++	case CKA_DERIVE:
++		return gkm_attribute_set_bool (attr, CK_TRUE);
++
+ 	case CKA_UNWRAP:
+ 	case CKA_WRAP:
+ 		return gkm_attribute_set_bool (attr, CK_TRUE);
+@@ -169,6 +178,14 @@ gkm_aes_key_real_get_attribute (GkmObject *base, GkmSession *session, CK_ATTRIBU
+ 	return GKM_OBJECT_CLASS (gkm_aes_key_parent_class)->get_attribute (base, session, attr);
+ }
+ 
++static gconstpointer
++gkm_aes_key_get_key_value (GkmSecretKey *key, gsize *n_value)
++{
++	GkmAesKey *self = GKM_AES_KEY (key);
++	*n_value = self->n_value;
++	return self->value;
++}
++
+ static void
+ gkm_aes_key_init (GkmAesKey *self)
+ {
+@@ -195,12 +212,15 @@ gkm_aes_key_class_init (GkmAesKeyClass *klass)
+ {
+ 	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+ 	GkmObjectClass *gkm_class = GKM_OBJECT_CLASS (klass);
++	GkmSecretKeyClass *key_class = GKM_SECRET_KEY_CLASS (klass);
+ 
+ 	gkm_aes_key_parent_class = g_type_class_peek_parent (klass);
+ 
+ 	gobject_class->finalize = gkm_aes_key_finalize;
+ 
+-	gkm_class->get_attribute = gkm_aes_key_real_get_attribute;
++	gkm_class->get_attribute = gkm_aes_key_get_attribute;
++
++	key_class->get_key_value = gkm_aes_key_get_key_value;
+ }
+ 
+ /* -----------------------------------------------------------------------------
+diff --git a/pkcs11/gkm/gkm-aes-mechanism.h b/pkcs11/gkm/gkm-aes-mechanism.h
+index a473d4b..d62d7c0 100644
+--- a/pkcs11/gkm/gkm-aes-mechanism.h
++++ b/pkcs11/gkm/gkm-aes-mechanism.h
+@@ -31,10 +31,6 @@
+ #define GKM_AES_MECHANISM_MIN_LENGTH     16
+ #define GKM_AES_MECHANISM_MAX_LENGTH     32
+ 
+-static const CK_MECHANISM_TYPE GKM_AES_MECHANISMS[] = {
+-	CKM_AES_CBC_PAD
+-};
+-
+ CK_RV                   gkm_aes_mechanism_wrap                 (GkmSession *session,
+                                                                 CK_MECHANISM_PTR mech,
+                                                                 GkmObject *wrapper,
+diff --git a/pkcs11/gkm/gkm-crypto.c b/pkcs11/gkm/gkm-crypto.c
+index 9662612..65336ff 100644
+--- a/pkcs11/gkm/gkm-crypto.c
++++ b/pkcs11/gkm/gkm-crypto.c
+@@ -25,6 +25,7 @@
+ #include "gkm-aes-mechanism.h"
+ #include "gkm-dh-mechanism.h"
+ #include "gkm-dsa-mechanism.h"
++#include "gkm-hkdf-mechanism.h"
+ #include "gkm-null-mechanism.h"
+ #include "gkm-rsa-mechanism.h"
+ #include "gkm-session.h"
+@@ -430,6 +431,9 @@ gkm_crypto_derive_key (GkmSession *session, CK_MECHANISM_PTR mech, GkmObject *ba
+ 	case CKM_DH_PKCS_DERIVE:
+ 		return gkm_dh_mechanism_derive (session, mech, base, attrs,
+ 		                                n_attrs, derived);
++	case CKM_G_HKDF_SHA256_DERIVE:
++		return gkm_hkdf_mechanism_derive (session, "sha256", mech, base,
++		                                  attrs, n_attrs, derived);
+ 	default:
+ 		return CKR_MECHANISM_INVALID;
+ 	}
+diff --git a/pkcs11/gkm/gkm-dh-mechanism.c b/pkcs11/gkm/gkm-dh-mechanism.c
+index 5b29ac3..446defb 100644
+--- a/pkcs11/gkm/gkm-dh-mechanism.c
++++ b/pkcs11/gkm/gkm-dh-mechanism.c
+@@ -209,8 +209,9 @@ gkm_dh_mechanism_derive (GkmSession *session, CK_MECHANISM_PTR mech, GkmObject *
+ 	gcry_error_t gcry;
+ 	CK_ATTRIBUTE attr;
+ 	GArray *array;
++	gsize n_actual = 0;
+ 	CK_ULONG n_value = 0;
+-	gpointer value;
++	guchar *value;
+ 	GkmTransaction *transaction;
+ 	CK_KEY_TYPE type;
+ 
+@@ -239,7 +240,7 @@ gkm_dh_mechanism_derive (GkmSession *session, CK_MECHANISM_PTR mech, GkmObject *
+ 	if (n_value == 0)
+ 		n_value = (gcry_mpi_get_nbits (prime) + 7) / 8;
+ 
+-	value = egg_dh_gen_secret (peer, priv, prime, n_value);
++	value = egg_dh_gen_secret (peer, priv, prime, &n_actual);
+ 	gcry_mpi_release (peer);
+ 
+ 	if (value == NULL)
+@@ -250,8 +251,24 @@ gkm_dh_mechanism_derive (GkmSession *session, CK_MECHANISM_PTR mech, GkmObject *
+ 
+ 	/* Prepend the value */
+ 	attr.type = CKA_VALUE;
+-	attr.pValue = value;
+ 	attr.ulValueLen = n_value;
++
++	/* Is it too long, move to the front and truncate */
++	if (n_actual > n_value) {
++		attr.pValue = value + (n_actual - n_value);
++
++	/* If it's too short, expand with zeros */
++	} else if (n_actual < n_value) {
++		value = egg_secure_realloc (value, n_value);
++		memmove (value + (n_value - n_actual), value, n_actual);
++		memset (value, 0, (n_value - n_actual));
++		attr.pValue = value;
++
++	/* It's just right */
++	} else {
++		attr.pValue = value;
++	}
++
+ 	g_array_append_val (array, attr);
+ 
+ 	/* Add the remainder of the attributes */
+diff --git a/pkcs11/gkm/gkm-generic-key.c b/pkcs11/gkm/gkm-generic-key.c
+new file mode 100644
+index 0000000..834f152
+--- a/dev/null
++++ b/pkcs11/gkm/gkm-generic-key.c
+@@ -0,0 +1,215 @@
++/*
++ * gnome-keyring
++ *
++ * Copyright (C) 2011 Collabora Ltd.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU Lesser General Public License as
++ * published by the Free Software Foundation; either version 2.1 of
++ * the License, or (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful, but
++ * WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this program; if not, write to the Free Software
++ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
++ * 02111-1307, USA.
++ *
++ * Author: Stef Walter <stefw@collabora.co.uk>
++ */
++
++#include "config.h"
++
++#include "pkcs11/pkcs11.h"
++#include "pkcs11/pkcs11i.h"
++
++#include "gkm-attributes.h"
++#include "gkm-generic-key.h"
++#include "gkm-session.h"
++#include "gkm-transaction.h"
++#include "gkm-util.h"
++
++#include "egg/egg-secure-memory.h"
++
++struct _GkmGenericKey {
++	GkmSecretKey parent;
++	gpointer value;
++	gsize n_value;
++};
++
++G_DEFINE_TYPE (GkmGenericKey, gkm_generic_key, GKM_TYPE_SECRET_KEY);
++
++static const CK_MECHANISM_TYPE GKM_GENERIC_MECHANISMS[] = {
++	CKM_G_HKDF_SHA256_DERIVE
++};
++
++/* -----------------------------------------------------------------------------
++ * INTERNAL
++ */
++
++static CK_RV
++attribute_set_check_value (GkmGenericKey *self, CK_ATTRIBUTE *attr)
++{
++	guchar buffer[20];
++
++	g_assert (GKM_IS_GENERIC_KEY (self));
++	g_assert (attr);
++
++	/* Just asking for the length */
++	if (!attr->pValue) {
++		attr->ulValueLen = 3;
++		return CKR_OK;
++	}
++
++	/* Just the a sha1 of the value */
++	gcry_md_hash_buffer (GCRY_MD_SHA1, buffer, self->value, self->n_value);
++
++	/* Use the first three bytes */
++	return gkm_attribute_set_data (attr, buffer, 3);
++}
++
++static GkmObject*
++factory_create_generic_key (GkmSession *session, GkmTransaction *transaction,
++                            CK_ATTRIBUTE_PTR attrs, CK_ULONG n_attrs)
++{
++	GkmGenericKey *key;
++	GkmManager *manager;
++	CK_ATTRIBUTE_PTR value;
++
++	value = gkm_attributes_find (attrs, n_attrs, CKA_VALUE);
++	if (value == NULL) {
++		gkm_transaction_fail (transaction, CKR_TEMPLATE_INCOMPLETE);
++		return NULL;
++	}
++
++	if (gkm_attributes_find (attrs, n_attrs, CKA_VALUE_LEN)) {
++		gkm_transaction_fail (transaction, CKR_TEMPLATE_INCONSISTENT);
++		return NULL;
++	}
++
++	manager = gkm_manager_for_template (attrs, n_attrs, session);
++	key = g_object_new (GKM_TYPE_GENERIC_KEY,
++	                    "module", gkm_session_get_module (session),
++	                    "manager", manager,
++	                    NULL);
++
++	key->value = egg_secure_alloc (value->ulValueLen);
++	key->n_value = value->ulValueLen;
++	memcpy (key->value, value->pValue, key->n_value);
++
++	gkm_attribute_consume (value);
++
++	gkm_session_complete_object_creation (session, transaction, GKM_OBJECT (key),
++	                                      TRUE, attrs, n_attrs);
++	return GKM_OBJECT (key);
++}
++
++/* -----------------------------------------------------------------------------
++ * OBJECT
++ */
++
++static CK_RV
++gkm_generic_key_get_attribute (GkmObject *base, GkmSession *session, CK_ATTRIBUTE *attr)
++{
++	GkmGenericKey *self = GKM_GENERIC_KEY (base);
++
++	switch (attr->type)
++	{
++	case CKA_KEY_TYPE:
++		return gkm_attribute_set_ulong (attr, CKK_GENERIC_SECRET);
++
++	case CKA_DERIVE:
++		return gkm_attribute_set_bool (attr, CK_TRUE);
++
++	case CKA_UNWRAP:
++	case CKA_WRAP:
++		return gkm_attribute_set_bool (attr, CK_FALSE);
++
++	case CKA_VALUE:
++		return gkm_attribute_set_data (attr, self->value, self->n_value);
++
++	case CKA_VALUE_LEN:
++		return gkm_attribute_set_ulong (attr, self->n_value);
++
++	case CKA_CHECK_VALUE:
++		return attribute_set_check_value (self, attr);
++
++	case CKA_ALLOWED_MECHANISMS:
++		return gkm_attribute_set_data (attr, (CK_VOID_PTR)GKM_GENERIC_MECHANISMS,
++		                               sizeof (GKM_GENERIC_MECHANISMS));
++	};
++
++	return GKM_OBJECT_CLASS (gkm_generic_key_parent_class)->get_attribute (base, session, attr);
++}
++
++static gconstpointer
++gkm_generic_key_get_key_value (GkmSecretKey *key, gsize *n_value)
++{
++	GkmGenericKey *self = GKM_GENERIC_KEY (key);
++	*n_value = self->n_value;
++	return self->value;
++}
++
++static void
++gkm_generic_key_init (GkmGenericKey *self)
++{
++
++}
++
++static void
++gkm_generic_key_finalize (GObject *obj)
++{
++	GkmGenericKey *self = GKM_GENERIC_KEY (obj);
++
++	if (self->value) {
++		egg_secure_clear (self->value, self->n_value);
++		egg_secure_free (self->value);
++		self->value = NULL;
++		self->n_value = 0;
++	}
++
++	G_OBJECT_CLASS (gkm_generic_key_parent_class)->finalize (obj);
++}
++
++static void
++gkm_generic_key_class_init (GkmGenericKeyClass *klass)
++{
++	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
++	GkmObjectClass *gkm_class = GKM_OBJECT_CLASS (klass);
++	GkmSecretKeyClass *key_class = GKM_SECRET_KEY_CLASS (klass);
++
++	gkm_generic_key_parent_class = g_type_class_peek_parent (klass);
++
++	gobject_class->finalize = gkm_generic_key_finalize;
++
++	gkm_class->get_attribute = gkm_generic_key_get_attribute;
++
++	key_class->get_key_value = gkm_generic_key_get_key_value;
++}
++
++/* -----------------------------------------------------------------------------
++ * PUBLIC
++ */
++
++GkmFactory*
++gkm_generic_key_get_factory (void)
++{
++	static CK_OBJECT_CLASS klass = CKO_SECRET_KEY;
++	static CK_KEY_TYPE type = CKK_GENERIC_SECRET;
++
++	static CK_ATTRIBUTE attributes[] = {
++		{ CKA_CLASS, &klass, sizeof (klass) },
++		{ CKA_KEY_TYPE, &type, sizeof (type) }
++	};
++
++	static GkmFactory factory = {
++		attributes,
++		G_N_ELEMENTS (attributes),
++		factory_create_generic_key
++	};
++
++	return &factory;
++}
+diff --git a/pkcs11/gkm/gkm-generic-key.h b/pkcs11/gkm/gkm-generic-key.h
+new file mode 100644
+index 0000000..6b4ee0b
+--- a/dev/null
++++ b/pkcs11/gkm/gkm-generic-key.h
+@@ -0,0 +1,52 @@
++/*
++ * gnome-keyring
++ *
++ * Copyright (C) 2011 Collabora Ltd.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU Lesser General Public License as
++ * published by the Free Software Foundation; either version 2.1 of
++ * the License, or (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful, but
++ * WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this program; if not, write to the Free Software
++ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
++ * 02111-1307, USA.
++ *
++ * Author: Stef Walter <stefw@collabora.co.uk>
++ */
++
++#ifndef __GKM_GENERIC_KEY_H__
++#define __GKM_GENERIC_KEY_H__
++
++#include <glib-object.h>
++
++#include "gkm-secret-key.h"
++#include "gkm-types.h"
++
++#define GKM_FACTORY_GENERIC_KEY            (gkm_generic_key_get_factory ())
++
++#define GKM_TYPE_GENERIC_KEY               (gkm_generic_key_get_type ())
++#define GKM_GENERIC_KEY(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), GKM_TYPE_GENERIC_KEY, GkmGenericKey))
++#define GKM_GENERIC_KEY_CLASS(klass)       (G_TYPE_CHECK_CLASS_CAST ((klass), GKM_TYPE_GENERIC_KEY, GkmGenericKeyClass))
++#define GKM_IS_GENERIC_KEY(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GKM_TYPE_GENERIC_KEY))
++#define GKM_IS_GENERIC_KEY_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), GKM_TYPE_GENERIC_KEY))
++#define GKM_GENERIC_KEY_GET_CLASS(obj)     (G_TYPE_INSTANCE_GET_CLASS ((obj), GKM_TYPE_GENERIC_KEY, GkmGenericKeyClass))
++
++typedef struct _GkmGenericKeyClass GkmGenericKeyClass;
++typedef struct _GkmGenericKeyPrivate GkmGenericKeyPrivate;
++
++struct _GkmGenericKeyClass {
++	GkmSecretKeyClass parent_class;
++};
++
++GType                     gkm_generic_key_get_type           (void);
++
++GkmFactory*               gkm_generic_key_get_factory        (void);
++
++#endif /* __GKM_GENERIC_KEY_H__ */
+diff --git a/pkcs11/gkm/gkm-hkdf-mechanism.c b/pkcs11/gkm/gkm-hkdf-mechanism.c
+new file mode 100644
+index 0000000..bbca94f
+--- a/dev/null
++++ b/pkcs11/gkm/gkm-hkdf-mechanism.c
+@@ -0,0 +1,96 @@
++/*
++ * gnome-keyring
++ *
++ * Copyright (C) 2008 Stefan Walter
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU Lesser General  License as
++ * published by the Free Software Foundation; either version 2.1 of
++ * the License, or (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful, but
++ * WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General  License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General
++ * License along with this program; if not, write to the Free Software
++ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
++ * 02111-1307, USA.
++ */
++
++#include "config.h"
++
++#include "gkm-attributes.h"
++#include "gkm-crypto.h"
++#include "gkm-hkdf-mechanism.h"
++#include "gkm-secret-key.h"
++#include "gkm-session.h"
++#include "gkm-transaction.h"
++
++#include "egg/egg-hkdf.h"
++#include "egg/egg-libgcrypt.h"
++#include "egg/egg-secure-memory.h"
++
++CK_RV
++gkm_hkdf_mechanism_derive (GkmSession *session, const char *algo,
++                           CK_MECHANISM_PTR mech, GkmObject *base,
++                           CK_ATTRIBUTE_PTR attrs, CK_ULONG n_attrs,
++                           GkmObject **derived)
++{
++	CK_ATTRIBUTE attr;
++	GArray *array;
++	gconstpointer value;
++	gpointer output;
++	gsize n_value;
++	CK_ULONG n_output = 0;
++	GkmTransaction *transaction;
++	CK_KEY_TYPE type;
++
++	g_return_val_if_fail (GKM_IS_SECRET_KEY (base), CKR_GENERAL_ERROR);
++
++	/* Get the value of the original key */
++	value = gkm_secret_key_get_key_value (GKM_SECRET_KEY (base), &n_value);
++	g_return_val_if_fail (value, CKR_GENERAL_ERROR);
++
++	/* What length should we truncate to? */
++	if (!gkm_attributes_find_ulong (attrs, n_attrs, CKA_VALUE_LEN, &n_output)) {
++		if (gkm_attributes_find_ulong (attrs, n_attrs, CKA_KEY_TYPE, &type))
++			n_output = gkm_crypto_secret_key_length (type);
++	}
++
++	/* Default to input length */
++	if (n_output == 0)
++		n_output = n_value;
++
++	output = egg_secure_alloc (n_output);
++	if (!egg_hkdf_perform ("sha256", value, n_value, mech->pParameter,
++	                       mech->ulParameterLen, NULL, 0, output, n_output)) {
++		egg_secure_free (output);
++		return CKR_FUNCTION_FAILED;
++	}
++
++	/* Now setup the attributes with our new value */
++	array = g_array_new (FALSE, FALSE, sizeof (CK_ATTRIBUTE));
++
++	/* Prepend the value */
++	attr.type = CKA_VALUE;
++	attr.pValue = output;
++	attr.ulValueLen = n_output;
++
++	g_array_append_val (array, attr);
++
++	/* Add the remainder of the attributes */
++	g_array_append_vals (array, attrs, n_attrs);
++
++	transaction = gkm_transaction_new ();
++
++	/* Now create an object with these attributes */
++	*derived = gkm_session_create_object_for_attributes (session, transaction,
++	                                                     (CK_ATTRIBUTE_PTR)array->data, array->len);
++
++	egg_secure_free (output);
++	g_array_free (array, TRUE);
++
++	return gkm_transaction_complete_and_unref (transaction);
++}
+diff --git a/pkcs11/gkm/gkm-hkdf-mechanism.h b/pkcs11/gkm/gkm-hkdf-mechanism.h
+new file mode 100644
+index 0000000..fc7ffaa
+--- a/dev/null
++++ b/pkcs11/gkm/gkm-hkdf-mechanism.h
+@@ -0,0 +1,46 @@
++/*
++ * gnome-keyring
++ *
++ * Copyright (C) 2011 Collabora Ltd.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU Lesser General  License as
++ * published by the Free Software Foundation; either version 2.1 of
++ * the License, or (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful, but
++ * WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General  License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General
++ * License along with this program; if not, write to the Free Software
++ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
++ * 02111-1307, USA.
++ *
++ * Author: Stef Walter <stefw@collabora.co.uk>
++ */
++
++#ifndef GKM_HKDF_MECHANISM_H_
++#define GKM_HKDF_MECHANISM_H_
++
++#include "gkm-types.h"
++
++#include "pkcs11/pkcs11.h"
++#include "pkcs11/pkcs11i.h"
++
++#include <glib.h>
++
++static const CK_MECHANISM_TYPE GKM_HKDF_MECHANISMS[] = {
++	CKM_G_HKDF_SHA256_DERIVE
++};
++
++CK_RV                    gkm_hkdf_mechanism_derive                     (GkmSession *session,
++                                                                        const gchar *algo,
++                                                                        CK_MECHANISM_PTR mech,
++                                                                        GkmObject *base,
++                                                                        CK_ATTRIBUTE_PTR attrs,
++                                                                        CK_ULONG n_attrs,
++                                                                        GkmObject **derived);
++
++#endif /* GKM_HKDF_MECHANISM_H_ */
+diff --git a/pkcs11/gkm/gkm-module.c b/pkcs11/gkm/gkm-module.c
+index bcc5ee6..eecda2f 100644
+--- a/pkcs11/gkm/gkm-module.c
++++ b/pkcs11/gkm/gkm-module.c
+@@ -30,6 +30,7 @@
+ #include "gkm-certificate.h"
+ #include "gkm-credential.h"
+ #include "gkm-factory.h"
++#include "gkm-generic-key.h"
+ #include "gkm-manager.h"
+ #include "gkm-memory-store.h"
+ #include "gkm-module.h"
+@@ -160,9 +161,15 @@ static const MechanismAndInfo mechanism_list[] = {
+ 
+ 	/*
+ 	 * CKM_DH_PKCS_DERIVE
+-	 * For DH derivation the min and max are sizes of prime in bits.
++	 * For DH derivation the min and max are sizes of output key in bytes.
++	 */
++	{ CKM_DH_PKCS_DERIVE, { 1, 255, CKF_DERIVE } },
++
++	/*
++	 * CKM_G_HKDF_DERIVE
++	 * For HKDF derivation the min and max are sizes of prime in bits.
+ 	 */
+-	{ CKM_DH_PKCS_DERIVE, { 768, 8192, CKF_DERIVE } },
++	{ CKM_G_HKDF_SHA256_DERIVE, { 768, 8192, CKF_DERIVE } },
+ 
+ 	/*
+ 	 * CKM_AES_CBC_PAD
+@@ -598,6 +605,7 @@ gkm_module_init (GkmModule *self)
+ 	gkm_module_register_factory (self, GKM_FACTORY_AES_KEY);
+ 	gkm_module_register_factory (self, GKM_FACTORY_CERTIFICATE);
+ 	gkm_module_register_factory (self, GKM_FACTORY_CREDENTIAL);
++	gkm_module_register_factory (self, GKM_FACTORY_GENERIC_KEY);
+ 	gkm_module_register_factory (self, GKM_FACTORY_NULL_KEY);
+ 	gkm_module_register_factory (self, GKM_FACTORY_DH_PRIVATE_KEY);
+ 	gkm_module_register_factory (self, GKM_FACTORY_PRIVATE_XSA_KEY);
+diff --git a/pkcs11/gkm/gkm-secret-key.c b/pkcs11/gkm/gkm-secret-key.c
+index dd46563..72493ff 100644
+--- a/pkcs11/gkm/gkm-secret-key.c
++++ b/pkcs11/gkm/gkm-secret-key.c
+@@ -157,3 +157,14 @@ gkm_secret_key_class_init (GkmSecretKeyClass *klass)
+ /* -----------------------------------------------------------------------------
+  * PUBLIC
+  */
++
++gconstpointer
++gkm_secret_key_get_key_value (GkmSecretKey *self, gsize *n_value)
++{
++	g_return_val_if_fail (GKM_IS_SECRET_KEY (self), NULL);
++	g_return_val_if_fail (n_value, NULL);
++
++	/* Check with the derived class */
++	g_return_val_if_fail (GKM_SECRET_KEY_GET_CLASS (self)->get_key_value, NULL);
++	return GKM_SECRET_KEY_GET_CLASS (self)->get_key_value (self, n_value);
++}
+diff --git a/pkcs11/gkm/gkm-secret-key.h b/pkcs11/gkm/gkm-secret-key.h
+index 4a1d325..865c3f2 100644
+--- a/pkcs11/gkm/gkm-secret-key.h
++++ b/pkcs11/gkm/gkm-secret-key.h
+@@ -44,8 +44,15 @@ struct _GkmSecretKey {
+ 
+ struct _GkmSecretKeyClass {
+ 	GkmObjectClass parent_class;
++
++	/* virtual methods  --------------------------------------------------------- */
++
++	gconstpointer (*get_key_value) (GkmSecretKey *key, gsize *n_value);
+ };
+ 
+ GType                     gkm_secret_key_get_type           (void);
+ 
++gconstpointer             gkm_secret_key_get_key_value      (GkmSecretKey *self,
++                                                             gsize *n_value);
++
+ #endif /* __GKM_SECRET_KEY_H__ */
+diff --git a/pkcs11/gkm/gkm-types.h b/pkcs11/gkm/gkm-types.h
+index 4ed1c4c..d64b92e 100644
+--- a/pkcs11/gkm/gkm-types.h
++++ b/pkcs11/gkm/gkm-types.h
+@@ -31,6 +31,7 @@ typedef struct _GkmDhKey GkmDhKey;
+ typedef struct _GkmDhPrivateKey GkmDhPrivateKey;
+ typedef struct _GkmDhPublicKey GkmDhPublicKey;
+ typedef struct _GkmFactory GkmFactory;
++typedef struct _GkmGenericKey GkmGenericKey;
+ typedef struct _GkmManager GkmManager;
+ typedef struct _GkmModule GkmModule;
+ typedef struct _GkmNullKey GkmNullKey;
+diff --git a/pkcs11/pkcs11i.h b/pkcs11/pkcs11i.h
+index e85e6cf..11a390c 100644
+--- a/pkcs11/pkcs11i.h
++++ b/pkcs11/pkcs11i.h
+@@ -112,6 +112,8 @@ typedef CK_G_APPLICATION* CK_G_APPLICATION_PTR;
+ /* Used for wrapping and unwrapping as null */
+ #define CKM_G_NULL                           (CKM_GNOME + 100)
+ 
++#define CKM_G_HKDF_SHA256_DERIVE             (CKM_GNOME + 101)
++
+ #define CKK_G_NULL                           (CKK_GNOME + 100)
+ 
+ /* -------------------------------------------------------------------
+diff --git a/ui/gku-prompt-tool.c b/ui/gku-prompt-tool.c
+index 51dc42d..cc9e385 100644
+--- a/ui/gku-prompt-tool.c
++++ b/ui/gku-prompt-tool.c
+@@ -28,6 +28,7 @@
+ #include "egg/egg-entry-buffer.h"
+ #include "egg/egg-error.h"
+ #include "egg/egg-hex.h"
++#include "egg/egg-hkdf.h"
+ #include "egg/egg-libgcrypt.h"
+ #include "egg/egg-secure-memory.h"
+ 
+@@ -693,6 +694,8 @@ negotiate_transport_crypto (void)
+ 	gcry_mpi_t base, prime, peer;
+ 	gcry_mpi_t key, pub, priv;
+ 	gboolean ret = FALSE;
++	gpointer ikm;
++	gsize n_ikm;
+ 
+ 	g_assert (!the_key);
+ 	base = prime = peer = NULL;
+@@ -709,9 +712,14 @@ negotiate_transport_crypto (void)
+ 			gku_prompt_util_encode_mpi (output_data, "transport", "public", pub);
+ 
+ 			/* Build up a key we can use */
+-			n_the_key = 16;
+-			the_key = egg_dh_gen_secret (peer, priv, prime, n_the_key);
+-			ret = (the_key != NULL);
++			ikm = egg_dh_gen_secret (peer, priv, prime, &n_ikm);
++			if (ikm != NULL) {
++				n_the_key = 16;
++				the_key = egg_secure_alloc (n_the_key);
++				if (!egg_hkdf_perform ("sha256", ikm, n_ikm, NULL, 0, NULL, 0, the_key, n_the_key))
++					g_return_val_if_reached (FALSE);
++				ret = TRUE;
++			}
+ 		}
+ 	}
+ 
+diff --git a/ui/gku-prompt.c b/ui/gku-prompt.c
+index 167f219..02acdbf 100644
+--- a/ui/gku-prompt.c
++++ b/ui/gku-prompt.c
+@@ -29,6 +29,7 @@
+ #include "egg/egg-dh.h"
+ #include "egg/egg-error.h"
+ #include "egg/egg-hex.h"
++#include "egg/egg-hkdf.h"
+ #include "egg/egg-libgcrypt.h"
+ #include "egg/egg-secure-memory.h"
+ #include "egg/egg-spawn.h"
+@@ -333,7 +334,8 @@ static gconstpointer
+ calculate_transport_key (GkuPrompt *self, gsize *n_key)
+ {
+ 	gcry_mpi_t peer;
+-	gpointer value;
++	gpointer ikm, key;
++	gsize n_ikm;
+ 
+ 	g_assert (self->pv->output);
+ 	g_assert (n_key);
+@@ -348,16 +350,21 @@ calculate_transport_key (GkuPrompt *self, gsize *n_key)
+ 		if (!gku_prompt_util_decode_mpi (self->pv->output, "transport", "public", &peer))
+ 			return NULL;
+ 
+-		value = egg_dh_gen_secret (peer, self->pv->transport->private,
+-		                           self->pv->transport->prime, 16);
++		ikm = egg_dh_gen_secret (peer, self->pv->transport->private,
++		                         self->pv->transport->prime, &n_ikm);
+ 
+ 		gcry_mpi_release (peer);
+ 
+-		if (!value)
++		if (!ikm)
+ 			return NULL;
+ 
++		key = egg_secure_alloc (16);
++		if (!egg_hkdf_perform ("sha256", ikm, n_ikm, NULL, 0, NULL, 0, key, 16))
++			g_return_val_if_reached (NULL);
++
++		egg_secure_free (ikm);
+ 		egg_secure_free (self->pv->transport->key);
+-		self->pv->transport->key = value;
++		self->pv->transport->key = key;
+ 		self->pv->transport->n_key = 16;
+ 	}
+ 
+--
+cgit v0.8.3.4

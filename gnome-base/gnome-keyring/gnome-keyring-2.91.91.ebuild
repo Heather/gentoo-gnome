@@ -59,7 +59,6 @@ pkg_setup() {
 		$(use_enable pam)
 		$(use_with pam pam-dir $(getpam_mod_dir))
 		--with-root-certs=${ROOT}/etc/ssl/certs/
-		--enable-acl-prompts
 		--enable-ssh-agent
 		--enable-gpg-agent
 		--with-gtk=2.0"
@@ -67,8 +66,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	gnome2_src_prepare
-
 	# Remove silly CFLAGS
 	sed 's:CFLAGS="$CFLAGS -Werror:CFLAGS="$CFLAGS:' \
 		-i configure.in configure || die "sed failed"
@@ -76,6 +73,14 @@ src_prepare() {
 	# Remove DISABLE_DEPRECATED flags
 	sed -e '/-D[A-Z_]*DISABLE_DEPRECATED/d' \
 		-i configure.in configure || die "sed 2 failed"
+
+	for i in 1 2 3 4 5 6; do
+		epatch "${FILESDIR}/${PN}-trunk-$i.patch"
+	done
+
+	eautoreconf
+
+	gnome2_src_prepare
 }
 
 src_test() {
