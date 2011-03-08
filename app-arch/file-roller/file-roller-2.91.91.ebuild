@@ -21,8 +21,8 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux"
 fi
 
-RDEPEND=">=dev-libs/glib-2.25.5
-	>=x11-libs/gtk+-2.91.1:3
+RDEPEND=">=dev-libs/glib-2.25.5:2
+	>=x11-libs/gtk+-3.0.2:3
 	sys-apps/file
 	nautilus? ( >=gnome-base/nautilus-2.22.2 )"
 DEPEND="${RDEPEND}
