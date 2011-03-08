@@ -6,7 +6,7 @@ EAPI="3"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit eutils gnome2
+inherit gnome2
 
 DESCRIPTION="The Eye of GNOME image viewer"
 HOMEPAGE="http://www.gnome.org/projects/eog/"
@@ -21,9 +21,9 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 fi
 
-RDEPEND=">=x11-libs/gtk+-2.91.7:3[introspection?,jpeg?,tiff?]
-	>=dev-libs/glib-2.25.15
-	>=dev-libs/libxml2-2
+RDEPEND=">=x11-libs/gtk+-3.0.2:3[introspection?,jpeg?,tiff?]
+	>=dev-libs/glib-2.25.15:2
+	>=dev-libs/libxml2-2:2
 	>=dev-libs/libpeas-0.7.2[gtk]
 	>=gnome-base/gnome-desktop-2.91.2:3
 	>=gnome-base/gsettings-desktop-schemas-0.1.0
