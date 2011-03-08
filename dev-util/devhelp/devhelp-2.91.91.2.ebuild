@@ -16,10 +16,10 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~sparc ~x86 ~x86-fbsd"
 IUSE=""
 
-RDEPEND=">=gnome-base/gconf-2.6
+RDEPEND=">=gnome-base/gconf-2.6:2
 	>=dev-libs/glib-2.25.11:2
-	x11-libs/gtk+:3
-	x11-libs/libwnck
+	>=x11-libs/gtk+-3.0.2:3
+	x11-libs/libwnck:3
 	net-libs/webkit-gtk:3"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
@@ -39,18 +39,18 @@ src_prepare() {
 	gnome2_src_prepare
 
 	# disable pyc compiling
-	rm py-compile
-	ln -s $(type -P true) py-compile
+	ln -sfn $(type -P true) py-compile
 }
 
 pkg_postinst() {
 	gnome2_pkg_postinst
 	python_need_rebuild
-	python_mod_optimize /usr/$(get_libdir)/gedit-2/plugins
+	python_mod_optimize /usr/$(get_libdir)/gedit/plugins
+	# Keep this around so that users get reminded to delete this
 	preserve_old_lib_notify /usr/$(get_libdir)/libdevhelp-1.so.1
 }
 
 pkg_postrm() {
 	gnome2_pkg_postrm
-	python_mod_cleanup /usr/$(get_libdir)/gedit-2/plugins
+	python_mod_cleanup /usr/$(get_libdir)/gedit/plugins
 }
