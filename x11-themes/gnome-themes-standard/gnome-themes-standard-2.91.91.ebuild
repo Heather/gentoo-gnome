@@ -31,7 +31,8 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext"
 # This ebuild does not install any binaries
 RESTRICT="binchecks strip"
-G2CONF="--disable-static"
+# FIXME: --enable-placeholders fails
+G2CONF="--disable-static --disable-placeholders"
 DOCS="ChangeLog NEWS"
 
 src_prepare() {
