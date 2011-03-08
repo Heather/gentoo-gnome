@@ -48,7 +48,7 @@ RDEPEND="!aqua? (
 	)
 	xinerama? ( x11-libs/libXinerama )
 	>=dev-libs/glib-2.28.0
-	>=x11-libs/pango-1.20[introspection?]
+	>=x11-libs/pango-1.24.0[introspection?]
 	>=dev-libs/atk-1.30[introspection?]
 	media-libs/fontconfig
 	x11-libs/gtk+:2
@@ -90,8 +90,6 @@ src_prepare() {
 	# -O3 and company cause random crashes in applications. Bug #133469
 	replace-flags -O3 -O2
 	strip-flags
-
-	epatch "${FILESDIR}/${P}-double-free.patch"
 
 	# Non-working test in gentoo's env
 	sed 's:\(g_test_add_func ("/ui-tests/keys-events.*\):/*\1*/:g' \
@@ -144,12 +142,6 @@ src_configure() {
 	# need libdir here to avoid a double slash in a path that libtool doesn't
 	# grok so well during install (// between $EPREFIX and usr ...)
 	econf --libdir="${EPREFIX}/usr/$(get_libdir)" ${myconf}
-}
-
-src_compile() {
-	# Unfortunately, the parellel make breaks if USE=introspection
-	use introspection && export MAKEOPTS="${MAKEOPTS} -j1"
-	default
 }
 
 src_test() {
