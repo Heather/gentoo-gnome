@@ -44,7 +44,7 @@ COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	>=media-sound/pulseaudio-0.9.16
 	media-libs/libcanberra[gtk3]
 
-	cups? ( >=net-print/cups-1.4 )
+	cups? ( >=net-print/cups-1.4[dbus] )
 	packagekit? (
 		dev-libs/glib:2
 		sys-fs/udev[extras]
