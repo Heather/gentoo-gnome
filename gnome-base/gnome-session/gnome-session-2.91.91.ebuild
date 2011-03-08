@@ -68,7 +68,6 @@ src_prepare() {
 		--disable-maintainer-mode
 		--disable-schemas-compile
 		--docdir="${EPREFIX}/usr/share/doc/${PF}"
-		--with-gtk=3.0
 		$(use_enable doc docbook-docs)
 		$(use_enable ipv6)"
 	DOCS="AUTHORS ChangeLog NEWS README"
