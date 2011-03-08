@@ -13,19 +13,23 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2 FDL-1.1 LGPL-2"
 SLOT="0"
-# Odd behaviour w.r.t. panels: https://bugzilla.gnome.org/show_bug.cgi?id=631553
-#KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~x86-solaris"
 IUSE="+bonobo doc eds +introspection networkmanager"
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+	KEYWORDS=""
+else
+	# Odd behaviour w.r.t. panels: https://bugzilla.gnome.org/show_bug.cgi?id=631553
+	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~x86-solaris"
+fi
 
 RDEPEND=">=gnome-base/gnome-desktop-2.91:3
 	>=x11-libs/pango-1.15.4[introspection?]
 	>=dev-libs/glib-2.25.12:2
-	>=x11-libs/gtk+-2.99:3[introspection?]
-	x11-libs/gdk-pixbuf
+	>=x11-libs/gtk+-3.0:3[introspection?]
+	x11-libs/gdk-pixbuf:2
 	>=dev-libs/libgweather-2.91:3
-	dev-libs/libxml2
-	>=gnome-base/gconf-2.6.1[introspection?]
-	>=media-libs/libcanberra-0.23[gtk3]
+	dev-libs/libxml2:2
+	>=gnome-base/gconf-2.6.1:2[introspection?]
 	>=gnome-base/gnome-menus-2.27.92
 	gnome-base/librsvg
 	>=dev-libs/dbus-glib-0.80
@@ -33,8 +37,8 @@ RDEPEND=">=gnome-base/gnome-desktop-2.91:3
 	>=x11-libs/cairo-1
 	x11-libs/libXau
 	>=x11-libs/libXrandr-1.2
+	>=x11-libs/libwnck-2.91:3
 
-	>=x11-libs/libwnck-2.91
 	eds? ( >=gnome-extra/evolution-data-server-2.91.2 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 	networkmanager? ( >=net-misc/networkmanager-0.6.7 )"
