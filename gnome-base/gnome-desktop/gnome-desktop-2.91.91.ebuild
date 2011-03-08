@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -21,11 +21,10 @@ else
 fi
 
 # TODO: Add RDEPEND on pciutils (requires support for reading gzipped pnp.ids)
-# XXX: gtk+-2.91.6 is needed for gdk_x11_window_get_xid()
 RDEPEND="
-	>=dev-libs/glib-2.19.1
-	>=x11-libs/gdk-pixbuf-2.21.3[introspection?]
-	>=x11-libs/gtk+-2.91.6:3[introspection?]
+	>=dev-libs/glib-2.19.1:2
+	>=x11-libs/gdk-pixbuf-2.21.3:2[introspection?]
+	>=x11-libs/gtk+-3.0.0:3[introspection?]
 	>=x11-libs/libXrandr-1.2
 	>=x11-libs/startup-notification-0.5
 	x11-libs/libX11
