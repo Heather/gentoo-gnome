@@ -41,6 +41,4 @@ src_prepare() {
 		--disable-schemas-compile
 		--enable-bz2
 		$(use_enable lzma)"
-
-	epatch "${FILESDIR}/${P}-fix-schema-typo.patch"
 }
