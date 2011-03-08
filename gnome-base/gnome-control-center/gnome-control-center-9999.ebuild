@@ -38,7 +38,7 @@ COMMON_DEPEND="
 	>=dev-libs/dbus-glib-0.73
 	>=gnome-base/gnome-desktop-2.91.5:3
 	>=gnome-base/gnome-settings-daemon-2.91.90.1
-	>=gnome-base/libgnomekbd-2.91.90
+	>=gnome-base/libgnomekbd-2.91.91
 
 	app-text/iso-codes
 	dev-libs/libxml2:2
@@ -60,7 +60,7 @@ COMMON_DEPEND="
 	cheese? (
 		media-libs/gstreamer:0.10
 		>=media-video/cheese-2.91.5 )
-	cups? ( >=net-print/cups-1.4 )
+	cups? ( >=net-print/cups-1.4[dbus] )
 	networkmanager? ( >=net-misc/networkmanager-0.8.992 )
 	socialweb? ( net-libs/libsocialweb )
 
