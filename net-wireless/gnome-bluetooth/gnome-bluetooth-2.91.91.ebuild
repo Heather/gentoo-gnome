@@ -55,6 +55,7 @@ DEPEND="${COMMON_DEPEND}
 #	dev-util/gtk-doc-am
 
 pkg_setup() {
+	# FIXME: Bump nautilus-sendto and re-enable support for it
 	G2CONF="${G2CONF}
 		$(use_enable introspection)
 		--disable-nautilus-sendto
