@@ -15,8 +15,3 @@
 # Arun Raghavan <ford_prefect@gentoo.org> (10 Sep 2010)
 # Development version of sysprof.
 =dev-util/sysprof-1.1*
-
-# Arun Raghavan <ford_prefect@gentoo.org> (23 Jun 2010)
-# We don't actually want gir-repository being used.
-dev-libs/gir-repository
-
