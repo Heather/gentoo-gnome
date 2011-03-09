@@ -37,7 +37,7 @@ RDEPEND="
 
 	nautilus? ( >=gnome-base/nautilus-2.12 )
 	gedit? ( >=app-editors/gedit-2.20 )
-	applet? ( >=gnome-base/gnome-panel-2.31.2 )
+	applet? ( >=gnome-base/gnome-panel-2.91.6 )
 	libnotify? ( >=x11-libs/libnotify-0.7.0 )
 "
 DEPEND="${RDEPEND}
@@ -61,10 +61,15 @@ src_prepare() {
 		$(use_enable nautilus)
 		$(use_enable test tests)"
 
+	# NOTE: All these are merged upstream, remove for release
 	# https://bugzilla.gnome.org/show_bug.cgi?id=632800
 	epatch "${FILESDIR}/${PN}-fix-build-with-libnotify-0.7.patch"
 	# https://bugzilla.gnome.org/show_bug.cgi?id=639493
 	epatch "${FILESDIR}/${PN}-port-to-latest-gtk-3.patch"
+	# Port to latest changes in gnome-keyring
+	epatch "${FILESDIR}/${PN}-remove-agent.patch"
+	# Port to latest gnome-panel
+	epatch "${FILESDIR}/${PN}-fix-panel-applet.patch"
 
 	# All this is needed because it's a git snapshot, remove for next release
 	gnome-doc-common
@@ -73,11 +78,4 @@ src_prepare() {
 	AT_M4DIR=m4 eautoreconf
 
 	gnome2_src_prepare
-}
-
-src_install() {
-	gnome2_src_install
-
-	exeinto /etc/X11/xinit/xinitrc.d/
-	doexe "${FILESDIR}/70-seahorse-agent" || die "doexe failed"
 }
