@@ -5,9 +5,8 @@
 EAPI="2"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
-PYTHON_DEPEND="2:2.5"
 
-inherit eutils gnome2 python
+inherit gnome2
 
 DESCRIPTION="Provides core UI functions for the GNOME 3 desktop"
 HOMEPAGE="http://live.gnome.org/GnomeShell"
@@ -40,7 +39,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	>=net-libs/telepathy-glib-0.13.12[introspection]
 	>=net-wireless/gnome-bluetooth-2.90.0[introspection]
 	>=sys-auth/polkit-0.100[introspection]
-	>=x11-wm/mutter-2.91.90.1[introspection]
+	>=x11-wm/mutter-2.91.91[introspection]
 
 	dev-libs/dbus-glib
 	dev-libs/libxml2:2
@@ -87,10 +86,6 @@ G2CONF="--enable-compile-warnings=maximum
 --disable-schemas-compile
 --disable-jhbuild-wrapper-script"
 
-pkg_setup() {
-	python_set_active_version 2
-}
-
 src_prepare() {
 	if use nm-applet; then
 		# See https://bugzilla.gnome.org/show_bug.cgi?id=621707"
@@ -100,12 +95,9 @@ src_prepare() {
 		epatch "${FILESDIR}/${PN}-experimental-nm-applet-1.2.patch"
 	fi
 
-	gnome2_src_prepare
-}
+	epatch "${FILESDIR}/${PN}-fix-gnome-bluetooth.patch"
 
-src_install() {
-	python_convert_shebangs 2 tools/check-for-missing.py src/gnome-shell
-	gnome2_src_install
+	gnome2_src_prepare
 }
 
 pkg_postinst() {

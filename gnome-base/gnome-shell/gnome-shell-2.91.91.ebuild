@@ -5,9 +5,8 @@
 EAPI="2"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
-PYTHON_DEPEND="2:2.5"
 
-inherit gnome2 python
+inherit autotools eutils gnome2
 
 DESCRIPTION="Provides core UI functions for the GNOME 3 desktop"
 HOMEPAGE="http://live.gnome.org/GnomeShell"
@@ -24,6 +23,7 @@ fi
 
 # gnome-desktop-2.91.2 is needed due to header changes, db82a33 in gnome-desktop
 # FIXME: Automagic gnome-bluetooth[introspection] support.
+# latest gsettings-desktop-schemas is needed due to commit 602fa1c6
 COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	>=dev-libs/gjs-0.7.11
 	>=dev-libs/gobject-introspection-0.10.1
@@ -31,14 +31,14 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	>=x11-libs/gtk+-3.0.0:3[introspection]
 	>=media-libs/clutter-1.5.15[introspection]
 	>=gnome-base/gnome-desktop-2.91.2:3
-	>=gnome-base/gsettings-desktop-schemas-0.1.7
+	>=gnome-base/gsettings-desktop-schemas-0.1.7.1
 	>=gnome-extra/evolution-data-server-2.91.6
 	>=media-libs/gstreamer-0.10.16
 	>=media-libs/gst-plugins-base-0.10.16
 	>=net-libs/telepathy-glib-0.13.12[introspection]
 	>=net-wireless/gnome-bluetooth-2.90.0[introspection]
 	>=sys-auth/polkit-0.100[introspection]
-	>=x11-wm/mutter-2.91.90[introspection]
+	>=x11-wm/mutter-2.91.91[introspection]
 
 	dev-libs/dbus-glib
 	dev-libs/libxml2:2
@@ -55,15 +55,21 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	x11-libs/libXfixes
 	x11-apps/mesa-progs"
 # Runtime-only deps are probably incomplete and approximate.
+# Each block:
+# 1. Introspection stuff + dconf needed via imports.gi.*
+# 2. gnome-session is needed for gnome-session-quit
+# 3. Don't remember
+# 4. nm-applet is needed for auth prompting and the wireless connection dialog
 RDEPEND="${COMMON_DEPEND}
-	dev-python/dbus-python
-	dev-python/gconf-python
 
 	>=gnome-base/dconf-0.4.1
-	>=gnome-base/gnome-settings-daemon-2.91
-	>=gnome-base/gnome-control-center-2.91
 	>=gnome-base/libgnomekbd-2.91.4[introspection]
-	sys-power/upower[introspection]"
+	sys-power/upower[introspection]
+	
+	>=gnome-base/gnome-session-2.91.91
+
+	>=gnome-base/gnome-settings-daemon-2.91
+	>=gnome-base/gnome-control-center-2.91"
 DEPEND="${COMMON_DEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.22
@@ -72,19 +78,14 @@ DEPEND="${COMMON_DEPEND}
 DOCS="AUTHORS README"
 # Don't error out on warnings
 G2CONF="--enable-compile-warnings=maximum
---disable-schemas-compile"
-
-pkg_setup() {
-	python_set_active_version 2
-}
+--disable-schemas-compile
+--disable-jhbuild-wrapper-script"
 
 src_prepare() {
+	epatch "${FILESDIR}/${PN}-fix-gnome-bluetooth.patch"
+	epatch "${FILESDIR}/${P}-fix-build.patch"
+	eautoreconf
 	gnome2_src_prepare
-}
-
-src_install() {
-	python_convert_shebangs 2 tools/check-for-missing.py src/gnome-shell
-	gnome2_src_install
 }
 
 pkg_postinst() {

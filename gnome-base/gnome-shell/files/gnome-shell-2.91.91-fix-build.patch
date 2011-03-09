@@ -1,0 +1,23 @@
+From 49f6280645cdad7fa7f53633ce67ed5f7079a8dd Mon Sep 17 00:00:00 2001
+From: Dan Winship <danw@gnome.org>
+Date: Tue, 08 Mar 2011 16:47:14 +0000
+Subject: src: add more stuff to gnome_shell_real_LDADD
+
+to work with libtools that are more strict about not allowing
+transitive dependencies
+---
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 40ce5de..1c3e1b6 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -140,7 +140,7 @@ libgnome_shell_la_gir_sources = \
+ gnome_shell_real_SOURCES =		\
+ 	main.c
+ gnome_shell_real_CPPFLAGS = $(gnome_shell_cflags)
+-gnome_shell_real_LDADD = libgnome-shell.la
++gnome_shell_real_LDADD = libgnome-shell.la $(libgnome_shell_la_LIBADD)
+ gnome_shell_real_DEPENDENCIES = libgnome-shell.la
+ 
+ ########################################
+--
+cgit v0.8.3.4
