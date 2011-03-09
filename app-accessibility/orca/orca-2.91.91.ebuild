@@ -19,6 +19,7 @@ IUSE=""
 
 # liblouis is not in portage yet
 # it is used to provide contracted braille support
+# XXX: Check deps for correctness
 RDEPEND=">=dev-libs/glib-2.10
 	>=gnome-extra/at-spi-1.32
 	>=gnome-base/orbit-2
