@@ -35,7 +35,7 @@ RDEPEND="
 	>=gnome-base/gnome-session-2.28
 	>=x11-misc/xdg-utils-1.0.2-r3
 	>=sys-power/upower-0.9
-	>=sys-apps/accountsservice-0.6.3
+	>=sys-apps/accountsservice-0.6.5
 
 	app-text/iso-codes
 
@@ -105,6 +105,7 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-2.32.0-fix-daemonize-regression.patch"
 
 	# fix VT grab problem causing GDM to grab VT2 instead of 7, bug #261339
+	# FIXME FIXME FIXME: this is due to a race b/w getty and gdm
 	#epatch "${FILESDIR}/${PN}-2.32.0-broken-VT-detection.patch"
 
 	# make custom session work, bug #216984
