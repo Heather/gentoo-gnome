@@ -5,14 +5,14 @@
 EAPI="2"
 GNOME2_LA_PUNT="yes"
 
-inherit autotools gnome2
+inherit gnome2
 
 DESCRIPTION="Upcoming GNOME 3 window manager (derived from metacity)"
 HOMEPAGE="http://blogs.gnome.org/metacity/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="debug +introspection +sound test xinerama"
+IUSE="debug +introspection test xinerama"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
@@ -23,12 +23,13 @@ fi
 RDEPEND=">=x11-libs/pango-1.2[X,introspection?]
 	>=x11-libs/cairo-1.10[X]
 	>=x11-libs/gtk+-2.91.7:3[introspection?]
-	>=gnome-base/gconf-2
-	>=dev-libs/glib-2.14
+	>=gnome-base/gconf-2:2
+	>=dev-libs/glib-2.14:2
+	>=media-libs/clutter-1.2:1.0
+	>=media-libs/libcanberra-0.26[gtk3]
 	>=x11-libs/startup-notification-0.7
 	>=x11-libs/libXcomposite-0.2
 
-	>=media-libs/clutter-1.2
 	x11-libs/libICE
 	x11-libs/libSM
 	x11-libs/libX11
@@ -40,7 +41,6 @@ RDEPEND=">=x11-libs/pango-1.2[X,introspection?]
 	x11-libs/libXrender
 
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
-	sound? (  >=media-libs/libcanberra-0.26[gtk3] )
 	xinerama? ( x11-libs/libXinerama )
 	gnome-extra/zenity
 	!x11-misc/expocity"
@@ -66,8 +66,8 @@ src_prepare() {
 		--enable-xsync
 		--enable-verbose-mode
 		--enable-compile-warnings=maximum
-		$(use_with sound libcanberra)
-		$(use_with introspection)
+		--with-libcanberra
+		$(use_enable introspection)
 		$(use_enable xinerama)"
 	gnome2_src_prepare
 }

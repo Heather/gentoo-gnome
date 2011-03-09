@@ -23,12 +23,12 @@ fi
 RDEPEND=">=x11-libs/pango-1.2[X,introspection?]
 	>=x11-libs/cairo-1.10[X]
 	>=x11-libs/gtk+-2.91.7:3[introspection?]
-	>=gnome-base/gconf-2
-	>=dev-libs/glib-2.14
+	>=gnome-base/gconf-2:2
+	>=dev-libs/glib-2.14:2
+	>=media-libs/clutter-1.2:1.0
 	>=x11-libs/startup-notification-0.7
 	>=x11-libs/libXcomposite-0.2
 
-	>=media-libs/clutter-1.2
 	x11-libs/libICE
 	x11-libs/libSM
 	x11-libs/libX11
@@ -67,7 +67,7 @@ src_prepare() {
 		--enable-verbose-mode
 		--enable-compile-warnings=maximum
 		$(use_with sound libcanberra)
-		$(use_with introspection)
+		$(use_enable introspection)
 		$(use_enable xinerama)"
 	gnome2_src_prepare
 }
