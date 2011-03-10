@@ -1,11 +1,10 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-misc/networkmanager/networkmanager-0.8.2-r4.ebuild,v 1.1 2011/01/25 02:46:46 qiaomuf Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-misc/networkmanager/networkmanager-0.8.995.ebuild,v 1.1 2011/03/09 07:56:21 qiaomuf Exp $
 
-EAPI="2"
-GCONF_DEBUG="no"
+EAPI="4"
 
-inherit gnome2 linux-info
+inherit autotools eutils gnome.org linux-info
 
 # NetworkManager likes itself with capital letters
 MY_PN=${PN/networkmanager/NetworkManager}
@@ -13,49 +12,44 @@ MY_P=${MY_PN}-${PV}
 
 DESCRIPTION="Network configuration and management in an easy way. Desktop environment independent."
 HOMEPAGE="http://www.gnome.org/projects/NetworkManager/"
+SRC_URI="${SRC_URI//${PN}/${MY_PN}}
+	http://dev.gentoo.org/~dagger/files/ifnet-0.9.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="avahi bluetooth doc nss gnutls dhclient dhcpcd +introspection kernel_linux
-resolvconf connection-sharing wimax +ppp"
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-	EGIT_REPO_URI="git://anongit.freedesktop.org/${MY_PN}/${MY_PN}"
-	KEYWORDS=""
-else
-	SRC_URI="${SRC_URI//${PN}/${MY_PN}}"
-	KEYWORDS="~amd64 ~arm ~ppc ~ppc64 ~x86"
-fi
+IUSE="avahi bluetooth doc +nss gnutls dhclient +dhcpcd +introspection
+kernel_linux +ppp resolvconf connection-sharing wimax"
+KEYWORDS="~amd64 ~arm ~ppc ~ppc64 ~x86"
+
+REQUIRED_USE="
+	nss? ( !gnutls ) !nss? ( gnutls )
+	dhcpcd? ( !dhclient ) !dhcpcd? ( dhclient )"
 
 # gobject-introspection-0.10.3 is needed due to gnome bug 642300
 RDEPEND=">=sys-apps/dbus-1.2
 	>=dev-libs/dbus-glib-0.75
 	>=net-wireless/wireless-tools-28_pre9
 	>=sys-fs/udev-145[extras]
-	>=dev-libs/glib-2.18
-	>=sys-auth/polkit-0.92
+	>=dev-libs/glib-2.26
+	>=sys-auth/polkit-0.96
 	>=dev-libs/libnl-1.1
 	>=net-misc/modemmanager-0.4
-	>=net-wireless/wpa_supplicant-0.5.10[dbus]
-	bluetooth? ( net-wireless/bluez )
-	|| ( sys-libs/e2fsprogs-libs <sys-fs/e2fsprogs-1.41.0 )
+	>=net-wireless/wpa_supplicant-0.7.2[dbus]
+	bluetooth? ( >=net-wireless/bluez-4.82 )
 	avahi? ( net-dns/avahi[autoipd] )
 	gnutls? (
-		nss? ( >=dev-libs/nss-3.11 )
-		!nss? ( dev-libs/libgcrypt
-			net-libs/gnutls ) )
-	!gnutls? ( >=dev-libs/nss-3.11 )
-	dhclient? (
-		dhcpcd? ( >=net-misc/dhcpcd-4.0.0_rc3 )
-		!dhcpcd? ( net-misc/dhcp ) )
-	!dhclient? ( >=net-misc/dhcpcd-4.0.0_rc3 )
+		dev-libs/libgcrypt
+		net-libs/gnutls )
+	nss? ( >=dev-libs/nss-3.11 )
+	dhclient? ( net-misc/dhcp )
+	dhcpcd? ( >=net-misc/dhcpcd-4.0.0_rc3 )
 	introspection? ( >=dev-libs/gobject-introspection-0.10.3 )
+	ppp? ( >=net-dialup/ppp-2.4.5 )
 	resolvconf? ( net-dns/openresolv )
 	connection-sharing? (
 		net-dns/dnsmasq
 		net-firewall/iptables )
-	wimax? ( >=net-wireless/wimax-1.5.1 )
-	ppp? ( >=net-dialup/ppp-2.4.5 )"
+	wimax? ( >=net-wireless/wimax-1.5.1 )"
 
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
@@ -77,7 +71,6 @@ sysfs_deprecated_check() {
 }
 
 pkg_setup() {
-
 	if use kernel_linux; then
 		get_version
 		if linux_config_exists; then
@@ -89,57 +82,43 @@ pkg_setup() {
 		fi
 
 	fi
+}
 
-	G2CONF="--disable-more-warnings
+src_prepare() {
+	# disable tests
+	epatch "${FILESDIR}/${PN}-fix-tests.patch"
+
+	EPATCH_SOURCE="${WORKDIR}/ifnet-0.9" EPATCH_SUFFIX="diff" EPATCH_FORCE="yes" epatch
+	eautoreconf
+	default
+}
+
+src_configure() {
+	ECONF="--disable-more-warnings
 		--localstatedir=/var
 		--with-distro=gentoo
 		--with-dbus-sys-dir=/etc/dbus-1/system.d
 		--with-udev-dir=/etc/udev
 		--with-iptables=/sbin/iptables
-		$(use_with doc docs)
-		$(use_with resolvconf)
-		$(use_enable introspection)
+		$(use_enable doc gtk-doc)
+		$(use_enable ppp)
 		$(use_enable wimax)
-		$(use_enable ppp)"
+		$(use_with dhclient)
+		$(use_with dhcpcd)
+		$(use_with doc docs)
+		$(use_with resolvconf)"
 
-	# default is dhcpcd (if none or both are specified), ISC dchclient otherwise
-	if use dhclient ; then
-		if use dhcpcd ; then
-			G2CONF="${G2CONF} --with-dhcpcd --without-dhclient"
-		else
-			G2CONF="${G2CONF} --with-dhclient --without-dhcpcd"
-		fi
-	else
-		G2CONF="${G2CONF} --with-dhcpcd --without-dhclient"
-	fi
-
-	# default is NSS (if none or both are specified), GnuTLS otherwise
-	if use gnutls ; then
 		if use nss ; then
-			G2CONF="${G2CONF} --with-crypto=nss"
+			ECONF="${ECONF} $(use_with nss crypto=nss)"
 		else
-			G2CONF="${G2CONF} --with-crypto=gnutls"
+			ECONF="${ECONF} $(use_with gnutls crypto=gnutls)"
 		fi
-	else
-		G2CONF="${G2CONF} --with-crypto=nss"
-	fi
 
-}
-
-src_prepare() {
-	# dbus policy patch
-	epatch "${FILESDIR}/${PN}-0.8.2-confchanges.patch"
-	# fix shared connection wrt bug #350476
-	# fix parsing dhclient.conf wrt bug #352638
-	# FIXME: does not apply
-	#epatch "${FILESDIR}/${PN}-0.8.2-shared-connection.patch"
-
-	gnome2_src_prepare
+	econf ${ECONF}
 }
 
 src_install() {
-	gnome2_src_install
-
+	default
 	# Need to keep the /var/run/NetworkManager directory
 	keepdir /var/run/NetworkManager
 
@@ -156,8 +135,6 @@ src_install() {
 }
 
 pkg_postinst() {
-	gnome2_pkg_postinst
-
 	elog "You will need to reload DBus if this is your first time installing"
 	elog "NetworkManager, or if you're upgrading from 0.7 or older."
 	elog ""
