@@ -32,7 +32,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	>=x11-libs/gtk+-3.0.0:3[introspection]
 	>=media-libs/clutter-1.5.15[introspection]
 	>=gnome-base/gnome-desktop-2.91.2:3
-	>=gnome-base/gsettings-desktop-schemas-0.1.7.1
+	>=gnome-base/gsettings-desktop-schemas-2.91.91
 	>=gnome-extra/evolution-data-server-2.91.6
 	>=media-libs/gstreamer-0.10.16
 	>=media-libs/gst-plugins-base-0.10.16
@@ -55,8 +55,8 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	x11-libs/startup-notification
 	x11-libs/libXfixes
 	x11-apps/mesa-progs
-	
-	nm-applet? ( >=net-misc/networkmanager-9999[introspection] )"
+
+	nm-applet? ( >=net-misc/networkmanager-0.8.996[introspection] )"
 # Runtime-only deps are probably incomplete and approximate.
 # Each block:
 # 1. Introspection stuff + dconf needed via imports.gi.*
@@ -68,13 +68,13 @@ RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/dconf-0.4.1
 	>=gnome-base/libgnomekbd-2.91.4[introspection]
 	sys-power/upower[introspection]
-	
+
 	>=gnome-base/gnome-session-2.91.91
 
 	>=gnome-base/gnome-settings-daemon-2.91
 	>=gnome-base/gnome-control-center-2.91
 
-	nm-applet? ( >=gnome-extra/nm-applet-9999 )"
+	nm-applet? ( >=gnome-extra/nm-applet-0.8.996 )"
 DEPEND="${COMMON_DEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.22
@@ -92,7 +92,7 @@ src_prepare() {
 		ewarn "Adding support for the experimental NetworkManager applet."
 		ewarn "This needs the latest NetworkManager & nm-applet trunk."
 		ewarn "Report bugs about this to 'nirbheek' on #gentoo-desktop @ FreeNode."
-		epatch "${FILESDIR}/${PN}-experimental-nm-applet-1.2.patch"
+		epatch "${FILESDIR}/${PN}-experimental-nm-applet-1.3.patch"
 	fi
 
 	epatch "${FILESDIR}/${PN}-fix-gnome-bluetooth.patch"

@@ -1,4 +1,4 @@
-From 9fb864ff75921974ad1f09ae75dcd6cc94ac90ef Mon Sep 17 00:00:00 2001
+From a4a93f5d68ea9ce6347125eaaf9640ed98654980 Mon Sep 17 00:00:00 2001
 From: Giovanni Campagna <gcampagna@src.gnome.org>
 Date: Tue, 25 Jan 2011 22:08:12 +0100
 Subject: [PATCH] Status area: add NetworkManager indicator
@@ -14,14 +14,14 @@ https://bugzilla.gnome.org/show_bug.cgi?id=621707
  js/Makefile.am                  |    2 +
  js/misc/modemManager.js         |  103 +++
  js/ui/panel.js                  |    3 +-
- js/ui/status/network.js         | 1780 +++++++++++++++++++++++++++++++++++++++
+ js/ui/status/network.js         | 1841 +++++++++++++++++++++++++++++++++++++++
  tools/build/gnome-shell.modules |   17 +
- 6 files changed, 1912 insertions(+), 1 deletions(-)
+ 6 files changed, 1973 insertions(+), 1 deletions(-)
  create mode 100644 js/misc/modemManager.js
  create mode 100644 js/ui/status/network.js
 
 diff --git a/data/theme/gnome-shell.css b/data/theme/gnome-shell.css
-index c7d875a..78f1361 100644
+index 22670bd..39bb7ab 100644
 --- a/data/theme/gnome-shell.css
 +++ b/data/theme/gnome-shell.css
 @@ -158,6 +158,14 @@ StTooltip StLabel {
@@ -169,10 +169,10 @@ index 0000000..b368511
 +};
 +Signals.addSignalMethods(ModemCdma.prototype);
 diff --git a/js/ui/panel.js b/js/ui/panel.js
-index d1bf3fd..76c10f1 100644
+index c08c3e8..abe0fe2 100644
 --- a/js/ui/panel.js
 +++ b/js/ui/panel.js
-@@ -38,7 +38,8 @@ const STANDARD_TRAY_ICON_SHELL_IMPLEMENTATION = {
+@@ -41,7 +41,8 @@ const STANDARD_TRAY_ICON_SHELL_IMPLEMENTATION = {
      'a11y': imports.ui.status.accessibility.ATIndicator,
      'volume': imports.ui.status.volume.Indicator,
      'battery': imports.ui.status.power.Indicator,
@@ -184,14 +184,15 @@ index d1bf3fd..76c10f1 100644
  if (Config.HAVE_BLUETOOTH)
 diff --git a/js/ui/status/network.js b/js/ui/status/network.js
 new file mode 100644
-index 0000000..ecc80cc
+index 0000000..9700896
 --- /dev/null
 +++ b/js/ui/status/network.js
-@@ -0,0 +1,1780 @@
+@@ -0,0 +1,1841 @@
 +// -*- mode: js2; indent-tabs-mode: nil; js2-basic-offset: 4 -*-
 +const ByteArray = imports.byteArray;
 +const DBus = imports.dbus;
 +const GLib = imports.gi.GLib;
++const GObject = imports.gi.GObject;
 +const Lang = imports.lang;
 +const Mainloop = imports.mainloop;
 +const NetworkManager = imports.gi.NetworkManager;
@@ -300,7 +301,7 @@ index 0000000..ecc80cc
 +    },
 +
 +    _updated: function(ap, strength) {
-+        if (strength > this._bestAP.strength)
++        if (strength > this.bestAP.strength)
 +            this.bestAP = ap;
 +
 +        this.setIcon(this._getIcon());
@@ -350,8 +351,9 @@ index 0000000..ecc80cc
 +        this.device = device;
 +        if (device) {
 +            this.device._delegate = this;
-+            this.device.connect('state-changed', Lang.bind(this, this.deviceStateChanged));
-+        }
++            this._stateChangedId = this.device.connect('state-changed', Lang.bind(this, this.deviceStateChanged));
++        } else
++            this._stateChangedId = 0;
 +
 +        // protected
 +        this._client = client;
@@ -383,6 +385,22 @@ index 0000000..ecc80cc
 +        this.section = new PopupMenu.PopupMenuSection();
 +
 +        this._createSection();
++    },
++
++    destroy: function() {
++        if (this.device)
++            this.device._delegate = null;
++
++        if (this._stateChangedId) {
++            // Need to go through GObject.Object.prototype because
++            // nm_device_disconnect conflicts with g_signal_disconnect
++            GObject.Object.prototype.disconnect.call(this.device, this._stateChangedId);
++            this._stateChangedId = 0;
++        }
++
++        if (this.titleItem)
++            this.titleItem.destroy();
++        this.section.destroy();
 +    },
 +
 +    setActiveConnection: function(activeConnection) {
@@ -577,7 +595,7 @@ index 0000000..ecc80cc
 +                   this.client.deactivate_connection(this._activeConnection);
 +                   but with this, NM insists in restarting the connection immediately
 +                */
-+                this.device.disconnect(function() { });
++                this.device.disconnect(null);
 +            }));
 +        } else {
 +            /* TRANSLATORS: this is the indication that a connection for another logged in user is active,
@@ -642,9 +660,7 @@ index 0000000..ecc80cc
 +
 +        if (newstate != NetworkManager.DeviceState.DISCONNECTED &&
 +            newstate != NetworkManager.DeviceState.ACTIVATED &&
-+            oldstate != NetworkManager.DeviceState.DISCONNECTED &&
-+            oldstate != NetworkManager.DeviceState.ACTIVATED &&
-+            oldstate != NetworkManager.DeviceState.UNMANAGED) {
++            this._statusItem) {
 +            // a transition between states that show the status label
 +            this._statusItem.label.text = this._getStatusLabel();
 +            return;
@@ -720,7 +736,7 @@ index 0000000..ecc80cc
 +            is_wwan = true;
 +            this.mobileDevice = new ModemManager.ModemCdma(device.udi);
 +            this._connectionType = NetworkManager.SETTING_CDMA_SETTING_NAME;
-+        } else if (this._capabilites & NetworkManager.DeviceModemCapabilites.LTE) {
++        } else if (this._capabilites & NetworkManager.DeviceModemCapabilities.LTE) {
 +            is_wwan = true;
 +            // FIXME: support signal quality
 +        }
@@ -734,7 +750,7 @@ index 0000000..ecc80cc
 +        }
 +
 +        if (this.mobileDevice) {
-+            this.mobileDevice.connect('notify::operator-name', Lang.bind(this, function() {
++            this._operatorNameId = this.mobileDevice.connect('notify::operator-name', Lang.bind(this, function() {
 +                if (this._operatorItem) {
 +                    let name = this.mobileDevice.operator_name;
 +                    if (name) {
@@ -744,7 +760,7 @@ index 0000000..ecc80cc
 +                        this._operatorItem.actor.hide();
 +                }
 +            }));
-+            this.mobileDevice.connect('notify::signal-quality', Lang.bind(this, function() {
++            this._signalQualityId = this.mobileDevice.connect('notify::signal-quality', Lang.bind(this, function() {
 +                if (this._operatorItem) {
 +                    this._operatorItem.setIcon(this._getSignalIcon());
 +                }
@@ -752,6 +768,13 @@ index 0000000..ecc80cc
 +        }
 +
 +        NMDevice.prototype._init.call(this, client, device, connections, 1);
++    },
++
++    destroy: function() {
++        if (this.mobileDevice)
++            this.mobileDevice.disconnectAll();
++
++        NMDevice.prototype.destroy.call(this);
 +    },
 +
 +    _getSignalIcon: function() {
@@ -913,10 +936,25 @@ index 0000000..ecc80cc
 +                }
 +            }
 +        }
-+        device.connect('access-point-added', Lang.bind(this, this._accessPointAdded));
-+        device.connect('access-point-removed', Lang.bind(this, this._accessPointRemoved));
++        this._apAddedId = device.connect('access-point-added', Lang.bind(this, this._accessPointAdded));
++        this._apRemovedId = device.connect('access-point-removed', Lang.bind(this, this._accessPointRemoved));
 +
 +        NMDevice.prototype._init.call(this, client, device, validConnections);
++    },
++
++    destroy: function() {
++        if (this._apAddedId) {
++            // see above for this HACK
++            GObject.Object.prototype.disconnect.call(this.device, this._apAddedId);
++            this._apAddedId = 0;
++        }
++
++        if (this._apRemovedId) {
++            GObject.Object.prototype.disconnect.call(this.device, this._apRemovedId);
++            this._apRemovedId = 0;
++        }
++
++        NMDevice.prototype.destroy.call(this);
 +    },
 +
 +    _findNetwork: function(ssid) {
@@ -932,7 +970,7 @@ index 0000000..ecc80cc
 +        let pos = this._findNetwork(ssid);
 +        let apObj;
 +        if (pos != -1) {
-+            apObj = this._network[pos];
++            apObj = this._networks[pos];
 +            if (apObj.accessPoints.indexOf(accessPoint) != -1) {
 +                log('Access point was already seen, not adding again');
 +                return;
@@ -945,7 +983,7 @@ index 0000000..ecc80cc
 +                      item: null,
 +                      accessPoints: [ accessPoint ]
 +                    };
-+            this._accessPoints.push(apObj);
++            this._networks.push(apObj);
 +        }
 +
 +        // check if this enables new connections for this group
@@ -1182,9 +1220,10 @@ index 0000000..ecc80cc
 +        if (fixedChannel && fixedChannel != NetworkManager.utils_wifi_freq_to_channel(ap.frequency))
 +            return false;
 +
-+        if (!wirelessSettings.ap_security_compatible(wirelessSecuritySettings, ap.flags, ap.wpa_flags, ap.rsn_flags, ap.mode))
-+            return false;
-+        return true;
++        if (!wirelessSecuritySettings)
++            return true;
++
++        return wirelessSettings.ap_security_compatible(wirelessSecuritySettings, ap.flags, ap.wpa_flags, ap.rsn_flags, ap.mode);
 +    },
 +
 +    _createActiveConnectionItems: function() {
@@ -1201,7 +1240,7 @@ index 0000000..ecc80cc
 +                                                                              { reactive: false });
 +            this._disconnectItem = new PopupMenu.PopupMenuItem(_("Disconnect"));
 +            this._disconnectItem.connect('activate', Lang.bind(this, function() {
-+                this.device.disconnect(function() { });
++                this.device.disconnect(null);
 +            }));
 +        } else {
 +            // We cannot read the connection (due to ACL, or API incompatibility), but we still show signal if we have it
@@ -1267,7 +1306,7 @@ index 0000000..ecc80cc
 +                        type: NetworkManager.SETTING_WIRELESS_SETTING_NAME
 +                    }));
 +
-+                    accessPoints = sortAccessPoints(apObj.accessPoints);
++                    let accessPoints = sortAccessPoints(apObj.accessPoints);
 +                    this._client.add_and_activate_connection(connection, this.device, accessPoints[0].dbus_path, null)
 +                }));
 +            }
@@ -1279,7 +1318,7 @@ index 0000000..ecc80cc
 +                    this._overflowItem = new PopupMenu.PopupSubMenuMenuItem(_("More..."));
 +                    this.section.addMenuItem(this._overflowItem);
 +                }
-+                this._overflowItem.menu.addMenuItem(menuItem);
++                this._overflowItem.menu.addMenuItem(apObj.item);
 +            }
 +        }
 +    },
@@ -1394,19 +1433,23 @@ index 0000000..ecc80cc
 +        this._ctypes[NetworkManager.SETTING_VPN_SETTING_NAME] = NMConnectionCategory.VPN;
 +
 +        this._settings = NMClient.RemoteSettings.new(null);
-+        this._settings.connect('connections-read', Lang.bind(this, function() {
++        this._connectionsReadId = this._settings.connect('connections-read', Lang.bind(this, function() {
 +            this._readConnections();
 +            this._readDevices();
 +            this._syncNMState();
 +
 +            // Connect to signals late so that early signals don't find in inconsistent state
-+            this._client.connect('notify::manager-running', Lang.bind(this, this._syncNMState));
-+            this._client.connect('notify::networking-enabled', Lang.bind(this, this._syncNMState));
-+            this._client.connect('notify::state', Lang.bind(this, this._syncNMState));
-+            this._client.connect('notify::active-connections', Lang.bind(this, this._updateIcon));
-+            this._client.connect('device-added', Lang.bind(this, this._deviceAdded));
-+            this._client.connect('device-removed', Lang.bind(this, this._deviceRemoved));
-+            this._settings.connect('new-connection', Lang.bind(this, this._newConnection));
++            // and connect only once (this signal handler can be called again if NetworkManager goes up and down)
++            if (!this._inited) {
++                this._inited = true;
++                this._client.connect('notify::manager-running', Lang.bind(this, this._syncNMState));
++                this._client.connect('notify::networking-enabled', Lang.bind(this, this._syncNMState));
++                this._client.connect('notify::state', Lang.bind(this, this._syncNMState));
++                this._client.connect('notify::active-connections', Lang.bind(this, this._updateIcon));
++                this._client.connect('device-added', Lang.bind(this, this._deviceAdded));
++                this._client.connect('device-removed', Lang.bind(this, this._deviceRemoved));
++                this._settings.connect('new-connection', Lang.bind(this, this._newConnection));
++            }
 +        }));
 +    },
 +
@@ -1463,19 +1506,26 @@ index 0000000..ecc80cc
 +    },
 +
 +    _readDevices: function() {
-+        let devices = this._client.get_devices();
++        let devices = this._client.get_devices() || [ ];
 +        for (let i = 0; i < devices.length; ++i) {
 +            this._deviceAdded(this._client, devices[i]);
 +        }
 +    },
 +
 +    _deviceAdded: function(client, device) {
++        if (device._delegate) {
++            // already seen, not adding again
++            return;
++        }
 +        let wrapperClass = this._dtypes[device.get_device_type()];
 +        if (wrapperClass) {
 +            // XXX: check what nm-applet does here
 +            device._description = device.get_product();
 +
 +            let wrapper = new wrapperClass(this._client, device, this._connections);
++            // FIXME: these notifications are duplicate with those exposed by nm-applet
++            // uncomment this code in 3.2, when we'll conflict with and kill nm-applet
++            /*
 +            wrapper._networkLostId = wrapper.connect('network-lost', Lang.bind(this, function() {
 +                this._ensureSource();
 +                let icon = new St.Icon({ icon_name: 'network-offline',
@@ -1506,7 +1556,7 @@ index 0000000..ecc80cc
 +            wrapper._destroyId = wrapper.connect('destroy', function(wrapper) {
 +                wrapper.disconnect(wrapper._networkLostId);
 +                wrapper.disconnect(wrapper._activationFailedId);
-+            });
++            }); */
 +            let section = this['_' + wrapper.category + 'Section'];
 +            let devices = this['_' + wrapper.category + 'Devices'];
 +
@@ -1527,13 +1577,12 @@ index 0000000..ecc80cc
 +
 +    _deviceRemoved: function(client, device) {
 +        if (!device._delegate) {
-+            log('Removing a network device that was not added (race condition?)');
++            log('Removing a network device that was not added');
 +            return;
 +        }
 +
 +        let wrapper = device._delegate;
-+        wrapper.titleItem.destroy();
-+        wrapper.section.destroy();
++        wrapper.destroy();
 +
 +        let section = this['_' + wrapper.category + 'Section'];
 +        let devices = this['_' + wrapper.category + 'Devices'];
@@ -1652,6 +1701,10 @@ index 0000000..ecc80cc
 +    },
 +
 +    _notifyActiveConnection: function(active) {
++        // FIXME: duplicate notifications when nm-applet is running
++        // This code will come back when nm-applet is killed
++        return;
++
 +        if (active.state == NetworkManager.ActiveConnectionState.ACTIVATED) {
 +
 +            // notify only connections that are visible
@@ -1708,11 +1761,11 @@ index 0000000..ecc80cc
 +        for (let i = 0; i < connections.length; i++) {
 +            let connection = connections[i];
 +            if (connection._uuid) {
-+                log('Connection was already seen, when reading the connections for the first time (race condition?)');
++                // connection was already seen (for example because NetworkManager was restarted)
 +                continue;
 +            }
-+            connection.connect('removed', Lang.bind(this, this._connectionRemoved));
-+            connection.connect('updated', Lang.bind(this, this._updateConnection));
++            connection._removedId = connection.connect('removed', Lang.bind(this, this._connectionRemoved));
++            connection._updatedId = connection.connect('updated', Lang.bind(this, this._updateConnection));
 +
 +            this._updateConnection(connection);
 +            this._connections.push(connection);
@@ -1721,12 +1774,12 @@ index 0000000..ecc80cc
 +
 +    _newConnection: function(settings, connection) {
 +        if (connection._uuid) {
-+            log('Connection was already seen, not adding again...');
++            // connection was already seen
 +            return;
 +        }
 +
-+        connection.connect('removed', Lang.bind(this, this._connectionRemoved));
-+        connection.connect('updated', Lang.bind(this, this._updateConnection));
++        connection._removedId = connection.connect('removed', Lang.bind(this, this._connectionRemoved));
++        connection._updatedId = connection.connect('updated', Lang.bind(this, this._updateConnection));
 +
 +        this._updateConnection(connection);
 +        this._connections.push(connection);
@@ -1739,9 +1792,15 @@ index 0000000..ecc80cc
 +        if (pos != -1)
 +            this._connections.splice(connection);
 +
-+        if (!connection._everAdded)
-+            return;
++        connection._uuid = null;
++        connection.disconnect(connection._removedId);
++        connection.disconnect(connection._updatedId);
 +
++        if (connection._everAdded)
++            this._hideConnection(connection);
++    },
++
++    _hideConnection: function(connection) {
 +        let section = connection._section;
 +        if (section == NMConnectionCategory.VPN) {
 +            this._vpnDevice.removeConnection(connection);
@@ -1752,10 +1811,12 @@ index 0000000..ecc80cc
 +            for (let i = 0; i < devices.length; i++)
 +                devices[i].removeConnection(connection);
 +        }
++        connection._everAdded = false;
 +    },
 +
 +    _updateConnection: function(connection) {
-+        this._connectionRemoved(connection);
++        if (connection._everAdded)
++            this._hideConnection(connection);
 +
 +        let connectionSettings = connection.get_setting_by_name(NetworkManager.SETTING_CONNECTION_SETTING_NAME);
 +        connection._type = connectionSettings.type;
@@ -1969,7 +2030,7 @@ index 0000000..ecc80cc
 +    }
 +};
 diff --git a/tools/build/gnome-shell.modules b/tools/build/gnome-shell.modules
-index 778db20..6ad230d 100644
+index 3f51fa2..73332b8 100644
 --- a/tools/build/gnome-shell.modules
 +++ b/tools/build/gnome-shell.modules
 @@ -9,6 +9,8 @@
@@ -1981,7 +2042,7 @@ index 778db20..6ad230d 100644
    <repository type="tarball" name="cairo.org"
        href="http://cairographics.org/"/>
    <repository type="tarball" name="0pointer.de"
-@@ -329,4 +331,19 @@
+@@ -367,4 +369,19 @@
      </dependencies>
  </autotools>
  

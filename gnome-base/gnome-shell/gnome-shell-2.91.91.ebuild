@@ -31,7 +31,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	>=x11-libs/gtk+-3.0.0:3[introspection]
 	>=media-libs/clutter-1.5.15[introspection]
 	>=gnome-base/gnome-desktop-2.91.2:3
-	>=gnome-base/gsettings-desktop-schemas-0.1.7.1
+	>=gnome-base/gsettings-desktop-schemas-2.91.91
 	>=gnome-extra/evolution-data-server-2.91.6
 	>=media-libs/gstreamer-0.10.16
 	>=media-libs/gst-plugins-base-0.10.16
@@ -65,7 +65,7 @@ RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/dconf-0.4.1
 	>=gnome-base/libgnomekbd-2.91.4[introspection]
 	sys-power/upower[introspection]
-	
+
 	>=gnome-base/gnome-session-2.91.91
 
 	>=gnome-base/gnome-settings-daemon-2.91
