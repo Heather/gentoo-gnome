@@ -13,7 +13,7 @@ HOMEPAGE="http://projects.gnome.org/brasero/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="beagle cdr +css doc +introspection +libburn nautilus packagekit playlist test"
+IUSE="beagle +css doc +introspection +libburn nautilus packagekit playlist test"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
@@ -42,12 +42,12 @@ COMMON_DEPEND="
 	nautilus? ( >=gnome-base/nautilus-2.91.90 )
 	playlist? ( >=dev-libs/totem-pl-parser-2.29.1 )"
 RDEPEND="${COMMON_DEPEND}
-	app-cdr/cdrdao
-	app-cdr/dvd+rw-tools
 	media-plugins/gst-plugins-meta
 	css? ( media-libs/libdvdcss )
-	cdr? ( virtual/cdrtools )
-	!libburn? ( virtual/cdrtools )
+	!libburn? (
+		app-cdr/cdrdao
+		app-cdr/dvd+rw-tools
+		virtual/cdrtools )
 	packagekit? ( app-portage/packagekit )"
 DEPEND="${COMMON_DEPEND}
 	app-text/gnome-doc-utils
@@ -69,16 +69,14 @@ pkg_setup() {
 		--disable-caches
 		--disable-dependency-tracking
 		$(use_enable beagle search beagle)
-		$(use_enable cdr cdrtools)
-		$(use_enable cdr cdrkit)
+		$(use_enable !libburn cdrtools)
+		$(use_enable !libburn cdrkit)
+		$(use_enable !libburn cdrdao)
+		$(use_enable !libburn growisofs)
 		$(use_enable introspection)
 		$(use_enable libburn libburnia)
 		$(use_enable nautilus)
 		$(use_enable playlist)"
-
-	if ! use libburn; then
-		G2CONF="${G2CONF} --enable-cdrtools --enable-cdrkit"
-	fi
 
 	DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README"
 }
