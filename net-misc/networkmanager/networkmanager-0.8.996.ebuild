@@ -101,6 +101,7 @@ src_configure() {
 		--with-udev-dir=/etc/udev
 		--with-iptables=/sbin/iptables
 		$(use_enable doc gtk-doc)
+		$(use_enable introspection)
 		$(use_enable ppp)
 		$(use_enable wimax)
 		$(use_with dhclient)
