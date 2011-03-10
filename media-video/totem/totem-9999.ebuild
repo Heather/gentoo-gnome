@@ -15,7 +15,7 @@ HOMEPAGE="http://gnome.org/projects/totem/"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
-IUSE="bluetooth debug doc galago lirc +introspection iplayer nautilus nsplugin
+IUSE="bluetooth debug doc lirc +introspection iplayer nautilus nsplugin
 +python tracker +youtube vala zeroconf"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
@@ -31,6 +31,7 @@ fi
 #
 # FIXME: Automagic tracker-0.9.0
 # XXX: Add Zeitgeist support when it gets added to GNOME 3 (3.2?)
+# Runtime dependency on gnome-session-2.91
 RDEPEND=">=dev-libs/glib-2.27.92
 	>=x11-libs/gdk-pixbuf-2.23.0
 	>=x11-libs/gtk+-2.99.3:3[introspection?]
@@ -62,7 +63,6 @@ RDEPEND=">=dev-libs/glib-2.27.92
 	bluetooth? ( || (
 		net-wireless/bluez
 		net-wireless/bluez-libs ) )
-	galago? ( >=dev-libs/libgalago-0.5.2 )
 	lirc? ( app-misc/lirc )
 	nautilus? ( >=gnome-base/nautilus-2.91.3 )
 	tracker? ( >=app-misc/tracker-0.9.34 )
@@ -123,9 +123,8 @@ pkg_setup() {
 		VALAC=$(type -P valac-0.12)
 		BROWSER_PLUGIN_DIR=/usr/$(get_libdir)/nsbrowser/plugins"
 
-	local plugins="brasero-disc-recorder,chapters,gromit,media-player-keys,ontop,properties,sidebar-test,skipto,screenshot,thumbnail"
+	local plugins="brasero-disc-recorder,chapters,im-status,gromit,media-player-keys,ontop,properties,sidebar-test,skipto,screenshot,thumbnail"
 	use bluetooth && plugins="${plugins},bemused"
-	use galago && plugins="${plugins},galago"
 	use iplayer && plugins="${plugins},iplayer"
 	use lirc && plugins="${plugins},lirc"
 	use nautilus && plugins="${plugins},save-file"
