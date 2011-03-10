@@ -22,9 +22,11 @@ else
 fi
 
 # USE=valgrind is probably not a good idea for the tree
-
+#
+# XXX: ARGH: libgcr is slotted, but libgck is not.
+# Hence, gtk2/3 versions are not parallel installable.
 RDEPEND=">=dev-libs/glib-2.25:2
-	>=x11-libs/gtk+-2.20:2
+	>=x11-libs/gtk+-2.90.0:3
 	gnome-base/gconf
 	>=sys-apps/dbus-1.0
 	>=dev-libs/libgcrypt-1.2.2
@@ -36,6 +38,7 @@ RDEPEND=">=dev-libs/glib-2.25:2
 #	valgrind? ( dev-util/valgrind )
 DEPEND="${RDEPEND}
 	sys-devel/gettext
+	>=dev-util/gtk-doc-am-1.9
 	>=dev-util/intltool-0.35
 	>=dev-util/pkgconfig-0.9
 	doc? ( >=dev-util/gtk-doc-1.9 )"
@@ -47,7 +50,7 @@ DOCS="AUTHORS ChangeLog NEWS README"
 
 # tests fail in several ways, they should be fixed in the next cycle (bug #340283),
 # revisit then.
-# UPDATE: tests use system-installed libraries, fail with:
+# UPDATE: gcr tests fail with:
 # ** WARNING **: couldn't load PKCS#11 module: /usr/lib64/pkcs11/gnome-keyring-pkcs11.so: Couldn't initialize module: The device was removed or unplugged 
 RESTRICT="test"
 
@@ -61,7 +64,7 @@ pkg_setup() {
 		--with-root-certs=${ROOT}/etc/ssl/certs/
 		--enable-ssh-agent
 		--enable-gpg-agent
-		--with-gtk=2.0"
+		--with-gtk=3.0"
 #		$(use_enable valgrind)
 }
 
@@ -73,12 +76,6 @@ src_prepare() {
 	# Remove DISABLE_DEPRECATED flags
 	sed -e '/-D[A-Z_]*DISABLE_DEPRECATED/d' \
 		-i configure.in configure || die "sed 2 failed"
-
-	for i in 1 2 3 4 5 6; do
-		epatch "${FILESDIR}/${PN}-trunk-$i.patch"
-	done
-
-	eautoreconf
 
 	gnome2_src_prepare
 }
