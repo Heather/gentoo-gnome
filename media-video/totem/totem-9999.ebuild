@@ -137,10 +137,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# AC_CONFIG_AUX_DIR_DEFAULT doesn't exist, and eautoreconf/aclocal fails
-	mkdir -p m4
-	gnome2_src_prepare
-
 	# Fix broken smclient option passing
 	# FIXME: File a bug for this
 	epatch "${FILESDIR}/${PN}-2.90.0-smclient-target-detection.patch"
@@ -149,6 +145,10 @@ src_prepare() {
 		intltoolize --force --copy --automake || die "intltoolize failed"
 		eautoreconf
 	fi
+
+	# AC_CONFIG_AUX_DIR_DEFAULT doesn't exist, and eautoreconf/aclocal fails
+	mkdir -p m4
+	gnome2_src_prepare
 
 	# disable pyc compiling
 	mv py-compile py-compile.orig
