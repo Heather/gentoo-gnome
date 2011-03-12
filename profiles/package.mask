@@ -15,3 +15,7 @@
 # Arun Raghavan <ford_prefect@gentoo.org> (10 Sep 2010)
 # Development version of sysprof.
 =dev-util/sysprof-1.1*
+
+# Nirbheek Chauhan <nirbheek@gentoo.org> (12 Mar 2011)
+# Doesn't seem to be working at all for me
+=media-video/cheese-2.91*
