@@ -15,7 +15,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="LGPL-2"
 SLOT="0"
-IUSE="doc gtk python seed" # glade
+IUSE="doc gtk python seed vala" # glade
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
@@ -26,13 +26,14 @@ fi
 RDEPEND=">=dev-libs/glib-2.23.6:2
 	>=dev-libs/gobject-introspection-0.10.1
 	gtk? ( >=x11-libs/gtk+-2.90:3[introspection] )
-	python? ( >=dev-python/pygobject-2.20 )
+	python? ( >=dev-python/pygobject-2.28 )
 	seed? ( >=dev-libs/seed-2.28.0 )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
 	>=sys-devel/gettext-0.17
 	>=sys-devel/libtool-2.2.6
-	doc? ( >=dev-util/gtk-doc-1.11 )"
+	doc? ( >=dev-util/gtk-doc-1.11 )
+	vala? ( >=dev-lang/vala-0.11.1:0.12 )"
 
 DOCS="AUTHORS ChangeLog NEWS README"
 
@@ -41,7 +42,13 @@ pkg_setup() {
 		$(use_enable gtk)
 		$(use_enable python)
 		$(use_enable seed)
+		$(use_enable vala)
+		VALAC=$(type -P valac-0.12)
 		--disable-static
 		--disable-maintainer-mode
-		--disable-gtk2-test-build"
+		--disable-gtk2-test-build
+		--disable-gdb
+		--disable-valgrind
+		--disable-gcov"
+	# What do we do about gdb, valgrind, gcov, etc?
 }
