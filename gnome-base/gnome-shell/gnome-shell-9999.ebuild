@@ -92,7 +92,7 @@ src_prepare() {
 		ewarn "Adding support for the experimental NetworkManager applet."
 		ewarn "This needs the latest NetworkManager & nm-applet trunk."
 		ewarn "Report bugs about this to 'nirbheek' on #gentoo-desktop @ FreeNode."
-		epatch "${FILESDIR}/${PN}-experimental-nm-applet-1.3.patch"
+		epatch "${FILESDIR}/${PN}-experimental-nm-applet-1.4.patch"
 	fi
 
 	epatch "${FILESDIR}/${PN}-fix-gnome-bluetooth.patch"
