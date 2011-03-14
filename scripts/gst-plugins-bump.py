@@ -14,7 +14,7 @@ import subprocess
 import sys
 
 import portage
-from portage.output import colorize
+from portage.output import EOutput
 
 def usage():
     print "Usage: $0 <base|good|bad|ugly> <version> [core version] [base version]"
@@ -28,6 +28,7 @@ if len(sys.argv) < 3 or len(sys.argv) > 5:
 ###################
 ## Configuration ##
 ###################
+REMOVE_OBSOLETE = True # Remove obsolete ebuilds?
 GSTLIB = sys.argv[1]
 GSTLIBVER = sys.argv[2]
 GSTCOREVER = ''
@@ -41,8 +42,12 @@ elif len(sys.argv) == 4:
 ##################
 ## Parse Config ##
 ##################
+eoutput = EOutput()
 PORTDIR = portage.settings["PORTDIR"]
-portage.portdb.porttrees = [PORTDIR]
+portdb = portage.portdb
+settings = portage.settings
+portdb.porttrees = [PORTDIR]
+
 GSTPREFIX = 'gst-plugins-'
 GSTECLASS = GSTPREFIX + GSTLIB
 GSTLIB = 'media-libs/' + GSTPREFIX + GSTLIB
@@ -55,9 +60,6 @@ GSTLIBS = {'media-libs/gstreamer': GSTCOREVER,
 ###############
 ## Functions ##
 ###############
-def print_colorize(color, text):
-    print colorize(color, " * ") + text
-
 def get_p(pkg):
     "pkg must contain at least the package name"
     if not portage.isjustname(pkg):
@@ -89,7 +91,7 @@ def get_cpv(cp, ver=None):
         return '%s-%s' % (cp, ver)
     else:
         # Return the latest one instead
-        return portage.portdb.xmatch('match-all', cp)[-1]
+        return portdb.xmatch('match-all', cp)[-1]
 
 def get_ebuild_dir(cpv):
     return os.path.join(PORTDIR, get_cp(cpv))
@@ -120,7 +122,7 @@ def isgstplugin(cpv):
     if not cpv.startswith('%s/%s' % (GSTCAT, GSTPREFIX)):
         return False
     # Does it inherit GSTECLASS?
-    if not GSTECLASS in portage.portdb.aux_get(cpv, ['INHERITED'])[0].split():
+    if not GSTECLASS in portdb.aux_get(cpv, ['INHERITED'])[0].split():
         return False
     return True
 
@@ -128,19 +130,27 @@ def isgstplugin(cpv):
 ## Begin Work ##
 ################
 
-print_colorize("green", "Getting a list of all gst-plugins ...")
-for cp in portage.portdb.cp_all(categories=[GSTCAT]):
+# We do this outside the loop so that we get notified while stuff gets cached
+eoutput.ebegin("Getting a list of all gst-plugins")
+cp_all = portdb.cp_all(categories=[GSTCAT])
+eoutput.eend(0)
+eoutput.ebegin("Getting the next gst-plugin")
+# Does a first-time-expensive xmatch call
+cpv = get_cpv(cp_all[0])
+eoutput.eend(0)
+for cp in portdb.cp_all(categories=[GSTCAT]):
     cpv = get_cpv(cp)
     if not isgstplugin(cpv):
         continue
-    print_colorize("green", "Current package is %s" % cpv)
+    print ">>> Current package is %s" % cpv
     GSTPLUGIN_CPVS.append(cpv)
     os.chdir(get_ebuild_dir(cpv))
     old_ebuild = get_ebuild(cpv)
     new_ebuild = get_ebuild(get_cpv(cp, GSTLIBVER))
-    print_colorize("green", "Copying %s to %s ..." % (old_ebuild, new_ebuild))
+    eoutput.ebegin("Copying %s to %s" % (old_ebuild, new_ebuild))
     shutil.copyfile(old_ebuild, new_ebuild)
-    print_colorize("green", "Editing gstreamer deps and keywords. A diff will follow ...")
+    eoutput.eend(0)
+    eoutput.einfo("Editing gstreamer deps and keywords. A diff will follow")
     edit_gstdeps(new_ebuild)
     subprocess.check_call('ekeyword ~all %s' % new_ebuild, shell=True, stdout=subprocess.PIPE)
     try:
@@ -153,5 +163,15 @@ for cp in portage.portdb.cp_all(categories=[GSTCAT]):
         if e.returncode == 2:
             raise e
     subprocess.check_call('ebuild %s manifest' % new_ebuild, shell=True)
-    print_colorize("green", "Running cvs add ...")
-    subprocess.check_call('cvs add %s' % new_ebuild, shell=True)
+    eoutput.ebegin("Running cvs add %s" % new_ebuild)
+    subprocess.check_call('cvs add %s' % new_ebuild, shell=True, stderr=subprocess.PIPE)
+    eoutput.eend(0)
+    if REMOVE_OBSOLETE:
+        from obsolete_ebuilds import get_obsolete
+        print ">>> Removing obsolete ebuilds"
+        obsolete_ebuilds = map(get_ebuild, get_obsolete(cp))
+        for ebuild in obsolete_ebuilds:
+            eoutput.ebegin("Running cvs rm -f %s" % ebuild)
+            subprocess.check_call('cvs rm -f %s' % ebuild, shell=True, stderr=subprocess.PIPE)
+            eoutput.eend(0)
+    print ">>> All done with %s!" % cp
