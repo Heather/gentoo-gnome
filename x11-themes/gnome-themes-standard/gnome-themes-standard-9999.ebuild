@@ -36,6 +36,7 @@ G2CONF="--disable-static --disable-placeholders"
 DOCS="ChangeLog NEWS"
 
 src_prepare() {
+	gnome2_src_prepare
 	# Install cursors in the right place
 	sed -e 's:^\(cursordir.*\)icons\(.*\):\1cursors/xorg-x11\2:' \
 		-i themes/Adwaita/cursors/Makefile.am \

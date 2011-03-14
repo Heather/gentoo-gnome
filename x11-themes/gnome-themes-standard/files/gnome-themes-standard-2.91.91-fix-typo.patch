@@ -1,0 +1,23 @@
+From fc6c05dbda865cc98b44f3c09701121698d38210 Mon Sep 17 00:00:00 2001
+From: Florian Müllner <fmuellner@gnome.org>
+Date: Tue, 08 Mar 2011 13:38:17 +0000
+Subject: Adwaita: Fix a typo
+
+The decimal separator is '.', not ',' - the error used to be ignored,
+but the CSS parser in GTK+ got stricter, causing the theme to fail.
+---
+diff --git a/themes/Adwaita/gtk-3.0/gtk.css b/themes/Adwaita/gtk-3.0/gtk.css
+index b7d0e0b..873a571 100644
+--- a/themes/Adwaita/gtk-3.0/gtk.css
++++ b/themes/Adwaita/gtk-3.0/gtk.css
+@@ -548,7 +548,7 @@ GtkComboBox .button {
+ 				     left top, left bottom,
+ 				     from (@theme_bg_color),
+ 				     color-stop (0.45, shade (@theme_bg_color, 0.97)),
+-				     to (shade (@theme_bg_color, 0,99));
++				     to (shade (@theme_bg_color, 0.99));
+     border-width: 0;
+     border-style: none;
+     padding: 4;
+--
+cgit v0.8.3.4
