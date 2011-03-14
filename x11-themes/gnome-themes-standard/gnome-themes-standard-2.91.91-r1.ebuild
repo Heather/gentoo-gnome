@@ -6,7 +6,7 @@ EAPI="3"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
+inherit eutils gnome2
 
 DESCRIPTION="Adwaita theme for GNOME Shell"
 HOMEPAGE="http://www.gnome.org/"
@@ -42,7 +42,7 @@ src_prepare() {
 		-i themes/Adwaita/cursors/Makefile.am \
 		-i themes/Adwaita/cursors/Makefile.in || die
 	# Take from upstream drop next release
-	epatch "${P}-fix-typo.patch"
+	epatch "${FILESDIR}/${P}-fix-typo.patch"
 }
 
 src_install() {
