@@ -13,8 +13,7 @@ HOMEPAGE="http://telepathy.freedesktop.org/wiki/Folks"
 
 LICENSE="LGPL-2"
 SLOT="0"
-# Breaks API, needs changes in empathy — fixed in empathy trunk
-#KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 # FIXME: links against system libfolks instead of the built one
