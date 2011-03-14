@@ -22,7 +22,6 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 fi
 
-# WTF: pulseaudio is compulsary now for gnome-volume-control
 # XXX: gnome-desktop-2.91.5 is needed for upstream commit c67f7efb
 # XXX: NetworkManager-0.9 support is automagic, make hard-dep once it's released
 #
@@ -30,11 +29,11 @@ fi
 # g-s-d-2.91.90.1 is needed for magnifier schema updates
 # Latest gsettings-desktop-schemas is needed for commit f6b0ae89
 COMMON_DEPEND="
-	>=dev-libs/glib-2.25.11
-	>=x11-libs/gdk-pixbuf-2.23.0
+	>=dev-libs/glib-2.25.11:2
+	>=x11-libs/gdk-pixbuf-2.23.0:2
 	>=x11-libs/gtk+-2.91.6:3
 	>=gnome-base/gsettings-desktop-schemas-0.1.7.1
-	>=gnome-base/gconf-2.0
+	>=gnome-base/gconf-2.0:2
 	>=dev-libs/dbus-glib-0.73
 	>=gnome-base/gnome-desktop-2.91.5:3
 	>=gnome-base/gnome-settings-daemon-2.91.90.1

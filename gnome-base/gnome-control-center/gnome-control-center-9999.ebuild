@@ -22,21 +22,23 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 fi
 
-# WTF: pulseaudio is compulsary now for gnome-volume-control
 # XXX: gnome-desktop-2.91.5 is needed for upstream commit c67f7efb
 # XXX: NetworkManager-0.9 support is automagic, make hard-dep once it's released
 #
 # gnome-session-2.91.6-r1 is needed so that 10-user-dirs-update is run at login
 # g-s-d-2.91.90.1 is needed for magnifier schema updates
-# Latest gsettings-desktop-schemas is needed for commit f6b0ae89
+#
+# Due to commit 70eb510 (gnome bug 633983):
+# * Latest gsettings-desktop-schemas is needed for commit 70eb510
+# * Latest gnome-desktop is needed for commit 7f3e3d52
 COMMON_DEPEND="
-	>=dev-libs/glib-2.25.11
-	>=x11-libs/gdk-pixbuf-2.23.0
-	>=x11-libs/gtk+-2.91.6:3
-	>=gnome-base/gsettings-desktop-schemas-0.1.7.1
-	>=gnome-base/gconf-2.0
+	>=dev-libs/glib-2.25.11:2
+	>=x11-libs/gdk-pixbuf-2.23.0:2
+	>=x11-libs/gtk+-3.0.2:3
+	>=gnome-base/gsettings-desktop-schemas-2.91.91.1
+	>=gnome-base/gconf-2.0:2
 	>=dev-libs/dbus-glib-0.73
-	>=gnome-base/gnome-desktop-2.91.5:3
+	>=gnome-base/gnome-desktop-2.91.91.1:3
 	>=gnome-base/gnome-settings-daemon-2.91.90.1
 	>=gnome-base/libgnomekbd-2.91.91
 
@@ -59,7 +61,7 @@ COMMON_DEPEND="
 
 	cheese? (
 		media-libs/gstreamer:0.10
-		>=media-video/cheese-2.91.5 )
+		>=media-video/cheese-2.91.91.1 )
 	cups? ( >=net-print/cups-1.4[dbus] )
 	networkmanager? ( >=net-misc/networkmanager-0.8.992 )
 	socialweb? ( net-libs/libsocialweb )
