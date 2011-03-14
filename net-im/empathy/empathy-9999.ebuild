@@ -33,7 +33,7 @@ RDEPEND=">=dev-libs/glib-2.27.2:2
 	>=x11-libs/libnotify-0.7.0
 	>=gnome-base/gnome-keyring-2.91.4-r300
 	>=net-libs/gnutls-2.8.5
-	>=dev-libs/folks-0.3.5
+	>=dev-libs/folks-0.4.0
 
 	gnome-base/gsettings-desktop-schemas
 	net-libs/farsight2
