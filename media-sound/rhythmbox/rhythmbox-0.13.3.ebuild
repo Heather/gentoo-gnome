@@ -31,6 +31,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.12
 	>=dev-libs/totem-pl-parser-2.32.1
 	>=gnome-base/gconf-2
 	>=gnome-extra/gnome-media-2.14
+	<gnome-extra/gnome-media-2.90
 	>=net-libs/libsoup-2.26:2.4
 	>=net-libs/libsoup-gnome-2.26:2.4
 	>=media-libs/gst-plugins-base-0.10.24
