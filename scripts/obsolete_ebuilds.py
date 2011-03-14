@@ -80,14 +80,14 @@ def get_obsolete(cp):
     @param check_kws: Which keywords to check for obsolete ebuilds, both/stable/unstable
     @type check_kws: String
     """
-    all_cpvs = portdb.xmatch('match-all', cp)
-    # Hashtable of unique {kws: cpv} pairs
-    all_kws = set()
+    cpvs = portdb.xmatch('match-all', cp)
     obsolete_cpvs = []
     not_pmasked = []
+    slot_cpvs = {}
+
     # This is copied from portage/dbapi/porttree.py:visible()
-    # Ignore PORTDIR package.mask cpv
-    for cpv in all_cpvs:
+    # Ignore PORTDIR package.masked cpvs
+    for cpv in cpvs:
         try:
             metadata = {'SLOT': portdb.aux_get(cpv, ['SLOT'])}
         except KeyError:
@@ -97,16 +97,27 @@ def get_obsolete(cp):
             continue
         # We skip the profile check because we don't care about that
         not_pmasked.append(cpv)
-    # We want the latest cpvs first so that we never mark newer ebuilds as obsolete
+    # We start with the latest cpvs first so that we never mark newer ebuilds as obsolete
     not_pmasked.reverse()
+    
+    # Generate a slot-sorted hashtable for cpvs
     for cpv in not_pmasked:
-        kws = set(get_kws(cpv, arches=ALL_ARCHES))
-        if cmp_kws(kws, all_kws):
-            # Keywords list is unique or better, so add it to the list
-            all_kws.update(kws)
-        else:
-            # Same or worse keywords (unstable and stable) => can be punted
-            obsolete_cpvs.append(cpv)
+        slot = portdb.aux_get(cpv, ['SLOT'])[0]
+        if not slot_cpvs.has_key(slot):
+            slot_cpvs[slot] = []
+        slot_cpvs[slot].append(cpv)
+
+    # Consider each slot separately for obsolete-detection
+    for (slot, cpvs) in slot_cpvs.iteritems():
+        all_kws = set()
+        for cpv in cpvs:
+            kws = set(get_kws(cpv, arches=ALL_ARCHES))
+            if cmp_kws(kws, all_kws):
+                # Keywords list is unique or better, so add it to the list
+                all_kws.update(kws)
+            else:
+                # Same or worse keywords (unstable and stable) => can be punted
+                obsolete_cpvs.append(cpv)
     return obsolete_cpvs
 
 if __name__ == "__main__":

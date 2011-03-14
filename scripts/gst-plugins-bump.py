@@ -138,7 +138,7 @@ eoutput.ebegin("Getting the next gst-plugin")
 # Does a first-time-expensive xmatch call
 cpv = get_cpv(cp_all[0])
 eoutput.eend(0)
-for cp in portdb.cp_all(categories=[GSTCAT]):
+for cp in cp_all:
     cpv = get_cpv(cp)
     if not isgstplugin(cpv):
         continue
