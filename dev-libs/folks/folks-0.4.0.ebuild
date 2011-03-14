@@ -14,7 +14,7 @@ HOMEPAGE="http://telepathy.freedesktop.org/wiki/Folks"
 LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="doc"
+IUSE=""
 
 # FIXME: links against system libfolks instead of the built one
 RDEPEND=">=dev-libs/glib-2.24:2
@@ -41,6 +41,7 @@ pkg_setup() {
 		--enable-vala
 		VALAC=$(type -p valac-0.12)
 		VAPIGEN=$(type -p vapigen-0.12)
-		$(use_enable doc docs)
+		--disable-docs
 		--disable-Werror"
+	# Rebuilding docs needs valadoc, which has no release
 }
