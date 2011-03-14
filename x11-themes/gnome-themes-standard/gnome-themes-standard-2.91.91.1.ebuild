@@ -6,7 +6,7 @@ EAPI="3"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit eutils gnome2
+inherit gnome2
 
 DESCRIPTION="Adwaita theme for GNOME Shell"
 HOMEPAGE="http://www.gnome.org/"
@@ -22,7 +22,7 @@ else
 fi
 
 # Double-check gtk/gtk-engines/metacity/mutter dependencies
-RDEPEND=">=x11-libs/gtk+-2.91.6:3
+RDEPEND=">=x11-libs/gtk+-3.0.2:3
 	>=x11-themes/gtk-engines-2.15.3"
 DEPEND="${RDEPEND}
 	>=x11-misc/icon-naming-utils-0.8.7
@@ -41,8 +41,6 @@ src_prepare() {
 	sed -e 's:^\(cursordir.*\)icons\(.*\):\1cursors/xorg-x11\2:' \
 		-i themes/Adwaita/cursors/Makefile.am \
 		-i themes/Adwaita/cursors/Makefile.in || die
-	# Take from upstream drop next release
-	epatch "${FILESDIR}/${P}-fix-typo.patch"
 }
 
 src_install() {
