@@ -60,11 +60,13 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 	nm-applet? ( >=net-misc/networkmanager-0.8.996[introspection] )"
 # Runtime-only deps are probably incomplete and approximate.
 # Each block:
-# 1. Introspection stuff + dconf needed via imports.gi.*
-# 2. gnome-session is needed for gnome-session-quit
-# 3. Control shell settings
-# 4. nm-applet is needed for auth prompting and the wireless connection dialog
+# 1. Pull in polkit-0.101 for pretty authorization dialogs
+# 2. Introspection stuff + dconf needed via imports.gi.*
+# 3. gnome-session is needed for gnome-session-quit
+# 4. Control shell settings
+# 5. nm-applet is needed for auth prompting and the wireless connection dialog
 RDEPEND="${COMMON_DEPEND}
+	>=sys-auth/polkit-0.101[introspection]
 
 	>=gnome-base/dconf-0.4.1
 	>=gnome-base/libgnomekbd-2.91.4[introspection]
