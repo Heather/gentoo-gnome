@@ -98,6 +98,7 @@ for rdep in rdeps:
         temp = portage.portdb.aux_get(rdep, DEPSTR)[0].split()
     except KeyError:
         failed_rdeps.append(rdep)
+        continue
     for dep in temp:
         # Ignore ||, (, ), etc.
         if not portage.isvalidatom(dep):
