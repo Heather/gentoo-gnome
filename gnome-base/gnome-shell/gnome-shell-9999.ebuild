@@ -25,17 +25,18 @@ fi
 # FIXME: Automagic gnome-bluetooth[introspection] support.
 # latest mutter is needed due to commit 474ff2e997
 # latest gsettings-desktop-schemas is needed due to commit 602fa1c6
-COMMON_DEPEND=">=dev-libs/glib-2.25.9
+COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 	>=dev-libs/gjs-0.7.11
 	>=dev-libs/gobject-introspection-0.10.1
 	x11-libs/gdk-pixbuf:2[introspection]
 	>=x11-libs/gtk+-3.0.0:3[introspection]
-	>=media-libs/clutter-1.5.15[introspection]
+	>=media-libs/clutter-1.5.15:1.0[introspection]
 	>=gnome-base/gnome-desktop-2.91.2:3
 	>=gnome-base/gsettings-desktop-schemas-2.91.91
 	>=gnome-extra/evolution-data-server-2.91.6
 	>=media-libs/gstreamer-0.10.16
 	>=media-libs/gst-plugins-base-0.10.16
+	>=net-im/telepathy-logger-0.2.4[introspection]
 	>=net-libs/telepathy-glib-0.13.12[introspection]
 	>=net-wireless/gnome-bluetooth-2.90.0[introspection]
 	>=sys-auth/polkit-0.100[introspection]
@@ -61,7 +62,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9
 # Each block:
 # 1. Introspection stuff + dconf needed via imports.gi.*
 # 2. gnome-session is needed for gnome-session-quit
-# 3. Don't remember
+# 3. Control shell settings
 # 4. nm-applet is needed for auth prompting and the wireless connection dialog
 RDEPEND="${COMMON_DEPEND}
 
@@ -92,7 +93,7 @@ src_prepare() {
 		ewarn "Adding support for the experimental NetworkManager applet."
 		ewarn "This needs the latest NetworkManager & nm-applet trunk."
 		ewarn "Report bugs about this to 'nirbheek' on #gentoo-desktop @ FreeNode."
-		epatch "${FILESDIR}/${PN}-experimental-nm-applet-1.4.patch"
+		epatch "${FILESDIR}/${PN}-experimental-nm-applet-1.5.patch"
 	fi
 
 	epatch "${FILESDIR}/${PN}-fix-gnome-bluetooth.patch"

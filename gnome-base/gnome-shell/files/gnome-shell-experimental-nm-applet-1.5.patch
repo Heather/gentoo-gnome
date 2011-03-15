@@ -1,4 +1,4 @@
-From 8a361b46917b8a371c79e9ea0d9ce2520110c5a3 Mon Sep 17 00:00:00 2001
+From 1bf9b9694338ba917db07d2bf75146dba6a80054 Mon Sep 17 00:00:00 2001
 From: Giovanni Campagna <gcampagna@src.gnome.org>
 Date: Tue, 25 Jan 2011 22:08:12 +0100
 Subject: [PATCH] Status area: add NetworkManager indicator
@@ -16,19 +16,25 @@ https://bugzilla.gnome.org/show_bug.cgi?id=621707
 ---
  data/theme/gnome-shell.css      |    8 +
  js/Makefile.am                  |    2 +
- js/misc/modemManager.js         |  127 +++
- js/ui/panel.js                  |    3 +-
- js/ui/status/network.js         | 2028 +++++++++++++++++++++++++++++++++++++++
+ js/misc/modemManager.js         |  219 +++++
+ js/misc/util.js                 |   80 ++
+ js/ui/panel.js                  |    7 +
+ js/ui/status/network.js         | 2048 +++++++++++++++++++++++++++++++++++++++
+ src/Makefile.am                 |    5 +-
+ src/shell-mobile-providers.c    |  816 ++++++++++++++++
+ src/shell-mobile-providers.h    |   96 ++
  tools/build/gnome-shell.modules |   17 +
- 6 files changed, 2184 insertions(+), 1 deletions(-)
+ 10 files changed, 3297 insertions(+), 1 deletions(-)
  create mode 100644 js/misc/modemManager.js
  create mode 100644 js/ui/status/network.js
+ create mode 100644 src/shell-mobile-providers.c
+ create mode 100644 src/shell-mobile-providers.h
 
 diff --git a/data/theme/gnome-shell.css b/data/theme/gnome-shell.css
-index 4fd303a..06ef4b2 100644
+index 7d9f011..5d7eea2 100644
 --- a/data/theme/gnome-shell.css
 +++ b/data/theme/gnome-shell.css
-@@ -158,6 +158,14 @@ StTooltip StLabel {
+@@ -160,6 +160,14 @@ StTooltip StLabel {
      spacing: .5em;
  }
  
@@ -65,13 +71,15 @@ index 55bb111..a085bfc 100644
  	ui/status/bluetooth.js	\
 diff --git a/js/misc/modemManager.js b/js/misc/modemManager.js
 new file mode 100644
-index 0000000..d019d50
+index 0000000..5b2754b
 --- /dev/null
 +++ b/js/misc/modemManager.js
-@@ -0,0 +1,127 @@
+@@ -0,0 +1,219 @@
 +// -*- mode: js2; indent-tabs-mode: nil; js2-basic-offset: 4 -*-
++
 +const DBus = imports.dbus;
 +const Lang = imports.lang;
++const Shell = imports.gi.Shell;
 +const Signals = imports.signals;
 +
 +// The following are not the complete interfaces, just the methods we need
@@ -105,6 +113,78 @@ index 0000000..d019d50
 +};
 +const ModemCdmaProxy = DBus.makeProxyClass(ModemCdmaInterface);
 +
++let _providersTable;
++function _getProvidersTable() {
++    if (_providersTable)
++        return _providersTable;
++    let [providers, countryCodes] = Shell.mobile_providers_parse();
++    return _providersTable = providers;
++}
++
++function _findProviderForMCCMNC(needle) {
++    let table = _getProvidersTable();
++    let needlemcc = needle.substring(0, 3);
++    let needlemnc = needle.substring(3, needle.length);
++
++    let name2, name3;
++    for (let iter in table) {
++        let providers = table[value];
++
++	/* Search through each country's providers */
++        for (let i = 0; i < providers.length; i++) {
++	    let provider = providers[i];
++
++	    /* Search through MCC/MNC list */
++            let list = provider.get_gsm_mcc_mnc();
++            for (let j = 0; j < list.length; j++) {
++		let mccmnc = list[j];
++
++		/* Match both 2-digit and 3-digit MNC; prefer a
++		 * 3-digit match if found, otherwise a 2-digit one.
++		 */
++                if (mccmnc.mcc != needlemcc)
++		    continue;  /* MCC was wrong */
++
++		if (!name3 && needle.length == 6 && needlemnc == mccmnc.mnc)
++		    name3 = provider.name;
++
++		if (!name2 && needlemnc.substring(0, 2) == mcc.mnc.substring(0, 2))
++		    name2 = provider.name;
++
++		if (name2 && name3)
++		    break;
++	    }
++	}
++    }
++
++    return name3 || name2 || null;
++}
++
++function _findProviderForSid(sid) {
++    if (sid == 0)
++	return null;
++
++    let table = _getProvidersTable();
++
++    /* Search through each country */
++    for (let iter in table) {
++        let providers = table[iter];
++
++	/* Search through each country's providers */
++        for (let i = 0; i < providers.length; i++) {
++	    let provider = providers[i];
++            let cdma_sid = provider.get_cdma_sid();
++
++	    /* Search through CDMA SID list */
++            for (let j = 0; j < cdma_sid.length; j++) {
++                if (cmda_sid[j] == sid)
++                    return provider.name;
++	    }
++	}
++    }
++
++    return null;
++}
 +
 +function ModemGsm() {
 +    this._init.apply(this, arguments);
@@ -123,10 +203,7 @@ index 0000000..d019d50
 +            this.emit('notify::signal-quality');
 +        }));
 +        this._proxy.connect('RegistrationInfo', Lang.bind(this, function(proxy, status, code, name) {
-+            if (name.length > 0)
-+                this.operator_name = name;
-+            else
-+                this.operator_name = null;
++            this.operator_name = this._findOperatorName(name, code);
 +            this.emit('notify::operator-name');
 +        }));
 +        this._proxy.GetRegistrationInfoRemote(Lang.bind(this, function(result, err) {
@@ -136,22 +213,36 @@ index 0000000..d019d50
 +            }
 +
 +            let [status, code, name] = result;
-+            if (name.length > 0)
-+                this.operator_name = name;
-+            else
-+                this.operator_name = null;
++            this.operator_name = this._findOperatorName(name, code);
 +            this.emit('notify::operator-name');
 +        }));
 +        this._proxy.GetSignalQualityRemote(Lang.bind(this, function(result, err) {
 +            if (err) {
 +                // it will return an error if the device is not connected
-+                return;
++                this.signal_quality = 0;
++            } else {
++                let [quality] = result;
++                this.signal_quality = quality;
 +            }
-+
-+            let [quality] = result;
-+            this.signal_quality = quality;
 +            this.emit('notify::signal-quality');
 +        }));
++    },
++
++    _findOperatorName: function(name, opCode) {
++        if (name.length != 0 && (name.length > 6 || name.length < 5)) {
++            // this looks like a valid name, i.e. not an MCCMNC (that some
++            // devices return when not yet connected
++            return name;
++        }
++        let needle;
++        if (name.length == 0 && opCode)
++            needle = opCode;
++        else if (name.length == 6 || name.length == 5)
++            needle = name;
++        else // nothing to search
++            return null;
++
++        return _findProviderForMCCMNC(needle);
 +    }
 +}
 +Signals.addSignalMethods(ModemGsm.prototype);
@@ -169,53 +260,153 @@ index 0000000..d019d50
 +        this._proxy.connect('SignalQuality', Lang.bind(this, function(quality) {
 +            this.signal_quality = quality;
 +            this.emit('notify::signal-quality');
++
++            // receiving this signal means the device got activated
++            // and we can finally call GetServingSystem
++            if (this.operator_name == null)
++                this._refreshServingSystem();
 +        }));
 +        this._proxy.GetSignalQualityRemote(Lang.bind(this, function(result, err) {
 +            if (err) {
 +                // it will return an error if the device is not connected
-+                return;
++                this.signal_quality = 0;
++            } else {
++                let [quality] = result;
++                this.signal_quality = quality;
 +            }
-+            let [quality] = result;
-+            this.signal_quality = quality;
 +            this.emit('notify::signal-quality');
 +        }));
++    },
++    _refreshServingSystem: function() {
 +        this._proxy.GetServingSystemRemote(Lang.bind(this, function(result, err) {
 +            if (err) {
 +                // it will return an error if the device is not connected
-+                return;
-+            }
-+
-+            let [bandClass, band, id] = result;
-+            if (name.length > 0)
-+                // FIXME: the applet has a mapping of ids to names
-+                this.operator_name = 'Mystery CDMA Provider ' + id;
-+            else
 +                this.operator_name = null;
++            } else {
++                let [bandClass, band, id] = result;
++                if (name.length > 0)
++                    this.operator_name = _findProviderForSid(id);
++                else
++                    this.operator_name = null;
++            }
 +            this.emit('notify::operator-name');
 +        }));
 +    }
 +};
 +Signals.addSignalMethods(ModemCdma.prototype);
+diff --git a/js/misc/util.js b/js/misc/util.js
+index e2ec2c1..ab430c8 100644
+--- a/js/misc/util.js
++++ b/js/misc/util.js
+@@ -178,3 +178,83 @@ function killall(processName) {
+         logError(e, 'Failed to kill ' + processName);
+     }
+ }
++
++// This was ported from network-manager-applet
++// Copyright 2007 - 2011 Red Hat, Inc.
++// Author: Dan Williams <dcbw@redhat.com>
++
++const _IGNORED_WORDS = [
++	'Semiconductor',
++	'Components',
++	'Corporation',
++	'Communications',
++	'Company',
++	'Corp.',
++	'Corp',
++	'Co.',
++	'Inc.',
++	'Inc',
++	'Incorporated',
++	'Ltd.',
++	'Limited.',
++	'Intel?',
++	'chipset',
++	'adapter',
++	'[hex]',
++	'NDIS',
++	'Module'
++];
++
++const _IGNORED_PHRASES = [
++	'Multiprotocol MAC/baseband processor',
++	'Wireless LAN Controller',
++	'Wireless LAN Adapter',
++	'Wireless Adapter',
++	'Network Connection',
++	'Wireless Cardbus Adapter',
++	'Wireless CardBus Adapter',
++	'54 Mbps Wireless PC Card',
++	'Wireless PC Card',
++	'Wireless PC',
++	'PC Card with XJACK(r) Antenna',
++	'Wireless cardbus',
++	'Wireless LAN PC Card',
++	'Technology Group Ltd.',
++	'Communication S.p.A.',
++	'Business Mobile Networks BV',
++	'Mobile Broadband Minicard Composite Device',
++	'Mobile Communications AB',
++	'(PC-Suite Mode)'
++];
++
++function fixupPCIDescription(desc) {
++    desc.replace('[_,]', ' ');
++
++    /* Attempt to shorten ID by ignoring certain phrases */
++    for (let i = 0; i < _IGNORED_PHRASES.length; i++) {
++        let item = _IGNORED_PHRASES[i];
++        let pos = desc.indexOf(item);
++	if (pos != -1) {
++            let before = desc.substring(0, pos);
++            let after = desc.substring(pos + item.length, desc.length);
++	    desc = before + after;
++	}
++    }
++
++    /* Attmept to shorten ID by ignoring certain individual words */
++    let words = desc.split(' ');
++    let out = '';
++    for (let i = 0; i < words; i++) {
++        let item = words[i];
++
++        // skip empty items (that come out from consecutive spaces)
++	if (item.length == 0)
++	    continue;
++
++        if (_IGNORED_WORDS.indexOf(item) == -1) {
++            out += ' ' + item;
++	}
++    }
++
++    return out;
++}
+\ No newline at end of file
 diff --git a/js/ui/panel.js b/js/ui/panel.js
-index c08c3e8..abe0fe2 100644
+index c08c3e8..adcd148 100644
 --- a/js/ui/panel.js
 +++ b/js/ui/panel.js
-@@ -41,7 +41,8 @@ const STANDARD_TRAY_ICON_SHELL_IMPLEMENTATION = {
-     'a11y': imports.ui.status.accessibility.ATIndicator,
-     'volume': imports.ui.status.volume.Indicator,
-     'battery': imports.ui.status.power.Indicator,
--    'keyboard': imports.ui.status.keyboard.XKBIndicator
-+    'keyboard': imports.ui.status.keyboard.XKBIndicator,
-+    'network': imports.ui.status.network.NMApplet
- };
- 
+@@ -47,6 +47,13 @@ const STANDARD_TRAY_ICON_SHELL_IMPLEMENTATION = {
  if (Config.HAVE_BLUETOOTH)
+     STANDARD_TRAY_ICON_SHELL_IMPLEMENTATION['bluetooth'] = imports.ui.status.bluetooth.Indicator;
+ 
++try {
++    STANDARD_TRAY_ICON_SHELL_IMPLEMENTATION['network'] = imports.ui.status.network.NMApplet;
++} catch(e) {
++    STANDARD_TRAY_ICON_SHELL_IMPLEMENTATION['network'] = undefined;
++    log('NMApplet is not supported. It is possible that your NetworkManager version is too old');
++}
++
+ // To make sure the panel corners blend nicely with the panel,
+ // we draw background and borders the same way, e.g. drawing
+ // them as filled shapes from the outside inwards instead of
 diff --git a/js/ui/status/network.js b/js/ui/status/network.js
 new file mode 100644
-index 0000000..0e2d483
+index 0000000..ac8e3d0
 --- /dev/null
 +++ b/js/ui/status/network.js
-@@ -0,0 +1,2028 @@
+@@ -0,0 +1,2048 @@
 +// -*- mode: js2; indent-tabs-mode: nil; js2-basic-offset: 4 -*-
 +const ByteArray = imports.byteArray;
 +const DBus = imports.dbus;
@@ -246,6 +437,10 @@ index 0000000..0e2d483
 +    VPN: 'vpn'
 +};
 +
++// small optimization, to avoid using [] all the time
++const NM80211Mode = NetworkManager['80211Mode'];
++const NM80211ApFlags = NetworkManager['80211ApFlags'];
++
 +function macToArray(string) {
 +    return string.split(':').map(function(el) {
 +        return parseInt(el, 16);
@@ -261,6 +456,8 @@ index 0000000..0e2d483
 +}
 +
 +function ssidCompare(one, two) {
++    if (!one || !two)
++        return false;
 +    if (one.length != two.length)
 +        return false;
 +    for (let i = 0; i < one.length; i++) {
@@ -284,14 +481,52 @@ index 0000000..0e2d483
 +}
 +
 +// shared between NMNetworkMenuItem and NMDeviceWireless
++function getApSecurityType(accessPoint) {
++    // XXX: have this checked by someone familiar with IEEE 802.1x
++
++    let flags = accessPoint.flags;
++    let wpa_flags = accessPoint.wpa_flags;
++    let rsn_flags = accessPoint.rsn_flags;
++    if (  !(flags & NM80211ApFlags.PRIVACY)
++	  && (wpa_flags == NM80211ApSecurityFlags.NONE)
++	  && (rsn_flags == NM80211ApSecurityFlags.NONE))
++	return 0;
++    else if (   (flags & NM80211ApFlags.PRIVACY)
++	        && (wpa_flags == NM80211ApSecurityFlags.NONE)
++	        && (rsn_flags == NM80211ApSecurityFlags.NONE))
++	return 1;
++    else if (   !(flags & NM80211ApFlags.PRIVACY)
++	        &&  (wpa_flags != NM80211ApSecurity.NONE)
++	        &&  (rsn_flags != NM80211ApSecurity.NONE))
++	return 2;
++    else
++        return 3;
++}
++
 +function sortAccessPoints(accessPoints) {
 +    return accessPoints.sort(function (one, two) {
-+        if (one.flags != two.flags) {
-+            // sort secure access point before open ones
-+            return one.flags & NetworkManager['80211ApFlags'].PRIVACY ? -1 : 1;
-+        }
 +        return two.strength - one.strength;
 +    });
++}
++
++function getDeviceDescription(device) {
++    let dev_product = device.get_product();
++    let dev_vendor = device.get_vendor();
++    if (!dev_product || !dev_vendor)
++	return null;
++
++    let product = Util.fixupPCIDescription(dev_product);
++    let vendor = Util.fixupPCIDescription(dev_vendor);
++    let out = '';
++
++    /* Another quick hack; if all of the fixed up vendor string
++     * is found in product, ignore the vendor.
++     */
++    if (product.indexOf(vendor) == -1)
++        out += vendor + ' ';
++    out += product;
++
++    return out;
 +}
 +
 +function NMNetworkMenuItem() {
@@ -380,7 +615,7 @@ index 0000000..0e2d483
 +                                              });
 +        this.addActor(this._descriptionLabel);
 +
-+        this._statusBin = new St.Bin();
++        this._statusBin = new St.Bin({ x_align: St.Align.END });
 +        this.addActor(this._statusBin, { align: St.Align.END });
 +
 +        this._statusLabel = new St.Label({ text: '',
@@ -441,7 +676,7 @@ index 0000000..0e2d483
 +        NMDeviceTitleMenuItem.prototype.activate.call(this, event);
 +
 +        if (!this._device) {
-+            log ('Section title activated when there is more than one device, should be non reactive');
++            log('Section title activated when there is more than one device, should be non reactive');
 +            return;
 +        }
 +
@@ -488,7 +723,6 @@ index 0000000..0e2d483
 +    activate: function(event) {
 +        NMDeviceTitleMenuItem.prototype.activate.call(this, event);
 +
-+        log ('setting enabled property, is ' + this._switch.state);
 +        this._client[this._setEnabledFunc](this._switch.state);
 +    },
 +
@@ -511,7 +745,7 @@ index 0000000..0e2d483
 +}
 +
 +NMDevice.prototype = {
-+    _init: function(client, device, connections, activeConnectionPosition) {
++    _init: function(client, device, connections) {
 +        this.device = device;
 +        if (device) {
 +            this.device._delegate = this;
@@ -543,9 +777,6 @@ index 0000000..0e2d483
 +        this._activeConnectionItem = null;
 +        this._autoConnectionItem = null;
 +        this._onlyOfCategory = false;
-+
-+        // private
-+        this._activeConnectionPosition = activeConnectionPosition || 0;
 +
 +        if (this.device) {
 +            this.statusItem = new NMDeviceTitleMenuItem(this.device._description);
@@ -613,39 +844,22 @@ index 0000000..0e2d483
 +            this._activeConnectionItem = null;
 +        }
 +
-+        let previousActive = this._activeConnection;
-+        this._activeConnection = null;
++        this._activeConnection = activeConnection;
 +
-+        if (previousActive && previousActive._connection) {
-+            // add the connection back as a normal one, by removing and adding it
-+            this.removeConnection(previousActive._connection, true);
-+            this.addConnection(previousActive._connection);
-+        }
++        this._clearSection();
++        this._createSection();
++    },
 +
-+        if (activeConnection) {
-+            if (activeConnection._connection) {
-+                // remove the connection if it was already seen
-+                let pos = this._findConnection(activeConnection._connection._uuid);
-+                if (pos != -1) {
-+                    let obj = this._connections[pos];
-+                    if (obj.item)
-+                        obj.item.destroy();
-+                    obj.item = null;
-+                }
-+            }
-+
-+            this._activeConnection = activeConnection;
-+            this._createActiveConnectionItem();
-+            this.section.addMenuItem(this._activeConnectionItem, this._activeConnectionPosition);
-+        }
++    checkConnection: function(connection) {
++        let exists = this._findConnection(connection) != -1;
++        let valid = this.connectionValid(connection);
++        if (exists && !valid)
++            this.removeConnection(connection);
++        else if (!exists && valid)
++            this.addConnection(connection);
 +    },
 +
 +    addConnection: function(connection) {
-+        if (this._findConnection(connection._uuid) != -1) {
-+            log('Connection already added to menu, not adding again');
-+            return;
-+        }
-+
 +        // record the connection
 +        let obj = {
 +            connection: connection,
@@ -658,20 +872,18 @@ index 0000000..0e2d483
 +            return two.timestamp - one.timestamp;
 +        });
 +
-+        if (this._shouldShowConnectionList()) {
-+            this._clearSection();
-+            this._createSection();
-+        }
++        this._clearSection();
++        this._createSection();
 +    },
 +
-+    removeConnection: function(connection, skipCreateMenu) {
++    removeConnection: function(connection) {
 +        if (!connection._uuid) {
 +            log('Cannot remove a connection without an UUID');
 +            return;
 +        }
 +        let pos = this._findConnection(connection._uuid);
 +        if (pos == -1) {
-+            log('Connection was never added, cannot remove');
++            // this connection was never added, nothing to do here
 +            return;
 +        }
 +
@@ -680,7 +892,7 @@ index 0000000..0e2d483
 +            obj.item.destroy();
 +        this._connections.splice(pos, 1);
 +
-+        if (this._connections.length == 0 && !skipCreateMenu) {
++        if (this._connections.length == 0) {
 +            // We need to show the automatic connection again
 +            this._clearSection();
 +            this._createSection();
@@ -709,8 +921,9 @@ index 0000000..0e2d483
 +            /* Translators: this is for network connections that require some kind of key or password */
 +            return _("authentication required");
 +        case NetworkManager.DeviceState.UNAVAILABLE:
-+            if ((this.device.capabilities & NetworkManager.DeviceCapabilities.CARRIER_DETECT) &&
-+                !this.device.carrier)
++            // we don't check if the carrier property is actually false, as that causes race
++            // conditions if state is changed before the new carrier value is picked by libnm-glib
++            if (this.device.capabilities & NetworkManager.DeviceCapabilities.CARRIER_DETECT)
 +                /* Translators: this is for wired network devices that are physically disconnected */
 +                return _("cable unplugged");
 +            else
@@ -872,15 +1085,6 @@ index 0000000..0e2d483
 +            autoconnect: true
 +        }));
 +        return connection;
-+    },
-+
-+    _updateStatusItem: function() {
-+        // ignore device state here, when there's only one device
-+        // it will be taken care by NMApplet
-+        if (this._onlyOfCategory)
-+            this.statusItem.actor.hide();
-+        else
-+            this.statusItem.actor.show();
 +    }
 +};
 +
@@ -898,7 +1102,6 @@ index 0000000..0e2d483
 +        this.mobileDevice = null;
 +        this._connectionType = 'ppp';
 +
-+        // FIXME: listen for this property changing and recreate modem stuff
 +        this._capabilities = device.current_capabilities;
 +        if (this._capabilities & NetworkManager.DeviceModemCapabilities.GSM_UMTS) {
 +            is_wwan = true;
@@ -915,7 +1118,7 @@ index 0000000..0e2d483
 +
 +        if (is_wwan) {
 +            this.category = NMConnectionCategory.WWAN;
-+            this._autoConnectionName = _("New Mobile Broadband connection...");
++            this._autoConnectionName = _("Auto broadband");
 +        } else {
 +            this.category = NMConnectionCategory.WIRED;
 +            this._autoConnectionName = _("Auto dial-up");
@@ -978,9 +1181,12 @@ index 0000000..0e2d483
 +
 +    _createSection: function() {
 +        if (this.mobileDevice) {
++            // If operator_name is null, just pass the empty string, as the item is hidden anyway
 +            this._operatorItem = new PopupMenu.PopupImageMenuItem(this.mobileDevice.operator_name || '',
 +                                                                  this._getSignalIcon(),
 +                                                                  { reactive: false });
++            if (this.mobileDevice.operator_name)
++                this._operatorItem.actor.hide();
 +            this.section.addMenuItem(this._operatorItem);
 +        }
 +
@@ -1000,8 +1206,7 @@ index 0000000..0e2d483
 +    _createAutomaticConnection: function() {
 +        // FIXME: we need to summon the mobile wizard here
 +        // or NM will not have the necessary parameters to complete the connection
-+        // (the same FIXME is currently in nm-applet, actually)
-+        // (this does not apply to dial-up)
++        // pending a DBus method on nm-applet
 +
 +        let connection = new NetworkManager.Connection;
 +        connection._uuid = NetworkManager.utils_uuid_generate();
@@ -1023,7 +1228,9 @@ index 0000000..0e2d483
 +    __proto__: NMDevice.prototype,
 +
 +    _init: function(client, device, connections) {
-+        this._autoConnectionName = _("New Mobile Broadband connection...");
++        this._autoConnectionName = this._makeConnectionName(device);
++        device.connect('notify::name', Lang.bind(this, this._updateAutoConnectionName));
++
 +        this.category = NMConnectionCategory.WWAN;
 +
 +        NMDevice.prototype._init.call(this, client, device, connections);
@@ -1042,8 +1249,6 @@ index 0000000..0e2d483
 +    },
 +
 +    _createAutomaticConnection: function() {
-+        // XXX: is this enough? or do we need other stuff from bluetoothd?
-+
 +        let connection = new NetworkManager.Connection;
 +        connection._uuid = NetworkManager.utils_uuid_generate();
 +        connection.add_setting(new NetworkManager.SettingBluetooth);
@@ -1054,6 +1259,21 @@ index 0000000..0e2d483
 +            autoconnect: false
 +        }));
 +        return connection;
++    },
++
++    _makeConnectionName: function(device) {
++        let name = device.name;
++        if (name)
++            return _("Auto %s").format(name);
++        else
++            return _("Auto bluetooth");
++    },
++
++    _updateAutoConnectionName: function() {
++        this._autoConnectionName = this._makeConnectioName(this.device);
++
++        this._clearSection();
++        this._createSection();
 +    }
 +};
 +
@@ -1122,16 +1342,17 @@ index 0000000..0e2d483
 +        }));
 +        let accessPoints = device.get_access_points() || [ ];
 +        for (let i = 0; i < accessPoints.length; i++) {
-+            // Access points are grouped by network name
++            // Access points are grouped by network
 +            let ap = accessPoints[i];
-+            let ssid = ap.get_ssid();
-+            let pos = this._findNetwork(ssid);
++            let pos = this._findNetwork(ap);
 +            let obj;
 +            if (pos != -1) {
 +                obj = this._networks[pos];
 +                obj.accessPoints.push(ap);
 +            } else {
 +                obj = { ssid: ssid,
++                        mode: ap.mode,
++                        security: getApSecurityType(ap),
 +                        connections: [ ],
 +                        item: null,
 +                        accessPoints: [ ap ]
@@ -1222,17 +1443,27 @@ index 0000000..0e2d483
 +        }
 +    },
 +
-+    _findNetwork: function(ssid) {
++    _networkCompare: function(network, accessPoint) {
++        if (!ssidCompare(network.ssid, accessPoint.get_ssid()))
++            return false;
++        if (network.mode != accessPoint.mode)
++            return false;
++        if (network.security != getApSecurityType(accessPoint))
++            return false;
++
++        return true;
++    },
++
++    _findNetwork: function(accessPoint) {
 +        for (let i = 0; i < this._networks.length; i++) {
-+            if (ssidCompare(this._networks[i].ssid, ssid))
++            if (this._networkCompare(this._networks[i], accessPoint))
 +                return i;
 +        }
 +        return -1;
 +    },
 +
 +    _accessPointAdded: function(device, accessPoint) {
-+        let ssid = accessPoint.get_ssid();
-+        let pos = this._findNetwork(ssid);
++        let pos = this._findNetwork(accessPoint);
 +        let apObj;
 +        if (pos != -1) {
 +            apObj = this._networks[pos];
@@ -1244,6 +1475,8 @@ index 0000000..0e2d483
 +            apObj.accessPoints.push(accessPoint);
 +        } else {
 +            apObj = { ssid: ssid,
++                      mode: accessPoint.mode,
++                      security: getApSecurityType(accessPoint),
 +                      connections: [ ],
 +                      item: null,
 +                      accessPoints: [ accessPoint ]
@@ -1266,8 +1499,7 @@ index 0000000..0e2d483
 +    },
 +
 +    _accessPointRemoved: function(device, accessPoint) {
-+        let ssid = accessPoint.get_ssid();
-+        let pos = this._findNetwork(ssid);
++        let pos = this._findNetwork(accessPoint);
 +
 +        if (pos == -1) {
 +            log('Removing an access point that was never added');
@@ -1349,12 +1581,12 @@ index 0000000..0e2d483
 +        this._overflowItem = null;
 +    },
 +
-+    removeConnection: function(connection, skipCreateAuto) {
++    removeConnection: function(connection) {
 +        if (!connection._uuid)
 +            return;
 +        let pos = this._findConnection(connection._uuid);
 +        if (pos == -1) {
-+            log('Removing connection that was never added');
++            // removing connection that was never added
 +            return;
 +        }
 +
@@ -1369,7 +1601,7 @@ index 0000000..0e2d483
 +                if (connections[k]._uuid == connection._uuid) {
 +                    // remove the connection from the access point group
 +                    connections.splice(k);
-+                    anyauto = true;
++                    anyauto = connections.length == 0;
 +                    if (apObj.item) {
 +                        if (apObj.item instanceof PopupMenu.PopupSubMenuMenuItem) {
 +                            let items = apObj.item.menu.getMenuItems();
@@ -1389,22 +1621,18 @@ index 0000000..0e2d483
 +                            apObj.item = null;
 +                        }
 +                    }
++                    break;
 +                }
 +            }
 +        }
 +
-+        if (forceupdate || (anyauto && !skipCreateAuto)) {
++        if (forceupdate || anyauto) {
 +            this._clearSection();
 +            this._createSection();
 +        }
 +    },
 +
 +    addConnection: function(connection) {
-+        if (this._findConnection(connection._uuid) != -1) {
-+            log('Connection already added to menu, not adding again');
-+            return;
-+        }
-+
 +        // record the connection
 +        let obj = {
 +            connection: connection,
@@ -1429,9 +1657,7 @@ index 0000000..0e2d483
 +                }
 +            }
 +
-+            if (any &&
-+                (this.device.state == NetworkManager.DeviceState.DISCONNECTED ||
-+                 this.device.state == NetworkManager.DeviceState.ACTIVATED)) {
++            if (any && this._shouldShowConnectionList() && !skipCreateMenu) { 
 +                // we need to show this connection
 +                if (apObj.item && apObj.item.menu) {
 +                    // We're already showing the submenu for this access point
@@ -1544,8 +1770,6 @@ index 0000000..0e2d483
 +        }
 +
 +        let activeAp = this.device.active_access_point;
-+        // Use undefined instead of null, so we're sure not to match anything
-+        // that comes from NetworkManager
 +        let activeApSsid = activeAp ? activeAp.get_ssid() : null;
 +
 +        // we want five access points in the menu, including the active one
@@ -1675,7 +1899,7 @@ index 0000000..0e2d483
 +        this._dtypes[NetworkManager.DeviceType.WIFI] = NMDeviceWireless;
 +        this._dtypes[NetworkManager.DeviceType.MODEM] = NMDeviceModem;
 +        this._dtypes[NetworkManager.DeviceType.BT] = NMDeviceBluetooth;
-+        // FIXME: WiMax support (if enabled)
++        // TODO: WiMax support
 +
 +        // Connection types
 +        this._ctypes = { };
@@ -1769,8 +1993,7 @@ index 0000000..0e2d483
 +        }
 +        let wrapperClass = this._dtypes[device.get_device_type()];
 +        if (wrapperClass) {
-+            // XXX: check what nm-applet does here
-+            device._description = device.get_product();
++            device._description = getDeviceDescription(device);
 +
 +            let wrapper = new wrapperClass(this._client, device, this._connections);
 +            // FIXME: these notifications are duplicate with those exposed by nm-applet
@@ -1874,7 +2097,7 @@ index 0000000..0e2d483
 +                if (a.state == NetworkManager.ActiveConnectionState.ACTIVATING) // prepare to notify to the user
 +                    a._notifyStateId = a.connect('notify::state', Lang.bind(this, this._notifyActiveConnection));
 +                else {
-+                    // notify immediately
++                    // notify as soon as possible
 +                    Mainloop.idle_add(Lang.bind(this, function() {
 +                        this._notifyActiveConnection(a);
 +                    }));
@@ -1913,7 +2136,6 @@ index 0000000..0e2d483
 +            if (!a._primaryDevice) {
 +                if (a._type != NetworkManager.SETTING_VPN_SETTING_NAME) {
 +                    // find a good device to be considered primary
-+                    // XXX: check what nm-applet does here
 +                    a._primaryDevice = null;
 +                    let devices = a.get_devices();
 +                    for (let j = 0; j < devices.length; j++) {
@@ -2027,15 +2249,6 @@ index 0000000..0e2d483
 +        if (pos != -1)
 +            this._connections.splice(connection);
 +
-+        if (connection._everAdded)
-+            this._hideConnection(connection);
-+
-+        connection._uuid = null;
-+        connection.disconnect(connection._removedId);
-+        connection.disconnect(connection._updatedId);
-+    },
-+
-+    _hideConnection: function(connection) {
 +        let section = connection._section;
 +        if (section == NMConnectionCategory.VPN) {
 +            this._devices.vpn.device.removeConnection(connection);
@@ -2046,13 +2259,13 @@ index 0000000..0e2d483
 +            for (let i = 0; i < devices.length; i++)
 +                devices[i].removeConnection(connection);
 +        }
-+        connection._everAdded = false;
++
++        connection._uuid = null;
++        connection.disconnect(connection._removedId);
++        connection.disconnect(connection._updatedId);
 +    },
 +
 +    _updateConnection: function(connection) {
-+        if (connection._everAdded)
-+            this._hideConnection(connection);
-+
 +        let connectionSettings = connection.get_setting_by_name(NetworkManager.SETTING_CONNECTION_SETTING_NAME);
 +        connection._type = connectionSettings.type;
 +        connection._section = this._ctypes[connection._type];
@@ -2062,16 +2275,13 @@ index 0000000..0e2d483
 +
 +        let section = connection._section;
 +        if (section == NMConnectionCategory.VPN) {
-+            this._devices.vpn.device.addConnection(connection);
++            this._devices.vpn.device.checkConnection(connection);
 +            this._devices.vpn.section.actor.show();
 +            connection._everAdded = true;
 +        } else {
 +            let devices = this._devices[section].devices;
 +            for (let i = 0; i < devices.length; i++) {
-+                if (devices[i].connectionValid(connection)) {
-+                    devices[i].addConnection(connection);
-+                    connection._everAdded = true;
-+                }
++                devices[i].checkConnection(connection);
 +            }
 +        }
 +    },
@@ -2181,17 +2391,18 @@ index 0000000..0e2d483
 +                this.setIcon('network-wired');
 +                break;
 +            case NMConnectionCategory.WWAN:
-+                if (mc._type == NetworkManager.SETTING_BLUETOOTH_SETTING_NAME) {
-+                    // XXX: NetworkManager does not give us signal for bluetooth
-+                    this.setIcon('network-cellular-signal-excellent');
-+                    break;
-+                }
-+
 +                dev = mc._primaryDevice;
 +                if (!dev) {
 +                    log('Active connection with no primary device?');
 +                    break;
 +                }
++                if (!dev.mobileDevice) {
++                    // this can happen for bluetooth in PAN mode
++                    // XXX: need network-cellular-connected icon
++                    this.setIcon('network-cellular-signal-excellent');
++                    break;
++                }   
++
 +                if (this._mobileUpdateId && this._mobileUpdateDevice != dev) {
 +                    this._mobileUpdateDevice.disconnect(this._mobileUpdateId);
 +                    this._mobileUpdateDevice = dev.mobileDevice;
@@ -2244,8 +2455,962 @@ index 0000000..0e2d483
 +        this._setSummaryIcon(icon);
 +    }
 +};
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 7c251de..0c440ae 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -62,7 +62,8 @@ gnome_shell_cflags =				\
+ 	$(GNOME_SHELL_CFLAGS)			\
+ 	-I$(srcdir)/tray			\
+ 	-DVERSION=\"$(VERSION)\"		\
+-	-DLOCALEDIR=\"$(datadir)/locale\" \
++	-DLOCALEDIR=\"$(datadir)/locale\" 	\
++	-DDATADIR=\"$(datadir)\"		\
+ 	-DGNOME_SHELL_LIBEXECDIR=\"$(libexecdir)\"	\
+ 	-DGNOME_SHELL_DATADIR=\"$(pkgdatadir)\"	\
+ 	-DGNOME_SHELL_PKGLIBDIR=\"$(pkglibdir)\" \
+@@ -90,6 +91,7 @@ shell_public_headers_h =		\
+ 	shell-generic-container.h	\
+ 	shell-gtk-embed.h		\
+ 	shell-global.h			\
++	shell-mobile-providers.h	\
+ 	shell-perf-log.h		\
+ 	shell-slicer.h			\
+ 	shell-stack.h			\
+@@ -121,6 +123,7 @@ libgnome_shell_la_SOURCES =		\
+ 	shell-generic-container.c	\
+ 	shell-gtk-embed.c		\
+ 	shell-global.c			\
++	shell-mobile-providers.c	\
+ 	shell-perf-log.c		\
+ 	shell-polkit-authentication-agent.h	\
+ 	shell-polkit-authentication-agent.c	\
+diff --git a/src/shell-mobile-providers.c b/src/shell-mobile-providers.c
+new file mode 100644
+index 0000000..ca6a41f
+--- /dev/null
++++ b/src/shell-mobile-providers.c
+@@ -0,0 +1,816 @@
++/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
++/*
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the
++ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
++ * Boston, MA 02110-1301 USA.
++ *
++ * Copyright (C) 2009 Novell, Inc.
++ * Author: Tambet Ingo (tambet@gmail.com).
++ *
++ * Copyright (C) 2009 - 2010 Red Hat, Inc.
++ */
++
++#include "config.h"
++
++#include <string.h>
++#include <errno.h>
++#include <stdlib.h>
++
++#include <glib/gi18n.h>
++
++#include "shell-mobile-providers.h"
++
++#ifndef MOBILE_BROADBAND_PROVIDER_INFO
++#define MOBILE_BROADBAND_PROVIDER_INFO DATADIR "/mobile-broadband-provider-info/serviceproviders.xml"
++#endif
++
++#define ISO_3166_COUNTRY_CODES DATADIR "/zoneinfo/iso3166.tab"
++
++
++
++static GHashTable *
++read_country_codes (void)
++{
++    GHashTable *table;
++    GIOChannel *channel;
++    GString *buffer;
++    GError *error = NULL;
++    GIOStatus status;
++
++    channel = g_io_channel_new_file (ISO_3166_COUNTRY_CODES, "r", &error);
++    if (!channel) {
++        if (error) {
++            g_warning ("Could not read " ISO_3166_COUNTRY_CODES ": %s", error->message);
++            g_error_free (error);
++        } else
++            g_warning ("Could not read " ISO_3166_COUNTRY_CODES ": Unknown error");
++
++        return NULL;
++    }
++
++    table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
++    buffer = g_string_sized_new (32);
++
++    status = G_IO_STATUS_NORMAL;
++    while (status == G_IO_STATUS_NORMAL) {
++        status = g_io_channel_read_line_string (channel, buffer, NULL, &error);
++
++        switch (status) {
++        case G_IO_STATUS_NORMAL:
++            if (buffer->str[0] != '#') {
++                char **pieces;
++
++                pieces = g_strsplit (buffer->str, "\t", 2);
++
++                /* Hack for rh#556292; iso3166.tab is just wrong */
++                pieces[1] = pieces[1] ? g_strchomp (pieces[1]) : NULL;
++                if (pieces[1] && !strcmp (pieces[1], "Britain (UK)")) {
++                    g_free (pieces[1]);
++                    pieces[1] = g_strdup (_("United Kingdom"));
++                }
++
++                g_hash_table_insert (table, pieces[0], pieces[1]);
++                g_free (pieces);
++            }
++
++            g_string_truncate (buffer, 0);
++            break;
++        case G_IO_STATUS_EOF:
++            break;
++        case G_IO_STATUS_ERROR:
++            g_warning ("Error while reading: %s", error->message);
++            g_error_free (error);
++            break;
++        case G_IO_STATUS_AGAIN:
++            /* FIXME: Try again a few times, but really, it never happes, right? */
++            break;
++        }
++    }
++
++    g_string_free (buffer, TRUE);
++    g_io_channel_unref (channel);
++
++    return table;
++}
++
++/* XML Parser */
++
++typedef enum {
++    PARSER_TOPLEVEL = 0,
++    PARSER_COUNTRY,
++    PARSER_PROVIDER,
++    PARSER_METHOD_GSM,
++    PARSER_METHOD_GSM_APN,
++    PARSER_METHOD_CDMA,
++    PARSER_ERROR
++} MobileContextState;
++
++typedef struct {
++    GHashTable *country_codes;
++    GHashTable *table;
++
++    char *current_country;
++    GSList *current_providers;
++    ShellMobileProvider *current_provider;
++    ShellMobileAccessMethod *current_method;
++
++    char *text_buffer;
++    MobileContextState state;
++} MobileParser;
++
++static ShellGsmMccMnc *
++mcc_mnc_new (const char *mcc, const char *mnc)
++{
++    ShellGsmMccMnc *m;
++
++    m = g_slice_new (ShellGsmMccMnc);
++    m->mcc = g_strstrip (g_strdup (mcc));
++    m->mnc = g_strstrip (g_strdup (mnc));
++    return m;
++}
++
++/* added in porting */
++static ShellGsmMccMnc *
++mcc_mnc_copy (const ShellGsmMccMnc *other) {
++    ShellGsmMccMnc *ret;
++
++    ret = g_slice_new (ShellGsmMccMnc);
++    ret->mcc = g_strdup (other->mcc);
++    ret->mnc = g_strdup (other->mnc);
++    return ret;
++}
++
++static void
++mcc_mnc_free (ShellGsmMccMnc *m)
++{
++    g_return_if_fail (m != NULL);
++    g_free (m->mcc);
++    g_free (m->mnc);
++    g_slice_free (ShellGsmMccMnc, m);
++}
++
++/* added in porting */
++G_DEFINE_BOXED_TYPE (ShellGsmMccMnc, shell_gsm_mcc_mnc, mcc_mnc_copy, mcc_mnc_free)
++
++static ShellMobileAccessMethod *
++access_method_new (void)
++{
++    ShellMobileAccessMethod *method;
++
++    method = g_slice_new0 (ShellMobileAccessMethod);
++    method->refs = 1;
++    method->lcl_names = g_hash_table_new_full (g_str_hash, g_str_equal,
++                                               (GDestroyNotify) g_free,
++                                               (GDestroyNotify) g_free);
++
++    return method;
++}
++
++ShellMobileAccessMethod *
++shell_mobile_access_method_ref (ShellMobileAccessMethod *method)
++{
++    g_return_val_if_fail (method != NULL, NULL);
++    g_return_val_if_fail (method->refs > 0, NULL);
++ 
++    method->refs++;
++
++    return method;
++}
++
++void
++shell_mobile_access_method_unref (ShellMobileAccessMethod *method)
++{
++    g_return_if_fail (method != NULL);
++    g_return_if_fail (method->refs > 0);
++
++    if (--method->refs == 0) {
++        g_free (method->name);
++        g_hash_table_destroy (method->lcl_names);
++        g_free (method->username);
++        g_free (method->password);
++        g_free (method->gateway);
++        g_free (method->gsm_apn);
++        g_slist_foreach (method->dns, (GFunc) g_free, NULL);
++        g_slist_free (method->dns);
++
++        g_slice_free (ShellMobileAccessMethod, method);
++    }
++}
++
++GType
++shell_mobile_access_method_get_type (void)
++{
++    static GType type = 0;
++
++    if (G_UNLIKELY (type == 0)) {
++        type = g_boxed_type_register_static ("ShellMobileAccessMethod",
++                                             (GBoxedCopyFunc) shell_mobile_access_method_ref,
++                                             (GBoxedFreeFunc) shell_mobile_access_method_unref);
++    }
++    return type;
++}
++
++
++static ShellMobileProvider *
++provider_new (void)
++{
++    ShellMobileProvider *provider;
++
++    provider = g_slice_new0 (ShellMobileProvider);
++    provider->refs = 1;
++    provider->lcl_names = g_hash_table_new_full (g_str_hash, g_str_equal,
++                                                 (GDestroyNotify) g_free,
++                                                 (GDestroyNotify) g_free);
++
++    return provider;
++}
++
++ShellMobileProvider *
++shell_mobile_provider_ref (ShellMobileProvider *provider)
++{
++    provider->refs++;
++
++    return provider;
++}
++
++void
++shell_mobile_provider_unref (ShellMobileProvider *provider)
++{
++    if (--provider->refs == 0) {
++        g_free (provider->name);
++        g_hash_table_destroy (provider->lcl_names);
++
++        g_slist_foreach (provider->methods, (GFunc) shell_mobile_access_method_unref, NULL);
++        g_slist_free (provider->methods);
++
++        g_slist_foreach (provider->gsm_mcc_mnc, (GFunc) mcc_mnc_free, NULL);
++        g_slist_free (provider->gsm_mcc_mnc);
++
++        g_slist_free (provider->cdma_sid);
++
++        g_slice_free (ShellMobileProvider, provider);
++    }
++}
++
++GType
++shell_mobile_provider_get_type (void)
++{
++    static GType type = 0;
++
++    if (G_UNLIKELY (type == 0)) {
++        type = g_boxed_type_register_static ("ShellMobileProvider",
++                                             (GBoxedCopyFunc) shell_mobile_provider_ref,
++                                             (GBoxedFreeFunc) shell_mobile_provider_unref);
++    }
++    return type;
++}
++
++static void
++provider_list_free (gpointer data)
++{
++    GSList *list = (GSList *) data;
++
++    while (list) {
++        shell_mobile_provider_unref ((ShellMobileProvider *) list->data);
++        list = g_slist_delete_link (list, list);
++    }
++}
++
++static void
++parser_toplevel_start (MobileParser *parser,
++                       const char *name,
++                       const char **attribute_names,
++                       const char **attribute_values)
++{
++    int i;
++
++    if (!strcmp (name, "serviceproviders")) {
++        for (i = 0; attribute_names && attribute_names[i]; i++) {
++            if (!strcmp (attribute_names[i], "format")) {
++                if (strcmp (attribute_values[i], "2.0")) {
++                    g_warning ("%s: mobile broadband provider database format '%s'"
++                               " not supported.", __func__, attribute_values[i]);
++                    parser->state = PARSER_ERROR;
++                    break;
++                }
++            }
++        }
++    } else if (!strcmp (name, "country")) {
++        for (i = 0; attribute_names && attribute_names[i]; i++) {
++            if (!strcmp (attribute_names[i], "code")) {
++                char *country_code;
++                char *country;
++
++                country_code = g_ascii_strup (attribute_values[i], -1);
++                country = g_hash_table_lookup (parser->country_codes, country_code);
++                if (country) {
++                    parser->current_country = g_strdup (country);
++                    g_free (country_code);
++                } else
++                    parser->current_country = country_code;
++
++                parser->state = PARSER_COUNTRY;
++                break;
++            }
++        }
++    }
++}
++
++static void
++parser_country_start (MobileParser *parser,
++                      const char *name,
++                      const char **attribute_names,
++                      const char **attribute_values)
++{
++    if (!strcmp (name, "provider")) {
++        parser->state = PARSER_PROVIDER;
++        parser->current_provider = provider_new ();
++    }
++}
++
++static void
++parser_provider_start (MobileParser *parser,
++                       const char *name,
++                       const char **attribute_names,
++                       const char **attribute_values)
++{
++    if (!strcmp (name, "gsm"))
++        parser->state = PARSER_METHOD_GSM;
++    else if (!strcmp (name, "cdma")) {
++        parser->state = PARSER_METHOD_CDMA;
++        parser->current_method = access_method_new ();
++    }
++}
++
++static void
++parser_gsm_start (MobileParser *parser,
++                  const char *name,
++                  const char **attribute_names,
++                  const char **attribute_values)
++{
++    if (!strcmp (name, "network-id")) {
++        const char *mcc = NULL, *mnc = NULL;
++        int i;
++
++        for (i = 0; attribute_names && attribute_names[i]; i++) {
++            if (!strcmp (attribute_names[i], "mcc"))
++                mcc = attribute_values[i];
++            else if (!strcmp (attribute_names[i], "mnc"))
++                mnc = attribute_values[i];
++
++            if (mcc && strlen (mcc) && mnc && strlen (mnc)) {
++                parser->current_provider->gsm_mcc_mnc = g_slist_prepend (parser->current_provider->gsm_mcc_mnc,
++                                                                         mcc_mnc_new (mcc, mnc));
++                break;
++            }
++        }
++    } else if (!strcmp (name, "apn")) {
++        int i;
++
++        for (i = 0; attribute_names && attribute_names[i]; i++) {
++            if (!strcmp (attribute_names[i], "value")) {
++
++                parser->state = PARSER_METHOD_GSM_APN;
++                parser->current_method = access_method_new ();
++                parser->current_method->gsm_apn = g_strstrip (g_strdup (attribute_values[i]));
++                break;
++            }
++        }
++    }
++}
++
++static void
++parser_cdma_start (MobileParser *parser,
++                   const char *name,
++                   const char **attribute_names,
++                   const char **attribute_values)
++{
++    if (!strcmp (name, "sid")) {
++        int i;
++
++        for (i = 0; attribute_names && attribute_names[i]; i++) {
++            if (!strcmp (attribute_names[i], "value")) {
++                unsigned long tmp;
++
++                errno = 0;
++                tmp = strtoul (attribute_values[i], NULL, 10);
++                if (errno == 0 && tmp > 0)
++                    parser->current_provider->cdma_sid = g_slist_prepend (parser->current_provider->cdma_sid,
++                                                                          GUINT_TO_POINTER ((guint32) tmp));
++                break;
++            }
++        }
++    }
++}
++
++static void
++mobile_parser_start_element (GMarkupParseContext *context,
++                             const gchar *element_name,
++                             const gchar **attribute_names,
++                             const gchar **attribute_values,
++                             gpointer data,
++                             GError **error)
++{
++    MobileParser *parser = (MobileParser *) data;
++
++    if (parser->text_buffer) {
++        g_free (parser->text_buffer);
++        parser->text_buffer = NULL;
++    }
++
++    switch (parser->state) {
++    case PARSER_TOPLEVEL:
++        parser_toplevel_start (parser, element_name, attribute_names, attribute_values);
++        break;
++    case PARSER_COUNTRY:
++        parser_country_start (parser, element_name, attribute_names, attribute_values);
++        break;
++    case PARSER_PROVIDER:
++        parser_provider_start (parser, element_name, attribute_names, attribute_values);
++        break;
++    case PARSER_METHOD_GSM:
++        parser_gsm_start (parser, element_name, attribute_names, attribute_values);
++        break;
++    case PARSER_METHOD_CDMA:
++        parser_cdma_start (parser, element_name, attribute_names, attribute_values);
++        break;
++    default:
++        break;
++    }
++}
++
++static void
++parser_country_end (MobileParser *parser,
++                    const char *name)
++{
++    if (!strcmp (name, "country")) {
++        g_hash_table_insert (parser->table, parser->current_country, parser->current_providers);
++        parser->current_country = NULL;
++        parser->current_providers = NULL;
++        parser->text_buffer = NULL;
++        parser->state = PARSER_TOPLEVEL;
++    }
++}
++
++static void
++parser_provider_end (MobileParser *parser,
++                     const char *name)
++{
++    if (!strcmp (name, "name")) {
++        if (!parser->current_provider->name) {
++            /* Use the first one. */
++            parser->current_provider->name = parser->text_buffer;
++            parser->text_buffer = NULL;
++        }
++    } else if (!strcmp (name, "provider")) {
++        parser->current_provider->methods = g_slist_reverse (parser->current_provider->methods);
++
++        parser->current_provider->gsm_mcc_mnc = g_slist_reverse (parser->current_provider->gsm_mcc_mnc);
++        parser->current_provider->cdma_sid = g_slist_reverse (parser->current_provider->cdma_sid);
++
++        parser->current_providers = g_slist_prepend (parser->current_providers, parser->current_provider);
++        parser->current_provider = NULL;
++        parser->text_buffer = NULL;
++        parser->state = PARSER_COUNTRY;
++    }
++}
++
++static void
++parser_gsm_end (MobileParser *parser,
++                 const char *name)
++{
++    if (!strcmp (name, "gsm")) {
++        parser->text_buffer = NULL;
++        parser->state = PARSER_PROVIDER;
++    }
++}
++
++static void
++parser_gsm_apn_end (MobileParser *parser,
++                    const char *name)
++{
++    if (!strcmp (name, "name")) {
++        if (!parser->current_method->name) {
++            /* Use the first one. */
++            parser->current_method->name = parser->text_buffer;
++            parser->text_buffer = NULL;
++        }
++    } else if (!strcmp (name, "username")) {
++        parser->current_method->username = parser->text_buffer;
++        parser->text_buffer = NULL;
++    } else if (!strcmp (name, "password")) {
++        parser->current_method->password = parser->text_buffer;
++        parser->text_buffer = NULL;
++    } else if (!strcmp (name, "dns")) {
++        parser->current_method->dns = g_slist_prepend (parser->current_method->dns, parser->text_buffer);
++        parser->text_buffer = NULL;
++    } else if (!strcmp (name, "gateway")) {
++        parser->current_method->gateway = parser->text_buffer;
++        parser->text_buffer = NULL;
++    } else if (!strcmp (name, "apn")) {
++        parser->current_method->type = SHELL_MOBILE_ACCESS_METHOD_TYPE_GSM;
++        parser->current_method->dns = g_slist_reverse (parser->current_method->dns);
++
++        if (!parser->current_method->name)
++            parser->current_method->name = g_strdup (_("Default"));
++
++        parser->current_provider->methods = g_slist_prepend (parser->current_provider->methods,
++                                                             parser->current_method);
++        parser->current_method = NULL;
++        parser->text_buffer = NULL;
++        parser->state = PARSER_METHOD_GSM;
++    }
++}
++
++static void
++parser_cdma_end (MobileParser *parser,
++                 const char *name)
++{
++    if (!strcmp (name, "username")) {
++        parser->current_method->username = parser->text_buffer;
++        parser->text_buffer = NULL;
++    } else if (!strcmp (name, "password")) {
++        parser->current_method->password = parser->text_buffer;
++        parser->text_buffer = NULL;
++    } else if (!strcmp (name, "dns")) {
++        parser->current_method->dns = g_slist_prepend (parser->current_method->dns, parser->text_buffer);
++        parser->text_buffer = NULL;
++    } else if (!strcmp (name, "gateway")) {
++        parser->current_method->gateway = parser->text_buffer;
++        parser->text_buffer = NULL;
++    } else if (!strcmp (name, "cdma")) {
++        parser->current_method->type = SHELL_MOBILE_ACCESS_METHOD_TYPE_CDMA;
++        parser->current_method->dns = g_slist_reverse (parser->current_method->dns);
++
++        if (!parser->current_method->name)
++            parser->current_method->name = g_strdup (parser->current_provider->name);
++
++        parser->current_provider->methods = g_slist_prepend (parser->current_provider->methods,
++                                                             parser->current_method);
++        parser->current_method = NULL;
++        parser->text_buffer = NULL;
++        parser->state = PARSER_PROVIDER;
++    }
++}
++
++static void
++mobile_parser_end_element (GMarkupParseContext *context,
++                           const gchar *element_name,
++                           gpointer data,
++                           GError **error)
++{
++    MobileParser *parser = (MobileParser *) data;
++
++    switch (parser->state) {
++    case PARSER_COUNTRY:
++        parser_country_end (parser, element_name);
++        break;
++    case PARSER_PROVIDER:
++        parser_provider_end (parser, element_name);
++        break;
++    case PARSER_METHOD_GSM:
++        parser_gsm_end (parser, element_name);
++        break;
++    case PARSER_METHOD_GSM_APN:
++        parser_gsm_apn_end (parser, element_name);
++        break;
++    case PARSER_METHOD_CDMA:
++        parser_cdma_end (parser, element_name);
++        break;
++    default:
++        break;
++    }
++}
++
++static void
++mobile_parser_characters (GMarkupParseContext *context,
++                          const gchar *text,
++                          gsize text_len,
++                          gpointer data,
++                          GError **error)
++{
++    MobileParser *parser = (MobileParser *) data;
++
++    g_free (parser->text_buffer);
++    parser->text_buffer = g_strdup (text);
++}
++
++static const GMarkupParser mobile_parser = {
++    mobile_parser_start_element,
++    mobile_parser_end_element,
++    mobile_parser_characters,
++    NULL, /* passthrough */
++    NULL /* error */
++};
++
++/**
++ * shell_mobile_providers_parse:
++ * @out_ccs: (out) (allow-none): (element-type utf8 utf8): a #GHashTable containing
++ *   country codes
++ *
++ * Returns: (element-type utf8 GList<Shell.MobileProvider>) (transfer container): a
++ *   hash table where keys are country names 'char *', values are a 'GSList *'
++ *   of 'ShellMobileProvider *'. Everything is destroyed with g_hash_table_destroy ().
++*/
++GHashTable *
++shell_mobile_providers_parse (GHashTable **out_ccs)
++{
++    GMarkupParseContext *ctx;
++    GIOChannel *channel;
++    MobileParser parser;
++    GError *error = NULL;
++    char buffer[4096];
++    GIOStatus status;
++    gsize len = 0;
++
++    memset (&parser, 0, sizeof (MobileParser));
++
++    parser.country_codes = read_country_codes ();
++    if (!parser.country_codes)
++        goto out;
++
++    channel = g_io_channel_new_file (MOBILE_BROADBAND_PROVIDER_INFO, "r", &error);
++    if (!channel) {
++        if (error) {
++            g_warning ("Could not read " MOBILE_BROADBAND_PROVIDER_INFO ": %s", error->message);
++            g_error_free (error);
++        } else
++            g_warning ("Could not read " MOBILE_BROADBAND_PROVIDER_INFO ": Unknown error");
++
++        goto out;
++    }
++
++    parser.table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, provider_list_free);
++    parser.state = PARSER_TOPLEVEL;
++
++    ctx = g_markup_parse_context_new (&mobile_parser, 0, &parser, NULL);
++
++    status = G_IO_STATUS_NORMAL;
++    while (status == G_IO_STATUS_NORMAL) {
++        status = g_io_channel_read_chars (channel, buffer, sizeof (buffer), &len, &error);
++
++        switch (status) {
++        case G_IO_STATUS_NORMAL:
++            if (!g_markup_parse_context_parse (ctx, buffer, len, &error)) {
++                status = G_IO_STATUS_ERROR;
++                g_warning ("Error while parsing XML: %s", error->message);
++                g_error_free (error);;
++            }
++            break;
++        case G_IO_STATUS_EOF:
++            break;
++        case G_IO_STATUS_ERROR:
++            g_warning ("Error while reading: %s", error->message);
++            g_error_free (error);
++            break;
++        case G_IO_STATUS_AGAIN:
++            /* FIXME: Try again a few times, but really, it never happes, right? */
++            break;
++        }
++    }
++
++    g_io_channel_unref (channel);
++    g_markup_parse_context_free (ctx);
++
++    if (parser.current_provider) {
++        g_warning ("pending current provider");
++        shell_mobile_provider_unref (parser.current_provider);
++    }
++
++    if (parser.current_providers) {
++        g_warning ("pending current providers");
++        provider_list_free (parser.current_providers);
++    }
++
++    g_free (parser.current_country);
++    g_free (parser.text_buffer);
++
++ out:
++    if (parser.country_codes) {
++        if (out_ccs)
++            *out_ccs = parser.country_codes;
++        else
++            g_hash_table_destroy (parser.country_codes);
++    }
++
++    return parser.table;
++}
++
++static void
++dump_generic (ShellMobileAccessMethod *method)
++{
++    GSList *iter;
++    GString *dns;
++
++    g_print ("        username: %s\n", method->username ? method->username : "");
++    g_print ("        password: %s\n", method->password ? method->password : "");
++
++    dns = g_string_new (NULL);
++    for (iter = method->dns; iter; iter = g_slist_next (iter))
++        g_string_append_printf (dns, "%s%s", dns->len ? ", " : "", (char *) iter->data);
++    g_print ("        dns     : %s\n", dns->str);
++    g_string_free (dns, TRUE);
++
++    g_print ("        gateway : %s\n", method->gateway ? method->gateway : "");
++}
++
++static void
++dump_cdma (ShellMobileAccessMethod *method)
++{
++    g_print ("     CDMA: %s\n", method->name);
++
++    dump_generic (method);
++}
++
++static void
++dump_gsm (ShellMobileAccessMethod *method)
++{
++    g_print ("     APN: %s (%s)\n", method->name, method->gsm_apn);
++
++    dump_generic (method);
++}
++
++static void
++dump_country (gpointer key, gpointer value, gpointer user_data)
++{
++    GSList *citer, *miter;
++
++    for (citer = value; citer; citer = g_slist_next (citer)) {
++        ShellMobileProvider *provider = citer->data;
++
++        g_print ("Provider: %s (%s)\n", provider->name, (const char *) key);
++        for (miter = provider->methods; miter; miter = g_slist_next (miter)) {
++            ShellMobileAccessMethod *method = miter->data;
++            GSList *liter;
++
++
++            for (liter = provider->gsm_mcc_mnc; liter; liter = g_slist_next (liter)) {
++                ShellGsmMccMnc *m = liter->data;
++                g_print ("        MCC/MNC: %s-%s\n", m->mcc, m->mnc);
++            }
++
++            for (liter = provider->cdma_sid; liter; liter = g_slist_next (liter))
++                g_print ("        SID: %d\n", GPOINTER_TO_UINT (liter->data));
++
++            switch (method->type) {
++            case SHELL_MOBILE_ACCESS_METHOD_TYPE_CDMA:
++                dump_cdma (method);
++                break;
++            case SHELL_MOBILE_ACCESS_METHOD_TYPE_GSM:
++                dump_gsm (method);
++                break;
++            default:
++                break;
++            }
++            g_print ("\n");
++        }
++    }
++}
++
++void
++shell_mobile_providers_dump (GHashTable *providers)
++{
++    g_return_if_fail (providers != NULL);
++    g_hash_table_foreach (providers, dump_country, NULL);
++}
++
++/* All the following don't exist in nm-applet, because C doesn't need
++   those. They're only needed for the introspection annotations
++*/
++
++/**
++ * shell_mobile_provider_get_gsm_mcc_mnc:
++ * @provider: a #ShellMobileProvider
++ *
++ * Returns: (element-type Shell.GsmMccMnc) (transfer none): the
++ *   list of #ShellGsmMccMnc this provider exposes
++ */
++GSList *
++shell_mobile_provider_get_gsm_mcc_mnc (ShellMobileProvider *provider)
++{
++    return provider->gsm_mcc_mnc;
++}
++
++/**
++ * shell_mobile_provider_get_cdma_sid:
++ * @provider: a #ShellMobileProvider
++ *
++ * Returns: (element-type guint32) (transfer none): the
++ *   list of CDMA sids this provider exposes
++ */
++GSList *
++shell_mobile_provider_get_cdma_sid (ShellMobileProvider *provider)
++{
++    return provider->cdma_sid;
++}
+diff --git a/src/shell-mobile-providers.h b/src/shell-mobile-providers.h
+new file mode 100644
+index 0000000..d70b8e2
+--- /dev/null
++++ b/src/shell-mobile-providers.h
+@@ -0,0 +1,96 @@
++/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
++/*
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the
++ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
++ * Boston, MA 02110-1301 USA.
++ *
++ * Copyright (C) 2009 Novell, Inc.
++ * Author: Tambet Ingo (tambet@gmail.com).
++ *
++ * Copyright (C) 2009 - 2010 Red Hat, Inc.
++ *
++ * Ported to GNOME Shell by Giovanni Campagna <scampa.giovanni@gmail.com>
++ * Porting consisted only in replacing nmn with shell, to be compatible with
++ * GObject Introspection namespacing
++ */
++
++#ifndef SHELL_MOBILE_PROVIDERS_H
++#define SHELL_MOBILE_PROVIDERS_H
++
++#include <glib.h>
++#include <glib-object.h>
++
++#define SHELL_TYPE_MOBILE_PROVIDER (shell_mobile_provider_get_type ())
++#define SHELL_TYPE_MOBILE_ACCESS_METHOD (shell_mobile_access_method_get_type ())
++
++typedef enum {
++    SHELL_MOBILE_ACCESS_METHOD_TYPE_UNKNOWN = 0,
++    SHELL_MOBILE_ACCESS_METHOD_TYPE_GSM,
++    SHELL_MOBILE_ACCESS_METHOD_TYPE_CDMA
++} ShellMobileAccessMethodType;
++
++typedef struct {
++    char *mcc;
++    char *mnc;
++} ShellGsmMccMnc;
++
++typedef struct {
++    char *name;
++    /* maps lang (char *) -> name (char *) */
++    GHashTable *lcl_names;
++
++    char *username;
++    char *password;
++    char *gateway;
++    GSList *dns; /* GSList of 'char *' */
++
++    /* Only used with SHELL_PROVIDER_TYPE_GSM */
++    char *gsm_apn;
++
++    ShellMobileAccessMethodType type;
++
++    gint refs;
++} ShellMobileAccessMethod;
++
++typedef struct {
++    char *name;
++    /* maps lang (char *) -> name (char *) */
++    GHashTable *lcl_names;
++
++    GSList *methods; /* GSList of ShellMobileAccessMethod */
++
++    GSList *gsm_mcc_mnc; /* GSList of ShellGsmMccMnc */
++    GSList *cdma_sid; /* GSList of guint32 */
++
++    gint refs;
++} ShellMobileProvider;
++
++
++GType shell_gsm_mcc_mnc_get_type (void); /* added in porting */
++GType shell_mobile_provider_get_type (void);
++GType shell_mobile_access_method_get_type (void);
++
++ShellMobileProvider *shell_mobile_provider_ref   (ShellMobileProvider *provider);
++void                 shell_mobile_provider_unref (ShellMobileProvider *provider);
++GSList *             shell_mobile_provider_get_gsm_mcc_mnc (ShellMobileProvider *provider);
++GSList *             shell_mobile_provider_get_cdma_sid (ShellMobileProvider *provider);
++
++ShellMobileAccessMethod *shell_mobile_access_method_ref   (ShellMobileAccessMethod *method);
++void                     shell_mobile_access_method_unref (ShellMobileAccessMethod *method);
++
++GHashTable *shell_mobile_providers_parse (GHashTable **out_ccs);
++
++void shell_mobile_providers_dump (GHashTable *providers);
++
++#endif /* SHELL_MOBILE_PROVIDERS_H */
 diff --git a/tools/build/gnome-shell.modules b/tools/build/gnome-shell.modules
-index 3f51fa2..73332b8 100644
+index 6c8db09..837cb22 100644
 --- a/tools/build/gnome-shell.modules
 +++ b/tools/build/gnome-shell.modules
 @@ -9,6 +9,8 @@
@@ -2257,7 +3422,7 @@ index 3f51fa2..73332b8 100644
    <repository type="tarball" name="cairo.org"
        href="http://cairographics.org/"/>
    <repository type="tarball" name="0pointer.de"
-@@ -367,4 +369,19 @@
+@@ -369,4 +371,19 @@
      </dependencies>
  </autotools>
  
