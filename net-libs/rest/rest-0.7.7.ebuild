@@ -38,10 +38,7 @@ pkg_setup() {
 	DOCS="AUTHORS NEWS README"
 }
 
-# FIXME: tests fail, find out where to report it.
-# No idea where the upstream bugzilla is.
 src_test() {
-	unset DBUS_SESSION_BUS_ADDRESS
 	# Tests need dbus
 	Xemake check || die
 }
