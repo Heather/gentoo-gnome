@@ -88,6 +88,10 @@ src_prepare() {
 	# disable tests
 	epatch "${FILESDIR}/${PN}-fix-tests.patch"
 
+	# https://bugzilla.gnome.org/show_bug.cgi?id=643011
+	# Merged upstream, not needed for next release
+	epatch "${FILESDIR}/${P}-fix-introspection.patch"
+
 	EPATCH_SOURCE="${WORKDIR}/ifnet-0.9" EPATCH_SUFFIX="diff" EPATCH_FORCE="yes" epatch
 	eautoreconf
 	default

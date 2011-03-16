@@ -13,7 +13,7 @@ HOMEPAGE="http://live.gnome.org/GnomeShell"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="nm-applet"
+IUSE="+nm-applet"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
@@ -23,7 +23,7 @@ fi
 
 # gnome-desktop-2.91.2 is needed due to header changes, db82a33 in gnome-desktop
 # FIXME: Automagic gnome-bluetooth[introspection] support.
-# latest mutter is needed due to commit 474ff2e997
+# latest mutter is needed due to commit 474ff2e9 and commit 079953c3
 # latest gsettings-desktop-schemas is needed due to commit 602fa1c6
 COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 	>=dev-libs/gjs-0.7.11
@@ -40,7 +40,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 	>=net-libs/telepathy-glib-0.13.12[introspection]
 	>=net-wireless/gnome-bluetooth-2.90.0[introspection]
 	>=sys-auth/polkit-0.100[introspection]
-	>=x11-wm/mutter-2.91.91[introspection]
+	>=x11-wm/mutter-2.91.91.1[introspection]
 
 	dev-libs/dbus-glib
 	dev-libs/libxml2:2
@@ -55,9 +55,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 
 	x11-libs/startup-notification
 	x11-libs/libXfixes
-	x11-apps/mesa-progs
-
-	nm-applet? ( >=net-misc/networkmanager-0.8.996[introspection] )"
+	x11-apps/mesa-progs"
 # Runtime-only deps are probably incomplete and approximate.
 # Each block:
 # 1. Pull in polkit-0.101 for pretty authorization dialogs
@@ -77,7 +75,9 @@ RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/gnome-settings-daemon-2.91
 	>=gnome-base/gnome-control-center-2.91
 
-	nm-applet? ( >=gnome-extra/nm-applet-0.8.996 )"
+	nm-applet? (
+		>=gnome-extra/nm-applet-0.8.996
+		>=net-misc/networkmanager-0.8.996-r1[introspection] )"
 DEPEND="${COMMON_DEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.22
@@ -90,14 +90,6 @@ G2CONF="--enable-compile-warnings=maximum
 --disable-jhbuild-wrapper-script"
 
 src_prepare() {
-	if use nm-applet; then
-		# See https://bugzilla.gnome.org/show_bug.cgi?id=621707"
-		ewarn "Adding support for the experimental NetworkManager applet."
-		ewarn "This needs the latest NetworkManager & nm-applet trunk."
-		ewarn "Report bugs about this to 'nirbheek' on #gentoo-desktop @ FreeNode."
-		epatch "${FILESDIR}/${PN}-experimental-nm-applet-1.5.patch"
-	fi
-
 	epatch "${FILESDIR}/${PN}-fix-gnome-bluetooth.patch"
 
 	gnome2_src_prepare
