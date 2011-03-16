@@ -32,8 +32,8 @@ RDEPEND="
 	>=gnome-base/libgnomekbd-${PV}
 	>=x11-libs/startup-notification-0.10
 
-	>=media-libs/gstreamer-0.10.31:0.10
-	>=media-libs/gst-plugins-base-0.10.31:0.10
+	>=media-libs/gstreamer-0.10.32:0.10
+	>=media-libs/gst-plugins-base-0.10.32:0.10
 	>=media-libs/gst-plugins-good-0.10.23:0.10
 
 	>=gnome-base/gdm-${PV}
