@@ -8,7 +8,7 @@ GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="python? 2:2.5"
 WANT_AUTOMAKE="1.11"
 
-inherit gnome2 python
+inherit gnome2 python virtualx
 
 DESCRIPTION="A GObject plugins library"
 HOMEPAGE="http://www.gnome.org/"
@@ -46,9 +46,13 @@ pkg_setup() {
 		VALAC=$(type -P valac-0.12)
 		--disable-static
 		--disable-maintainer-mode
-		--disable-gtk2-test-build
-		--disable-gdb
-		--disable-valgrind
-		--disable-gcov"
+		--disable-gtk2-test-build"
+	# Wtf, --disable-gcov, --enable-gcov=no, --enable-gcov, all enable gcov
 	# What do we do about gdb, valgrind, gcov, etc?
+}
+
+src_test() {
+	# Tests need X
+	# FIXME: Tests fail!
+	Xemake check || die
 }
