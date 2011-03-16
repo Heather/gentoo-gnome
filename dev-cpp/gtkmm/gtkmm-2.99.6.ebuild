@@ -26,6 +26,7 @@ RDEPEND=">=dev-cpp/glibmm-2.27.93:2
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	doc? (
+		>=dev-cpp/mm-common-0.9.3
 		media-gfx/graphviz
 		dev-libs/libxslt
 		app-doc/doxygen )"

@@ -20,12 +20,10 @@ DEPEND="${RDEPEND}
 	doc? (
 		app-doc/doxygen
 		>=dev-cpp/mm-common-0.9.3 )"
-# mm-common needed for mm-common-prepare
 
 DOCS="AUTHORS ChangeLog NEWS README"
 
 src_prepare() {
-	# Documentation utils are now only in mm-common
 	G2CONF="${G2CONF}
 		$(use_enable doc documentation)
 		--disable-schemas-compile
@@ -41,12 +39,6 @@ src_prepare() {
 		# don't waste time building examples
 		sed 's/^\(SUBDIRS =.*\)examples\(.*\)$/\1\2/' \
 			-i Makefile.am Makefile.in || die "sed 2 failed"
-	fi
-
-	if use doc; then
-		# Needed due to commit 9635fffd
-		# REPORT A BUG: This shouldn't be needed, should be run during make dist
-		mm-common-prepare --copy --force || die
 	fi
 
 	gnome2_src_prepare
