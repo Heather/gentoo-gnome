@@ -55,9 +55,25 @@ gnome2_src_unpack() {
 }
 
 gnome2_src_prepare() {
-	# Don't use the session bus address inherited via the environment
-	# causes test and introspection-building failures
+	# Reset various variables inherited via the environment.
+	# Causes test failures, introspection-build failures, and access violations
 	unset DBUS_SESSION_BUS_ADDRESS
+	unset DISPLAY
+	unset GNOME_KEYRING_CONTROL
+	unset GNOME_KEYRING_PID
+	unset XAUTHORITY
+	unset XDG_SESSION_COOKIE
+
+	# Reset the XDG_* directories to avoid access violations
+	export XDG_DATA_HOME="${T}/.local/share"
+	export XDG_CONFIG_HOME="${T}/.config"
+	export XDG_CACHE_HOME="${T}/.cache"
+	export XDG_RUNTIME_DIR="${T}/run"
+	mkdir -p "${XDG_DATA_HOME}" "${XDG_CONFIG_HOME}" "${XDG_CACHE_HOME}" \
+			 "${XDG_RUNTIME_DIR}"
+	# This directory needs to be owned by the user, and chmod 0700
+	# http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
+	chmod 0700 "${XDG_RUNTIME_DIR}"
 
 	# Prevent scrollkeeper access violations
 	gnome2_omf_fix
