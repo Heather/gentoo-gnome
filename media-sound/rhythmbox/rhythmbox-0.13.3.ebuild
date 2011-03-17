@@ -6,7 +6,7 @@ EAPI="2"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="python? 2:2.5"
 
-inherit eutils gnome2 python multilib virtualx
+inherit autotools eutils gnome2 python multilib virtualx
 
 DESCRIPTION="Music management and playback software for GNOME"
 HOMEPAGE="http://www.rhythmbox.org/"
@@ -158,11 +158,15 @@ pkg_setup() {
 }
 
 src_prepare() {
+	epatch "${FILESDIR}/libdmapsharing-0.3-support.patch"
+	eautoreconf
+
 	gnome2_src_prepare
 
 	# disable pyc compiling
 	mv py-compile py-compile.orig
 	ln -s $(type -P true) py-compile
+
 }
 
 src_compile() {
@@ -192,5 +196,5 @@ pkg_postinst() {
 
 pkg_postrm() {
 	gnome2_pkg_postrm
-	python_mod_cleanup /usr/lib*/rhythmbox/plugins
+	python_mod_cleanup /usr/$(get_libdir)/rhythmbox/plugins
 }

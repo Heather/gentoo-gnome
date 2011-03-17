@@ -196,5 +196,5 @@ pkg_postinst() {
 
 pkg_postrm() {
 	gnome2_pkg_postrm
-	python_mod_cleanup /usr/lib*/rhythmbox/plugins
+	python_mod_cleanup /usr/$(get_libdir)/rhythmbox/plugins
 }

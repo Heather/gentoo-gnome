@@ -1,0 +1,235 @@
+commit 0d3b198d1bdb3b15eaca1f1105a5940d45fd79b4
+Author: W. Michael Petullo <mike@flyn.org>
+Date:   Tue Jan 18 19:56:24 2011 -0600
+
+    Update to use libdmapsharing 3.0 API
+    
+    Signed-off-by: W. Michael Petullo <mike@flyn.org>
+
+diff --git a/configure.ac b/configure.ac
+index a69febe..8383e47 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -785,7 +785,7 @@ AC_ARG_ENABLE(daap,
+                              [Disable DAAP support]),,
+               enable_daap=auto)
+ if test "x$enable_daap" != "xno"; then
+-	PKG_CHECK_MODULES(DMAPSHARING, libdmapsharing-2.2 >= 2.1.6,
++	PKG_CHECK_MODULES(DMAPSHARING, libdmapsharing-3.0,
+ 			  have_libdmapsharing=yes,
+ 			  have_libdmapsharing=no)
+ 	if test "x$have_libdmapsharing" = "xno" -a "x$enable_daap" = "xyes"; then
+diff --git a/plugins/daap/rb-daap-container-record.c b/plugins/daap/rb-daap-container-record.c
+index 5957452..621b038 100644
+--- a/plugins/daap/rb-daap-container-record.c
++++ b/plugins/daap/rb-daap-container-record.c
+@@ -147,9 +147,9 @@ rb_daap_container_record_class_init (RBDAAPContainerRecordClass *klass)
+ static void
+ rb_daap_container_record_daap_iface_init (gpointer iface, gpointer data)
+ {
+-	DMAPContainerRecordInterface *dmap_container_record = iface;
++	DMAPContainerRecordIface *dmap_container_record = iface;
+ 
+-	g_assert (G_TYPE_FROM_INTERFACE (dmap_container_record) == TYPE_DMAP_CONTAINER_RECORD);
++	g_assert (G_TYPE_FROM_INTERFACE (dmap_container_record) == DMAP_TYPE_CONTAINER_RECORD);
+ 
+ 	dmap_container_record->get_id = rb_daap_container_record_get_id;
+ 	dmap_container_record->add_entry = rb_daap_container_record_add_entry;
+@@ -158,7 +158,7 @@ rb_daap_container_record_daap_iface_init (gpointer iface, gpointer data)
+ }
+ 
+ G_DEFINE_TYPE_WITH_CODE (RBDAAPContainerRecord, rb_daap_container_record, G_TYPE_OBJECT, 
+-			 G_IMPLEMENT_INTERFACE (TYPE_DMAP_CONTAINER_RECORD, rb_daap_container_record_daap_iface_init))
++			 G_IMPLEMENT_INTERFACE (DMAP_TYPE_CONTAINER_RECORD, rb_daap_container_record_daap_iface_init))
+ 
+ static void rb_daap_container_record_finalize (GObject *object)
+ {
+diff --git a/plugins/daap/rb-daap-record-factory.c b/plugins/daap/rb-daap-record-factory.c
+index be750e4..393cf31 100644
+--- a/plugins/daap/rb-daap-record-factory.c
++++ b/plugins/daap/rb-daap-record-factory.c
+@@ -55,15 +55,15 @@ rb_daap_record_factory_class_init (RBDAAPRecordFactoryClass *klass)
+ static void
+ rb_daap_record_factory_interface_init (gpointer iface, gpointer data)
+ {
+-	DMAPRecordFactoryInterface *factory = iface;
++	DMAPRecordFactoryIface *factory = iface;
+ 
+-	g_assert (G_TYPE_FROM_INTERFACE (factory) == TYPE_DMAP_RECORD_FACTORY);
++	g_assert (G_TYPE_FROM_INTERFACE (factory) == DMAP_TYPE_RECORD_FACTORY);
+ 
+ 	factory->create = rb_daap_record_factory_create;
+ }
+ 
+ G_DEFINE_TYPE_WITH_CODE (RBDAAPRecordFactory, rb_daap_record_factory, G_TYPE_OBJECT, 
+-			 G_IMPLEMENT_INTERFACE (TYPE_DMAP_RECORD_FACTORY,
++			 G_IMPLEMENT_INTERFACE (DMAP_TYPE_RECORD_FACTORY,
+ 					        rb_daap_record_factory_interface_init))
+ 
+ RBDAAPRecordFactory *
+diff --git a/plugins/daap/rb-daap-record.c b/plugins/daap/rb-daap-record.c
+index 91cca4b..ff5c127 100644
+--- a/plugins/daap/rb-daap-record.c
++++ b/plugins/daap/rb-daap-record.c
+@@ -346,9 +346,9 @@ rb_daap_record_class_init (RBDAAPRecordClass *klass)
+ static void
+ rb_daap_record_daap_iface_init (gpointer iface, gpointer data)
+ {
+-	DAAPRecordInterface *daap_record = iface;
++	DAAPRecordIface *daap_record = iface;
+ 
+-	g_assert (G_TYPE_FROM_INTERFACE (daap_record) == TYPE_DAAP_RECORD);
++	g_assert (G_TYPE_FROM_INTERFACE (daap_record) == DAAP_TYPE_RECORD);
+ 
+ 	daap_record->itunes_compat = rb_daap_record_itunes_compat;
+ 	daap_record->read = rb_daap_record_read;
+@@ -357,14 +357,14 @@ rb_daap_record_daap_iface_init (gpointer iface, gpointer data)
+ static void
+ rb_daap_record_dmap_iface_init (gpointer iface, gpointer data)
+ {
+-	DMAPRecordInterface *dmap_record = iface;
++	DMAPRecordIface *dmap_record = iface;
+ 
+-	g_assert (G_TYPE_FROM_INTERFACE (dmap_record) == TYPE_DMAP_RECORD);
++	g_assert (G_TYPE_FROM_INTERFACE (dmap_record) == DMAP_TYPE_RECORD);
+ }
+ 
+ G_DEFINE_TYPE_WITH_CODE (RBDAAPRecord, rb_daap_record, G_TYPE_OBJECT,
+-			 G_IMPLEMENT_INTERFACE (TYPE_DAAP_RECORD, rb_daap_record_daap_iface_init)
+-			 G_IMPLEMENT_INTERFACE (TYPE_DMAP_RECORD, rb_daap_record_dmap_iface_init))
++			 G_IMPLEMENT_INTERFACE (DAAP_TYPE_RECORD, rb_daap_record_daap_iface_init)
++			 G_IMPLEMENT_INTERFACE (DMAP_TYPE_RECORD, rb_daap_record_dmap_iface_init))
+ 
+ static void rb_daap_record_finalize (GObject *object)
+ {
+diff --git a/plugins/daap/rb-daap-source.c b/plugins/daap/rb-daap-source.c
+index c531428..ceec711 100644
+--- a/plugins/daap/rb-daap-source.c
++++ b/plugins/daap/rb-daap-source.c
+@@ -649,7 +649,7 @@ rb_daap_source_selected (RBDisplayPage *page)
+ 
+ 	factory = DMAP_RECORD_FACTORY (rb_daap_record_factory_new ());
+ 
+-	daap_source->priv->connection = dmap_connection_new (name,
++	daap_source->priv->connection = daap_connection_new (name,
+ 							     daap_source->priv->host,
+ 							     daap_source->priv->port,
+ 							     daap_source->priv->password_protected,
+diff --git a/plugins/daap/rb-dacp-player.c b/plugins/daap/rb-dacp-player.c
+index 0a49f1d..a8227b5 100644
+--- a/plugins/daap/rb-dacp-player.c
++++ b/plugins/daap/rb-dacp-player.c
+@@ -58,7 +58,7 @@ static void playing_song_changed (RBShellPlayer *shell_player, RhythmDBEntry *en
+ static void elapsed_changed (RBShellPlayer *shell_player, guint elapsed, RBDACPPlayer *player);
+ 
+ static DAAPRecord *rb_dacp_player_now_playing_record  (DACPPlayer *player);
+-static gchar *rb_dacp_player_now_playing_artwork (DACPPlayer *player, guint width, guint height);
++static const guchar *rb_dacp_player_now_playing_artwork (DACPPlayer *player, guint width, guint height);
+ static void rb_dacp_player_play_pause          (DACPPlayer *player);
+ static void rb_dacp_player_pause               (DACPPlayer *player);
+ static void rb_dacp_player_next_item           (DACPPlayer *player);
+@@ -86,9 +86,9 @@ static guint signals[LAST_SIGNAL] = { 0 };
+ static void
+ rb_dacp_player_iface_init (gpointer iface, gpointer data)
+ {
+-	DACPPlayerInterface *dacp_player = iface;
++	DACPPlayerIface *dacp_player = iface;
+ 
+-	g_assert (G_TYPE_FROM_INTERFACE (dacp_player) == TYPE_DACP_PLAYER);
++	g_assert (G_TYPE_FROM_INTERFACE (dacp_player) == DACP_TYPE_PLAYER);
+ 
+ 	dacp_player->now_playing_record  = rb_dacp_player_now_playing_record;
+ 	dacp_player->now_playing_artwork = rb_dacp_player_now_playing_artwork;
+@@ -102,7 +102,7 @@ rb_dacp_player_iface_init (gpointer iface, gpointer data)
+ }
+ 
+ G_DEFINE_TYPE_WITH_CODE (RBDACPPlayer, rb_dacp_player, G_TYPE_OBJECT,
+-                         G_IMPLEMENT_INTERFACE (TYPE_DACP_PLAYER, rb_dacp_player_iface_init))
++                         G_IMPLEMENT_INTERFACE (DACP_TYPE_PLAYER, rb_dacp_player_iface_init))
+ 
+ static void
+ rb_dacp_player_init (RBDACPPlayer *object)
+@@ -291,7 +291,7 @@ rb_dacp_player_now_playing_record (DACPPlayer *player)
+ 	}
+ }
+ 
+-static gchar *
++static const guchar *
+ rb_dacp_player_now_playing_artwork (DACPPlayer *player, guint width, guint height)
+ {
+ 	return NULL;
+diff --git a/plugins/daap/rb-dmap-container-db-adapter.c b/plugins/daap/rb-dmap-container-db-adapter.c
+index 0f3e640..e7a4b1a 100644
+--- a/plugins/daap/rb-dmap-container-db-adapter.c
++++ b/plugins/daap/rb-dmap-container-db-adapter.c
+@@ -139,9 +139,9 @@ rb_dmap_container_db_adapter_class_init (RBDMAPContainerDbAdapterClass *klass)
+ static void
+ rb_dmap_container_db_adapter_interface_init (gpointer iface, gpointer data)
+ {
+-	DMAPContainerDbInterface *dmap_db = iface;
++	DMAPContainerDbIface *dmap_db = iface;
+ 
+-	g_assert (G_TYPE_FROM_INTERFACE (dmap_db) == TYPE_DMAP_CONTAINER_DB);
++	g_assert (G_TYPE_FROM_INTERFACE (dmap_db) == DMAP_TYPE_CONTAINER_DB);
+ 
+ 	dmap_db->lookup_by_id = rb_dmap_container_db_adapter_lookup_by_id;
+ 	dmap_db->foreach = rb_dmap_container_db_adapter_foreach;
+@@ -149,7 +149,7 @@ rb_dmap_container_db_adapter_interface_init (gpointer iface, gpointer data)
+ }
+ 
+ G_DEFINE_TYPE_WITH_CODE (RBDMAPContainerDbAdapter, rb_dmap_container_db_adapter, G_TYPE_OBJECT, 
+-			 G_IMPLEMENT_INTERFACE (TYPE_DMAP_CONTAINER_DB, rb_dmap_container_db_adapter_interface_init))
++			 G_IMPLEMENT_INTERFACE (DMAP_TYPE_CONTAINER_DB, rb_dmap_container_db_adapter_interface_init))
+ 
+ static void
+ assign_id (RBPlaylistManager *mgr,
+diff --git a/plugins/daap/rb-rhythmdb-dmap-db-adapter.c b/plugins/daap/rb-rhythmdb-dmap-db-adapter.c
+index e6b6891..2d7eb48 100644
+--- a/plugins/daap/rb-rhythmdb-dmap-db-adapter.c
++++ b/plugins/daap/rb-rhythmdb-dmap-db-adapter.c
+@@ -247,9 +247,9 @@ rb_rhythmdb_dmap_db_adapter_class_init (RBRhythmDBDMAPDbAdapterClass *klass)
+ static void
+ rb_rhythmdb_dmap_db_adapter_interface_init (gpointer iface, gpointer data)
+ {
+-	DMAPDbInterface *dmap_db = iface;
++	DMAPDbIface *dmap_db = iface;
+ 
+-	g_assert (G_TYPE_FROM_INTERFACE (dmap_db) == TYPE_DMAP_DB);
++	g_assert (G_TYPE_FROM_INTERFACE (dmap_db) == DMAP_TYPE_DB);
+ 
+ 	dmap_db->add = rb_rhythmdb_dmap_db_adapter_add;
+ 	dmap_db->lookup_by_id = rb_rhythmdb_dmap_db_adapter_lookup_by_id;
+@@ -258,7 +258,7 @@ rb_rhythmdb_dmap_db_adapter_interface_init (gpointer iface, gpointer data)
+ }
+ 
+ G_DEFINE_TYPE_WITH_CODE (RBRhythmDBDMAPDbAdapter, rb_rhythmdb_dmap_db_adapter, G_TYPE_OBJECT, 
+-			 G_IMPLEMENT_INTERFACE (TYPE_DMAP_DB, rb_rhythmdb_dmap_db_adapter_interface_init))
++			 G_IMPLEMENT_INTERFACE (DMAP_TYPE_DB, rb_rhythmdb_dmap_db_adapter_interface_init))
+ 
+ RBRhythmDBDMAPDbAdapter *
+ rb_rhythmdb_dmap_db_adapter_new (RhythmDB *rdb, RhythmDBEntryType *entry_type)
+diff --git a/plugins/daap/rb-rhythmdb-query-model-dmap-db-adapter.c b/plugins/daap/rb-rhythmdb-query-model-dmap-db-adapter.c
+index 58abe5e..0a341e1 100644
+--- a/plugins/daap/rb-rhythmdb-query-model-dmap-db-adapter.c
++++ b/plugins/daap/rb-rhythmdb-query-model-dmap-db-adapter.c
+@@ -129,9 +129,9 @@ rb_rhythmdb_query_model_dmap_db_adapter_class_init (RBRhythmDBQueryModelDMAPDbAd
+ static void
+ rb_rhythmdb_query_model_dmap_db_adapter_interface_init (gpointer iface, gpointer data)
+ {
+-	DMAPDbInterface *dmap_db = iface;
++	DMAPDbIface *dmap_db = iface;
+ 
+-	g_assert (G_TYPE_FROM_INTERFACE (dmap_db) == TYPE_DMAP_DB);
++	g_assert (G_TYPE_FROM_INTERFACE (dmap_db) == DMAP_TYPE_DB);
+ 
+ 	dmap_db->add = rb_rhythmdb_query_model_dmap_db_adapter_add;
+ 	dmap_db->lookup_by_id = rb_rhythmdb_query_model_dmap_db_adapter_lookup_by_id;
+@@ -140,7 +140,7 @@ rb_rhythmdb_query_model_dmap_db_adapter_interface_init (gpointer iface, gpointer
+ }
+ 
+ G_DEFINE_TYPE_WITH_CODE (RBRhythmDBQueryModelDMAPDbAdapter, rb_rhythmdb_query_model_dmap_db_adapter, G_TYPE_OBJECT, 
+-			 G_IMPLEMENT_INTERFACE (TYPE_DMAP_DB, rb_rhythmdb_query_model_dmap_db_adapter_interface_init))
++			 G_IMPLEMENT_INTERFACE (DMAP_TYPE_DB, rb_rhythmdb_query_model_dmap_db_adapter_interface_init))
+ 
+ RBRhythmDBQueryModelDMAPDbAdapter *
+ rb_rhythmdb_query_model_dmap_db_adapter_new (RhythmDBQueryModel *model)
