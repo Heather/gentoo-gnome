@@ -6,7 +6,7 @@ EAPI="3"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2 virtualx
+inherit autotools eutils gnome2 virtualx
 
 DESCRIPTION="Helper library for RESTful services"
 HOMEPAGE="http://git.gnome.org/browse/librest"
@@ -29,13 +29,18 @@ DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1.13 )
 	test? ( sys-apps/dbus )"
 
-pkg_setup() {
+src_prepare() {
 	G2CONF="${G2CONF}
 		--disable-static
 		--disable-gcov
 		$(use_with gnome)
 		$(use_enable introspection)"
 	DOCS="AUTHORS NEWS README"
+
+	# Fails to compile if not already installed
+	# https://bugs.gentoo.org/show_bug.cgi?id=359283
+	epatch "${FILESDIR}/${PN}-0.7.7-fix-introspection.patch"
+	eautoreconf
 }
 
 src_test() {
