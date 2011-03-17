@@ -45,12 +45,12 @@ def rdeps_with_slot(slot_rdeps, slot=None):
     """
     Prints a list of rev-deps which depend on the specified package and slot
     """
-    print "All packages:"
     pkg_maints = {}
     pkg_herds = {}
     if not slot_rdeps.has_key(slot):
         # No rdeps using the given slot
         return
+    print "All packages:"
     for pkg in slot_rdeps[slot]:
         pkg_md = MetaDataXML(get_md_path(pkg), get_herds())
         for herd in pkg_md.herds():
