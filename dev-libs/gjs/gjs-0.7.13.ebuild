@@ -7,14 +7,14 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2"
 
-inherit gnome2 python
+inherit autotools eutils gnome2 python virtualx
 
 DESCRIPTION="Javascript bindings for GNOME"
 HOMEPAGE="http://live.gnome.org/Gjs"
 
 LICENSE="MIT MPL-1.1 LGPL-2 GPL-2"
 SLOT="0"
-IUSE="coverage examples"
+IUSE="coverage examples test"
 
 if [[ ${PV} == 9999 ]]; then
 	inherit gnome2-live
@@ -23,22 +23,20 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 
-# || ( xulrunner spidermonkey ): configure prefers spidermonkey over xulrunner
-# Hence, having older spidermonkey installed will result in bug 353941
 RDEPEND=">=dev-libs/glib-2.18:2
 	>=dev-libs/gobject-introspection-0.10.1
 
 	dev-libs/dbus-glib
 	x11-libs/cairo
-	|| ( >=net-libs/xulrunner-1.9.2:1.9
-		 >=dev-lang/spidermonkey-1.9.2 )
-	!<dev-lang/spidermonkey-1.9.2"
+	>=net-libs/xulrunner-1.9.2:1.9"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.9
 	coverage? (
 		sys-devel/gcc
-		dev-util/lcov )"
+		dev-util/lcov )
+	test? ( !dev-lang/spidermonkey )"
+# HACK HACK: gjs-tests picks up /usr/lib/libmozjs.so with spidermonkey installed
 
 src_prepare() {
 	# AUTHORS, ChangeLog are empty
@@ -46,19 +44,18 @@ src_prepare() {
 	G2CONF="${G2CONF}
 		$(use_enable coverage)"
 
-	# If spidermonkey & xulrunner are installed configure prefers spidermonkey.
-	# This will break gnome-shell if the user removes spidermonkey.
-	# Mozilla wants to move to a split spidermonkey, so this problem should
-	# solve itself in the future. For now, we add an ewarn.
-	if has_version dev-lang/spidermonkey && has_version net-libs/xulrunner; then
-		ewarn "You have both spidermonkey and xulrunner installed,"
-		ewarn "hence gnome-shell will be linked with spidermonkey."
-		ewarn "If you remove spidermonkey, you will need to recompile"
-		ewarn "gnome-shell so that it links with xulrunner."
-	fi
+	# https://bugs.gentoo.org/353941
+	epatch "${FILESDIR}/${PN}-drop-js-config.patch"
+
+	[[ ${PV} != 9999 ]] && eautoreconf
 
 	gnome2_src_prepare
 	python_convert_shebangs 2 "${S}"/scripts/make-tests
+}
+
+src_test() {
+	# Tests need dbus
+	Xemake check || die
 }
 
 src_install() {
