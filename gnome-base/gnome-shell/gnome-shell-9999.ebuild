@@ -96,6 +96,7 @@ src_prepare() {
 }
 
 pkg_postinst() {
+	gnome2_pkg_postinst
 	if ! has_version '>=media-libs/gst-plugins-good-0.10.23' || \
 	   ! has_version 'media-plugins/gst-plugins-vp8'; then
 		ewarn "To make use of GNOME Shell's built-in screen recording utility,"
