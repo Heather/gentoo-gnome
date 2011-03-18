@@ -39,6 +39,8 @@ src_prepare() {
 	# Only build against libX11 if the user wants to do so
 	epatch "${FILESDIR}"/${PN}-2.21.4-fix-automagic-x11.patch
 
+	epatch "${FILESDIR}/${PN}-2.23.1-fix-annotations.patch"
+
 	elibtoolize
 	eautoreconf
 }
