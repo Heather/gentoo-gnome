@@ -174,4 +174,6 @@ for cp in cp_all:
             eoutput.ebegin("Running cvs rm -f %s" % ebuild)
             subprocess.check_call('cvs rm -f %s' % ebuild, shell=True, stderr=subprocess.PIPE)
             eoutput.eend(0)
+        if os.path.isdir('files'):
+            print portage.output.yellow(">>> Package has a files/ directory, please double-check obsolete files")
     print ">>> All done with %s!" % cp

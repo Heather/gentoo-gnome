@@ -8,12 +8,12 @@
 # based on the current keywords
 #
 
+import sys
 
 import portage
 
 def usage():
-    print "Usage: $0 <cpv>"
-    print ""
+    print "Usage: %s <cpv>" % sys.argv[0]
 
 ###############
 ## Constants ##
@@ -121,7 +121,6 @@ def get_obsolete(cp):
     return obsolete_cpvs
 
 if __name__ == "__main__":
-    import sys
     if len(sys.argv) < 2:
         usage()
         sys.exit(1)
