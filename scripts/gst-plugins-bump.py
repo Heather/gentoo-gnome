@@ -19,7 +19,7 @@ from portage.output import EOutput
 def usage():
     print "Usage: $0 <base|good|bad|ugly> <version> [core version] [base version]"
     print ""
-    print "  If core/base version is unspecified or blank, it's assumed to be the same"
+    print "  If core/base version is unspecified or blank, it will not be changed"
 
 if len(sys.argv) < 3 or len(sys.argv) > 5:
     usage()
@@ -51,7 +51,6 @@ portdb.porttrees = [PORTDIR]
 GSTPREFIX = 'gst-plugins-'
 GSTECLASS = GSTPREFIX + GSTLIB
 GSTLIB = 'media-libs/' + GSTPREFIX + GSTLIB
-GSTPLUGIN_CPVS = []
 GSTCAT = 'media-plugins'
 GSTLIBS = {'media-libs/gstreamer': GSTCOREVER,
            'media-libs/gst-plugins-base': GSTBASEVER,
@@ -133,6 +132,7 @@ def isgstplugin(cpv):
 # We do this outside the loop so that we get notified while stuff gets cached
 eoutput.ebegin("Getting a list of all gst-plugins")
 cp_all = portdb.cp_all(categories=[GSTCAT])
+gst_cpv_all = []
 eoutput.eend(0)
 eoutput.ebegin("Getting the next gst-plugin")
 # Does a first-time-expensive xmatch call
@@ -142,11 +142,11 @@ for cp in cp_all:
     cpv = get_cpv(cp)
     if not isgstplugin(cpv):
         continue
+    new_cpv = get_cpv(cp, GSTLIBVER)
     print ">>> Current package is %s" % cpv
-    GSTPLUGIN_CPVS.append(cpv)
     os.chdir(get_ebuild_dir(cpv))
     old_ebuild = get_ebuild(cpv)
-    new_ebuild = get_ebuild(get_cpv(cp, GSTLIBVER))
+    new_ebuild = get_ebuild(new_cpv)
     eoutput.ebegin("Copying %s to %s" % (old_ebuild, new_ebuild))
     shutil.copyfile(old_ebuild, new_ebuild)
     eoutput.eend(0)
@@ -175,5 +175,10 @@ for cp in cp_all:
             subprocess.check_call('cvs rm -f %s' % ebuild, shell=True, stderr=subprocess.PIPE)
             eoutput.eend(0)
         if os.path.isdir('files'):
-            print portage.output.yellow(">>> Package has a files/ directory, please double-check obsolete files")
+            print portage.output.red(">>> Package has a files/ directory, please double-check obsolete files")
     print ">>> All done with %s!" % cp
+    gst_cpv_all.append(new_cpv)
+print ""
+print "Here's a list for emerge :-)"
+for cpv in gst_cpv_all:
+    print '=%s' % cpv,
