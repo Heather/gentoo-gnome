@@ -33,7 +33,8 @@ DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40"
 
 src_configure() {
-	# No python support with gtk+:3
+	# Python support is via gobject-introspection
+	# Ex: from gi.repository import GtkVnc
 	econf \
 		$(use_with examples) \
 		$(use_enable introspection) \
