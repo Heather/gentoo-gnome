@@ -40,7 +40,7 @@ RDEPEND=">=dev-libs/glib-2.28:2
 	>=dev-libs/libgweather-2.90.0:3
 	media-libs/libcanberra[gtk3]
 	>=x11-libs/libnotify-0.7
-	>=gnome-extra/evolution-data-server-${MY_MAJORV}[weather]
+	>=gnome-extra/evolution-data-server-${MY_MAJORV}.91[weather]
 	>=gnome-extra/gtkhtml-3.31.3:4.0
 	>=gnome-base/gconf-2
 	dev-libs/atk
