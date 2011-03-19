@@ -28,6 +28,7 @@ fi
 # FIXME: introspection data is built against system installation of gtk+:3
 # NOTE: cairo[svg] dep is due to bug 291283 (not patched to avoid eautoreconf)
 # Use gtk+:2 for gtk-update-icon-cache and gtk-builder-convert
+# >=x11-libs/gtk+-2.24:2 is needed for bug 359555
 RDEPEND="!aqua? (
 		x11-libs/libXrender
 		x11-libs/libX11
@@ -50,8 +51,8 @@ RDEPEND="!aqua? (
 	>=dev-libs/glib-2.28.0
 	>=x11-libs/pango-1.24.0[introspection?]
 	>=dev-libs/atk-1.30[introspection?]
+	>=x11-libs/gtk+-2.24:2
 	media-libs/fontconfig
-	x11-libs/gtk+:2
 	x11-misc/shared-mime-info
 	cups? ( net-print/cups )
 	introspection? ( >=dev-libs/gobject-introspection-0.10.1 )
