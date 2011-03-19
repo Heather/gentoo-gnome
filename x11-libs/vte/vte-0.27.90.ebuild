@@ -5,16 +5,15 @@
 EAPI="3"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
-#PYTHON_DEPEND="python? 2:2.4"
 
-inherit autotools eutils gnome2 #python
+inherit autotools eutils gnome2
 
 DESCRIPTION="GNOME terminal widget"
 HOMEPAGE="http://git.gnome.org/browse/vte"
 
 LICENSE="LGPL-2"
 SLOT="2.90"
-IUSE="debug doc +introspection" #python
+IUSE="debug doc +introspection"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
@@ -22,7 +21,6 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 fi
 
-# No python bindings (yet) with gtk+:3
 PDEPEND="x11-libs/gnome-pty-helper"
 RDEPEND=">=dev-libs/glib-2.26:2
 	>=x11-libs/gtk+-3.0:3
@@ -41,6 +39,8 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext"
 
 src_prepare() {
+	# Python bindings are via gobject-introspection
+	# Ex: from gi.repository import Vte
 	# Glade is disabled because it needs gladeui-1.0 & gtk3 glade is gladeui-2.0
 	G2CONF="${G2CONF}
 		--disable-glade-catalogue
@@ -52,9 +52,7 @@ src_prepare() {
 		$(use_enable introspection)
 		--with-html-dir=${ROOT}/usr/share/doc/${PF}/html
 		--with-gtk=3.0"
-		#$(use_enable python)
 	DOCS="AUTHORS ChangeLog HACKING NEWS README"
-	#use python && python_set_active_version 2
 
 	epatch "${FILESDIR}/${PN}-0.27.90-fix-gdk-targets.patch"
 
@@ -62,8 +60,3 @@ src_prepare() {
 
 	gnome2_src_prepare
 }
-
-#src_install() {
-#	gnome2_src_install
-#	python_clean_installation_image
-#}
