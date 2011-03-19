@@ -16,7 +16,8 @@ SLOT="3.0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 IUSE="doc examples test"
 
-RDEPEND=">=dev-cpp/glibmm-2.27.93:2
+RDEPEND=">=dev-cpp/mm-common-0.9.3
+	>=dev-cpp/glibmm-2.27.93:2
 	>=x11-libs/gtk+-3.0.0:3
 	>=x11-libs/gdk-pixbuf-2.22.1
 	>=dev-cpp/atkmm-2.22.2
@@ -26,7 +27,6 @@ RDEPEND=">=dev-cpp/glibmm-2.27.93:2
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	doc? (
-		>=dev-cpp/mm-common-0.9.3
 		media-gfx/graphviz
 		dev-libs/libxslt
 		app-doc/doxygen )"
