@@ -16,10 +16,9 @@ IUSE="doc examples test"
 RDEPEND=">=dev-libs/libsigc++-2.2
 	>=dev-libs/glib-2.28.0"
 DEPEND="${RDEPEND}
+	>=dev-cpp/mm-common-0.9.3
 	dev-util/pkgconfig
-	doc? (
-		app-doc/doxygen
-		>=dev-cpp/mm-common-0.9.3 )"
+	doc? ( app-doc/doxygen )"
 
 DOCS="AUTHORS ChangeLog NEWS README"
 
