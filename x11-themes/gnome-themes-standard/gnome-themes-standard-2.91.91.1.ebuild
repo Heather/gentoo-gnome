@@ -28,7 +28,8 @@ DEPEND="${RDEPEND}
 	>=x11-misc/icon-naming-utils-0.8.7
 	>=dev-util/pkgconfig-0.19
 	>=dev-util/intltool-0.40
-	sys-devel/gettext"
+	sys-devel/gettext
+	!<x11-themes/gnome-themes-2.91"
 # This ebuild does not install any binaries
 RESTRICT="binchecks strip"
 # FIXME: --enable-placeholders fails
