@@ -26,6 +26,7 @@ REQUIRED_USE="
 	dhcpcd? ( !dhclient ) !dhcpcd? ( dhclient )"
 
 # gobject-introspection-0.10.3 is needed due to gnome bug 642300
+# wpa_supplicant-0.7.3-r3 is needed due to bug 359271
 RDEPEND=">=sys-apps/dbus-1.2
 	>=dev-libs/dbus-glib-0.75
 	>=net-wireless/wireless-tools-28_pre9
@@ -34,7 +35,7 @@ RDEPEND=">=sys-apps/dbus-1.2
 	>=sys-auth/polkit-0.96
 	>=dev-libs/libnl-1.1
 	>=net-misc/modemmanager-0.4
-	>=net-wireless/wpa_supplicant-0.7.2[dbus]
+	>=net-wireless/wpa_supplicant-0.7.3-r3[dbus]
 	bluetooth? ( >=net-wireless/bluez-4.82 )
 	avahi? ( net-dns/avahi[autoipd] )
 	gnutls? (
