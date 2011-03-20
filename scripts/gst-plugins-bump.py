@@ -162,7 +162,6 @@ for cp in cp_all:
         #   2 if something went wrong
         if e.returncode == 2:
             raise e
-    subprocess.check_call('ebuild %s manifest' % new_ebuild, shell=True)
     eoutput.ebegin("Running cvs add %s" % new_ebuild)
     subprocess.check_call('cvs add %s' % new_ebuild, shell=True, stderr=subprocess.PIPE)
     eoutput.eend(0)
@@ -176,6 +175,7 @@ for cp in cp_all:
             eoutput.eend(0)
         if os.path.isdir('files'):
             print portage.output.red(">>> Package has a files/ directory, please double-check obsolete files")
+    subprocess.check_call('ebuild %s manifest' % new_ebuild, shell=True)
     print ">>> All done with %s!" % cp
     gst_cpv_all.append(new_cpv)
 print ""
