@@ -1,0 +1,14 @@
+# GNOME 3
+dev-libs/glib
+x11-libs/gtk+:2
+x11-libs/gtk+:3
+media-libs/clutter
+media-libs/clutter-gtk
+media-libs/clutter-gst
+dev-python/pyclutter
+dev-libs/seed
+gnome-base/gdm
+media-video/cheese
+net-misc/networkmanager
+sys-auth/polkit
+gnome-extra/polkit-gnome
