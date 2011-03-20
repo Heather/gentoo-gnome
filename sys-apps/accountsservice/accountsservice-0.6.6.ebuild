@@ -13,7 +13,7 @@ SRC_URI="http://www.freedesktop.org/software/${PN}/${P}.tar.bz2"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="doc +introspection"
+IUSE="+introspection"
 
 RDEPEND="
 	dev-libs/glib:2
@@ -28,19 +28,19 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext
 
 	>=dev-util/intltool-0.40
-	>=dev-util/gtk-doc-am-1.13
-
-	doc? ( app-text/xmlto )"
+	>=dev-util/gtk-doc-am-1.13"
 
 # Documentaton doesn't validate
 RESTRICT="test"
 
 pkg_setup() {
 	# Can configure systemdsystemunitdir
+	# docbook docs don't validate, disable doc rebuild
 	G2CONF="${G2CONF}
+		--disable-docbook-docs
 		--disable-maintainer-mode
 		--disable-more-warnings
-		$(use_enable doc docbook-docs)
+		--without-systemdsystemunitdir
 		$(use_enable introspection)"
 	DOCS="AUTHORS NEWS README TODO"
 }
