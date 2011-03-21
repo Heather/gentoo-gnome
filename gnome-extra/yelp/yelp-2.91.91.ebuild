@@ -5,7 +5,7 @@
 EAPI="2"
 GNOME2_LA_PUNT="yes"
 
-inherit eutils gnome2
+inherit gnome2
 
 DESCRIPTION="Help browser for GNOME"
 HOMEPAGE="http://www.gnome.org/"
@@ -13,7 +13,7 @@ HOMEPAGE="http://www.gnome.org/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~sparc ~x86 ~x86-freebsd ~amd64-linux ~x86-linux"
-IUSE="doc lzma"
+IUSE="doc"
 
 RDEPEND="
 	>=x11-libs/gtk+-2.91.8:3
@@ -23,9 +23,9 @@ RDEPEND="
 	>=dev-libs/dbus-glib-0.71
 	>=gnome-extra/yelp-xsl-2.91.9
 	>=net-libs/webkit-gtk-1.3.2:3
+	>=app-arch/xz-utils-4.9
 	app-arch/bzip2
-	dev-db/sqlite:3
-	lzma? ( >=app-arch/xz-utils-4.9 )"
+	dev-db/sqlite:3"
 DEPEND="${RDEPEND}
 	>=sys-devel/gettext-0.17
 	>=dev-util/intltool-0.41.0
@@ -35,10 +35,7 @@ DEPEND="${RDEPEND}
 #	gnome-base/gnome-common
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
-
-src_prepare() {
-	G2CONF="${G2CONF}
-		--disable-schemas-compile
-		--enable-bz2
-		$(use_enable lzma)"
-}
+G2CONF="${G2CONF}
+	--disable-schemas-compile
+	--enable-bz2
+	--enable-lzma"
