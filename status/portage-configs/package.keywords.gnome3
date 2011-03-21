@@ -130,8 +130,11 @@ x11-themes/gtk-engines-clearlooks
 x11-wm/mutter
 
 # CPP bindings
+dev-cpp/libxmlpp
 dev-cpp/atkmm
 dev-cpp/cairomm
+dev-cpp/gconfmm
+dev-cpp/gstreamermm
 dev-cpp/glibmm
 dev-cpp/gtkmm:2.4
 dev-cpp/gtkmm:3.0
