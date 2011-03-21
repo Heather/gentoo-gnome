@@ -5,7 +5,7 @@
 EAPI="3"
 GCONF_DEBUG="no"
 
-inherit gnome2
+inherit autotools gnome2
 
 DESCRIPTION="C++ interface for GTK+2"
 HOMEPAGE="http://www.gtkmm.org"
@@ -24,7 +24,7 @@ RDEPEND="
 	dev-libs/libsigc++:2"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
-	>=dev-cpp/mm-common-0.8
+	>=dev-cpp/mm-common-0.9.3
 	doc? (
 		media-gfx/graphviz
 		dev-libs/libxslt
@@ -49,6 +49,12 @@ src_prepare() {
 		# don't waste time building tests
 		sed 's/^\(SUBDIRS =.*\)demos\(.*\)$/\1\2/' -i Makefile.am Makefile.in \
 			|| die "sed 2 failed"
+	fi
+
+	if use doc; then
+		# Needed temporarily till next release see glibmm's mm-common dep for details
+		mm-common-prepare --copy --force
+		eautoreconf
 	fi
 
 	gnome2_src_prepare
