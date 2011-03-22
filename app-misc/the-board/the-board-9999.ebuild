@@ -16,7 +16,8 @@ SLOT="0"
 IUSE="+libnotify +libsoup +nautilus"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
-	KEYWORDS=""
+	# Releases get outdated very quickly
+	KEYWORDS="~amd64 ~x86"
 else
 	KEYWORDS="~amd64 ~x86"
 fi
