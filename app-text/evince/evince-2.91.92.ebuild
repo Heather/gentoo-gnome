@@ -28,7 +28,7 @@ RDEPEND="
 	>=dev-libs/glib-2.25.11:2
 	>=dev-libs/libxml2-2.5
 	>=x11-libs/gdk-pixbuf-2.22:2[introspection?]
-	>=x11-libs/gtk+-3.0.0:3[introspection?]
+	>=x11-libs/gtk+-3.0.2:3[introspection?]
 	>=x11-libs/libSM-1
 	x11-libs/libICE
 	gnome-base/gsettings-desktop-schemas
