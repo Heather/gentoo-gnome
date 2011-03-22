@@ -32,14 +32,14 @@ fi
 # FIXME: Automagic tracker-0.9.0
 # XXX: Add Zeitgeist support when it gets added to GNOME 3 (3.2?)
 # Runtime dependency on gnome-session-2.91
-RDEPEND=">=dev-libs/glib-2.27.92
-	>=x11-libs/gdk-pixbuf-2.23.0
+RDEPEND=">=dev-libs/glib-2.27.92:2
+	>=x11-libs/gdk-pixbuf-2.23.0:2
 	>=x11-libs/gtk+-2.99.3:3[introspection?]
-	>=dev-libs/totem-pl-parser-2.32.2[introspection?]
+	>=dev-libs/totem-pl-parser-2.32.4[introspection?]
 	>=dev-libs/libpeas-0.7.2[gtk]
 	>=x11-themes/gnome-icon-theme-2.16
 	x11-libs/cairo
-	>=dev-libs/libxml2-2.6
+	>=dev-libs/libxml2-2.6:2
 	>=dev-libs/dbus-glib-0.82
 	>=media-libs/gstreamer-0.10.30:0.10
 	>=media-libs/gst-plugins-base-0.10.30:0.10
