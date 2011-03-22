@@ -2,12 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/www-client/epiphany/epiphany-2.30.2.ebuild,v 1.1 2010/06/13 21:09:33 pacho Exp $
 
-EAPI="2"
+EAPI="3"
 
 inherit eutils gnome2
 
 DESCRIPTION="GNOME webbrowser based on Webkit"
-HOMEPAGE="http://www.gnome.org/projects/epiphany/"
+HOMEPAGE="http://projects.gnome.org/epiphany/"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -27,7 +27,7 @@ RDEPEND=">=dev-libs/glib-2.25.3:2
 	>=x11-libs/startup-notification-0.5
 	>=dev-libs/dbus-glib-0.71
 	>=app-text/iso-codes-0.35
-	>=net-libs/webkit-gtk-1.3.11:3[introspection?]
+	>=net-libs/webkit-gtk-1.3.13:3[introspection?]
 	>=net-libs/libsoup-gnome-2.33.1:2.4
 	>=gnome-base/gnome-keyring-2.26.0
 	>=gnome-base/gsettings-desktop-schemas-0.0.1
@@ -49,9 +49,9 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext
 	doc? ( >=dev-util/gtk-doc-1 )"
 
-DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS README TODO"
 
 pkg_setup() {
+	DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS README TODO"
 	G2CONF="${G2CONF}
 		--enable-shared
 		--disable-maintainer-mode
@@ -68,8 +68,8 @@ pkg_setup() {
 }
 
 src_compile() {
-	# Fix sandbox error with USE="introspection"
+	# Fix sandbox error with USE="introspection" and "doc"
 	# https://bugs.webkit.org/show_bug.cgi?id=35471
 	addpredict "$(unset HOME; echo ~)/.local"
-	emake || die "Compile failed"
+	gnome2_src_compile
 }
