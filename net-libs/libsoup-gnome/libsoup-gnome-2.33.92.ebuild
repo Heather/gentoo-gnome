@@ -22,8 +22,6 @@ IUSE="debug doc +introspection"
 
 RDEPEND="~net-libs/libsoup-${PV}
 	|| ( gnome-base/libgnome-keyring <gnome-base/gnome-keyring-2.29.4 )
-	net-libs/libproxy
-	>=gnome-base/gconf-2
 	dev-db/sqlite:3
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )"
 DEPEND="${RDEPEND}
@@ -54,6 +52,6 @@ src_prepare() {
 	gnome2_src_prepare
 
 	# Use lib present on the system
-	epatch "${FILESDIR}"/${PN}-2.33.5-system-lib.patch
+	epatch "${FILESDIR}"/${PN}-2.33.92-system-lib.patch
 	eautoreconf
 }

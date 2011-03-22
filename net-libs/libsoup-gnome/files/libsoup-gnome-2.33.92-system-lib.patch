@@ -1,21 +1,56 @@
-Split support for libsoup-gnome, original patch by Romain Perier.
+From 1cb947b6e1d3ecc8cf13d55034aa85bd161d4e82 Mon Sep 17 00:00:00 2001
+From: Priit Laes <plaes@plaes.org>
+Date: Tue, 22 Mar 2011 15:54:10 +0200
+Subject: [PATCH] Split support for libsoup-gnome
 
+Original patch by Romain Perier.
 ---
---- configure.ac
-+++ configure.ac
-@@ -72,15 +72,30 @@
+ Makefile.am         |   12 ++++++++++--
+ configure.ac        |   42 +++++++++++++++++++++++++++---------------
+ libsoup/Makefile.am |   45 +++++++++++++++++++++++++++++++++++++--------
+ 3 files changed, 74 insertions(+), 25 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 861daff..a6463fb 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -1,7 +1,11 @@
+ ## Process this file with automake to produce Makefile.in
+ ACLOCAL_AMFLAGS = -I m4
+ 
+-SUBDIRS = libsoup tests docs
++SUBDIRS = libsoup
++
++if BUILD_LIBSOUP
++SUBDIRS += tests docs
++endif
+ 
+ EXTRA_DIST =			\
+ 	libsoup-2.4.pc.in	\
+@@ -14,7 +18,11 @@ DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc --enable-introspection
+ 
+ pkgconfigdir = $(libdir)/pkgconfig
+ 
+-pkgconfig_DATA = libsoup-2.4.pc
++pkgconfig_DATA =
++
++if BUILD_LIBSOUP
++pkgconfig_DATA += libsoup-2.4.pc
++endif
+ 
+ if BUILD_LIBSOUP_GNOME
+ pkgconfig_DATA += libsoup-gnome-2.4.pc
+diff --git a/configure.ac b/configure.ac
+index 8f37cec..d8daf9c 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -72,15 +72,30 @@ dnl ***********************
  dnl *** Checks for glib ***
  dnl ***********************
  
 -AM_PATH_GLIB_2_0(2.27.5,,,gobject gthread gio)
 -if test "$GLIB_LIBS" = ""; then
 -   AC_MSG_ERROR(GLIB 2.27.5 or later is required to build libsoup)
--fi
--GLIB_CFLAGS="$GLIB_CFLAGS -DG_DISABLE_SINGLE_INCLUDES"
--
--PKG_CHECK_MODULES(XML, libxml-2.0)
--AC_SUBST(XML_CFLAGS)
--AC_SUBST(XML_LIBS)
 +PKG_PROG_PKG_CONFIG
 +enable_ssl=no
 +AC_ARG_WITH(libsoup-system,
@@ -38,12 +73,17 @@ Split support for libsoup-gnome, original patch by Romain Perier.
 +	AC_CHECK_FUNCS(gmtime_r)
 +	AC_CHECK_FUNCS(mmap)
 +	AC_CHECK_FUNC(socket, , AC_CHECK_LIB(socket, socket))
-+fi
+ fi
+-GLIB_CFLAGS="$GLIB_CFLAGS -DG_DISABLE_SINGLE_INCLUDES"
+-
+-PKG_CHECK_MODULES(XML, libxml-2.0)
+-AC_SUBST(XML_CFLAGS)
+-AC_SUBST(XML_LIBS)
 +AM_CONDITIONAL(BUILD_LIBSOUP, test $with_libsoup_system = no)
  
  dnl ***********************
  dnl *** Check for Win32 ***
-@@ -99,13 +114,6 @@
+@@ -99,13 +114,6 @@ esac
  AC_MSG_RESULT([$os_win32])
  AM_CONDITIONAL(OS_WIN32, [test $os_win32 = yes])
  
@@ -57,7 +97,7 @@ Split support for libsoup-gnome, original patch by Romain Perier.
  dnl *********************
  dnl *** GNOME support ***
  dnl *********************
-@@ -130,6 +138,10 @@
+@@ -130,6 +138,10 @@ AM_CONDITIONAL(BUILD_LIBSOUP_GNOME, test $with_gnome != no)
  if test $with_gnome != no; then
  	AC_DEFINE(HAVE_GNOME, 1, [Defined if GNOME support is enabled])
  
@@ -65,12 +105,14 @@ Split support for libsoup-gnome, original patch by Romain Perier.
 +		PKG_CHECK_MODULES(LIBSOUP, libsoup-$SOUP_API_VERSION = $VERSION)
 +	fi
 +
- 	PKG_CHECK_MODULES(LIBPROXY, libproxy-1.0, :, [AC_MSG_ERROR(dnl
- [Could not find libproxy:
+ 	PKG_CHECK_MODULES(SQLITE, sqlite3, :, [AC_MSG_ERROR(dnl
+ [Could not find sqlite3 devel files:
  
---- libsoup/Makefile.am
-+++ libsoup/Makefile.am
-@@ -4,17 +4,18 @@
+diff --git a/libsoup/Makefile.am b/libsoup/Makefile.am
+index 308c08f..0c78061 100644
+--- a/libsoup/Makefile.am
++++ b/libsoup/Makefile.am
+@@ -4,15 +4,18 @@ if OS_WIN32
  LIBWS2_32 = -lws2_32
  endif
  
@@ -87,15 +129,13 @@ Split support for libsoup-gnome, original patch by Romain Perier.
  	$(SOUP_MAINTAINER_FLAGS)	\
  	$(GLIB_CFLAGS)			\
 -	$(XML_CFLAGS)			\
--	$(GCONF_CFLAGS)			\
--	$(LIBPROXY_CFLAGS)		\
 -	$(SQLITE_CFLAGS)		\
 -	$(GNOME_KEYRING_CFLAGS)
 +	$(XML_CFLAGS)
  
  MARSHAL_GENERATED = soup-marshal.c soup-marshal.h
  MKENUMS_GENERATED = soup-enum-types.c soup-enum-types.h
-@@ -43,7 +44,7 @@
+@@ -41,7 +44,7 @@ soup-enum-types.c: $(libsoupinclude_HEADERS)
  
  BUILT_SOURCES = $(MARSHAL_GENERATED) $(MKENUMS_GENERATED)
  
@@ -104,7 +144,7 @@ Split support for libsoup-gnome, original patch by Romain Perier.
  
  libsoupincludedir = $(includedir)/libsoup-2.4/libsoup
  
-@@ -95,7 +96,7 @@
+@@ -94,7 +97,7 @@ libsoupinclude_HEADERS =	\
  	$(soup_headers)		\
  	soup-enum-types.h
  
@@ -113,7 +153,7 @@ Split support for libsoup-gnome, original patch by Romain Perier.
  
  libsoup_2_4_la_LDFLAGS =	\
  	-version-info $(SOUP_CURRENT):$(SOUP_REVISION):$(SOUP_AGE) -no-undefined
-@@ -178,10 +179,18 @@
+@@ -178,10 +181,16 @@ libsoup_2_4_la_SOURCES =		\
  	soup-value-utils.c		\
  	soup-xmlrpc.c
  
@@ -124,15 +164,13 @@ Split support for libsoup-gnome, original patch by Romain Perier.
  libsoupgnomeincludedir = $(includedir)/libsoup-gnome-2.4/libsoup
  
 +INCLUDES += $(LIBSOUP_CFLAGS)		\
-+    $(GCONF_CFLAGS)     		\
-+    $(LIBPROXY_CFLAGS)			\
 +    $(SQLITE_CFLAGS)			\
 +    $(GNOME_KEYRING_CFLAGS)
 +
  libsoupgnomeinclude_HEADERS =	\
  	soup-cookie-jar-sqlite.h\
  	soup-gnome.h		\
-@@ -189,16 +198,26 @@
+@@ -189,14 +198,24 @@ libsoupgnomeinclude_HEADERS =	\
  
  lib_LTLIBRARIES += libsoup-gnome-2.4.la
  
@@ -146,8 +184,6 @@ Split support for libsoup-gnome, original patch by Romain Perier.
  libsoup_gnome_2_4_la_LIBADD =		\
 -	libsoup-2.4.la			\
  	$(GLIB_LIBS)			\
- 	$(GCONF_LIBS)			\
- 	$(LIBPROXY_LIBS)		\
  	$(SQLITE_LIBS)			\
  	$(GNOME_KEYRING_LIBS)
  
@@ -160,7 +196,7 @@ Split support for libsoup-gnome, original patch by Romain Perier.
  libsoup_gnome_2_4_la_SOURCES =		\
  	soup-cookie-jar-sqlite.c	\
  	soup-gnome-features.c		\
-@@ -219,6 +238,8 @@
+@@ -217,6 +236,8 @@ INTROSPECTION_COMPILER_ARGS = --includedir=.
  
  if HAVE_INTROSPECTION
  
@@ -169,7 +205,7 @@ Split support for libsoup-gnome, original patch by Romain Perier.
  # Core library
  gi_soup_files = \
  	$(filter-out soup.h soup-enum-types.% soup-marshal.%,\
-@@ -240,13 +261,21 @@
+@@ -238,13 +259,21 @@ Soup_2_4_gir_FILES = \
  
  INTROSPECTION_GIRS += Soup-2.4.gir
  
@@ -192,31 +228,6 @@ Split support for libsoup-gnome, original patch by Romain Perier.
  SoupGNOME_2_4_gir_SCANNERFLAGS = --identifier-prefix=Soup --symbol-prefix=soup --c-include "libsoup/soup-gnome.h"
  SoupGNOME_2_4_gir_INCLUDES = Soup-2.4
  SoupGNOME_2_4_gir_CFLAGS = $(INCLUDES)
---- Makefile.am
-+++ Makefile.am
-@@ -1,7 +1,11 @@
- ## Process this file with automake to produce Makefile.in
- ACLOCAL_AMFLAGS = -I m4
- 
--SUBDIRS = libsoup tests docs
-+SUBDIRS = libsoup
-+
-+if BUILD_LIBSOUP
-+SUBDIRS += tests docs
-+endif
- 
- EXTRA_DIST =			\
- 	libsoup-2.4.pc.in	\
-@@ -14,7 +18,11 @@
- 
- pkgconfigdir = $(libdir)/pkgconfig
- 
--pkgconfig_DATA = libsoup-2.4.pc
-+pkgconfig_DATA =
-+
-+if BUILD_LIBSOUP
-+pkgconfig_DATA += libsoup-2.4.pc
-+endif
- 
- if BUILD_LIBSOUP_GNOME
- pkgconfig_DATA += libsoup-gnome-2.4.pc
+-- 
+1.7.4.1
+
