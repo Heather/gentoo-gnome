@@ -1,0 +1,271 @@
+From 1cb7101054a04b443b44b6e60928c53f2379034f Mon Sep 17 00:00:00 2001
+From: Ray Strode <rstrode@redhat.com>
+Date: Mon, 21 Mar 2011 14:03:55 -0400
+Subject: [PATCH] manager: port to latest shell api
+
+The shell API changed to support multiple
+buttons on the log out dialog (see bug 641375)
+
+This commit brings gnome-session up to speed.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=645432
+---
+ gnome-session/gsm-manager.c |   68 +++++++++++++++++++++++++++++++-----
+ gnome-session/gsm-shell.c   |   82 ++++++++++++++++++++++++++++++++++++------
+ gnome-session/gsm-shell.h   |    5 ++-
+ 3 files changed, 133 insertions(+), 22 deletions(-)
+
+diff --git a/gnome-session/gsm-manager.c b/gnome-session/gsm-manager.c
+index abbc223..4892c5c 100644
+--- a/gnome-session/gsm-manager.c
++++ b/gnome-session/gsm-manager.c
+@@ -149,7 +149,9 @@ struct GsmManagerPrivate
+         GsmShell               *shell;
+         guint                   shell_end_session_dialog_canceled_id;
+         guint                   shell_end_session_dialog_open_failed_id;
+-        guint                   shell_end_session_dialog_confirmed_id;
++        guint                   shell_end_session_dialog_confirmed_logout_id;
++        guint                   shell_end_session_dialog_confirmed_shutdown_id;
++        guint                   shell_end_session_dialog_confirmed_reboot_id;
+ };
+ 
+ enum {
+@@ -3058,10 +3060,22 @@ disconnect_shell_dialog_signals (GsmManager *manager)
+                 manager->priv->shell_end_session_dialog_canceled_id = 0;
+         }
+ 
+-        if (manager->priv->shell_end_session_dialog_confirmed_id != 0) {
++        if (manager->priv->shell_end_session_dialog_confirmed_logout_id != 0) {
+                 g_signal_handler_disconnect (manager->priv->shell,
+-                                             manager->priv->shell_end_session_dialog_confirmed_id);
+-                manager->priv->shell_end_session_dialog_confirmed_id = 0;
++                                             manager->priv->shell_end_session_dialog_confirmed_logout_id);
++                manager->priv->shell_end_session_dialog_confirmed_logout_id = 0;
++        }
++
++        if (manager->priv->shell_end_session_dialog_confirmed_shutdown_id != 0) {
++                g_signal_handler_disconnect (manager->priv->shell,
++                                             manager->priv->shell_end_session_dialog_confirmed_shutdown_id);
++                manager->priv->shell_end_session_dialog_confirmed_shutdown_id = 0;
++        }
++
++        if (manager->priv->shell_end_session_dialog_confirmed_reboot_id != 0) {
++                g_signal_handler_disconnect (manager->priv->shell,
++                                             manager->priv->shell_end_session_dialog_confirmed_reboot_id);
++                manager->priv->shell_end_session_dialog_confirmed_reboot_id = 0;
+         }
+ 
+         if (manager->priv->shell_end_session_dialog_open_failed_id != 0) {
+@@ -3080,8 +3094,8 @@ on_shell_end_session_dialog_canceled (GsmShell   *shell,
+ }
+ 
+ static void
+-on_shell_end_session_dialog_confirmed (GsmShell   *shell,
+-                                       GsmManager *manager)
++_handle_end_session_dialog_response (GsmManager           *manager,
++                                     GsmManagerLogoutType  logout_type)
+ {
+         /* Note we're checking for END_SESSION here and
+          * QUERY_END_SESSION in the fallback cases elsewhere.
+@@ -3098,7 +3112,31 @@ on_shell_end_session_dialog_confirmed (GsmShell   *shell,
+         }
+ 
+         manager->priv->logout_mode = GSM_MANAGER_LOGOUT_MODE_FORCE;
++        manager->priv->logout_type = logout_type;
+         end_phase (manager);
++}
++
++static void
++on_shell_end_session_dialog_confirmed_logout (GsmShell   *shell,
++                                              GsmManager *manager)
++{
++        _handle_end_session_dialog_response (manager, GSM_MANAGER_LOGOUT_LOGOUT);
++        disconnect_shell_dialog_signals (manager);
++}
++
++static void
++on_shell_end_session_dialog_confirmed_shutdown (GsmShell   *shell,
++                                                GsmManager *manager)
++{
++        _handle_end_session_dialog_response (manager, GSM_MANAGER_LOGOUT_SHUTDOWN);
++        disconnect_shell_dialog_signals (manager);
++}
++
++static void
++on_shell_end_session_dialog_confirmed_reboot (GsmShell   *shell,
++                                              GsmManager *manager)
++{
++        _handle_end_session_dialog_response (manager, GSM_MANAGER_LOGOUT_REBOOT);
+         disconnect_shell_dialog_signals (manager);
+ }
+ 
+@@ -3120,10 +3158,22 @@ connect_shell_dialog_signals (GsmManager *manager)
+                                   G_CALLBACK (on_shell_end_session_dialog_canceled),
+                                   manager);
+ 
+-        manager->priv->shell_end_session_dialog_confirmed_id =
++        manager->priv->shell_end_session_dialog_confirmed_logout_id =
++                g_signal_connect (manager->priv->shell,
++                                  "end-session-dialog-confirmed-logout",
++                                  G_CALLBACK (on_shell_end_session_dialog_confirmed_logout),
++                                  manager);
++
++        manager->priv->shell_end_session_dialog_confirmed_shutdown_id =
++                g_signal_connect (manager->priv->shell,
++                                  "end-session-dialog-confirmed-shutdown",
++                                  G_CALLBACK (on_shell_end_session_dialog_confirmed_shutdown),
++                                  manager);
++
++        manager->priv->shell_end_session_dialog_confirmed_reboot_id =
+                 g_signal_connect (manager->priv->shell,
+-                                  "end-session-dialog-confirmed",
+-                                  G_CALLBACK (on_shell_end_session_dialog_confirmed),
++                                  "end-session-dialog-confirmed-reboot",
++                                  G_CALLBACK (on_shell_end_session_dialog_confirmed_reboot),
+                                   manager);
+ }
+ 
+diff --git a/gnome-session/gsm-shell.c b/gnome-session/gsm-shell.c
+index fb5f4ed..be234aa 100644
+--- a/gnome-session/gsm-shell.c
++++ b/gnome-session/gsm-shell.c
+@@ -74,7 +74,9 @@ enum {
+         END_SESSION_DIALOG_OPENED = 0,
+         END_SESSION_DIALOG_OPEN_FAILED,
+         END_SESSION_DIALOG_CANCELED,
+-        END_SESSION_DIALOG_CONFIRMED,
++        END_SESSION_DIALOG_CONFIRMED_LOGOUT,
++        END_SESSION_DIALOG_CONFIRMED_SHUTDOWN,
++        END_SESSION_DIALOG_CONFIRMED_REBOOT,
+         NUMBER_OF_SIGNALS
+ };
+ 
+@@ -169,11 +171,31 @@ gsm_shell_class_init (GsmShellClass *shell_class)
+                               g_cclosure_marshal_VOID__VOID,
+                               G_TYPE_NONE, 0);
+ 
+-        signals [END_SESSION_DIALOG_CONFIRMED] =
+-                g_signal_new ("end-session-dialog-confirmed",
++        signals [END_SESSION_DIALOG_CONFIRMED_LOGOUT] =
++                g_signal_new ("end-session-dialog-confirmed-logout",
+                               G_OBJECT_CLASS_TYPE (object_class),
+                               G_SIGNAL_RUN_LAST,
+-                              G_STRUCT_OFFSET (GsmShellClass, end_session_dialog_confirmed),
++                              G_STRUCT_OFFSET (GsmShellClass, end_session_dialog_confirmed_logout),
++                              NULL,
++                              NULL,
++                              g_cclosure_marshal_VOID__VOID,
++                              G_TYPE_NONE, 0);
++
++        signals [END_SESSION_DIALOG_CONFIRMED_SHUTDOWN] =
++                g_signal_new ("end-session-dialog-confirmed-shutdown",
++                              G_OBJECT_CLASS_TYPE (object_class),
++                              G_SIGNAL_RUN_LAST,
++                              G_STRUCT_OFFSET (GsmShellClass, end_session_dialog_confirmed_shutdown),
++                              NULL,
++                              NULL,
++                              g_cclosure_marshal_VOID__VOID,
++                              G_TYPE_NONE, 0);
++
++        signals [END_SESSION_DIALOG_CONFIRMED_REBOOT] =
++                g_signal_new ("end-session-dialog-confirmed-reboot",
++                              G_OBJECT_CLASS_TYPE (object_class),
++                              G_SIGNAL_RUN_LAST,
++                              G_STRUCT_OFFSET (GsmShellClass, end_session_dialog_confirmed_reboot),
+                               NULL,
+                               NULL,
+                               g_cclosure_marshal_VOID__VOID,
+@@ -477,8 +499,21 @@ on_end_session_dialog_canceled (DBusGProxy *proxy,
+ }
+ 
+ static void
+-on_end_session_dialog_confirmed (DBusGProxy *proxy,
+-                                 GsmShell   *shell)
++on_end_session_dialog_confirmed_logout (DBusGProxy *proxy,
++                                        GsmShell   *shell)
++{
++        if (shell->priv->update_idle_id != 0) {
++                g_source_remove (shell->priv->update_idle_id);
++                shell->priv->update_idle_id = 0;
++        }
++
++        shell->priv->has_open_dialog = FALSE;
++        g_signal_emit (G_OBJECT (shell), signals[END_SESSION_DIALOG_CONFIRMED_LOGOUT], 0);
++}
++
++static void
++on_end_session_dialog_confirmed_shutdown (DBusGProxy *proxy,
++                                          GsmShell   *shell)
+ {
+         if (shell->priv->update_idle_id != 0) {
+                 g_source_remove (shell->priv->update_idle_id);
+@@ -486,7 +521,20 @@ on_end_session_dialog_confirmed (DBusGProxy *proxy,
+         }
+ 
+         shell->priv->has_open_dialog = FALSE;
+-        g_signal_emit (G_OBJECT (shell), signals[END_SESSION_DIALOG_CONFIRMED], 0);
++        g_signal_emit (G_OBJECT (shell), signals[END_SESSION_DIALOG_CONFIRMED_SHUTDOWN], 0);
++}
++
++static void
++on_end_session_dialog_confirmed_reboot (DBusGProxy *proxy,
++                                        GsmShell   *shell)
++{
++        if (shell->priv->update_idle_id != 0) {
++                g_source_remove (shell->priv->update_idle_id);
++                shell->priv->update_idle_id = 0;
++        }
++
++        shell->priv->has_open_dialog = FALSE;
++        g_signal_emit (G_OBJECT (shell), signals[END_SESSION_DIALOG_CONFIRMED_REBOOT], 0);
+ }
+ 
+ static void
+@@ -575,14 +623,24 @@ gsm_shell_open_end_session_dialog (GsmShell *shell,
+                                              "Canceled",
+                                              G_CALLBACK (on_end_session_dialog_canceled),
+                                              shell, NULL);
+-
+                 dbus_g_proxy_add_signal (shell->priv->end_session_dialog_proxy,
+-                                         "Confirmed", G_TYPE_INVALID);
++                                         "ConfirmedLogout", G_TYPE_INVALID);
+                 dbus_g_proxy_connect_signal (shell->priv->end_session_dialog_proxy,
+-                                             "Confirmed",
+-                                             G_CALLBACK (on_end_session_dialog_confirmed),
++                                             "ConfirmedLogout",
++                                             G_CALLBACK (on_end_session_dialog_confirmed_logout),
++                                             shell, NULL);
++                dbus_g_proxy_add_signal (shell->priv->end_session_dialog_proxy,
++                                         "ConfirmedShutdown", G_TYPE_INVALID);
++                dbus_g_proxy_connect_signal (shell->priv->end_session_dialog_proxy,
++                                             "ConfirmedShutdown",
++                                             G_CALLBACK (on_end_session_dialog_confirmed_shutdown),
++                                             shell, NULL);
++                dbus_g_proxy_add_signal (shell->priv->end_session_dialog_proxy,
++                                         "ConfirmedReboot", G_TYPE_INVALID);
++                dbus_g_proxy_connect_signal (shell->priv->end_session_dialog_proxy,
++                                             "ConfirmedReboot",
++                                             G_CALLBACK (on_end_session_dialog_confirmed_reboot),
+                                              shell, NULL);
+-
+         }
+ 
+         inhibitor_array = get_array_from_store (inhibitors);
+diff --git a/gnome-session/gsm-shell.h b/gnome-session/gsm-shell.h
+index 74a617d..123d4cc 100644
+--- a/gnome-session/gsm-shell.h
++++ b/gnome-session/gsm-shell.h
+@@ -64,7 +64,10 @@ struct _GsmShellClass
+         void (* end_session_dialog_opened)        (GsmShell *shell);
+         void (* end_session_dialog_open_failed)   (GsmShell *shell);
+         void (* end_session_dialog_canceled)      (GsmShell *shell);
+-        void (* end_session_dialog_confirmed)     (GsmShell *shell);
++
++        void (* end_session_dialog_confirmed_logout)   (GsmShell *shell);
++        void (* end_session_dialog_confirmed_shutdown) (GsmShell *shell);
++        void (* end_session_dialog_confirmed_reboot)   (GsmShell *shell);
+ 
+ };
+ 
+-- 
+1.7.4.1
