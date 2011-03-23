@@ -15,15 +15,14 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="test"
 
+# Newer gnome-doc-utils is needed for RNGs
 RDEPEND=""
 DEPEND="app-text/scrollkeeper
-	>=app-text/gnome-doc-utils-0.5.6
+	>=app-text/gnome-doc-utils-0.20.5
 	>=dev-util/pkgconfig-0.9
 	test? (
 		~app-text/docbook-xml-dtd-4.1.2
 		~app-text/docbook-xml-dtd-4.3 )"
 
-pkg_setup() {
-	G2CONF="${G2CONF} --disable-scrollkeeper"
-	DOCS="AUTHORS ChangeLog NEWS README"
-}
+G2CONF="${G2CONF} --disable-scrollkeeper"
+DOCS="AUTHORS ChangeLog NEWS README"
