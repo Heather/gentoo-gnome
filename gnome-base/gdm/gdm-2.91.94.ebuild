@@ -46,6 +46,7 @@ RDEPEND="
 	x11-libs/libXdmcp
 	x11-libs/libXext
 	x11-libs/libXft
+	x11-libs/libXrandr
 	x11-apps/sessreg
 
 	virtual/pam
