@@ -120,7 +120,6 @@ x11-misc/notification-daemon
 x11-misc/shared-mime-info
 x11-plugins/pidgin-libnotify
 x11-terms/gnome-terminal
-x11-themes/gnome-themes
 x11-themes/gnome-icon-theme
 x11-themes/gnome-icon-theme-symbolic
 x11-themes/gnome-icon-theme-extras

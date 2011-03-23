@@ -1,0 +1,2 @@
+You may want to do `mkdir /etc/portage/package.keywords`, etc, and then symlink
+all these inside those directories as these are still incomplete.
