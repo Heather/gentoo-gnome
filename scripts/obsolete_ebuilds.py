@@ -8,6 +8,7 @@
 # based on the current keywords
 #
 
+import os
 import sys
 
 import portage
@@ -124,5 +125,7 @@ if __name__ == "__main__":
     if len(sys.argv) < 2:
         usage()
         sys.exit(1)
+    if sys.argv[1] == '.':
+        sys.argv[1] = '/'.join((os.path.basename(os.path.dirname(os.getcwd())), os.path.basename(os.getcwd())))
     for i in get_obsolete(sys.argv[1]):
         print portage.catsplit(i)[-1]+'.ebuild',
