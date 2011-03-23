@@ -21,6 +21,7 @@ else
 fi
 
 # TODO: Add RDEPEND on pciutils (requires support for reading gzipped pnp.ids)
+# Latest schemas needed due to commit 7f3e3d52
 RDEPEND="
 	>=dev-libs/glib-2.19.1:2
 	>=x11-libs/gdk-pixbuf-2.21.3:2[introspection?]
@@ -28,7 +29,7 @@ RDEPEND="
 	>=x11-libs/libXrandr-1.2
 	>=x11-libs/startup-notification-0.5
 	x11-libs/libX11
-	>=gnome-base/gsettings-desktop-schemas-0.1.4
+	>=gnome-base/gsettings-desktop-schemas-2.91.92
 	introspection? ( >=dev-libs/gobject-introspection-0.9.7 )"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
