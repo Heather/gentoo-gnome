@@ -56,6 +56,7 @@ DEPEND="${COMMON_DEPEND}
 
 pkg_setup() {
 	# FIXME: Bump nautilus-sendto and re-enable support for it
+	# FIXME: Add geoclue support
 	G2CONF="${G2CONF}
 		$(use_enable introspection)
 		--disable-nautilus-sendto
