@@ -65,7 +65,9 @@ DEPEND="${COMMON_DEPEND}
 	doc? ( >=dev-util/gtk-doc-1.14 )
 	vala? ( >=dev-lang/vala-0.11.6:0.12 )"
 
-G2CONF="${G2CONF} --disable-maintainer-mode 
+G2CONF="${G2CONF}
+	VALAC=$(type -p valac-0.12)
+	--disable-maintainer-mode 
 	--disable-scrollkeeper
 	--disable-static"
 DOCS="AUTHORS ChangeLog NEWS README"
