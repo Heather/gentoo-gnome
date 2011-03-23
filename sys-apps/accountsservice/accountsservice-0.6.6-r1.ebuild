@@ -33,7 +33,7 @@ DEPEND="${RDEPEND}
 # Documentaton doesn't validate
 RESTRICT="test"
 
-pkg_setup() {
+src_prepare() {
 	# Can configure systemdsystemunitdir
 	# docbook docs don't validate, disable doc rebuild
 	G2CONF="${G2CONF}
@@ -43,4 +43,9 @@ pkg_setup() {
 		--without-systemdsystemunitdir
 		$(use_enable introspection)"
 	DOCS="AUTHORS NEWS README TODO"
+
+	# Taken from upstream trunk, remove for next release
+	epatch "${FILESDIR}/${PN}-fix-useradd.patch"
+
+	gnome2_src_prepare
 }
