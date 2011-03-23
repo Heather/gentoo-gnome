@@ -25,7 +25,7 @@ RDEPEND=">=dev-libs/glib-2.28.0:2
 	>=x11-libs/vte-0.27.6:2.90
 	>=dev-libs/libxml2-2.4.23
 	>=dev-libs/gdl-2.91.4
-	>=x11-libs/gtksourceview-2.91.5:3.0
+	>=x11-libs/gtksourceview-2.91.8:3.0
 
 	dev-libs/libxslt
 	>=dev-lang/perl-5
@@ -39,7 +39,7 @@ RDEPEND=">=dev-libs/glib-2.28.0:2
 	x11-libs/libXrender
 
 	devhelp? ( >=dev-util/devhelp-2.91.6 )
-	glade? ( >=dev-util/glade-3.9.0 )
+	glade? ( >=dev-util/glade-3.9.2 )
 	graphviz? ( >=media-gfx/graphviz-2.6 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 	subversion? (
