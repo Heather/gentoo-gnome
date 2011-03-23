@@ -23,7 +23,7 @@ fi
 # x11-misc/xdg-user-dirs{,-gtk} are needed to create the various XDG_*_DIRs, and
 # create .config/user-dirs.dirs which is read by glib to get G_USER_DIRECTORY_*
 # xdg-user-dirs-update is run during login (see 10-user-dirs-update below).
-COMMON_DEPEND=">=dev-libs/glib-2.16:2
+COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
 	>=x11-libs/gtk+-2.90.7:3
 	>=dev-libs/dbus-glib-0.76
 	>=gnome-base/gconf-2
@@ -42,13 +42,14 @@ COMMON_DEPEND=">=dev-libs/glib-2.16:2
 	x11-misc/xdg-user-dirs-gtk
 	x11-apps/xdpyinfo"
 # Pure-runtime deps from the session files
-# Don't add nautilus because that has been removed in trunk
-# gnome-panel is used by classic-gnome
+# gnome-themes-standard is needed for the failwhale dialog themeing
 RDEPEND="${COMMON_DEPEND}
-	gnome-base/gnome-panel
-	gnome-base/gnome-settings-daemon"
+	gnome-base/gnome-settings-daemon
+	>=x11-themes/gnome-themes-standard-2.91.92"
 # PDEPEND to avoid circular dependency
-PDEPEND="gnome-base/gnome-shell"
+# gnome-panel is used by classic-gnome
+PDEPEND="gnome-base/gnome-shell
+	gnome-base/gnome-panel"
 DEPEND="${COMMON_DEPEND}
 	>=dev-lang/perl-5
 	>=sys-devel/gettext-0.10.40
