@@ -56,14 +56,14 @@ RDEPEND="${COMMON_DEPEND}
 	|| ( >=media-plugins/gst-plugins-x-0.10
 		>=media-plugins/gst-plugins-xvideo-0.10 )"
 DEPEND="${COMMON_DEPEND}
+	>=dev-lang/vala-0.11.6:0.12
 	>=app-text/gnome-doc-utils-0.12
 	>=dev-util/intltool-0.40
 	>=sys-devel/gettext-0.17
 	dev-util/pkgconfig
 	x11-proto/xf86vidmodeproto
 	app-text/docbook-xml-dtd:4.3
-	doc? ( >=dev-util/gtk-doc-1.14 )
-	vala? ( >=dev-lang/vala-0.11.6:0.12 )"
+	doc? ( >=dev-util/gtk-doc-1.14 )"
 
 G2CONF="${G2CONF}
 	VALAC=$(type -p valac-0.12)
