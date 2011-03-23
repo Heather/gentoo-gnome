@@ -11,26 +11,31 @@
 # Currently prints out a list of revdeps which *don't* use a slot in the
 # dependency atom containing the given library
 #
-# TODO: Add a slower portage-only mode which calculates the required rindex
-#
 
 import sys
-import urllib2
 import os.path as osp
 
 import portage
 from portage.xml.metadata import MetaDataXML
 
+portdb = portage.portdb
+portdb.porttrees = [portage.settings['PORTDIR']]
+PORTDIR = portage.settings['PORTDIR']
+DEPVARS = ['RDEPEND', 'PDEPEND', 'DEPEND']
+
+#####################
+### Configuration ###
+#####################
 if len(sys.argv) < 2:
     print "Usage: %s <cat/pkg>" % sys.argv[0]
     sys.exit(1)
 
-portage.portdb.porttrees = [portage.settings['PORTDIR']]
-PORTDIR = portage.settings['PORTDIR']
-RINDEX = "http://tinderbox.dev.gentoo.org/misc/rindex"
-DEPSTR = ['RDEPEND', 'PDEPEND', 'DEPEND']
 KEY = sys.argv[1]
+PORTAGE_ONLY = False
 
+########################
+### Output Functions ###
+########################
 def get_herds():
     return osp.join(PORTDIR, 'metadata', 'herds.xml')
 
@@ -50,7 +55,9 @@ def rdeps_with_slot(slot_rdeps, slot=None):
     if not slot_rdeps.has_key(slot):
         # No rdeps using the given slot
         return
+    print "-------------------------------"
     print "All packages:"
+    print "-------------------------------"
     for pkg in slot_rdeps[slot]:
         pkg_md = MetaDataXML(get_md_path(pkg), get_herds())
         for herd in pkg_md.herds():
@@ -69,54 +76,92 @@ def rdeps_with_slot(slot_rdeps, slot=None):
             print '%s' % i.email,
         print
 
+    print "-------------------------------"
     print "Herd packages:"
+    print "-------------------------------"
     for (herd, pkgs) in pkg_herds.iteritems():
         print 'Herd: %s' % herd
         for pkg in pkgs:
             print '\t%s' % pkg
 
+    print "-------------------------------"
     print "Maintainer packages:"
+    print "-------------------------------"
     for (maint, pkgs) in pkg_maints.iteritems():
         print 'Maintainer: %s' % maint
         for pkg in pkgs:
             print '\t%s' % pkg
 
+#############################
+### Portage API Functions ###
+#############################
+def get_deps_both(cpv, depvars=DEPVARS):
+    """
+    Parses the dependency variables listed in depvars for cpv
 
-vrdeps = urllib2.urlopen('/'.join([RINDEX, KEY])).read().split()
-rdeps = []
-for i in vrdeps:
-    rdeps.append(i.split(':')[0])
-
-slot_rdeps = {}
-failed_rdeps = []
-for rdep in rdeps:
-    rdep = rdep.split(':')[0]
-    if not portage.isvalidatom('='+rdep):
-        print 'Invalid atom: ' + rdep
-        continue
+    returns (set(dep_cps), set(dep_strs))
+    """
+    dep_cps = set()
+    dep_strs = set()
+    raw_deps = []
     try:
-        temp = portage.portdb.aux_get(rdep, DEPSTR)[0].split()
+        raw_deps = portdb.aux_get(cpv, depvars)[0].split()
     except KeyError:
-        failed_rdeps.append(rdep)
+        return (dep_cps, dep_strs)
+    for dep in portage.dep.use_reduce(' '.join(raw_deps),
+                                      matchall=True, flat=True):
+        # Ignore blockers, etc
+        if portage.isvalidatom(dep):
+            dep_strs.add(dep)
+            dep_cps.add(portage.dep.dep_getkey(dep))
+    return (dep_cps, dep_strs)
+
+def get_revdeps_rindex(key):
+    """
+    Given a key, returns a reverse-dependency list of that key using the tinderbox rindex
+    """
+    import urllib2
+    RINDEX = "http://tinderbox.dev.gentoo.org/misc/rindex"
+    revdeps = []
+    rdeps_raw = urllib2.urlopen('/'.join([RINDEX, key])).read().split()
+    for i in rdeps_raw:
+        cpv = i.split(':')[0]
+        if portage.isvalidatom('='+cpv):
+            revdeps.append(cpv)
+    return revdeps
+
+def get_revdeps_portage(key):
+    """
+    Given a key, returns a reverse-dependency list of that key using portage API
+    """
+    revdeps = []
+    for cp in portdb.cp_all():
+        cpvrs = portdb.xmatch('match-all', cp)
+        for cpvr in cpvrs:
+            if key in get_deps_both(cpvr)[0]:
+                revdeps.append(cpvr)
+    return revdeps
+
+###################
+### Actual Work ###
+###################
+slot_rdeps = {}
+revdeps = []
+if PORTAGE_ONLY:
+    revdeps = get_revdeps_portage(KEY)
+else:
+    revdeps = get_revdeps_rindex(KEY)
+
+for rdep in revdeps:
+    (cps, deps) = get_deps_both(rdep)
+    if KEY not in cps:
         continue
-    for dep in temp:
-        # Ignore ||, (, ), etc.
-        if not portage.isvalidatom(dep):
+    for cpv in deps:
+        if cpv.find(KEY) == -1:
             continue
-        # Categorize the dep into the slot it uses
-        if portage.dep.dep_getkey(dep) == KEY:
-            slot = portage.dep.dep_getslot(dep)
-            if not slot_rdeps.has_key(slot):
-                # We use a set here because atoms often get repeated
-                slot_rdeps[slot] = set()
-            slot_rdeps[slot].add(rdep)
-
-# Convert back to list, and sort the atoms
-for slot in slot_rdeps.keys():
-    slot_rdeps[slot] = list(slot_rdeps[slot])
-    slot_rdeps[slot].sort()
-
-if failed_rdeps:
-    print 'Failed: ' + str(failed_rdeps)
+        slot = portage.dep.dep_getslot(cpv)
+        if not slot_rdeps.has_key(slot):
+            slot_rdeps[slot] = []
+        slot_rdeps[slot].append(rdep)
 
 rdeps_with_slot(slot_rdeps)
