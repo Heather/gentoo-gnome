@@ -33,7 +33,6 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 	>=x11-libs/gtk+-3.0.0:3[introspection]
 	>=media-libs/clutter-1.5.15:1.0[introspection]
 	>=gnome-base/gnome-desktop-2.91.2:3
-	>=gnome-base/gnome-menus-2.91.91-r1
 	>=gnome-base/gsettings-desktop-schemas-2.91.91
 	>=gnome-extra/evolution-data-server-2.91.6
 	>=media-libs/gstreamer-0.10.16
@@ -50,6 +49,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 	dev-libs/libcroco:0.6
 
 	gnome-base/gconf[introspection]
+	gnome-base/gnome-menus
 	gnome-base/librsvg
 	media-libs/libcanberra
 	media-sound/pulseaudio
@@ -92,6 +92,9 @@ G2CONF="--enable-compile-warnings=maximum
 
 src_prepare() {
 	epatch "${FILESDIR}/${PN}-fix-gnome-bluetooth.patch"
+
+	# https://bugzilla.gnome.org/show_bug.cgi?id=645063
+	sed -e 's/settings.menu/gnomecc.menu/g' -i src/shell-app-system.c || die
 
 	gnome2_src_prepare
 }
