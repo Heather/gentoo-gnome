@@ -55,15 +55,15 @@ def main():
                         mypkg_slot = "unset"
 
                     if mypkg_slot not in res_slots:
-                        res_slots[mypkg_slot] = [cpvr]
+                        res_slots[mypkg_slot] = [(cpvr, depend)]
                     else:
-                        res_slots[mypkg_slot].append(cpvr)
+                        res_slots[mypkg_slot].append((cpvr, depend))
                     #print(portage.dep.dep_getkey(depend) + ' uses ' + sys.argv[1] + ' slot ' +  portage.dep.dep_getslot(depend))
 
     for slot in sorted(res_slots):
         print('%s:%s' % (sys.argv[1], slot))
         for rescpv in res_slots[slot]:
-            print('    ' + rescpv)
+            print('    %s (as %s)' % rescpv)
 
 
 if __name__ == "__main__":
