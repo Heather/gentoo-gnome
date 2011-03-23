@@ -22,7 +22,7 @@ RDEPEND="
 	>=x11-libs/libnotify-0.7.0
 	>=dev-libs/dbus-glib-0.73
 
-	>=app-portage/packagekit-0.6.5
+	>=app-portage/packagekit-0.6.5[gtk]
 	>=gnome-base/gnome-menus-2.24.1
 	>=media-libs/libcanberra-0.10[gtk3]
 	>=sys-apps/dbus-1.1.2
