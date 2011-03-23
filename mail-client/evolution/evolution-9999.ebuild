@@ -34,17 +34,17 @@ PINENTRY_DEPEND="|| ( app-crypt/pinentry[gtk] app-crypt/pinentry-qt app-crypt/pi
 # pst is not mature enough and changes API/ABI frequently
 RDEPEND=">=dev-libs/glib-2.28:2
 	>=x11-libs/cairo-1.9.15
-	>=x11-libs/gtk+-3.0:3
+	>=x11-libs/gtk+-3.0.2:3
 	>=dev-libs/libunique-2.91.4:3
 	>=gnome-base/gnome-desktop-2.91.3:3
 	>=dev-libs/libgweather-2.90.0:3
 	media-libs/libcanberra[gtk3]
 	>=x11-libs/libnotify-0.7
-	>=gnome-extra/evolution-data-server-${MY_MAJORV}[weather]
+	>=gnome-extra/evolution-data-server-${MY_MAJORV}.91[weather]
 	>=gnome-extra/gtkhtml-3.31.3:4.0
-	>=gnome-base/gconf-2
+	>=gnome-base/gconf-2:2
 	dev-libs/atk
-	>=dev-libs/libxml2-2.7.3
+	>=dev-libs/libxml2-2.7.3:2
 	>=net-libs/libsoup-gnome-2.4:2.4
 	>=x11-misc/shared-mime-info-0.22
 	>=x11-themes/gnome-icon-theme-2.30.2.1
@@ -60,8 +60,8 @@ RDEPEND=">=dev-libs/glib-2.28:2
 					${PINENTRY_DEPEND} )
 				  =app-crypt/gnupg-1.4* ) )
 	gstreamer? (
-		>=media-libs/gstreamer-0.10
-		>=media-libs/gst-plugins-base-0.10 )
+		>=media-libs/gstreamer-0.10:0.10
+		>=media-libs/gst-plugins-base-0.10:0.10 )
 	kerberos? ( virtual/krb5 )
 	ldap? ( >=net-nds/openldap-2 )
 	networkmanager? ( >=net-misc/networkmanager-0.7 )
@@ -137,9 +137,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# Fix invalid use of la file in contact-editor, upstream bug #635002
-	epatch "${FILESDIR}/${PN}-2.32.0-wrong-lafile-usage.patch"
-
 	# Use NSS/NSPR only if 'ssl' is enabled.
 	if use ssl ; then
 		sed -e 's|mozilla-nss|nss|' \
@@ -162,12 +159,13 @@ src_prepare() {
 pkg_postinst() {
 	gnome2_pkg_postinst
 
-	elog "To change the default browser if you are not using GNOME, do:"
-	elog "gconftool-2 --set /desktop/gnome/url-handlers/http/command -t string 'firefox %s'"
-	elog "gconftool-2 --set /desktop/gnome/url-handlers/https/command -t string 'firefox %s'"
-	elog ""
-	elog "Replace 'firefox %s' with which ever browser you use."
-	elog ""
+	# FIXME: This has changed with GNOME 3, revisit
+	#elog "To change the default browser if you are not using GNOME, do:"
+	#elog "gconftool-2 --set /desktop/gnome/url-handlers/http/command -t string 'firefox %s'"
+	#elog "gconftool-2 --set /desktop/gnome/url-handlers/https/command -t string 'firefox %s'"
+	#elog ""
+	#elog "Replace 'firefox %s' with which ever browser you use."
+	#elog ""
 	elog "Junk filters are now a run-time choice. You will get a choice of"
 	elog "bogofilter or spamassassin based on which you have installed"
 	elog ""
