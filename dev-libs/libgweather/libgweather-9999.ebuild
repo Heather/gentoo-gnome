@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/libgweather/libgweather-2.30.3.ebuild,v 1.3 2010/11/14 23:05:07 eva Exp $
 
@@ -12,7 +12,7 @@ DESCRIPTION="Library to access weather information from online services"
 HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2"
-SLOT="3"
+SLOT="2"
 IUSE="+introspection doc"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
@@ -32,7 +32,6 @@ RDEPEND=">=x11-libs/gtk+-2.90.0:3[introspection?]
 
 	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
 
-	!<dev-libs/libgweather-2.30.3-r200
 	!<gnome-base/gnome-applets-2.22.0"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40.3
@@ -47,4 +46,5 @@ G2CONF="${G2CONF}
 	--enable-locations-compression
 	--disable-maintainer-mode
 	--disable-all-translations-in-one-xml
-	--disable-static"
+	--disable-static
+	$(use_enable introspection)"
