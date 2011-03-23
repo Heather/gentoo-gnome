@@ -20,9 +20,9 @@ S=${WORKDIR}
 
 # TODO: check a11y and re-enable USE-flag
 RDEPEND="
-	>=dev-libs/glib-2.28.1:2
-	>=media-libs/clutter-1.6.2:1.0
-	>=x11-libs/gtk+-3.0.0:3[cups?]
+	>=dev-libs/glib-2.28.3:2
+	>=media-libs/clutter-1.6.10:1.0
+	>=x11-libs/gtk+-3.0.4:3[cups?]
 	>=x11-libs/gdk-pixbuf-2.23.1:2
 	>=dev-libs/atk-1.33.6
 	>=x11-libs/pango-1.28.3
@@ -59,7 +59,7 @@ RDEPEND="
 
 	>=app-arch/file-roller-${PV}
 	>=app-crypt/seahorse-${PV}
-	>=app-editors/gedit-2.91.9
+	>=app-editors/gedit-2.91.10
 	>=app-text/evince-${PV}
 	>=gnome-extra/gcalctool-5.91.90
 	>=gnome-extra/gconf-editor-${PV}
@@ -69,11 +69,11 @@ RDEPEND="
 	>=gnome-extra/gucharmap-2.32.1
 	>=media-gfx/eog-${PV}
 	>=media-sound/sound-juicer-2.32.0
-	>=media-video/cheese-2.32.0
+	>=media-video/cheese-${PV}
 	>=media-video/totem-${PV}
 	>=net-analyzer/gnome-nettool-2.91.5
-	>=net-misc/vinagre-2.91.8
-	>=net-misc/vino-2.99.3
+	>=net-misc/vinagre-${PV}
+	>=net-misc/vino-2.99.4
 	>=www-client/epiphany-${PV}
 	>=x11-terms/gnome-terminal-2.33.1
 
@@ -82,8 +82,8 @@ RDEPEND="
 
 	>=x11-themes/gtk-engines-2.20.2:2
 	>=x11-themes/gnome-backgrounds-2.32.0
-	>=x11-themes/gnome-icon-theme-2.91.7
-	>=x11-themes/gnome-icon-theme-symbolic-2.91.7
+	>=x11-themes/gnome-icon-theme-${PV}
+	>=x11-themes/gnome-icon-theme-symbolic-${PV}
 	>=x11-themes/gnome-themes-standard-${PV}
 
 	>=gnome-extra/gnome-user-docs-${PV}
