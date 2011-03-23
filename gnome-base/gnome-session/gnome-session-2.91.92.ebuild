@@ -5,7 +5,7 @@
 EAPI="3"
 GCONF_DEBUG="yes"
 
-inherit eutils gnome2
+inherit gnome2
 
 DESCRIPTION="Gnome session manager"
 HOMEPAGE="http://www.gnome.org/"
@@ -72,9 +72,6 @@ src_prepare() {
 		$(use_enable doc docbook-docs)
 		$(use_enable ipv6)"
 	DOCS="AUTHORS ChangeLog NEWS README"
-
-	# Fixed upstream, https://bugzilla.gnome.org/show_bug.cgi?id=645432
-	epatch "${FILESDIR}/${P}-fix-logout.patch"
 
 	gnome2_src_prepare
 }
