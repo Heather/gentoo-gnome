@@ -25,7 +25,7 @@ fi
 # FIXME: Automagic gnome-bluetooth[introspection] support.
 # latest mutter is needed due to commit 474ff2e9 and commit 079953c3
 # latest gsettings-desktop-schemas is needed due to commit 602fa1c6
-# latest gnome-menus is needed due to https://bugzilla.gnome.org/show_bug.cgi?id=645063#c4
+# latest g-c-c is needed due to https://bugs.gentoo.org/show_bug.cgi?id=360057
 COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 	>=dev-libs/gjs-0.7.11
 	>=dev-libs/gobject-introspection-0.10.1
@@ -74,7 +74,7 @@ RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/gnome-session-2.91.91
 
 	>=gnome-base/gnome-settings-daemon-2.91
-	>=gnome-base/gnome-control-center-2.91
+	>=gnome-base/gnome-control-center-2.91.92-r1
 
 	nm-applet? (
 		>=gnome-extra/nm-applet-0.8.996

@@ -95,5 +95,8 @@ src_prepare() {
 		$(use_with socialweb libsocialweb)"
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
 
+	# https://bugs.gentoo.org/show_bug.cgi?id=360057
+	epatch "${FILESDIR}/${PN}-fix-gnomecc-menu.patch"
+
 	gnome2_src_prepare
 }
