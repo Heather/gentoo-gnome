@@ -21,7 +21,7 @@ RDEPEND="
 	>=dev-libs/libxml2-2.6.5
 	>=dev-libs/libxslt-1.1.4
 	>=dev-libs/dbus-glib-0.71
-	>=gnome-extra/yelp-xsl-2.91.9
+	>=gnome-extra/yelp-xsl-${PV}
 	>=net-libs/webkit-gtk-1.3.2:3
 	>=app-arch/xz-utils-4.9
 	app-arch/bzip2
