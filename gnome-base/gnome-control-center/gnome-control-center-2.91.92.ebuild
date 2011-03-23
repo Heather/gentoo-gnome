@@ -13,8 +13,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2"
 SLOT="2"
-# Make it +cheese once cheese is ported to gtk+3, and added to overlay
-IUSE="doc cheese +cups +networkmanager +socialweb"
+IUSE="doc +cheese +cups +networkmanager +socialweb"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
@@ -27,12 +26,12 @@ fi
 #
 # gnome-session-2.91.6-r1 is needed so that 10-user-dirs-update is run at login
 # g-s-d-2.91.90.1 is needed for magnifier schema updates
-# Latest gsettings-desktop-schemas is needed for commit f6b0ae89
+# Latest gsettings-desktop-schemas is needed for commit 73f9bffb
 COMMON_DEPEND="
 	>=dev-libs/glib-2.25.11:2
 	>=x11-libs/gdk-pixbuf-2.23.0:2
-	>=x11-libs/gtk+-2.91.6:3
-	>=gnome-base/gsettings-desktop-schemas-0.1.7.1
+	>=x11-libs/gtk+-3.0.2:3
+	>=gnome-base/gsettings-desktop-schemas-2.91.92
 	>=gnome-base/gconf-2.0:2
 	>=dev-libs/dbus-glib-0.73
 	>=gnome-base/gnome-desktop-2.91.5:3
@@ -58,7 +57,7 @@ COMMON_DEPEND="
 
 	cheese? (
 		media-libs/gstreamer:0.10
-		>=media-video/cheese-2.91.5 )
+		>=media-video/cheese-2.91.91.1 )
 	cups? ( >=net-print/cups-1.4[dbus] )
 	networkmanager? ( >=net-misc/networkmanager-0.8.992 )
 	socialweb? ( net-libs/libsocialweb )
@@ -80,6 +79,8 @@ DEPEND="${COMMON_DEPEND}
 
 	app-text/scrollkeeper
 	>=app-text/gnome-doc-utils-0.10.1
+	
+	cups? ( sys-apps/sed )
 	doc? ( >=dev-util/gtk-doc-1.9 )"
 # Needed for autoreconf
 #	gnome-base/gnome-common
