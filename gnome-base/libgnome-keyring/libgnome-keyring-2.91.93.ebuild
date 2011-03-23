@@ -17,8 +17,7 @@ IUSE="debug doc test"
 
 RDEPEND=">=sys-apps/dbus-1.0
 	gnome-base/gconf
-	>=gnome-base/gnome-keyring-2.29[test?]
-	!<gnome-base/gnome-keyring-2.29"
+	>=gnome-base/gnome-keyring-2.29[test?]"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/intltool-0.35
