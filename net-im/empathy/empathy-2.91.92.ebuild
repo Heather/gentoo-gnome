@@ -28,7 +28,7 @@ fi
 RDEPEND=">=dev-libs/glib-2.27.2:2
 	>=x11-libs/gtk+-3.0.2:3
 	>=dev-libs/dbus-glib-0.51
-	>=net-libs/telepathy-glib-0.13.16
+	>=net-libs/telepathy-glib-0.14.1
 	>=media-libs/libcanberra-0.25[gtk3]
 	>=x11-libs/libnotify-0.7.0
 	>=gnome-base/gnome-keyring-2.91.4-r300
