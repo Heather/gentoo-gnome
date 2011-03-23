@@ -5,7 +5,7 @@
 EAPI="3"
 GCONF_DEBUG="no"
 
-inherit autotools eutils gnome2
+inherit gnome2
 
 DESCRIPTION="Simple low-level configuration system"
 HOMEPAGE="http://live.gnome.org/dconf"
@@ -25,7 +25,8 @@ RDEPEND=">=dev-libs/glib-2.27.2
 	>=dev-libs/libgee-0.5.1
 	>=dev-libs/libxml2-2.7.7
 	sys-apps/dbus
-	x11-libs/gtk+:3"
+	x11-libs/gtk+:3
+	!dev-lang/vala:0"
 DEPEND="${RDEPEND}
 	>=dev-lang/vala-0.11.7:0.12
 	doc? ( >=dev-util/gtk-doc-1.15 )"
