@@ -42,7 +42,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.26.0:2
 
 	cdr? ( >=app-cdr/brasero-2.91.90 )
 	daap? (
-		media-libs/libdmapsharing:3.0
+		net-libs/libdmapsharing:3.0
 		>=net-dns/avahi-0.6 )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-0.4.9 )
 	html? ( >=net-libs/webkit-gtk-1.3.9:3 )

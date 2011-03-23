@@ -40,7 +40,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.12
 		brasero? ( >=app-cdr/brasero-0.9.1 )
 		!brasero? ( >=gnome-extra/nautilus-cd-burner-2.21.6 ) )
 	daap? (
-		>=media-libs/libdmapsharing-2.1.6
+		>=net-libs/libdmapsharing-2.1.6:2.2
 		>=net-dns/avahi-0.6 )
 	html? ( >=net-libs/webkit-gtk-1.1.17 )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-0.4.9 )
