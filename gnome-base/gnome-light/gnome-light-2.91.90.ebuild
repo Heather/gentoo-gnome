@@ -49,7 +49,6 @@ RDEPEND="!gnome-base/gnome
 
 	>=x11-themes/gnome-icon-theme-2.91.7
 	>=x11-themes/gnome-icon-theme-symbolic-2.91.7
-	>=x11-themes/gnome-themes-${PV}
 	>=x11-themes/gnome-themes-standard-${PV}
 
 	>=x11-terms/gnome-terminal-2.33.1

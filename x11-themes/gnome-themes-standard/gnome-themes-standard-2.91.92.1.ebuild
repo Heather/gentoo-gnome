@@ -21,15 +21,17 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 
-# Double-check gtk/gtk-engines/metacity/mutter dependencies
+# gnome-themes{,-extras} are OBSOLETE for GNOME 3
+# http://comments.gmane.org/gmane.comp.gnome.desktop/44130
 RDEPEND=">=x11-libs/gtk+-3.0.2:3
-	>=x11-themes/gtk-engines-2.15.3"
+	>=x11-themes/gtk-engines-2.15.3:2
+	!x11-themes/gnome-themes
+	!x11-themes/gnome-themes-extras"
 DEPEND="${RDEPEND}
 	>=x11-misc/icon-naming-utils-0.8.7
 	>=dev-util/pkgconfig-0.19
 	>=dev-util/intltool-0.40
-	sys-devel/gettext
-	!<x11-themes/gnome-themes-2.91"
+	sys-devel/gettext"
 # This ebuild does not install any binaries
 RESTRICT="binchecks strip"
 # FIXME: --enable-placeholders fails

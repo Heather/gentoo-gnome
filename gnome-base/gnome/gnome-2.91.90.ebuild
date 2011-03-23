@@ -84,7 +84,6 @@ RDEPEND="
 	>=x11-themes/gnome-backgrounds-2.32.0
 	>=x11-themes/gnome-icon-theme-2.91.7
 	>=x11-themes/gnome-icon-theme-symbolic-2.91.7
-	>=x11-themes/gnome-themes-${PV}
 	>=x11-themes/gnome-themes-standard-${PV}
 
 	>=gnome-extra/gnome-user-docs-${PV}
