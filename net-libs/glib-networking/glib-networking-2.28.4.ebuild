@@ -13,9 +13,10 @@ HOMEPAGE="http://git.gnome.org/browse/glib-networking/"
 LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="+gnutls +libproxy"
+IUSE="+gnome +gnutls +libproxy"
 
 RDEPEND=">=dev-libs/glib-2.27.90
+	gnome? ( gnome-base/gsettings-desktop-schemas )
 	gnutls? ( >=net-libs/gnutls-2.1.7 )
 	libproxy? ( >=net-libs/libproxy-0.3.1 )"
 DEPEND="${RDEPEND}
@@ -30,6 +31,7 @@ pkg_setup() {
 		--disable-static
 		--disable-maintainer-mode
 		--with-ca-certificates=${ROOT}/etc/ssl/certs/ca-certificates.crt
+		$(use_with gnome gnome-proxy)
 		$(use_with gnutls)
 		$(use_with libproxy)"
 }
