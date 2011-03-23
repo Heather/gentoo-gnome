@@ -3,6 +3,7 @@
 # $Header: $
 
 EAPI="3"
+GNOME2_LA_PUNT="yes"
 
 inherit gnome2
 
@@ -37,6 +38,8 @@ src_prepare() {
 	# Can configure systemdsystemunitdir
 	# docbook docs don't validate, disable doc rebuild
 	G2CONF="${G2CONF}
+		--disable-static
+		--localstatedir=/var
 		--disable-docbook-docs
 		--disable-maintainer-mode
 		--disable-more-warnings
@@ -48,4 +51,11 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-fix-useradd.patch"
 
 	gnome2_src_prepare
+}
+
+src_install() {
+	gnome2_src_install
+
+	# Install directories for icons/configuration, bug 360175
+	#dodir /var/lib/AccountsService/{users,icons} || die
 }
