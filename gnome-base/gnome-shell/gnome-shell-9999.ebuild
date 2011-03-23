@@ -25,6 +25,7 @@ fi
 # FIXME: Automagic gnome-bluetooth[introspection] support.
 # latest mutter is needed due to commit 474ff2e9 and commit 079953c3
 # latest gsettings-desktop-schemas is needed due to commit 602fa1c6
+# latest gnome-menus is needed due to https://bugzilla.gnome.org/show_bug.cgi?id=645063#c4
 COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 	>=dev-libs/gjs-0.7.11
 	>=dev-libs/gobject-introspection-0.10.1
@@ -32,6 +33,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 	>=x11-libs/gtk+-3.0.0:3[introspection]
 	>=media-libs/clutter-1.5.15:1.0[introspection]
 	>=gnome-base/gnome-desktop-2.91.2:3
+	>=gnome-base/gnome-menus-2.91.91-r1
 	>=gnome-base/gsettings-desktop-schemas-2.91.91
 	>=gnome-extra/evolution-data-server-2.91.6
 	>=media-libs/gstreamer-0.10.16
@@ -48,7 +50,6 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 	dev-libs/libcroco:0.6
 
 	gnome-base/gconf[introspection]
-	gnome-base/gnome-menus
 	gnome-base/librsvg
 	media-libs/libcanberra
 	media-sound/pulseaudio
