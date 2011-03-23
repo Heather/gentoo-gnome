@@ -36,11 +36,6 @@ src_prepare() {
 		$(use_with gnome)
 		$(use_enable introspection)"
 	DOCS="AUTHORS NEWS README"
-
-	# Fails to compile if not already installed
-	# https://bugs.gentoo.org/show_bug.cgi?id=359283
-	epatch "${FILESDIR}/${PN}-0.7.7-fix-introspection.patch"
-	eautoreconf
 }
 
 src_test() {
