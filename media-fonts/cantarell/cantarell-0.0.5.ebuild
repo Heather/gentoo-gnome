@@ -8,7 +8,7 @@ MY_PN="${PN}-fonts"
 inherit font gnome.org
 
 DESCRIPTION="Cantarell fonts, default fontset for GNOME Shell"
-HOMEPAGE="http://abattis.org/cantarell/"
+HOMEPAGE="http://live.gnome.org/CantarellFonts"
 LICENSE="OFL-1.1"
 SRC_URI="${SRC_URI//${PN}/${MY_PN}}"
 
