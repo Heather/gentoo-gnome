@@ -10,10 +10,6 @@ inherit gnome2
 
 DESCRIPTION="Gnome Settings Daemon"
 HOMEPAGE="http://www.gnome.org"
-#SRC_URI="${SRC_URI}
-#	mirror://gentoo/${PN}-2.30.0-gst-vol-control-support.patch"
-# mirror://gentoo/${PN}-2.30.2-gst-vol-control-support.patch.bz2"
-# New patch has other problems like bug #339732
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -62,6 +58,7 @@ RDEPEND="${COMMON_DEPEND}
 	>=x11-themes/gnome-icon-theme-symbolic-2.91"
 DEPEND="${COMMON_DEPEND}
 	!<gnome-base/gnome-control-center-2.22
+	cups? ( sys-apps/sed )
 	sys-devel/gettext
 	>=dev-util/intltool-0.40
 	>=dev-util/pkgconfig-0.19
