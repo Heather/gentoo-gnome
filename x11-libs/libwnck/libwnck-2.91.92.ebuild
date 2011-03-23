@@ -17,7 +17,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-fr
 
 IUSE="doc +introspection startup-notification"
 
-RDEPEND=">=x11-libs/gtk+-2.91.5:3[introspection?]
+RDEPEND=">=x11-libs/gtk+-3.0:3[introspection?]
 	>=dev-libs/glib-2.16:2
 	x11-libs/libX11
 	x11-libs/libXres
