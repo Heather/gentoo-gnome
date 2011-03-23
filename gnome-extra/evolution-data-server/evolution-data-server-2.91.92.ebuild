@@ -42,7 +42,7 @@ RDEPEND=">=dev-libs/glib-2.28:2
 	ssl? (
 		>=dev-libs/nspr-4.4
 		>=dev-libs/nss-3.9 )
-	weather? ( >=dev-libs/libgweather-2.90.0:3 )
+	weather? ( >=dev-libs/libgweather-2.90.0:2 )
 "
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9

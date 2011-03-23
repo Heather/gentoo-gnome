@@ -37,7 +37,7 @@ RDEPEND=">=dev-libs/glib-2.28:2
 	>=x11-libs/gtk+-3.0.2:3
 	>=dev-libs/libunique-2.91.4:3
 	>=gnome-base/gnome-desktop-2.91.3:3
-	>=dev-libs/libgweather-2.90.0:3
+	>=dev-libs/libgweather-2.90.0:2
 	media-libs/libcanberra[gtk3]
 	>=x11-libs/libnotify-0.7
 	>=gnome-extra/evolution-data-server-${MY_MAJORV}.91[weather]

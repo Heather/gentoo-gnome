@@ -21,7 +21,7 @@ RDEPEND=">=gnome-base/gnome-desktop-2.91:3
 	>=dev-libs/glib-2.25.12:2
 	>=x11-libs/gtk+-2.99:3[introspection?]
 	x11-libs/gdk-pixbuf
-	>=dev-libs/libgweather-2.91:3
+	>=dev-libs/libgweather-2.91:2
 	dev-libs/libxml2
 	>=gnome-base/gconf-2.6.1[introspection?]
 	>=media-libs/libcanberra-0.23[gtk3]
