@@ -13,7 +13,7 @@ HOMEPAGE="http://www.gnome.org/projects/vinagre/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="avahi +introspection +ssh +telepathy test" #applet spice
+IUSE="applet avahi +introspection +telepathy test" #+ssh
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
@@ -31,11 +31,11 @@ RDEPEND=">=dev-libs/glib-2.25.11:2
 
 	avahi? ( >=net-dns/avahi-0.6.26[dbus,gtk3] )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.3 )
-	ssh? ( >=x11-libs/vte-0.20:2.90 )
 	telepathy? (
 		dev-libs/dbus-glib
-		>=net-libs/telepathy-glib-0.11.6 )"
-	#applet? ( || ( gnome-base/gnome-panel[bonobo] <gnome-base/gnome-panel-2.32 ) )
+		>=net-libs/telepathy-glib-0.11.6 )
+	applet? ( >=gnome-base/gnome-panel-2.91 )"
+#	ssh? ( >=x11-libs/vte-0.20:2.90 )
 DEPEND="${RDEPEND}
 	gnome-base/gnome-common
 	>=dev-lang/perl-5
@@ -45,21 +45,22 @@ DEPEND="${RDEPEND}
 	app-text/gnome-doc-utils
 	test? ( ~app-text/docbook-xml-dtd-4.3 )"
 
-DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README"
+DOCS="AUTHORS ChangeLog ChangeLog.pre-git NEWS README"
 
 src_prepare() {
-	# Applet doesn't work with GNOME 3: gnome bug 642707
 	# Spice support?
+	# SSH support fails to compile
 	G2CONF="${G2CONF}
 		--disable-schemas-compile
 		--disable-scrollkeeper
-		--disable-applet
 		--disable-spice
+		--disable-ssh
 		--enable-rdp
-		$(use_enable avahi)
+		$(use_with panelapplet)
+		$(use_with avahi)
 		$(use_enable introspection)
-		$(use_enable ssh)
-		$(use_enable telepathy)"
+		$(use_with telepathy)"
+		#$(use_enable ssh)
 
 	gnome2_src_prepare
 }
