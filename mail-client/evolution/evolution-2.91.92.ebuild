@@ -7,9 +7,7 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="python? 2:2.4"
 
-inherit autotools flag-o-matic gnome2 python versionator
-
-MY_MAJORV=$(get_version_component_range 1-2)
+inherit autotools flag-o-matic gnome2 python
 
 DESCRIPTION="Integrated mail, addressbook and calendaring functionality"
 HOMEPAGE="http://www.gnome.org/projects/evolution/"
@@ -40,7 +38,7 @@ RDEPEND=">=dev-libs/glib-2.28:2
 	>=dev-libs/libgweather-2.90.0:2
 	media-libs/libcanberra[gtk3]
 	>=x11-libs/libnotify-0.7
-	>=gnome-extra/evolution-data-server-${MY_MAJORV}.91[weather]
+	>=gnome-extra/evolution-data-server-${PV}[weather]
 	>=gnome-extra/gtkhtml-3.31.3:4.0
 	>=gnome-base/gconf-2:2
 	dev-libs/atk
