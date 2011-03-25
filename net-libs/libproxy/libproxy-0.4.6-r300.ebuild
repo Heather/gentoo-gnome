@@ -32,8 +32,10 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS NEWS README ChangeLog"
 
-PATCHES=( "${FILESDIR}"/${P}-mozjs-link_directory.patch )
-		 # "${FILESDIR}"/${P}-webkit-gtk-3.patch )
+PATCHES=(
+	"${FILESDIR}"/${P}-mozjs-link_directory.patch
+	"${FILESDIR}"/${P}-xulrunner-2.patch )
+	# "${FILESDIR}"/${P}-webkit-gtk-3.patch )
 
 pkg_setup() {
 	if use python; then
@@ -65,10 +67,6 @@ src_compile() {
 	# Prevent access violation when building with mono support
 	export MONO_SHARED_DIR="${T}/shared"
 	cmake-utils_src_compile
-}
-
-pkg_preinst() {
-	preserve_old_lib /usr/$(get_libdir)/libproxy.so.0
 }
 
 pkg_postinst() {
