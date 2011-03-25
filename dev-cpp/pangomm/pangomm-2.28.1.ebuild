@@ -21,11 +21,9 @@ RDEPEND=">=x11-libs/pango-1.23.0
 	dev-libs/libsigc++:2
 	!<dev-cpp/gtkmm-2.13:2.4"
 
-# mm-common needed for mm-common-prepare below
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	doc? (
-		>=dev-cpp/mm-common-0.9.3
 		media-gfx/graphviz
 		dev-libs/libxslt
 		app-doc/doxygen )"
@@ -35,10 +33,4 @@ src_prepare() {
 		--disable-maintainer-mode
 		$(use_enable doc documentation)"
 	DOCS="AUTHORS ChangeLog NEWS README*"
-
-	if use doc; then
-		# Needed temporarily till next release see glibmm's mm-common dep for details
-		mm-common-prepare --copy --force
-		eautoreconf
-	fi
 }
