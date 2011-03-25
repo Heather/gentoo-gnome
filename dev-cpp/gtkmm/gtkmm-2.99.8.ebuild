@@ -26,7 +26,6 @@ RDEPEND="
 	dev-libs/libsigc++:2"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
-	>=dev-cpp/mm-common-0.9.3
 	doc? (
 		media-gfx/graphviz
 		dev-libs/libxslt
