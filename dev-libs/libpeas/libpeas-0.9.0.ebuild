@@ -52,7 +52,12 @@ pkg_setup() {
 }
 
 src_test() {
-	# Tests need X
-	# FIXME: Tests fail!
+	# FIXME: Tests fail because of some bug involving Xvfb and Gtk.IconTheme
+	# DO NOT REPORT UPSTREAM, this is not a libpeas bug.
+	# To reproduce:
+	# >>> from gi.repository import Gtk
+	# >>> Gtk.IconTheme.get_default().has_icon("gtk-about")
+	# This should return True, it returns False for Xvfb
 	Xemake check || die
+
 }
