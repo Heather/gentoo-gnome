@@ -1,0 +1,24 @@
+From 0b25f5a45e53338646c6c87cc540df3db828c0f2 Mon Sep 17 00:00:00 2001
+From: Colin Walters <walters@verbum.org>
+Date: Wed, 23 Mar 2011 15:43:13 +0000
+Subject: gnome-control-center.desktop: Ensure we're in the menu
+
+If we're not categorized, the shell won't pick us up, and that's
+a problem for application tracking.  Per IRC discussion, go
+into System Settings for now.
+---
+diff --git a/shell/gnome-control-center.desktop.in.in b/shell/gnome-control-center.desktop.in.in
+index b4182f6..38be8ea 100644
+--- a/shell/gnome-control-center.desktop.in.in
++++ b/shell/gnome-control-center.desktop.in.in
+@@ -5,7 +5,7 @@ Exec=gnome-control-center --overview
+ Terminal=false
+ Type=Application
+ StartupNotify=true
+-Categories=GNOME;GTK;Settings;
++Categories=GNOME;GTK;System;
+ OnlyShowIn=GNOME;
+ X-GNOME-Bugzilla-Bugzilla=GNOME
+ X-GNOME-Bugzilla-Product=gnome-control-center
+--
+cgit v0.9
