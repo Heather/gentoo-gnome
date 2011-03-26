@@ -60,12 +60,13 @@ COMMON_DEPEND="
 		>=media-video/cheese-2.91.91.1 )
 	cups? ( >=net-print/cups-1.4[dbus] )
 	networkmanager? ( >=net-misc/networkmanager-0.8.992 )
-	socialweb? ( net-libs/libsocialweb )
+	socialweb? ( net-libs/libsocialweb )"
+RDEPEND="${COMMON_DEPEND}
+	sys-apps/accountsservice
 
 	!gnome-extra/gnome-media[pulseaudio]
-	!<gnome-extra/gnome-media-2.32.0-r300"
-RDEPEND="${COMMON_DEPEND}
-	sys-apps/accountsservice"
+	!<gnome-extra/gnome-media-2.32.0-r300
+	!<gnome-base/gdm-2.91.94"
 # PDEPEND to avoid circular dependency
 PDEPEND=">=gnome-base/gnome-session-2.91.6-r1"
 DEPEND="${COMMON_DEPEND}
@@ -79,7 +80,7 @@ DEPEND="${COMMON_DEPEND}
 
 	app-text/scrollkeeper
 	>=app-text/gnome-doc-utils-0.10.1
-	
+
 	cups? ( sys-apps/sed )
 	doc? ( >=dev-util/gtk-doc-1.9 )"
 # Needed for autoreconf
