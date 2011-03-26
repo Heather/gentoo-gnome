@@ -14,7 +14,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="doc +gvfs +introspection spell"
+IUSE="doc +gvfs +introspection python spell"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
@@ -22,8 +22,6 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~ia64-linux ~x86-linux"
 fi
 
-# Note: introspection is *not* optional on pygobject: we need
-# gi.repository.Gtk, etc.
 # X libs are not needed for OSX (aqua)
 RDEPEND=">=x11-libs/libSM-1.0
 	>=dev-libs/libxml2-2.5.0
@@ -32,7 +30,6 @@ RDEPEND=">=x11-libs/libSM-1.0
 	>=x11-libs/gtksourceview-2.91.9:3.0[introspection?]
 	>=dev-libs/libpeas-0.7.2[gtk]
 
-	dev-python/pygobject[introspection]
 	gnome-base/gsettings-desktop-schemas
 	x11-libs/libX11
 	x11-libs/libICE
@@ -40,6 +37,12 @@ RDEPEND=">=x11-libs/libSM-1.0
 
 	gvfs? ( gnome-base/gvfs )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.3 )
+	python? (
+		>=dev-libs/gobject-introspection-0.9.3
+		>=x11-libs/gtk+-3.0:3[introspection]
+		>=x11-libs/gtksourceview-2.91.9:3.0[introspection]
+		>=dev-libs/libpeas-0.7.4[gtk]
+		>=dev-python/pygobject-2.28.0[introspection] )
 	spell? (
 		>=app-text/enchant-1.2
 		>=app-text/iso-codes-0.35
