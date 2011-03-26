@@ -37,6 +37,7 @@ COMMON_DEPEND="
 
 	media-video/gnome-video-effects
 	x11-libs/gdk-pixbuf:2[jpeg,introspection?]
+	x11-libs/mx
 	x11-libs/libX11
 	x11-libs/libXtst
 
@@ -65,9 +66,12 @@ DEPEND="${COMMON_DEPEND}
 	app-text/docbook-xml-dtd:4.3
 	doc? ( >=dev-util/gtk-doc-1.14 )"
 
-G2CONF="${G2CONF}
-	VALAC=$(type -p valac-0.12)
-	--disable-maintainer-mode 
-	--disable-scrollkeeper
-	--disable-static"
-DOCS="AUTHORS ChangeLog NEWS README"
+pkg_setup() {
+	G2CONF="${G2CONF}
+		VALAC=$(type -p valac-0.12)
+		$(use_enable introspection)
+		--disable-maintainer-mode 
+		--disable-scrollkeeper
+		--disable-static"
+	DOCS="AUTHORS ChangeLog NEWS README"
+}
