@@ -13,6 +13,7 @@
 #
 
 import sys
+import os
 import os.path as osp
 
 import portage
@@ -32,6 +33,8 @@ if len(sys.argv) < 2:
 
 KEY = sys.argv[1]
 PORTAGE_ONLY = False
+if os.environ.has_key('PORTAGE_ONLY'):
+    PORTAGE_ONLY = os.environ['PORTAGE_ONLY']
 
 ########################
 ### Output Functions ###
@@ -119,27 +122,33 @@ def get_deps_both(cpv, depvars=DEPVARS):
 def get_revdeps_rindex(key):
     """
     Given a key, returns a reverse-dependency list of that key using the tinderbox rindex
+    list will be a sorted list of unique cpvs
     """
     import urllib2
     RINDEX = "http://tinderbox.dev.gentoo.org/misc/rindex"
-    revdeps = []
+    revdeps = set()
     rdeps_raw = urllib2.urlopen('/'.join([RINDEX, key])).read().split()
     for i in rdeps_raw:
         cpv = i.split(':')[0]
         if portage.isvalidatom('='+cpv):
-            revdeps.append(cpv)
+            revdeps.add(cpv)
+    revdeps = list(revdeps)
+    revdeps.sort()
     return revdeps
 
 def get_revdeps_portage(key):
     """
     Given a key, returns a reverse-dependency list of that key using portage API
+    list will be a sorted list of unique cpvs
     """
-    revdeps = []
+    revdeps = set()
     for cp in portdb.cp_all():
         cpvrs = portdb.xmatch('match-all', cp)
         for cpvr in cpvrs:
             if key in get_deps_both(cpvr)[0]:
-                revdeps.append(cpvr)
+                revdeps.add(cpvr)
+    revdeps = list(revdeps)
+    revdeps.sort()
     return revdeps
 
 ###################
