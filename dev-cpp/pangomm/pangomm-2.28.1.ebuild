@@ -15,18 +15,19 @@ SLOT="2.4"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 IUSE="doc"
 
-RDEPEND=">=x11-libs/pango-1.23.0
+COMMON_DEPEND=">=x11-libs/pango-1.23.0
 	>=dev-cpp/glibmm-2.14.1
 	>=dev-cpp/cairomm-1.2.2
-	dev-libs/libsigc++:2
-	!<dev-cpp/gtkmm-2.13:2.4"
+	dev-libs/libsigc++:2"
 
-DEPEND="${RDEPEND}
+DEPEND="${COMMON_DEPEND}
 	dev-util/pkgconfig
 	doc? (
 		media-gfx/graphviz
 		dev-libs/libxslt
 		app-doc/doxygen )"
+RDEPEND="${COMMON_DEPEND}
+	!<dev-cpp/gtkmm-2.13:2.4"
 
 src_prepare() {
 	G2CONF="${G2CONF}

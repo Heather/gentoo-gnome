@@ -24,7 +24,7 @@ SRC_URI="${SRC_URI}
 	mirror://gentoo/${GDM_EXTRA}.tar.bz2"
 
 # NOTE: x11-base/xorg-server dep is for X_SERVER_PATH etc, bug #295686
-RDEPEND="
+COMMON_DEPEND="
 	>=dev-libs/dbus-glib-0.74
 	>=dev-libs/glib-2.27.4:2
 	>=x11-libs/gtk+-2.91.1:3
@@ -57,10 +57,8 @@ RDEPEND="
 	selinux? ( sys-libs/libselinux )
 	tcpd? ( >=sys-apps/tcp-wrappers-7.6 )
 	xinerama? ( x11-libs/libXinerama )
-	xklavier? ( >=x11-libs/libxklavier-4 )
-
-	!gnome-extra/fast-user-switch-applet"
-DEPEND="${RDEPEND}
+	xklavier? ( >=x11-libs/libxklavier-4 )"
+DEPEND="${COMMON_DEPEND}
 	test? ( >=dev-libs/check-0.9.4 )
 	xinerama? ( x11-proto/xineramaproto )
 	app-text/docbook-xml-dtd:4.1.2
@@ -70,6 +68,8 @@ DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.19
 	>=app-text/scrollkeeper-0.1.4
 	>=app-text/gnome-doc-utils-0.3.2"
+RDEPEND="${COMMON_DEPEND}
+	!gnome-extra/fast-user-switch-applet"
 
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS README TODO"

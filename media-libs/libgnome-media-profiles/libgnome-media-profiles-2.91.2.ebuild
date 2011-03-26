@@ -17,17 +17,16 @@ IUSE=""
 
 # FIXME: automagic dep on gladeui-3.0
 # these guys are just copy-pasting configure code b/w modules with all the bugs
-#
-# NOTE: Audio profile stuff moved from gnome-media to here, so we add a blocker
-#       to avoid collisions
 COMMON_DEPEND="
 	dev-libs/glib
 	>=x11-libs/gtk+-2.91.0:3
 	>=media-libs/gstreamer-0.10.23:0.10
 	>=media-libs/gst-plugins-base-0.10.23:0.10
-	gnome-base/gconf:2
-	!!<gnome-extra/gnome-media-2.32.0-r300"
-RDEPEND="${COMMON_DEPEND}"
+	gnome-base/gconf:2"
+# NOTE: Audio profile stuff moved from gnome-media to here, so we add a blocker
+#       to avoid collisions
+RDEPEND="${COMMON_DEPEND}
+	!<gnome-extra/gnome-media-2.32.0-r300"
 DEPEND="${COMMON_DEPEND}
 	app-text/gnome-doc-utils
 	>=dev-util/intltool-0.35.0

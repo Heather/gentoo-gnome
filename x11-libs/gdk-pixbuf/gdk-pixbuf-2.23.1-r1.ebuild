@@ -14,26 +14,27 @@ SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 IUSE="+X debug doc +introspection jpeg jpeg2k tiff test"
 
-# librsvg blocker is for the new pixbuf loader API, you lose icons otherwise
-RDEPEND="
+COMMON_DEPEND="
 	>=dev-libs/glib-2.27.2
 	>=media-libs/libpng-1.2.43-r2:0
 	introspection? ( >=dev-libs/gobject-introspection-0.9.3 )
 	jpeg? ( virtual/jpeg )
 	jpeg2k? ( media-libs/jasper )
 	tiff? ( >=media-libs/tiff-3.9.2 )
-	X? ( x11-libs/libX11 )
-	!<gnome-base/gail-1000
-	!<gnome-base/librsvg-2.31.0
-	!<x11-libs/gtk+-2.21.3:2
-	!<x11-libs/gtk+-2.90.4:3"
-DEPEND="${RDEPEND}
+	X? ( x11-libs/libX11 )"
+DEPEND="${COMMON_DEPEND}
 	>=dev-util/pkgconfig-0.9
 	>=sys-devel/gettext-0.17
 	>=dev-util/gtk-doc-am-1.11
 	doc? (
 		>=dev-util/gtk-doc-1.11
 		~app-text/docbook-xml-dtd-4.1.2 )"
+# librsvg blocker is for the new pixbuf loader API, you lose icons otherwise
+RDEPEND="${COMMON_DEPEND}
+	!<gnome-base/gail-1000
+	!<gnome-base/librsvg-2.31.0
+	!<x11-libs/gtk+-2.21.3:2
+	!<x11-libs/gtk+-2.90.4:3"
 
 src_prepare() {
 	# Only build against libX11 if the user wants to do so

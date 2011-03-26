@@ -55,9 +55,9 @@ COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 RDEPEND="${COMMON_DEPEND}
 	>=x11-themes/gnome-themes-standard-2.91
 	>=x11-themes/gnome-icon-theme-2.91
-	>=x11-themes/gnome-icon-theme-symbolic-2.91"
+	>=x11-themes/gnome-icon-theme-symbolic-2.91
+	!<gnome-base/gnome-control-center-2.22"
 DEPEND="${COMMON_DEPEND}
-	!<gnome-base/gnome-control-center-2.22
 	cups? ( sys-apps/sed )
 	sys-devel/gettext
 	>=dev-util/intltool-0.40

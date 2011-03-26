@@ -20,7 +20,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 
-RDEPEND=">=x11-libs/pango-1.2[X,introspection?]
+COMMON_DEPEND=">=x11-libs/pango-1.2[X,introspection?]
 	>=x11-libs/cairo-1.10[X]
 	>=x11-libs/gtk+-2.91.7:3[introspection?]
 	>=gnome-base/gconf-2:2
@@ -42,9 +42,8 @@ RDEPEND=">=x11-libs/pango-1.2[X,introspection?]
 
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 	xinerama? ( x11-libs/libXinerama )
-	gnome-extra/zenity
-	!x11-misc/expocity"
-DEPEND="${RDEPEND}
+	gnome-extra/zenity"
+DEPEND="${COMMON_DEPEND}
 	>=app-text/gnome-doc-utils-0.8
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.9
@@ -53,6 +52,8 @@ DEPEND="${RDEPEND}
 	xinerama? ( x11-proto/xineramaproto )
 	x11-proto/xextproto
 	x11-proto/xproto"
+RDEPEND="${COMMON_DEPEND}
+	!x11-misc/expocity"
 
 DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README *.txt doc/*.txt"
 

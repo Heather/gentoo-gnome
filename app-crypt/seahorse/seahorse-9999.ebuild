@@ -22,8 +22,7 @@ else
 fi
 
 # Pull in libnotify-0.7 because it's controlled via an automagic ifdef
-# Need seahorse-plugins git snapshot
-RDEPEND="
+COMMON_DEPEND="
 	>=gnome-base/gconf-2
 	>=dev-libs/glib-2.10:2
 	>=x11-libs/gtk+-2.90.0:3[introspection?]
@@ -42,16 +41,18 @@ RDEPEND="
 	introspection? ( >=dev-libs/gobject-introspection-0.6.4 )
 	ldap? ( net-nds/openldap )
 	libnotify? ( >=x11-libs/libnotify-0.7.0 )
-
-	!<app-crypt/seahorse-plugins-2.91.0_pre20110114
 "
-DEPEND="${RDEPEND}
+DEPEND="${COMMON_DEPEND}
 	sys-devel/gettext
 	>=app-text/gnome-doc-utils-0.3.2
 	>=app-text/scrollkeeper-0.3
 	>=dev-util/pkgconfig-0.20
 	>=dev-util/intltool-0.35
 	doc? ( >=dev-util/gtk-doc-1.9 )
+"
+# Need seahorse-plugins git snapshot
+RDEPEND="${COMMON_DEPEND}
+	!<app-crypt/seahorse-plugins-2.91.0_pre20110114
 "
 pkg_setup() {
 	G2CONF="${G2CONF}

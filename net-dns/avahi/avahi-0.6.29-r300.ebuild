@@ -21,7 +21,7 @@ IUSE="autoipd bookmarks dbus doc gdbm gtk gtk3 howl-compat +introspection ipv6
 kernel_linux mdnsresponder-compat mono python qt4 test utils"
 
 DBUS_DEPEND=">=sys-apps/dbus-0.30"
-RDEPEND=">=dev-libs/libdaemon-0.14
+COMMON_DEPEND=">=dev-libs/libdaemon-0.14
 	dev-libs/expat
 	dev-libs/glib:2
 	gdbm? ( sys-libs/gdbm )
@@ -36,15 +36,9 @@ RDEPEND=">=dev-libs/libdaemon-0.14
 		>=dev-lang/mono-1.1.10
 		gtk? ( >=dev-dotnet/gtk-sharp-2 )
 	)
-	howl-compat? (
-		!net-misc/howl
-		${DBUS_DEPEND}
-	)
+	howl-compat? ( ${DBUS_DEPEND} )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
-	mdnsresponder-compat? (
-		!net-misc/mDNSResponder
-		${DBUS_DEPEND}
-	)
+	mdnsresponder-compat? ( ${DBUS_DEPEND} )
 	python? (
 		gtk? ( >=dev-python/pygtk-2 )
 	)
@@ -53,13 +47,16 @@ RDEPEND=">=dev-libs/libdaemon-0.14
 		dev-python/twisted-web
 	)
 	kernel_linux? ( sys-libs/libcap )"
-DEPEND="${RDEPEND}
+DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.40.5
 	>=dev-util/pkgconfig-0.9.0
 	doc? (
 		app-doc/doxygen
 		mono? ( >=virtual/monodoc-1.1.8 )
 	)"
+RDEPEND="${COMMON_DEPEND}
+	howl-compat? ( !net-misc/howl )
+	mdnsresponder-compat? ( !net-misc/mDNSResponder )"
 
 pkg_setup() {
 	if use python; then

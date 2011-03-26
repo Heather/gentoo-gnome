@@ -20,11 +20,11 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 fi
 
-RDEPEND="virtual/libiconv
+COMMON_DEPEND="virtual/libiconv
 	sys-libs/zlib
 	xattr? ( sys-apps/attr )
 	fam? ( virtual/fam )"
-DEPEND="${RDEPEND}
+DEPEND="${COMMON_DEPEND}
 	>=dev-util/pkgconfig-0.16
 	>=sys-devel/gettext-0.11
 	doc? (
@@ -32,7 +32,8 @@ DEPEND="${RDEPEND}
 		>=dev-util/gtk-doc-1.13
 		~app-text/docbook-xml-dtd-4.1.2 )
 	test? ( >=sys-apps/dbus-1.2.14 )"
-PDEPEND="introspection? ( dev-libs/gobject-introspection )
+PDEPEND="introspection? ( dev-libs/gobject-introspection )"
+RDEPEND="${COMMON_DEPEND}
 	!<gnome-base/gvfs-1.6.4-r990" # Earlier versions do not work with glib
 # XXX: Consider adding test? ( sys-devel/gdb ); assert-msg-test tries to use it
 

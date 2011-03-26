@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS="amd64 ~arm ~ppc ~ppc64 ~x86 ~x86-fbsd"
 IUSE="dbus debug gnutls eap-sim fasteap madwifi ps3 qt4 readline ssl wimax wps kernel_linux kernel_FreeBSD"
 
-RDEPEND="dbus? ( sys-apps/dbus )
+COMMON_DEPEND="dbus? ( sys-apps/dbus )
 	kernel_linux? (
 		eap-sim? ( sys-apps/pcsc-lite )
 		madwifi? ( ||
@@ -28,12 +28,13 @@ RDEPEND="dbus? ( sys-apps/dbus )
 	qt4? ( x11-libs/qt-gui:4
 		x11-libs/qt-svg:4 )
 	readline? ( sys-libs/ncurses sys-libs/readline )
-	wimax? ( !net-wireless/libeap )
 	ssl? ( dev-libs/openssl )
 	!ssl? ( gnutls? ( net-libs/gnutls ) )
 	!ssl? ( !gnutls? ( dev-libs/libtommath ) )"
-DEPEND="${RDEPEND}
+DEPEND="${COMMON_DEPEND}
 	dev-util/pkgconfig"
+RDEPEND="${COMMON_DEPEND}
+	wimax? ( !net-wireless/libeap )"
 
 S="${WORKDIR}/${P}/${PN}"
 

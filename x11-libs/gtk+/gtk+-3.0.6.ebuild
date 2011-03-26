@@ -29,7 +29,7 @@ fi
 # NOTE: cairo[svg] dep is due to bug 291283 (not patched to avoid eautoreconf)
 # Use gtk+:2 for gtk-update-icon-cache and gtk-builder-convert
 # >=x11-libs/gtk+-2.24:2 is needed for bug 359555
-RDEPEND="!aqua? (
+COMMON_DEPEND="!aqua? (
 		x11-libs/libXrender
 		x11-libs/libX11
 		x11-libs/libXi
@@ -55,9 +55,8 @@ RDEPEND="!aqua? (
 	media-libs/fontconfig
 	x11-misc/shared-mime-info
 	cups? ( net-print/cups )
-	introspection? ( >=dev-libs/gobject-introspection-0.10.1 )
-	!<gnome-base/gail-1000"
-DEPEND="${RDEPEND}
+	introspection? ( >=dev-libs/gobject-introspection-0.10.1 )"
+DEPEND="${COMMON_DEPEND}
 	>=dev-util/pkgconfig-0.9
 	!aqua? (
 		x11-proto/xextproto
@@ -76,6 +75,8 @@ DEPEND="${RDEPEND}
 	test? (
 		media-fonts/font-misc-misc
 		media-fonts/font-cursor-misc )"
+RDEPEND="${COMMON_DEPEND}
+	!<gnome-base/gail-1000"
 PDEPEND="vim-syntax? ( app-vim/gtk-syntax )"
 
 strip_builddir() {

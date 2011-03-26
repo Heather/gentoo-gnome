@@ -48,16 +48,16 @@ COMMON_DEPEND="
 		>=dev-lang/vala-0.11.6:0.12
 		>=gnome-base/librsvg-2.32
 		virtual/opengl
-		x11-libs/libX11 )
-	
-	!gnome-extra/gnome-games-extra-data"
+		x11-libs/libX11 )"
 # FIXME: /usr/share/gnome-games-common/cards/bonded.svg collides!
 RDEPEND="${COMMON_DEPEND}
 	sudoku? (
 		>=dev-python/gconf-python-2.17.3
 		>=dev-python/pygobject-2
 		>=dev-python/pygtk-2.14
-		>=dev-python/pycairo-1 )"
+		>=dev-python/pycairo-1 )
+
+	!gnome-extra/gnome-games-extra-data"
 DEPEND="${COMMON_DEPEND}
 	sys-apps/lsb-release
 	>=dev-util/pkgconfig-0.15

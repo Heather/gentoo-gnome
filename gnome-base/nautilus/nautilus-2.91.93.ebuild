@@ -21,7 +21,7 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux"
 fi
 
-RDEPEND=">=dev-libs/glib-2.28.0:2
+COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
 	>=x11-libs/pango-1.1.2
 	>=x11-libs/gtk+-3.0.4:3[introspection?]
 	>=dev-libs/libxml2-2.4.7:2
@@ -35,14 +35,15 @@ RDEPEND=">=dev-libs/glib-2.28.0:2
 
 	exif? ( >=media-libs/libexif-0.5.12 )
 	introspection? ( >=dev-libs/gobject-introspection-0.6.4 )
-	sendto? ( !!gnome-extra/nautilus-sendto )
 	xmp? ( >=media-libs/exempi-1.99.5 )"
-DEPEND="${RDEPEND}
+DEPEND="${COMMON_DEPEND}
 	>=dev-lang/perl-5
 	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.40.1
 	sys-devel/gettext
 	doc? ( >=dev-util/gtk-doc-1.4 )"
+RDEPEND="${COMMON_DEPEND}
+	sendto? ( !gnome-extra/nautilus-sendto )"
 # For eautoreconf
 #	gnome-base/gnome-common
 #	dev-util/gtk-doc-am"

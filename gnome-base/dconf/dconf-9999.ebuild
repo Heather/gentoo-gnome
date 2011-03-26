@@ -21,15 +21,16 @@ else
 	KEYWORDS="~amd64 ~arm ~sparc ~x86"
 fi
 
-RDEPEND=">=dev-libs/glib-2.27.2
+COMMON_DEPEND=">=dev-libs/glib-2.27.2
 	>=dev-libs/libgee-0.5.1
 	>=dev-libs/libxml2-2.7.7
 	sys-apps/dbus
-	x11-libs/gtk+:3
-	!dev-lang/vala:0"
-DEPEND="${RDEPEND}
+	x11-libs/gtk+:3"
+DEPEND="${COMMON_DEPEND}
 	>=dev-lang/vala-0.11.7:0.12
 	doc? ( >=dev-util/gtk-doc-1.15 )"
+RDEPEND="${COMMON_DEPEND}
+	!dev-lang/vala:0"
 #vala? ( >=dev-lang/vala-0.9.5:0.10 )
 
 src_prepare() {

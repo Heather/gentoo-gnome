@@ -17,20 +17,20 @@ IUSE="examples +introspection sasl"
 # libview is used in examples/gvncviewer -- no need
 # TODO: review nsplugin when it will be considered less experimental
 
-RDEPEND=">=dev-libs/glib-2.10:2
+COMMON_DEPEND=">=dev-libs/glib-2.10:2
 	>=net-libs/gnutls-1.4
 	>=x11-libs/cairo-1.2
 	>=x11-libs/gtk+-2.91.3:3
 	x11-libs/libX11
 	introspection? ( >=dev-libs/gobject-introspection-0.9.4 )
-	sasl? ( dev-libs/cyrus-sasl )
-	
-	!!net-libs/gtk-vnc:3"
-DEPEND="${RDEPEND}
+	sasl? ( dev-libs/cyrus-sasl )"
+DEPEND="${COMMON_DEPEND}
 	>=dev-lang/perl-5
 	dev-util/pkgconfig
 	sys-devel/gettext
 	>=dev-util/intltool-0.40"
+RDEPEND="${COMMON_DEPEND}
+	!net-libs/gtk-vnc:3"
 
 src_configure() {
 	# Python support is via gobject-introspection

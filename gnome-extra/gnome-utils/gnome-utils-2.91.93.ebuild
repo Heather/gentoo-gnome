@@ -22,7 +22,7 @@ else
 fi
 
 # libcanberra 0.26-r2 is needed for gtk+:3 fixes
-RDEPEND=">=dev-libs/glib-2.26.0:2
+COMMON_DEPEND=">=dev-libs/glib-2.26.0:2
 	>=x11-libs/gtk+-3.0.3:3
 	>=gnome-base/gconf-2:2
 	>=gnome-base/gnome-panel-2.13.4
@@ -33,7 +33,7 @@ RDEPEND=">=dev-libs/glib-2.26.0:2
 	x11-libs/libX11
 	bonobo? ( || ( gnome-base/gnome-panel[bonobo] <gnome-base/gnome-panel-2.32 ) )"
 
-DEPEND="${RDEPEND}
+DEPEND="${COMMON_DEPEND}
 	x11-proto/xextproto
 	app-text/scrollkeeper
 	>=dev-util/intltool-0.40
@@ -41,7 +41,7 @@ DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1.10 )"
 
 # file collisions
-RDEPEND="${RDEPEND}
+RDEPEND="${COMMON_DEPEND}
 	!<gnome-base/gnome-control-center-2.90"
 
 pkg_setup() {

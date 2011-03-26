@@ -20,11 +20,10 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux"
 fi
 
-RDEPEND=">=x11-libs/gtk+-2.90.7:3
+COMMON_DEPEND=">=x11-libs/gtk+-2.90.7:3
 	>=dev-libs/glib-2.25.10:2
-	dev-libs/libxml2
-	!<gnome-extra/gnome-utils-2.3"
-DEPEND="${RDEPEND}
+	dev-libs/libxml2"
+DEPEND="${COMMON_DEPEND}
 	>=app-text/gnome-doc-utils-0.3.2
 	app-text/scrollkeeper
 	>=dev-util/intltool-0.35
@@ -32,6 +31,8 @@ DEPEND="${RDEPEND}
 	sys-devel/bison
 	sys-devel/flex
 	sys-devel/gettext"
+RDEPEND="${COMMON_DEPEND}
+	!<gnome-extra/gnome-utils-2.3"
 
 pkg_setup() {
 	G2CONF="${G2CONF}

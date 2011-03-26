@@ -23,28 +23,30 @@ fi
 
 # libsoup-gnome is to be used because libsoup[gnome] might not
 # get libsoup-gnome installed by the time ${P} is built
-RDEPEND=">=x11-libs/gtk+-2.90.0:3[introspection?]
+COMMON_DEPEND=">=x11-libs/gtk+-2.90.0:3[introspection?]
 	>=dev-libs/glib-2.13
 	>=gnome-base/gconf-2.8
 	>=net-libs/libsoup-gnome-2.25.1:2.4
 	>=dev-libs/libxml2-2.6.0
 	>=sys-libs/timezone-data-2010k
 
-	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
-
-	!<gnome-base/gnome-applets-2.22.0"
-DEPEND="${RDEPEND}
+	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )"
+DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.40.3
 	>=dev-util/pkgconfig-0.19
 	>=dev-util/gtk-doc-am-1.9
 	sys-devel/gettext
 	doc? ( >=dev-util/gtk-doc-1.9 )"
+RDEPEND="${COMMON_DEPEND}
+	!<gnome-base/gnome-applets-2.22.0"
 
 DOCS="AUTHORS ChangeLog MAINTAINERS NEWS"
 
-G2CONF="${G2CONF}
-	--enable-locations-compression
-	--disable-maintainer-mode
-	--disable-all-translations-in-one-xml
-	--disable-static
-	$(use_enable introspection)"
+pkg_setup() {
+	G2CONF="${G2CONF}
+		--enable-locations-compression
+		--disable-maintainer-mode
+		--disable-all-translations-in-one-xml
+		--disable-static
+		$(use_enable introspection)"
+}

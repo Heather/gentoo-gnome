@@ -30,7 +30,7 @@ PINENTRY_DEPEND="|| ( app-crypt/pinentry[gtk] app-crypt/pinentry-qt app-crypt/pi
 # glade-3 support is for maintainers only per configure.ac
 # mono plugin disabled as it's incompatible with 2.8 and lacks maintainance (see bgo#634571)
 # pst is not mature enough and changes API/ABI frequently
-RDEPEND=">=dev-libs/glib-2.28:2
+COMMON_DEPEND=">=dev-libs/glib-2.28:2
 	>=x11-libs/cairo-1.9.15
 	>=x11-libs/gtk+-3.0.2:3
 	>=dev-libs/libunique-2.91.4:3
@@ -65,11 +65,9 @@ RDEPEND=">=dev-libs/glib-2.28:2
 	networkmanager? ( >=net-misc/networkmanager-0.7 )
 	ssl? (
 		>=dev-libs/nspr-4.6.1
-		>=dev-libs/nss-3.11 )
+		>=dev-libs/nss-3.11 )"
 
-	!<gnome-extra/evolution-exchange-2.32"
-
-DEPEND="${RDEPEND}
+DEPEND="${COMMON_DEPEND}
 	>=dev-util/pkgconfig-0.16
 	>=dev-util/intltool-0.40.0
 	sys-devel/gettext
@@ -83,6 +81,8 @@ DEPEND="${RDEPEND}
 # eautoreconf needs:
 #	>=gnome-base/gnome-common-2.12
 #	>=dev-util/gtk-doc-am-1.9
+RDEPEND="${COMMON_DEPEND}
+	!<gnome-extra/evolution-exchange-2.32"
 
 pkg_setup() {
 	ELTCONF="--reverse-deps"
