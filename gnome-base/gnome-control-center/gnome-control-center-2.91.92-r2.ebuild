@@ -96,7 +96,7 @@ src_prepare() {
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
 
 	# https://bugs.gentoo.org/show_bug.cgi?id=360057
-	epatch "${FILESDIR}/${PN}-fix-desktop-file.patch"
+	epatch "${FILESDIR}/${P}-fix-desktop-file.patch"
 
 	gnome2_src_prepare
 }
