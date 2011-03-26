@@ -63,7 +63,7 @@ DOCS="AUTHORS BUGS ChangeLog MAINTAINERS NEWS README"
 pkg_setup() {
 	# TODO: Zeitgeist support, if GNOME 3 adds it to moduleset (3.2?)
 	G2CONF="${G2CONF}
-		--disable-indicator
+		--disable-zeitgeist
 		--disable-deprecations
 		--disable-maintainer-mode
 		--disable-schemas-compile
