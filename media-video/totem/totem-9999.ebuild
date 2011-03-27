@@ -123,7 +123,10 @@ pkg_setup() {
 		VALAC=$(type -P valac-0.12)
 		BROWSER_PLUGIN_DIR=/usr/$(get_libdir)/nsbrowser/plugins"
 
-	local plugins="brasero-disc-recorder,chapters,im-status,gromit,media-player-keys,ontop,properties,sidebar-test,skipto,screenshot,thumbnail"
+	# Disabled: coherence_upnp, sample-python, zeitgeist-dp
+	local plugins="brasero-disc-recorder,chapters,im-status,gromit"
+	plugins="${plugins},media-player-keys,ontop,properties,screensaver"
+	plugins="${plugins},screenshot,sidebar-test,skipto,thumbnail"
 	use bluetooth && plugins="${plugins},bemused"
 	use iplayer && plugins="${plugins},iplayer"
 	use lirc && plugins="${plugins},lirc"
