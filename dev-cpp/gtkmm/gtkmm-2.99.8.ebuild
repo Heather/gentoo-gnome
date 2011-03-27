@@ -22,7 +22,7 @@ RDEPEND="
 	>=x11-libs/gdk-pixbuf-2.22.1
 	>=dev-cpp/atkmm-2.22.2
 	>=dev-cpp/cairomm-1.9.2.2
-	>=dev-cpp/pangomm-2.27.1:2.4
+	>=dev-cpp/pangomm-2.27.1:1.4
 	dev-libs/libsigc++:2"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
