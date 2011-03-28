@@ -122,6 +122,27 @@ def get_deps_both(cpv, depvars=DEPVARS):
             dep_cps.add(portage.dep.dep_getkey(dep))
     return (dep_cps, dep_strs)
 
+def get_dep_slot(dep):
+    """
+    If the dep atom contains a slot, return that
+    If the dep atom doesn't contain a slot, but is of the =cat/pkg-ver* type,
+    check which slots each satisfied cpv has, and return that if they're all the
+    same; return None if they're different
+    """
+    # FIXME: Use our own portdb so that we match atoms outside of PORTDIR too
+    slot = portage.dep.dep_getslot(dep)
+    if slot or not dep.startswith('='):
+        return slot
+    cp = portage.dep.dep_getkey(dep)
+    cpvrs = portage.dep.match_from_list(dep, portdb.xmatch('match-all', cp))
+    for cpvr in cpvrs:
+        my_slot = portdb.aux_get(cpvr, ['SLOT'])[0]
+        if slot and my_slot != slot:
+            # omg, one of the slots is different
+            return None
+        slot = my_slot
+    return slot
+
 def get_revdeps_rindex(key):
     """
     Given a key, returns a reverse-dependency list of that key using the tinderbox rindex
@@ -172,10 +193,10 @@ for rdep in revdeps:
     (cps, deps) = get_deps_both(rdep)
     if KEY not in cps:
         continue
-    for cpv in deps:
-        if cpv.find(KEY) == -1:
+    for dep in deps:
+        if dep.find(KEY) == -1:
             continue
-        slot = portage.dep.dep_getslot(cpv)
+        slot = get_dep_slot(dep)
         if not slot_rdeps.has_key(slot):
             slot_rdeps[slot] = []
         slot_rdeps[slot].append(rdep)
