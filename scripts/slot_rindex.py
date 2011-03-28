@@ -33,8 +33,11 @@ if len(sys.argv) < 2:
 
 KEY = sys.argv[1]
 PORTAGE_ONLY = False
+IGNORE_OBSOLETE = False
 if os.environ.has_key('PORTAGE_ONLY'):
     PORTAGE_ONLY = os.environ['PORTAGE_ONLY']
+if os.environ.has_key('IGNORE_OBSOLETE'):
+    IGNORE_OBSOLETE = os.environ['IGNORE_OBSOLETE']
 
 ########################
 ### Output Functions ###
@@ -162,6 +165,10 @@ else:
     revdeps = get_revdeps_rindex(KEY)
 
 for rdep in revdeps:
+    if IGNORE_OBSOLETE:
+        from obsolete_ebuilds import get_obsolete
+        if rdep in get_obsolete(portage.pkgsplit(rdep)[0]):
+            continue
     (cps, deps) = get_deps_both(rdep)
     if KEY not in cps:
         continue
