@@ -13,7 +13,6 @@ app-crypt/seahorse-plugins
 app-editors/gedit
 app-pda/libimobiledevice
 app-portage/packagekit
-app-text/gnome-doc-utils
 app-text/evince
 app-text/poppler
 dev-lang/orc
@@ -117,7 +116,6 @@ x11-libs/libnotify
 x11-libs/libwnck
 x11-libs/libxklavier
 x11-misc/notification-daemon
-x11-misc/shared-mime-info
 x11-plugins/pidgin-libnotify
 x11-terms/gnome-terminal
 x11-themes/gnome-icon-theme
@@ -196,6 +194,13 @@ media-video/cheese
 x11-libs/gnome-pty-helper
 x11-libs/vte:0
 x11-libs/vte:2.90
+
+# Docs
+dev-util/desktop-file-utils
+
+# Xdg
+dev-util/desktop-file-utils
+x11-misc/shared-mime-info
 
 #################
 ## END GNOME 3 ##
