@@ -196,11 +196,12 @@ x11-libs/vte:0
 x11-libs/vte:2.90
 
 # Docs
-dev-util/desktop-file-utils
+>=app-text/gnome-doc-utils-0.20.5
 
 # Xdg
-dev-util/desktop-file-utils
-x11-misc/shared-mime-info
+>=dev-util/desktop-file-utils-0.18
+>=x11-mis/xdg-utils-1.1.0_rc1_p20110329
+>=x11-misc/shared-mime-info-0.90
 
 #################
 ## END GNOME 3 ##
