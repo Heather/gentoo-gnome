@@ -29,13 +29,16 @@ RDEPEND=">=gnome-base/gnome-desktop-2.91:3
 	x11-libs/gdk-pixbuf:2
 	>=dev-libs/libgweather-2.91:2
 	dev-libs/libxml2:2
+	gnome-base/dconf
 	>=gnome-base/gconf-2.6.1:2[introspection?]
 	>=gnome-base/gnome-menus-2.27.92
-	gnome-base/librsvg
+	gnome-base/librsvg:2
 	>=dev-libs/dbus-glib-0.80
 	>=sys-apps/dbus-1.1.2
 	>=x11-libs/cairo-1
 	x11-libs/libXau
+	x11-libs/libICE
+	x11-libs/libSM
 	>=x11-libs/libXrandr-1.2
 	>=x11-libs/libwnck-2.91:3
 
@@ -59,6 +62,7 @@ pkg_setup() {
 		--disable-static
 		--disable-scrollkeeper
 		--disable-schemas-install
+		--disable-schemas-compile
 		--with-in-process-applets=clock,notification-area,wncklet
 		$(use_enable networkmanager network-manager)
 		$(use_enable introspection)
