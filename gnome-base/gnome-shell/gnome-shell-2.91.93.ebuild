@@ -23,7 +23,6 @@ fi
 
 # gnome-desktop-2.91.2 is needed due to header changes, db82a33 in gnome-desktop
 # FIXME: Automagic gnome-bluetooth[introspection] support.
-# latest mutter is needed due to commit 474ff2e9 and commit 079953c3
 # latest gsettings-desktop-schemas is needed due to commit 602fa1c6
 # latest g-c-c is needed due to https://bugs.gentoo.org/show_bug.cgi?id=360057
 COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
@@ -41,7 +40,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 	>=net-libs/telepathy-glib-0.13.12[introspection]
 	>=net-wireless/gnome-bluetooth-2.90.0[introspection]
 	>=sys-auth/polkit-0.100[introspection]
-	>=x11-wm/mutter-2.91.91.1[introspection]
+	>=x11-wm/mutter-2.91.93[introspection]
 
 	dev-libs/dbus-glib
 	dev-libs/libxml2:2
@@ -92,15 +91,6 @@ DOCS="AUTHORS README"
 G2CONF="--enable-compile-warnings=maximum
 --disable-schemas-compile
 --disable-jhbuild-wrapper-script"
-
-src_prepare() {
-	epatch "${FILESDIR}/${PN}-fix-gnome-bluetooth.patch"
-
-	# https://bugzilla.gnome.org/show_bug.cgi?id=645063
-	sed -e 's/settings.menu/gnomecc.menu/g' -i src/shell-app-system.c || die
-
-	gnome2_src_prepare
-}
 
 pkg_postinst() {
 	gnome2_pkg_postinst
