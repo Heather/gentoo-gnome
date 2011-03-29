@@ -32,6 +32,8 @@ RDEPEND="
 	>=media-libs/clutter-gst-1.3.2:1.0
 	>=x11-libs/mx-1.1.1[introspection]
 
+	media-libs/gstreamer:0.10
+
 	libnotify? ( >=x11-libs/libnotify-0.7.1 )
 	libsoup? ( net-libs/libsoup:2.4[introspection] )
 	nautilus? ( >=x11-libs/gdk-pixbuf-2.22.1

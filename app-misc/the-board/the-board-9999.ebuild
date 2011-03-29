@@ -16,8 +16,7 @@ SLOT="0"
 IUSE="+libnotify +libsoup +nautilus"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
-	# Releases get outdated very quickly
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS=""
 else
 	KEYWORDS="~amd64 ~x86"
 fi
@@ -32,6 +31,8 @@ RDEPEND="
 	>=media-libs/clutter-gtk-0.91.8:1.0
 	>=media-libs/clutter-gst-1.3.2:1.0
 	>=x11-libs/mx-1.1.1[introspection]
+
+	media-libs/gstreamer:0.10
 
 	libnotify? ( >=x11-libs/libnotify-0.7.1 )
 	libsoup? ( net-libs/libsoup:2.4[introspection] )
