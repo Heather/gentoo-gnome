@@ -96,8 +96,5 @@ src_prepare() {
 		$(use_with socialweb libsocialweb)"
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
 
-	# https://bugs.gentoo.org/show_bug.cgi?id=360057
-	epatch "${FILESDIR}/${P}-fix-desktop-file.patch"
-
 	gnome2_src_prepare
 }
