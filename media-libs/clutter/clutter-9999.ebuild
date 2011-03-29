@@ -4,35 +4,31 @@
 
 EAPI="2"
 WANT_AUTOMAKE="1.11"
-[[ ${PV} = 9999 ]] && GIT_ECLASS="autotools git"
 
-inherit clutter ${GIT_ECLASS}
+# Inherit clutter after gnome2 to override src_install
+inherit gnome2 clutter
 
 DESCRIPTION="Clutter is a library for creating graphical user interfaces"
 
 SLOT="1.0"
 IUSE="debug doc +introspection"
 if [[ ${PV} = 9999 ]]; then
-	EGIT_BOOTSTRAP="echo > build/config.rpath
-		gtkdocize
-		cp "${ROOT}/usr/share/gettext/po/Makefile.in.in" po/
-		eautoreconf"
-	EGIT_REPO_URI="git://git.clutter-project.org/${PN}.git"
-	SRC_URI=""
+	inherit gnome2-live
 	KEYWORDS=""
-	DEPEND=">=dev-util/gtk-doc-1.13"
 else
 	KEYWORDS="~amd64 ~ppc ~ppc64 ~x86"
 fi
 
 # NOTE: glx flavour uses libdrm + >=mesa-7.3
 # We always use the gdk-pixbuf backend now since it's been split out
-RDEPEND="${RDEPEND}
+RDEPEND="
 	>=dev-libs/glib-2.26:2
 	>=x11-libs/cairo-1.10
 	>=x11-libs/pango-1.20[introspection?]
 	>=dev-libs/json-glib-0.12[introspection?]
 	>=dev-libs/atk-1.17
+
+	x11-libs/gdk-pixbuf:2
 
 	virtual/opengl
 	x11-libs/libdrm
@@ -44,24 +40,23 @@ RDEPEND="${RDEPEND}
 	>=x11-libs/libXfixes-3
 	>=x11-libs/libXcomposite-0.4
 
-	|| ( x11-libs/gdk-pixbuf:2
-		 >=x11-libs/gtk+-2.0:2 )
-
-	introspection? ( >=dev-libs/gobject-introspection-0.9.6 )
-"
+	introspection? ( >=dev-libs/gobject-introspection-0.9.6 )"
 DEPEND="${RDEPEND}
-	${DEPEND}
 	sys-devel/gettext
 	dev-util/pkgconfig
 	>=dev-util/gtk-doc-am-1.13
 	doc? (
 		>=dev-util/gtk-doc-1.13
 		>=app-text/docbook-sgml-utils-0.6.14[jadetex]
-		dev-libs/libxslt )
-"
+		dev-libs/libxslt )"
 DOCS="AUTHORS README NEWS ChangeLog*"
 
-src_configure() {
+src_prepare() {
+	# Some gettext stuff, we can't run gettextize because that does too much
+	[[ ${PV} = 9999 ]] && cp "${ROOT}/usr/share/gettext/po/Makefile.in.in" "${S}/po"
+
+	gnome2_src_prepare
+
 	# We only need conformance tests, the rest are useless for us
 	sed -e 's/^\(SUBDIRS =\).*/\1/g' \
 		-i tests/Makefile.am || die "am tests sed failed"
@@ -72,7 +67,7 @@ src_configure() {
 	# XXX: Profiling, coverage disabled for now
 	# XXX: What about eglx/eglnative/opengl-egl-xlib/osx/wayland/etc flavours?
 	#      Uses gudev-1.0 and libxkbcommon for eglnative/cex1000
-	local myconf="
+	G2CONF="
 		--enable-debug=minimum
 		--enable-cogl-debug=minimum
 		--enable-conformance=no
@@ -86,10 +81,8 @@ src_configure() {
 		$(use_enable doc docs)"
 
 	if use debug; then
-		myconf="${myconf}
+		G2CONF="${myconf}
 			--enable-debug=yes
 			--enable-cogl-debug=yes"
 	fi
-
-	econf ${myconf}
 }
