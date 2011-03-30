@@ -35,7 +35,7 @@ DEPEND="${RDEPEND}
 	coverage? (
 		sys-devel/gcc
 		dev-util/lcov )
-	test? ( !dev-lang/spidermonkey )"
+	!dev-lang/spidermonkey"
 # HACK HACK: gjs-tests picks up /usr/lib/libmozjs.so with spidermonkey installed
 
 src_prepare() {
