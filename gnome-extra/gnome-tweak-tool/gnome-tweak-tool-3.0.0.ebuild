@@ -3,6 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/gnome-screensaver/gnome-screensaver-2.30.2.ebuild,v 1.2 2010/11/02 02:33:58 ford_prefect Exp $
 
 EAPI="3"
+GNOME2_LA_PUNT="yes"
 GCONF_DEBUG="no"
 
 inherit gnome2
@@ -21,14 +22,16 @@ else
 fi
 
 COMMON_DEPEND="
-	>=gnome-base/gsettings-desktop-schemas-0.1.7
-	>=dev-python/pygobject-2.27.91:2
+	>=gnome-base/gsettings-desktop-schemas-2.91.92
+	>=dev-python/pygobject-2.28.0:2
 	gnome-base/gconf:2"
 RDEPEND="${COMMON_DEPEND}
 	x11-libs/gtk+:3[introspection]
 	gnome-base/gconf:2[introspection]"
 DEPEND="${COMMON_DEPEND}
-	>=dev-util/pkgconfig-0.9"
+	>=dev-util/intltool-0.40.0
+	>=dev-util/pkgconfig-0.9
+	>=sys-devel/gettext-0.17"
 
 DOCS="NEWS README"
 G2CONF="--disable-schemas-compile"
