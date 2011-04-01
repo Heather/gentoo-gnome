@@ -33,8 +33,7 @@ RDEPEND=">=gnome-base/gnome-desktop-2.91:3
 	>=gnome-base/gconf-2.6.1:2[introspection?]
 	>=gnome-base/gnome-menus-2.27.92
 	gnome-base/librsvg:2
-	>=dev-libs/dbus-glib-0.80
-	>=sys-apps/dbus-1.1.2
+	>=net-libs/telepathy-glib-0.14.0
 	>=x11-libs/cairo-1
 	x11-libs/libXau
 	x11-libs/libICE
@@ -57,6 +56,8 @@ DEPEND="${RDEPEND}
 #	dev-util/gtk-doc-am
 
 pkg_setup() {
+	# XXX: Make presence/telepathy-glib support optional?
+	#      We can do that if we intend to support fallback-only as a setup
 	G2CONF="${G2CONF}
 		--disable-deprecation-flags
 		--disable-static
@@ -64,6 +65,7 @@ pkg_setup() {
 		--disable-schemas-install
 		--disable-schemas-compile
 		--with-in-process-applets=clock,notification-area,wncklet
+		--enable-telepathy-glib
 		$(use_enable networkmanager network-manager)
 		$(use_enable introspection)
 		$(use_enable eds)"
