@@ -6,7 +6,7 @@ EAPI="3"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit autotools eutils gnome2 virtualx
+inherit gnome2 virtualx
 
 DESCRIPTION="Helper library for RESTful services"
 HOMEPAGE="http://git.gnome.org/browse/librest"
