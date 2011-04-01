@@ -58,7 +58,7 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-2.28.0-make_check.patch"
 
 	# Support installation for multiple Python versions
-	epatch "${FILESDIR}/${PN}-2.28.0-support_multiple_python_versions.patch"
+	epatch "${FILESDIR}/${PN}-2.28.3-support_multiple_python_versions.patch"
 
 	# Disable tests that fail
 	epatch "${FILESDIR}/${PN}-2.28.0-disable-failing-tests.patch"
