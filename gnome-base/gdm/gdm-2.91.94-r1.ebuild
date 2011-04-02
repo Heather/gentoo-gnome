@@ -118,6 +118,9 @@ src_prepare() {
 	# fix libxklavier automagic support
 	epatch "${FILESDIR}/${PN}-2.32.0-automagic-libxklavier-support.patch"
 
+	# Fix crasher with gtk+-3.0.7, bug 361679
+	epatch "${FILESDIR}/${P}-fix-gtk+-crasher.patch"
+
 	mkdir "${S}"/m4
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
