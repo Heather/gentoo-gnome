@@ -44,7 +44,7 @@ RDEPEND="
 	>=x11-wm/mutter-${PV}
 	>=gnome-base/gnome-shell-${PV}
 
-	>=x11-wm/metacity-2.30.3
+	>=x11-wm/metacity-2.30.3-r1
 	>=gnome-base/gnome-panel-${PV}
 	>=gnome-base/gnome-menus-${PV}
 

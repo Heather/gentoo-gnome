@@ -166,6 +166,9 @@ gnome-base/gnome-shell
 net-im/telepathy-logger
 >=net-libs/telepathy-glib-0.13.12
 
+# GNOME Fallback
+>=x11-wm/metacity-2.30.3-r1
+
 # GNOME Games
 ~dev-scheme/guile-1.8.7
 gnome-extra/gnome-games
