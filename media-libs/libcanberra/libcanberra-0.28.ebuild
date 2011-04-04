@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/libcanberra/libcanberra-0.25.ebuild,v 1.1 2010/06/18 10:11:15 pacho Exp $
 
-EAPI="3"
+EAPI="4"
 inherit gnome2-utils libtool
 
 DESCRIPTION="Portable Sound Event Library"
@@ -12,31 +12,31 @@ SRC_URI="http://0pointer.de/lennart/projects/${PN}/${P}.tar.gz"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="alsa gstreamer +gtk +gtk3 oss pulseaudio +sound tdb"
+IUSE="alsa gstreamer +gtk +gtk3 oss pulseaudio +sound tdb udev"
 
 COMMON_DEPEND="media-libs/libvorbis
 	>=sys-devel/libtool-2.2.6b
-	alsa? ( media-libs/alsa-lib )
+	alsa? (
+		media-libs/alsa-lib
+		udev? ( >=sys-fs/udev-160 ) )
 	gstreamer? ( >=media-libs/gstreamer-0.10.15 )
 	gtk? ( >=x11-libs/gtk+-2.20.0:2
-		>=gnome-base/gconf-2 )
+		gnome-base/gconf:2 )
 	gtk3? ( x11-libs/gtk+:3
-		>=gnome-base/gconf-2 )
+		gnome-base/gconf:2 )
 	pulseaudio? ( >=media-sound/pulseaudio-0.9.11 )
-	tdb? ( sys-libs/tdb )"
+	tdb? ( sys-libs/tdb )
+"
 RDEPEND="${COMMON_DEPEND}
 	sound? ( x11-themes/sound-theme-freedesktop )" # Required for index.theme wrt #323379
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/pkgconfig-0.17"
 
+REQUIRED_USE="udev? ( alsa )"
+
 src_prepare() {
 	# Run elibtoolize for ~x86-fbsd.
 	use x86-fbsd && elibtoolize
-
-	# Comment out gtk_quit_add which was removed in gtk+:3
-	# Wrong solution, but this is what is used in jhbuild right now
-	# https://bugs.freedesktop.org//show_bug.cgi?id=32839
-	sed -e 's:\(gtk_quit_add\)://\1:' -i "${S}/src/canberra-gtk-module.c" || die
 }
 
 src_configure() {
@@ -50,18 +50,19 @@ src_configure() {
 		$(use_enable gtk) \
 		$(use_enable gtk3) \
 		$(use_enable tdb) \
+		$(use_enable udev) \
 		--disable-lynx \
 		--disable-gtk-doc \
-		--disable-gtk-doc-html \
-		--disable-gtk-doc-pdf \
 		--with-html-dir=/usr/share/doc/${PF}/html
 }
 
 # TODO: check which la files are really needed
 src_install() {
 	# Disable parallel installation until bug #253862 is solved
-	emake -j1 DESTDIR="${ED}" install || die
-	prepalldocs
+	emake -j1 DESTDIR="${D}" install || die
+
+	find "${ED}"/usr/$(get_libdir)/gtk-2.0 -name "*.la" -delete
+	find "${ED}"/usr/$(get_libdir)/gtk-3.0 -name "*.la" -delete
 }
 
 pkg_preinst() { gnome2_gconf_savelist; }
