@@ -30,7 +30,7 @@ COMMON_DEPEND=">=x11-libs/gtk+-2.90.0:3[introspection?]
 	>=dev-libs/libxml2-2.6.0
 	>=sys-libs/timezone-data-2010k
 
-	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )"
+	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )"
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.40.3
 	>=dev-util/pkgconfig-0.19
