@@ -4,10 +4,11 @@
 
 EAPI="2"
 GNOME2_LA_PUNT="yes"
+GNOME_ORG_MODULE="network-manager-applet"
 
 inherit gnome2
 
-MY_PN="${PN/nm-applet/network-manager-applet}"
+MY_PN="${PN/nm-applet/${GNOME_ORG_MODULE}}"
 
 DESCRIPTION="Gnome applet for NetworkManager."
 HOMEPAGE="http://projects.gnome.org/NetworkManager/"
@@ -17,10 +18,9 @@ SLOT="0"
 IUSE="bluetooth"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
-	EGIT_REPO_URI="${EGIT_REPO_URI//${PN}/${MY_PN}}"
+	GNOME_LIVE_MODULE="${GNOME_ORG_MODULE}"
 	KEYWORDS=""
 else
-	SRC_URI="${SRC_URI//${PN}/${MY_PN}}"
 	KEYWORDS="~amd64 ~ppc ~x86"
 fi
 
@@ -51,9 +51,7 @@ DOCS="AUTHORS ChangeLog NEWS README"
 
 S="${WORKDIR}/${MY_PN}-${PV}"
 
-pkg_setup() {
-	G2CONF="${G2CONF}
-		--with-gtkver=3
-		--disable-more-warnings
-		--localstatedir=/var"
-}
+G2CONF="${G2CONF}
+	--with-gtkver=3
+	--disable-more-warnings
+	--localstatedir=/var"
