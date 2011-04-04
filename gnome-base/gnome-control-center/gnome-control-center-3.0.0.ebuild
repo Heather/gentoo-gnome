@@ -13,7 +13,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2"
 SLOT="2"
-IUSE="doc +cheese +cups +networkmanager +socialweb"
+IUSE="+cheese +cups +networkmanager +socialweb"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
@@ -25,7 +25,6 @@ fi
 # XXX: NetworkManager-0.9 support is automagic, make hard-dep once it's released
 #
 # gnome-session-2.91.6-r1 is needed so that 10-user-dirs-update is run at login
-# g-s-d-2.91.90.1 is needed for magnifier schema updates
 # Latest gsettings-desktop-schemas is needed for commit 73f9bffb
 COMMON_DEPEND="
 	>=dev-libs/glib-2.25.11:2
@@ -35,7 +34,7 @@ COMMON_DEPEND="
 	>=gnome-base/gconf-2.0:2
 	>=dev-libs/dbus-glib-0.73
 	>=gnome-base/gnome-desktop-2.91.5:3
-	>=gnome-base/gnome-settings-daemon-2.91.90.1
+	>=gnome-base/gnome-settings-daemon-2.91.94
 	>=gnome-base/libgnomekbd-2.91.91
 
 	app-text/iso-codes
@@ -81,8 +80,7 @@ DEPEND="${COMMON_DEPEND}
 	app-text/scrollkeeper
 	>=app-text/gnome-doc-utils-0.10.1
 
-	cups? ( sys-apps/sed )
-	doc? ( >=dev-util/gtk-doc-1.9 )"
+	cups? ( sys-apps/sed )"
 # Needed for autoreconf
 #	gnome-base/gnome-common
 
