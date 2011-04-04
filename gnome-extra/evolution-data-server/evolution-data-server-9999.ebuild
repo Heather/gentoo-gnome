@@ -21,6 +21,7 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-solaris"
 fi
 
+RESTRIC="test"
 # GNOME3: How do we slot libedataserverui-3.0.so?
 # Also, libedata-cal-1.2.so and libecal-1.2.so use gtk-3, but aren't slotted
 RDEPEND=">=dev-libs/glib-2.28:2
@@ -30,7 +31,7 @@ RDEPEND=">=dev-libs/glib-2.28:2
 	>=dev-libs/libgdata-0.7.0
 	>=gnome-base/gnome-keyring-2.20.1
 	>=dev-libs/libical-0.43
-	>=net-libs/libsoup-2.4:2.4
+	>=net-libs/libsoup-2.31.2:2.4
 	>=dev-libs/libxml2-2
 	>=sys-libs/db-4
 	sys-libs/zlib
