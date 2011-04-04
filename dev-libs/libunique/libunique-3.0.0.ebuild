@@ -6,7 +6,7 @@ EAPI="2"
 WANT_AUTOMAKE="1.11"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2 virtualx autotools
+inherit gnome2 virtualx
 
 DESCRIPTION="a library for writing single instance application"
 HOMEPAGE="http://live.gnome.org/LibUnique"
@@ -38,22 +38,10 @@ src_prepare() {
 		--disable-maintainer-flags
 		--disable-dbus
 		$(use_enable introspection)"
-
-	# Put docs in a versioned directory, from upstream bug #623454
-	epatch "${FILESDIR}/${PN}-2.90.1-parallel-docs-install.patch"
-
-	eautoreconf
 }
 
 src_test() {
 	cd "${S}/tests"
-
-	# Fix environment variable leakage (due to `su` etc)
-	unset DBUS_SESSION_BUS_ADDRESS
-
-	# Force Xemake to use Xvfb, bug 279840
-	unset XAUTHORITY
-	unset DISPLAY
 
 	cp "${FILESDIR}/run-tests" . || die "Unable to cp \${FILESDIR}/run-tests"
 	Xemake -f run-tests || die "Tests failed"
