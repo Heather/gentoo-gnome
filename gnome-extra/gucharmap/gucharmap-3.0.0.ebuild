@@ -13,14 +13,12 @@ HOMEPAGE="http://live.gnome.org/Gucharmap"
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
-# FIXME: Fails with:
-# ERROR:gucharmap-chartable.c:851:get_font_size_px: assertion failed: (priv->font_desc != NULL)
-#KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="cjk doc gnome +introspection test"
 
 RDEPEND=">=dev-libs/glib-2.16.3
 	>=x11-libs/pango-1.2.1
-	>=x11-libs/gtk+-2.91.0:3
+	>=x11-libs/gtk+-3.0.0:3
 
 	gnome? ( gnome-base/gconf:2 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.0 )"
