@@ -38,7 +38,7 @@ RDEPEND=">=dev-libs/glib-2.28.0:2
 	x11-libs/libXft
 	x11-libs/libXrender
 
-	devhelp? ( >=dev-util/devhelp-2.91.6 )
+	devhelp? ( >=dev-util/devhelp-3.0.0 )
 	glade? ( >=dev-util/glade-3.9.2 )
 	graphviz? ( >=media-gfx/graphviz-2.6 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
