@@ -3,7 +3,6 @@
 # $Header: $
 
 EAPI="3"
-PYTHON_DEPEND="2:2.4"
 
 inherit eutils flag-o-matic gnome.org gnome2-utils libtool virtualx
 
@@ -17,7 +16,7 @@ SLOT="3"
 #  * http://blogs.gnome.org/kris/2010/12/29/gdk-3-0-on-mac-os-x/
 #  * http://mail.gnome.org/archives/gtk-devel-list/2010-November/msg00099.html
 # NOTE: Lots of aqua stuff in this ebuild is probably very broken
-IUSE="aqua cups debug doc examples +introspection jpeg jpeg2k tiff test vim-syntax xinerama"
+IUSE="aqua cups debug doc examples +introspection test vim-syntax xinerama"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
@@ -41,11 +40,11 @@ COMMON_DEPEND="!aqua? (
 		x11-libs/libXcomposite
 		x11-libs/libXdamage
 		>=x11-libs/cairo-1.10.0[X,svg]
-		>=x11-libs/gdk-pixbuf-2.22.0:2[X,introspection?,jpeg?,jpeg2k?,tiff?]
+		>=x11-libs/gdk-pixbuf-2.22.0:2[X,introspection?]
 	)
 	aqua? (
 		>=x11-libs/cairo-1.10.0[aqua,svg]
-		>=x11-libs/gdk-pixbuf-2.22.0:2[introspection?,jpeg?,jpeg2k?,tiff?]
+		>=x11-libs/gdk-pixbuf-2.22.0:2[introspection?]
 	)
 	xinerama? ( x11-libs/libXinerama )
 	>=dev-libs/glib-2.28.0
