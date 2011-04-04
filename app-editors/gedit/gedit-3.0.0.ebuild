@@ -25,10 +25,10 @@ fi
 # X libs are not needed for OSX (aqua)
 RDEPEND=">=x11-libs/libSM-1.0
 	>=dev-libs/libxml2-2.5.0
-	>=dev-libs/glib-2.26
+	>=dev-libs/glib-2.28
 	>=x11-libs/gtk+-3.0:3[introspection?]
-	>=x11-libs/gtksourceview-2.91.9:3.0[introspection?]
-	>=dev-libs/libpeas-0.7.2[gtk]
+	>=x11-libs/gtksourceview-3.0.0:3.0[introspection?]
+	>=dev-libs/libpeas-0.7.3[gtk]
 
 	gnome-base/gsettings-desktop-schemas
 	x11-libs/libX11
