@@ -22,10 +22,10 @@ else
 fi
 
 COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
-	>=x11-libs/pango-1.1.2
-	>=x11-libs/gtk+-3.0.4:3[introspection?]
-	>=dev-libs/libxml2-2.4.7:2
-	>=gnome-base/gnome-desktop-2.91.2:3
+	>=x11-libs/pango-1.28.3
+	>=x11-libs/gtk+-3.0.8:3[introspection?]
+	>=dev-libs/libxml2-2.7.8:2
+	>=gnome-base/gnome-desktop-3.0.0:3
 
 	gnome-base/gsettings-desktop-schemas
 	x11-libs/libnotify
@@ -33,9 +33,9 @@ COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
 	x11-libs/libXext
 	x11-libs/libXrender
 
-	exif? ( >=media-libs/libexif-0.5.12 )
+	exif? ( >=media-libs/libexif-0.6.20 )
 	introspection? ( >=dev-libs/gobject-introspection-0.6.4 )
-	xmp? ( >=media-libs/exempi-1.99.5 )"
+	xmp? ( >=media-libs/exempi-2.1.0 )"
 DEPEND="${COMMON_DEPEND}
 	>=dev-lang/perl-5
 	>=dev-util/pkgconfig-0.9
