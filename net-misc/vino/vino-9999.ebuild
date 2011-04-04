@@ -26,6 +26,7 @@ RDEPEND=">=dev-libs/glib-2.26:2
 	>=x11-libs/gtk+-3.0.0:3
 	>=net-libs/libsoup-2.24:2.4
 
+	dev-libs/dbus-glib
 	x11-libs/pango[X]
 	x11-libs/libX11
 	x11-libs/libXdamage
