@@ -21,7 +21,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 
-COMMON_DEPEND=">=x11-libs/gtk+-3.0.2:3
+COMMON_DEPEND=">=x11-libs/gtk+-3.0.8:3
 	>=x11-themes/gtk-engines-2.15.3:2"
 DEPEND="${COMMON_DEPEND}
 	>=x11-misc/icon-naming-utils-0.8.7
