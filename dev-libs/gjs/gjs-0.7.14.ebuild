@@ -23,12 +23,13 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 
+# Things are untested and broken with anything other than xulrunner-2.0
 RDEPEND=">=dev-libs/glib-2.18:2
 	>=dev-libs/gobject-introspection-0.10.1
 
 	dev-libs/dbus-glib
 	x11-libs/cairo
-	>=net-libs/xulrunner-1.9.2:1.9"
+	>=net-libs/xulrunner-2.0:1.9"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.9
