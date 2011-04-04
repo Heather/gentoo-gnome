@@ -40,7 +40,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 	>=net-libs/telepathy-glib-0.13.12[introspection]
 	>=net-wireless/gnome-bluetooth-2.90.0[introspection]
 	>=sys-auth/polkit-0.100[introspection]
-	>=x11-wm/mutter-2.91.93[introspection]
+	>=x11-wm/mutter-3.0.0[introspection]
 
 	dev-libs/dbus-glib
 	dev-libs/libxml2:2
@@ -76,8 +76,8 @@ RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/gnome-control-center-2.91.92-r1
 
 	nm-applet? (
-		>=gnome-extra/nm-applet-0.8.996
-		>=net-misc/networkmanager-0.8.996-r1[introspection] )"
+		>=gnome-extra/nm-applet-0.8.997
+		>=net-misc/networkmanager-0.8.997[introspection] )"
 DEPEND="${COMMON_DEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.22

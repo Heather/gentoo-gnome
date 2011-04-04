@@ -3,17 +3,16 @@
 # $Header: /var/cvsroot/gentoo-x86/net-misc/networkmanager/networkmanager-0.8.995.ebuild,v 1.1 2011/03/09 07:56:21 qiaomuf Exp $
 
 EAPI="4"
+GNOME_ORG_MODULE="NetworkManager"
 
 inherit autotools eutils gnome.org linux-info
 
 # NetworkManager likes itself with capital letters
-MY_PN=${PN/networkmanager/NetworkManager}
+MY_PN=${PN/networkmanager/${GNOME_ORG_MODULE}}
 MY_P=${MY_PN}-${PV}
 
 DESCRIPTION="Network configuration and management in an easy way. Desktop environment independent."
 HOMEPAGE="http://www.gnome.org/projects/NetworkManager/"
-SRC_URI="${SRC_URI//${PN}/${MY_PN}}
-	http://dev.gentoo.org/~dagger/files/ifnet-0.9.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -71,7 +70,7 @@ sysfs_deprecated_check() {
 	eend $?
 }
 
-pkg_setup() {
+pkg_pretend() {
 	if use kernel_linux; then
 		get_version
 		if linux_config_exists; then
@@ -86,14 +85,8 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# disable tests
+	# Don't build tests
 	epatch "${FILESDIR}/${PN}-fix-tests.patch"
-
-	# https://bugzilla.gnome.org/show_bug.cgi?id=643011
-	# Merged upstream, not needed for next release
-	epatch "${FILESDIR}/${P}-fix-introspection.patch"
-
-	EPATCH_SOURCE="${WORKDIR}/ifnet-0.9" EPATCH_SUFFIX="diff" EPATCH_FORCE="yes" epatch
 	eautoreconf
 	default
 }
@@ -131,17 +124,10 @@ src_install() {
 	# Need to keep the /etc/NetworkManager/dispatched.d for dispatcher scripts
 	keepdir /etc/NetworkManager/dispatcher.d
 
-	dodoc AUTHORS ChangeLog NEWS README TODO || die "dodoc failed"
+	dodoc AUTHORS ChangeLog NEWS README TODO
 
 	# Add keyfile plugin support
 	keepdir /etc/NetworkManager/system-connections
 	insinto /etc/NetworkManager
-	newins "${FILESDIR}/nm-system-settings.conf-ifnet" nm-system-settings.conf \
-		|| die "newins failed"
-}
-
-pkg_postinst() {
-	elog "You will need to reload DBus if this is your first time installing"
-	elog "NetworkManager, or if you're upgrading from 0.7 or older."
-	elog ""
+	newins "${FILESDIR}/nm-system-settings.conf-ifnet" nm-system-settings.conf
 }

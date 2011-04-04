@@ -40,7 +40,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 	>=net-libs/telepathy-glib-0.13.12[introspection]
 	>=net-wireless/gnome-bluetooth-2.90.0[introspection]
 	>=sys-auth/polkit-0.100[introspection]
-	>=x11-wm/mutter-2.91.93[introspection]
+	>=x11-wm/mutter-3.0.0[introspection]
 
 	dev-libs/dbus-glib
 	dev-libs/libxml2:2
