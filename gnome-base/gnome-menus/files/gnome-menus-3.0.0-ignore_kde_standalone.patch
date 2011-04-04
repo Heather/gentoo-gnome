@@ -2,8 +2,8 @@
 +++ layout/applications.menu	2007-09-21 17:55:38.000000000 +0300
 @@ -146,6 +146,19 @@
          <Not><Category>Core</Category></Not>
-         <Not><Category>Settings</Category></Not>
          <Not><Category>Screensaver</Category></Not>
+         <Not><Category>X-GNOME-Settings-Panel</Category></Not>
 +        <Not><Category>X-KDE-settings-accessibility</Category></Not>
 +        <Not><Category>X-KDE-settings-components</Category></Not>
 +        <Not><Category>X-KDE-settings-desktop</Category></Not>

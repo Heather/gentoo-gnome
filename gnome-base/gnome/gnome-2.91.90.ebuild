@@ -20,10 +20,10 @@ S=${WORKDIR}
 
 # TODO: check a11y and re-enable USE-flag
 RDEPEND="
-	>=dev-libs/glib-2.28.3:2
+	>=dev-libs/glib-2.28.4:2
 	>=media-libs/clutter-1.6.10:1.0
-	>=x11-libs/gtk+-3.0.4:3[cups?]
-	>=x11-libs/gdk-pixbuf-2.23.1:2
+	>=x11-libs/gtk+-3.0.8:3[cups?]
+	>=x11-libs/gdk-pixbuf-2.23.2:2
 	>=dev-libs/atk-1.33.6
 	>=x11-libs/pango-1.28.3
 	>=x11-libs/libwnck-${PV}:3
@@ -44,7 +44,7 @@ RDEPEND="
 	>=x11-wm/mutter-${PV}
 	>=gnome-base/gnome-shell-${PV}
 
-	>=x11-wm/metacity-2.30.3-r1
+	>=x11-wm/metacity-2.34
 	>=gnome-base/gnome-panel-${PV}
 	>=gnome-base/gnome-menus-${PV}
 
@@ -54,34 +54,34 @@ RDEPEND="
 	>=gnome-base/gnome-keyring-${PV}
 	>=gnome-base/libgnome-keyring-${PV}
 
-	>=gnome-base/gvfs-1.7
+	>=gnome-base/gvfs-1.8
 	>=gnome-base/nautilus-${PV}
 
 	>=app-arch/file-roller-${PV}
 	>=app-crypt/seahorse-${PV}
-	>=app-editors/gedit-2.91.10
+	>=app-editors/gedit-${PV}
 	>=app-text/evince-${PV}
 	>=gnome-extra/gcalctool-5.91.90
 	>=gnome-extra/gconf-editor-${PV}
 	>=gnome-extra/gnome-games-${PV}
 	>=gnome-extra/gnome-system-monitor-${PV}
 	>=gnome-extra/gnome-utils-${PV}
-	>=gnome-extra/gucharmap-2.32.1
+	>=gnome-extra/gucharmap-${PV}
 	>=media-gfx/eog-${PV}
 	>=media-sound/sound-juicer-2.32.0
 	>=media-video/cheese-${PV}
 	>=media-video/totem-${PV}
-	>=net-analyzer/gnome-nettool-2.91.5
+	>=net-analyzer/gnome-nettool-${PV}
 	>=net-misc/vinagre-${PV}
-	>=net-misc/vino-2.99.4
+	>=net-misc/vino-${PV}
 	>=www-client/epiphany-${PV}
-	>=x11-terms/gnome-terminal-2.33.1
+	>=x11-terms/gnome-terminal-${PV}
 
 	>=mail-client/evolution-${PV}
 	>=gnome-extra/evolution-data-server-${PV}
 
 	>=x11-themes/gtk-engines-2.20.2:2
-	>=x11-themes/gnome-backgrounds-2.32.0
+	>=x11-themes/gnome-backgrounds-${PV}
 	>=x11-themes/gnome-icon-theme-${PV}
 	>=x11-themes/gnome-icon-theme-symbolic-${PV}
 	>=x11-themes/gnome-themes-standard-${PV}
@@ -101,10 +101,6 @@ PDEPEND=">=gnome-base/gvfs-1.6.6[gdu]"
 
 # gnome-cups-manager isn't needed, printing support is in gnome-control-center
 
-# Don't work at all:
-#   cheese-2.91.91.1
-#   gucharmap-2.33.2
-#
 # Not ported:
 #   bug-buddy-2.32
 #   sound-juicer-2.32

@@ -24,10 +24,10 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-freebsd ~amd64-l
 # XXX: This list is incomplete!
 RDEPEND="!gnome-base/gnome
 
-	>=dev-libs/glib-2.28.3:2
+	>=dev-libs/glib-2.28.4:2
 	>=media-libs/clutter-1.6.10:1.0
-	>=x11-libs/gtk+-3.0.4:3
-	>=x11-libs/gdk-pixbuf-2.23.1:2
+	>=x11-libs/gtk+-3.0.8:3
+	>=x11-libs/gdk-pixbuf-2.23.2:2
 	>=dev-libs/atk-1.33.6
 	>=x11-libs/pango-1.28.3
 	>=x11-libs/libwnck-${PV}:3
@@ -44,14 +44,14 @@ RDEPEND="!gnome-base/gnome
 	>=x11-wm/mutter-${PV}
 	>=gnome-base/gnome-shell-${PV}
 
-	>=x11-wm/metacity-2.30.3-r1
+	>=x11-wm/metacity-2.34.0
 	>=gnome-base/gnome-panel-${PV}
 
 	>=x11-themes/gnome-icon-theme-${PV}
 	>=x11-themes/gnome-icon-theme-symbolic-${PV}
 	>=x11-themes/gnome-themes-standard-${PV}
 
-	>=x11-terms/gnome-terminal-2.33.1
+	>=x11-terms/gnome-terminal-${PV}
 
 	>=gnome-extra/yelp-${PV}"
 DEPEND=""
