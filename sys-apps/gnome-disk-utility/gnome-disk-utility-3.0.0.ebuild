@@ -30,7 +30,7 @@ CDEPEND="
 	>=dev-libs/libatasmart-0.14
 	>=x11-libs/libnotify-0.6.1
 
-	>=gnome-base/nautilus-2.24
+	>=gnome-base/nautilus-2.91.0
 
 	avahi? ( >=net-dns/avahi-0.6.25[gtk3] )
 	gnome-keyring? ( || (
