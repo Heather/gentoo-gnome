@@ -8,7 +8,7 @@ GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="python? 2:2.5"
 WANT_AUTOMAKE="1.11"
 
-inherit gnome2 python
+inherit gnome2 python virtualx
 
 DESCRIPTION="A GObject plugins library"
 HOMEPAGE="http://www.gnome.org/"
@@ -27,7 +27,7 @@ RDEPEND=">=dev-libs/glib-2.23.6:2
 	>=dev-libs/gobject-introspection-0.10.1
 	gtk? ( >=x11-libs/gtk+-2.90:3[introspection] )
 	python? ( >=dev-python/pygobject-2.28 )
-	seed? ( >=dev-libs/seed-2.28.0 )"
+	seed? ( >=dev-libs/seed-2.91.91 )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
 	>=sys-devel/gettext-0.17
@@ -46,9 +46,18 @@ pkg_setup() {
 		VALAC=$(type -P valac-0.12)
 		--disable-static
 		--disable-maintainer-mode
-		--disable-gtk2-test-build
-		--disable-gdb
-		--disable-valgrind
-		--disable-gcov"
+		--disable-gtk2-test-build"
+	# Wtf, --disable-gcov, --enable-gcov=no, --enable-gcov, all enable gcov
 	# What do we do about gdb, valgrind, gcov, etc?
+}
+
+src_test() {
+	# FIXME: Tests fail because of some bug involving Xvfb and Gtk.IconTheme
+	# DO NOT REPORT UPSTREAM, this is not a libpeas bug.
+	# To reproduce:
+	# >>> from gi.repository import Gtk
+	# >>> Gtk.IconTheme.get_default().has_icon("gtk-about")
+	# This should return True, it returns False for Xvfb
+	Xemake check || die
+
 }

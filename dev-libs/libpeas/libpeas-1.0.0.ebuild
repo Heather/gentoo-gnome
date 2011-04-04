@@ -27,7 +27,7 @@ RDEPEND=">=dev-libs/glib-2.23.6:2
 	>=dev-libs/gobject-introspection-0.10.1
 	gtk? ( >=x11-libs/gtk+-2.90:3[introspection] )
 	python? ( >=dev-python/pygobject-2.28 )
-	seed? ( >=dev-libs/seed-2.28.0 )"
+	seed? ( >=dev-libs/seed-2.91.91 )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
 	>=sys-devel/gettext-0.17
