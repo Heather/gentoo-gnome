@@ -5,17 +5,17 @@ no longer works. So, sort of hack around it for now?
 --- configure.in
 +++ configure.in
 @@ -53,6 +53,7 @@
-        VTE_SEAL_CFLAGS=
         GTK_API_VERSION=2.0
         GTK_REQUIRED=2.20.0
+        GLADE_API_VERSION=1.0
 +       GDK_TARGETS=$($PKG_CONFIG --variable target gdk-$GTK_API_VERSION)
         ;;
    3.0) VTE_API_VERSION=2.90
         VTE_API_MAJOR_VERSION=2
 @@ -62,6 +63,7 @@
-        VTE_SEAL_CFLAGS="-DVTE_SEAL_ENABLE"
         GTK_API_VERSION=3.0
         GTK_REQUIRED=3.0.0
+        GLADE_API_VERSION=2.0
 +       GDK_TARGETS=$($PKG_CONFIG --variable targets gdk-$GTK_API_VERSION)
         ;;
  esac

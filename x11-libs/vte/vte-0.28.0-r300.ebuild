@@ -13,7 +13,7 @@ HOMEPAGE="http://git.gnome.org/browse/vte"
 
 LICENSE="LGPL-2"
 SLOT="2.90"
-IUSE="debug doc +introspection"
+IUSE="debug doc glade +introspection"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
@@ -41,20 +41,19 @@ DEPEND="${RDEPEND}
 src_prepare() {
 	# Python bindings are via gobject-introspection
 	# Ex: from gi.repository import Vte
-	# Glade is disabled because it needs gladeui-1.0 & gtk3 glade is gladeui-2.0
 	G2CONF="${G2CONF}
-		--disable-glade-catalogue
 		--disable-gnome-pty-helper
 		--disable-deprecation
 		--disable-maintainer-mode
 		--disable-static
 		$(use_enable debug)
+		$(use_enable glade glade-catalogue)
 		$(use_enable introspection)
 		--with-html-dir=${ROOT}/usr/share/doc/${PF}/html
 		--with-gtk=3.0"
 	DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
-	epatch "${FILESDIR}/${PN}-0.27.90-fix-gdk-targets.patch"
+	epatch "${FILESDIR}/${P}-fix-gdk-targets.patch"
 
 	[[ ${PV} != 9999 ]] && eautoreconf
 
