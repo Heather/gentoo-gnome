@@ -17,7 +17,7 @@ HOMEPAGE="http://live.gnome.org/GnomeGames/"
 LICENSE="GPL-2 GPL-3 FDL-1.1"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="+aisleriot +clutter +introspection glchess seed +sudoku test"
+IUSE="artworkextra +aisleriot +clutter +introspection glchess seed +sudoku test"
 
 COMMON_DEPEND="
 	>=dev-games/libggz-0.0.14
@@ -34,6 +34,7 @@ COMMON_DEPEND="
 	x11-libs/libSM
 
 	aisleriot? ( >=dev-scheme/guile-1.6.5[deprecated,regex] )
+	artworkextra? ( >=gnome-extra/gnome-games-extra-data-3.0.0 )
 	clutter? (
 		>=dev-libs/gobject-introspection-0.6.3
 		>=x11-libs/gtk+-2.90:3[introspection]
@@ -49,7 +50,6 @@ COMMON_DEPEND="
 		>=gnome-base/librsvg-2.32
 		virtual/opengl
 		x11-libs/libX11 )"
-# FIXME: /usr/share/gnome-games-common/cards/bonded.svg collides!
 RDEPEND="${COMMON_DEPEND}
 	sudoku? (
 		>=dev-python/gconf-python-2.17.3
@@ -57,7 +57,7 @@ RDEPEND="${COMMON_DEPEND}
 		>=dev-python/pygtk-2.14
 		>=dev-python/pycairo-1 )
 
-	!gnome-extra/gnome-games-extra-data"
+	!<gnome-extra/gnome-games-extra-data-3.0.0"
 DEPEND="${COMMON_DEPEND}
 	sys-apps/lsb-release
 	>=dev-util/pkgconfig-0.15
