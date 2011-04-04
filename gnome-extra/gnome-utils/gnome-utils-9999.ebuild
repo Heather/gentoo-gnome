@@ -22,7 +22,7 @@ else
 fi
 
 # libcanberra 0.26-r2 is needed for gtk+:3 fixes
-COMMON_DEPEND=">=dev-libs/glib-2.26.0:2
+COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
 	>=x11-libs/gtk+-3.0.3:3
 	>=gnome-base/gconf-2:2
 	>=gnome-base/gnome-panel-2.13.4
