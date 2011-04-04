@@ -38,8 +38,8 @@ DEPEND="${DEPEND}
 # Extra options passed to elibtoolize
 ELTCONF=${ELTCONF:-}
 
-# Default module svn path
-MODPATH=${MODPATH:-"${PN}"}
+# Default git module name
+GNOME_LIVE_MODULE=${MODPATH:-"${PN}"}
 
 # GIT URI for the project
 EGIT_REPO_URI="${EGIT_REPO_URI:-"git://git.gnome.org/${MODPATH}"}"
