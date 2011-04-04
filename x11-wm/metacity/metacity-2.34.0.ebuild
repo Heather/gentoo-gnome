@@ -18,7 +18,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-in
 IUSE="test xinerama"
 
 # XXX: libgtop is automagic, hard-enabled instead
-RDEPEND=">=x11-libs/gtk+-2.20:2
+RDEPEND=">=x11-libs/gtk+-2.20.0:2
 	>=x11-libs/pango-1.2[X]
 	>=gnome-base/gconf-2:2
 	>=dev-libs/glib-2.6:2
@@ -29,7 +29,6 @@ RDEPEND=">=x11-libs/gtk+-2.20:2
 	x11-libs/libXdamage
 	x11-libs/libXcursor
 	x11-libs/libX11
-	xinerama? ( x11-libs/libXinerama )
 	x11-libs/libXext
 	x11-libs/libXrandr
 	x11-libs/libSM
@@ -37,6 +36,9 @@ RDEPEND=">=x11-libs/gtk+-2.20:2
 	media-libs/libcanberra[gtk]
 	gnome-base/libgtop
 	gnome-extra/zenity
+
+	xinerama? ( x11-libs/libXinerama )
+
 	!x11-misc/expocity"
 DEPEND="${RDEPEND}
 	>=app-text/gnome-doc-utils-0.8
@@ -53,6 +55,7 @@ DOCS="AUTHORS ChangeLog HACKING NEWS README *.txt doc/*.txt"
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-static
+		--enable-canberra
 		--enable-compositor
 		--enable-gconf
 		--enable-render
@@ -67,12 +70,6 @@ pkg_setup() {
 src_prepare() {
 	gnome2_src_prepare
 
-	# Should set RestartStyleHint to RestartIfRunning when replaced,
-	# this fix a strange issue with gnome-session (100% of the CPU,
-	# and try to restart metacity infinitively when compiz is started)
-	# patch import from upstream bug #588119.
-	epatch "${FILESDIR}/${PN}-2.28.0-restartstylehint-when-replace.patch"
-
 	# Use sys/wait.h header instead of wait.h as described in posix specs,
 	# bug 292009
 	epatch "${FILESDIR}/${PN}-2.28.0-sys-wait-header.patch"
@@ -82,7 +79,4 @@ src_prepare() {
 	# https://bugs.gentoo.org/show_bug.cgi?id=309443
 	# https://bugzilla.gnome.org/show_bug.cgi?id=605460
 	epatch "${FILESDIR}/${PN}-2.28.1-wif_macros.patch"
-
-	# Use Adwaita as the default theme instead of clearlooks
-	sed -e 's/Clearlooks/Adwaita/g' -i src/metacity.schemas* || die
 }
