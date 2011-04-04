@@ -76,8 +76,8 @@ RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/gnome-control-center-2.91.92-r1
 
 	nm-applet? (
-		>=gnome-extra/nm-applet-0.8.996
-		>=net-misc/networkmanager-0.8.996-r1[introspection] )"
+		>=gnome-extra/nm-applet-0.8.997
+		>=net-misc/networkmanager-0.8.997[introspection] )"
 DEPEND="${COMMON_DEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.22
