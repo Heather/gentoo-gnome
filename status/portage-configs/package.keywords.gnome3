@@ -55,7 +55,6 @@ gnome-base/gnome-settings-daemon
 gnome-base/gsettings-desktop-schemas
 gnome-base/gvfs
 gnome-base/libgnomekbd
-gnome-base/nautilus
 gnome-extra/at-spi
 gnome-extra/evolution-data-server
 gnome-extra/evolution-exchange
@@ -70,6 +69,7 @@ gnome-extra/gnome-system-monitor
 gnome-extra/gnome-user-docs
 gnome-extra/gnome-utils
 gnome-extra/gtkhtml:4.0
+gnome-extra/gucharmap
 gnome-extra/libgda:4
 gnome-extra/libgda:5
 gnome-extra/yelp
@@ -161,6 +161,10 @@ net-voip/telepathy-gabble
 net-misc/networkmanager
 gnome-extra/nm-applet
 
+# Nautilus
+>=media-libs/libexif-0.6.20
+gnome-base/nautilus
+
 # GNOME Shell
 gnome-base/gnome-shell
 net-im/telepathy-logger
@@ -200,6 +204,10 @@ x11-libs/vte:2.90
 
 # Docs
 >=app-text/gnome-doc-utils-0.20.5
+
+# Extras
+gnome-extra/drwright
+gnome-extra/gnome-tweak-tool
 
 # Xdg
 >=dev-util/desktop-file-utils-0.18
