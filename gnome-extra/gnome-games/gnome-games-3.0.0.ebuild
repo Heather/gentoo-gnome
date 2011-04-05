@@ -179,12 +179,11 @@ pkg_postinst() {
 	games-ggz_update_modules
 	gnome2_pkg_postinst
 	python_need_rebuild
-	python_mod_optimize gnome_sudoku
-	use opengl && python_mod_optimize glchess
+	use sudoku && python_mod_optimize gnome_sudoku
 }
 
 pkg_postrm() {
 	games-ggz_update_modules
 	gnome2_pkg_postrm
-	python_mod_cleanup gnome_sudoku glchess
+	python_mod_cleanup gnome_sudoku
 }
