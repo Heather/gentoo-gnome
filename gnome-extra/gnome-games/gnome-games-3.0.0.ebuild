@@ -124,7 +124,7 @@ pkg_setup() {
 	fi
 
 	if ! use sudoku; then
-		_omitgame sudoku
+		_omitgame gnome-sudoku
 	fi
 }
 
