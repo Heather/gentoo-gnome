@@ -1,5 +1,3 @@
 * hamster-applet 2.91 is still an applet; useless with GNOME Shell
-* Cheese hasn't been ported to GNOME 3 libraries; no point adding it
-* GStreamer is waiting on Ford_Prefect/leio getting time to do it
 * gnome-keyring's gtk3 version libgcr -> libgcr-3
   - Difficult to parallel install, though, because other libs are the same
