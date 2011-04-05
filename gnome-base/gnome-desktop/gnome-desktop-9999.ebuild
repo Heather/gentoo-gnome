@@ -55,4 +55,3 @@ pkg_setup() {
 		--with-gnome-distributor=Gentoo
 		$(use_enable introspection)"
 }
-

@@ -2,7 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="2"
+EAPI="3"
+GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2
@@ -32,28 +33,26 @@ RDEPEND="
 	>=gnome-base/gsettings-desktop-schemas-2.91.92
 	introspection? ( >=dev-libs/gobject-introspection-0.9.7 )"
 DEPEND="${RDEPEND}
-	sys-devel/gettext
+	~app-text/docbook-xml-dtd-4.1.2
+	>=app-text/gnome-doc-utils-0.3.2
 	>=dev-util/intltool-0.40
 	>=dev-util/pkgconfig-0.9
-	>=app-text/gnome-doc-utils-0.3.2
-	doc? ( >=dev-util/gtk-doc-1.4 )
-	~app-text/docbook-xml-dtd-4.1.2
+	sys-devel/gettext
 	x11-proto/xproto
-	>=x11-proto/randrproto-1.2"
+	>=x11-proto/randrproto-1.2
+	doc? ( >=dev-util/gtk-doc-1.4 )"
 
 # Includes X11/Xatom.h in libgnome-desktop/gnome-bg.c which comes from xproto
 # Includes X11/extensions/Xrandr.h that includes randr.h from randrproto (and
 # eventually libXrandr shouldn't RDEPEND on randrproto)
 
-DOCS="AUTHORS ChangeLog HACKING NEWS README"
-
 pkg_setup() {
+	DOCS="AUTHORS ChangeLog HACKING NEWS README"
 	G2CONF="${G2CONF}
 		--disable-scrollkeeper
 		--disable-static
-		--disable-desktop-docs
-		--with-pnp-ids-path=/usr/share/libgnome-desktop/pnp.ids
+		--with-pnp-ids-path=internal
 		--with-gnome-distributor=Gentoo
+		$(use_enable doc desktop-docs)
 		$(use_enable introspection)"
 }
-
