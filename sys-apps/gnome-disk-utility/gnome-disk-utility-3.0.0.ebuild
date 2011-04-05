@@ -30,12 +30,11 @@ CDEPEND="
 	>=dev-libs/libatasmart-0.14
 	>=x11-libs/libnotify-0.6.1
 
-	>=gnome-base/nautilus-2.91.0
-
 	avahi? ( >=net-dns/avahi-0.6.25[gtk3] )
 	gnome-keyring? ( || (
 		gnome-base/libgnome-keyring
 		<gnome-base/gnome-keyring-2.29.4 ) )
+	nautilus? ( >=gnome-base/nautilus-2.91.0 )
 "
 RDEPEND="${CDEPEND}
 	fat? ( sys-fs/dosfstools )
