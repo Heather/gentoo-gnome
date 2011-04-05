@@ -87,7 +87,7 @@ media-libs/libchamplain:0.10
 media-libs/libdmapsharing:3.0
 media-libs/memphis
 media-sound/rhythmbox
-=media-sound/sound-juicer-2.32*
+media-sound/sound-juicer
 media-video/totem
 net-analyzer/gnome-nettool
 net-dns/avahi
