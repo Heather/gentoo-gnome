@@ -2,13 +2,13 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/nm-applet/nm-applet-0.8.2.ebuild,v 1.1 2010/11/10 13:05:32 dagger Exp $
 
-EAPI="2"
+EAPI="3"
 GNOME2_LA_PUNT="yes"
 GNOME_ORG_MODULE="network-manager-applet"
 
 inherit gnome2
 
-MY_PN="${PN/nm-applet/${GNOME_ORG_MODULE}}"
+MY_PN="${GNOME_ORG_MODULE}"
 
 DESCRIPTION="Gnome applet for NetworkManager."
 HOMEPAGE="http://projects.gnome.org/NetworkManager/"

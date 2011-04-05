@@ -8,7 +8,7 @@ GNOME_ORG_MODULE="NetworkManager"
 inherit autotools eutils gnome.org linux-info
 
 # NetworkManager likes itself with capital letters
-MY_PN=${PN/networkmanager/${GNOME_ORG_MODULE}}
+MY_PN=${GNOME_ORG_MODULE}
 MY_P=${MY_PN}-${PV}
 
 DESCRIPTION="Network configuration and management in an easy way. Desktop environment independent."
@@ -21,8 +21,8 @@ kernel_linux +ppp resolvconf connection-sharing wimax"
 KEYWORDS="~amd64 ~arm ~ppc ~ppc64 ~x86"
 
 REQUIRED_USE="
-	nss? ( !gnutls ) !nss? ( gnutls )
-	dhcpcd? ( !dhclient ) !dhcpcd? ( dhclient )"
+	^^ ( nss gnutls )
+	^^ ( dhclient dhcpcd )"
 
 # gobject-introspection-0.10.3 is needed due to gnome bug 642300
 # wpa_supplicant-0.7.3-r3 is needed due to bug 359271
@@ -124,10 +124,11 @@ src_install() {
 	# Need to keep the /etc/NetworkManager/dispatched.d for dispatcher scripts
 	keepdir /etc/NetworkManager/dispatcher.d
 
-	dodoc AUTHORS ChangeLog NEWS README TODO
-
 	# Add keyfile plugin support
 	keepdir /etc/NetworkManager/system-connections
 	insinto /etc/NetworkManager
 	newins "${FILESDIR}/nm-system-settings.conf-ifnet" nm-system-settings.conf
+
+	# Remove useless .la files
+	find "${D}" -name '*.la' -exec rm -f {} +
 }
