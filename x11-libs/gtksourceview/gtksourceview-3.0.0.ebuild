@@ -18,33 +18,37 @@ if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
 else
-	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-solaris"
 fi
 
 # Note: has native OSX support, prefix teams, attack!
 RDEPEND=">=x11-libs/gtk+-3.0:3[introspection?]
-	>=dev-libs/libxml2-2.6
-	>=dev-libs/glib-2.28
-	glade? ( >=dev-util/glade-3.9 )
+	>=dev-libs/libxml2-2.6:2
+	>=dev-libs/glib-2.28:2
+	glade? ( >=dev-util/glade-3.9:3 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.0 )"
 DEPEND="${RDEPEND}
-	sys-devel/gettext
+	>=sys-devel/gettext-0.17
 	>=dev-util/intltool-0.40
 	>=dev-util/pkgconfig-0.9
 	doc? ( >=dev-util/gtk-doc-1.11 )"
 
-DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README"
-
-pkg_config() {
+pkg_setup() {
+	DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README"
 	G2CONF="${G2CONF}
 		--disable-deprecations
-		--enable-completion-providers
+		--enable-providers
 		$(use_enable glade glade-catalog)
 		$(use_enable introspection)"
 }
 
 src_prepare() {
 	sed -i -e 's:--warn-all::' gtksourceview/Makefile.in
+
+	# Skip broken test until upstream bug #621383 is solved
+	sed -e "/guess-language/d" \
+		-e "/get-language/d" \
+		-i tests/test-languagemanager.c || die
 
 	gnome2_src_prepare
 }
