@@ -3,6 +3,8 @@
 # $Header: /var/cvsroot/gentoo-x86/dev-cpp/glibmm/glibmm-2.24.2-r1.ebuild,v 1.5 2011/01/04 18:10:11 armin76 Exp $
 
 EAPI="3"
+GCONF_DEBUG="no"
+
 inherit gnome2
 
 DESCRIPTION="C++ interface for glib2"
@@ -11,22 +13,24 @@ HOMEPAGE="http://www.gtkmm.org"
 LICENSE="|| ( LGPL-2.1 GPL-2 )"
 SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~x86-solaris"
-IUSE="doc examples test"
+IUSE="doc debug examples test"
 
-RDEPEND=">=dev-libs/libsigc++-2.2
-	>=dev-libs/glib-2.28.0"
+RDEPEND=">=dev-libs/libsigc++-2.2:2
+	>=dev-libs/glib-2.28:2"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	doc? ( app-doc/doxygen )"
 
-DOCS="AUTHORS ChangeLog NEWS README"
-
-src_prepare() {
+pkg_setup() {
+	DOCS="AUTHORS ChangeLog NEWS README"
 	G2CONF="${G2CONF}
+		$(use_enable debug debug-refcounting)
 		$(use_enable doc documentation)
 		--disable-schemas-compile
 		--enable-deprecated-api"
+}
 
+src_prepare() {
 	if ! use test; then
 		# don't waste time building tests
 		sed 's/^\(SUBDIRS =.*\)tests\(.*\)$/\1\2/' \
