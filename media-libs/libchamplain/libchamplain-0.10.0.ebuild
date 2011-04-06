@@ -49,3 +49,15 @@ pkg_setup() {
 		$(use_enable introspection)
 		$(use_enable vala)"
 }
+
+src_prepare() {
+	# Fix documentation slotability
+	sed -e "s/^DOC_MODULE.*/DOC_MODULE = ${PN}-${SLOT}/" \
+		-i docs/reference/Makefile.{am,in} || die "sed (1) failed"
+	sed -e "s/^DOC_MODULE.*/DOC_MODULE = ${PN}-gtk-${SLOT}/" \
+		-i docs/reference-gtk/Makefile.{am,in} || die "sed (2) failed"
+	mv ${S}/docs/reference/${PN}{,-${SLOT}}-docs.sgml || die "mv (1) failed"
+	mv ${S}/docs/reference-gtk/${PN}-gtk{,-${SLOT}}-docs.sgml || die "mv (1) failed"
+
+	gnome2_src_prepare
+}
