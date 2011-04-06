@@ -3,6 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/media-libs/libchamplain/libchamplain-0.8.1.ebuild,v 1.1 2011/02/12 09:11:16 jlec Exp $
 
 EAPI="4"
+GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2
@@ -13,7 +14,7 @@ HOMEPAGE="http://blog.pierlux.com/projects/libchamplain/en/"
 LICENSE="LGPL-2"
 SLOT="0.10"
 KEYWORDS="~amd64 ~x86"
-IUSE="doc +gtk html +introspection vala"
+IUSE="debug doc +gtk +introspection vala"
 
 REQUIRED_USE="vala? ( introspection )"
 
@@ -33,11 +34,8 @@ DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1.9 )
 	vala? ( dev-lang/vala:0.12 )"
 
-DOCS="AUTHORS ChangeLog NEWS README"
-
-src_prepare() {
-	gnome2_src_prepare
-
+pkg_setup() {
+	DOCS="AUTHORS ChangeLog NEWS README"
 	# Vala demos are only built, so just disable them
 	G2CONF="${G2CONF}
 		--disable-maintainer-mode
@@ -45,10 +43,9 @@ src_prepare() {
 		--disable-maemo
 		--disable-vala-demos
 		--enable-memphis
-		--with-html-dir="${EPREFIX}/usr/share/doc/${PF}/html"
 		VAPIGEN=$(type -p vapigen-0.12)
+		$(use_enable debug)
 		$(use_enable gtk)
-		$(use_enable html gtk-doc-html)
 		$(use_enable introspection)
 		$(use_enable vala)"
 }
