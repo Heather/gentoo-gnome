@@ -6,7 +6,7 @@ EAPI="3"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
+inherit eutils gnome2
 
 DESCRIPTION="Gnome keyboard configuration library"
 HOMEPAGE="http://www.gnome.org"
@@ -34,14 +34,7 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-static
 		--disable-schemas-compile
+		$(use_enable introspection)
 		$(use_enable test tests)"
 	DOCS="AUTHORS ChangeLog NEWS README"
 }
-
-#src_compile() {
-	# FreeBSD doesn't like -j, upstream? bug #176517
-	# FIXME: Please re-test and notify us if still valid,
-	# disabling for now
-	# use x86-fbsd && MAKEOPTS="${MAKEOPTS} -j1"
-#	gnome2_src_compile
-#}

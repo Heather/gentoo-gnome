@@ -34,12 +34,7 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-static
 		--disable-schemas-compile
+		$(use_enable introspection)
 		$(use_enable test tests)"
 	DOCS="AUTHORS ChangeLog NEWS README"
-}
-
-src_prepare() {
-	# https://bugzilla.gnome.org/show_bug.cgi?id=642703, not needed for next release
-	epatch "${FILESDIR}/${P}-gkbdstatus-text-color.patch"
-	gnome2_src_prepare
 }
