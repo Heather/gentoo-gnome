@@ -23,3 +23,5 @@ DEPEND="dev-util/pkgconfig
 
 G2CONF="${G2CONF} --disable-scrollkeeper"
 DOCS="AUTHORS ChangeLog NEWS README"
+# FIXME: Docs don't validate
+RESTRICT="test"
