@@ -13,7 +13,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="LGPL-2"
 SLOT="3"
-KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~x86-solaris"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~x64-solaris ~x86-solaris"
 
 IUSE="doc +introspection startup-notification"
 
@@ -35,10 +35,12 @@ DEPEND="${RDEPEND}
 #	gnome-base/gnome-common
 
 pkg_setup() {
+	# Don't collide with SLOT=1
 	G2CONF="${G2CONF}
 		--disable-static
 		$(use_enable introspection)
-		$(use_enable startup-notification)"
+		$(use_enable startup-notification)
+		--program-suffix=-${SLOT}"
 	DOCS="AUTHORS ChangeLog HACKING NEWS README"
 }
 
@@ -52,12 +54,9 @@ src_prepare() {
 	fi
 }
 
-src_install() {
-	gnome2_src_install
+pkg_postinst() {
+	gnome2_pkg_postinst
 
 	elog "wnckprop is now called wnckprop-${SLOT}"
 	elog "wnck-urgency-monitor is now called wnck-urgency-monitor-${SLOT}"
-	# Don't collide with SLOT=1
-	mv "${ED}"/usr/bin/wnckprop{,-${SLOT}} || die
-	mv "${ED}"/usr/bin/wnck-urgency-monitor{,-${SLOT}} || die
 }
