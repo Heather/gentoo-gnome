@@ -14,45 +14,42 @@ HOMEPAGE="http://git.gnome.org/browse/vte"
 
 LICENSE="LGPL-2"
 SLOT="0"
-IUSE="debug doc +introspection python"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 fi
+IUSE="debug doc glade +introspection python"
 
 PDEPEND="x11-libs/gnome-pty-helper"
 RDEPEND=">=dev-libs/glib-2.26:2
-	>=x11-libs/gtk+-2.20.0:2
+	>=x11-libs/gtk+-2.20:2
 	>=x11-libs/pango-1.22.0
 
 	sys-libs/ncurses
 	x11-libs/libX11
 	x11-libs/libXft
 
+	glade? ( <dev-util/glade-3.9:3 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.0 )
-	python? ( >=dev-python/pygtk-2.4 ) "
+	python? ( >=dev-python/pygtk-2.4:2 )"
 DEPEND="${RDEPEND}
-	doc? ( >=dev-util/gtk-doc-1.13 )
 	>=dev-util/intltool-0.35
 	>=dev-util/pkgconfig-0.9
-	sys-apps/sed
-	sys-devel/gettext"
+	sys-devel/gettext
+	doc? ( >=dev-util/gtk-doc-1.13 )"
 
 pkg_setup() {
-	# Glade is disabled because it needs gladeui-1.0 & gtk3 glade is gladeui-2.0
-	# glade isn't slotted, and gtksourceview (for instance) needs gladeui-2.0
 	G2CONF="${G2CONF}
-		--disable-glade-catalogue
 		--disable-gnome-pty-helper
 		--disable-deprecation
 		--disable-maintainer-mode
 		--disable-static
 		$(use_enable debug)
+		$(use_enable glade glade-catalogue)
 		$(use_enable introspection)
 		$(use_enable python)
-		--with-html-dir=${ROOT}/usr/share/doc/${PF}/html
 		--with-gtk=2.0"
 	DOCS="AUTHORS ChangeLog HACKING NEWS README"
 	use python && python_set_active_version 2
@@ -60,5 +57,5 @@ pkg_setup() {
 
 src_install() {
 	gnome2_src_install
-	python_clean_installation_image
+	use python && python_clean_installation_image
 }
