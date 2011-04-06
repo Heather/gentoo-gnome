@@ -13,12 +13,12 @@ HOMEPAGE="http://live.gnome.org/LibSoup"
 
 LICENSE="LGPL-2"
 SLOT="2.4"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="debug doc +introspection test"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+IUSE="debug doc +introspection ssl test"
 
-RDEPEND=">=dev-libs/glib-2.27.5
-	>=dev-libs/libxml2-2
-	net-libs/glib-networking[gnutls]
+RDEPEND=">=dev-libs/glib-2.27.5:2
+	>=dev-libs/libxml2-2:2
+	net-libs/glib-networking[ssl?]
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9
@@ -27,8 +27,9 @@ DEPEND="${RDEPEND}
 #	test? (	www-servers/apache[ssl,apache2_modules_auth_digest,apache2_modules_alias,apache2_modules_auth_basic,
 #		apache2_modules_authn_file,apache2_modules_authz_host,apache2_modules_authz_user,apache2_modules_dir,
 #		apache2_modules_mime,apache2_modules_proxy,apache2_modules_proxy_http,apache2_modules_proxy_connect]
-#		dev-lang/php[apache2]
-#		net-misc/curl )"
+#		dev-lang/php[apache2,xmlrpc]
+#		net-misc/curl
+#		net-libs/glib-networking[ssl])"
 
 pkg_setup() {
 	# Set invalid apache module dir until apache tests are ready, bug #326957
