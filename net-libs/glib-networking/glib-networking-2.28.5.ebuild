@@ -3,6 +3,7 @@
 # $Header: $
 
 EAPI="3"
+GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2
@@ -13,12 +14,13 @@ HOMEPAGE="http://git.gnome.org/browse/glib-networking/"
 LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="+gnome +gnutls +libproxy"
+IUSE="+gnome +libproxy +ssl"
 
-RDEPEND=">=dev-libs/glib-2.27.90
+RDEPEND=">=dev-libs/glib-2.27.90:2
 	gnome? ( gnome-base/gsettings-desktop-schemas )
-	gnutls? ( >=net-libs/gnutls-2.1.7 )
-	libproxy? ( >=net-libs/libproxy-0.3.1 )"
+	libproxy? ( >=net-libs/libproxy-0.3.1 )
+	ssl? ( >=net-libs/gnutls-2.1.7 )
+"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35.0
 	>=dev-util/pkgconfig-0.9
@@ -32,6 +34,6 @@ pkg_setup() {
 		--disable-maintainer-mode
 		--with-ca-certificates=${ROOT}/etc/ssl/certs/ca-certificates.crt
 		$(use_with gnome gnome-proxy)
-		$(use_with gnutls)
-		$(use_with libproxy)"
+		$(use_with libproxy)
+		$(use_with ssl gnutls)"
 }
