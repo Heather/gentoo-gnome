@@ -16,9 +16,9 @@ IUSE="doc"
 SLOT="3.0"
 LICENSE="LGPL-2.1"
 
-RDEPEND=">=dev-cpp/glibmm-2.27.93:2
-	>=dev-cpp/gtkmm-2.91.2:3.0
-	>=x11-libs/gtksourceview-2.91.9:3.0
+RDEPEND=">=dev-cpp/glibmm-2.28:2
+	>=dev-cpp/gtkmm-3:3.0
+	>=x11-libs/gtksourceview-3:3.0
 
 	dev-cpp/atkmm
 	dev-cpp/cairomm
