@@ -12,13 +12,13 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2 LGPL-2 FDL-1.1"
 SLOT="0"
-IUSE="doc ipv6 elibc_FreeBSD"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 fi
+IUSE="doc ipv6 elibc_FreeBSD"
 
 # x11-misc/xdg-user-dirs{,-gtk} are needed to create the various XDG_*_DIRs, and
 # create .config/user-dirs.dirs which is read by glib to get G_USER_DIRECTORY_*
@@ -26,7 +26,7 @@ fi
 COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
 	>=x11-libs/gtk+-2.90.7:3
 	>=dev-libs/dbus-glib-0.76
-	>=gnome-base/gconf-2
+	>=gnome-base/gconf-2:2
 	>=sys-power/upower-0.9.0
 	gnome-base/librsvg:2
 	elibc_FreeBSD? ( dev-libs/libexecinfo )
@@ -59,7 +59,7 @@ DEPEND="${COMMON_DEPEND}
 # gnome-common needed for eautoreconf
 # gnome-base/gdm does not provide gnome.desktop anymore
 
-src_prepare() {
+pkg_setup() {
 	# TODO: convert libnotify to a configure option
 	G2CONF="${G2CONF}
 		--disable-deprecation-flags
@@ -69,8 +69,6 @@ src_prepare() {
 		$(use_enable doc docbook-docs)
 		$(use_enable ipv6)"
 	DOCS="AUTHORS ChangeLog NEWS README"
-
-	gnome2_src_prepare
 }
 
 src_install() {
@@ -79,7 +77,16 @@ src_install() {
 	dodir /etc/X11/Sessions || die "dodir failed"
 	exeinto /etc/X11/Sessions
 	doexe "${FILESDIR}/Gnome" || die "doexe failed"
+
+	dodir /usr/share/gnome/applications/ || die
+	insinto /usr/share/gnome/applications/
+	doins "${FILESDIR}/defaults.list" || die
+
+	dodir /etc/X11/xinit/xinitrc.d/ || die
 	exeinto /etc/X11/xinit/xinitrc.d/
+	doexe "${FILESDIR}/15-xdg-data-gnome" || die
+
+	# FIXME: this should be done by x11-misc/xdg-user-dirs
 	doexe "${FILESDIR}/10-user-dirs-update" || die "doexe failed"
 }
 
