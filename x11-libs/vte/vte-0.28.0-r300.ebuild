@@ -23,7 +23,7 @@ IUSE="debug doc glade +introspection"
 
 PDEPEND="x11-libs/gnome-pty-helper"
 RDEPEND=">=dev-libs/glib-2.26:2
-	>=x11-libs/gtk+-3.0:3
+	>=x11-libs/gtk+-3.0:3[introspection?]
 	>=x11-libs/pango-1.22.0
 
 	sys-libs/ncurses
