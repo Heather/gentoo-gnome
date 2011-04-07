@@ -3,7 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-settings-daemon/gnome-settings-daemon-2.32.1.ebuild,v 1.1 2010/12/04 16:50:12 pacho Exp $
 
 EAPI="3"
-GCONF_DEBUG="yes"
+GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2
@@ -13,19 +13,19 @@ HOMEPAGE="http://www.gnome.org"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="+cups debug +udev packagekit policykit smartcard"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 fi
+IUSE="+cups debug packagekit policykit smartcard +udev"
 
 # Latest gsettings-desktop-schemas is needed due to commit e8d1de92
 COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
-	>=dev-libs/glib-2.26.0
-	>=x11-libs/gtk+-2.99.3
-	>=gnome-base/gconf-2.6.1
+	>=dev-libs/glib-2.26.0:2
+	>=x11-libs/gtk+-2.99.3:3
+	>=gnome-base/gconf-2.6.1:2
 	>=gnome-base/libgnomekbd-2.91.1
 	>=gnome-base/gnome-desktop-2.91.5:3
 	>=gnome-base/gsettings-desktop-schemas-0.1.7.1
