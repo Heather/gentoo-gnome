@@ -135,6 +135,7 @@ dev-cpp/gstreamermm
 dev-cpp/glibmm
 dev-cpp/gtkmm:2.4
 dev-cpp/gtkmm:3.0
+dev-cpp/gtksourceviewmm:3.0
 dev-cpp/mm-common
 dev-cpp/pangomm
 
