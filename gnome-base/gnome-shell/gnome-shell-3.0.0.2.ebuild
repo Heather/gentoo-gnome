@@ -5,6 +5,7 @@
 EAPI="2"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
+PYTHON_DEPEND="2:2.5"
 
 inherit gnome2
 
@@ -33,9 +34,9 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 	>=media-libs/clutter-1.5.15:1.0[introspection]
 	>=gnome-base/gnome-desktop-2.91.2:3
 	>=gnome-base/gsettings-desktop-schemas-2.91.91
-	>=gnome-extra/evolution-data-server-2.91.6
-	>=media-libs/gstreamer-0.10.16
-	>=media-libs/gst-plugins-base-0.10.16
+	>=gnome-extra/evolution-data-server-2.32.0
+	>=media-libs/gstreamer-0.10.16:0.10
+	>=media-libs/gst-plugins-base-0.10.16:0.10
 	>=net-im/telepathy-logger-0.2.4[introspection]
 	>=net-libs/telepathy-glib-0.13.12[introspection]
 	>=net-wireless/gnome-bluetooth-2.90.0[introspection]
@@ -47,13 +48,14 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 	x11-libs/pango[introspection]
 	dev-libs/libcroco:0.6
 
-	gnome-base/gconf[introspection]
+	gnome-base/gconf:2[introspection]
 	gnome-base/gnome-menus
 	gnome-base/librsvg
 	media-libs/libcanberra
 	media-sound/pulseaudio
 
 	x11-libs/startup-notification
+	x11-libs/libX11
 	x11-libs/libXfixes
 	x11-apps/mesa-progs"
 # Runtime-only deps are probably incomplete and approximate.
@@ -86,11 +88,15 @@ DEPEND="${COMMON_DEPEND}
 	!dev-lang/spidermonkey"
 # libmozjs.so is picked up from /usr/lib while compiling, so block at build-time
 # https://bugs.gentoo.org/show_bug.cgi?id=360413
-DOCS="AUTHORS README"
-# Don't error out on warnings
-G2CONF="--enable-compile-warnings=maximum
---disable-schemas-compile
---disable-jhbuild-wrapper-script"
+
+pkg_setup() {
+	DOCS="AUTHORS README"
+	# Don't error out on warnings
+	G2CONF="${G2CONF}
+		--enable-compile-warnings=maximum
+		--disable-schemas-compile
+		--disable-jhbuild-wrapper-script"
+}
 
 pkg_postinst() {
 	gnome2_pkg_postinst
