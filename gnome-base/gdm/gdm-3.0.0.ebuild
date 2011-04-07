@@ -63,6 +63,7 @@ DEPEND="${COMMON_DEPEND}
 	app-text/docbook-xml-dtd:4.1.2
 	sys-devel/gettext
 	x11-proto/inputproto
+	x11-proto/randrproto
 	>=dev-util/intltool-0.40.0
 	>=dev-util/pkgconfig-0.19
 	>=app-text/scrollkeeper-0.1.4
