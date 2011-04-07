@@ -58,7 +58,7 @@ COMMON_DEPEND="
 		media-libs/gstreamer:0.10
 		>=media-video/cheese-2.91.91.1 )
 	cups? ( >=net-print/cups-1.4[dbus] )
-	networkmanager? ( >=net-misc/networkmanager-0.8.992 )
+	networkmanager? ( >=net-misc/networkmanager-0.8.997 )
 	socialweb? ( net-libs/libsocialweb )"
 RDEPEND="${COMMON_DEPEND}
 	sys-apps/accountsservice
@@ -84,7 +84,7 @@ DEPEND="${COMMON_DEPEND}
 # Needed for autoreconf
 #	gnome-base/gnome-common
 
-src_prepare() {
+pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-update-mimedb
 		--disable-static
@@ -93,6 +93,4 @@ src_prepare() {
 		$(use_enable cups)
 		$(use_with socialweb libsocialweb)"
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
-
-	gnome2_src_prepare
 }
