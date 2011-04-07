@@ -7,10 +7,6 @@ GNOME_ORG_MODULE="NetworkManager"
 
 inherit autotools eutils gnome.org linux-info
 
-# NetworkManager likes itself with capital letters
-MY_PN=${GNOME_ORG_MODULE}
-MY_P=${MY_PN}-${PV}
-
 DESCRIPTION="Network configuration and management in an easy way. Desktop environment independent."
 HOMEPAGE="http://www.gnome.org/projects/NetworkManager/"
 
@@ -26,10 +22,11 @@ REQUIRED_USE="
 
 # gobject-introspection-0.10.3 is needed due to gnome bug 642300
 # wpa_supplicant-0.7.3-r3 is needed due to bug 359271
+# make consolekit support optional ?
 RDEPEND=">=sys-apps/dbus-1.2
 	>=dev-libs/dbus-glib-0.75
 	>=net-wireless/wireless-tools-28_pre9
-	>=sys-fs/udev-145[extras]
+	>=sys-fs/udev-147[extras]
 	>=dev-libs/glib-2.26
 	>=sys-auth/polkit-0.96
 	>=dev-libs/libnl-1.1
@@ -53,10 +50,9 @@ RDEPEND=">=sys-apps/dbus-1.2
 
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
-	dev-util/intltool
+	>=dev-util/intltool-0.40
+	>=sys-devel/gettext-0.17
 	doc? ( >=dev-util/gtk-doc-1.8 )"
-
-S=${WORKDIR}/${MY_P}
 
 sysfs_deprecated_check() {
 	ebegin "Checking for SYSFS_DEPRECATED support"
