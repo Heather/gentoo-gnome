@@ -13,13 +13,13 @@ HOMEPAGE="http://www.gnome.org"
 
 LICENSE="LGPL-2"
 SLOT="0"
-IUSE="+introspection test"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~x86-solaris"
 fi
+IUSE="+introspection test"
 
 RDEPEND=">=dev-libs/glib-2.18:2
 	>=x11-libs/gtk+-2.91.7:3[introspection?]

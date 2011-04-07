@@ -38,15 +38,3 @@ pkg_setup() {
 		$(use_enable test tests)"
 	DOCS="AUTHORS ChangeLog NEWS README"
 }
-
-pkg_preinst() {
-	gnome2_pkg_preinst
-	preserve_old_lib /usr/$(get_libdir)/libgnomekbd.so.4
-	preserve_old_lib /usr/$(get_libdir)/libgnomekbdui.so.4
-}
-
-pkg_postinst() {
-	gnome2_pkg_postinst
-	preserve_old_lib_notify /usr/$(get_libdir)/libgnomekbd.so.4
-	preserve_old_lib_notify /usr/$(get_libdir)/libgnomekbdui.so.4
-}
