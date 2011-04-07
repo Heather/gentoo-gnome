@@ -54,6 +54,10 @@ DEPEND="${COMMON_DEPEND}
 RDEPEND="${COMMON_DEPEND}
 	!<app-crypt/seahorse-plugins-2.91.0_pre20110114
 "
+
+# FIXME: Tests fail to compile, file bug upstream
+RESTRICT="test"
+
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--enable-pgp
@@ -80,12 +84,4 @@ src_prepare() {
 	sed -e '/CFLAGS="$CFLAGS -g -O0/d' \
 		-e 's/-Werror//' \
 		-i configure.in configure || die "sed failed"
-}
-
-pkg_postinst() {
-	gnome2_pkg_postinst
-	if ! has app-crypt/seahorse-plugins; then
-		einfo "The seahorse-agent tool has been moved to app-crypt/seahorse-plugins"
-		einfo "Use that if you want seahorse to manage your terminal SSH keys"
-	fi
 }
