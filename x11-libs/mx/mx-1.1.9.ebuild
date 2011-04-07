@@ -17,22 +17,23 @@ IUSE="dbus debug doc glade +gtk +introspection startup-notification"
 
 RDEPEND="
 	>=dev-libs/glib-2.26.0:2
-	>=media-libs/clutter-1.4.0
+	>=media-libs/clutter-1.4.0:1.0
 	>=x11-apps/xrandr-1.2.0
 
-	x11-libs/gdk-pixbuf:2
+	x11-libs/gdk-pixbuf:2[introspection?]
 
 	dbus? ( >=dev-libs/dbus-glib-0.82 )
 	glade? (
 		>=dev-util/glade-3.4.5:3
 		<dev-util/glade-3.9.1:3 )
-	gtk? ( >=x11-libs/gtk+-2.20:2 )
+	gtk? ( >=x11-libs/gtk+-2.20:2[introspection?] )
 	introspection? ( >=dev-libs/gobject-introspection-0.6.4 )
 	startup-notification? ( >=x11-libs/startup-notification-0.9 )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35.0
 	sys-devel/gettext
 	doc? ( >=dev-util/gtk-doc-1.14 )"
+
 DOCS="ChangeLog NEWS README"
 
 src_prepare() {
