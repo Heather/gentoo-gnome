@@ -28,6 +28,7 @@ RDEPEND=">=dev-libs/glib-2.18:2
 	>=dev-libs/gobject-introspection-0.10.1
 
 	dev-libs/dbus-glib
+	sys-libs/readline
 	x11-libs/cairo
 	>=net-libs/xulrunner-2.0:1.9"
 DEPEND="${RDEPEND}
@@ -42,7 +43,10 @@ DEPEND="${RDEPEND}
 src_prepare() {
 	# AUTHORS, ChangeLog are empty
 	DOCS="NEWS README"
+	# FIXME: add systemtap/dtrace support, like in glib:2
 	G2CONF="${G2CONF}
+		--disable-systemtap
+		--disable-dtrace
 		$(use_enable coverage)"
 
 	# https://bugs.gentoo.org/353941
