@@ -13,7 +13,7 @@ HOMEPAGE="http://www.gnome.org/projects/cheese/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="doc +introspection v4l vala"
+IUSE="doc +introspection vala"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
@@ -30,7 +30,7 @@ COMMON_DEPEND="
 	>=sys-fs/udev-145-r1[extras]
 	>=gnome-base/gnome-desktop-2.91.6:3
 	>=gnome-base/librsvg-2.32.0:2
-	>=media-libs/libcanberra-0.11[gtk3]
+	>=media-libs/libcanberra-0.26[gtk3]
 	>=media-libs/clutter-1.6.1:1.0[introspection?]
 	>=media-libs/clutter-gtk-0.91.8:1.0
 	>=media-libs/clutter-gst-1.0.0:1.0
@@ -53,12 +53,11 @@ RDEPEND="${COMMON_DEPEND}
 	>=media-plugins/gst-plugins-theora-0.10.20
 	>=media-plugins/gst-plugins-v4l2-0.10
 	>=media-plugins/gst-plugins-vorbis-0.10.20
-	v4l? ( >=media-plugins/gst-plugins-v4l-0.10 )
 	|| ( >=media-plugins/gst-plugins-x-0.10
 		>=media-plugins/gst-plugins-xvideo-0.10 )"
 DEPEND="${COMMON_DEPEND}
 	>=dev-lang/vala-0.11.6:0.12
-	>=app-text/gnome-doc-utils-0.12
+	>=app-text/gnome-doc-utils-0.20
 	>=dev-util/intltool-0.40
 	>=sys-devel/gettext-0.17
 	dev-util/pkgconfig
@@ -70,7 +69,7 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		VALAC=$(type -p valac-0.12)
 		$(use_enable introspection)
-		--disable-maintainer-mode 
+		--disable-maintainer-mode
 		--disable-scrollkeeper
 		--disable-static"
 	DOCS="AUTHORS ChangeLog NEWS README"
