@@ -13,18 +13,18 @@ HOMEPAGE="http://www.gnome.org"
 
 LICENSE="LGPL-2"
 SLOT="0"
-IUSE="+introspection test"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~x86-solaris"
 fi
+IUSE="+introspection test"
 
 RDEPEND=">=dev-libs/glib-2.18:2
 	>=x11-libs/gtk+-2.91.7:3[introspection?]
 	>=x11-libs/libxklavier-5.1
-	
+
 	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
@@ -37,4 +37,16 @@ pkg_setup() {
 		$(use_enable introspection)
 		$(use_enable test tests)"
 	DOCS="AUTHORS ChangeLog NEWS README"
+}
+
+pkg_preinst() {
+	gnome2_pkg_preinst
+	preserve_old_lib /usr/$(get_libdir)/libgnomekbd.so.4
+	preserve_old_lib /usr/$(get_libdir)/libgnomekbdui.so.4
+}
+
+pkg_postinst() {
+	gnome2_pkg_postinst
+	preserve_old_lib_notify /usr/$(get_libdir)/libgnomekbd.so.4
+	preserve_old_lib_notify /usr/$(get_libdir)/libgnomekbdui.so.4
 }

@@ -24,7 +24,7 @@ fi
 RDEPEND=">=dev-libs/glib-2.18:2
 	>=x11-libs/gtk+-2.91.7:3[introspection?]
 	>=x11-libs/libxklavier-5.1
-	
+
 	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
