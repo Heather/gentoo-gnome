@@ -17,7 +17,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="doc +gvfs +introspection python spell"
+IUSE="doc +introspection python spell"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -25,19 +25,23 @@ else
 fi
 
 # X libs are not needed for OSX (aqua)
-RDEPEND=">=x11-libs/libSM-1.0
-	>=dev-libs/libxml2-2.5.0
-	>=dev-libs/glib-2.28
+RDEPEND="
+	>=x11-libs/libSM-1.0
+	>=dev-libs/libxml2-2.5.0:2
+	>=dev-libs/glib-2.28:2
 	>=x11-libs/gtk+-3.0:3[introspection?]
 	>=x11-libs/gtksourceview-3.0.0:3.0[introspection?]
 	>=dev-libs/libpeas-0.7.3[gtk]
 
 	gnome-base/gsettings-desktop-schemas
+	gnome-base/gvfs
+
 	x11-libs/libX11
 	x11-libs/libICE
 	x11-libs/libSM
 
-	gvfs? ( gnome-base/gvfs )
+	net-libs/libsoup:2.4
+
 	introspection? ( >=dev-libs/gobject-introspection-0.9.3 )
 	python? (
 		>=dev-libs/gobject-introspection-0.9.3
@@ -60,9 +64,8 @@ DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1 )"
 # gnome-common and gtk-doc-am needed to eautoreconf
 
-DOCS="AUTHORS BUGS ChangeLog MAINTAINERS NEWS README"
-
 pkg_setup() {
+	DOCS="AUTHORS BUGS ChangeLog MAINTAINERS NEWS README"
 	# TODO: Zeitgeist support, if GNOME 3 adds it to moduleset (3.2?)
 	G2CONF="${G2CONF}
 		--disable-zeitgeist
@@ -70,18 +73,43 @@ pkg_setup() {
 		--disable-maintainer-mode
 		--disable-schemas-compile
 		--disable-scrollkeeper
-		--disable-updater
-		$(use_enable gvfs gvfs-metadata)
+		--enable-updater
+		--enable-gvfs-metadata
 		$(use_enable introspection)
 		$(use_enable spell)"
+
+	if use python || use introspection; then
+		python_set_active_version 2
+	fi
+}
+
+src_prepare() {
+	gnome2_src_prepare
+
+	# disable pyc compiling
+	mv "${S}"/py-compile "${S}"/py-compile.orig
+	ln -s $(type -P true) "${S}"/py-compile
+}
+
+src_test() {
+	# FIXME: this should be handled at eclass level
+	"${EROOT}${GLIB_COMPILE_SCHEMAS}" --allow-any-name "${S}/data" || die
+
+	GSETTINGS_SCHEMA_DIR="${S}/data" emake check || die "make check failed"
 }
 
 pkg_postinst() {
 	gnome2_pkg_postinst
-	python_mod_optimize /usr/$(get_libdir)/gedit/plugins
+	if use python; then
+		python_mod_optimize /usr/$(get_libdir)/gedit/plugins
+		# FIXME: take care of gi.overrides with USE=introspection
+	fi
+
 }
 
 pkg_postrm() {
 	gnome2_pkg_postrm
-	python_mod_cleanup /usr/$(get_libdir)/gedit/plugins
+	if use python; then
+		python_mod_cleanup /usr/$(get_libdir)/gedit/plugins
+	fi
 }
