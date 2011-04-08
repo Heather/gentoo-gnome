@@ -3,7 +3,7 @@
 # $Header: $
 
 EAPI="3"
-GCONF_DEBUG="yes"
+GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2 virtualx
@@ -19,17 +19,17 @@ IUSE="doc +gnome +introspection test"
 # XXX: coverage testing should not be enabled
 RDEPEND=">=dev-libs/glib-2.18:2
 	dev-libs/libxml2:2
+	net-libs/libsoup:2.4
 
 	gnome? ( >=net-libs/libsoup-gnome-2.25.1:2.4 )
 	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )"
 DEPEND="${RDEPEND}
-	>=dev-util/gtk-doc-am-1.13
 	>=dev-util/intltool-0.40
 	dev-util/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.13 )
 	test? ( sys-apps/dbus )"
 
-src_prepare() {
+pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-static
 		--disable-gcov
