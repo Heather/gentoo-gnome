@@ -1,8 +1,11 @@
 ###################
 ## START GNOME 3 ##
 ###################
-gnome-base/gnome-light
 gnome-base/gnome
+gnome-base/gnome-fallback
+gnome-base/gnome-extra-apps
+gnome-base/gnome-core-apps
+gnome-base/gnome-core-libs
 
 # Core
 app-accessibility/orca
@@ -168,6 +171,7 @@ gnome-base/nautilus
 
 # GNOME Shell
 gnome-base/gnome-shell
+net-libs/xulrunner
 net-im/telepathy-logger
 >=net-libs/telepathy-glib-0.13.12
 

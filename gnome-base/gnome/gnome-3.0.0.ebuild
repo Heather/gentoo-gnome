@@ -1,10 +1,10 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome/gnome-2.32.1.ebuild,v 1.7 2011/03/11 18:47:45 pacho Exp $
+# $Header: $
 
-EAPI="3"
+EAPI="4"
 
-DESCRIPTION="Meta package for the GNOME desktop"
+DESCRIPTION="Meta package for GNOME 3"
 HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="as-is"
@@ -14,86 +14,29 @@ SLOT="2.0"
 # double check none of the deps are still masked !
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 
-IUSE="cdr cups dvdr" # accessibility
+IUSE="+cdr cups +extras +fallback" # accessibility
 
 S=${WORKDIR}
 
 # TODO: check a11y and re-enable USE-flag
+# GDM-3.0 integrates very nicely with GNOME Shell
 RDEPEND="
-	>=dev-libs/glib-2.28.4:2
-	>=media-libs/clutter-1.6.10:1.0
-	>=x11-libs/gtk+-3.0.8:3[cups?]
-	>=x11-libs/gdk-pixbuf-2.23.2:2
-	>=dev-libs/atk-1.33.6
-	>=x11-libs/pango-1.28.3
-	>=x11-libs/libwnck-${PV}:3
-	>=gnome-base/librsvg-2.32.1[gtk]
-	>=gnome-base/gnome-desktop-${PV}:3
-	>=gnome-base/libgnomekbd-${PV}
-	>=x11-libs/startup-notification-0.10
-
-	>=media-libs/gstreamer-0.10.32:0.10
-	>=media-libs/gst-plugins-base-0.10.32:0.10
-	>=media-libs/gst-plugins-good-0.10.23:0.10
+	>=gnome-base/gnome-core-libs-${PV}[cups?]
+	>=gnome-base/gnome-core-apps-${PV}[cups?,bluetooth,cdr?]
+	>=gnome-base/gnome-extra-apps-${PV}
 
 	>=gnome-base/gdm-${PV}
-	>=gnome-base/gnome-session-${PV}
-	>=gnome-base/gnome-settings-daemon-${PV}[cups?]
-	>=gnome-extra/bug-buddy-2.32.0:2
 
 	>=x11-wm/mutter-${PV}
 	>=gnome-base/gnome-shell-${PV}
 
-	>=x11-wm/metacity-2.34
-	>=gnome-base/gnome-panel-${PV}
-	>=gnome-base/gnome-menus-${PV}
-
-	>=gnome-base/gnome-control-center-${PV}[cups?]
-	>=gnome-extra/gnome-screensaver-${PV}
-	>=gnome-extra/gnome-power-manager-${PV}
-	>=gnome-base/gnome-keyring-${PV}
-	>=gnome-base/libgnome-keyring-${PV}
-
-	>=gnome-base/gvfs-1.8
-	>=gnome-base/nautilus-${PV}
-
-	>=app-arch/file-roller-${PV}
-	>=app-crypt/seahorse-${PV}
-	>=app-editors/gedit-${PV}
-	>=app-text/evince-${PV}
-	>=gnome-extra/gcalctool-6.0.0
-	>=gnome-extra/gconf-editor-${PV}
-	>=gnome-extra/gnome-games-${PV}
-	>=gnome-extra/gnome-system-monitor-${PV}
-	>=gnome-extra/gnome-utils-${PV}
-	>=gnome-extra/gucharmap-${PV}
-	>=media-gfx/eog-${PV}
-	>=media-sound/sound-juicer-2.99
-	>=media-video/cheese-${PV}
-	>=media-video/totem-${PV}
-	>=net-analyzer/gnome-nettool-${PV}
-	>=net-misc/vinagre-${PV}
-	>=net-misc/vino-${PV}
-	>=www-client/epiphany-${PV}
-	>=x11-terms/gnome-terminal-${PV}
-
-	>=mail-client/evolution-${PV}
-	>=gnome-extra/evolution-data-server-${PV}
-
-	>=x11-themes/gtk-engines-2.20.2:2
 	>=x11-themes/gnome-backgrounds-${PV}
-	>=x11-themes/gnome-icon-theme-${PV}
-	>=x11-themes/gnome-icon-theme-symbolic-${PV}
-	>=x11-themes/gnome-themes-standard-${PV}
+	>=x11-themes/gnome-icon-theme-extras-${PV}
+	x11-themes/sound-theme-freedesktop
 
-	>=gnome-extra/gnome-user-docs-${PV}
-	>=gnome-extra/yelp-${PV}
-	>=gnome-extra/zenity-${PV}
-
-	cdr? ( >=app-cdr/brasero-${PV} )
-	dvdr? ( >=app-cdr/brasero-${PV} )"
+	fallback? ( >=gnome-base/gnome-fallback-${PV} )"
 DEPEND=""
-PDEPEND=">=gnome-base/gvfs-1.6.6[gdu]"
+PDEPEND=">=gnome-base/gvfs-1.8.0[gdu]"
 # Broken from assumptions of gnome-vfs headers being included in nautilus headers,
 # which isn't the case with nautilus-2.22, bug #216019
 #	>=app-admin/gnome-system-tools-2.32.0
@@ -135,17 +78,19 @@ PDEPEND=">=gnome-base/gvfs-1.6.6[gdu]"
 #   gtk-doc
 #   gnome-doc-utils
 
-pkg_postinst() {
+#pkg_postinst() {
 # gnome-wm is gone, session files are now used by gnome-session to decide which
 # windowmanager etc to use. Need to document this
-
-	elog "The main file alteration monitoring functionality is"
-	elog "provided by >=glib-2.16. Note that on a modern Linux system"
-	elog "you do not need the USE=fam flag on it if you have inotify"
-	elog "support in your linux kernel ( >=2.6.13 ) enabled."
-	elog "USE=fam on glib is however useful for other situations,"
-	elog "such as Gentoo/FreeBSD systems. A global USE=fam can also"
-	elog "be useful for other packages that do not use the new file"
-	elog "monitoring API yet that the new glib provides."
-	elog
-}
+#
+# FIXME: Is this still relevant?
+#
+#	elog "The main file alteration monitoring functionality is"
+#	elog "provided by >=glib-2.16. Note that on a modern Linux system"
+#	elog "you do not need the USE=fam flag on it if you have inotify"
+#	elog "support in your linux kernel ( >=2.6.13 ) enabled."
+#	elog "USE=fam on glib is however useful for other situations,"
+#	elog "such as Gentoo/FreeBSD systems. A global USE=fam can also"
+#	elog "be useful for other packages that do not use the new file"
+#	elog "monitoring API yet that the new glib provides."
+#	elog
+#}
