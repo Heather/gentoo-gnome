@@ -26,8 +26,7 @@ RESTRICT="binchecks strip"
 # FIXME: double check potential LINGUAS problem
 src_prepare() {
 	DOCS="AUTHORS NEWS"
-	G2CONF="${G2CONF} --enable-icon-mapping"
-
-	# Don't update icon cache, eclass handles that
-	sed -ie 's/$(GTK_UPDATE_ICON_CACHE)/true/' Makefile.{am,in} || die
+	G2CONF="${G2CONF}
+		--enable-icon-mapping
+		GTK_UPDATE_ICON_CACHE=$(type -p true)"
 }
