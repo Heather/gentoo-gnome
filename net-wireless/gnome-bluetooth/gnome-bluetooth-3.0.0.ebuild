@@ -72,6 +72,14 @@ pkg_setup() {
 	enewgroup plugdev
 }
 
+src_prepare() {
+	# Add missing files for intltool checks
+	echo "sendto/bluetooth-sendto.desktop.in" >> po/POTFILES.in
+	echo "wizard/bluetooth-wizard.desktop.in" >> po/POTFILES.in
+
+	gnome2_src_prepare
+}
+
 src_install() {
 	gnome2_src_install
 
