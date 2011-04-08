@@ -41,15 +41,12 @@ COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
 	x11-misc/xdg-user-dirs
 	x11-misc/xdg-user-dirs-gtk
 	x11-apps/xdpyinfo"
-# Pure-runtime deps from the session files
+# Pure-runtime deps from the session files should *NOT* be added here
+# Otherwise, things like gdm pull in gnome-shell
 # gnome-themes-standard is needed for the failwhale dialog themeing
 RDEPEND="${COMMON_DEPEND}
 	gnome-base/gnome-settings-daemon
 	>=x11-themes/gnome-themes-standard-2.91.92"
-# PDEPEND to avoid circular dependency
-# gnome-panel is used by classic-gnome
-PDEPEND="gnome-base/gnome-shell
-	gnome-base/gnome-panel"
 DEPEND="${COMMON_DEPEND}
 	>=dev-lang/perl-5
 	>=sys-devel/gettext-0.10.40

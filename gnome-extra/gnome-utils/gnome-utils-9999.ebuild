@@ -25,7 +25,6 @@ fi
 COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
 	>=x11-libs/gtk+-3.0.3:3
 	>=gnome-base/gconf-2:2
-	>=gnome-base/gnome-panel-2.13.4
 	>=gnome-base/gsettings-desktop-schemas-0.1.0
 	>=gnome-base/libgtop-2.12:2
 	>=media-libs/libcanberra-0.26-r2[gtk3]

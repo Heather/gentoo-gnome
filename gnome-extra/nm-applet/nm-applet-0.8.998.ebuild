@@ -38,8 +38,14 @@ RDEPEND=">=dev-libs/glib-2.16
 	>=net-misc/networkmanager-${PV}
 	>=net-wireless/wireless-tools-28_pre9
 	>=net-wireless/wpa_supplicant-0.5.7
-	|| ( >=gnome-base/gnome-panel-2 xfce-base/xfce4-panel x11-misc/trayer )
+
+	|| ( gnome-base/gnome-shell
+		 gnome-base/gnome-panel
+		 xfce-base/xfce4-panel
+		 x11-misc/trayer )
+
 	net-misc/mobile-broadband-provider-info
+
 	bluetooth? ( >=net-wireless/gnome-bluetooth-2.27.6 )"
 
 DEPEND="${RDEPEND}
