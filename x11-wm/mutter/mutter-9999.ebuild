@@ -2,7 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="2"
+EAPI="3"
+GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2
@@ -12,7 +13,7 @@ HOMEPAGE="http://blogs.gnome.org/metacity/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="debug +introspection test xinerama"
+IUSE="+introspection test xinerama"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
@@ -22,6 +23,7 @@ fi
 
 COMMON_DEPEND=">=x11-libs/pango-1.2[X,introspection?]
 	>=x11-libs/cairo-1.10[X]
+	x11-libs/gdk-pixbuf:2
 	>=x11-libs/gtk+-2.91.7:3[introspection?]
 	>=gnome-base/gconf-2:2
 	>=dev-libs/glib-2.14:2
@@ -40,9 +42,11 @@ COMMON_DEPEND=">=x11-libs/pango-1.2[X,introspection?]
 	x11-libs/libXrandr
 	x11-libs/libXrender
 
+	gnome-extra/zenity
+
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 	xinerama? ( x11-libs/libXinerama )
-	gnome-extra/zenity"
+"
 DEPEND="${COMMON_DEPEND}
 	>=app-text/gnome-doc-utils-0.8
 	sys-devel/gettext
@@ -55,9 +59,8 @@ DEPEND="${COMMON_DEPEND}
 RDEPEND="${COMMON_DEPEND}
 	!x11-misc/expocity"
 
-DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README *.txt doc/*.txt"
-
-src_prepare() {
+pkg_setup() {
+	DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README *.txt doc/*.txt"
 	G2CONF="${G2CONF}
 		--disable-static
 		--enable-gconf
@@ -70,5 +73,4 @@ src_prepare() {
 		--with-libcanberra
 		$(use_enable introspection)
 		$(use_enable xinerama)"
-	gnome2_src_prepare
 }
