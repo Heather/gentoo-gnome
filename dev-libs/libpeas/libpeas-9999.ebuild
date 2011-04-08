@@ -15,7 +15,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="LGPL-2"
 SLOT="0"
-IUSE="doc gtk python seed vala" # glade
+IUSE="doc +gtk python seed vala" # glade
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
