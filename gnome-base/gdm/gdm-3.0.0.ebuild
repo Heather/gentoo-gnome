@@ -32,7 +32,6 @@ COMMON_DEPEND="
 	>=media-libs/fontconfig-2.5.0
 	>=media-libs/libcanberra-0.4[gtk3]
 	>=gnome-base/gconf-2.31.3
-	>=gnome-base/gnome-session-2.28
 	>=x11-misc/xdg-utils-1.0.2-r3
 	>=sys-power/upower-0.9
 	>=sys-apps/accountsservice-0.6.5
@@ -68,7 +67,14 @@ DEPEND="${COMMON_DEPEND}
 	>=dev-util/pkgconfig-0.19
 	>=app-text/scrollkeeper-0.1.4
 	>=app-text/gnome-doc-utils-0.3.2"
+# XXX: These deps are from the gnome-session gdm.session file
 RDEPEND="${COMMON_DEPEND}
+	>=gnome-base/gnome-session-2.91.92
+	>=gnome-base/gnome-settings-daemon-2.91
+	x11-wm/metacity
+
+	consolekit? ( gnome-extra/polkit-gnome )
+
 	!gnome-extra/fast-user-switch-applet"
 
 pkg_setup() {
