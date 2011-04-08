@@ -12,8 +12,7 @@ HOMEPAGE="http://live.gnome.org/dconf"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-#IUSE="doc vala"
-IUSE="doc"
+IUSE="doc +X"
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 	KEYWORDS=""
@@ -21,23 +20,23 @@ else
 	KEYWORDS="~amd64 ~arm ~sparc ~x86"
 fi
 
-COMMON_DEPEND=">=dev-libs/glib-2.27.2
-	>=dev-libs/libgee-0.5.1
-	>=dev-libs/libxml2-2.7.7
+COMMON_DEPEND=">=dev-libs/glib-2.27.2:2
 	sys-apps/dbus
-	x11-libs/gtk+:3"
+	X? (
+		>=dev-libs/libxml2-2.7.7:2
+		x11-libs/gtk+:3 )"
 DEPEND="${COMMON_DEPEND}
 	>=dev-lang/vala-0.11.7:0.12
 	doc? ( >=dev-util/gtk-doc-1.15 )"
-#vala? ( >=dev-lang/vala-0.9.5:0.10 )
-RDEPEND="${COMMON_DEPEND}
-	!dev-lang/vala:0"
+
+pkg_setup() {
+	G2CONF="${G2CONF}
+		VALAC=$(type -p valac-0.12)
+		$(use_enable X editor)"
+		#$(use_enable vala)
+}
 
 src_prepare() {
-	G2CONF="${G2CONF}
-		VALAC=$(type -p valac-0.12)"
-		#$(use_enable vala)
-
 	if [[ ${PV} = 9999 ]]; then
 		# XXX: gtk-doc.make should be in top_srcdir -- file a bug for this
 		# Let's only do this in the live version to avoid gtkdocize in releases
@@ -50,4 +49,14 @@ src_prepare() {
 	#epatch "${FILESDIR}/${PN}-automagic-vala.patch"
 
 	gnome2_src_prepare
+}
+
+src_install() {
+	gnome2_src_install
+
+	# GSettings backend may be one of: memory, gconf, dcon
+	# Only dconf is really considered functional by upstream
+	# must have it enabled over gconf if both are installed
+	echo 'GSETTINGS_BACKEND="dconf"' >> 51dconf
+	doenvd 51dconf || die "doenvd failed"
 }
