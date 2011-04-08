@@ -19,20 +19,19 @@ KEYWORDS=""
 IUSE=""
 
 # FIXME: configure.ac needs cleaning: g-v-c was removed, but PA checks weren't
-RDEPEND=">=dev-libs/glib-2.18.2:2
+RDEPEND="dev-libs/libxml2:2
+	>=dev-libs/glib-2.18.2:2
 	>=x11-libs/gtk+-2.91.0:3
-	>=gnome-base/gconf-2.6.1
-	>=media-libs/gstreamer-0.10.23
-	>=media-libs/gst-plugins-base-0.10.23
-	>=media-libs/gst-plugins-good-0.10
-	dev-libs/libxml2
-
+	>=gnome-base/gconf-2.6.1:2
+	>=media-libs/gstreamer-0.10.23:0.10
+	>=media-libs/gst-plugins-base-0.10.23:0.10
+	>=media-libs/gst-plugins-good-0.10:0.10
 	>=media-libs/libcanberra-0.13[gtk3]
 	media-libs/libgnome-media-profiles:3
-	>=media-libs/gst-plugins-base-0.10.23:0.10
 	>=media-plugins/gst-plugins-meta-0.10-r2:0.10
-	>=media-plugins/gst-plugins-gconf-0.10.23"
+	>=media-plugins/gst-plugins-gconf-0.10.23:0.10"
 DEPEND="${RDEPEND}
+	app-text/docbook-xml-dtd:4.1.2
 	>=dev-util/pkgconfig-0.9
 	>=app-text/scrollkeeper-0.3.11
 	>=app-text/gnome-doc-utils-0.3.2

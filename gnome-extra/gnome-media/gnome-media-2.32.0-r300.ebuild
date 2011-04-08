@@ -24,20 +24,20 @@ IUSE=""
 #  * gnome-volume-control (moved to gnome-control-center)
 #  * gstmixer (won't work under GNOME 3, even in classic-gnome)
 #  * gnome-audio-profile-properties (moved to libgnome-media-profiles)
-RDEPEND=">=dev-libs/glib-2.18.2:2
+RDEPEND="dev-libs/libxml2:2
+	>=dev-libs/glib-2.18.2:2
 	>=x11-libs/gtk+-2.18.0:2
-	>=gnome-base/gconf-2.6.1
-	>=media-libs/gstreamer-0.10.23
-	>=media-libs/gst-plugins-base-0.10.23
-	>=media-libs/gst-plugins-good-0.10
-	>=dev-libs/libunique-1
-
-	>=media-libs/libcanberra-0.13[gtk]
-	dev-libs/libxml2
+	>=gnome-base/gconf-2.6.1:2
+	>=media-libs/gstreamer-0.10.23:0.10
 	>=media-libs/gst-plugins-base-0.10.23:0.10
+	>=media-libs/gst-plugins-good-0.10:0.10
+	>=media-libs/libcanberra-0.13[gtk]
 	>=media-plugins/gst-plugins-meta-0.10-r2:0.10
-	>=media-plugins/gst-plugins-gconf-0.10.1"
+	>=media-plugins/gst-plugins-gconf-0.10.1:0.10
+	>=dev-libs/libunique-1:1
+"
 DEPEND="${RDEPEND}
+	app-text/docbook-xml-dtd:4.1.2
 	>=dev-util/pkgconfig-0.9
 	>=app-text/scrollkeeper-0.3.11
 	>=app-text/gnome-doc-utils-0.3.2
@@ -58,6 +58,8 @@ src_prepare() {
 	# This has been moved to media-libs/libgnome-media-profiles:3,
 	# but the library libgnome-media-profiles.so.0 is still used
 	epatch "${FILESDIR}/${P}-disable-gnome-audio-profile-properties.patch"
+
+	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
 }
 
