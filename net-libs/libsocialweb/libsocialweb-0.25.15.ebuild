@@ -3,10 +3,11 @@
 # $Header: $
 
 EAPI="3"
-GCONF_DEBUG="yes"
+GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
+PYTHON_DEPEND="2"
 
-inherit gnome2
+inherit gnome2 python
 
 DESCRIPTION="Social web services integration framework"
 HOMEPAGE="http://git.gnome.org/browse/libsocialweb"
@@ -24,7 +25,8 @@ RDEPEND=">=dev-libs/glib-2.14:2
 	gnome-base/libgnome-keyring
 	dev-libs/dbus-glib
 	dev-libs/json-glib
-	
+	net-libs/libsoup:2.4
+
 	gnome? ( >=net-libs/libsoup-gnome-2.25.1:2.4 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.6 )
 	networkmanager? ( net-misc/networkmanager )
@@ -64,4 +66,12 @@ pkg_setup() {
 	fi
 
 	DOCS="AUTHORS README TODO"
+
+	python_set_active_version 2
+}
+
+src_prepare() {
+	gnome2_src_prepare
+
+	python_convert_shebangs 2 ${S}/tools/glib-ginterface-gen.py
 }
