@@ -7,9 +7,6 @@ GNOME_ORG_MODULE="NetworkManager-openvpn"
 
 inherit gnome.org
 
-# NetworkManager likes itself with capital letters
-MY_PN="${GNOME_ORG_MODULE}"
-
 DESCRIPTION="NetworkManager OpenVPN plugin"
 HOMEPAGE="http://www.gnome.org/projects/NetworkManager/"
 
@@ -19,8 +16,8 @@ KEYWORDS="~amd64 ~x86"
 IUSE="gnome test"
 
 RDEPEND="
-	>=net-misc/networkmanager-${PV}
 	>=dev-libs/dbus-glib-0.74
+	>=net-misc/networkmanager-${PV}
 	>=net-misc/openvpn-2.1_rc9
 	gnome? (
 		>=x11-libs/gtk+-2.91.4:3
@@ -29,10 +26,8 @@ RDEPEND="
 
 DEPEND="${RDEPEND}
 	sys-devel/gettext
-	dev-util/pkgconfig
-	>=dev-util/intltool-0.35"
-
-S="${WORKDIR}/${MY_PN}-${PV}"
+	>=dev-util/intltool-0.35
+	dev-util/pkgconfig"
 
 # FAIL: (tls-import-data) unexpected 'ca' secret value
 #RESTRICT="test"
