@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gvfs/gvfs-1.6.4-r1.ebuild,v 1.1 2010/10/05 08:49:12 pacho Exp $
 
-EAPI="2"
+EAPI="3"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -16,8 +16,6 @@ HOMEPAGE="http://www.gnome.org"
 
 LICENSE="LGPL-2"
 SLOT="0"
-IUSE="archive avahi bluetooth cdda doc fuse gdu gnome-keyring gphoto2 hal +http
-iphone samba +udev"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 	DOCS="AUTHORS ChangeLog.pre-1-2 NEWS README TODO"
@@ -25,6 +23,7 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 	DOCS="AUTHORS ChangeLog ChangeLog.pre-1-2 NEWS README TODO"
 fi
+IUSE="archive avahi bluetooth cdda doc fuse gdu gnome-keyring gphoto2 +http ios samba +udev"
 
 RDEPEND=">=dev-libs/glib-2.27.4
 	>=sys-apps/dbus-1.0
@@ -42,15 +41,12 @@ RDEPEND=">=dev-libs/glib-2.27.4
 	gdu? ( >=sys-apps/gnome-disk-utility-2.29 )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-1.0 )
 	gphoto2? ( >=media-libs/libgphoto2-2.4.7 )
-	iphone? (
+	ios? (
 		>=app-pda/libimobiledevice-1.1.0
 		>=app-pda/libplist-0.15 )
 	udev? (
 		cdda? ( >=dev-libs/libcdio-0.78.2[-minimal] )
 		>=sys-fs/udev-145[extras] )
-	hal? (
-		cdda? ( >=dev-libs/libcdio-0.78.2[-minimal] )
-		>=sys-apps/hal-0.5.10 )
 	http? ( >=net-libs/libsoup-gnome-2.26.0 )
 	samba? ( || ( >=net-fs/samba-3.4.6[smbclient]
 			<=net-fs/samba-3.3 ) )"
@@ -60,18 +56,19 @@ DEPEND="${RDEPEND}
 	dev-util/gtk-doc-am
 	doc? ( >=dev-util/gtk-doc-1 )"
 
-
 pkg_setup() {
-	if use cdda && ! use hal && ! use udev; then
-		ewarn "You have \"+cdda\", but you have \"-hal\" and \"-udev\""
-		ewarn "cdda support will NOT be built unless you enable EITHER hal OR udev"
+	if use cdda && ! use udev; then
+		ewarn
+		ewarn "You need to enable USE=\"udev\" for USE=\"cdda\" to be useful."
+		ewarn
 	fi
 
 	G2CONF="${G2CONF}
 		--enable-udev
 		--disable-bash-completion
-		--with-dbus-service-dir=/usr/share/dbus-1/services
+		--disable-hal
 		--disable-schemas-compile
+		--with-dbus-service-dir=/usr/share/dbus-1/services
 		$(use_enable archive)
 		$(use_enable avahi)
 		$(use_enable bluetooth obexftp)
@@ -79,9 +76,8 @@ pkg_setup() {
 		$(use_enable fuse)
 		$(use_enable gdu)
 		$(use_enable gphoto2)
-		$(use_enable iphone afc)
+		$(use_enable ios afc)
 		$(use_enable udev gudev)
-		$(use_enable hal)
 		$(use_enable http)
 		$(use_enable gnome-keyring keyring)
 		$(use_enable samba)"
