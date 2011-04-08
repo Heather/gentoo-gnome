@@ -8,6 +8,9 @@ GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2"
 
 inherit autotools eutils gnome2 python virtualx
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Javascript bindings for GNOME"
 HOMEPAGE="http://live.gnome.org/Gjs"
@@ -17,7 +20,6 @@ SLOT="0"
 IUSE="coverage examples test"
 
 if [[ ${PV} == 9999 ]]; then
-	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~amd64 ~x86"

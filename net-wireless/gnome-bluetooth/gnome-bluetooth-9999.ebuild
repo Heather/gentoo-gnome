@@ -8,6 +8,9 @@ GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="no"
 
 inherit eutils gnome2 multilib
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Fork of bluez-gnome focused on integration with GNOME"
 HOMEPAGE="http://live.gnome.org/GnomeBluetooth"
@@ -16,7 +19,6 @@ LICENSE="GPL-2 LGPL-2.1"
 SLOT="2"
 IUSE="doc +introspection" #nautilus
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~amd64 ~ppc ~x86"

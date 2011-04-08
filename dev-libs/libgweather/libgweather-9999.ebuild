@@ -7,6 +7,9 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Library to access weather information from online services"
 HOMEPAGE="http://www.gnome.org/"
@@ -15,7 +18,6 @@ LICENSE="GPL-2"
 SLOT="2"
 IUSE="+introspection doc"
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"

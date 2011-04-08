@@ -7,6 +7,9 @@ GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
 inherit autotools eutils gnome2
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Simple document viewer for GNOME"
 HOMEPAGE="http://www.gnome.org/projects/evince/"
@@ -15,7 +18,6 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="dbus debug djvu doc dvi gnome-keyring +introspection nautilus t1lib tiff"
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~x64-solaris"

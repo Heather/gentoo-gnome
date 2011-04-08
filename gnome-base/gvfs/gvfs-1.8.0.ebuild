@@ -7,6 +7,9 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
 inherit autotools bash-completion gnome2 eutils
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="GNOME Virtual Filesystem Layer"
 HOMEPAGE="http://www.gnome.org"
@@ -16,7 +19,6 @@ SLOT="0"
 IUSE="archive avahi bluetooth cdda doc fuse gdu gnome-keyring gphoto2 hal +http
 iphone samba +udev"
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	KEYWORDS=""
 	DOCS="AUTHORS ChangeLog.pre-1-2 NEWS README TODO"
 else

@@ -9,6 +9,9 @@ PYTHON_DEPEND="python? 2:2.5"
 WANT_AUTOMAKE="1.11"
 
 inherit gnome2 python virtualx
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="A GObject plugins library"
 HOMEPAGE="http://www.gnome.org/"
@@ -17,7 +20,6 @@ LICENSE="LGPL-2"
 SLOT="0"
 IUSE="doc +gtk python seed vala" # glade
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"

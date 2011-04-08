@@ -7,6 +7,9 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
 inherit autotools db-use eutils flag-o-matic gnome2 versionator virtualx
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Evolution groupware backend"
 HOMEPAGE="http://www.gnome.org/projects/evolution/"
@@ -15,7 +18,6 @@ LICENSE="LGPL-2 BSD DB"
 SLOT="0"
 IUSE="doc +introspection ipv6 ldap kerberos ssl +weather"
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-solaris"

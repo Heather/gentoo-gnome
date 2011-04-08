@@ -7,6 +7,9 @@ GNOME2_LA_PUNT="yes"
 GNOME_ORG_MODULE="network-manager-applet"
 
 inherit gnome2
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Gnome applet for NetworkManager."
 HOMEPAGE="http://projects.gnome.org/NetworkManager/"
@@ -15,7 +18,6 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="bluetooth"
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	GNOME_LIVE_MODULE="${GNOME_ORG_MODULE}"
 	KEYWORDS=""
 else

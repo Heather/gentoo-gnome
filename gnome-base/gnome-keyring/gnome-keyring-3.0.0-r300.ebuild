@@ -7,6 +7,9 @@ GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2 multilib pam virtualx
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Password and keyring managing daemon"
 HOMEPAGE="http://www.gnome.org/"
@@ -15,7 +18,6 @@ LICENSE="GPL-2 LGPL-2"
 SLOT="0"
 IUSE="debug doc pam test"
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86"

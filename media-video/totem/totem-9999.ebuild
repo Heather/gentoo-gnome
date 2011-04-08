@@ -9,6 +9,9 @@ PYTHON_DEPEND="python? 2:2.4"
 PYTHON_USE_WITH="threads"
 PYTHON_USE_WITH_OPT="python"
 inherit autotools eutils gnome2 multilib python
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Media player for GNOME"
 HOMEPAGE="http://gnome.org/projects/totem/"
@@ -18,7 +21,6 @@ SLOT="0"
 IUSE="bluetooth debug doc lirc +introspection iplayer nautilus nsplugin
 +python tracker +youtube vala zeroconf"
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"

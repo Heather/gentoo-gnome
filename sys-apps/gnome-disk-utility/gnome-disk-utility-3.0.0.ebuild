@@ -7,6 +7,9 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
 inherit autotools eutils gnome2
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Disk Utility for GNOME using devicekit-disks"
 HOMEPAGE="http://git.gnome.org/browse/gnome-disk-utility"
@@ -15,7 +18,6 @@ LICENSE="LGPL-2.1"
 SLOT="0"
 IUSE="avahi doc fat gnome-keyring nautilus remote-access"
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86"

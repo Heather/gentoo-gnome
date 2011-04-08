@@ -8,6 +8,9 @@ GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2:2.4"
 
 inherit eutils gnome2 multilib python
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Telepathy client and library using GTK+"
 HOMEPAGE="http://live.gnome.org/Empathy"
@@ -17,7 +20,6 @@ SLOT="0"
 # FIXME: Add location support once geoclue stops being idiotic with automagic deps
 IUSE="+gnome eds +map +networkmanager sendto spell test webkit"
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~sparc ~x86"

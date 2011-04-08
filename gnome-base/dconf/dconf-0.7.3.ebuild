@@ -6,6 +6,9 @@ EAPI="3"
 GCONF_DEBUG="no"
 
 inherit gnome2
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Simple low-level configuration system"
 HOMEPAGE="http://live.gnome.org/dconf"
@@ -14,7 +17,6 @@ LICENSE="LGPL-2.1"
 SLOT="0"
 IUSE="doc +X"
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~amd64 ~arm ~sparc ~x86"

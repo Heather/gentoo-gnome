@@ -7,6 +7,9 @@ GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="python? 2:2.5"
 
 inherit autotools eutils gnome2 python multilib virtualx
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Music management and playback software for GNOME"
 HOMEPAGE="http://www.rhythmbox.org/"
@@ -16,7 +19,6 @@ SLOT="0"
 IUSE="+brasero cdr daap dbus doc gnome-keyring html ipod +lastfm libnotify lirc
 musicbrainz mtp nsplugin python test udev upnp vala webkit"
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~amd64 ~ppc64 ~x86"

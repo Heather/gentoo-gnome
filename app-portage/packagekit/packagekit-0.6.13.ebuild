@@ -5,6 +5,9 @@
 EAPI="2"
 
 inherit eutils multilib python nsplugins
+if [[ ${PV} = 9999 ]]; then
+	inherit autotools git
+fi
 
 MY_PN="PackageKit"
 
@@ -12,7 +15,6 @@ DESCRIPTION="Manage packages in a secure way using a cross-distro and cross-arch
 HOMEPAGE="http://www.packagekit.org/"
 
 if [[ ${PV} = 9999 ]]; then
-	inherit autotools git
 	EGIT_REPO_URI="git://anongit.freedesktop.org/git/${PN}/${MY_PN}"
 	KEYWORDS=""
 	DEPEND=">=dev-util/gtk-doc-1.9"

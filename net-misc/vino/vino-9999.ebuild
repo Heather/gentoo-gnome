@@ -7,6 +7,9 @@ GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="An integrated VNC server for GNOME"
 HOMEPAGE="http://www.gnome.org/"
@@ -16,7 +19,6 @@ SLOT="0"
 IUSE="avahi crypt ipv6 jpeg gnome-keyring libnotify networkmanager ssl
 +telepathy +zlib"
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"

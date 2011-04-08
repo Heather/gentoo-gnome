@@ -8,6 +8,9 @@ GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="python? 2:2.4"
 
 inherit gnome2 python
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="GNOME terminal widget"
 HOMEPAGE="http://git.gnome.org/browse/vte"
@@ -15,7 +18,6 @@ HOMEPAGE="http://git.gnome.org/browse/vte"
 LICENSE="LGPL-2"
 SLOT="0"
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"

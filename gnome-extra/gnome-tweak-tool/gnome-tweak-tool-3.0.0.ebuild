@@ -7,6 +7,9 @@ GNOME2_LA_PUNT="yes"
 GCONF_DEBUG="no"
 
 inherit gnome2
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Tool to customize GNOME 3 options"
 HOMEPAGE="http://live.gnome.org/GnomeTweakTool"
@@ -15,7 +18,6 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE=""
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~amd64 ~x86"

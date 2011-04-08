@@ -6,6 +6,9 @@ EAPI="3"
 PYTHON_DEPEND="2"
 
 inherit autotools gnome.org libtool eutils flag-o-matic pax-utils python virtualx
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="The GLib library of C routines"
 HOMEPAGE="http://www.gtk.org/"
@@ -14,7 +17,6 @@ LICENSE="LGPL-2"
 SLOT="2"
 IUSE="debug doc fam +introspection selinux static-libs test xattr"
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"

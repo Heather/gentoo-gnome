@@ -6,6 +6,9 @@ EAPI="3"
 GCONF_DEBUG="yes"
 
 inherit eutils gnome2
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Collection of network tools"
 HOMEPAGE="http://www.gnome.org/projects/gnome-network/"
@@ -14,7 +17,6 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="debug"
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"

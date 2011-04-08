@@ -7,6 +7,9 @@ GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Utilities for the Gnome2 desktop"
 HOMEPAGE="http://www.gnome.org/"
@@ -15,7 +18,6 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="bonobo doc ipv6 test"
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux"

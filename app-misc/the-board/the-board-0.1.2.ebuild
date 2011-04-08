@@ -6,6 +6,9 @@ EAPI="3"
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="A space to place daily records"
 HOMEPAGE="http://live.gnome.org/TheBoardProject"
@@ -15,7 +18,6 @@ LICENSE="GPL-3"
 SLOT="0"
 IUSE="+libnotify +libsoup +nautilus"
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~amd64 ~x86"

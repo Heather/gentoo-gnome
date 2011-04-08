@@ -7,13 +7,15 @@ WANT_AUTOMAKE="1.11"
 
 # Inherit clutter after gnome2 to override src_install
 inherit gnome2 clutter
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Clutter is a library for creating graphical user interfaces"
 
 SLOT="1.0"
 IUSE="debug doc +introspection"
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~amd64 ~ppc ~ppc64 ~x86"

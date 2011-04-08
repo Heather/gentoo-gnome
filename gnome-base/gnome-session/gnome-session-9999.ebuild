@@ -6,6 +6,9 @@ EAPI="3"
 GCONF_DEBUG="yes"
 
 inherit gnome2
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Gnome session manager"
 HOMEPAGE="http://www.gnome.org/"
@@ -13,7 +16,6 @@ HOMEPAGE="http://www.gnome.org/"
 LICENSE="GPL-2 LGPL-2 FDL-1.1"
 SLOT="0"
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"

@@ -7,6 +7,9 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Adwaita theme for GNOME Shell"
 HOMEPAGE="http://www.gnome.org/"
@@ -15,7 +18,6 @@ LICENSE="LGPL-2.1"
 SLOT="0"
 IUSE=""
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~amd64 ~x86"

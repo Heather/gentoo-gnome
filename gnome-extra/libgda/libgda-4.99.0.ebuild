@@ -7,6 +7,9 @@ GNOME2_LA_PUNT="yes"
 GCONF_DEBUG="yes"
 
 inherit db-use eutils flag-o-matic gnome2 java-pkg-opt-2
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Gnome Database Access Library"
 HOMEPAGE="http://www.gnome-db.org/"
@@ -16,7 +19,6 @@ LICENSE="GPL-2 LGPL-2"
 IUSE="berkdb bindist canvas doc firebird gnome-keyring gtk graphviz http +introspection json mysql oci8 postgres sourceview ssl"
 SLOT="5"
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	EGIT_BRANCH="gtk3"
 	KEYWORDS=""
 else

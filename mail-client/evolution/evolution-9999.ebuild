@@ -8,6 +8,9 @@ GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="python? 2:2.4"
 
 inherit autotools flag-o-matic gnome2 python
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Integrated mail, addressbook and calendaring functionality"
 HOMEPAGE="http://www.gnome.org/projects/evolution/"
@@ -16,7 +19,6 @@ LICENSE="GPL-2 LGPL-2 OPENLDAP"
 SLOT="2.0"
 IUSE="clutter connman crypt doc gstreamer kerberos ldap networkmanager python ssl"
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"

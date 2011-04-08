@@ -5,6 +5,9 @@
 EAPI="3"
 
 inherit eutils gnome2
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="GNOME webbrowser based on Webkit"
 HOMEPAGE="http://projects.gnome.org/epiphany/"
@@ -13,7 +16,6 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="avahi doc +introspection networkmanager +nss test"
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~ia64 ~sparc ~x86"

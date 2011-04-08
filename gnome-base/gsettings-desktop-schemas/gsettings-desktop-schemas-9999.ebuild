@@ -6,6 +6,9 @@ EAPI="3"
 GCONF_DEBUG="no"
 
 inherit gnome2
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Collection of GSettings schemas for GNOME desktop"
 HOMEPAGE="http://www.gnome.org/"
@@ -14,7 +17,6 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE=""
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~x86-solaris"

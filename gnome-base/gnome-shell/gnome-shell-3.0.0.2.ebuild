@@ -8,6 +8,9 @@ GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2:2.5"
 
 inherit gnome2
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Provides core UI functions for the GNOME 3 desktop"
 HOMEPAGE="http://live.gnome.org/GnomeShell"
@@ -16,7 +19,6 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="+nm-applet"
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~amd64 ~x86"

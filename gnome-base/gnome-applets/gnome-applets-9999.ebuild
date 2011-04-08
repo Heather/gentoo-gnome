@@ -8,6 +8,9 @@ GNOME2_LA_PUNT="no" # bug 340725, no other la files
 #PYTHON_DEPEND="2:2.4"
 
 inherit eutils gnome2 #python
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Applets for the GNOME Desktop and Panel"
 HOMEPAGE="http://www.gnome.org/"
@@ -16,7 +19,6 @@ LICENSE="GPL-2 FDL-1.1 LGPL-2"
 SLOT="0"
 IUSE="gnome gstreamer ipv6 networkmanager policykit"
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux"
