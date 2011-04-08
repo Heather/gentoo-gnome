@@ -23,7 +23,7 @@ IUSE="debug +introspection python"
 
 RDEPEND=">=dev-libs/glib-2.18
 	python? ( dev-python/pygtk )
-	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )"
+	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.9
@@ -86,11 +86,6 @@ pkg_postinst() {
 	if use python; then
 		python_mod_optimize GMenuSimpleEditor
 	fi
-
-	ewarn "Due to bug #256614, you might lose icons in applications menus."
-	ewarn "If you use a login manager, please re-select your session."
-	ewarn "If you use startx and have no .xinitrc, just export XSESSION=Gnome."
-	ewarn "If you use startx and have .xinitrc, export XDG_MENU_PREFIX=gnome-."
 }
 
 pkg_postrm() {
