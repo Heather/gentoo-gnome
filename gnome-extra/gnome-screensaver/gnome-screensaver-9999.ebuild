@@ -3,6 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/gnome-screensaver/gnome-screensaver-2.30.2.ebuild,v 1.2 2010/11/02 02:33:58 ford_prefect Exp $
 
 EAPI="3"
+GCONF_DEBUG="yes"
 
 inherit gnome2
 if [[ ${PV} = 9999 ]]; then
@@ -54,12 +55,11 @@ DEPEND="${RDEPEND}
 	x11-proto/scrnsaverproto
 	x11-proto/xf86miscproto
 "
-DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
 pkg_setup() {
+	DOCS="AUTHORS ChangeLog HACKING NEWS README"
 	G2CONF="${G2CONF}
 		$(use_enable doc docbook-docs)
-		$(use_enable debug)
 		$(use_enable pam locking)
 		--with-mit-ext
 		--with-pam-prefix=/etc
