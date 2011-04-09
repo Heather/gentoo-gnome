@@ -3,6 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/www-client/epiphany/epiphany-2.30.2.ebuild,v 1.1 2010/06/13 21:09:33 pacho Exp $
 
 EAPI="3"
+GCONF_DEBUG="yes"
 
 inherit eutils gnome2
 if [[ ${PV} = 9999 ]]; then
@@ -22,7 +23,7 @@ else
 fi
 
 # XXX: Should we add seed support? Seed seems to be unmaintained now.
-RDEPEND=">=dev-libs/glib-2.25.3:2
+RDEPEND=">=dev-libs/glib-2.25.13:2
 	>=x11-libs/gtk+-3.0.2:3[introspection?]
 	>=dev-libs/libxml2-2.6.12:2
 	>=dev-libs/libxslt-1.1.7
@@ -38,14 +39,15 @@ RDEPEND=">=dev-libs/glib-2.25.3:2
 	x11-libs/libSM
 	x11-libs/libX11
 
+	app-misc/ca-certificates
+	x11-themes/gnome-icon-theme
+
 	avahi? ( >=net-dns/avahi-0.6.22 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 	networkmanager? ( net-misc/networkmanager )
-	nss? ( dev-libs/nss )
-	x11-themes/gnome-icon-theme"
+	nss? ( dev-libs/nss )"
 DEPEND="${RDEPEND}
 	app-text/gnome-doc-utils
-	gnome-base/gnome-common
 	>=dev-util/intltool-0.40
 	dev-util/pkgconfig
 	sys-devel/gettext
@@ -67,11 +69,4 @@ pkg_setup() {
 		$(use_enable networkmanager network-manager)
 		$(use_enable nss)
 		$(use_enable test tests)"
-}
-
-src_compile() {
-	# Fix sandbox error with USE="introspection" and "doc"
-	# https://bugs.webkit.org/show_bug.cgi?id=35471
-	addpredict "$(unset HOME; echo ~)/.local"
-	gnome2_src_compile
 }
