@@ -17,7 +17,7 @@ HOMEPAGE="http://live.gnome.org/Gjs"
 
 LICENSE="MIT MPL-1.1 LGPL-2 GPL-2"
 SLOT="0"
-IUSE="coverage examples test"
+IUSE="examples test"
 
 if [[ ${PV} == 9999 ]]; then
 	KEYWORDS=""
@@ -46,10 +46,11 @@ src_prepare() {
 	# AUTHORS, ChangeLog are empty
 	DOCS="NEWS README"
 	# FIXME: add systemtap/dtrace support, like in glib:2
+	# XXX: Do NOT enable coverage, completely useless for portage installs
 	G2CONF="${G2CONF}
 		--disable-systemtap
 		--disable-dtrace
-		$(use_enable coverage)"
+		--disable-coverage"
 
 	# https://bugs.gentoo.org/353941
 	epatch "${FILESDIR}/${PN}-drop-js-config.patch"
