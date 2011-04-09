@@ -5,7 +5,7 @@
 EAPI="3"
 GCONF_DEBUG="no"
 
-inherit autotools eutils gnome2 virtualx
+inherit gnome2 virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -15,12 +15,12 @@ HOMEPAGE="http://www.gnome.org/projects/gnome-power-manager/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="doc test"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 fi
+IUSE="doc test"
 
 # FIXME: Interactive testsuite (upstream ? I'm so...pessimistic)
 RESTRICT="test"
@@ -31,7 +31,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	>=gnome-base/gnome-keyring-0.6.0
 	>=x11-libs/libnotify-0.7.0
 	>=x11-libs/cairo-1.0.0
-	>=gnome-base/gconf-2.31.1
+	>=gnome-base/gconf-2.31.1:2
 	>=gnome-base/gnome-control-center-2.31.4
 	>=media-libs/libcanberra-0.26-r2[gtk3]
 	>=sys-power/upower-0.9.1
@@ -64,9 +64,7 @@ DEPEND="${COMMON_DEPEND}
 # (files under ${S}/man).
 # docbook-xml-dtd-4.4 and -4.1.2 are used by the xml files under ${S}/docs.
 
-src_prepare() {
-	gnome2_src_prepare
-
+pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_enable test tests)
 		$(use_enable doc docbook-docs)
@@ -75,19 +73,19 @@ src_prepare() {
 		--disable-schemas-compile"
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
 
+	if ! use doc; then
+		G2CONF="${G2CONF} DOCBOOK2MAN=$(type -p false)"
+	fi
+}
+
+src_prepare() {
+	gnome2_src_prepare
+
 	# Drop debugger CFLAGS from configure
 	# XXX: touch configure.ac only if running eautoreconf, otherwise
 	# maintainer mode gets triggered -- even if the order is correct
 	sed -e 's:^CPPFLAGS="$CPPFLAGS -g"$::g' \
 		-i configure || die "debugger sed failed"
-
-	if ! use doc; then
-		# Remove the docbook2man rules here since it's not handled by a proper
-		# parameter in configure.in.
-		sed -e 's:@HAVE_DOCBOOK2MAN_TRUE@.*::' \
-			-i man/Makefile.am man/Makefile.in \
-			|| die "docbook sed failed"
-	fi
 }
 
 src_test() {
