@@ -2,26 +2,26 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="2"
+EAPI="3"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit autotools eutils gnome2 virtualx
+inherit eutils gnome2 virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
 
 DESCRIPTION="A file manager for the GNOME desktop"
-HOMEPAGE="http://www.gnome.org/projects/nautilus/"
+HOMEPAGE="http://live.gnome.org/Nautilus"
 
 LICENSE="GPL-2 LGPL-2 FDL-1.1"
 SLOT="0"
-IUSE="doc exif gnome +introspection sendto xmp"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux"
+	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux"
 fi
+IUSE="doc exif gnome +introspection sendto xmp"
 
 COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
 	>=x11-libs/pango-1.28.3
@@ -52,8 +52,6 @@ RDEPEND="${COMMON_DEPEND}
 PDEPEND="gnome? ( >=x11-themes/gnome-icon-theme-1.1.91 )
 	>=gnome-base/gvfs-0.1.2"
 
-DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS README THANKS TODO"
-
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-maintainer-mode
@@ -63,29 +61,19 @@ pkg_setup() {
 		$(use_enable introspection)
 		$(use_enable sendto nst-extension)
 		$(use_enable xmp)"
+	DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS README THANKS TODO"
 }
 
 src_prepare() {
 	gnome2_src_prepare
 
-	# FIXME: tarball generated with broken gtk-doc, revisit me.
-	if use doc; then
-		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/usr/bin/gtkdoc-rebase" \
-			-i gtk-doc.make || die "sed 1 failed"
-	else
-		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/bin/true" \
-			-i gtk-doc.make || die "sed 2 failed"
-	fi
-
 	# Remove crazy CFLAGS
-	sed 's:-DG.*DISABLE_DEPRECATED::g' -i configure.in \
-		|| die "sed 4 failed"
-
-	eautoreconf
+	sed 's:-DG.*DISABLE_DEPRECATED::g' -i configure.in configure \
+		|| die "sed 1 failed"
 }
 
 src_test() {
-	addwrite "/root/.gnome2_private"
+	addpredict "/root/.gnome2_private"
 	unset SESSION_MANAGER
 	unset ORBIT_SOCKETDIR
 	unset DBUS_SESSION_BUS_ADDRESS
