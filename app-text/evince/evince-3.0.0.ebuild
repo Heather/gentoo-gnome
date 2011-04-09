@@ -28,8 +28,7 @@ fi
 RDEPEND="
 	>=app-text/libspectre-0.2.0
 	>=dev-libs/glib-2.25.11:2
-	>=dev-libs/libxml2-2.5
-	>=x11-libs/gdk-pixbuf-2.22:2[introspection?]
+	>=dev-libs/libxml2-2.5:2
 	>=x11-libs/gtk+-3.0.2:3[introspection?]
 	>=x11-libs/libSM-1
 	x11-libs/libICE
@@ -104,7 +103,10 @@ src_prepare() {
 	# Fix building of EvinceView-3.0.gir, needs eautoreconf
 	epatch "${FILESDIR}"/${PN}-2.91.5-fix-evinceview-introspection.patch
 
-	[[ ${PV} != 9999 ]] && eautoreconf
+	if [[ ${PV} != 9999 ]]; then
+		intltoolize --force --copy --automake || die "intltoolize failed"
+		eautoreconf
+	fi
 
 	gnome2_src_prepare
 }
