@@ -36,9 +36,6 @@ RDEPEND=">=dev-libs/glib-2.18:2
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.9
-	coverage? (
-		sys-devel/gcc
-		dev-util/lcov )
 	!dev-lang/spidermonkey"
 # HACK HACK: gjs-tests picks up /usr/lib/libmozjs.so with spidermonkey installed
 
