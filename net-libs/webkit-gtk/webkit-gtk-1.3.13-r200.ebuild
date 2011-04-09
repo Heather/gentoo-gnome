@@ -23,7 +23,7 @@ RDEPEND="
 	dev-libs/libxml2:2
 	dev-libs/libxslt
 	virtual/jpeg
-	media-libs/libpng:0
+	>=media-libs/libpng-1.4:0
 	x11-libs/cairo
 	>=dev-libs/glib-2.27.90:2
 	>=x11-libs/gtk+-2.13:2[aqua=]
