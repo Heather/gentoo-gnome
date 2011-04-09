@@ -16,15 +16,15 @@ HOMEPAGE="http://projects.gnome.org/brasero/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="beagle +css doc +introspection +libburn nautilus packagekit playlist test"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 fi
+IUSE="+css doc +introspection +libburn nautilus packagekit playlist test"
 
 COMMON_DEPEND="
-	>=dev-libs/glib-2.27.5:2
+	>=dev-libs/glib-2.28:2
 	>=x11-libs/gtk+-3.0.0:3[introspection?]
 	>=gnome-base/gconf-2.32.0:2
 	>=media-libs/gstreamer-0.10.15:0.10
@@ -36,7 +36,6 @@ COMMON_DEPEND="
 	x11-libs/libICE
 	x11-libs/libSM
 
-	beagle? ( >=dev-libs/libbeagle-0.3 )
 	introspection? ( >=dev-libs/gobject-introspection-0.6.3 )
 	libburn? (
 		>=dev-libs/libburn-0.4
@@ -44,8 +43,9 @@ COMMON_DEPEND="
 	nautilus? ( >=gnome-base/nautilus-2.91.90 )
 	playlist? ( >=dev-libs/totem-pl-parser-2.29.1 )"
 RDEPEND="${COMMON_DEPEND}
-	media-plugins/gst-plugins-meta
-	css? ( media-libs/libdvdcss )
+	media-plugins/gst-plugins-meta:0.10
+	x11-themes/hicolor-icon-theme
+	css? ( media-libs/libdvdcss:1.2 )
 	!libburn? (
 		app-cdr/cdrdao
 		app-cdr/dvd+rw-tools
@@ -56,7 +56,7 @@ DEPEND="${COMMON_DEPEND}
 	dev-util/pkgconfig
 	sys-devel/gettext
 	dev-util/intltool
-	gnome-base/gnome-common
+	gnome-base/gnome-common:3
 	>=dev-util/gtk-doc-am-1.12
 	doc? ( >=dev-util/gtk-doc-1.12 )
 	test? ( app-text/docbook-xml-dtd:4.3 )"
@@ -70,7 +70,7 @@ pkg_setup() {
 		--disable-scrollkeeper
 		--disable-caches
 		--disable-dependency-tracking
-		$(use_enable beagle search beagle)
+		--disable-search
 		$(use_enable !libburn cdrtools)
 		$(use_enable !libburn cdrkit)
 		$(use_enable !libburn cdrdao)
