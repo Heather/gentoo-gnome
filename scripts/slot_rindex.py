@@ -151,7 +151,12 @@ def get_revdeps_rindex(key):
     import urllib2
     RINDEX = "http://tinderbox.dev.gentoo.org/misc/rindex"
     revdeps = set()
-    rdeps_raw = urllib2.urlopen('/'.join([RINDEX, key])).read().split()
+    try:
+        rdeps_raw = urllib2.urlopen('/'.join([RINDEX, key])).read().split()
+    except urllib2.HTTPError as e:
+        if e.getcode() == 404:
+            return revdeps
+        raise
     for i in rdeps_raw:
         cpv = i.split(':')[0]
         if portage.isvalidatom('='+cpv):
