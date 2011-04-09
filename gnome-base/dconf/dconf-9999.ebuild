@@ -60,5 +60,5 @@ src_install() {
 	# Only dconf is really considered functional by upstream
 	# must have it enabled over gconf if both are installed
 	echo 'GSETTINGS_BACKEND="dconf"' >> 51dconf
-	doenvd 51gsettings-dconf || die "doenvd failed"
+	doenvd 51dconf || die "doenvd failed"
 }
