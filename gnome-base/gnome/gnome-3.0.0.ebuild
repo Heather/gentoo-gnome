@@ -23,7 +23,6 @@ S=${WORKDIR}
 RDEPEND="
 	>=gnome-base/gnome-core-libs-${PV}[cups?]
 	>=gnome-base/gnome-core-apps-${PV}[cups?,bluetooth,cdr?]
-	>=gnome-base/gnome-extra-apps-${PV}
 
 	>=gnome-base/gdm-${PV}
 
@@ -34,6 +33,7 @@ RDEPEND="
 	>=x11-themes/gnome-icon-theme-extras-${PV}
 	x11-themes/sound-theme-freedesktop
 
+	extras? ( >=gnome-base/gnome-extra-apps-${PV} )
 	fallback? ( >=gnome-base/gnome-fallback-${PV} )"
 DEPEND=""
 PDEPEND=">=gnome-base/gvfs-1.8.0[gdu]"
