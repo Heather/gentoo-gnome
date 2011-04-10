@@ -3,7 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-keyring/gnome-keyring-2.32.1.ebuild,v 1.4 2011/01/02 21:32:23 mr_bones_ Exp $
 
 EAPI="3"
-GCONF_DEBUG="yes"
+GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2 multilib pam virtualx
@@ -29,7 +29,7 @@ fi
 # Hence, gtk2/3 versions are not parallel installable.
 RDEPEND=">=dev-libs/glib-2.25:2
 	>=x11-libs/gtk+-2.90.0:3
-	gnome-base/gconf
+	gnome-base/gconf:2
 	>=sys-apps/dbus-1.0
 	>=dev-libs/libgcrypt-1.2.2
 	>=dev-libs/libtasn1-1
@@ -40,7 +40,6 @@ RDEPEND=">=dev-libs/glib-2.25:2
 #	valgrind? ( dev-util/valgrind )
 DEPEND="${RDEPEND}
 	sys-devel/gettext
-	>=dev-util/gtk-doc-am-1.9
 	>=dev-util/intltool-0.35
 	>=dev-util/pkgconfig-0.9
 	doc? ( >=dev-util/gtk-doc-1.9 )"
@@ -48,22 +47,15 @@ PDEPEND="gnome-base/libgnome-keyring"
 # eautoreconf needs:
 #	>=dev-util/gtk-doc-am-1.9
 
-DOCS="AUTHORS ChangeLog NEWS README"
-
-# tests fail in several ways, they should be fixed in the next cycle (bug #340283),
-# revisit then.
-# UPDATE: gcr tests fail with:
-# ** WARNING **: couldn't load PKCS#11 module: /usr/lib64/pkcs11/gnome-keyring-pkcs11.so: Couldn't initialize module: The device was removed or unplugged 
-RESTRICT="test"
-
 pkg_setup() {
+	DOCS="AUTHORS ChangeLog NEWS README"
 	# XXX: Automagic libcap support
 	G2CONF="${G2CONF}
 		$(use_enable debug)
 		$(use_enable test tests)
 		$(use_enable pam)
 		$(use_with pam pam-dir $(getpam_mod_dir))
-		--with-root-certs=${ROOT}/etc/ssl/certs/
+		--with-root-certs=${EPREFIX}/etc/ssl/certs/
 		--enable-ssh-agent
 		--enable-gpg-agent
 		--with-gtk=3.0"
@@ -72,12 +64,18 @@ pkg_setup() {
 
 src_prepare() {
 	# Remove silly CFLAGS
-	sed 's:CFLAGS="$CFLAGS -Werror:CFLAGS="$CFLAGS:' \
+	sed -e 's:CFLAGS="$CFLAGS -Werror:CFLAGS="$CFLAGS:' \
+		-e 's:CFLAGS="$CFLAGS -g -O0:CFLAGS="$CFLAGS:' \
 		-i configure.in configure || die "sed failed"
 
 	# Remove DISABLE_DEPRECATED flags
 	sed -e '/-D[A-Z_]*DISABLE_DEPRECATED/d' \
 		-i configure.in configure || die "sed 2 failed"
+
+	# Disable gcr tests due to weirdness with opensc
+	# ** WARNING **: couldn't load PKCS#11 module: /usr/lib64/pkcs11/gnome-keyring-pkcs11.so: Couldn't initialize module: The device was removed or unplugged
+	sed -e 's/SUBDIRS = .*/SUBDIRS =/' \
+		-i gcr/Makefile.am gcr/Makefile.in || die "sed 3 failed"
 
 	gnome2_src_prepare
 }
