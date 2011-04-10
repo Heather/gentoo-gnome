@@ -25,7 +25,7 @@ fi
 
 # Pull in libnotify-0.7 because it's controlled via an automagic ifdef
 COMMON_DEPEND="
-	>=gnome-base/gconf-2
+	>=gnome-base/gconf-2:2
 	>=dev-libs/glib-2.10:2
 	>=x11-libs/gtk+-2.90.0:3[introspection?]
 	>=dev-libs/dbus-glib-0.72
@@ -57,9 +57,6 @@ RDEPEND="${COMMON_DEPEND}
 	!<app-crypt/seahorse-plugins-2.91.0_pre20110114
 "
 
-# FIXME: Tests fail to compile, file bug upstream
-RESTRICT="test"
-
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--enable-pgp
@@ -80,10 +77,14 @@ pkg_setup() {
 }
 
 src_prepare() {
-	gnome2_src_prepare
-
-	# Do not mess with CFLAGS with USE="debug"
+	# FIXME: Do not mess with CFLAGS with USE="debug"
 	sed -e '/CFLAGS="$CFLAGS -g -O0/d' \
 		-e 's/-Werror//' \
-		-i configure.in configure || die "sed failed"
+		-i configure.in configure || die "sed 1 failed"
+
+	# FIXME: Disable test not ported to gtk:3
+	sed -e 's/^SUBDIRS = .*/SUBDIRS = /' \
+		-i libcryptui/Makefile.am libcryptui/Makefile.in || die "sed 2 failed"
+
+	gnome2_src_prepare
 }
