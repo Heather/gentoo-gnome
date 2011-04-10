@@ -3,7 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/libgnome-keyring/libgnome-keyring-2.32.0.ebuild,v 1.5 2011/02/24 19:18:29 tomka Exp $
 
 EAPI="3"
-GCONF_DEBUG="yes"
+GCONF_DEBUG="no"
 
 inherit gnome2
 
@@ -12,7 +12,7 @@ HOMEPAGE="http://live.gnome.org/GnomeKeyring"
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd64-linux"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux"
 IUSE="debug doc test"
 
 RDEPEND=">=sys-apps/dbus-1.0
@@ -26,25 +26,25 @@ DEPEND="${RDEPEND}
 
 pkg_setup() {
 	G2CONF="${G2CONF}
-		--disable-debug
+		$(use_enable debug)
 		$(use_enable test tests)"
 	DOCS="AUTHORS ChangeLog NEWS README"
-	use debug && G2CONF="${G2CONF} --enable-debug=full"
 }
 
 src_prepare() {
 	gnome2_src_prepare
 
-	# Remove silly CFLAGS
-	sed 's:CFLAGS="$CFLAGS -Werror:CFLAGS="$CFLAGS:' \
+	# FIXME: Remove silly CFLAGS
+	sed -e 's:CFLAGS="$CFLAGS -Werror:CFLAGS="$CFLAGS:' \
+		-e 's:CFLAGS="$CFLAGS -g -O0:CFLAGS="$CFLAGS:' \
 		-i configure.in configure || die "sed failed"
 
-	# Remove DISABLE_DEPRECATED flags
+	# FIXME: Remove DISABLE_DEPRECATED flags
 	sed -e '/-D[A-Z_]*DISABLE_DEPRECATED/d' \
 		-i configure.in configure || die "sed 2 failed"
 }
 
 src_test() {
 	unset DBUS_SESSION_BUS_ADDRESS
-	emake check || die "tests failed"
+	dbus-launch emake check || die "tests failed"
 }
