@@ -72,7 +72,7 @@ src_prepare() {
 
 	# Disable gcr tests due to weirdness with opensc
 	# ** WARNING **: couldn't load PKCS#11 module: /usr/lib64/pkcs11/gnome-keyring-pkcs11.so: Couldn't initialize module: The device was removed or unplugged
-	sed -e 's/SUBDIRS = .*/SUBDIRS =/' \
+	sed -e '/^SUBDIRS = /,+1 c\SUBDIRS =\' \
 		-i gcr/Makefile.am gcr/Makefile.in || die "sed 3 failed"
 
 	gnome2_src_prepare
