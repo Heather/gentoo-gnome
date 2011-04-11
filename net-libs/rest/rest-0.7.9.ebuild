@@ -12,7 +12,7 @@ DESCRIPTION="Helper library for RESTful services"
 HOMEPAGE="http://git.gnome.org/browse/librest"
 
 LICENSE="LGPL-2.1"
-SLOT="0"
+SLOT="0.7"
 KEYWORDS="~amd64 ~x86"
 IUSE="doc +gnome +introspection test"
 
