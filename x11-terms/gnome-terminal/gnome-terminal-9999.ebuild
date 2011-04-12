@@ -40,9 +40,9 @@ DEPEND="${RDEPEND}
 
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog HACKING NEWS README"
-	G2CONF="${G2CONF}
-		--with-smclient=xsmp
-		--with-gtk=3.0"
+	# FIXME: leave smclient configure unset until it accepts values from the
+	# switch and not from GDK_TARGET, bug #363033
+	G2CONF="${G2CONF} --with-gtk=3.0"
 }
 
 src_prepare() {
