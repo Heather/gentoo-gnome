@@ -47,6 +47,11 @@ src_prepare() {
 	gnome2_src_prepare
 }
 
+src_configure() {
+	# Disable maintainer to get rid of -Werror  (bug #363009)
+	econf --disable-maintainer-mode || die
+}
+
 src_install() {
 	gnome2_src_install
 	find "${ED}" -name "*.la" -delete || die "Removal of .la files failed"
