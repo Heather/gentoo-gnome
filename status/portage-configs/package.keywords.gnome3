@@ -108,7 +108,6 @@ net-print/cups
 net-wireless/gnome-bluetooth
 sys-apps/accountsservice
 sys-apps/gnome-disk-utility
-www-client/epiphany
 x11-libs/gdk-pixbuf
 x11-libs/goocanvas:2.0
 x11-libs/goocanvas:0
@@ -152,6 +151,10 @@ media-libs/clutter-gst:1.0
 # libsocialweb
 net-libs/libsocialweb
 net-libs/rest
+
+# Epiphany
+www-client/epiphany
+www-client/epiphany-extensions
 
 # Empathy
 net-im/empathy
