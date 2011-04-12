@@ -104,7 +104,7 @@ src_prepare() {
 src_configure() {
 	use sh && replace-flags -O? -O0
 
-	local myconf=""
+	local myconf="--disable-static"
 
 	if use python; then
 		myconf+="
@@ -184,6 +184,9 @@ src_install() {
 		insinto /usr/share/devhelp/books/avahi
 		doins avahi.devhelp || die
 	fi
+
+	# Remove .la files
+	find "${D}" -name '*.la' -exec rm -f {} + || die
 }
 
 pkg_postrm() {
