@@ -121,13 +121,15 @@ x11-libs/libxklavier
 x11-misc/notification-daemon
 x11-plugins/pidgin-libnotify
 x11-terms/gnome-terminal
+x11-wm/mutter
+
+# Themes
+x11-themes/gnome-backgrounds
 x11-themes/gnome-icon-theme
 x11-themes/gnome-icon-theme-symbolic
 x11-themes/gnome-icon-theme-extras
 x11-themes/gnome-themes-standard
-x11-themes/gtk-engines
 x11-themes/gtk-engines-clearlooks
-x11-wm/mutter
 
 # CPP bindings
 dev-cpp/libxmlpp
@@ -163,6 +165,9 @@ net-voip/telepathy-gabble
 
 # NM
 net-misc/networkmanager
+net-misc/networkmanager-vpnc
+net-misc/networkmanager-pptp
+net-misc/networkmanager-openvpn
 gnome-extra/nm-applet
 
 # Nautilus
