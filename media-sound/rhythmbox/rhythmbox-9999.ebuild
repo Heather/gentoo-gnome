@@ -35,7 +35,6 @@ COMMON_DEPEND=">=dev-libs/glib-2.26.0:2
 	>=dev-libs/dbus-glib-0.71
 	>=dev-libs/gobject-introspection-0.10.0
 	>=dev-libs/totem-pl-parser-2.32.1
-	>=gnome-base/gconf-2:2
 	>=media-libs/libgnome-media-profiles-2.91.0:3
 	>=net-libs/libsoup-2.26:2.4
 	>=net-libs/libsoup-gnome-2.26:2.4
@@ -49,7 +48,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.26.0:2
 	gnome-keyring? ( >=gnome-base/gnome-keyring-0.4.9 )
 	html? ( >=net-libs/webkit-gtk-1.3.9:3 )
 	lastfm? ( dev-libs/json-glib )
-	libnotify? ( >=x11-libs/libnotify-0.5.1 )
+	libnotify? ( >=x11-libs/libnotify-0.7.0 )
 	lirc? ( app-misc/lirc )
 	musicbrainz? ( media-libs/musicbrainz:3 )
 	udev? (
@@ -74,7 +73,6 @@ RDEPEND="${COMMON_DEPEND}
 		x11-libs/gdk-pixbuf:2[introspection]
 		x11-libs/gtk+:3[introspection]
 		x11-libs/pango[introspection]
-		gnome-base/gconf:2[introspection]
 
 		dbus? ( dev-python/dbus-python )
 		gnome-keyring? ( dev-python/gnome-keyring-python )
@@ -142,7 +140,7 @@ pkg_setup() {
 		VALAC=$(type -P valac-0.10)
 		--enable-mmkeys
 		--disable-scrollkeeper
-		--disable-schemas-install
+		--disable-schemas-commpile
 		--disable-static
 		$(use_enable daap)
 		$(use_enable lastfm)
@@ -169,12 +167,6 @@ src_prepare() {
 	# disable pyc compiling
 	mv py-compile py-compile.orig
 	ln -s $(type -P true) py-compile
-}
-
-src_compile() {
-	addpredict "$(unset HOME; echo ~)/.gconf"
-	addpredict "$(unset HOME; echo ~)/.gconfd"
-	gnome2_src_compile
 }
 
 src_test() {
