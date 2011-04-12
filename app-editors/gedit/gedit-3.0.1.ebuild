@@ -7,7 +7,7 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes" # plugins are dlopened
 PYTHON_DEPEND="2"
 
-inherit gnome2 python eutils
+inherit gnome2 python eutils virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -95,7 +95,7 @@ src_test() {
 	# FIXME: this should be handled at eclass level
 	"${EROOT}${GLIB_COMPILE_SCHEMAS}" --allow-any-name "${S}/data" || die
 
-	GSETTINGS_SCHEMA_DIR="${S}/data" emake check || die "make check failed"
+	GSETTINGS_SCHEMA_DIR="${S}/data" Xemake check || die "make check failed"
 }
 
 pkg_postinst() {
