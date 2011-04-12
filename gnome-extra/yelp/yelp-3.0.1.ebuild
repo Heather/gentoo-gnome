@@ -22,7 +22,7 @@ RDEPEND="
 	>=dev-libs/libxml2-2.6.5:2
 	>=dev-libs/libxslt-1.1.4
 	>=dev-libs/dbus-glib-0.71
-	>=gnome-extra/yelp-xsl-${PV}
+	>=gnome-extra/yelp-xsl-3.0.0
 	>=net-libs/webkit-gtk-1.3.2:3
 	>=app-arch/xz-utils-4.9
 	app-arch/bzip2
@@ -38,6 +38,7 @@ DEPEND="${RDEPEND}
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
 	G2CONF="${G2CONF}
+		--disable-static
 		--disable-schemas-compile
 		--enable-bz2
 		--enable-lzma"
