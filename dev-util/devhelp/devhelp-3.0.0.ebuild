@@ -5,6 +5,7 @@
 EAPI="3"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
+PYTHON_DEPEND="2"
 
 inherit eutils gnome2 python toolchain-funcs
 
@@ -22,7 +23,7 @@ RDEPEND=">=gnome-base/gconf-2.6:2
 	x11-libs/libwnck:3
 	net-libs/webkit-gtk:3"
 DEPEND="${RDEPEND}
-	sys-devel/gettext
+	>=sys-devel/gettext-0.17
 	>=dev-util/intltool-0.40
 	>=dev-util/pkgconfig-0.9"
 
@@ -42,12 +43,17 @@ src_prepare() {
 	ln -sfn $(type -P true) py-compile
 }
 
+pkg_preinst() {
+	gnome2_pkg_preinst
+	preserve_old_lib /usr/$(get_libdir)/libdevhelp-2.so.1
+}
+
 pkg_postinst() {
 	gnome2_pkg_postinst
 	python_need_rebuild
 	python_mod_optimize /usr/$(get_libdir)/gedit/plugins
 	# Keep this around so that users get reminded to delete this
-	preserve_old_lib_notify /usr/$(get_libdir)/libdevhelp-1.so.1
+	preserve_old_lib_notify /usr/$(get_libdir)/libdevhelp-2.so.1
 }
 
 pkg_postrm() {
