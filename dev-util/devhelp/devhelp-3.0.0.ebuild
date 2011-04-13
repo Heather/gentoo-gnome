@@ -52,7 +52,8 @@ pkg_postinst() {
 	gnome2_pkg_postinst
 	python_need_rebuild
 	python_mod_optimize /usr/$(get_libdir)/gedit/plugins
-	# Keep this around so that users get reminded to delete this
+	# Keep all the notify calls around so that users get reminded to delete them
+	preserve_old_lib_notify /usr/$(get_libdir)/libdevhelp-1.so.1
 	preserve_old_lib_notify /usr/$(get_libdir)/libdevhelp-2.so.1
 }
 
