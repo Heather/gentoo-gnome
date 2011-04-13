@@ -16,7 +16,7 @@ HOMEPAGE="http://fileroller.sourceforge.net/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="nautilus"
+IUSE="nautilus packagekit"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -26,7 +26,9 @@ fi
 RDEPEND=">=dev-libs/glib-2.25.5:2
 	>=x11-libs/gtk+-3.0.2:3
 	sys-apps/file
-	nautilus? ( >=gnome-base/nautilus-2.22.2 )"
+	nautilus? ( >=gnome-base/nautilus-2.22.2 )
+	packagekit? ( app-portage/packagekit )
+"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/intltool-0.40.0
@@ -36,17 +38,16 @@ DEPEND="${RDEPEND}
 #	gnome-base/gnome-common
 
 pkg_setup() {
-	# TODO: PackageKit support
 	G2CONF="${G2CONF}
 		--disable-dependency-tracking
 		--disable-scrollkeeper
 		--disable-run-in-place
 		--disable-static
-		--disable-packagekit
 		--disable-deprecations
 		--disable-schemas-compile
 		--enable-magic
-		$(use_enable nautilus nautilus-actions)"
+		$(use_enable nautilus nautilus-actions)
+		$(use_enable packagekit)"
 	DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README TODO"
 }
 
