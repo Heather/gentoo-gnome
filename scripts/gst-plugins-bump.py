@@ -165,6 +165,7 @@ for cp in cp_all:
     eoutput.ebegin("Running cvs add %s" % new_ebuild)
     subprocess.check_call('cvs add %s' % new_ebuild, shell=True, stderr=subprocess.PIPE)
     eoutput.eend(0)
+    subprocess.check_call('ebuild %s manifest' % new_ebuild, shell=True)
     if REMOVE_OBSOLETE:
         from obsolete_ebuilds import get_obsolete
         print ">>> Removing obsolete ebuilds"
@@ -175,7 +176,7 @@ for cp in cp_all:
             eoutput.eend(0)
         if os.path.isdir('files'):
             print portage.output.red(">>> Package has a files/ directory, please double-check obsolete files")
-    subprocess.check_call('ebuild %s manifest' % new_ebuild, shell=True)
+        subprocess.check_call('ebuild %s manifest' % new_ebuild, shell=True)
     print ">>> All done with %s!" % cp
     gst_cpv_all.append(new_cpv)
 print ""
