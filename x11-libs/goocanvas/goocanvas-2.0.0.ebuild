@@ -3,8 +3,8 @@
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/goocanvas/goocanvas-1.0.0.ebuild,v 1.1 2011/02/22 22:33:38 eva Exp $
 
 EAPI="3"
-GNOME2_LA_PUNT="yes"
 GCONF_DEBUG="no"
+GNOME2_LA_PUNT="yes"
 
 inherit gnome2
 
@@ -23,8 +23,18 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.8 )"
 
-DOCS="AUTHORS ChangeLog NEWS README TODO"
-G2CONF="${G2CONF} --disable-rebuilds --disable-static"
+pkg_setup() {
+	DOCS="AUTHORS ChangeLog NEWS README TODO"
+	G2CONF="${G2CONF} --disable-rebuilds --disable-static"
+}
+
+src_prepare() {
+	# Do not build demos
+	sed -e 's/^\(SUBDIRS =.*\)demo\(.*\)$/\1\2/' \
+		-i Makefile.am Makefile.in || die "sed 2 failed"
+
+	gnome2_src_prepare
+}
 
 src_install() {
 	gnome2_src_install
