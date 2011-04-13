@@ -4,6 +4,7 @@
 
 EAPI="2"
 GNOME2_LA_PUNT="yes"
+GCONF_DEBUG="yes"
 
 inherit gnome2
 
@@ -13,12 +14,12 @@ HOMEPAGE="http://glade.gnome.org/"
 LICENSE="GPL-2"
 SLOT="3"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="doc python"
+IUSE="doc +introspection python"
 
-RDEPEND=">=dev-libs/glib-2.8.0:2
-	>=x11-libs/gtk+-2.99.0:3
+RDEPEND=">=x11-libs/gtk+-3.0.2:3
 	>=dev-libs/libxml2-2.4.0:2
-	python? ( >=dev-python/pygtk-2.10.0 )
+	introspection? ( >=dev-libs/gobject-introspection-0.10.1 )
+	python? ( >=dev-python/pygobject-2.27.0 )
 "
 DEPEND="${RDEPEND}
 	app-text/scrollkeeper
@@ -30,12 +31,13 @@ DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1.13 )
 "
 
-DOCS="AUTHORS ChangeLog NEWS README TODO"
-
 pkg_setup() {
+	DOCS="AUTHORS ChangeLog NEWS README TODO"
 	G2CONF="${G2CONF}
+		--disable-maintainer-mode
 		--disable-static
 		--enable-libtool-lock
 		--disable-scrollkeeper
+		$(use_enable introspection)
 		$(use_enable python)"
 }
