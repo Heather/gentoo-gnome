@@ -25,7 +25,10 @@ DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.19
 	~app-text/docbook-xml-dtd-4.1.2"
 # gnome-common for eautoreconf
-DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README"
-G2CONF="${G2CONF}
-	--disable-maintainer-mode
-	--disable-scrollkeeper"
+
+pkg_setup() {
+	DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README"
+	G2CONF="${G2CONF}
+		--disable-maintainer-mode
+		--disable-scrollkeeper"
+}
