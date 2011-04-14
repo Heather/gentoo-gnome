@@ -14,15 +14,15 @@ HOMEPAGE="http://live.gnome.org/Zenity"
 LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux"
-IUSE="+compat libnotify"
+IUSE="libnotify"
 
 RDEPEND=">=x11-libs/gtk+-3.0.0:3
 	>=dev-libs/glib-2.8:2
-	compat? ( >=dev-lang/perl-5 )
 	libnotify? ( >=x11-libs/libnotify-0.6.1 )"
 
 DEPEND="${RDEPEND}
 	app-text/scrollkeeper
+	app-text/docbook-xml-dtd:4.1.2
 	>=dev-util/intltool-0.40
 	>=sys-devel/gettext-0.14
 	>=dev-util/pkgconfig-0.9
@@ -33,14 +33,14 @@ DEPEND="${RDEPEND}
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-scrollkeeper
-		$(use_enable libnotify)"
+		$(use_enable libnotify)
+		PERL=$(type -p false)"
 	DOCS="AUTHORS ChangeLog HACKING NEWS README THANKS TODO"
 }
+
 
 src_install() {
 	gnome2_src_install
 
-	if ! use compat; then
-		rm -v "${ED}/usr/bin/gdialog" || die "rm gdialog failed!"
-	fi
+	rm "${ED}/usr/bin/gdialog" || die "rm gdialog failed!"
 }
