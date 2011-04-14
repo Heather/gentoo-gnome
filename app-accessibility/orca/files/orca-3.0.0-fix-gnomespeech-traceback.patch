@@ -1,0 +1,39 @@
+From 83362b4facb7848a1cc3ac1bcba7f269ba660855 Mon Sep 17 00:00:00 2001
+From: Joanmarie Diggs <joanmarie.diggs@gmail.com>
+Date: Fri, 1 Apr 2011 21:06:05 +0000
+Subject: [PATCH 2/6] Fix for bug #646475 - Traceback seen with gnome-speech
+
+---
+ src/orca/gnomespeechfactory.py |    2 +-
+ src/orca/speech.py             |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/orca/gnomespeechfactory.py b/src/orca/gnomespeechfactory.py
+index 800809a..572cccb 100644
+--- a/src/orca/gnomespeechfactory.py
++++ b/src/orca/gnomespeechfactory.py
+@@ -443,7 +443,7 @@ class SpeechServer(speechserver.SpeechServer):
+     def __getSpeaker(self, acss=None):
+ 
+         voices = settings.voices
+-        defaultACSS = voices[settings.DEFAULT_VOICE]
++        defaultACSS = ACSS(voices[settings.DEFAULT_VOICE])
+ 
+         if not acss:
+             acss = defaultACSS
+diff --git a/src/orca/speech.py b/src/orca/speech.py
+index 56de03d..eccea41 100644
+--- a/src/orca/speech.py
++++ b/src/orca/speech.py
+@@ -147,7 +147,7 @@ def __resolveACSS(acss=None):
+         return acss
+     else:
+         voices = settings.voices
+-        return voices[settings.DEFAULT_VOICE]
++        return ACSS(voices[settings.DEFAULT_VOICE])
+ 
+ def sayAll(utteranceIterator, progressCallback):
+     if settings.silenceSpeech:
+-- 
+1.7.4.1
+

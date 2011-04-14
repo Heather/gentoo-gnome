@@ -6,6 +6,7 @@ EAPI="3"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2:2.6"
+# FIXME: multiple python support
 
 inherit gnome2 python
 
@@ -52,6 +53,12 @@ pkg_setup() {
 
 src_prepare() {
 	gnome2_src_prepare
+
+	# Apply patches from origin/gnome-3-0 fixing important bugs
+	epatch "${FILESDIR}/${P}-fix-gnomespeech-traceback.patch" \
+		"${FILESDIR}/${P}-fix-gsettings.patch" \
+		"${FILESDIR}/${P}-autostart-kde.patch" \
+		"${FILESDIR}/${P}-braille-window.patch"
 
 	# disable pyc compiling
 	mv py-compile py-compile.orig

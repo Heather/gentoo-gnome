@@ -1,0 +1,21 @@
+From f1d122442a30178d20ca2968c42e6cb24b3999fc Mon Sep 17 00:00:00 2001
+From: Matthias Clasen <mclasen@redhat.com>
+Date: Thu, 7 Apr 2011 19:03:51 -0400
+Subject: [PATCH 4/6] Fix for bug #647117 - orca autostarted in kde
+
+---
+ orca-autostart.desktop.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/orca-autostart.desktop.in b/orca-autostart.desktop.in
+index 98bdd48..7887e75 100644
+--- a/orca-autostart.desktop.in
++++ b/orca-autostart.desktop.in
+@@ -6,3 +6,4 @@ NoDisplay=true
+ AutostartCondition=GSettings org.gnome.desktop.a11y.applications screen-reader-enabled
+ X-GNOME-AutoRestart=true
+ #X-GNOME-Autostart-Phase=Initialization
++OnlyShowIn=GNOME;
+-- 
+1.7.4.1
+
