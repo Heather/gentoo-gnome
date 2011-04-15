@@ -50,12 +50,8 @@ src_prepare() {
 	# Taken from upstream trunk, remove for next release
 	epatch "${FILESDIR}/${PN}-fix-useradd.patch"
 
+	# Taken from upstream trunk, remove for next release
+	epatch "${FILESDIR}/${PN}-fix-nameless-users-crash.patch"
+
 	gnome2_src_prepare
-}
-
-src_install() {
-	gnome2_src_install
-
-	# Install directories for icons/configuration, bug 360175
-	#dodir /var/lib/AccountsService/{users,icons} || die
 }
