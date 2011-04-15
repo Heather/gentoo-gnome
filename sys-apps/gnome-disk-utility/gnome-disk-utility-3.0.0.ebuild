@@ -39,11 +39,13 @@ CDEPEND="
 	nautilus? ( >=gnome-base/nautilus-2.91.0 )
 "
 RDEPEND="${CDEPEND}
+	x11-misc/xdg-utils
 	fat? ( sys-fs/dosfstools )
 	!!sys-apps/udisks"
 DEPEND="${CDEPEND}
 	sys-devel/gettext
 	gnome-base/gnome-common
+	app-text/docbook-xml-dtd:4.1.2
 	app-text/scrollkeeper
 	app-text/gnome-doc-utils
 
@@ -64,6 +66,9 @@ pkg_setup() {
 }
 
 src_prepare() {
+	sed -e '/printf/s:nautilus:xdg-open:' \
+		-i src/palimpsest/gdu-section-volumes.c || die "#350919"
+
 	# Keep avahi optional, upstream bug #631986
 	epatch "${FILESDIR}/${PN}-2.91.6-optional-avahi.patch"
 
