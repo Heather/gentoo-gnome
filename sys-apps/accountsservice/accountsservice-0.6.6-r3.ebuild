@@ -3,6 +3,7 @@
 # $Header: $
 
 EAPI="3"
+GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2
@@ -25,16 +26,13 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	dev-libs/libxslt
 	dev-util/pkgconfig
-	gnome-base/gnome-common
 	sys-devel/gettext
-
-	>=dev-util/intltool-0.40
-	>=dev-util/gtk-doc-am-1.13"
+	>=dev-util/intltool-0.40"
 
 # Documentaton doesn't validate
 RESTRICT="test"
 
-src_prepare() {
+pkg_setup() {
 	# Can configure systemdsystemunitdir
 	# docbook docs don't validate, disable doc rebuild
 	G2CONF="${G2CONF}
@@ -46,7 +44,9 @@ src_prepare() {
 		--without-systemdsystemunitdir
 		$(use_enable introspection)"
 	DOCS="AUTHORS NEWS README TODO"
+}
 
+src_prepare() {
 	# Taken from upstream trunk, remove for next release
 	epatch "${FILESDIR}/${PN}-fix-useradd.patch"
 
