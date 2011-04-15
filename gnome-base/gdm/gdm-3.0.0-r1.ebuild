@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gdm/gdm-2.32.0.ebuild,v 1.2 2010/11/11 11:48:55 ssuominen Exp $
+# $Header: $
 
 EAPI="3"
 GCONF_DEBUG="yes"
@@ -90,7 +90,6 @@ pkg_setup() {
 		--with-xdmcp=yes
 		--enable-authentication-scheme=pam
 		--with-pam-prefix=/etc
-		SOUND_PROGRAM=/usr/bin/gdmplay
 		$(use_with accessibility xevie)
 		$(use_enable ipv6)
 		$(use_enable xklavier libxklavier)
@@ -112,9 +111,8 @@ src_prepare() {
 	# daemonize so that the boot process can continue, bug #236701
 	epatch "${FILESDIR}/${PN}-2.32.0-fix-daemonize-regression.patch"
 
-	# fix VT grab problem causing GDM to grab VT2 instead of 7, bug #261339
-	# FIXME FIXME FIXME: this is due to a race b/w getty and gdm
-	#epatch "${FILESDIR}/${PN}-2.32.0-broken-VT-detection.patch"
+	# GDM grabs VT2 instead of VT7, bug 261339, bug 284053, bug 288852
+	epatch "${FILESDIR}/${PN}-3.0.0-fix-vt-problems.patch"
 
 	# make custom session work, bug #216984
 	epatch "${FILESDIR}/${PN}-2.32.0-custom-session.patch"
@@ -125,7 +123,7 @@ src_prepare() {
 	# fix libxklavier automagic support
 	epatch "${FILESDIR}/${PN}-2.32.0-automagic-libxklavier-support.patch"
 
-	mkdir "${S}"/m4
+	mkdir -p "${S}"/m4
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
 }
@@ -135,6 +133,7 @@ src_install() {
 
 	local gentoodir="${WORKDIR}/${GDM_EXTRA}"
 
+	# FIXME: Remove dosym usage, gone in EAPI 4
 	# gdm-binary should be gdm to work with our init (#5598)
 	rm -f "${D}/usr/sbin/gdm"
 	dosym /usr/sbin/gdm-binary /usr/sbin/gdm
@@ -144,14 +143,6 @@ src_install() {
 
 	# log, etc.
 	keepdir /var/log/gdm
-	keepdir /var/gdm
-
-	fowners root:gdm /var/gdm
-	fperms 1770 /var/gdm
-
-	# add a custom xsession .desktop by default (#44537)
-	exeinto /etc/X11/dm/Sessions
-	doexe "${gentoodir}/custom.desktop" || die "doexe 1 failed"
 
 	# add xinitrc.d scripts
 	exeinto /etc/X11/xinit/xinitrc.d
@@ -162,19 +153,9 @@ src_install() {
 	echo 'XDG_DATA_DIRS="/usr/share/gdm"' > 99xdg-gdm
 	doenvd 99xdg-gdm || die "doenvd failed"
 
-	# add a custom sound playing script (#248253)
-	dobin "${gentoodir}/gdmplay"
-
-	# avoid file collision, bug #213118
-	rm -f "${D}/usr/share/xsessions/gnome.desktop"
-
-	# We replace the pam stuff by our own
-	rm -rf "${D}/etc/pam.d"
-
 	use gnome-keyring && sed -i "s:#Keyring=::g" "${gentoodir}"/pam.d/*
 
-	dopamd "${gentoodir}"/pam.d/*
-	dopamsecurity console.apps "${gentoodir}/security/console.apps/gdmsetup"
+	dopamd "${gentoodir}"/pam.d/gdm{,-autologin}
 }
 
 pkg_postinst() {
