@@ -16,16 +16,16 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="avahi crypt ipv6 jpeg gnome-keyring libnotify networkmanager ssl
-+telepathy +zlib"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 fi
+IUSE="avahi crypt ipv6 jpeg gnome-keyring libnotify networkmanager ssl +telepathy +zlib"
 
 RDEPEND=">=dev-libs/glib-2.26:2
 	>=x11-libs/gtk+-3.0.0:3
+	>=dev-libs/libgcrypt-1.1.90
 	>=net-libs/libsoup-2.24:2.4
 
 	dev-libs/dbus-glib
@@ -50,7 +50,6 @@ DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.16
 	>=dev-util/intltool-0.40
 	>=sys-devel/gettext-0.17
-	sys-apps/sed
 	|| (
 		gnome-base/libgnome-keyring
 		<gnome-base/gnome-keyring-2.29.4 )"
@@ -61,6 +60,7 @@ pkg_setup() {
 		--disable-schemas-compile
 		--disable-maintainer-mode
 		--enable-http-server
+		--with-gcrypt
 		$(use_with avahi)
 		$(use_with crypt gcrypt)
 		$(use_enable ipv6)
@@ -71,5 +71,5 @@ pkg_setup() {
 		$(use_with ssl gnutls)
 		$(use_with telepathy)
 		$(use_with zlib)"
-	DOCS="AUTHORS ChangeLog NEWS README"
+	DOCS="AUTHORS ChangeLog* NEWS README"
 }
