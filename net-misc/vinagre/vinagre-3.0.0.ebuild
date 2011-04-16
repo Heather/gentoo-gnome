@@ -6,7 +6,7 @@ EAPI="3"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2 virtualx
+inherit autotools eutils gnome2 virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -16,53 +16,59 @@ HOMEPAGE="http://www.gnome.org/projects/vinagre/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="applet avahi +introspection +telepathy test" #+ssh
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 fi
+IUSE="applet avahi +introspection +ssh +telepathy test"
 
 RDEPEND=">=dev-libs/glib-2.25.11:2
 	>=x11-libs/gtk+-3.0.3:3
 	>=dev-libs/libpeas-0.7.2[gtk]
 	>=dev-libs/libxml2-2.6.31:2
-	>=net-libs/gtk-vnc-0.4.3-r300
+	>=net-libs/gtk-vnc-0.4.3[gtk3]
 
-	gnome-base/gnome-keyring
+	>=gnome-base/gnome-keyring-1
 
+	applet? ( >=gnome-base/gnome-panel-2.91 )
 	avahi? ( >=net-dns/avahi-0.6.26[dbus,gtk3] )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.3 )
-	telepathy? (
-		dev-libs/dbus-glib
-		>=net-libs/telepathy-glib-0.11.6 )
-	applet? ( >=gnome-base/gnome-panel-2.91 )"
-#	ssh? ( >=x11-libs/vte-0.20:2.90 )
+	ssh? ( >=x11-libs/vte-0.20:2.90 )
+	telepathy? ( >=net-libs/telepathy-glib-0.11.6 )
+"
 DEPEND="${RDEPEND}
 	gnome-base/gnome-common
 	>=dev-lang/perl-5
-	>=dev-util/pkgconfig-0.9
+	>=dev-util/pkgconfig-0.16
 	>=dev-util/intltool-0.40
 	app-text/scrollkeeper
 	app-text/gnome-doc-utils
+	>=sys-devel/gettext-0.17
 	test? ( ~app-text/docbook-xml-dtd-4.3 )"
 
-DOCS="AUTHORS ChangeLog ChangeLog.pre-git NEWS README"
-
-src_prepare() {
+pkg_setup() {
+	DOCS="AUTHORS ChangeLog ChangeLog.pre-git NEWS README"
 	# Spice support?
 	# SSH support fails to compile
 	G2CONF="${G2CONF}
 		--disable-schemas-compile
 		--disable-scrollkeeper
 		--disable-spice
-		--disable-ssh
 		--enable-rdp
-		$(use_with panelapplet)
+		$(use_with applet panelapplet)
 		$(use_with avahi)
 		$(use_enable introspection)
+		$(use_enable ssh)
 		$(use_with telepathy)"
-		#$(use_enable ssh)
+}
+
+src_prepare() {
+	# Fix build of ssh plugin
+	epatch "${FILESDIR}/${P}-ssh-plugin.patch"
+
+	intltoolize --force --copy --automake || die
+	eautoreconf
 
 	gnome2_src_prepare
 }
