@@ -64,7 +64,7 @@ src_configure() {
 	cd ${GTK2_BUILDDIR}
 	einfo "Running configure in ${GTK2_BUILDDIR}"
 	ECONF_SOURCE="${S}" econf ${myconf} \
-		$(use_enable python) \
+		$(use_with python) \
 		--with-gtk=2.0
 
 	if use gtk3; then
