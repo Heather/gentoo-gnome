@@ -33,14 +33,10 @@ DEPEND="${RDEPEND}
 # eautoreconf dependencies:
 #	  gnome-base/gnome-common
 
-# FIXME: Open security issues:
-# XXX: Check if this is still valid
-# FIXME: - adblock        ( https://bugzilla.gnome.org/show_bug.cgi?id=595255 )
-
 pkg_setup() {
 	local extensions=""
 	# XXX: Only enable default/useful extensions?
-	extensions="actions auto-reload certificates \
+	extensions="actions adblock auto-reload certificates \
 			   error-viewer extensions-manager-ui gestures html5tube \
 			   java-console livehttpheaders page-info \
 			   push-scroller select-stylesheet \
