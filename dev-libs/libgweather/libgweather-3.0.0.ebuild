@@ -42,11 +42,12 @@ DEPEND="${COMMON_DEPEND}
 RDEPEND="${COMMON_DEPEND}
 	!<gnome-base/gnome-applets-2.22.0"
 
-DOCS="AUTHORS ChangeLog MAINTAINERS NEWS"
-
-G2CONF="${G2CONF}
-	--enable-locations-compression
-	--disable-maintainer-mode
-	--disable-all-translations-in-one-xml
-	--disable-static
-	$(use_enable introspection)"
+pkg_setup() {
+	DOCS="AUTHORS ChangeLog MAINTAINERS NEWS"
+	G2CONF="${G2CONF}
+		--enable-locations-compression
+		--disable-maintainer-mode
+		--disable-all-translations-in-one-xml
+		--disable-static
+		$(use_enable introspection)"
+}
