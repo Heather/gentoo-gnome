@@ -16,14 +16,13 @@ HOMEPAGE="http://www.gnome.org/projects/evolution/"
 
 LICENSE="LGPL-2 BSD DB"
 SLOT="0"
-IUSE="doc +introspection ipv6 ldap kerberos ssl +weather"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-solaris"
 fi
+IUSE="doc +introspection ipv6 ldap kerberos ssl +weather"
 
-RESTRIC="test"
 # GNOME3: How do we slot libedataserverui-3.0.so?
 # Also, libedata-cal-1.2.so and libecal-1.2.so use gtk-3, but aren't slotted
 RDEPEND=">=dev-libs/glib-2.28:2
@@ -47,6 +46,7 @@ RDEPEND=">=dev-libs/glib-2.28:2
 	weather? ( >=dev-libs/libgweather-2.90.0:2 )
 "
 DEPEND="${RDEPEND}
+	dev-util/gperf
 	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.35.5
 	sys-devel/bison
@@ -57,6 +57,9 @@ DEPEND="${RDEPEND}
 # eautoreconf needs:
 #	>=gnome-base/gnome-common-2
 #	>=dev-util/gtk-doc-am-1.9
+
+# FIXME
+RESTRIC="test"
 
 pkg_setup() {
 	DOCS="ChangeLog MAINTAINERS NEWS TODO"
