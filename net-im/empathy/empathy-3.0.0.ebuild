@@ -23,7 +23,7 @@ else
 	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~sparc ~x86"
 fi
 # FIXME: Add location support once geoclue stops being idiotic with automagic deps
-IUSE="debug eds +gnome +map +networkmanager sendto spell test webkit"
+IUSE="debug eds +gnome +map +geoloc +networkmanager sendto spell test webkit"
 
 # FIXME: gst-plugins-bad is required for the valve plugin. This should move to good
 # eventually at which point the dep can be dropped
@@ -49,6 +49,7 @@ RDEPEND=">=dev-libs/glib-2.27.2:2
 	>=net-im/telepathy-logger-0.2.8
 
 	eds? ( >=gnome-extra/evolution-data-server-1.2 )
+	geoloc? ( >=app-misc/geoclue-0.11 )
 	gnome? ( >=gnome-base/gnome-control-center-2.31.4 )
 	map? (
 		media-libs/libchamplain:0.10[gtk]
@@ -81,10 +82,10 @@ pkg_setup() {
 		--disable-schemas-compile
 		--disable-static
 		--disable-meego
-		--disable-location
 		--disable-Werror
 		$(use_enable debug)
 		$(use_with eds)
+		$(use_enable geoloc location)
 		$(use_enable gnome control-center-embedding)
 		$(use_enable map)
 		$(use_with networkmanager connectivity nm)
