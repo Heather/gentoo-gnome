@@ -17,12 +17,12 @@ HOMEPAGE="http://www.gnome.org/projects/evolution/"
 
 LICENSE="GPL-2 LGPL-2 OPENLDAP"
 SLOT="2.0"
-IUSE="clutter connman crypt doc gstreamer kerberos ldap networkmanager python ssl"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 fi
+IUSE="clutter connman crypt doc gstreamer kerberos ldap map networkmanager python ssl"
 
 # We need a graphical pinentry frontend to be able to ask for the GPG
 # password from inside evolution, bug 160302
@@ -38,7 +38,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.28:2
 	>=dev-libs/libunique-2.91.4:3
 	>=gnome-base/gnome-desktop-2.91.3:3
 	>=dev-libs/libgweather-2.90.0:2
-	media-libs/libcanberra[gtk3]
+	>=media-libs/libcanberra-0.25[gtk3]
 	>=x11-libs/libnotify-0.7
 	>=gnome-extra/evolution-data-server-${PV}[weather]
 	>=gnome-extra/gtkhtml-3.31.3:4.0
@@ -50,20 +50,25 @@ COMMON_DEPEND=">=dev-libs/glib-2.28:2
 	>=x11-themes/gnome-icon-theme-2.30.2.1
 	>=dev-libs/libgdata-0.4
 
+	x11-libs/libSM
+	x11-libs/libICE
+
 	clutter? (
 		>=media-libs/clutter-1.0.0:1.0
 		>=media-libs/clutter-gtk-0.90:1.0
 		x11-libs/mx )
 	connman? ( net-misc/connman )
 	crypt? ( || (
-				  ( >=app-crypt/gnupg-2.0.1-r2
-					${PINENTRY_DEPEND} )
-				  =app-crypt/gnupg-1.4* ) )
+		( >=app-crypt/gnupg-2.0.1-r2 ${PINENTRY_DEPEND} )
+		=app-crypt/gnupg-1.4* ) )
 	gstreamer? (
 		>=media-libs/gstreamer-0.10:0.10
 		>=media-libs/gst-plugins-base-0.10:0.10 )
 	kerberos? ( virtual/krb5 )
 	ldap? ( >=net-nds/openldap-2 )
+	map? (
+		>=app-misc/geoclue-0.11.1
+		media-libs/libchamplain:0.8 )
 	networkmanager? ( >=net-misc/networkmanager-0.7 )
 	ssl? (
 		>=dev-libs/nspr-4.6.1
@@ -71,7 +76,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.28:2
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/pkgconfig-0.16
 	>=dev-util/intltool-0.40.0
-	sys-devel/gettext
+	>=sys-devel/gettext-0.17
 	sys-devel/bison
 	app-text/scrollkeeper
 	>=app-text/gnome-doc-utils-0.9.1
@@ -85,13 +90,21 @@ DEPEND="${COMMON_DEPEND}
 RDEPEND="${COMMON_DEPEND}
 	!<gnome-extra/evolution-exchange-2.32"
 
+# Need EAPI=4 support in python eclass
+#REQUIRED_USE="map? ( clutter )"
+
 pkg_setup() {
 	ELTCONF="--reverse-deps"
 	DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS* README"
+	# image-inline plugin needs a gtk+:3 gtkimageview, which does not exist yet
 	G2CONF="${G2CONF}
+		--without-glade-catalog
 		--without-kde-applnk-path
 		--enable-plugins=experimental
 		--disable-image-inline
+		--disable-mono
+		--disable-profiling
+		--disable-pst-import
 		--enable-canberra
 		--enable-weather
 		$(use_enable ssl nss)
@@ -99,16 +112,11 @@ pkg_setup() {
 		$(use_enable networkmanager nm)
 		$(use_enable connman)
 		$(use_enable gstreamer audio-inline)
-		--disable-profiling
-		--disable-pst-import
+		$(use_enable map contacts-map)
 		$(use_enable python)
 		$(use_with clutter)
 		$(use_with ldap openldap)
-		$(use_with kerberos krb5 /usr)
-		--disable-contacts-map
-		--without-glade-catalog
-		--disable-mono"
-	# image-inline plugin needs a gtk+:3 gtkimageview, which does not exist yet
+		$(use_with kerberos krb5 /usr)"
 
 	# dang - I've changed this to do --enable-plugins=experimental.  This will
 	# autodetect new-mail-notify and exchange, but that cannot be helped for the
@@ -144,7 +152,7 @@ src_prepare() {
 	fi
 
 	# Fix compilation flags crazyness
-	sed -e 's/CFLAGS="$CFLAGS $WARNING_FLAGS"//' \
+	sed -e 's/\(AM_CPPFLAGS="\)$WARNING_FLAGS"/\1/' \
 		-i configure.ac || die "sed 1 failed"
 
 	if [[ ${PV} != 9999 ]]; then
