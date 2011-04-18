@@ -36,7 +36,7 @@ RDEPEND=">=gnome-base/gnome-desktop-2.91:3
 	>=gnome-base/gnome-menus-2.27.92
 	gnome-base/librsvg:2
 	>=net-libs/telepathy-glib-0.14.0
-	>=x11-libs/cairo-1
+	>=x11-libs/cairo-1[X]
 	x11-libs/libXau
 	x11-libs/libICE
 	x11-libs/libSM
