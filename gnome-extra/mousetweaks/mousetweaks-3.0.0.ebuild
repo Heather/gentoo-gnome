@@ -25,7 +25,9 @@ RDEPEND="
 	x11-libs/libXfixes
 	x11-libs/libXcursor
 	
-	applet? ( >=gnome-base/gnome-panel-2.32 )
+	applet? (
+		>=gnome-base/gnome-panel-2.32
+		<gnome-base/gnome-panel-2.90 )
 "
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
