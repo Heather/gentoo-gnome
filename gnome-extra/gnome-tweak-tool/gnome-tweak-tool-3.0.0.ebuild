@@ -5,8 +5,9 @@
 EAPI="3"
 GNOME2_LA_PUNT="yes"
 GCONF_DEBUG="no"
+PYTHON_DEPEND="2:2.6"
 
-inherit gnome2
+inherit gnome2 python
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -35,5 +36,13 @@ DEPEND="${COMMON_DEPEND}
 	>=dev-util/pkgconfig-0.9
 	>=sys-devel/gettext-0.17"
 
-DOCS="NEWS README"
-G2CONF="--disable-schemas-compile"
+pkg_setup() {
+	DOCS="NEWS README"
+	G2CONF="${G2CONF} --disable-schemas-compile"
+	python_set_active_version 2
+}
+
+src_install() {
+	gnome2_src_install
+	python_convert_shebangs 2 "${ED}"/usr/bin/gnome-tweak-tool
+}
