@@ -156,6 +156,7 @@ net-libs/libnice
 net-libs/telepathy-farsight
 >=net-libs/telepathy-glib-0.13.12
 net-voip/telepathy-gabble
+app-misc/geoclue
 net-im/empathy
 
 # NM
@@ -277,6 +278,7 @@ gnome-extra/polkit-gnome
 # Cheese
 # Needs gst good, base from above
 media-video/gnome-video-effects
+x11-libs/mx
 media-video/cheese
 
 # Vte
