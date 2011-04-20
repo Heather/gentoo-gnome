@@ -81,10 +81,8 @@ gnome-extra/zenity
 mail-client/evolution
 media-fonts/cantarell
 media-gfx/eog
-~media-libs/libcanberra-0.26
 media-libs/libgnome-media-profiles
 # totem-pl-parser
-media-libs/libcanberra
 media-libs/libchamplain:0.8
 media-libs/libchamplain:0.10
 media-libs/libdmapsharing:3.0
@@ -148,6 +146,10 @@ media-libs/clutter:1.0
 media-libs/clutter-gtk:1.0
 media-libs/clutter-gst:1.0
 
+# libcanberra
+>=sys-fs/udev-160
+media-libs/libcanberra
+
 # libsocialweb
 net-libs/libsocialweb
 net-libs/rest
@@ -179,7 +181,9 @@ gnome-base/nautilus
 
 # GNOME Shell
 gnome-base/gnome-shell
-net-libs/xulrunner
+>=dev-libs/nspr-4.8.7
+>=dev-libs/nss-3.12.9
+>=net-libs/xulrunner-2.0
 net-im/telepathy-logger
 >=net-libs/telepathy-glib-0.13.12
 
