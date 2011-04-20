@@ -30,7 +30,6 @@ RDEPEND="
 	>=gnome-extra/gnome-utils-${PV}
 	>=gnome-extra/gucharmap-${PV}
 	>=mail-client/evolution-${PV}
-	>=media-gfx/shotwell-0.8.1
 	>=media-sound/sound-juicer-2.99
 	>=media-video/cheese-${PV}
 	>=net-analyzer/gnome-nettool-${PV}
@@ -38,5 +37,8 @@ RDEPEND="
 	>=net-misc/vino-${PV}
 	>=www-client/epiphany-${PV}
 "
+# Re-add when it stops using outdated libraries like gnome-vfs
+#>=media-gfx/shotwell-0.8.1
+# Note: bug-buddy is broken with GNOME 3
 DEPEND=""
 S=${WORKDIR}
