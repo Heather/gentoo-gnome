@@ -24,17 +24,13 @@ dev-libs/atk
 dev-libs/folks
 dev-libs/gdl:1
 dev-libs/gdl:3
-dev-libs/gjs
 dev-libs/glib
 dev-libs/gobject-introspection
 dev-libs/json-glib
-#avahi
-dev-libs/libdaemon
 dev-libs/libgdata
 dev-libs/libgweather
 dev-libs/libpeas
 dev-libs/libunique:3
-dev-libs/totem-pl-parser
 dev-perl/Text-CSV
 dev-python/pygobject
 dev-util/anjuta
@@ -81,15 +77,6 @@ gnome-extra/zenity
 mail-client/evolution
 media-fonts/cantarell
 media-gfx/eog
-media-libs/libgnome-media-profiles
-# totem-pl-parser
-media-libs/libchamplain:0.8
-media-libs/libchamplain:0.10
-media-libs/libdmapsharing:3.0
-media-libs/memphis
-media-sound/rhythmbox
-media-sound/sound-juicer
-media-video/totem
 net-analyzer/gnome-nettool
 net-dns/avahi
 net-libs/glib-networking
@@ -159,7 +146,9 @@ www-client/epiphany
 www-client/epiphany-extensions
 
 # Empathy
-net-im/empathy
+media-libs/libchamplain:0.8
+media-libs/libchamplain:0.10
+media-libs/memphis
 net-im/telepathy-logger
 net-im/telepathy-mission-control
 net-libs/farsight2
@@ -167,25 +156,40 @@ net-libs/libnice
 net-libs/telepathy-farsight
 >=net-libs/telepathy-glib-0.13.12
 net-voip/telepathy-gabble
+net-im/empathy
 
 # NM
-net-misc/networkmanager
-net-misc/networkmanager-vpnc
-net-misc/networkmanager-pptp
-net-misc/networkmanager-openvpn
-gnome-extra/nm-applet
+>=net-dialup/ppp-2.4.5
+>=net-misc/networkmanager-0.8.990
+>=net-misc/networkmanager-vpnc-0.8.990
+>=net-misc/networkmanager-pptp-0.8.990
+>=net-misc/networkmanager-openvpn-0.8.990
+>=gnome-extra/nm-applet-0.8.990
 
 # Nautilus
 >=media-libs/libexif-0.6.20
 gnome-base/nautilus
 
+# Rhythmbox, Sound Juicer, Totem
+=sys-devel/autoconf-2.68*
+>=media-libs/quvi-0.2.14-r1
+>=dev-libs/totem-pl-parser-2.32.4
+media-libs/libgnome-media-profiles:3
+media-libs/libdmapsharing:3.0
+media-sound/rhythmbox
+>=media-sound/sound-juicer-2.99
+>=media-video/totem-3.0
+
 # GNOME Shell
-gnome-base/gnome-shell
 >=dev-libs/nspr-4.8.7
 >=dev-libs/nss-3.12.9
 >=net-libs/xulrunner-2.0
+# Not needed by gnome-shell, but will cause conflicts due to xulrunner-2.0
+>=www-client/firefox-4.0
+dev-libs/gjs
 net-im/telepathy-logger
 >=net-libs/telepathy-glib-0.13.12
+gnome-base/gnome-shell
 
 # GNOME Fallback
 >=x11-wm/metacity-2.30.3-r1
