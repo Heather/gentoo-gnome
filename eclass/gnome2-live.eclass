@@ -1,4 +1,4 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -17,7 +17,7 @@ inherit autotools gnome2 gnome2-utils libtool git
 # Stolen from git.eclass
 EXPORTED_FUNCTIONS="src_unpack pkg_postinst"
 case "${EAPI:-0}" in
-    2|3) EXPORTED_FUNCTIONS="${EXPORTED_FUNCTIONS} src_prepare" ;;
+    2|3|4) EXPORTED_FUNCTIONS="${EXPORTED_FUNCTIONS} src_prepare" ;;
     0|1) ;;
     *) die "Unknown EAPI, Bug eclass maintainers." ;;
 esac
@@ -39,10 +39,10 @@ DEPEND="${DEPEND}
 ELTCONF=${ELTCONF:-}
 
 # Default git module name
-GNOME_LIVE_MODULE=${MODPATH:-"${PN}"}
+GNOME_LIVE_MODULE=${GNOME_LIVE_MODULE:-"${PN}"}
 
 # GIT URI for the project
-EGIT_REPO_URI="${EGIT_REPO_URI:-"git://git.gnome.org/${MODPATH}"}"
+EGIT_REPO_URI="${EGIT_REPO_URI:-"git://git.gnome.org/${GNOME_LIVE_MODULE}"}"
 
 # Unset SRC_URI auto-set by gnome2.eclass
 SRC_URI=""
