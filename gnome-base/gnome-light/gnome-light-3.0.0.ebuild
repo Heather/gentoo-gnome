@@ -16,13 +16,15 @@ IUSE="cups +fallback"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 
 # Note to developers:
-# This is a wrapper for the 'light' Gnome2 desktop,
+# This is a wrapper for the 'light' GNOME 3 desktop,
 # This should only consist of the bare minimum of libs/apps needed
-# It is basically gnome-base/gnome without all extra apps
+# It is basically gnome-base/gnome without the apps,
+# but should not be used by users unless they know what they are doing
 RDEPEND="!gnome-base/gnome
 	>=gnome-base/gnome-core-libs-${PV}[cups?]
 
 	>=gnome-base/gnome-session-${PV}
+	>=gnome-base/gnome-menus-${PV}
 	>=gnome-base/gnome-settings-daemon-${PV}[cups?]
 	>=gnome-base/gnome-control-center-${PV}[cups?]
 
