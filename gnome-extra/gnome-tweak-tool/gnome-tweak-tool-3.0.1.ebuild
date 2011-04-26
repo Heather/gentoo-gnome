@@ -42,6 +42,11 @@ pkg_setup() {
 	python_set_active_version 2
 }
 
+src_prepare() {
+	gnome2_src_prepare
+	: > "${S}"/py-compile
+}
+
 src_install() {
 	gnome2_src_install
 	python_convert_shebangs 2 "${ED}"/usr/bin/gnome-tweak-tool
