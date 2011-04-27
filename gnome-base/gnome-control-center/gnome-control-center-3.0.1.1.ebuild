@@ -90,7 +90,6 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-update-mimedb
 		--disable-static
-		--disable-schemas-install
 		$(use_with cheese)
 		$(use_enable cups)
 		$(use_with socialweb libsocialweb)"
