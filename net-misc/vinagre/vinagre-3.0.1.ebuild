@@ -6,7 +6,7 @@ EAPI="3"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit autotools eutils gnome2 virtualx
+inherit gnome2 virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -28,8 +28,8 @@ RDEPEND=">=dev-libs/glib-2.25.11:2
 	>=dev-libs/libpeas-0.7.2[gtk]
 	>=dev-libs/libxml2-2.6.31:2
 	>=net-libs/gtk-vnc-0.4.3[gtk3]
-
 	>=gnome-base/gnome-keyring-1
+	x11-themes/gnome-icon-theme
 
 	applet? ( >=gnome-base/gnome-panel-2.91 )
 	avahi? ( >=net-dns/avahi-0.6.26[dbus,gtk3] )
@@ -61,16 +61,6 @@ pkg_setup() {
 		$(use_enable introspection)
 		$(use_enable ssh)
 		$(use_with telepathy)"
-}
-
-src_prepare() {
-	# Fix build of ssh plugin
-	epatch "${FILESDIR}/${P}-ssh-plugin.patch"
-
-	intltoolize --force --copy --automake || die
-	eautoreconf
-
-	gnome2_src_prepare
 }
 
 src_compile() {
