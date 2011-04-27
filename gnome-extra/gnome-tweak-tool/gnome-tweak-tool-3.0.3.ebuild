@@ -41,3 +41,13 @@ src_install() {
 	gnome2-python_src_install
 	python_convert_shebangs 2 "${ED}"/usr/bin/gnome-tweak-tool
 }
+
+pkg_postinst() {
+	gnome2_pkg_postinst
+	python_mod_optimize gtweak
+}
+
+pkg_postrm() {
+	gnome2_pkg_postrm
+	python_mod_cleanup gtweak
+}
