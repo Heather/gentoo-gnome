@@ -6,11 +6,10 @@ EAPI="3"
 GNOME2_LA_PUNT="yes"
 GCONF_DEBUG="no"
 PYTHON_DEPEND="2:2.6"
+SUPPORT_PYTHON_ABIS="1"
+RESTRICT_PYTHON_ABIS="3.*"
 
-inherit gnome2 python
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
+inherit gnome2-python
 
 DESCRIPTION="Tool to customize GNOME 3 options"
 HOMEPAGE="http://live.gnome.org/GnomeTweakTool"
@@ -18,11 +17,7 @@ HOMEPAGE="http://live.gnome.org/GnomeTweakTool"
 LICENSE="GPL-2"
 SLOT="0"
 IUSE=""
-if [[ ${PV} = 9999 ]]; then
-	KEYWORDS=""
-else
-	KEYWORDS="~amd64 ~x86"
-fi
+KEYWORDS="~amd64 ~x86"
 
 COMMON_DEPEND="
 	>=gnome-base/gsettings-desktop-schemas-2.91.92
@@ -39,15 +34,10 @@ DEPEND="${COMMON_DEPEND}
 pkg_setup() {
 	DOCS="NEWS README"
 	G2CONF="${G2CONF} --disable-schemas-compile"
-	python_set_active_version 2
-}
-
-src_prepare() {
-	gnome2_src_prepare
-	: > "${S}"/py-compile
+	gnome2-python_pkg_setup
 }
 
 src_install() {
-	gnome2_src_install
+	gnome2-python_src_install
 	python_convert_shebangs 2 "${ED}"/usr/bin/gnome-tweak-tool
 }
