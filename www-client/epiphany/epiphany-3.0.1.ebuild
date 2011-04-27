@@ -30,7 +30,7 @@ RDEPEND=">=dev-libs/glib-2.25.13:2
 	>=x11-libs/startup-notification-0.5
 	>=dev-libs/dbus-glib-0.71
 	>=app-text/iso-codes-0.35
-	>=net-libs/webkit-gtk-1.3.13:3[introspection?]
+	>=net-libs/webkit-gtk-1.4:3[introspection?]
 	>=net-libs/libsoup-gnome-2.33.1:2.4
 	>=gnome-base/gnome-keyring-2.26.0
 	>=gnome-base/gsettings-desktop-schemas-0.0.1
