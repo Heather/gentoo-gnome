@@ -63,24 +63,16 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# Remove silly CFLAGS
-	sed -e 's:CFLAGS="$CFLAGS -Werror:CFLAGS="$CFLAGS:' \
-		-e 's:CFLAGS="$CFLAGS -g -O0:CFLAGS="$CFLAGS:' \
-		-i configure.in configure || die "sed failed"
-
-	# Remove DISABLE_DEPRECATED flags
-	sed -e '/-D[A-Z_]*DISABLE_DEPRECATED/d' \
-		-i configure.in configure || die "sed 2 failed"
-
 	# Disable gcr tests due to weirdness with opensc
 	# ** WARNING **: couldn't load PKCS#11 module: /usr/lib64/pkcs11/gnome-keyring-pkcs11.so: Couldn't initialize module: The device was removed or unplugged
-	sed -e '/^SUBDIRS = /,+1 c\SUBDIRS =\' \
-		-i gcr/Makefile.am gcr/Makefile.in || die "sed 3 failed"
+	sed -e 's/^\(SUBDIRS = \.\)\(.*\)/\1/' \
+		-i gcr/Makefile.am gcr/Makefile.in || die "sed failed"
 
 	gnome2_src_prepare
 }
 
 src_test() {
+	# FIXME: /gkm/transaction/ tests fail
 	unset DBUS_SESSION_BUS_ADDRESS
 	Xemake check || die "emake check failed!"
 }

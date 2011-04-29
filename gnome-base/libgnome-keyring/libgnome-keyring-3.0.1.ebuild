@@ -27,7 +27,7 @@ DEPEND="${RDEPEND}
 pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_enable debug)
-		$(use_enable test tests)"
+		$(use_enable test tests full)"
 	DOCS="AUTHORS ChangeLog NEWS README"
 }
 
