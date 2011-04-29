@@ -56,13 +56,15 @@ src_configure() {
 		--with-html-dir=/usr/share/doc/${PF}/html
 }
 
-# TODO: check which la files are really needed
 src_install() {
 	# Disable parallel installation until bug #253862 is solved
 	emake -j1 DESTDIR="${D}" install || die
 
-	find "${ED}"/usr/$(get_libdir)/gtk-2.0 -name "*.la" -delete
-	find "${ED}"/usr/$(get_libdir)/gtk-3.0 -name "*.la" -delete
+	# TODO: check which la files are really needed
+	#find "${ED}"/usr/$(get_libdir)/gtk-2.0 -name "*.la" -delete
+	#find "${ED}"/usr/$(get_libdir)/gtk-3.0 -name "*.la" -delete
+	# removing ALL of them for now.
+	find "${D}" -name '*.la' -exec rm -f {} + || die "la file removal failed"
 }
 
 pkg_preinst() { gnome2_gconf_savelist; }
