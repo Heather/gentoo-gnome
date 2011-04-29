@@ -33,7 +33,7 @@ PINENTRY_DEPEND="|| ( app-crypt/pinentry[gtk] app-crypt/pinentry-qt app-crypt/pi
 # mono plugin disabled as it's incompatible with 2.8 and lacks maintainance (see bgo#634571)
 # pst is not mature enough and changes API/ABI frequently
 COMMON_DEPEND=">=dev-libs/glib-2.28:2
-	>=x11-libs/cairo-1.9.15
+	>=x11-libs/cairo-1.9.15[glib]
 	>=x11-libs/gtk+-3.0.2:3
 	>=dev-libs/libunique-2.91.4:3
 	>=gnome-base/gnome-desktop-2.91.3:3
