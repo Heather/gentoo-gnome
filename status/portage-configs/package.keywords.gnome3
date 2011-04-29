@@ -26,7 +26,6 @@ dev-libs/gdl:1
 dev-libs/gdl:3
 dev-libs/glib
 dev-libs/gobject-introspection
-dev-libs/json-glib
 dev-libs/libgdata
 dev-libs/libgweather
 dev-libs/libpeas
@@ -129,6 +128,7 @@ dev-cpp/mm-common
 dev-cpp/pangomm
 
 # Clutter
+dev-libs/json-glib
 media-libs/clutter:1.0
 media-libs/clutter-gtk:1.0
 media-libs/clutter-gst:1.0
@@ -160,7 +160,11 @@ app-misc/geoclue
 net-im/empathy
 
 # NM
+net-misc/mobile-broadband-provider-info
+net-wireless/wimax-tools
+net-wireless/wimax
 >=net-dialup/ppp-2.4.5
+>=net-wireless/wpa_supplicant-0.7.3
 >=net-misc/networkmanager-0.8.990
 >=net-misc/networkmanager-vpnc-0.8.990
 >=net-misc/networkmanager-pptp-0.8.990
@@ -197,6 +201,8 @@ gnome-base/gnome-shell
 
 # GNOME Games
 ~dev-scheme/guile-1.8.7
+gnome-base/gnome-js-common
+dev-libs/seed
 gnome-extra/gnome-games
 gnome-extra/gnome-games-extra-data
 
