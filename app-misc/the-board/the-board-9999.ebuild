@@ -16,7 +16,7 @@ HOMEPAGE="http://live.gnome.org/TheBoardProject"
 # Not sure if this is the correct license
 LICENSE="GPL-3"
 SLOT="0"
-IUSE="+libnotify +libsoup +nautilus"
+IUSE="+cheese +libnotify +libsoup +nautilus"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -24,22 +24,23 @@ else
 fi
 
 RDEPEND="
-	>=dev-libs/glib-2.27.3
-	>=x11-libs/gtk+-2.91.7:3[introspection]
+	>=dev-libs/glib-2.28.0
+	>=x11-libs/gtk+-3.0.0:3[introspection]
 	>=x11-libs/gdk-pixbuf-2.22:2[introspection]
 	>=dev-libs/gjs-0.7.7
-	>=dev-libs/gobject-introspection-0.9.6
+	>=dev-libs/gobject-introspection-0.10.0
 	>=media-libs/clutter-1.6.0:1.0[introspection]
-	>=media-libs/clutter-gtk-0.91.8:1.0
+	>=media-libs/clutter-gtk-1.0.0:1.0
 	>=media-libs/clutter-gst-1.3.2:1.0
 	>=x11-libs/mx-1.1.1[introspection]
 
 	media-libs/gstreamer:0.10
 
+	cheese? ( >=media-video/cheese-3.0.1 )
 	libnotify? ( >=x11-libs/libnotify-0.7.1 )
 	libsoup? ( net-libs/libsoup:2.4[introspection] )
 	nautilus? ( >=x11-libs/gdk-pixbuf-2.22.1
-				>=gnome-base/nautilus-2.91.3 )
+				>=gnome-base/nautilus-3.0.0 )
 "
 DEPEND="${RDEPEND}
 	>=sys-devel/gettext-0.17
@@ -52,6 +53,7 @@ src_prepare() {
 	G2CONF="${G2CONF}
 		--disable-static
 		--disable-maintainer-mode
+		$(use_with cheese)
 		$(use_with libnotify)
 		$(use_with libsoup)
 		$(use_with nautilus)"
