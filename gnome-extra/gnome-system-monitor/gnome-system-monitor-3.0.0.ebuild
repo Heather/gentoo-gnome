@@ -31,7 +31,9 @@ DEPEND="${RDEPEND}
 	>=sys-devel/gettext-0.17
 	>=app-text/gnome-doc-utils-0.20"
 
-DOCS="AUTHORS ChangeLog NEWS README"
-G2CONF="${G2CONF}
---disable-schemas-compile
---disable-scrollkeeper"
+pkg_setup() {
+	DOCS="AUTHORS ChangeLog NEWS README"
+	G2CONF="${G2CONF}
+		--disable-schemas-compile
+		--disable-scrollkeeper"
+}
