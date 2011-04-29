@@ -3,6 +3,7 @@
 # $Header: $
 
 EAPI="3"
+GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2
@@ -47,9 +48,8 @@ DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.22
 	>=dev-util/intltool-0.40"
 
-DOCS="AUTHORS NEWS README"
-
-src_prepare() {
+pkg_setup() {
+	DOCS="AUTHORS NEWS README"
 	G2CONF="${G2CONF}
 		--disable-static
 		--disable-maintainer-mode
@@ -57,5 +57,4 @@ src_prepare() {
 		$(use_with libnotify)
 		$(use_with libsoup)
 		$(use_with nautilus)"
-	gnome2_src_prepare
 }
