@@ -18,13 +18,13 @@ KEYWORDS="~amd64 ~ppc ~sparc ~x86"
 IUSE="doc gnome +introspection"
 
 RDEPEND="
-	>=dev-libs/glib-2.25.10:2
-	>=x11-libs/gtk+-2.91.3:3
-	>=x11-libs/gtksourceview-2.90.0:3.0
+	>=dev-libs/glib-2.28.0:2
+	>=x11-libs/gtk+-3.0.3:3
+	>=x11-libs/gtksourceview-3.0.0:3.0
 	>=dev-libs/gdl-2.91.91:3
 	>=dev-libs/libxml2-2.4.12:2
 	>=dev-libs/json-glib-0.12.0
-	>=dev-libs/libpeas-0.7.3[gtk]
+	>=dev-libs/libpeas-1.0.0[gtk]
 	>=gnome-extra/libgda-4.2.0:4
 	>=app-text/iso-codes-0.35
 
