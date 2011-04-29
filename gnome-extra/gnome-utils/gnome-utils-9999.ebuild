@@ -16,7 +16,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="bonobo doc ipv6 test"
+IUSE="doc ipv6 test"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -31,8 +31,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
 	>=gnome-base/libgtop-2.12:2
 	>=media-libs/libcanberra-0.26-r2[gtk3]
 	x11-libs/libXext
-	x11-libs/libX11
-	bonobo? ( || ( gnome-base/gnome-panel[bonobo] <gnome-base/gnome-panel-2.32 ) )"
+	x11-libs/libX11"
 
 DEPEND="${COMMON_DEPEND}
 	x11-proto/xextproto
@@ -52,7 +51,6 @@ pkg_setup() {
 
 	G2CONF="${G2CONF}
 		$(use_enable ipv6)
-		$(use_enable bonobo gdict-applet)
 		--enable-zlib
 		--disable-maintainer-flags
 		--disable-static
