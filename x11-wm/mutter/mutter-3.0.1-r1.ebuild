@@ -76,3 +76,9 @@ pkg_setup() {
 		$(use_enable introspection)
 		$(use_enable xinerama)"
 }
+
+src_prepare() {
+	# https://bugs.gentoo.org/show_bug.cgi?id=363853
+	# Taken from upstream, remove for next release
+	epatch "${FILESDIR}/${P}-fix-session-saving.patch"
+}
