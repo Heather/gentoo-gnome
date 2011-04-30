@@ -47,6 +47,10 @@ src_prepare() {
 	# Fix incorrect rules for out of tree build
 	epatch "${FILESDIR}/${PN}-0.4.3-outoftree-build.patch"
 
+	# Fix incorrect codegendir check: h2def.py is in pygobject, not pygtk
+	sed -e 's/codegendir pygtk-2.0/codegendir pygobject-2.0/g' \
+		-i src/Makefile.* || die
+
 	intltoolize --force --copy --automake || die
 	eautoreconf
 }
