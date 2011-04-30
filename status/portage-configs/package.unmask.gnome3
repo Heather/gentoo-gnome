@@ -2,5 +2,5 @@
 dev-libs/seed
 gnome-base/gdm
 net-misc/networkmanager
-=net-misc/notification-daemon-0.7*
+=x11-misc/notification-daemon-0.7*
 =x11-wm/metacity-2.34*
