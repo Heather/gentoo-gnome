@@ -56,7 +56,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}/${PN}-0.27.90-fix-gdk-targets.patch"
+	epatch "${FILESDIR}/${PN}-0.28.0-fix-gdk-targets.patch"
 
 	[[ ${PV} != 9999 ]] && eautoreconf
 
