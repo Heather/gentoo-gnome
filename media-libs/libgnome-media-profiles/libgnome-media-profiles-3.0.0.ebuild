@@ -3,6 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/media-libs/libcanberra/libcanberra-0.25.ebuild,v 1.1 2010/06/18 10:11:15 pacho Exp $
 
 EAPI="3"
+GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2
@@ -32,5 +33,8 @@ DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.35.0
 	>=dev-util/pkgconfig-0.19
 	sys-devel/gettext"
-DOCS="ChangeLog NEWS README"
-G2CONF="--disable-static"
+
+pkg_setup() {
+	DOCS="ChangeLog NEWS README"
+	G2CONF="${G2CONF} --disable-static"
+}
