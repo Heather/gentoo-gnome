@@ -58,3 +58,9 @@ pkg_setup() {
 		$(use_enable doc desktop-docs)
 		$(use_enable introspection)"
 }
+
+src_prepare() {
+	# https://bugs.gentoo.org/show_bug.cgi?id=365717
+	epatch "${FILESDIR}/${P}-fix-randr-missing-crash.patch"
+	gnome2_src_prepare
+}
