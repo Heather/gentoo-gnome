@@ -142,6 +142,10 @@ src_prepare() {
 	# AC_CONFIG_AUX_DIR_DEFAULT doesn't exist, and eautoreconf/aclocal fails
 	mkdir -p m4
 
+	# Don't check for gconf sinks, causes access violations that we can't fix.
+	# See bug 358755
+	sed -ri -e 's/gconf[a-z]+sink //g' configure* || die "gconf sed failed"
+
 	# Fix broken smclient option passing
 	# FIXME: File a bug for this
 	epatch "${FILESDIR}/${PN}-2.90.0-smclient-target-detection.patch"
