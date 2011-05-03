@@ -439,10 +439,11 @@ if __name__ == "__main__":
             raise Exception('Inline comments are not supported')
         if not portage.catpkgsplit(cpv):
             # It's actually a cp
-            cpv = match_wanted_atoms(cpv, release=NEW_REL)[0]
-            if not cpv:
+            cpv = match_wanted_atoms(cpv, release=NEW_REL)
+            if not cpv or not cpv[0]:
                 debug('%s: Invalid cpv' % cpv)
                 continue
+            cpv = cpv[0]
         kws_missing = max_kws(cpv, release=OLD_REL)
         if kws_missing == []:
             # Current cpv has the max keywords => nothing to do
