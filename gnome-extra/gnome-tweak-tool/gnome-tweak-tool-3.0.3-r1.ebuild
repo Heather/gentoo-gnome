@@ -37,6 +37,16 @@ pkg_setup() {
 	gnome2-python_pkg_setup
 }
 
+src_prepare() {
+	# https://bugzilla.gnome.org/show_bug.cgi?id=649003
+	# Cursor themes are not installed in the usual place in Gentoo
+	# In addition, due to some weird setup issue, changing "cursor-theme" in
+	# org.gnome.desktop.interface doesn't change the cursor at all.
+	# This is a temporary workaround till we can figure this out properly.
+	epatch "${FILESDIR}/${PN}-no-cursor-themes.patch"
+	gnome2-python_src_prepare
+}
+
 src_install() {
 	gnome2-python_src_install
 	python_convert_shebangs 2 "${ED}"/usr/bin/gnome-tweak-tool
