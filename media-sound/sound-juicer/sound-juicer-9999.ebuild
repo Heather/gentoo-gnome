@@ -6,14 +6,13 @@ EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit autotools gnome2
+inherit gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
 
 DESCRIPTION="CD ripper for GNOME 2"
 HOMEPAGE="http://www.burtonini.com/blog/computers/sound-juicer/"
-SRC_URI="mirror://gentoo/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -59,15 +58,6 @@ pkg_setup() {
 		--disable-scrollkeeper
 		GST_INSPECT=$(type -p true)"
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
-}
-
-src_prepare() {
-	gnome-doc-common
-	gnome-doc-prepare --automake
-	intltoolize --force
-	eautoreconf
-
-	gnome2_src_prepare
 }
 
 pkg_postinst() {
