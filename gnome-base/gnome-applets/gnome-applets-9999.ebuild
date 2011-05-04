@@ -39,7 +39,7 @@ RDEPEND=">=x11-libs/gtk+-3.0.0:3
 	>=dev-libs/dbus-glib-0.74
 	>=dev-libs/libxml2-2.5.0
 	>=x11-themes/gnome-icon-theme-2.15.91
-	>=dev-libs/libgweather-2.91.0:3
+	>=dev-libs/libgweather-2.91.0
 	x11-libs/libX11
 
 	gnome?	(
