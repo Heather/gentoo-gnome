@@ -169,6 +169,8 @@ net-wireless/wimax
 >=net-misc/networkmanager-vpnc-0.8.990
 >=net-misc/networkmanager-pptp-0.8.990
 >=net-misc/networkmanager-openvpn-0.8.990
+>=net-misc/networkmanager-openswan-0.8.990
+>=net-misc/modemmanager-0.4.996
 >=gnome-extra/nm-applet-0.8.990
 
 # Nautilus
