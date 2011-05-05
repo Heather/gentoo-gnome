@@ -3,27 +3,27 @@
 # $Header: $
 
 EAPI="4"
-GNOME_ORG_MODULE="NetworkManager-vpnc"
+GNOME_ORG_MODULE="NetworkManager-${PN##*-}"
 
 inherit gnome.org
 
 # NetworkManager likes itself with capital letters
 MY_PN="${GNOME_ORG_MODULE}"
 
-DESCRIPTION="NetworkManager VPNC plugin"
+DESCRIPTION="NetworkManager Openswan plugin"
 HOMEPAGE="http://www.gnome.org/projects/NetworkManager/"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="gnome test"
+IUSE="gnome"
 
 RDEPEND="
 	>=net-misc/networkmanager-${PV}
 	>=dev-libs/dbus-glib-0.74
 	>=net-misc/vpnc-0.5
 	gnome? (
-		>=x11-libs/gtk+-2.91.4:3
+		>=x11-libs/gtk+-3.0.0:3
 		gnome-base/gnome-keyring
 	)"
 
@@ -34,16 +34,12 @@ DEPEND="${RDEPEND}
 
 S="${WORKDIR}/${MY_PN}-${PV}"
 
-# XXX: https://bugzilla.gnome.org/show_bug.cgi?id=608348
-RESTRICT="test"
-
 src_configure() {
 	ECONF="--disable-more-warnings
 		--disable-static
 		--with-dist-version=Gentoo
 		--with-gtkver=3.0
-		$(use_with gnome)
-		$(use_with test tests)"
+		$(use_with gnome)"
 
 	econf ${ECONF}
 }

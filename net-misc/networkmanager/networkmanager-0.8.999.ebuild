@@ -92,7 +92,7 @@ src_configure() {
 		--localstatedir=/var
 		--with-distro=gentoo
 		--with-dbus-sys-dir=/etc/dbus-1/system.d
-		--with-udev-dir=/etc/udev
+		--with-udev-dir=/lib/udev
 		--with-iptables=/sbin/iptables
 		$(use_enable doc gtk-doc)
 		$(use_enable introspection)

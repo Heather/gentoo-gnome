@@ -3,14 +3,11 @@
 # $Header: $
 
 EAPI="4"
-GNOME_ORG_MODULE="NetworkManager-pptp"
+GNOME_ORG_MODULE="NetworkManager-${PN##*-}"
 
 inherit gnome.org
 
-# NetworkManager likes itself with capital letters
-MY_PN="${GNOME_ORG_MODULE}"
-
-DESCRIPTION="NetworkManager PPTP plugin"
+DESCRIPTION="NetworkManager OpenVPN plugin"
 HOMEPAGE="http://www.gnome.org/projects/NetworkManager/"
 
 LICENSE="GPL-2"
@@ -19,10 +16,9 @@ KEYWORDS="~amd64 ~x86"
 IUSE="gnome test"
 
 RDEPEND="
-	>=net-misc/networkmanager-${PV}
 	>=dev-libs/dbus-glib-0.74
-	net-dialup/ppp
-	net-dialup/pptpclient
+	>=net-misc/networkmanager-${PV}
+	>=net-misc/openvpn-2.1_rc9
 	gnome? (
 		>=x11-libs/gtk+-2.91.4:3
 		gnome-base/gnome-keyring
@@ -30,10 +26,11 @@ RDEPEND="
 
 DEPEND="${RDEPEND}
 	sys-devel/gettext
-	dev-util/intltool
+	>=dev-util/intltool-0.35
 	dev-util/pkgconfig"
 
-S="${WORKDIR}/${MY_PN}-${PV}"
+# FAIL: (tls-import-data) unexpected 'ca' secret value
+#RESTRICT="test"
 
 src_configure() {
 	ECONF="--disable-more-warnings
