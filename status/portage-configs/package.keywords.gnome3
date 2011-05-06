@@ -191,12 +191,14 @@ media-sound/rhythmbox
 >=dev-libs/nspr-4.8.7
 >=dev-libs/nss-3.12.9
 >=net-libs/xulrunner-2.0
-# Not needed by gnome-shell, but will cause conflicts due to xulrunner-2.0
->=www-client/firefox-4.0
 dev-libs/gjs
 net-im/telepathy-logger
 >=net-libs/telepathy-glib-0.13.12
 gnome-base/gnome-shell
+
+# Not needed by GNOME 3, but will cause conflicts due to xulrunner-2.0
+>=media-libs/libpng-1.4.7
+>=www-client/firefox-4.0
 
 # GNOME Fallback
 >=x11-wm/metacity-2.30.3-r1
