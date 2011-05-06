@@ -11,7 +11,3 @@
 # we can't use this until everything that uses libgnome-media-profiles.so is
 # ported to gtk+:3 (this includes rhythmbox, at least)
 >=gnome-base/gnome-media-2.91
-
-# Arun Raghavan <ford_prefect@gentoo.org> (10 Sep 2010)
-# Development version of sysprof.
-=dev-util/sysprof-1.1*
