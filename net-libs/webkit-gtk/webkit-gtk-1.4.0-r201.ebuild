@@ -65,6 +65,7 @@ src_prepare() {
 	# Fix build on Darwin8 (10.4 Tiger)
 	# XXX: Fails to apply
 	#epatch "${FILESDIR}"/${PN}-1.2.5-darwin8.patch
+	epatch "${FILESDIR}/${P}-nav-crasher.patch"
 
 	# Don't force -O2
 	sed -i 's/-O2//g' "${S}"/configure.ac || die "sed failed"
@@ -110,8 +111,6 @@ src_configure() {
 }
 
 src_compile() {
-	# XXX: This step is required so we properly build gettext catalogs
-	emake update-po || die "Compile failed"
 	# Fix sandbox error with USE="introspection"
 	# https://bugs.webkit.org/show_bug.cgi?id=35471
 	emake XDG_DATA_HOME="${T}/.local" || die "Compile failed"
