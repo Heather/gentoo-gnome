@@ -6,7 +6,7 @@ EAPI="3"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
+inherit eutils gnome2
 
 DESCRIPTION="Help browser for GNOME"
 HOMEPAGE="http://www.gnome.org/"
@@ -42,4 +42,11 @@ pkg_setup() {
 		--disable-schemas-compile
 		--enable-bz2
 		--enable-lzma"
+}
+
+src_prepare() {
+	gnome2_src_prepare
+
+	# Fix various issues fixed upstream since 3.0.2 release
+	epatch "${FILESDIR}"/*.patch
 }
