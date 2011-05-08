@@ -2,10 +2,14 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-#
-# Original Author: Gilles Dartiguelongue <eva@gentoo.org>
-# Purpose:
-#
+# @ECLASS: gnome2-python.eclass
+# @MAINTAINER:
+# Gentoo GNOME Project <gnome@gentoo.org>
+# Gentoo Python Project <python@gentoo.org>
+# @BLURB: Eclass for GNOME Python packages supporting installation for multiple Python ABIs
+# @DESCRIPTION:
+# The gnome2-python eclass defines phase functions for GNOME Python packages supporting
+# installation for multiple Python ABIs.
 
 inherit gnome2 python
 
