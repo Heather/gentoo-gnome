@@ -30,16 +30,15 @@ fi
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="connman cron gtk +introspection networkmanager nls nsplugin pm-utils qt4
-test udev"
+IUSE="connman cron gtk +introspection networkmanager nls nsplugin pm-utils qt4 test udev"
 
 CDEPEND="
 	connman? ( net-misc/connman )
-	introspection? ( >=dev-libs/gobject-introspection-0.9.8 )
 	gtk? ( dev-libs/dbus-glib
 		media-libs/fontconfig
 		>=x11-libs/gtk+-2.91.0:3
 		x11-libs/pango )
+	introspection? ( >=dev-libs/gobject-introspection-0.9.8 )
 	networkmanager? ( >=net-misc/networkmanager-0.6.4 )
 	nsplugin? ( dev-libs/dbus-glib
 		dev-libs/glib:2
@@ -55,13 +54,15 @@ CDEPEND="
 	>=dev-libs/dbus-glib-0.74
 	>=dev-libs/glib-2.22:2
 	>=sys-apps/dbus-1.1.0
-	>=sys-auth/polkit-0.97"
+	>=sys-auth/polkit-0.97
+"
 RDEPEND="${CDEPEND}
 	pm-utils? ( sys-power/pm-utils )
 	>=app-portage/layman-1.2.3
 	>=sys-apps/portage-2.2_rc39
-	sys-auth/consolekit"
-DEPEND="${CDEPEND} ${DEPEND}
+	sys-auth/consolekit
+"
+DEPEND="${CDEPEND}
 	nsplugin? ( >=net-libs/xulrunner-1.9.1 )
 	test? ( qt4? ( dev-util/cppunit >=x11-libs/qt-gui-4.4.0 ) )
 	dev-libs/libxslt
@@ -105,7 +106,6 @@ src_configure() {
 		${myconf} \
 		--localstatedir=/var \
 		--disable-dependency-tracking \
-		--enable-option-checking \
 		--enable-libtool-lock \
 		--disable-strict \
 		--disable-local \

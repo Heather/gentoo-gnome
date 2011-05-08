@@ -5,33 +5,49 @@
 EAPI="2"
 
 inherit eutils multilib python nsplugins
+if [[ ${PV} = 9999 ]]; then
+	inherit autotools git
+fi
 
 MY_PN="PackageKit"
-MY_P=${MY_PN}-${PV}
 
 DESCRIPTION="Manage packages in a secure way using a cross-distro and cross-architecture API"
 HOMEPAGE="http://www.packagekit.org/"
-SRC_URI="http://www.packagekit.org/releases/${MY_P}.tar.gz"
+
+if [[ ${PV} = 9999 ]]; then
+	EGIT_REPO_URI="git://anongit.freedesktop.org/git/${PN}/${MY_PN}"
+	KEYWORDS=""
+	DEPEND=">=dev-util/gtk-doc-1.9"
+	RESTRICT="test" # tests are failing atm
+	DOCS="AUTHORS MAINTAINERS NEWS README TODO"
+else
+	MY_P=${MY_PN}-${PV}
+	SRC_URI="http://www.packagekit.org/releases/${MY_P}.tar.gz"
+	KEYWORDS="~amd64 ~ppc ~x86"
+	S="${WORKDIR}/${MY_P}"
+	DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README TODO"
+fi
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~ppc ~x86"
-IUSE="connman +consolekit cron gtk networkmanager nls nsplugin pm-utils +policykit qt4 static-libs test udev"
+IUSE="connman cron gtk +introspection networkmanager nls nsplugin pm-utils qt4 test udev"
 
 CDEPEND="
 	connman? ( net-misc/connman )
 	gtk? ( dev-libs/dbus-glib
 		media-libs/fontconfig
 		>=x11-libs/gtk+-2.14.0:2
+		>=x11-libs/gtk+-2.91.0:3
 		x11-libs/pango )
+	introspection? ( >=dev-libs/gobject-introspection-0.9.8 )
 	networkmanager? ( >=net-misc/networkmanager-0.6.4 )
 	nsplugin? ( dev-libs/dbus-glib
 		dev-libs/glib:2
 		dev-libs/nspr
 		x11-libs/cairo
 		>=x11-libs/gtk+-2.14.0:2
+		>=x11-libs/gtk+-2.91.0:3
 		x11-libs/pango )
-	policykit? ( >=sys-auth/polkit-0.97 )
 	qt4? ( >=x11-libs/qt-core-4.4.0
 		>=x11-libs/qt-dbus-4.4.0
 		>=x11-libs/qt-sql-4.4.0 )
@@ -39,12 +55,15 @@ CDEPEND="
 	dev-db/sqlite:3
 	>=dev-libs/dbus-glib-0.74
 	>=dev-libs/glib-2.22:2
-	>=sys-apps/dbus-1.1.0"
+	>=sys-apps/dbus-1.1.0
+	>=sys-auth/polkit-0.97
+"
 RDEPEND="${CDEPEND}
-	consolekit? ( sys-auth/consolekit )
 	pm-utils? ( sys-power/pm-utils )
 	>=app-portage/layman-1.2.3
-	>=sys-apps/portage-2.2_rc39"
+	>=sys-apps/portage-2.2_rc39
+	sys-auth/consolekit
+"
 DEPEND="${CDEPEND}
 	nsplugin? ( >=net-libs/xulrunner-1.9.1 )
 	test? ( qt4? ( dev-util/cppunit >=x11-libs/qt-gui-4.4.0 ) )
@@ -53,15 +72,8 @@ DEPEND="${CDEPEND}
 	dev-util/pkgconfig
 	sys-devel/gettext"
 
-S="${WORKDIR}/${MY_P}"
-RESTRICT="test" # tests are failing atm
-
 # NOTES:
-# polkit is in gnome overlay, otherwise, should use policykit
-# do not use a specific user, useless and not more secure according to upstream
 # doc is in the tarball and always installed
-# mono doesn't install anything (RDEPEND dev-dotnet/gtk-sharp-gapi:2
-#	(R)DEPEND dev-dotnet/glib-sharp:2 dev-lang/mono), upstream bug 23247
 # using >=dbus-1.3.0 instead of >=dbus-1.1.1 because of a bug fixed in 1.3.0
 
 # TODO:
@@ -73,27 +85,23 @@ RESTRICT="test" # tests are failing atm
 # documentation/website with --enable-doc-install
 # failing tests
 
+pkg_setup() {
+	python_set_active_version 2
+}
+
 src_prepare() {
-	# fix sandbox issue with gapi2-* tools
-	# TODO: commented because mono is broken but:
-	# TODO: should be in pkg_setup ? could be done better ?
-	#if use mono; then
-	#	addwrite "/root/.wapi"
-	#fi
+	if [[ ${PV} = 9999 ]]; then
+		gtkdocize || die
+		intltoolize --force || die
+		eautoreconf
+	fi
 
 	# prevent pyc/pyo generation
-	rm py-compile || die "rm py-compile failed"
-	ln -s $(type -P true) py-compile
+	ln -sfn $(type -P true) py-compile
 }
 
 src_configure() {
 	local myconf=""
-
-	if use policykit; then
-		myconf="${myconf} --with-security-framework=polkit"
-	else
-		myconf="${myconf} --with-security-framework=dummy"
-	fi
 
 	# localstatedir: for gentoo it's /var/lib but for $PN it's /var
 	# dep-tracking,option-check,libtool-lock,strict,local: obvious reasons
@@ -104,7 +112,6 @@ src_configure() {
 		${myconf} \
 		--localstatedir=/var \
 		--disable-dependency-tracking \
-		--enable-option-checking \
 		--enable-libtool-lock \
 		--disable-strict \
 		--disable-local \
@@ -113,21 +120,21 @@ src_configure() {
 		--disable-debuginfo-install \
 		--disable-gstreamer-plugin \
 		--disable-service-packs \
-		--disable-managed \
+		--disable-static \
 		--enable-man-pages \
 		--disable-dummy \
 		--enable-portage \
 		--with-default-backend=portage \
-		--disable-introspection \
+		--with-security-framework=polkit \
 		$(use_enable connman) \
 		$(use_enable cron) \
 		$(use_enable gtk gtk-module) \
+		$(use_enable introspection) \
 		$(use_enable networkmanager) \
 		$(use_enable nls) \
 		$(use_enable nsplugin browser-plugin) \
 		$(use_enable pm-utils) \
 		$(use_enable qt4 qt) \
-		$(use_enable static-libs static) \
 		$(use_enable test tests) \
 		$(use_enable udev device-rebind)
 }
@@ -135,36 +142,19 @@ src_configure() {
 src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 
-	dodoc AUTHORS ChangeLog MAINTAINERS NEWS README TODO || die "dodoc failed"
+	dodoc ${DOCS} || die "dodoc failed"
 
 	if use nsplugin; then
 		src_mv_plugins /usr/$(get_libdir)/mozilla/plugins
 	fi
 
-	if ! use static-libs; then
-		find "${D}" -name *.la | xargs rm || die "removing .la files failed"
-	fi
+	ebegin "Removing .la files"
+	find "${D}" -name '*.la' -exec rm -f '{}' + || die
+	eend
 }
 
 pkg_postinst() {
 	python_mod_optimize $(python_get_sitedir)/${PN}
-
-	if ! use policykit; then
-		ewarn "You are not using policykit, the daemon can't be considered as secure."
-		ewarn "All users will be able to do anything through ${MY_PN}."
-		ewarn "Please, consider rebuilding ${MY_PN} with policykit USE flag."
-		ewarn "THIS IS A SECURITY ISSUE."
-		ewarn ""
-		ebeep
-		epause 5
-	fi
-
-	if ! use consolekit; then
-		ewarn "You have disabled consolekit support."
-		ewarn "Even if you can run ${MY_PN} without a running ConsoleKit daemon,"
-		ewarn "it is not recommanded nor supported upstream."
-		ewarn ""
-	fi
 }
 
 pkg_prerm() {
