@@ -40,13 +40,13 @@ gnome2-python_src_prepare() {
 
 gnome2-python_src_configure() {
 	configure() {
-		gnome2_src_configure PYTHON=$(PYTHON -a)
+		gnome2_src_configure PYTHON=$(PYTHON -a) "$@"
 	}
 	python_execute_function -s configure
 }
 
 gnome2-python_src_compile() {
-	python_execute_function -s gnome2_src_compile
+	python_execute_function -s gnome2_src_compile "$@"
 }
 
 gnome2-python_src_test() {
