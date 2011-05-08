@@ -66,7 +66,7 @@ pkg_setup() {
 #		--enable-libtool-lock
 #		--disable-dependency-tracking
 #		--enable-option-checking
-	G2CONF="
+	G2CONF="${G2CONF}
 		--localstatedir=/var
 		--enable-compile-warnings=yes
 		--enable-iso-c
