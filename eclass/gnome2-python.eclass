@@ -14,7 +14,7 @@
 inherit gnome2 python
 
 # Stolen from git.eclass
-EXPORTED_FUNCTIONS="pkg_setup src_compile src_test src_install pkg_postinst pkg_postrm"
+EXPORTED_FUNCTIONS="pkg_setup src_compile src_test src_install"
 case "${EAPI:-0}" in
     2|3) EXPORTED_FUNCTIONS="${EXPORTED_FUNCTIONS} src_prepare src_configure" ;;
 	0|1) ;;
@@ -53,20 +53,7 @@ gnome2-python_src_test() {
 	python_execute_function -s -d
 }
 
-
 gnome2-python_src_install() {
 	python_execute_function -s gnome2_src_install
 	python_clean_installation_image
-}
-
-
-gnome2-python_pkg_postinst() {
-	gnome2_pkg_postinst
-	python_mod_optimize ${GNOME_ORG_MODULE}
-}
-
-
-gnome2-python_pkg_postrm() {
-	gnome2_pkg_postrm
-	python_mod_cleanup ${GNOME_ORG_MODULE}
 }
