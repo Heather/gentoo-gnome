@@ -101,6 +101,13 @@ DEPEND="${RDEPEND}
 # docbook-xml-dtd is needed for user doc
 
 pkg_setup() {
+	# To remove when python eclass supports EAPI=4
+	# see bug #359379
+	if use python && ! use introspection; then
+		eerror "USE=python requires USE=introspection"
+		die "USE=python requires USE=introspection"
+	fi
+
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
 	G2CONF="${G2CONF}
 		--disable-maintainer-mode
