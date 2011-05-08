@@ -6,7 +6,7 @@ EAPI="3"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit eutils gnome2 multilib
+inherit gnome2 multilib
 
 DESCRIPTION="Personal file sharing for the GNOME desktop"
 HOMEPAGE="http://www.gnome.org/"
@@ -17,7 +17,6 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 # FIXME: could libnotify be made optional ?
-#        is consolekit needed or not ?
 # FIXME: gnome-bluetooth is a hard-dep
 # bluetooth is pure runtime dep (dbus)
 RDEPEND=">=dev-libs/glib-2.16.0:2
@@ -33,7 +32,7 @@ RDEPEND=">=dev-libs/glib-2.16.0:2
 	>=sys-apps/dbus-1.1.1
 	>=www-apache/mod_dnssd-0.6
 	>=www-servers/apache-2.2[apache2_modules_dav,apache2_modules_dav_fs,apache2_modules_authn_file,apache2_modules_auth_digest,apache2_modules_authz_groupfile]
-	x11-libs/libnotify"
+	>=x11-libs/libnotify-0.7"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/intltool-0.35
@@ -41,9 +40,8 @@ DEPEND="${RDEPEND}
 	app-text/gnome-doc-utils
 	app-text/docbook-xml-dtd:4.1.2"
 
-DOCS="AUTHORS ChangeLog NEWS README"
-
 pkg_setup() {
+	DOCS="AUTHORS ChangeLog NEWS README"
 	G2CONF="${G2CONF}
 		--with-httpd=apache2
 		--with-modules-path=/usr/$(get_libdir)/apache2/modules/"
