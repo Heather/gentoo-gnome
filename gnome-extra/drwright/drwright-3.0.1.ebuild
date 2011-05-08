@@ -3,6 +3,7 @@
 # $Header: $
 
 EAPI="4"
+GCONF_DEBUG="no"
 
 inherit gnome2
 
@@ -11,11 +12,10 @@ HOMEPAGE="http://git.gnome.org/browse/drwright"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86 ~amd64 ~sparc ~ppc"
+KEYWORDS="~amd64 ~ppc ~sparc ~x86"
 IUSE=""
 
 RDEPEND=">=dev-libs/glib-2.26.0:2
-	>=x11-libs/pango-1.2
 	>=x11-libs/gtk+-3.0.0:3
 	>=gnome-base/gnome-settings-daemon-2.91.8
 	>=gnome-base/gnome-control-center-2.91.6
@@ -23,10 +23,12 @@ RDEPEND=">=dev-libs/glib-2.26.0:2
 	media-libs/libcanberra[gtk3]
 	x11-libs/libX11
 	x11-libs/libXext
-	x11-libs/libXScrnSaver"
+	x11-libs/libXScrnSaver
+"
 DEPEND="${RDEPEND}
 	x11-proto/scrnsaverproto
 	sys-devel/gettext
 	>=dev-util/intltool-0.35.0
-	>=dev-util/pkgconfig-0.12.0"
+	>=dev-util/pkgconfig-0.12.0
+"
 DOCS="AUTHORS ChangeLog NEWS"
