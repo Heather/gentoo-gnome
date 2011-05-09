@@ -5,7 +5,7 @@
 EAPI="3"
 GCONF_DEBUG="no"
 
-inherit gnome2
+inherit gnome2 bash-completion
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -33,6 +33,7 @@ DEPEND="${COMMON_DEPEND}
 
 pkg_setup() {
 	G2CONF="${G2CONF}
+		--disable-schemas-compile
 		VALAC=$(type -p valac-0.12)
 		$(use_enable X editor)"
 		#$(use_enable vala)
@@ -62,4 +63,15 @@ src_install() {
 	echo 'CONFIG_PROTECT_MASK="/etc/dconf"' >> 51dconf
 	echo 'GSETTINGS_BACKEND="dconf"' >> 51dconf
 	doenvd 51dconf || die "doenvd failed"
+
+	# Remove bash-completion file installed by build system
+	rm -rv "${ED}/etc/bash_completion.d/" || die
+
+	use bash-completion && \
+		dobashcompletion "${S}/bin/dconf-bash-completion.sh" ${PN}
+}
+
+pkg_postinst() {
+	gnome2_pkg_postinst
+	use bashcompletion && bash-completion_pkg_postinst
 }
