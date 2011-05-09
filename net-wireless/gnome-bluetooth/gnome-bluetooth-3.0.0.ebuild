@@ -17,7 +17,7 @@ HOMEPAGE="http://live.gnome.org/GnomeBluetooth"
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="2"
-IUSE="doc +introspection" #nautilus
+IUSE="doc +introspection sendto"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -30,12 +30,9 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.7:2
 	>=dev-libs/dbus-glib-0.74
 	>=gnome-base/gnome-control-center-2.91
 
-	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )"
-#	nautilus? (
-#		|| ( >=gnome-base/nautilus-2.91
-#			 >=gnome-extra/nautilus-sendto-2.31.7 ) )"
-# New nautilus provides nautilus-sendto
-# sendto support doesn't work with newer nautilus
+	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
+	sendto? ( >=gnome-extra/nautilus-sendto-2.91 )
+"
 RDEPEND="${COMMON_DEPEND}
 	>=net-wireless/bluez-4.34
 	app-mobilephone/obexd
@@ -57,18 +54,16 @@ DEPEND="${COMMON_DEPEND}
 #	dev-util/gtk-doc-am
 
 pkg_setup() {
-	# FIXME: Bump nautilus-sendto and re-enable support for it
 	# FIXME: Add geoclue support
 	G2CONF="${G2CONF}
 		$(use_enable introspection)
-		--disable-nautilus-sendto
+		$(use_enable sendto nautilus-sendto)
 		--disable-maintainer-mode
 		--disable-moblin
 		--disable-desktop-update
 		--disable-icon-update
 		--disable-schemas-compile
 		--disable-static"
-		#$(use_enable nautilus nautilus-sendto)
 	DOCS="AUTHORS README NEWS ChangeLog"
 
 	enewgroup plugdev
