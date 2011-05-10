@@ -21,6 +21,8 @@ RDEPEND="
 	>=gnome-base/gnome-core-apps-${PV}[cups?,bluetooth?,cdr?]
 
 	>=x11-wm/metacity-2.34.0
+	>=x11-misc/notification-daemon-0.7
+	>=gnome-extra/polkit-gnome-0.100
 	>=gnome-base/gnome-panel-${PV}
 "
 DEPEND=""
