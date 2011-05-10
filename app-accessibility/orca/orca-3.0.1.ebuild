@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-accessibility/orca/orca-2.32.1.ebuild,v 1.1 2010/12/03 23:44:57 pacho Exp $
+# $Header: $
 
 EAPI="3"
 GCONF_DEBUG="no"
@@ -21,25 +21,25 @@ IUSE=""
 # liblouis is not in portage yet
 # it is used to provide contracted braille support
 # XXX: Check deps for correctness
-RDEPEND=">=dev-libs/glib-2.10
-	>=gnome-extra/at-spi-1.32
-	>=gnome-base/orbit-2
+RDEPEND=">=dev-libs/glib-2.10:2
+	>=gnome-extra/at-spi-1.32:1
+	>=gnome-base/orbit-2:2
 	>=dev-python/pyorbit-2.24
 	>=gnome-base/libbonobo-2.24
-	>=dev-python/libbonobo-python-2.24
+	>=dev-python/libbonobo-python-2.24:2
 
-	dev-python/pygobject
+	dev-python/pygobject:2
 	dev-python/pycairo
 	dev-python/pyxdg
 	>=dev-python/dbus-python-0.83
-	>=dev-python/pygtk-2.12
+	>=dev-python/pygtk-2.12:2
 
 	>=dev-python/libwnck-python-2.24
-	>=dev-python/gconf-python-2.24
-	>=dev-python/libgnome-python-2.14
+	>=dev-python/gconf-python-2.24:2
+	>=dev-python/libgnome-python-2.14:2
 
-	>=app-accessibility/gnome-speech-0.3.10
-	>=app-accessibility/gnome-mag-0.12.5"
+	>=app-accessibility/gnome-speech-0.3.10:1
+	>=app-accessibility/gnome-mag-0.12.5:1"
 
 DEPEND="${RDEPEND}
 	>=app-text/gnome-doc-utils-0.17.3
@@ -53,12 +53,6 @@ pkg_setup() {
 
 src_prepare() {
 	gnome2_src_prepare
-
-	# Apply patches from origin/gnome-3-0 fixing important bugs
-	epatch "${FILESDIR}/${P}-fix-gnomespeech-traceback.patch" \
-		"${FILESDIR}/${P}-fix-gsettings.patch" \
-		"${FILESDIR}/${P}-autostart-kde.patch" \
-		"${FILESDIR}/${P}-braille-window.patch"
 
 	# disable pyc compiling
 	mv py-compile py-compile.orig
