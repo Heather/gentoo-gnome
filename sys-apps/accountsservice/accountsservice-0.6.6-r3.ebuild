@@ -6,7 +6,7 @@ EAPI="3"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
+inherit gnome2 systemd
 
 DESCRIPTION="D-Bus interfaces for querying and manipulating user account information"
 HOMEPAGE="http://www.fedoraproject.org/wiki/Features/UserAccountDialog"
@@ -33,7 +33,6 @@ DEPEND="${RDEPEND}
 RESTRICT="test"
 
 pkg_setup() {
-	# Can configure systemdsystemunitdir
 	# docbook docs don't validate, disable doc rebuild
 	G2CONF="${G2CONF}
 		--disable-static
@@ -41,7 +40,7 @@ pkg_setup() {
 		--disable-docbook-docs
 		--disable-maintainer-mode
 		--disable-more-warnings
-		--without-systemdsystemunitdir
+		$(systemd_with_unitdir)
 		$(use_enable introspection)"
 	DOCS="AUTHORS NEWS README TODO"
 }
