@@ -39,6 +39,7 @@ RDEPEND="${COMMON_DEPEND}
 	sys-fs/udev"
 DEPEND="${COMMON_DEPEND}
 	!!net-wireless/bluez-gnome
+	app-text/docbook-xml-dtd:4.1.2
 	app-text/gnome-doc-utils
 	app-text/scrollkeeper
 	dev-libs/libxml2
