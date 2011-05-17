@@ -49,9 +49,6 @@ src_prepare() {
 		--disable-dtrace
 		--disable-coverage"
 
-	# https://bugs.gentoo.org/353941
-	epatch "${FILESDIR}/${PN}-drop-js-config.patch"
-
 	[[ ${PV} != 9999 ]] && eautoreconf
 
 	gnome2_src_prepare
