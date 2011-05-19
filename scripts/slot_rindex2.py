@@ -26,7 +26,7 @@ def main():
         #print(cp)
 
         # Get versions
-        cpvrs = portdb.dbapi.match(cp)
+        cpvrs = portdb.dbapi.xmatch('match-all', cp)
 
         # Group by slots
         slots = {}
