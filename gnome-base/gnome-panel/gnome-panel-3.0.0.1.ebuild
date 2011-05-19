@@ -16,7 +16,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2 FDL-1.1 LGPL-2"
 SLOT="0"
-IUSE="+bonobo doc eds +introspection networkmanager"
+IUSE="doc eds +introspection networkmanager"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
