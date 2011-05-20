@@ -1,0 +1,41 @@
+From d7230bc94184e341d477722e3844006ef9d4ed87 Mon Sep 17 00:00:00 2001
+From: W. Michael Petullo <mike@flyn.org>
+Date: Thu, 19 May 2011 03:05:06 +0000
+Subject: daap: treat DAAP record's mediakind property as en enum, not int
+
+Signed-off-by: W. Michael Petullo <mike@flyn.org>
+---
+diff --git a/plugins/daap/rb-daap-record.c b/plugins/daap/rb-daap-record.c
+index 08e28b5..50027c5 100644
+--- a/plugins/daap/rb-daap-record.c
++++ b/plugins/daap/rb-daap-record.c
+@@ -119,7 +119,7 @@ rb_daap_record_set_property (GObject *object,
+ 			record->priv->genre = g_value_dup_string (value);
+ 			break;
+ 		case PROP_MEDIAKIND:
+-			record->priv->mediakind = g_value_get_int (value);
++			record->priv->mediakind = g_value_get_enum (value);
+ 			break;
+ 		case PROP_FORMAT:
+ 			g_free (record->priv->format);
+@@ -201,7 +201,7 @@ rb_daap_record_get_property (GObject *object,
+ 			g_value_set_string (value, record->priv->genre);
+ 			break;
+ 		case PROP_MEDIAKIND:
+-			g_value_set_int (value, record->priv->mediakind);
++			g_value_set_enum (value, record->priv->mediakind);
+ 			break;
+ 		case PROP_FORMAT:
+ 			g_value_set_string (value, record->priv->format);
+@@ -437,9 +437,6 @@ rb_daap_record_new (RhythmDBEntry *entry)
+ 		record->priv->real_format = g_strdup (ext);
+ 		record->priv->format = g_strdup (record->priv->real_format);
+ 
+-		/* Only support songs */
+-		record->priv->mediakind = 1;
+-
+ 		record->priv->track    = rhythmdb_entry_get_ulong
+ 						(entry, RHYTHMDB_PROP_TRACK_NUMBER);
+ 
+--
+cgit v0.9

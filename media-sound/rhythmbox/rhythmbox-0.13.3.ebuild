@@ -42,7 +42,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.12
 		brasero? ( >=app-cdr/brasero-0.9.1 )
 		!brasero? ( >=gnome-extra/nautilus-cd-burner-2.21.6 ) )
 	daap? (
-		net-libs/libdmapsharing:3.0
+		>=net-libs/libdmapsharing-2.9.9:3.0
 		>=net-dns/avahi-0.6 )
 	html? ( >=net-libs/webkit-gtk-1.1.17 )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-0.4.9 )
@@ -161,6 +161,8 @@ pkg_setup() {
 
 src_prepare() {
 	epatch "${FILESDIR}/libdmapsharing-0.3-support.patch"
+	epatch "${FILESDIR}/rhythmbox-daap-media-enum.patch"
+	epatch "${FILESDIR}/rhythmbox-daap-password.patch"
 	eautoreconf
 
 	gnome2_src_prepare
