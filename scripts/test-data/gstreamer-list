@@ -9,7 +9,6 @@ media-plugins/gst-plugins-libvisual
 media-plugins/gst-plugins-ogg
 media-plugins/gst-plugins-pango
 media-plugins/gst-plugins-theora
-media-plugins/gst-plugins-v4l
 media-plugins/gst-plugins-vorbis
 media-plugins/gst-plugins-x
 media-plugins/gst-plugins-xvideo
@@ -20,6 +19,7 @@ media-plugins/gst-plugins-dv
 media-plugins/gst-plugins-esd
 media-plugins/gst-plugins-flac
 media-plugins/gst-plugins-gconf
+media-plugins/gst-plugins-jack
 media-plugins/gst-plugins-jpeg
 media-plugins/gst-plugins-libpng
 media-plugins/gst-plugins-oss
@@ -52,11 +52,15 @@ media-plugins/gst-plugins-ladspa
 media-plugins/gst-plugins-libmms
 media-plugins/gst-plugins-mimic
 media-plugins/gst-plugins-modplug
+media-plugins/gst-plugins-mpeg2enc
+media-plugins/gst-plugins-mplex
 media-plugins/gst-plugins-musepack
 media-plugins/gst-plugins-mythtv
 media-plugins/gst-plugins-neon
 media-plugins/gst-plugins-resindvd
-#media-plugins/gst-plugins-schroedinger
+media-plugins/gst-plugins-schroedinger
+media-plugins/gst-plugins-vp8
+media-plugins/gst-plugins-xvid
 
 dev-python/gst-python
 
