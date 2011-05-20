@@ -39,7 +39,7 @@ RDEPEND=">=dev-libs/glib-2.28.0:2
 	x11-libs/libXrender
 
 	devhelp? ( >=dev-util/devhelp-3.0.0 )
-	glade? ( >=dev-util/glade-3.9.2 )
+	glade? ( >=dev-util/glade-3.9.2:3.10 )
 	graphviz? ( >=media-gfx/graphviz-2.6 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 	subversion? (

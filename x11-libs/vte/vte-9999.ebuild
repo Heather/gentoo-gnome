@@ -32,7 +32,7 @@ RDEPEND=">=dev-libs/glib-2.26:2
 	x11-libs/libX11
 	x11-libs/libXft
 
-	glade? ( >=dev-util/glade-3.9:3 )
+	glade? ( >=dev-util/glade-3.9:3.10 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.0 )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
