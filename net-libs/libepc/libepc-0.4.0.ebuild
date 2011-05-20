@@ -16,7 +16,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="doc"
 
-RDEPEND=">=net-dns/avahi-0.6[dbus,gtk]
+RDEPEND=">=net-dns/avahi-0.6[dbus,gtk3]
 	>=dev-libs/glib-2.15.1
 	>=net-libs/gnutls-1.4
 	>=sys-libs/e2fsprogs-libs-1.36
