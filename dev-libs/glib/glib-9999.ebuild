@@ -12,40 +12,44 @@ fi
 
 DESCRIPTION="The GLib library of C routines"
 HOMEPAGE="http://www.gtk.org/"
+SRC_URI="${SRC_URI}
+	http://pkgconfig.freedesktop.org/releases/pkg-config-0.26.tar.gz" # pkg.m4 for eautoreconf
 
 LICENSE="LGPL-2"
 SLOT="2"
-IUSE="debug doc fam +introspection selinux static-libs test xattr"
+IUSE="debug doc fam +introspection selinux +static-libs test xattr"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 fi
 
-COMMON_DEPEND="virtual/libiconv
+RDEPEND="virtual/libiconv
 	sys-libs/zlib
 	xattr? ( sys-apps/attr )
 	fam? ( virtual/fam )"
-DEPEND="${COMMON_DEPEND}
-	>=dev-util/pkgconfig-0.16
+DEPEND="${RDEPEND}
 	>=sys-devel/gettext-0.11
+	>=dev-util/gtk-doc-am-1.13
 	doc? (
 		>=dev-libs/libxslt-1.0
 		>=dev-util/gtk-doc-1.13
 		~app-text/docbook-xml-dtd-4.1.2 )
-	test? ( >=sys-apps/dbus-1.2.14 )"
-PDEPEND="introspection? ( dev-libs/gobject-introspection )"
-RDEPEND="${COMMON_DEPEND}
+	test? ( dev-util/pkgconfig
+		>=sys-apps/dbus-1.2.14 )"
+PDEPEND="introspection? ( dev-libs/gobject-introspection )
 	!<gnome-base/gvfs-1.6.4-r990" # Earlier versions do not work with glib
+
 # XXX: Consider adding test? ( sys-devel/gdb ); assert-msg-test tries to use it
 
 pkg_setup() {
 	python_set_active_version 2
-
 }
 
 src_prepare() {
 	[[ ${PV} = 9999 ]] && gnome2-live_src_prepare
+	mv -vf "${WORKDIR}"/pkg-config-*/pkg.m4 "${WORKDIR}"/ || die
+
 	if use ia64 ; then
 		# Only apply for < 4.1
 		local major=$(gcc-major-version)
@@ -69,9 +73,6 @@ src_prepare() {
 	# Fix test failure when upgrading from 2.22 to 2.24, upstream bug 621368
 	epatch "${FILESDIR}/${PN}-2.24-assert-test-failure.patch"
 
-	# skip tests that require writing to /root/.dbus, upstream bug 631379
-	#epatch "${FILESDIR}/${PN}-2.25-skip-tests-with-dbus-keyring.patch"
-
 	# Do not try to remove files on live filesystem, upstream bug #619274
 	sed 's:^\(.*"/desktop-app-info/delete".*\):/*\1*/:' \
 		-i "${S}"/gio/tests/desktop-app-info.c || die "sed failed"
@@ -82,14 +83,9 @@ src_prepare() {
 			|| die "sed failed"
 	fi
 
-	## Don't skip these in development versions
-	# Gsettings tests are broken, see bug #352451
-	#sed -e '/gsettings/d' \
-	#	-i gio/tests/Makefile.* || die "sed gsettings failed"
-
-	# Needed for the punt-python-check patch.
+	# Needed for the punt-python-check patch, disabling timeout test
 	# Also needed to prevent croscompile failures, see bug #267603
-	eautoreconf
+	AT_M4DIR="${WORKDIR}" eautoreconf
 
 	[[ ${CHOST} == *-freebsd* ]] && elibtoolize
 
@@ -103,20 +99,21 @@ src_configure() {
 	# an unusable form as it disables some commonly used API.  Please do not
 	# convert this to the use_enable form, as it results in a broken build.
 	# -- compnerd (3/27/06)
-	# disable-visibility needed for reference debug, bug #274647
-	use debug && myconf="--enable-debug --disable-visibility"
+	use debug && myconf="--enable-debug"
 
 	# Always use internal libpcre, bug #254659
 	econf ${myconf} \
-		  $(use_enable xattr) \
-		  $(use_enable doc man) \
-		  $(use_enable doc gtk-doc) \
-		  $(use_enable fam) \
-		  $(use_enable selinux) \
-		  $(use_enable static-libs static) \
-		  --enable-regex \
-		  --with-pcre=internal \
-		  --with-threads=posix
+		$(use_enable xattr) \
+		$(use_enable doc man) \
+		$(use_enable doc gtk-doc) \
+		$(use_enable fam) \
+		$(use_enable selinux) \
+		$(use_enable static-libs static) \
+		--enable-regex \
+		--with-pcre=internal \
+		--with-threads=posix \
+		--disable-dtrace \
+		--disable-systemtap
 }
 
 src_install() {
@@ -146,10 +143,11 @@ src_test() {
 	export XDG_DATA_DIRS=/usr/local/share:/usr/share
 	export G_DBUS_COOKIE_SHA1_KEYRING_DIR="${T}/temp"
 	export XDG_DATA_HOME="${T}"
+	unset GSETTINGS_BACKEND # bug 352451
 
 	# Related test is a bit nitpicking
-	mkdir "$G_DBUS_COOKIE_SHA1_KEYRING_DIR/temp"
-	chmod 0700  "$G_DBUS_COOKIE_SHA1_KEYRING_DIR/temp"
+	mkdir "$G_DBUS_COOKIE_SHA1_KEYRING_DIR"
+	chmod 0700 "$G_DBUS_COOKIE_SHA1_KEYRING_DIR"
 
 	# Hardened: gdb needs this, bug #338891
 	if host-is-pax ; then
