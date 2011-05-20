@@ -6,7 +6,7 @@ EAPI="3"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2 multilib pam virtualx
+inherit autotools eutils gnome2 multilib pam virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -16,7 +16,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
-IUSE="debug doc pam test"
+IUSE="+caps debug doc pam test"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -33,13 +33,13 @@ RDEPEND=">=dev-libs/glib-2.25:2
 	>=sys-apps/dbus-1.0
 	>=dev-libs/libgcrypt-1.2.2
 	>=dev-libs/libtasn1-1
-	sys-libs/libcap
-
+	caps? ( sys-libs/libcap-ng )
 	pam? ( virtual/pam )
 "
 #	valgrind? ( dev-util/valgrind )
 DEPEND="${RDEPEND}
 	sys-devel/gettext
+	>=dev-util/gtk-doc-am-1.9
 	>=dev-util/intltool-0.35
 	>=dev-util/pkgconfig-0.9
 	doc? ( >=dev-util/gtk-doc-1.9 )"
@@ -49,10 +49,10 @@ PDEPEND="gnome-base/libgnome-keyring"
 
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS README"
-	# XXX: Automagic libcap support
 	G2CONF="${G2CONF}
 		$(use_enable debug)
 		$(use_enable test tests)
+		$(use_with caps libcap-ng)
 		$(use_enable pam)
 		$(use_with pam pam-dir $(getpam_mod_dir))
 		--with-root-certs=${EPREFIX}/etc/ssl/certs/
@@ -66,8 +66,10 @@ src_prepare() {
 	# Disable gcr tests due to weirdness with opensc
 	# ** WARNING **: couldn't load PKCS#11 module: /usr/lib64/pkcs11/gnome-keyring-pkcs11.so: Couldn't initialize module: The device was removed or unplugged
 	sed -e 's/^\(SUBDIRS = \.\)\(.*\)/\1/' \
-		-i gcr/Makefile.am gcr/Makefile.in || die "sed failed"
+		-i gcr/Makefile.* || die "sed failed"
 
+	# https://bugzilla.gnome.org/show_bug.cgi?id=649936
+	epatch "${FILESDIR}"/${PN}-3.1.1-automagic-libcap-ng.patch
 	gnome2_src_prepare
 }
 

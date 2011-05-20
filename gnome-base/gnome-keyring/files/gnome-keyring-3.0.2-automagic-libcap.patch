@@ -1,0 +1,57 @@
+From b75b9d5aa7f6207eca190b9d8e08059872c99365 Mon Sep 17 00:00:00 2001
+From: Alexandre Rostovtsev <tetromino@gmail.com>
+Date: Fri, 20 May 2011 17:53:43 -0400
+Subject: [PATCH] Fix automagic libcap dependency (GNOME bug #649936)
+
+Backport of the patch by Saleem Abdulrasool <compnerd@compnerd.org>
+to gnome-keyring-3.0.x
+
+Signed-off-by: Alexandre Rostovtsev <tetromino@gmail.com>
+---
+ configure.in |   29 +++++++++++++++++++++--------
+ 1 files changed, 21 insertions(+), 8 deletions(-)
+
+diff --git a/configure.in b/configure.in
+index b2d07a7..88f7e66 100644
+--- a/configure.in
++++ b/configure.in
+@@ -445,16 +445,29 @@ fi
+ # libcap2
+ #
+
+-AC_CHECK_LIB([cap], [cap_get_proc], have_libcap="yes", have_libcap="no")
+-
+-if test $have_libcap = yes; then
+-   AC_DEFINE(HAVE_LIBCAP, 1, [Have libcap2 package, libcap library])
+-   DAEMON_LIBS="$DAEMON_LIBS -lcap"
+-else
+-   AC_MSG_WARN([libcap2 (or development headers) is not installed])
++AC_ARG_WITH([libcap],
++            [AC_HELP_STRING([--without-libcap],
++                            [build without libcap2 (disables Linux capabilities support)])],,
++            [with_libcap=auto])
++
++if test x"$with_libcap" != x"no" ; then
++    AC_CHECK_LIB([cap], [cap_get_proc],
++                 [
++                   with_libcap="yes"
++                   AC_DEFINE([HAVE_LIBCAP], [1], [Have libcap2 package, libcap library])
++                   DAEMON_LIBS="$DAEMON_LIBS -lcap"
++                 ],
++                 [
++                   if test x"$with_libcap" = x"yes" ; then
++                     AC_MSG_ERROR([libcap2 support requested, but package not found])
++                   else
++                     AC_MSG_WARN([libcap2 (or development headers) is not installed])
++                   fi
++                   with_libcap="no"
++                 ])
+ fi
+
+-libcap_status=$have_libcap
++libcap_status=$with_libcap
+
+ # --------------------------------------------------------------------
+ # Debug mode
+--
+1.7.5.rc3
