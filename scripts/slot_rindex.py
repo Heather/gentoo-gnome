@@ -153,7 +153,7 @@ def get_revdeps_rindex(key):
     revdeps = set()
     try:
         rdeps_raw = urllib2.urlopen('/'.join([RINDEX, key])).read().split()
-    except urllib2.HTTPError as e:
+    except urllib2.HTTPError, e:
         if e.getcode() == 404:
             return revdeps
         raise
