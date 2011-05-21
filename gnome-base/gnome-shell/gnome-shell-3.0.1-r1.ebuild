@@ -14,6 +14,8 @@ fi
 
 DESCRIPTION="Provides core UI functions for the GNOME 3 desktop"
 HOMEPAGE="http://live.gnome.org/GnomeShell"
+SRC_URI="${SRC_URI}
+	mirror://gentoo/${P}-patches-0.1.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -87,7 +89,7 @@ DEPEND="${COMMON_DEPEND}
 	>=dev-util/pkgconfig-0.22
 	>=dev-util/intltool-0.26
 	gnome-base/gnome-common
-	!dev-lang/spidermonkey"
+	!!<dev-lang/spidermonkey-2"
 # libmozjs.so is picked up from /usr/lib while compiling, so block at build-time
 # https://bugs.gentoo.org/show_bug.cgi?id=360413
 
@@ -98,6 +100,11 @@ pkg_setup() {
 		--enable-compile-warnings=maximum
 		--disable-schemas-compile
 		--disable-jhbuild-wrapper-script"
+}
+
+src_prepare() {
+	EPATCH_SUFFIX="patch" epatch "${WORKDIR}"
+	gnome2_src_prepare
 }
 
 pkg_postinst() {
