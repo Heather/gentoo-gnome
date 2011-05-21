@@ -6,7 +6,10 @@ EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2 gnome2-live
+inherit gnome2
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="JavaScript Extensions for GNOME Shell"
 HOMEPAGE="http://live.gnome.org/GnomeShell/Extensions"
@@ -17,8 +20,6 @@ IUSE=""
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	EGIT_TREE="3.0.1"
-	EGIT_BRANCH="gnome-3-0"
 	KEYWORDS="~amd64 ~x86"
 fi
 
@@ -38,7 +39,7 @@ DEPEND="${COMMON_DEPEND}
 	gnome-base/gnome-common"
 
 pkg_setup() {
-	DOCS="HACKING README"
+	DOCS="NEWS README"
 	G2CONF="${G2CONF}
 		--enable-extensions=all
 		--disable-schemas-compile"
