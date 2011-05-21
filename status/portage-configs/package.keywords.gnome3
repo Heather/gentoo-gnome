@@ -54,6 +54,7 @@ gnome-base/gsettings-desktop-schemas
 gnome-base/gvfs
 gnome-base/libgnomekbd
 gnome-extra/at-spi
+gnome-extra/bug-buddy
 gnome-extra/evolution-data-server
 gnome-extra/evolution-exchange
 gnome-extra/evolution-mapi
