@@ -54,6 +54,12 @@ DEPEND="${RDEPEND}
 
 S="${WORKDIR}/${MY_P}"
 
+pkg_setup() {
+	if ! use gstreamer ; then
+		die "Build does not work with USE=-gstreamer due to upstream issue"
+	fi
+}
+
 src_prepare() {
 	# FIXME: Fix unaligned accesses on ARM, IA64 and SPARC
 	# https://bugs.webkit.org/show_bug.cgi?id=19775
