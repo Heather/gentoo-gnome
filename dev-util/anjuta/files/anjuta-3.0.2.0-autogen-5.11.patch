@@ -1,0 +1,33 @@
+From 21dbcf252598da91237abbbb60442f95662cd522 Mon Sep 17 00:00:00 2001
+From: Alexandre Rostovtsev <tetromino@gmail.com>
+Date: Mon, 23 May 2011 22:02:23 -0400
+Subject: [PATCH] Support autogen-5.11 detection (bug #650930)
+
+Autogen-5.11 uses a different version string format that autogen-5.9:
+autogen (GNU AutoGen) 5.11.9
+vs.
+autogen (GNU AutoGen) - The Automated Program Generator - Ver. 5.9.7
+
+Fortunately, all versions of autogen use the longer version of the
+string in their usage description. So we can detect modern versions
+of autogen simply by replacing autogen -v with autogen -u.
+---
+ plugins/project-wizard/autogen.c |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/plugins/project-wizard/autogen.c b/plugins/project-wizard/autogen.c
+index ca6492a..0135cb8 100644
+--- a/plugins/project-wizard/autogen.c
++++ b/plugins/project-wizard/autogen.c
+@@ -89,7 +89,7 @@ struct _NPWAutogen
+ gboolean
+ npw_check_autogen (void)
+ {
+-	gchar* args[] = {"autogen", "-v", NULL};
++	gchar* args[] = {"autogen", "-u", NULL};
+ 	gchar* output;
+ 
+ 	if (g_spawn_sync (NULL, args, NULL, G_SPAWN_SEARCH_PATH | G_SPAWN_STDERR_TO_DEV_NULL,
+-- 
+1.7.5.rc3
+

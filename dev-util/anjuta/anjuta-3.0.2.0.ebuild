@@ -86,10 +86,18 @@ pkg_setup() {
 	filter-flags -fomit-frame-pointer
 
 	python_set_active_version 2
+
+	# FIXME: documentation fails to build when USE=test. But why?
+	# FIXME: change this to REQUIRED_USE when python.eclass allows EAPI4.
+	use test && use doc &&
+		die "For ${P}, doc USE flag must be disabled when FEATURES=test"
 }
 
-#src_prepare() {
-#	gnome2_src_prepare
+src_prepare() {
+	# https://bugzilla.gnome.org/show_bug.cgi?id=650930
+	epatch "${FILESDIR}/${PN}-3.0.2.0-autogen-5.11.patch"
+
+	gnome2_src_prepare
 
 	# Needed to preserve introspection configure option, see bgo#633730
 	# eautoreconf needs introspection.m4
@@ -99,7 +107,7 @@ pkg_setup() {
 #	cp "${WORKDIR}"/introspection.m4 . || die
 #	intltoolize --force --copy --automake || die "intltoolize failed"
 #	AT_M4DIR="." eautoreconf
-#}
+}
 
 src_install() {
 	# Anjuta uses a custom rule to install DOCS, get rid of it
