@@ -52,10 +52,12 @@ COMMON_DEPEND="
 		x11-libs/libX11 )"
 RDEPEND="${COMMON_DEPEND}
 	sudoku? (
-		>=dev-python/gconf-python-2.17.3
+		dev-libs/glib:2[introspection]
+		>=dev-python/pycairo-1
 		>=dev-python/pygobject-2
-		>=dev-python/pygtk-2.14
-		>=dev-python/pycairo-1 )
+		>=x11-libs/gtk+-3.0.0:3[introspection]
+		x11-libs/gdk-pixbuf:2[introspection]
+		x11-libs/pango[introspection] )
 
 	!<gnome-extra/gnome-games-extra-data-3.0.0"
 DEPEND="${COMMON_DEPEND}
@@ -130,6 +132,8 @@ pkg_setup() {
 
 src_prepare() {
 	gnome2_src_prepare
+
+	use sudoku && python_convert_shebangs 2 gnome-sudoku/src/gnome-sudoku.in.in
 
 	# TODO: File upstream bug for this
 	epatch "${FILESDIR}/${PN}-2.91.90-fix-conditional-ac-prog-cxx.patch"
