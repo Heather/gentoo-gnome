@@ -34,7 +34,7 @@ COMMON_DEPEND="
 	>=gnome-base/gconf-2.31.3
 	>=x11-misc/xdg-utils-1.0.2-r3
 	>=sys-power/upower-0.9
-	>=sys-apps/accountsservice-0.6.5
+	>=sys-apps/accountsservice-0.6.12
 
 	app-text/iso-codes
 

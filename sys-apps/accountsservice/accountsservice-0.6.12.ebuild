@@ -44,13 +44,3 @@ pkg_setup() {
 		$(use_enable introspection)"
 	DOCS="AUTHORS NEWS README TODO"
 }
-
-src_prepare() {
-	# Taken from upstream trunk, remove for next release
-	epatch "${FILESDIR}/${PN}-fix-useradd.patch"
-
-	# Taken from upstream trunk, remove for next release
-	epatch "${FILESDIR}/${PN}-fix-nameless-users-crash.patch"
-
-	gnome2_src_prepare
-}
