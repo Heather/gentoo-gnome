@@ -6,7 +6,7 @@ EAPI="3"
 GCONF_DEBUG="no"
 PYTHON_DEPEND="2"
 
-inherit eutils gnome2 python virtualx
+inherit autotools eutils gnome2 python virtualx
 
 DESCRIPTION="PackageKit client for the GNOME desktop"
 HOMEPAGE="http://www.packagekit.org/"
@@ -80,6 +80,9 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# https://bugzilla.gnome.org/show_bug.cgi?id=651026
+	eautoreconf
+
 	gnome2_src_prepare
 
 	# fix pyc/pyo generation
