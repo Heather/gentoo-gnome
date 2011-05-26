@@ -13,7 +13,7 @@ HOMEPAGE="http://live.gnome.org/Mousetweaks/Home"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
-IUSE="+applet"
+IUSE="applet"
 
 RDEPEND="
 	>=dev-libs/glib-2.25.9:2
