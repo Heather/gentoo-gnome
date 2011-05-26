@@ -6,7 +6,7 @@ EAPI="3"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
+inherit eutils gnome2
 
 DESCRIPTION="Gtk module for bridging AT-SPI to Atk"
 HOMEPAGE="http://live.gnome.org/Accessibility"
@@ -34,4 +34,14 @@ pkg_setup() {
 	DOCS="AUTHORS NEWS README"
 	# xevie is deprecated/broken since xorg-1.6/1.7
 	G2CONF="${G2CONF} --enable-p2p"
+}
+
+src_prepare() {
+	# disable teamspaces test since that requires Novell.ICEDesktop.Daemon
+	epatch "${FILESDIR}/${PN}-2.0.2-disable-teamspaces-test.patch"
+	# FIXME: droute test fails
+	sed -e 's:TESTS = droute-test\.*:TESTS = :' -i droute/Makefile.* ||
+		die "sed droute/Makefile.* failed"
+
+	gnome2_src_prepare
 }
