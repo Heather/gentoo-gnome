@@ -69,7 +69,7 @@ src_prepare() {
 		-i gcr/Makefile.* || die "sed failed"
 
 	# https://bugzilla.gnome.org/show_bug.cgi?id=649936
-	epatch "${FILESDIR}"/${P}-automagic-libcap.patch
+	epatch "${FILESDIR}"/${PN}-3.0.2-automagic-libcap.patch
 	eautoreconf
 	gnome2_src_prepare
 }
