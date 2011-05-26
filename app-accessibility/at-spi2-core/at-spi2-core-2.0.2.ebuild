@@ -6,7 +6,7 @@ EAPI="3"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
+inherit eutils gnome2
 
 DESCRIPTION="D-Bus accessibility specifications and registration daemon"
 HOMEPAGE="http://live.gnome.org/Accessibility"
@@ -33,4 +33,11 @@ pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS README"
 	# xevie is deprecated/broken since xorg-1.6/1.7
 	G2CONF="${G2CONF} --disable-xevie"
+}
+
+src_prepare() {
+	# disable teamspaces test since that requires Novell.ICEDesktop.Daemon
+	epatch "${FILESDIR}/${PN}-2.0.2-disable-teamspaces-test.patch"
+
+	gnome2_src_prepare
 }
