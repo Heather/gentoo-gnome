@@ -32,7 +32,6 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	>=x11-libs/libnotify-0.7.0
 	>=x11-libs/cairo-1.0.0
 	>=gnome-base/gconf-2.31.1:2
-	>=gnome-base/gnome-control-center-2.31.4
 	>=media-libs/libcanberra-0.26-r2[gtk3]
 	>=sys-power/upower-0.9.1
 	>=x11-apps/xrandr-1.3
