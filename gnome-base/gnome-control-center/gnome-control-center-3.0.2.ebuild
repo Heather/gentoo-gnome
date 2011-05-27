@@ -64,6 +64,7 @@ COMMON_DEPEND="
 	socialweb? ( net-libs/libsocialweb )"
 RDEPEND="${COMMON_DEPEND}
 	sys-apps/accountsservice
+	cups? ( net-print/cups-pk-helper )
 
 	!gnome-extra/gnome-media[pulseaudio]
 	!<gnome-extra/gnome-media-2.32.0-r300
@@ -94,4 +95,13 @@ pkg_setup() {
 		$(use_enable cups)
 		$(use_with socialweb libsocialweb)"
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
+}
+
+src_prepare() {
+	# https://bugzilla.gnome.org/show_bug.cgi?id=651162
+	# XXX: remove for next release
+	sed -e 's:no-undefined:-no-undefined:' \
+		-i libgnome-control-center/Makefile.* || die "sed failed"
+
+	gnome2_src_prepare
 }

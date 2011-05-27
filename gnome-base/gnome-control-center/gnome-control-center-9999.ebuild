@@ -64,6 +64,7 @@ COMMON_DEPEND="
 	socialweb? ( net-libs/libsocialweb )"
 RDEPEND="${COMMON_DEPEND}
 	sys-apps/accountsservice
+	cups? ( net-print/cups-pk-helper )
 
 	!gnome-extra/gnome-media[pulseaudio]
 	!<gnome-extra/gnome-media-2.32.0-r300
