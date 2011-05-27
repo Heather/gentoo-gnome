@@ -65,6 +65,9 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# Gentoo bug #365779 + https://bugzilla.gnome.org/show_bug.cgi?id=651209
+	epatch "${FILESDIR}/${PN}-3.0.2-segfault-in-gtk_icon_info_load_symbolic.patch"
+
 	gnome2_src_prepare
 
 	# Remove crazy CFLAGS
