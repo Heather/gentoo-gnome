@@ -47,6 +47,7 @@ pkg_setup() {
 src_prepare() {
 	gnome2_src_prepare
 
-	# Fix various issues fixed upstream since 3.0.2 release
-	epatch "${FILESDIR}"/*.patch
+	# Fix compatibility with Gentoo's sys-apps/man
+	# https://bugzilla.gnome.org/show_bug.cgi?id=648854
+	epatch "${FILESDIR}/${PN}-3.0.3-man-compatibility.patch"
 }
