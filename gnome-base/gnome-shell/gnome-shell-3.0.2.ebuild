@@ -7,15 +7,13 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2:2.5"
 
-inherit gnome2
+inherit eutils gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
 
 DESCRIPTION="Provides core UI functions for the GNOME 3 desktop"
 HOMEPAGE="http://live.gnome.org/GnomeShell"
-SRC_URI="${SRC_URI}
-	mirror://gentoo/${P}-patches-0.1.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -68,7 +66,8 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 # 2. Introspection stuff + dconf needed via imports.gi.*
 # 3. gnome-session is needed for gnome-session-quit
 # 4. Control shell settings
-# 5. nm-applet is needed for auth prompting and the wireless connection dialog
+# 5. accountsservice is needed for GdmUserManager
+# 6. nm-applet is needed for auth prompting and the wireless connection dialog
 RDEPEND="${COMMON_DEPEND}
 	>=sys-auth/polkit-0.101[introspection]
 
@@ -81,9 +80,11 @@ RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/gnome-settings-daemon-2.91
 	>=gnome-base/gnome-control-center-2.91.92-r1
 
+	>=sys-apps/accountsservice-0.6.12
+
 	nm-applet? (
-		>=gnome-extra/nm-applet-0.8.997
-		>=net-misc/networkmanager-0.8.997[introspection] )"
+		>=gnome-extra/nm-applet-0.8.999
+		>=net-misc/networkmanager-0.8.999[introspection] )"
 DEPEND="${COMMON_DEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.22
@@ -103,7 +104,9 @@ pkg_setup() {
 }
 
 src_prepare() {
-	EPATCH_SUFFIX="patch" epatch "${WORKDIR}"
+	# https://bugzilla.gnome.org/show_bug.cgi?id=647893
+	# can trigger the crash even with accountsservice-0.6.12
+	epatch "${FILESDIR}/${PN}-3.0.2-user-removed-signals.patch"
 	gnome2_src_prepare
 }
 

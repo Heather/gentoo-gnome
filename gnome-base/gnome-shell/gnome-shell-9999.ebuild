@@ -66,7 +66,8 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 # 2. Introspection stuff + dconf needed via imports.gi.*
 # 3. gnome-session is needed for gnome-session-quit
 # 4. Control shell settings
-# 5. nm-applet is needed for auth prompting and the wireless connection dialog
+# 5. accountsservice is needed for GdmUserManager
+# 6. nm-applet is needed for auth prompting and the wireless connection dialog
 RDEPEND="${COMMON_DEPEND}
 	>=sys-auth/polkit-0.101[introspection]
 
@@ -79,9 +80,11 @@ RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/gnome-settings-daemon-2.91
 	>=gnome-base/gnome-control-center-2.91.92-r1
 
+	>=sys-apps/accountsservice-0.6.12
+
 	nm-applet? (
-		>=gnome-extra/nm-applet-0.8.997
-		>=net-misc/networkmanager-0.8.997[introspection] )"
+		>=gnome-extra/nm-applet-0.8.999
+		>=net-misc/networkmanager-0.8.999[introspection] )"
 DEPEND="${COMMON_DEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.22
