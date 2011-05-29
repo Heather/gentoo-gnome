@@ -1,0 +1,764 @@
+From 67c3c93b8fd1e11716e72142ca43deb978e15c98 Mon Sep 17 00:00:00 2001
+From: Owen W. Taylor <otaylor@fishsoup.net>
+Date: Tue, 22 Mar 2011 19:36:12 +0000
+Subject: Only shadow ARGB windows with a frame outside the frame
+
+An ARGB window with a frame is likely something like a transparent
+terminal. It looks awful (and breaks transparency) to draw a big
+opaque black shadow under the window, so clip out the region under
+the terminal from the shadow we draw.
+
+Add meta_window_get_frame_bounds() to get a cairo region for the
+outer bounds of the frame of a window, and modify the frame handling
+code to notice changes to the frame shape and discard a cached
+region. meta_frames_apply_shapes() is refactored so we can extract
+meta_frames_get_frame_bounds() from it.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=635268
+---
+diff --git a/src/compositor/meta-shadow-factory-private.h b/src/compositor/meta-shadow-factory-private.h
+index 3d51cbb..e6b033e 100644
+--- a/src/compositor/meta-shadow-factory-private.h
++++ b/src/compositor/meta-shadow-factory-private.h
+@@ -47,7 +47,8 @@ void        meta_shadow_paint       (MetaShadow            *shadow,
+                                      int                    window_width,
+                                      int                    window_height,
+                                      guint8                 opacity,
+-                                     cairo_region_t        *clip);
++                                     cairo_region_t        *clip,
++                                     gboolean               clip_strictly);
+ void        meta_shadow_get_bounds  (MetaShadow            *shadow,
+                                      int                    window_x,
+                                      int                    window_y,
+diff --git a/src/compositor/meta-shadow-factory.c b/src/compositor/meta-shadow-factory.c
+index 1a9a447..f8bb1a8 100644
+--- a/src/compositor/meta-shadow-factory.c
++++ b/src/compositor/meta-shadow-factory.c
+@@ -189,8 +189,10 @@ meta_shadow_unref (MetaShadow *shadow)
+  * @window_width: actual width of the region to paint a shadow for
+  * @window_height: actual height of the region to paint a shadow for
+  * @clip: (allow-none): if non-%NULL specifies the visible portion
+- *   of the shadow. Drawing won't be strictly clipped to this region
+- *   but it will be used to optimize what is drawn.
++ *   of the shadow.
++ * @clip_strictly: if %TRUE, drawing will be clipped strictly
++ *   to @clip, otherwise, it will be only used to optimize
++ *   drawing.
+  *
+  * Paints the shadow at the given position, for the specified actual
+  * size of the region. (Since a #MetaShadow can be shared between
+@@ -204,7 +206,8 @@ meta_shadow_paint (MetaShadow     *shadow,
+                    int             window_width,
+                    int             window_height,
+                    guint8          opacity,
+-                   cairo_region_t *clip)
++                   cairo_region_t *clip,
++                   gboolean        clip_strictly)
+ {
+   float texture_width = cogl_texture_get_width (shadow->texture);
+   float texture_height = cogl_texture_get_height (shadow->texture);
+@@ -276,6 +279,9 @@ meta_shadow_paint (MetaShadow     *shadow,
+       dest_rect.y = dest_y[j];
+       dest_rect.height = dest_y[j + 1] - dest_y[j];
+ 
++      if (dest_rect.height == 0)
++        continue;
++
+       for (i = 0; i < n_x; i++)
+         {
+           cairo_region_overlap_t overlap;
+@@ -283,16 +289,64 @@ meta_shadow_paint (MetaShadow     *shadow,
+           dest_rect.x = dest_x[i];
+           dest_rect.width = dest_x[i + 1] - dest_x[i];
+ 
++          if (dest_rect.width == 0)
++            continue;
++
+           if (clip)
+             overlap = cairo_region_contains_rectangle (clip, &dest_rect);
+           else
+-            overlap = CAIRO_REGION_OVERLAP_PART;
++            overlap = CAIRO_REGION_OVERLAP_IN;
+ 
+-          if (overlap != CAIRO_REGION_OVERLAP_OUT)
+-            cogl_rectangle_with_texture_coords (dest_x[i], dest_y[j],
+-                                                dest_x[i + 1], dest_y[j + 1],
+-                                                src_x[i], src_y[j],
+-                                                src_x[i + 1], src_y[j + 1]);
++          /* There's quite a bit of overhead from allocating a new
++           * region in order to find an exact intersection and
++           * generating more geometry - we make the assumption that
++           * unless we have to clip strictly it will be cheaper to
++           * just draw the entire rectangle.
++           */
++          if (overlap == CAIRO_REGION_OVERLAP_IN ||
++              (overlap == CAIRO_REGION_OVERLAP_PART && !clip_strictly))
++            {
++              cogl_rectangle_with_texture_coords (dest_x[i], dest_y[j],
++                                                  dest_x[i + 1], dest_y[j + 1],
++                                                  src_x[i], src_y[j],
++                                                  src_x[i + 1], src_y[j + 1]);
++            }
++          else if (overlap == CAIRO_REGION_OVERLAP_PART)
++            {
++              cairo_region_t *intersection;
++              int n_rectangles, k;
++
++              intersection = cairo_region_create_rectangle (&dest_rect);
++              cairo_region_intersect (intersection, clip);
++
++              n_rectangles = cairo_region_num_rectangles (intersection);
++              for (k = 0; k < n_rectangles; k++)
++                {
++                  cairo_rectangle_int_t rect;
++                  float src_x1, src_x2, src_y1, src_y2;
++
++                  cairo_region_get_rectangle (intersection, k, &rect);
++
++                  /* Separately linear interpolate X and Y coordinates in the source
++                   * based on the destination X and Y coordinates */
++
++                  src_x1 = (src_x[i] * (dest_rect.x + dest_rect.width - rect.x) +
++                            src_x[i + 1] * (rect.x - dest_rect.x)) / dest_rect.width;
++                  src_x2 = (src_x[i] * (dest_rect.x + dest_rect.width - (rect.x + rect.width)) +
++                            src_x[i + 1] * (rect.x + rect.width - dest_rect.x)) / dest_rect.width;
++
++                  src_y1 = (src_y[j] * (dest_rect.y + dest_rect.height - rect.y) +
++                            src_y[j + 1] * (rect.y - dest_rect.y)) / dest_rect.height;
++                  src_y2 = (src_y[j] * (dest_rect.y + dest_rect.height - (rect.y + rect.height)) +
++                            src_y[j + 1] * (rect.y + rect.height - dest_rect.y)) / dest_rect.height;
++
++                  cogl_rectangle_with_texture_coords (rect.x, rect.y,
++                                                      rect.x + rect.width, rect.y + rect.height,
++                                                      src_x1, src_y1, src_x2, src_y2);
++                }
++
++              cairo_region_destroy (intersection);
++            }
+         }
+     }
+ }
+diff --git a/src/compositor/meta-window-actor.c b/src/compositor/meta-window-actor.c
+index 3be0363..4aab5c9 100644
+--- a/src/compositor/meta-window-actor.c
++++ b/src/compositor/meta-window-actor.c
+@@ -702,6 +702,26 @@ meta_window_actor_get_shadow_bounds (MetaWindowActor       *self,
+ }
+ #endif
+ 
++/* If we have an ARGB32 window that we decorate with a frame, it's
++ * probably something like a translucent terminal - something where
++ * the alpha channel represents transparency rather than a shape.  We
++ * don't want to show the shadow through the translucent areas since
++ * the shadow is wrong for translucent windows (it should be
++ * translucent itself and colored), and not only that, will /look/
++ * horribly wrong - a misplaced big black blob. As a hack, what we
++ * want to do is just draw the shadow as normal outside the frame, and
++ * inside the frame draw no shadow.  This is also not even close to
++ * the right result, but looks OK. We also apply this approach to
++ * windows set to be partially translucent with _NET_WM_WINDOW_OPACITY.
++ */
++static gboolean
++clip_shadow_under_window (MetaWindowActor *self)
++{
++  MetaWindowActorPrivate *priv = self->priv;
++
++  return (priv->argb32 || priv->opacity != 0xff) && priv->window->frame;
++}
++
+ static void
+ meta_window_actor_paint (ClutterActor *actor)
+ {
+@@ -714,17 +734,36 @@ meta_window_actor_paint (ClutterActor *actor)
+     {
+       MetaShadowParams params;
+       cairo_rectangle_int_t shape_bounds;
++      cairo_region_t *clip = priv->shadow_clip;
+ 
+       meta_window_actor_get_shape_bounds (self, &shape_bounds);
+       meta_window_actor_get_shadow_params (self, appears_focused, &params);
+ 
++      /* The frame bounds are already subtracted from priv->shadow_clip
++       * if that exists.
++       */
++      if (!clip && clip_shadow_under_window (self))
++        {
++          cairo_region_t *frame_bounds = meta_window_get_frame_bounds (priv->window);
++          cairo_rectangle_int_t bounds;
++
++          meta_window_actor_get_shadow_bounds (self, appears_focused, &bounds);
++          clip = cairo_region_create_rectangle (&bounds);
++
++          cairo_region_subtract (clip, frame_bounds);
++        }
++
+       meta_shadow_paint (shadow,
+                          params.x_offset + shape_bounds.x,
+                          params.y_offset + shape_bounds.y,
+                          shape_bounds.width,
+                          shape_bounds.height,
+                          (clutter_actor_get_paint_opacity (actor) * params.opacity * priv->opacity) / (255 * 255),
+-                         priv->shadow_clip);
++                         clip,
++                         clip_shadow_under_window (self)); /* clip_strictly - not just as an optimization */
++
++      if (clip && clip != priv->shadow_clip)
++        cairo_region_destroy (clip);
+     }
+ 
+   CLUTTER_ACTOR_CLASS (meta_window_actor_parent_class)->paint (actor);
+@@ -1787,6 +1826,12 @@ meta_window_actor_set_visible_region_beneath (MetaWindowActor *self,
+     {
+       meta_window_actor_clear_shadow_clip (self);
+       priv->shadow_clip = cairo_region_copy (beneath_region);
++
++      if (clip_shadow_under_window (self))
++        {
++          cairo_region_t *frame_bounds = meta_window_get_frame_bounds (priv->window);
++          cairo_region_subtract (priv->shadow_clip, frame_bounds);
++        }
+     }
+ }
+ 
+diff --git a/src/core/frame.c b/src/core/frame.c
+index 4db0002..155a0b8 100644
+--- a/src/core/frame.c
++++ b/src/core/frame.c
+@@ -328,7 +328,7 @@ meta_frame_calc_geometry (MetaFrame         *frame,
+   *geomp = geom;
+ }
+ 
+-static void
++static gboolean
+ update_shape (MetaFrame *frame)
+ {
+   if (frame->need_reapply_frame_shape)
+@@ -339,10 +339,14 @@ update_shape (MetaFrame *frame)
+                                  frame->rect.height,
+                                  frame->window->has_shape);
+       frame->need_reapply_frame_shape = FALSE;
++
++      return TRUE;
+     }
++  else
++    return FALSE;
+ }
+ 
+-void
++gboolean
+ meta_frame_sync_to_window (MetaFrame *frame,
+                            int        resize_gravity,
+                            gboolean   need_move,
+@@ -350,8 +354,7 @@ meta_frame_sync_to_window (MetaFrame *frame,
+ {
+   if (!(need_move || need_resize))
+     {
+-      update_shape (frame);
+-      return;
++      return update_shape (frame);
+     }
+ 
+   meta_topic (META_DEBUG_GEOMETRY,
+@@ -401,6 +404,17 @@ meta_frame_sync_to_window (MetaFrame *frame,
+         meta_ui_repaint_frame (frame->window->screen->ui,
+                                frame->xwindow);
+     }
++
++  return need_resize;
++}
++
++cairo_region_t *
++meta_frame_get_frame_bounds (MetaFrame *frame)
++{
++  return meta_ui_get_frame_bounds (frame->window->screen->ui,
++                                   frame->xwindow,
++                                   frame->rect.width,
++                                   frame->rect.height);
+ }
+ 
+ void
+diff --git a/src/core/frame.h b/src/core/frame.h
+index 019d6b3..7a637e8 100644
+--- a/src/core/frame.h
++++ b/src/core/frame.h
+@@ -73,11 +73,13 @@ Window         meta_frame_get_xwindow (MetaFrame *frame);
+ /* These should ONLY be called from meta_window_move_resize_internal */
+ void meta_frame_calc_geometry      (MetaFrame         *frame,
+                                     MetaFrameGeometry *geomp);
+-void meta_frame_sync_to_window     (MetaFrame         *frame,
++gboolean meta_frame_sync_to_window (MetaFrame         *frame,
+                                     int                gravity,
+                                     gboolean           need_move,
+                                     gboolean           need_resize);
+ 
++cairo_region_t *meta_frame_get_frame_bounds (MetaFrame *frame);
++
+ void meta_frame_set_screen_cursor (MetaFrame	*frame,
+ 				   MetaCursor	cursor);
+ 
+diff --git a/src/core/window-private.h b/src/core/window-private.h
+index cbac91d..7909943 100644
+--- a/src/core/window-private.h
++++ b/src/core/window-private.h
+@@ -42,6 +42,7 @@
+ #include "stack.h"
+ #include "iconcache.h"
+ #include <X11/Xutil.h>
++#include <cairo.h>
+ #include <gdk-pixbuf/gdk-pixbuf.h>
+ 
+ typedef struct _MetaWindowQueue MetaWindowQueue;
+@@ -316,6 +317,9 @@ struct _MetaWindow
+   /* if TRUE, application is buggy and SYNC resizing is turned off */
+   guint disable_sync : 1;
+ 
++  /* if non-NULL, the bounds of the window frame */
++  cairo_region_t *frame_bounds;
++
+   /* Note: can be NULL */
+   GSList *struts;
+ 
+diff --git a/src/core/window.c b/src/core/window.c
+index d442932..aa6d75c 100644
+--- a/src/core/window.c
++++ b/src/core/window.c
+@@ -181,6 +181,9 @@ meta_window_finalize (GObject *object)
+   if (window->mini_icon)
+     g_object_unref (G_OBJECT (window->mini_icon));
+ 
++  if (window->frame_bounds)
++    cairo_region_destroy (window->frame_bounds);
++
+   meta_icon_cache_free (&window->icon_cache);
+ 
+   g_free (window->sm_client_id);
+@@ -4295,6 +4298,7 @@ meta_window_move_resize_internal (MetaWindow          *window,
+   int frame_size_dy;
+   int size_dx;
+   int size_dy;
++  gboolean frame_shape_changed = FALSE;
+   gboolean is_configure_request;
+   gboolean do_gravity_adjust;
+   gboolean is_user_action;
+@@ -4598,9 +4602,9 @@ meta_window_move_resize_internal (MetaWindow          *window,
+     meta_window_set_gravity (window, StaticGravity);
+ 
+   if (configure_frame_first && window->frame)
+-    meta_frame_sync_to_window (window->frame,
+-                               gravity,
+-                               need_move_frame, need_resize_frame);
++    frame_shape_changed = meta_frame_sync_to_window (window->frame,
++                                                     gravity,
++                                                     need_move_frame, need_resize_frame);
+ 
+   values.border_width = 0;
+   values.x = client_move_x;
+@@ -4655,9 +4659,9 @@ meta_window_move_resize_internal (MetaWindow          *window,
+     }
+ 
+   if (!configure_frame_first && window->frame)
+-    meta_frame_sync_to_window (window->frame,
+-                               gravity,
+-                               need_move_frame, need_resize_frame);
++    frame_shape_changed = meta_frame_sync_to_window (window->frame,
++                                                     gravity,
++                                                     need_move_frame, need_resize_frame);
+ 
+   /* Put gravity back to be nice to lesser window managers */
+   if (use_static_gravity)
+@@ -4700,6 +4704,12 @@ meta_window_move_resize_internal (MetaWindow          *window,
+    *   b) all constraints are obeyed by window->rect and frame->rect
+    */
+ 
++  if (frame_shape_changed && window->frame_bounds)
++    {
++      cairo_region_destroy (window->frame_bounds);
++      window->frame_bounds = NULL;
++    }
++
+   if (meta_prefs_get_attach_modal_dialogs ())
+     meta_window_foreach_transient (window, move_attached_dialog, NULL);
+ }
+@@ -10204,3 +10214,24 @@ meta_window_get_frame_type (MetaWindow *window)
+       return base_type;
+     }
+ }
++
++/**
++ * meta_window_get_frame_bounds:
++ *
++ * Gets a region representing the outer bounds of the window's frame.
++ *
++ * Return value: (transfer none) (allow-none): a #cairo_region_t
++ *  holding the outer bounds of the window, or %NULL if the window
++ *  doesn't have a frame.
++ */
++cairo_region_t *
++meta_window_get_frame_bounds (MetaWindow *window)
++{
++  if (!window->frame_bounds)
++    {
++      if (window->frame)
++        window->frame_bounds = meta_frame_get_frame_bounds (window->frame);
++    }
++
++  return window->frame_bounds;
++}
+diff --git a/src/meta/window.h b/src/meta/window.h
+index a1c4b75..985a146 100644
+--- a/src/meta/window.h
++++ b/src/meta/window.h
+@@ -23,6 +23,7 @@
+ #define META_WINDOW_H
+ 
+ #include <glib-object.h>
++#include <cairo.h>
+ #include <X11/Xlib.h>
+ 
+ #include <meta/boxes.h>
+@@ -156,4 +157,6 @@ const char *meta_window_get_mutter_hints (MetaWindow *window);
+ 
+ MetaFrameType meta_window_get_frame_type (MetaWindow *window);
+ 
++cairo_region_t *meta_window_get_frame_bounds (MetaWindow *window);
++
+ #endif
+diff --git a/src/ui/frames.c b/src/ui/frames.c
+index 7c62898..520f29d 100644
+--- a/src/ui/frames.c
++++ b/src/ui/frames.c
+@@ -797,60 +797,22 @@ apply_cairo_region_to_window (Display        *display,
+ }
+ #endif
+ 
+-void
+-meta_frames_apply_shapes (MetaFrames *frames,
+-                          Window      xwindow,
+-                          int         new_window_width,
+-                          int         new_window_height,
+-                          gboolean    window_has_shape)
++static cairo_region_t *
++get_bounds_region (MetaFrames        *frames,
++                  MetaUIFrame       *frame,
++                  MetaFrameGeometry *fgeom,
++                  int                window_width,
++                  int                window_height)
+ {
+-#ifdef HAVE_SHAPE
+-  /* Apply shapes as if window had new_window_width, new_window_height */
+-  MetaUIFrame *frame;
+-  MetaFrameGeometry fgeom;
+-  cairo_rectangle_int_t rect;
+   cairo_region_t *corners_region;
+-  cairo_region_t *window_region;
+-  Display *display;
+-  
+-  frame = meta_frames_lookup_window (frames, xwindow);
+-  g_return_if_fail (frame != NULL);
+-
+-  display = GDK_DISPLAY_XDISPLAY (gdk_display_get_default ());
+-
+-  meta_frames_calc_geometry (frames, frame, &fgeom);
++  cairo_region_t *bounds_region;
++  cairo_rectangle_int_t rect;
+ 
+-  if (!(fgeom.top_left_corner_rounded_radius != 0 ||
+-        fgeom.top_right_corner_rounded_radius != 0 ||
+-        fgeom.bottom_left_corner_rounded_radius != 0 ||
+-        fgeom.bottom_right_corner_rounded_radius != 0 ||
+-        window_has_shape))
+-    {
+-      if (frame->shape_applied)
+-        {
+-          meta_topic (META_DEBUG_SHAPES,
+-                      "Unsetting shape mask on frame 0x%lx\n",
+-                      frame->xwindow);
+-          
+-          XShapeCombineMask (display, frame->xwindow,
+-                             ShapeBounding, 0, 0, None, ShapeSet);
+-          frame->shape_applied = FALSE;
+-        }
+-      else
+-        {
+-          meta_topic (META_DEBUG_SHAPES,
+-                      "Frame 0x%lx still doesn't need a shape mask\n",
+-                      frame->xwindow);
+-        }
+-      
+-      return; /* nothing to do */
+-    }
+-  
+   corners_region = cairo_region_create ();
+   
+-  if (fgeom.top_left_corner_rounded_radius != 0)
++  if (fgeom->top_left_corner_rounded_radius != 0)
+     {
+-      const int corner = fgeom.top_left_corner_rounded_radius;
++      const int corner = fgeom->top_left_corner_rounded_radius;
+       const float radius = sqrt(corner) + corner;
+       int i;
+ 
+@@ -866,16 +828,16 @@ meta_frames_apply_shapes (MetaFrames *frames,
+         }
+     }
+ 
+-  if (fgeom.top_right_corner_rounded_radius != 0)
++  if (fgeom->top_right_corner_rounded_radius != 0)
+     {
+-      const int corner = fgeom.top_right_corner_rounded_radius;
++      const int corner = fgeom->top_right_corner_rounded_radius;
+       const float radius = sqrt(corner) + corner;
+       int i;
+ 
+       for (i=0; i<corner; i++)
+         {
+           const int width = floor(0.5 + radius - sqrt(radius*radius - (radius-(i+0.5))*(radius-(i+0.5))));
+-          rect.x = new_window_width - width;
++          rect.x = window_width - width;
+           rect.y = i;
+           rect.width = width;
+           rect.height = 1;
+@@ -884,9 +846,9 @@ meta_frames_apply_shapes (MetaFrames *frames,
+         }
+     }
+ 
+-  if (fgeom.bottom_left_corner_rounded_radius != 0)
++  if (fgeom->bottom_left_corner_rounded_radius != 0)
+     {
+-      const int corner = fgeom.bottom_left_corner_rounded_radius;
++      const int corner = fgeom->bottom_left_corner_rounded_radius;
+       const float radius = sqrt(corner) + corner;
+       int i;
+ 
+@@ -894,7 +856,7 @@ meta_frames_apply_shapes (MetaFrames *frames,
+         {
+           const int width = floor(0.5 + radius - sqrt(radius*radius - (radius-(i+0.5))*(radius-(i+0.5))));
+           rect.x = 0;
+-          rect.y = new_window_height - i - 1;
++          rect.y = window_height - i - 1;
+           rect.width = width;
+           rect.height = 1;
+           
+@@ -902,17 +864,17 @@ meta_frames_apply_shapes (MetaFrames *frames,
+         }
+     }
+ 
+-  if (fgeom.bottom_right_corner_rounded_radius != 0)
++  if (fgeom->bottom_right_corner_rounded_radius != 0)
+     {
+-      const int corner = fgeom.bottom_right_corner_rounded_radius;
++      const int corner = fgeom->bottom_right_corner_rounded_radius;
+       const float radius = sqrt(corner) + corner;
+       int i;
+ 
+       for (i=0; i<corner; i++)
+         {
+           const int width = floor(0.5 + radius - sqrt(radius*radius - (radius-(i+0.5))*(radius-(i+0.5))));
+-          rect.x = new_window_width - width;
+-          rect.y = new_window_height - i - 1;
++          rect.x = window_width - width;
++          rect.y = window_height - i - 1;
+           rect.width = width;
+           rect.height = 1;
+           
+@@ -920,19 +882,88 @@ meta_frames_apply_shapes (MetaFrames *frames,
+         }
+     }
+   
+-  window_region = cairo_region_create ();
++  bounds_region = cairo_region_create ();
+   
+   rect.x = 0;
+   rect.y = 0;
+-  rect.width = new_window_width;
+-  rect.height = new_window_height;
++  rect.width = window_width;
++  rect.height = window_height;
+ 
+-  cairo_region_union_rectangle (window_region, &rect);
++  cairo_region_union_rectangle (bounds_region, &rect);
+ 
+-  cairo_region_subtract (window_region, corners_region);
++  cairo_region_subtract (bounds_region, corners_region);
+ 
+   cairo_region_destroy (corners_region);
++
++  return bounds_region;
++}
++
++static cairo_region_t *
++get_client_region (MetaFrameGeometry *fgeom,
++                   int                window_width,
++                   int                window_height)
++{
++  cairo_rectangle_int_t rect;
++
++  rect.x = fgeom->left_width;
++  rect.y = fgeom->top_height;
++  rect.width = window_width - fgeom->right_width - rect.x;
++  rect.height = window_height - fgeom->bottom_height - rect.y;
++
++  return cairo_region_create_rectangle (&rect);
++}
++
++void
++meta_frames_apply_shapes (MetaFrames *frames,
++                          Window      xwindow,
++                          int         new_window_width,
++                          int         new_window_height,
++                          gboolean    window_has_shape)
++{
++#ifdef HAVE_SHAPE
++  /* Apply shapes as if window had new_window_width, new_window_height */
++  MetaUIFrame *frame;
++  MetaFrameGeometry fgeom;
++  cairo_region_t *window_region;
++  Display *display;
+   
++  frame = meta_frames_lookup_window (frames, xwindow);
++  g_return_if_fail (frame != NULL);
++
++  display = GDK_DISPLAY_XDISPLAY (gdk_display_get_default ());
++
++  meta_frames_calc_geometry (frames, frame, &fgeom);
++
++  if (!(fgeom.top_left_corner_rounded_radius != 0 ||
++        fgeom.top_right_corner_rounded_radius != 0 ||
++        fgeom.bottom_left_corner_rounded_radius != 0 ||
++        fgeom.bottom_right_corner_rounded_radius != 0 ||
++        window_has_shape))
++    {
++      if (frame->shape_applied)
++        {
++          meta_topic (META_DEBUG_SHAPES,
++                      "Unsetting shape mask on frame 0x%lx\n",
++                      frame->xwindow);
++
++          XShapeCombineMask (display, frame->xwindow,
++                             ShapeBounding, 0, 0, None, ShapeSet);
++          frame->shape_applied = FALSE;
++        }
++      else
++        {
++          meta_topic (META_DEBUG_SHAPES,
++                      "Frame 0x%lx still doesn't need a shape mask\n",
++                      frame->xwindow);
++        }
++
++      return; /* nothing to do */
++    }
++
++  window_region = get_bounds_region (frames, frame,
++                                     &fgeom,
++                                     new_window_width, new_window_height);
++
+   if (window_has_shape)
+     {
+       /* The client window is oclock or something and has a shape
+@@ -984,15 +1015,10 @@ meta_frames_apply_shapes (MetaFrames *frames,
+       /* Punch the client area out of the normal frame shape,
+        * then union it with the shape_window's existing shape
+        */
+-      client_region = cairo_region_create ();
+-  
+-      rect.x = fgeom.left_width;
+-      rect.y = fgeom.top_height;
+-      rect.width = new_window_width - fgeom.right_width - rect.x;
+-      rect.height = new_window_height - fgeom.bottom_height - rect.y;
++      client_region = get_client_region (&fgeom,
++                                         new_window_width,
++                                         new_window_height);
+ 
+-      cairo_region_union_rectangle (client_region, &rect);
+-      
+       cairo_region_subtract (window_region, client_region);
+ 
+       cairo_region_destroy (client_region);
+@@ -1027,6 +1053,25 @@ meta_frames_apply_shapes (MetaFrames *frames,
+ #endif /* HAVE_SHAPE */
+ }
+ 
++cairo_region_t *
++meta_frames_get_frame_bounds (MetaFrames *frames,
++                              Window      xwindow,
++                              int         window_width,
++                              int         window_height)
++{
++  MetaUIFrame *frame;
++  MetaFrameGeometry fgeom;
++
++  frame = meta_frames_lookup_window (frames, xwindow);
++  g_return_val_if_fail (frame != NULL, NULL);
++
++  meta_frames_calc_geometry (frames, frame, &fgeom);
++
++  return get_bounds_region (frames, frame,
++                            &fgeom,
++                            window_width, window_height);
++}
++
+ void
+ meta_frames_move_resize_frame (MetaFrames *frames,
+                                Window      xwindow,
+diff --git a/src/ui/frames.h b/src/ui/frames.h
+index 5fdba63..d1807df 100644
+--- a/src/ui/frames.h
++++ b/src/ui/frames.h
+@@ -144,6 +144,10 @@ void meta_frames_apply_shapes (MetaFrames *frames,
+                                int         new_window_width,
+                                int         new_window_height,
+                                gboolean    window_has_shape);
++cairo_region_t *meta_frames_get_frame_bounds (MetaFrames *frames,
++                                              Window      xwindow,
++                                              int         window_width,
++                                              int         window_height);
+ void meta_frames_move_resize_frame (MetaFrames *frames,
+ 				    Window      xwindow,
+ 				    int         x,
+diff --git a/src/ui/ui.c b/src/ui/ui.c
+index 575f2ae..5381b8d 100644
+--- a/src/ui/ui.c
++++ b/src/ui/ui.c
+@@ -470,6 +470,16 @@ meta_ui_apply_frame_shape  (MetaUI  *ui,
+                             window_has_shape);
+ }
+ 
++cairo_region_t *
++meta_ui_get_frame_bounds (MetaUI  *ui,
++                          Window   xwindow,
++                          int      window_width,
++                          int      window_height)
++{
++  return meta_frames_get_frame_bounds (ui->frames, xwindow,
++                                       window_width, window_height);
++}
++
+ void
+ meta_ui_queue_frame_draw (MetaUI *ui,
+                           Window xwindow)
+diff --git a/src/ui/ui.h b/src/ui/ui.h
+index cc449bd..9a33d9d 100644
+--- a/src/ui/ui.h
++++ b/src/ui/ui.h
+@@ -28,6 +28,7 @@
+ #include <meta/common.h>
+ #include <X11/Xlib.h>
+ #include <X11/Xutil.h>
++#include <cairo.h>
+ #include <glib.h>
+ #include <gdk-pixbuf/gdk-pixbuf.h>
+ 
+@@ -104,6 +105,11 @@ void meta_ui_apply_frame_shape  (MetaUI  *ui,
+                                  int      new_window_height,
+                                  gboolean window_has_shape);
+ 
++cairo_region_t *meta_ui_get_frame_bounds (MetaUI  *ui,
++                                          Window   xwindow,
++                                          int      window_width,
++                                          int      window_height);
++
+ void meta_ui_queue_frame_draw (MetaUI *ui,
+                                Window xwindow);
+ 
+--
+cgit v0.9

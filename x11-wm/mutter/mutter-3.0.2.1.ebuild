@@ -6,7 +6,7 @@ EAPI="3"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
+inherit eutils gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -78,7 +78,12 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# https://bugs.gentoo.org/show_bug.cgi?id=363853
-	# Taken from upstream, remove for next release
-	epatch "${FILESDIR}/${P}-fix-session-saving.patch"
+	# Fix argb window shadows: https://bugzilla.gnome.org/show_bug.cgi?id=635268
+	# The first two patches are from upstream git master branch:
+	epatch "${FILESDIR}/${PN}-3.0.2-frame-region-cairo-region.patch"
+	epatch "${FILESDIR}/${PN}-3.0.2-argb-windows-shadow.patch"
+	# The third is from comment 33 in the gnome bug and unbreaks XShape handling
+	epatch "${FILESDIR}/${PN}-3.0.2-fix-xshape.patch"
+
+	gnome2_src_prepare
 }
