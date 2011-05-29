@@ -7,7 +7,7 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="python? 2:2.4"
 
-inherit autotools flag-o-matic gnome2 python
+inherit autotools eutils flag-o-matic gnome2 python
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -144,6 +144,11 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# XXX: useful upstream fixes, will be included in next release
+	epatch "${FILESDIR}/0001-Bug-651039-Always-update-signature-in-composer-on-ac.patch"
+	epatch "${FILESDIR}/0002-Bug-651062-refresh_folders_exec-reports-progress-inc.patch"
+	epatch "${FILESDIR}/0003-Bug-651135-Crash-using-saved-search-with-an-empty-ex.patch"
+
 	# Use NSS/NSPR only if 'ssl' is enabled.
 	if use ssl ; then
 		sed -e 's|mozilla-nss|nss|' \
@@ -166,13 +171,17 @@ src_prepare() {
 pkg_postinst() {
 	gnome2_pkg_postinst
 
-	# FIXME: This has changed with GNOME 3, revisit
-	#elog "To change the default browser if you are not using GNOME, do:"
-	#elog "gconftool-2 --set /desktop/gnome/url-handlers/http/command -t string 'firefox %s'"
-	#elog "gconftool-2 --set /desktop/gnome/url-handlers/https/command -t string 'firefox %s'"
-	#elog ""
-	#elog "Replace 'firefox %s' with which ever browser you use."
-	#elog ""
+	elog "To change the default browser if you are not using GNOME, edit"
+	elog "~/.local/share/applications/mimeapps.list so it includes the"
+	elog "following content:"
+	elog ""
+	elog "[Default Applications]"
+	elog "x-scheme-handler/http=firefox.desktop"
+	elog "x-scheme-handler/https=firefox.desktop"
+	elog ""
+	elog "(replace firefox.desktop with the name of the appropriate .desktop"
+	elog "file from /usr/share/applications if you use a different browser)."
+	elog ""
 	elog "Junk filters are now a run-time choice. You will get a choice of"
 	elog "bogofilter or spamassassin based on which you have installed"
 	elog ""

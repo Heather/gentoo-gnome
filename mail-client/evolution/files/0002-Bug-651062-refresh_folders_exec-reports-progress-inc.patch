@@ -1,0 +1,41 @@
+From fbd3aca29cc12c8a58d15237e3e44f83fe1b8229 Mon Sep 17 00:00:00 2001
+From: Matthew Barnes <mbarnes@redhat.com>
+Date: Thu, 26 May 2011 07:03:15 -0400
+Subject: [PATCH 2/3] Bug 651062 - refresh_folders_exec() reports progress
+ incorrectly.
+
+(cherry picked from commit 6ddc2340d03b6fe3745e97ca10336408833c7294)
+---
+ mail/mail-send-recv.c |    7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
+
+diff --git a/mail/mail-send-recv.c b/mail/mail-send-recv.c
+index a4e2e2e..79018f3 100644
+--- a/mail/mail-send-recv.c
++++ b/mail/mail-send-recv.c
+@@ -924,6 +924,8 @@ refresh_folders_exec (struct _refresh_folders_msg *m,
+ 
+ 	get_folders (m->store, m->folders, m->finfo);
+ 
++	camel_operation_push_message (cancellable, _("Updating..."));
++
+ 	for (i=0;i<m->folders->len;i++) {
+ 		folder = e_mail_session_uri_to_folder_sync (
+ 			m->info->session,
+@@ -944,9 +946,12 @@ refresh_folders_exec (struct _refresh_folders_msg *m,
+ 			break;
+ 
+ 		if (m->info->state != SEND_CANCELLED)
+-			g_signal_emit_by_name (m->info->cancellable, "status", _("Updating..."), 100 * i / m->folders->len);
++			camel_operation_progress (
++				cancellable, 100 * i / m->folders->len);
+ 	}
+ 
++	camel_operation_pop_message (cancellable);
++
+ 	if (cancellable)
+ 		g_signal_handler_disconnect (m->info->cancellable, handler_id);
+ }
+-- 
+1.7.5.rc3
+

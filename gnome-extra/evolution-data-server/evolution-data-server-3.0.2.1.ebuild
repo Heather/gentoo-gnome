@@ -46,6 +46,7 @@ RDEPEND=">=dev-libs/glib-2.28:2
 	weather? ( >=dev-libs/libgweather-2.90.0:2 )
 "
 DEPEND="${RDEPEND}
+	dev-lang/perl
 	dev-util/gperf
 	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.35.5
@@ -78,8 +79,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# WTF: libebook-1.2 links against system libcamel-1.2
-	#      libedata-book-1.2 links against system libebackend-1.2
 	gnome2_src_prepare
 
 	# Adjust to gentoo's /etc/service
@@ -107,6 +106,13 @@ src_prepare() {
 }
 
 src_install() {
+	# Prevent this evolution-data-server from linking to libs in the installed
+	# evolution-data-server libraries by adding -L arguments for build dirs to
+	# every .la file's relink_command field, forcing libtool to look there
+	# first during relinking. This will mangle the .la files installed by
+	# make install, but we don't care because we will be punting them anyway.
+	perl "${FILESDIR}/fix_relink_command.pl" . ||
+		die "fix_relink_command.pl failed"
 	gnome2_src_install
 
 	if use ldap; then

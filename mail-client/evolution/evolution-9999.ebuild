@@ -166,13 +166,17 @@ src_prepare() {
 pkg_postinst() {
 	gnome2_pkg_postinst
 
-	# FIXME: This has changed with GNOME 3, revisit
-	#elog "To change the default browser if you are not using GNOME, do:"
-	#elog "gconftool-2 --set /desktop/gnome/url-handlers/http/command -t string 'firefox %s'"
-	#elog "gconftool-2 --set /desktop/gnome/url-handlers/https/command -t string 'firefox %s'"
-	#elog ""
-	#elog "Replace 'firefox %s' with which ever browser you use."
-	#elog ""
+	elog "To change the default browser if you are not using GNOME, edit"
+	elog "~/.local/share/applications/mimeapps.list so it includes the"
+	elog "following content:"
+	elog ""
+	elog "[Default Applications]"
+	elog "x-scheme-handler/http=firefox.desktop"
+	elog "x-scheme-handler/https=firefox.desktop"
+	elog ""
+	elog "(replace firefox.desktop with the name of the appropriate .desktop"
+	elog "file from /usr/share/applications if you use a different browser)."
+	elog ""
 	elog "Junk filters are now a run-time choice. You will get a choice of"
 	elog "bogofilter or spamassassin based on which you have installed"
 	elog ""
