@@ -22,13 +22,13 @@ REQUIRED_USE="
 
 # gobject-introspection-0.10.3 is needed due to gnome bug 642300
 # wpa_supplicant-0.7.3-r3 is needed due to bug 359271
-# make consolekit support optional ?
-RDEPEND=">=sys-apps/dbus-1.2
+# make consolekit and/or polkit support optional ?
+COMMON_DEPEND=">=sys-apps/dbus-1.2
 	>=dev-libs/dbus-glib-0.75
 	>=net-wireless/wireless-tools-28_pre9
 	>=sys-fs/udev-147[extras]
 	>=dev-libs/glib-2.26
-	>=sys-auth/polkit-0.96
+	>=sys-auth/polkit-0.97
 	>=dev-libs/libnl-1.1
 	>=net-misc/modemmanager-0.4
 	>=net-wireless/wpa_supplicant-0.7.3-r3[dbus]
@@ -48,7 +48,10 @@ RDEPEND=">=sys-apps/dbus-1.2
 		net-firewall/iptables )
 	wimax? ( >=net-wireless/wimax-1.5.1 )"
 
-DEPEND="${RDEPEND}
+RDEPEND="${COMMON_DEPEND}
+	sys-auth/consolekit"
+
+DEPEND="${COMMON_DEPEND}
 	dev-util/pkgconfig
 	>=dev-util/intltool-0.40
 	>=sys-devel/gettext-0.17
