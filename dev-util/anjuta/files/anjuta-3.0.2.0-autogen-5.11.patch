@@ -1,33 +1,70 @@
-From 21dbcf252598da91237abbbb60442f95662cd522 Mon Sep 17 00:00:00 2001
+From a251ee54ebe822f1d92fc9434674b22623000233 Mon Sep 17 00:00:00 2001
 From: Alexandre Rostovtsev <tetromino@gmail.com>
-Date: Mon, 23 May 2011 22:02:23 -0400
-Subject: [PATCH] Support autogen-5.11 detection (bug #650930)
+Date: Tue, 24 May 2011 16:43:55 -0400
+Subject: [PATCH] Support autogen-5.11.x detection, v3 (bug #650930)
 
-Autogen-5.11 uses a different version string format that autogen-5.9:
+The latest versions of autogen-5.11.x use a different version string
+format that autogen-5.9.x or earlier releases of 5.11.x:
 autogen (GNU AutoGen) 5.11.9
 vs.
 autogen (GNU AutoGen) - The Automated Program Generator - Ver. 5.9.7
 
-Fortunately, all versions of autogen use the longer version of the
-string in their usage description. So we can detect modern versions
-of autogen simply by replacing autogen -v with autogen -u.
+Replace version matching code with a regex that should, hopefully,
+match everything from autogen-5.5.x to the latest 5.11.x (including
+the releases that don't have a micro version number).
 ---
- plugins/project-wizard/autogen.c |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ plugins/project-wizard/autogen.c |   38 +++++++++++++++++++++++++-------------
+ 1 files changed, 25 insertions(+), 13 deletions(-)
 
 diff --git a/plugins/project-wizard/autogen.c b/plugins/project-wizard/autogen.c
-index ca6492a..0135cb8 100644
+index ca6492a..d38241b 100644
 --- a/plugins/project-wizard/autogen.c
 +++ b/plugins/project-wizard/autogen.c
-@@ -89,7 +89,7 @@ struct _NPWAutogen
- gboolean
- npw_check_autogen (void)
- {
--	gchar* args[] = {"autogen", "-v", NULL};
-+	gchar* args[] = {"autogen", "-u", NULL};
- 	gchar* output;
- 
+@@ -95,19 +95,31 @@ npw_check_autogen (void)
  	if (g_spawn_sync (NULL, args, NULL, G_SPAWN_SEARCH_PATH | G_SPAWN_STDERR_TO_DEV_NULL,
+ 		NULL, NULL, &output, NULL, NULL, NULL))
+ 	{
+-		gint ver[3];
+-		gchar* ptr;
+-
+-		/* Check autogen */
+-		if (strstr(output, "The Automated Program Generator") == NULL) return FALSE;
+-
+-		/* Get version number */
+-		ptr = strstr(output, "Ver. ");
+-	       	if (ptr == NULL) return FALSE;
+-		ptr += 5;
+-		sscanf(ptr,"%d.%d.%d", &ver[0], &ver[1], &ver[2]);
+-
+-		return (ver[0] == 5);
++		GRegex *re;
++		GMatchInfo *minfo;
++		gboolean result = FALSE;
++
++		/* Check autogen 5 version string
++		 * Examples:
++		 * autogen - The Automated Program Generator - Ver. 5.5.7
++		 * autogen (GNU AutoGen) - The Automated Program Generator - Ver. 5.11
++		 * autogen (GNU AutoGen) 5.11.9
++		 */
++		re = g_regex_new ("autogen.* (\\d)\\.(\\d+)(?:\\.(\\d+))?", 0, 0, NULL);
++		g_regex_match (re, output, 0, &minfo);
++		if (g_match_info_matches (minfo)) {
++			gchar **match_strings;
++
++			match_strings = g_match_info_fetch_all (minfo);
++			/* if major version is 5 */
++			if (g_ascii_strtoll (match_strings[1], 0, 10) == 5)
++				result = TRUE;
++
++			g_strfreev (match_strings);
++		}
++		g_match_info_free (minfo);
++		g_regex_unref (re);
++		return result;
+ 	}
+ 
+ 	return FALSE;
 -- 
 1.7.5.rc3
 
