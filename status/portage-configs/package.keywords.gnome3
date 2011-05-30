@@ -213,6 +213,7 @@ gnome-extra/gnome-games-extra-data
 # Polkit
 sys-auth/polkit
 gnome-extra/polkit-gnome
+net-print/cups-pk-helper
 
 # Gstreamer
 =media-libs/gstreamer-0.10.32*
@@ -302,6 +303,7 @@ x11-libs/vte:2.90
 # Extras
 gnome-extra/drwright
 gnome-extra/gnome-tweak-tool
+gnome-extra/mousetweaks
 
 # Xdg
 >=dev-util/desktop-file-utils-0.18
