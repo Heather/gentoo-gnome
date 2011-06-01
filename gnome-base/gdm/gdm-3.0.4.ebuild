@@ -180,6 +180,23 @@ pkg_postinst() {
 		elog "file.  It has been moved to /etc/X11/gdm/gdm-pre-gnome-2.16"
 		mv /etc/X11/gdm/gdm.conf /etc/X11/gdm/gdm-pre-gnome-2.16
 	fi
+
+	# https://bugzilla.redhat.com/show_bug.cgi?id=513579
+	# Lennart says this problem is fixed, but users are still reporting problems
+	# XXX: Do we want this elog?
+#	if has_version "media-libs/libcanberra[pulseaudio]" ; then
+#		elog
+#		elog "You have media-libs/libcanberra with the pulseaudio USE flag"
+#		elog "enabled. GDM will start a pulseaudio process to play sounds. This"
+#		elog "process should automatically terminate when a user logs into a"
+#		elog "desktop session. If GDM's pulseaudio fails to terminate and"
+#		elog "causes problems for users' audio, you can prevent GDM from"
+#		elog "starting pulseaudio by editing /var/lib/gdm/.pulse/client.conf"
+#		elog "so it contains the following two lines:"
+#		elog
+#		elog "autospawn = no"
+#		elog "daemon-binary = /bin/true"
+#	fi
 }
 
 pkg_postrm() {
