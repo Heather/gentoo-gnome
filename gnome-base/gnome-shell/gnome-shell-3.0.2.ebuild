@@ -2,12 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="3"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2:2.5"
 
-inherit eutils gnome2
+inherit eutils gnome2 python
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -108,6 +108,11 @@ src_prepare() {
 	# can trigger the crash even with accountsservice-0.6.12
 	epatch "${FILESDIR}/${PN}-3.0.2-user-removed-signals.patch"
 	gnome2_src_prepare
+}
+
+src_install() {
+	gnome2_src_install
+	python_convert_shebangs 2 "${D}"/usr/bin/gnome-shell-extension-tool
 }
 
 pkg_postinst() {

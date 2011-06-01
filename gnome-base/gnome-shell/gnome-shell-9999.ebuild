@@ -2,12 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="3"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2:2.5"
 
-inherit gnome2
+inherit eutils gnome2 python
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -101,6 +101,16 @@ pkg_setup() {
 		--enable-compile-warnings=maximum
 		--disable-schemas-compile
 		--disable-jhbuild-wrapper-script"
+}
+
+src_prepare() {
+	EPATCH_SUFFIX="patch" epatch "${WORKDIR}"
+	gnome2_src_prepare
+}
+
+src_install() {
+	gnome2_src_install
+	python_convert_shebangs 2 "${D}"/usr/bin/gnome-shell-extension-tool
 }
 
 pkg_postinst() {
