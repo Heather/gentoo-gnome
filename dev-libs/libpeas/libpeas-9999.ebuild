@@ -28,7 +28,7 @@ RDEPEND=">=dev-libs/glib-2.23.6:2
 	>=dev-libs/gobject-introspection-0.10.1
 	glade? ( >=dev-util/glade-3.9.1:3 )
 	gtk? ( >=x11-libs/gtk+-2.90:3[introspection] )
-	python? ( >=dev-python/pygobject-2.28 )
+	python? ( >=dev-python/pygobject-2.28:2[introspection] )
 	seed? ( >=dev-libs/seed-2.91.91 )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40

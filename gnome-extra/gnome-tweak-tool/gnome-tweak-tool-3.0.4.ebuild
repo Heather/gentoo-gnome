@@ -21,7 +21,7 @@ KEYWORDS="~amd64 ~x86"
 
 COMMON_DEPEND="
 	>=gnome-base/gsettings-desktop-schemas-2.91.92
-	>=dev-python/pygobject-2.28.0:2
+	>=dev-python/pygobject-2.28.0:2[introspection]
 	gnome-base/gconf:2"
 RDEPEND="${COMMON_DEPEND}
 	x11-libs/gtk+:3[introspection]

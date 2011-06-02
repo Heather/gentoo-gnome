@@ -67,7 +67,7 @@ RDEPEND="${COMMON_DEPEND}
 
 	nsplugin? ( net-libs/xulrunner )
 	python? (
-		>=dev-python/pygobject-2.15.4
+		>=dev-python/pygobject-2.15.4:2[introspection]
 		>=dev-python/gst-python-0.10.8
 
 		x11-libs/gdk-pixbuf:2[introspection]

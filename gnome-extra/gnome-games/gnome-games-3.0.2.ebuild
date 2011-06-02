@@ -53,11 +53,11 @@ COMMON_DEPEND="
 RDEPEND="${COMMON_DEPEND}
 	sudoku? (
 		dev-libs/glib:2[introspection]
-		>=dev-python/pycairo-1
-		>=dev-python/pygobject-2
-		>=x11-libs/gtk+-3.0.0:3[introspection]
+		dev-python/pygobject:2[introspection]
+		dev-python/pycairo
 		x11-libs/gdk-pixbuf:2[introspection]
 		x11-libs/pango[introspection] )
+		>=x11-libs/gtk+-3.0.0:3[introspection]
 
 	!<gnome-extra/gnome-games-extra-data-3.0.0"
 DEPEND="${COMMON_DEPEND}
