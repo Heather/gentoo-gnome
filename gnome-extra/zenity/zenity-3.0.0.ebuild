@@ -2,11 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/zenity/zenity-2.32.1.ebuild,v 1.1 2010/11/29 18:40:56 pacho Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
+inherit eutils gnome2
 
 DESCRIPTION="Tool to display dialogs from the commandline and shell scripts"
 HOMEPAGE="http://live.gnome.org/Zenity"
@@ -34,10 +34,14 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-scrollkeeper
 		$(use_enable libnotify)
-		PERL=$(type -p false)"
+		PERL=$(type -P false)"
 	DOCS="AUTHORS ChangeLog HACKING NEWS README THANKS TODO"
 }
 
+src_prepare() {
+	epatch "${FILESDIR}/${P}-libnotify-ifdef.patch"
+	gnome2_src_prepare
+}
 
 src_install() {
 	gnome2_src_install
