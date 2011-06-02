@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="3"
+EAPI="4"
 CLUTTER_LA_PUNT="yes"
 
 inherit clutter
@@ -47,14 +47,11 @@ src_configure() {
 
 	myconf="--enable-maintainer-flags=no
 		--with-winsys=x11
-		$(use_with dbus)
 		$(use_enable gtk gtk-widgets)
+		$(use_enable introspection)
+		$(use_with dbus)
+		$(use_with glade)
 		$(use_with startup-notification)"
-
-	# configure is broken, and enables glade if anything is passed
-	if use glade; then
-		myconf="${myconf} --enable-glade"
-	fi
 
 	econf ${myconf}
 }
