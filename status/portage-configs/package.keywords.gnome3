@@ -13,7 +13,6 @@ app-arch/file-roller
 app-cdr/brasero
 app-crypt/seahorse
 app-crypt/seahorse-plugins
-app-editors/gedit
 app-pda/libimobiledevice
 app-portage/packagekit
 app-text/evince
@@ -141,6 +140,10 @@ media-libs/libcanberra
 # libsocialweb
 net-libs/libsocialweb
 net-libs/rest
+
+# Gedit
+app-editors/gedit
+app-editors/gedit-plugins
 
 # Epiphany
 www-client/epiphany
