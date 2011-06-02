@@ -5,7 +5,7 @@
 EAPI="4"
 GNOME_ORG_MODULE="NetworkManager"
 
-inherit autotools eutils gnome.org linux-info
+inherit autotools eutils gnome.org linux-info systemd
 
 DESCRIPTION="Network configuration and management in an easy way. Desktop environment independent."
 HOMEPAGE="http://www.gnome.org/projects/NetworkManager/"
@@ -104,7 +104,8 @@ src_configure() {
 		$(use_with dhclient)
 		$(use_with dhcpcd)
 		$(use_with doc docs)
-		$(use_with resolvconf)"
+		$(use_with resolvconf)
+		$(systemd_with_unitdir)"
 
 		if use nss ; then
 			ECONF="${ECONF} $(use_with nss crypto=nss)"
