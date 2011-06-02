@@ -46,7 +46,7 @@ COMMON_DEPEND="
 	media-libs/fontconfig
 
 	>=media-libs/libcanberra-0.13[gtk3]
-	>=media-sound/pulseaudio-0.9.16
+	>=media-sound/pulseaudio-0.9.16[glib]
 	>=sys-auth/polkit-0.97
 	>=sys-power/upower-0.9.1
 
@@ -91,7 +91,6 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-update-mimedb
 		--disable-static
-		--disable-schemas-install
 		$(use_with cheese)
 		$(use_enable cups)
 		$(use_with socialweb libsocialweb)"
