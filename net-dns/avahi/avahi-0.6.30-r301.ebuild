@@ -125,9 +125,6 @@ src_configure() {
 	# We need to unset DISPLAY, else the configure script might have problems detecting the pygtk module
 	unset DISPLAY
 
-	# Upstream ships a gir file (AvahiCore.gir) which does not work with
-	# >=gobject-introspection-0.9, so we disable introspection for now.
-	# http://avahi.org/ticket/318
 	econf \
 		--localstatedir=/var \
 		--with-distro=gentoo \
