@@ -5,8 +5,9 @@
 EAPI="3"
 GNOME2_LA_PUNT="yes"
 GCONF_DEBUG="yes"
+PYTHON_DEPEND="2"
 
-inherit db-use eutils flag-o-matic gnome2 java-pkg-opt-2
+inherit db-use eutils flag-o-matic gnome2 java-pkg-opt-2 python
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -15,11 +16,9 @@ DESCRIPTION="Gnome Database Access Library"
 HOMEPAGE="http://www.gnome-db.org/"
 LICENSE="GPL-2 LGPL-2"
 
-# MDB support currently works with CVS only, so disable it in the meantime
-IUSE="berkdb bindist canvas doc firebird gnome-keyring gtk graphviz http +introspection json mysql oci8 postgres sourceview ssl"
+IUSE="berkdb bindist canvas doc firebird gnome-keyring gtk graphviz http +introspection json ldap mdb mysql oci8 postgres sourceview ssl"
 SLOT="5"
 if [[ ${PV} = 9999 ]]; then
-	EGIT_BRANCH="gtk3"
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
@@ -47,11 +46,12 @@ RDEPEND="
 	http? ( >=net-libs/libsoup-2.24:2.4 )
 	introspection? ( >=dev-libs/gobject-introspection-0.6.5 )
 	json?     ( dev-libs/json-glib )
+	ldap?     ( net-nds/openldap )
+	mdb?      ( >app-office/mdbtools-0.5 )
 	mysql?    ( virtual/mysql )
 	postgres? ( dev-db/postgresql-base )
 	ssl?      ( dev-libs/openssl )
 	>=dev-db/sqlite-3.6.22:3"
-#	mdb?      ( >app-office/mdbtools-0.5 )
 
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.18
@@ -87,11 +87,11 @@ pkg_setup() {
 		$(use_enable introspection)
 		$(use_with java java $JAVA_HOME)
 		$(use_enable json)
+		$(use_with ldap)
+		$(use_with mdb mdb /usr)
 		$(use_with mysql mysql /usr)
 		$(use_with postgres postgres /usr)
-		$(use_enable ssl crypto)
-		--without-mdb"
-#		$(use_with mdb mdb /usr)
+		$(use_enable ssl crypto)"
 
 	if use bindist; then
 		# firebird license is not GPL compatible
@@ -118,6 +118,34 @@ src_prepare() {
 	# Disable broken tests so we can check the others
 	epatch "${FILESDIR}/${PN}-9999-disable-broken-tests.patch"
 
+	# Put subdirectories for conversion scripts in /usr/share, not /usr/bin
+	# https://bugzilla.gnome.org/show_bug.cgi?id=594115 comment 2
+	epatch "${FILESDIR}/${PN}-4.1.1-no-subdir-in-bindir.patch"
+
+	# Prevent file collisions with libgda:4
+	epatch "${FILESDIR}/${PN}-4.99.1-gda-browser-help-collision.patch"
+	epatch "${FILESDIR}/${PN}-4.99.1-gda-browser-doc-collision.patch"
+	epatch "${FILESDIR}/${PN}-4.99.1-control-center-icon-collision.patch"
+	# Move files with mv (since epatch can't handle rename diffs) and
+	# update pre-generated gtk-doc files (for non-git versions of libgda)
+	local f
+	for f in tools/browser/doc/gda-browser* ; do
+		mv ${f} ${f/gda-browser/gda-browser-5.0} || die "mv ${f} failed"
+	done
+	if [[ ${PV} != 9999 ]] ; then
+		for f in tools/browser/doc/html/gda-browser.devhelp* ; do
+			sed -e 's:name="gda-browser":name="gda-browser-5.0":' \
+				-i ${f} || die "sed ${f} failed"
+			mv ${f} ${f/gda-browser/gda-browser-5.0} || die "mv ${f} failed"
+		done
+	fi
+	for f in control-center/data/*_gda-control-center.png ; do
+		mv ${f} ${f/_gda-control-center.png/_gda-control-center-5.0.png} ||
+			die "mv ${f} failed"
+	done
+
+	python_convert_shebangs -r 2 libgda-report/RML/trml2{html,pdf}
+
 	gnome2_src_prepare
 }
 
@@ -125,9 +153,18 @@ src_test() {
 	emake check XDG_DATA_HOME="${T}/.local" || die "tests failed"
 }
 
-src_install() {
-	gnome2_src_install
+pkg_postinst() {
+	gnome2_pkg_postinst
+	local d
+	for d in /usr/share/libgda-5.0/gda_trml2{html,pdf} ; do
+		python_mod_optimize ${d}
+	done
+}
 
-	# File-collisions. How do we handle this?
-	rm -rf "${ED}"/usr/bin/gda_trml2* || die
+pkg_postrm() {
+	gnome2_pkg_postrm
+	local d
+	for d in /usr/share/libgda-5.0/gda_trml2{html,pdf} ; do
+		python_mod_cleanup ${d}
+	done
 }

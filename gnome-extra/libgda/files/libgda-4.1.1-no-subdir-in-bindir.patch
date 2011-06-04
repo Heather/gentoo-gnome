@@ -1,0 +1,52 @@
+Index: libgda-4.1.1/libgda-report/RML/gda-report-rml-document.c
+===================================================================
+--- libgda-4.1.1.orig/libgda-report/RML/gda-report-rml-document.c
++++ libgda-4.1.1/libgda-report/RML/gda-report-rml-document.c
+@@ -198,7 +198,7 @@ gda_report_rml_document_run_as_html (Gda
+ 	if (!converter) {
+ 		converter = g_find_program_in_path ("trml2html.py");
+ 		if (!converter) {
+-			converter = gda_gbr_get_file_path (GDA_BIN_DIR, "gda_trml2html", "trml2html.py", NULL);
++			converter = gda_gbr_get_file_path (GDA_DATA_DIR, LIBGDA_ABI_NAME, "gda_trml2html", "trml2html.py", NULL);
+ 			if (!g_file_test (converter, G_FILE_TEST_IS_EXECUTABLE)) {
+ 				g_free (converter);
+ 				converter = NULL;
+@@ -229,7 +229,7 @@ gda_report_rml_document_run_as_pdf (GdaR
+ 	if (!converter) {
+ 		converter = g_find_program_in_path ("trml2pdf.py");
+ 		if (!converter) {
+-			converter = gda_gbr_get_file_path (GDA_BIN_DIR, "gda_trml2pdf", "trml2pdf.py", NULL);
++			converter = gda_gbr_get_file_path (GDA_DATA_DIR, LIBGDA_ABI_NAME, "gda_trml2pdf", "trml2pdf.py", NULL);
+ 			if (!g_file_test (converter, G_FILE_TEST_IS_EXECUTABLE)) {
+ 				g_free (converter);
+ 				converter = NULL;
+Index: libgda-4.1.1/libgda-report/RML/trml2html/Makefile.am
+===================================================================
+--- libgda-4.1.1.orig/libgda-report/RML/trml2html/Makefile.am
++++ libgda-4.1.1/libgda-report/RML/trml2html/Makefile.am
+@@ -1,7 +1,7 @@
+ trml2html_SCRIPTS = trml2html.py
+ trml2html_DATA = __init__.py utils.py
+-trml2htmldir = $(bindir)/gda_trml2html
++trml2htmldir = $(datadir)/libgda-$(GDA_ABI_MAJOR_VERSION).$(GDA_ABI_MINOR_VERSION)/gda_trml2html
+ 
+ EXTRA_DIST = \
+ 	$(trml2html_SCRIPTS) \
+-	$(trml2html_DATA)
+\ No newline at end of file
++	$(trml2html_DATA)
+Index: libgda-4.1.1/libgda-report/RML/trml2pdf/Makefile.am
+===================================================================
+--- libgda-4.1.1.orig/libgda-report/RML/trml2pdf/Makefile.am
++++ libgda-4.1.1/libgda-report/RML/trml2pdf/Makefile.am
+@@ -1,7 +1,7 @@
+ trml2pdf_SCRIPTS = trml2pdf.py
+ trml2pdf_DATA = __init__.py color.py utils.py
+-trml2pdfdir = $(bindir)/gda_trml2pdf
++trml2pdfdir = $(datadir)/libgda-$(GDA_ABI_MAJOR_VERSION).$(GDA_ABI_MINOR_VERSION)/gda_trml2pdf
+ 
+ EXTRA_DIST = \
+ 	$(trml2pdf_SCRIPTS) \
+-	$(trml2pdf_DATA)
+\ No newline at end of file
++	$(trml2pdf_DATA)

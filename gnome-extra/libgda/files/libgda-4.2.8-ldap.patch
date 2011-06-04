@@ -1,0 +1,27 @@
+From f8042173c2139f65c69502a393fb44e00124ecc6 Mon Sep 17 00:00:00 2001
+From: Daniel Espinosa <esodan@gmail.com>
+Date: Thu, 02 Jun 2011 15:51:52 +0000
+Subject: Added checks for LDAP on table-columns for GdaBrowser
+
+---
+diff --git a/tools/browser/schema-browser/table-columns.c b/tools/browser/schema-browser/table-columns.c
+index 80cdaee..26ad771 100644
+--- a/tools/browser/schema-browser/table-columns.c
++++ b/tools/browser/schema-browser/table-columns.c
+@@ -117,12 +117,14 @@ table_columns_show_all (GtkWidget *widget)
+ {
+ 	TableColumns *tcolumns = (TableColumns *) widget;
+         GTK_WIDGET_CLASS (parent_class)->show_all (widget);
++#ifdef HAVE_LDAP
+ 	if (browser_connection_is_ldap (tcolumns->priv->bcnc)) {
+ 		if (! tcolumns->priv->ldap_props_shown) {
+ 			gtk_widget_hide (tcolumns->priv->ldap_header);
+ 			gtk_widget_hide (tcolumns->priv->ldap_text);
+ 		}
+ 	}
++#endif
+ }
+ 
+ GType
+--
+cgit v0.9
