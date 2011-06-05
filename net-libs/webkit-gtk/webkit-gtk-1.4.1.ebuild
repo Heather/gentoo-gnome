@@ -12,13 +12,14 @@ HOMEPAGE="http://www.webkitgtk.org/"
 SRC_URI="http://www.webkitgtk.org/${MY_P}.tar.gz"
 
 LICENSE="LGPL-2 LGPL-2.1 BSD"
-SLOT="2"
+SLOT="3"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-macos"
-# geoclue
-IUSE="aqua coverage debug doc spell +gstreamer +introspection +jit"
+# aqua, geoclue
+IUSE="coverage debug doc +gstreamer +introspection +jit spell"
 
 # use sqlite, svg by default
 # dependency on >=x11-libs/gtk+-2.13:2 for gail
+# Aqua support in gtk3 is untested
 RDEPEND="
 	dev-libs/libxml2:2
 	dev-libs/libxslt
@@ -26,7 +27,7 @@ RDEPEND="
 	>=media-libs/libpng-1.4:0
 	x11-libs/cairo
 	>=dev-libs/glib-2.27.90:2
-	>=x11-libs/gtk+-2.13:2[aqua=]
+	>=x11-libs/gtk+-3.0:3
 	>=dev-libs/icu-3.8.1-r1
 	>=net-libs/libsoup-2.33.6:2.4
 	>=dev-db/sqlite-3
@@ -53,25 +54,18 @@ DEPEND="${RDEPEND}
 
 S="${WORKDIR}/${MY_P}"
 
-pkg_setup() {
-	if ! use gstreamer ; then
-		die "Build does not work with USE=-gstreamer due to upstream issue"
-	fi
-}
-
 src_prepare() {
 	# FIXME: Fix unaligned accesses on ARM, IA64 and SPARC
 	# https://bugs.webkit.org/show_bug.cgi?id=19775
-	use sparc && epatch "${FILESDIR}"/${PN}-1.1.15.2-unaligned.patch
+	use sparc && epatch "${FILESDIR}"/${PN}-1.2.3-fix-pool-sparc.patch
 
 	# intermediate MacPorts hack while upstream bug is not fixed properly
 	# https://bugs.webkit.org/show_bug.cgi?id=28727
-	use sparc && epatch "${FILESDIR}"/${PN}-1.2.3-fix-pool-sparc.patch
+	use aqua && epatch "${FILESDIR}"/${PN}-1.2.5-darwin-quartz.patch
 
 	# Fix build on Darwin8 (10.4 Tiger)
 	# XXX: Fails to apply
 	#epatch "${FILESDIR}"/${PN}-1.2.5-darwin8.patch
-	epatch "${FILESDIR}/${P}-nav-crasher.patch"
 
 	# Don't force -O2
 	sed -i 's/-O2//g' "${S}"/configure.ac || die "sed failed"
@@ -107,10 +101,11 @@ src_configure() {
 		$(use_enable gstreamer video)
 		$(use_enable jit)
 		--disable-webgl
-		--with-gtk=2.0
+		--with-gtk=3.0
 		--disable-webkit2
-		--disable-web-sockets
-		$(use aqua && echo "--with-font-backend=pango --with-target=quartz")"
+		--disable-web-sockets"
+		# Aqua support in gtk3 is untested
+		#$(use aqua && echo "--with-font-backend=pango --with-target=quartz")"
 		# Disable web-sockets per bug #326547
 
 	econf ${myconf}
