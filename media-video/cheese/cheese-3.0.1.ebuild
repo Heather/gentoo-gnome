@@ -29,7 +29,7 @@ COMMON_DEPEND="
 	>=x11-libs/gtk+-2.99.4:3[introspection?]
 	>=x11-libs/cairo-1.10
 	>=x11-libs/pango-1.28.0
-	>=sys-fs/udev-145-r1[extras]
+	|| ( >=sys-fs/udev-171[gudev] >=sys-fs/udev-145-r1[extras] )
 	>=gnome-base/gnome-desktop-2.91.6:3
 	>=gnome-base/librsvg-2.32.0:2
 	>=media-libs/libcanberra-0.26[gtk3]

@@ -46,7 +46,7 @@ RDEPEND=">=dev-libs/glib-2.27.4
 		>=app-pda/libplist-0.15 )
 	udev? (
 		cdda? ( >=dev-libs/libcdio-0.78.2[-minimal] )
-		>=sys-fs/udev-145[extras] )
+		|| ( >=sys-fs/udev-171[gudev] >=sys-fs/udev-145[extras] ) )
 	http? ( >=net-libs/libsoup-gnome-2.26.0 )
 	samba? ( || ( >=net-fs/samba-3.4.6[smbclient]
 			<=net-fs/samba-3.3 ) )"

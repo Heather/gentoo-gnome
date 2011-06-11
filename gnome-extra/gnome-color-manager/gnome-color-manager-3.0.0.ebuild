@@ -30,7 +30,7 @@ RDEPEND=">=dev-libs/glib-2.25.9:2
 	media-libs/tiff
 	net-print/cups
 
-	sys-fs/udev[extras]
+	|| ( sys-fs/udev[gudev] sys-fs/udev[extras] )
 	x11-libs/libX11
 	x11-libs/libXrandr
 	>=x11-libs/gtk+-2.91:3
