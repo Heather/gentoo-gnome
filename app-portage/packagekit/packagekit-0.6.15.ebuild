@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -18,7 +18,6 @@ if [[ ${PV} = 9999 ]]; then
 	EGIT_REPO_URI="git://anongit.freedesktop.org/git/${PN}/${MY_PN}"
 	KEYWORDS=""
 	DEPEND=">=dev-util/gtk-doc-1.9"
-	RESTRICT="test" # tests are failing atm
 	DOCS="AUTHORS MAINTAINERS NEWS README TODO"
 else
 	MY_P=${MY_PN}-${PV}
@@ -30,44 +29,52 @@ fi
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="connman cron gtk +introspection networkmanager nls nsplugin pm-utils qt4
-test udev"
+IUSE="connman cron gtk +introspection networkmanager nls nsplugin pm-utils qt4 test udev"
 
 CDEPEND="
 	connman? ( net-misc/connman )
-	introspection? ( >=dev-libs/gobject-introspection-0.9.8 )
 	gtk? ( dev-libs/dbus-glib
 		media-libs/fontconfig
+		>=x11-libs/gtk+-2.14.0:2
 		>=x11-libs/gtk+-2.91.0:3
 		x11-libs/pango )
+	introspection? ( >=dev-libs/gobject-introspection-0.9.8 )
 	networkmanager? ( >=net-misc/networkmanager-0.6.4 )
 	nsplugin? ( dev-libs/dbus-glib
 		dev-libs/glib:2
 		dev-libs/nspr
 		x11-libs/cairo
 		>=x11-libs/gtk+-2.14.0:2
+		>=x11-libs/gtk+-2.91.0:3
 		x11-libs/pango )
 	qt4? ( >=x11-libs/qt-core-4.4.0
 		>=x11-libs/qt-dbus-4.4.0
 		>=x11-libs/qt-sql-4.4.0 )
-	udev? ( >=sys-fs/udev-145[extras] )
+	udev? ( || ( >=sys-fs/udev-171[gudev]
+		>=sys-fs/udev-145[extras] ) )
 	dev-db/sqlite:3
 	>=dev-libs/dbus-glib-0.74
 	>=dev-libs/glib-2.22:2
 	>=sys-apps/dbus-1.1.0
-	>=sys-auth/polkit-0.97"
+	>=sys-auth/polkit-0.97
+"
 RDEPEND="${CDEPEND}
 	pm-utils? ( sys-power/pm-utils )
 	>=app-portage/layman-1.2.3
 	>=sys-apps/portage-2.2_rc39
-	sys-auth/consolekit"
-DEPEND="${CDEPEND} ${DEPEND}
+	sys-auth/consolekit
+"
+DEPEND="${CDEPEND}
 	nsplugin? ( >=net-libs/xulrunner-1.9.1 )
 	test? ( qt4? ( dev-util/cppunit >=x11-libs/qt-gui-4.4.0 ) )
 	dev-libs/libxslt
 	>=dev-util/intltool-0.35.0
 	dev-util/pkgconfig
 	sys-devel/gettext"
+
+# FIXME: tests are failing
+# PackageKit:ERROR:pk-self-test.c:949:pk_test_control_get_properties_cb: assertion failed (text == "application/x-rpm;application/x-deb"): ("" == "application/x-rpm;application/x-deb")
+RESTRICT="test"
 
 # NOTES:
 # doc is in the tarball and always installed
@@ -81,6 +88,10 @@ DEPEND="${CDEPEND} ${DEPEND}
 # UPSTREAM:
 # documentation/website with --enable-doc-install
 # failing tests
+
+pkg_setup() {
+	python_set_active_version 2
+}
 
 src_prepare() {
 	if [[ ${PV} = 9999 ]]; then
@@ -105,7 +116,6 @@ src_configure() {
 		${myconf} \
 		--localstatedir=/var \
 		--disable-dependency-tracking \
-		--enable-option-checking \
 		--enable-libtool-lock \
 		--disable-strict \
 		--disable-local \

@@ -18,7 +18,6 @@ if [[ ${PV} = 9999 ]]; then
 	EGIT_REPO_URI="git://anongit.freedesktop.org/git/${PN}/${MY_PN}"
 	KEYWORDS=""
 	DEPEND=">=dev-util/gtk-doc-1.9"
-	RESTRICT="test" # tests are failing atm
 	DOCS="AUTHORS MAINTAINERS NEWS README TODO"
 else
 	MY_P=${MY_PN}-${PV}
@@ -51,7 +50,8 @@ CDEPEND="
 	qt4? ( >=x11-libs/qt-core-4.4.0
 		>=x11-libs/qt-dbus-4.4.0
 		>=x11-libs/qt-sql-4.4.0 )
-	udev? ( >=sys-fs/udev-145[extras] )
+	udev? ( || ( >=sys-fs/udev-171[gudev]
+		>=sys-fs/udev-145[extras] ) )
 	dev-db/sqlite:3
 	>=dev-libs/dbus-glib-0.74
 	>=dev-libs/glib-2.22:2
@@ -71,6 +71,10 @@ DEPEND="${CDEPEND}
 	>=dev-util/intltool-0.35.0
 	dev-util/pkgconfig
 	sys-devel/gettext"
+
+# FIXME: tests are failing
+# PackageKit:ERROR:pk-self-test.c:949:pk_test_control_get_properties_cb: assertion failed (text == "application/x-rpm;application/x-deb"): ("" == "application/x-rpm;application/x-deb")
+RESTRICT="test"
 
 # NOTES:
 # doc is in the tarball and always installed
@@ -98,6 +102,10 @@ src_prepare() {
 
 	# prevent pyc/pyo generation
 	ln -sfn $(type -P true) py-compile
+
+	# allow building with >=glib-2.28.7:2 (fixed upstream in 0.6.15)
+	sed -e 's:GLIB_CHECK_VERSION(2,28,7):GLIB_CHECK_VERSION(2,29,4):g' \
+		-i src/pk-main.c || die "sed src/pk-main.c failed"
 }
 
 src_configure() {
