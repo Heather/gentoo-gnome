@@ -11,7 +11,7 @@ if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
 
-DESCRIPTION="CD ripper for GNOME 2"
+DESCRIPTION="CD ripper for GNOME"
 HOMEPAGE="http://www.burtonini.com/blog/computers/sound-juicer/"
 SRC_URI="mirror://gentoo/${P}.tar.bz2"
 
@@ -39,6 +39,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.18:2
 	>=media-libs/gst-plugins-base-0.10:0.10"
 
 RDEPEND="${COMMON_DEPEND}
+	gnome-base/gvfs[cdda,udev]
 	>=media-plugins/gst-plugins-gconf-0.10:0.10
 	>=media-plugins/gst-plugins-gio-0.10:0.10
 	|| (
