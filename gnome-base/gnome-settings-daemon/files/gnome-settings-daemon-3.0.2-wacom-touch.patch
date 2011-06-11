@@ -1,0 +1,32 @@
+From 4248d799058f36bbb93ab9be173b249e7f631f80 Mon Sep 17 00:00:00 2001
+From: Peter Hutterer <peter.hutterer@who-t.net>
+Date: Wed, 25 May 2011 02:50:15 +0000
+Subject: wacom: enable wacom touch key by default.
+
+This was caused by a misunderstanding of the touch behaviour.
+This key enables/disables the touch part of the tablet altogether, not the
+behaviour of touch while using the pen. Hence the erroneous default, we
+really don't want to disable touch on most tablets by default.
+
+Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
+
+https://bugzilla.gnome.org/show_bug.cgi?id=651020
+---
+diff --git a/data/org.gnome.settings-daemon.peripherals.wacom.gschema.xml.in.in b/data/org.gnome.settings-daemon.peripherals.wacom.gschema.xml.in.in
+index 738b26a..4554d62 100644
+--- a/data/org.gnome.settings-daemon.peripherals.wacom.gschema.xml.in.in
++++ b/data/org.gnome.settings-daemon.peripherals.wacom.gschema.xml.in.in
+@@ -23,9 +23,9 @@
+     <_description>Set this to 'none', 'cw' for 90 degree clockwise, 'half' for 180 degree, and 'ccw' for 90 degree counterclockwise.</_description>
+     </key>
+     <key name="touch" type="b">
+-      <default>false</default>
++      <default>true</default>
+       <_summary>Wacom touch feature</_summary>
+-      <_description>Enable this to only move the cursor when the user touches the tablet.</_description>
++      <_description>Enable this to move the cursor when the user touches the tablet.</_description>
+     </key>
+     <key name="tablet-pc-button" type="b">
+       <default>false</default>
+--
+cgit v0.9

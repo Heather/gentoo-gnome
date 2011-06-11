@@ -6,7 +6,7 @@ EAPI="3"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
+inherit eutils gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -21,7 +21,7 @@ if [[ ${PV} = 9999 ]]; then
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 fi
-IUSE="+cups debug packagekit policykit smartcard +udev"
+IUSE="+cups debug packagekit policykit short-touchpad-timeout smartcard +udev"
 
 # Latest gsettings-desktop-schemas is needed due to commit e8d1de92
 COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
@@ -45,14 +45,16 @@ COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	cups? ( >=net-print/cups-1.4[dbus] )
 	packagekit? (
 		dev-libs/glib:2
-		sys-fs/udev[extras]
+		|| ( sys-fs/udev[gudev]
+			sys-fs/udev[extras] )
 		>=app-portage/packagekit-0.6.4
 		>=sys-power/upower-0.9.1 )
 	policykit? (
 		>=sys-auth/polkit-0.97
 		>=sys-apps/dbus-1.1.2 )
 	smartcard? ( >=dev-libs/nss-3.11.2 )
-	udev? ( sys-fs/udev[extras] )"
+	udev? ( || ( sys-fs/udev[gudev]
+		sys-fs/udev[extras] ) )"
 # Themes needed by g-s-d, gnome-shell, gtk+:3 apps to work properly
 RDEPEND="${COMMON_DEPEND}
 	>=x11-themes/gnome-themes-standard-2.91
@@ -83,6 +85,19 @@ pkg_setup() {
 		$(use_enable udev gudev)"
 }
 
+src_prepare() {
+	# Patch from upstream git, will be in next release
+	epatch "${FILESDIR}/${P}-wacom-touch.patch"
+
+	# https://bugzilla.gnome.org/show_bug.cgi?id=621836
+	# Apparently this change severely affects touchpad usability for some
+	# people, so revert it if USE=short-touchpad-timeout.
+	# Revisit if/when upstream adds a setting for customizing the timeout.
+	use short-touchpad-timeout &&
+		epatch "${FILESDIR}/${PN}-3.0.2-short-touchpad-timeout.patch"
+
+	gnome2_src_prepare
+}
 
 src_install() {
 	gnome2_src_install

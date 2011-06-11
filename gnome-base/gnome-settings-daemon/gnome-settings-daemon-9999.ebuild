@@ -45,14 +45,16 @@ COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	cups? ( >=net-print/cups-1.4[dbus] )
 	packagekit? (
 		dev-libs/glib:2
-		sys-fs/udev[extras]
+		|| ( sys-fs/udev[gudev]
+			sys-fs/udev[extras] )
 		>=app-portage/packagekit-0.6.4
 		>=sys-power/upower-0.9.1 )
 	policykit? (
 		>=sys-auth/polkit-0.97
 		>=sys-apps/dbus-1.1.2 )
 	smartcard? ( >=dev-libs/nss-3.11.2 )
-	udev? ( sys-fs/udev[extras] )"
+	udev? ( || ( sys-fs/udev[gudev]
+		sys-fs/udev[extras] ) )"
 # Themes needed by g-s-d, gnome-shell, gtk+:3 apps to work properly
 RDEPEND="${COMMON_DEPEND}
 	>=x11-themes/gnome-themes-standard-2.91
