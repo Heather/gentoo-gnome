@@ -1,10 +1,12 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-sound/rhythmbox/rhythmbox-0.12.8-r1.ebuild,v 1.2 2010/07/06 15:46:43 ssuominen Exp $
 
-EAPI="2"
+EAPI="3"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="python? 2:2.5"
+PYTHON_USE_WITH="xml"
+PYTHON_USE_WITH_OPT="python"
 
 inherit eutils gnome2 python multilib virtualx
 if [[ ${PV} = 9999 ]]; then
@@ -16,8 +18,7 @@ HOMEPAGE="http://www.rhythmbox.org/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="cdr daap dbus doc gnome-keyring html ipod +lastfm libnotify lirc
-musicbrainz mtp nsplugin python test udev upnp vala webkit"
+IUSE="cdr daap dbus doc gnome-keyring html ipod +lastfm libnotify lirc musicbrainz mtp nsplugin python test udev upnp vala webkit"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -25,7 +26,6 @@ else
 fi
 
 # FIXME: double check what to do with fm-radio plugin
-# TODO: watchout for udev use flag changes
 # FIXME: Zeitgesti python plugin
 # NOTE:: Rhythmbox Uses dbus-glib, gdbus, and dbus-python right now
 COMMON_DEPEND=">=dev-libs/glib-2.26.0:2
@@ -34,6 +34,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.26.0:2
 	>=x11-libs/gdk-pixbuf-2.18.0
 	>=dev-libs/dbus-glib-0.71
 	>=dev-libs/gobject-introspection-0.10.0
+	>=dev-libs/libpeas-0.7.3[gtk,python?]
 	>=dev-libs/totem-pl-parser-2.32.1
 	>=media-libs/libgnome-media-profiles-2.91.0:3
 	>=net-libs/libsoup-2.26:2.4
@@ -51,10 +52,11 @@ COMMON_DEPEND=">=dev-libs/glib-2.26.0:2
 	libnotify? ( >=x11-libs/libnotify-0.7.0 )
 	lirc? ( app-misc/lirc )
 	musicbrainz? ( media-libs/musicbrainz:3 )
+	python? ( >=dev-python/pygobject-2.28:2[introspection] )
 	udev? (
 		ipod? ( >=media-libs/libgpod-0.7.92[udev] )
 		mtp? ( >=media-libs/libmtp-0.3 )
-		>=sys-fs/udev-145[extras] )
+		|| ( >=sys-fs/udev-171[gudev] >=sys-fs/udev-145[extras] ) )
 "
 RDEPEND="${COMMON_DEPEND}
 	>=media-plugins/gst-plugins-soup-0.10
@@ -64,10 +66,7 @@ RDEPEND="${COMMON_DEPEND}
 		>=media-plugins/gst-plugins-cdio-0.10 )
 	>=media-plugins/gst-plugins-meta-0.10-r2:0.10
 	>=media-plugins/gst-plugins-taglib-0.10.6
-
-	nsplugin? ( net-libs/xulrunner )
 	python? (
-		>=dev-python/pygobject-2.15.4:2[introspection]
 		>=dev-python/gst-python-0.10.8
 
 		x11-libs/gdk-pixbuf:2[introspection]
@@ -78,12 +77,15 @@ RDEPEND="${COMMON_DEPEND}
 		gnome-keyring? ( dev-python/gnome-keyring-python )
 		webkit? (
 			dev-python/mako
-			net-libs/webkit-gtk:3[introspection] )
+			>=net-libs/webkit-gtk-1.3.9:3[introspection] )
 		upnp? (
+			>=dev-python/gconf-python-2.22
+			>=dev-python/pygtk-2.8:2
 			dev-python/louie
 			media-video/coherence
 			dev-python/twisted[gtk] ) )
-"
+
+	nsplugin? ( net-libs/xulrunner )"
 # gtk-doc-am needed for eautoreconf
 #	dev-util/gtk-doc-am
 DEPEND="${COMMON_DEPEND}
@@ -99,16 +101,26 @@ DOCS="AUTHORS ChangeLog DOCUMENTERS INTERNALS \
 	  MAINTAINERS MAINTAINERS.old NEWS README THANKS"
 
 pkg_setup() {
+	if use python; then
+		python_set_active_version 2
+		python_pkg_setup
+		G2CONF="${G2CONF} PYTHON=$(PYTHON -2)"
+	fi
+
 	if ! use udev; then
 		if use ipod; then
 			ewarn "ipod support requires udev support.  Please"
 			ewarn "re-emerge with USE=udev to enable ipod support"
+			G2CONF="${G2CONF} --without-ipod"
 		fi
 
 		if use mtp; then
 			ewarn "MTP support requires udev support.  Please"
 			ewarn "re-emerge with USE=udev to enable MTP support"
+			G2CONF="${G2CONF} --without-mtp"
 		fi
+	else
+		G2CONF="${G2CONF} $(use_with ipod) $(use_with mtp)"
 	fi
 
 	if ! use cdr ; then
@@ -140,8 +152,9 @@ pkg_setup() {
 		VALAC=$(type -P valac-0.10)
 		--enable-mmkeys
 		--disable-scrollkeeper
-		--disable-schemas-commpile
+		--disable-schemas-compile
 		--disable-static
+		--without-hal
 		$(use_enable daap)
 		$(use_enable lastfm)
 		$(use_enable libnotify)
