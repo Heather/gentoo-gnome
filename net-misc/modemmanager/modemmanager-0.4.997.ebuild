@@ -3,6 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/net-misc/modemmanager/modemmanager-0.4_p20110205.ebuild,v 1.1 2011/02/05 00:00:36 dagger Exp $
 
 EAPI="4"
+GNOME_TARBALL_SUFFIX="xz"
 GNOME_ORG_MODULE="ModemManager"
 
 inherit gnome.org eutils
