@@ -6,31 +6,31 @@ EAPI="3"
 
 inherit base
 
-DESCRIPTION="system service to accurately color manage input and output devices"
+DESCRIPTION="System service to accurately color manage input and output devices"
 HOMEPAGE="http://colord.hughsie.com/"
 SRC_URI="http://people.freedesktop.org/~hughsient/releases/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 # XXX: raise to libusb-1.0.9:1 when available
 RDEPEND="
 	dev-db/sqlite:3
-	>=dev-libs/glib-2.25.9:2
+	>=dev-libs/glib-2.28.0:2
 	>=dev-libs/libusb-1.0.8:1
 	media-gfx/sane-backends
-	media-libs/lcms:2
+	>=media-libs/lcms-2.2:2
 	>=sys-auth/polkit-0.97
-	sys-fs/udev[extras]
+	|| ( sys-fs/udev[gudev] sys-fs/udev[extras] )
 "
 DEPEND="${RDEPEND}
 	app-text/docbook-sgml-utils
 	dev-libs/libxslt
 	>=dev-util/intltool-0.35
 	dev-util/pkgconfig
-	sys-devel/gettext
+	>=sys-devel/gettext-0.17
 "
 
 # FIXME: needs pre-installed dbus service files
