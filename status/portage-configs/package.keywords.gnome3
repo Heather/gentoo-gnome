@@ -133,6 +133,11 @@ media-libs/clutter:1.0
 media-libs/clutter-gtk:1.0
 media-libs/clutter-gst:1.0
 
+# Colord
+>=media-libs/lcms-2.2:2
+x11-misc/colord
+gnome-extra/gnome-color-manager
+
 # libcanberra
 >=sys-fs/udev-160
 media-libs/libcanberra
