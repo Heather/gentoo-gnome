@@ -17,7 +17,7 @@ KEYWORDS="~amd64 ~arm ~ppc ~ppc64 ~x86"
 IUSE="doc policykit test"
 
 RDEPEND=">=dev-libs/glib-2.18:2
-	>=sys-fs/udev-145[extras]
+	|| ( >=sys-fs/udev-171[gudev] >=sys-fs/udev-145[extras] )
 	>=dev-libs/dbus-glib-0.86
 	net-dialup/ppp
 	policykit? ( >=sys-auth/polkit-0.99 )"
