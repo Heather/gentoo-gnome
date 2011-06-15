@@ -3,11 +3,12 @@
 # $Header: /var/cvsroot/gentoo-x86/dev-util/anjuta/anjuta-2.32.1.1.ebuild,v 1.2 2011/01/24 15:51:47 eva Exp $
 
 EAPI="3"
+GNOME_TARBALL_SUFFIX="xz"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2"
 
-inherit eutils gnome2 flag-o-matic multilib python
+inherit gnome2 flag-o-matic multilib python
 
 DESCRIPTION="A versatile IDE for GNOME"
 HOMEPAGE="http://www.anjuta.org"
@@ -82,7 +83,7 @@ pkg_setup() {
 		G2CONF="${G2CONF} VALAC=$(type -P valac-0.12)"
 	fi
 
-	# Conflics wiht -pg in a plugin, bug #266777
+	# Conflics with -pg in a plugin, bug #266777
 	filter-flags -fomit-frame-pointer
 
 	python_set_active_version 2
@@ -93,11 +94,8 @@ pkg_setup() {
 		die "For ${P}, doc USE flag must be disabled when FEATURES=test"
 }
 
-src_prepare() {
-	# https://bugzilla.gnome.org/show_bug.cgi?id=650930
-	epatch "${FILESDIR}/${PN}-3.0.2.0-autogen-5.11.patch"
-
-	gnome2_src_prepare
+#src_prepare() {
+#	gnome2_src_prepare
 
 	# Needed to preserve introspection configure option, see bgo#633730
 	# eautoreconf needs introspection.m4
@@ -107,7 +105,7 @@ src_prepare() {
 #	cp "${WORKDIR}"/introspection.m4 . || die
 #	intltoolize --force --copy --automake || die "intltoolize failed"
 #	AT_M4DIR="." eautoreconf
-}
+#}
 
 src_install() {
 	# Anjuta uses a custom rule to install DOCS, get rid of it
