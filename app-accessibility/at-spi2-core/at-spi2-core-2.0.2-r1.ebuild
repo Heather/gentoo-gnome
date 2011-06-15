@@ -39,5 +39,9 @@ src_prepare() {
 	# disable teamspaces test since that requires Novell.ICEDesktop.Daemon
 	epatch "${FILESDIR}/${PN}-2.0.2-disable-teamspaces-test.patch"
 
+	# https://bugzilla.gnome.org/show_bug.cgi?id=652215
+	# Fixed in upstream git master branch, but not in gnome-3-0 branch
+	epatch "${FILESDIR}/${PN}-2.0.2-abort-if-already-running.patch"
+
 	gnome2_src_prepare
 }
