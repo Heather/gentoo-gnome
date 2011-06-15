@@ -31,6 +31,7 @@ RDEPEND="
 	>=x11-libs/startup-notification-0.5
 	x11-libs/libX11
 	>=gnome-base/gsettings-desktop-schemas-0.1.4
+	doc? ( !<gnome-base/gnome-desktop-2.32.1-r50:2[doc] )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.7 )"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
