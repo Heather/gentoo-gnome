@@ -17,6 +17,7 @@ IUSE="doc"
 
 # Vala/libgee/gtk+:2 is only used when maintainer-mode is enabled
 # Doesn't seem to be used for anything...
+# TODO: implement tests (requires dev-libs/check)
 RDEPEND="
 	dev-libs/glib:2
 	x11-libs/gdk-pixbuf:2
@@ -38,7 +39,7 @@ src_prepare() {
 
 	# Fix documentation sloting
 	sed "s/^\(DOC_MODULE\).*/\1 = ${PN}-${SLOT}/" \
-		-i docs/Makefile.am docs/Makefile.in || die "sed failed"
+		-i doc/Makefile.am doc/Makefile.in || die "sed failed"
 }
 
 src_configure() {
