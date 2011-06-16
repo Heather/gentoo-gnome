@@ -4,6 +4,7 @@
 
 EAPI="4"
 GCONF_DEBUG="no"
+GNOME_TARBALL_SUFFIX="bz2"
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2

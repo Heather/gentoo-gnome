@@ -3,6 +3,7 @@
 # $Header: $
 
 EAPI="4"
+GNOME_TARBALL_SUFFIX="bz2"
 GNOME_ORG_MODULE="NetworkManager-${PN##*-}"
 
 inherit gnome.org

@@ -4,6 +4,7 @@
 
 EAPI="3"
 GNOME2_LA_PUNT="yes"
+GNOME_TARBALL_SUFFIX="bz2"
 GNOME_ORG_MODULE="network-manager-applet"
 
 inherit gnome2
