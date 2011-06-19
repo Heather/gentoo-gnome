@@ -7,7 +7,7 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="gnome? 2"
 
-inherit eutils gnome2 python
+inherit eutils gnome2 multilib python
 
 DESCRIPTION="An enhanced gettext po file editor for GNOME"
 HOMEPAGE="http://gtranslator.sourceforge.net/"
@@ -15,9 +15,9 @@ HOMEPAGE="http://gtranslator.sourceforge.net/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~ppc ~sparc ~x86"
-IUSE="doc gnome +introspection"
+IUSE="doc gnome"
 
-RDEPEND="
+COMMON_DEPEND="
 	>=dev-libs/glib-2.28.0:2
 	>=x11-libs/gtk+-3.0.3:3
 	>=x11-libs/gtksourceview-3.0.0:3.0
@@ -30,9 +30,16 @@ RDEPEND="
 
 	gnome-base/gsettings-desktop-schemas
 
-	gnome? ( gnome-extra/gnome-utils )
-	introspection? ( >=dev-libs/gobject-introspection-0.9.3 )"
-DEPEND="${RDEPEND}
+	gnome? (
+		dev-libs/glib:2[introspection]
+		gnome-extra/gnome-utils
+		x11-libs/gtk+:3[introspection] )"
+RDEPEND="${COMMON_DEPEND}
+	gnome? (
+		>=dev-libs/libpeas-1.0.0[gtk,python]
+		dev-python/pygobject[introspection]
+		gnome-extra/gucharmap:2.90[introspection] )"
+DEPEND="${COMMON_DEPEND}
 	>=app-text/scrollkeeper-0.1.4
 	>=dev-util/intltool-0.40
 	>=sys-devel/gettext-0.17
@@ -48,5 +55,30 @@ pkg_setup() {
 		--disable-static
 		--without-gtkspell
 		$(use_with gnome dictionary)
-		$(use_enable introspection)"
+		$(use_enable gnome introspection)"
+}
+
+src_prepare() {
+	gnome2_src_prepare
+
+	# disable pyc compiling
+	ln -sfn $(type -P true) py-compile
+	if ! use gnome; then
+		# don't install charmap plugin, it requires gnome-extra/gucharmap
+		sed -e 's:\scharmap\s: :g' -i plugins/Makefile.* ||
+			die "sed plugins/Makefile.* failed"
+	fi
+}
+
+pkg_postinst() {
+	gnome2_pkg_postinst
+	if use gnome; then
+		python_need_rebuild
+		python_mod_optimize /usr/$(get_libdir)/gtranslator/plugins
+	fi
+}
+
+pkg_postrm() {
+	gnome2_pkg_postrm
+	use gnome && python_mod_cleanup /usr/$(get_libdir)/gtranslator/plugins
 }
