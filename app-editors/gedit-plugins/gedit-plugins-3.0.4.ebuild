@@ -34,7 +34,7 @@ RDEPEND=">=app-editors/gedit-3.0.0[python?]
 		x11-libs/pango[introspection]
 		x11-libs/gdk-pixbuf:2[introspection]
 	)
-	charmap? ( >=gnome-extra/gucharmap-3.0.0[introspection] )
+	charmap? ( >=gnome-extra/gucharmap-3.0.0:2.90[introspection] )
 	synctex? ( >=dev-python/dbus-python-0.82 )
 	terminal? ( x11-libs/vte:2.90[introspection] )"
 DEPEND="${RDEPEND}

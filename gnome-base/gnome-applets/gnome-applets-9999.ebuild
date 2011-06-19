@@ -46,7 +46,7 @@ RDEPEND=">=x11-libs/gtk+-3.0.0:3
 		gnome-base/gnome-settings-daemon
 		gnome-base/libgnome
 
-		>=gnome-extra/gucharmap-2.33.0
+		>=gnome-extra/gucharmap-2.33.0:2.90
 		>=gnome-base/libgtop-2.11.92 )
 	gstreamer?	(
 		>=media-libs/gstreamer-0.10.2
