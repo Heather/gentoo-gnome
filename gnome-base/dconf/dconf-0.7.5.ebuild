@@ -73,5 +73,5 @@ src_install() {
 
 pkg_postinst() {
 	gnome2_pkg_postinst
-	use bashcompletion && bash-completion_pkg_postinst
+	use bash-completion && bash-completion_pkg_postinst
 }
