@@ -57,6 +57,7 @@ COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 		sys-fs/udev[extras] ) )"
 # Themes needed by g-s-d, gnome-shell, gtk+:3 apps to work properly
 RDEPEND="${COMMON_DEPEND}
+	gnome-base/dconf
 	>=x11-themes/gnome-themes-standard-2.91
 	>=x11-themes/gnome-icon-theme-2.91
 	>=x11-themes/gnome-icon-theme-symbolic-2.91
