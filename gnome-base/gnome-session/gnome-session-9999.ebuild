@@ -48,6 +48,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
 # gnome-themes-standard is needed for the failwhale dialog themeing
 RDEPEND="${COMMON_DEPEND}
 	gnome-base/gnome-settings-daemon
+	>=gnome-base/gsettings-desktop-schemas-0.1.7
 	>=x11-themes/gnome-themes-standard-2.91.92"
 DEPEND="${COMMON_DEPEND}
 	>=dev-lang/perl-5
