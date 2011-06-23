@@ -91,6 +91,7 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-update-mimedb
 		--disable-static
+		--disable-maintainer-mode
 		$(use_with cheese)
 		$(use_enable cups)
 		$(use_with socialweb libsocialweb)"
@@ -102,6 +103,12 @@ src_prepare() {
 	# XXX: remove for next release
 	sed -e 's:no-undefined:-no-undefined:' \
 		-i libgnome-control-center/Makefile.* || die "sed failed"
+
+	# cups-1.5 compatibility; will be in next release
+	epatch "${FILESDIR}/${P}-cups-ppd.h.patch"
+
+	# https://bugzilla.gnome.org/show_bug.cgi?id=653211
+	epatch "${FILESDIR}/${PN}-3.0.2-https-handler.patch"
 
 	gnome2_src_prepare
 }

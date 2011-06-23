@@ -1,0 +1,28 @@
+From 6a6a8583803464d4b56870c7faf4db035b97e12d Mon Sep 17 00:00:00 2001
+From: Alexandre Rostovtsev <tetromino@gmail.com>
+Date: Thu, 23 Jun 2011 00:05:34 -0400
+Subject: [PATCH] Fix https scheme handler app setting (bug #653211)
+
+default_app_changed() contains a typo: we need to set the https
+handler app when the user changes the http app chooser, not the
+(non-existent) https app chooser.
+---
+ panels/info/cc-info-panel.c |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/panels/info/cc-info-panel.c b/panels/info/cc-info-panel.c
+index 2283896..f4dba1b 100644
+--- a/panels/info/cc-info-panel.c
++++ b/panels/info/cc-info-panel.c
+@@ -922,7 +922,7 @@ default_app_changed (GtkAppChooserButton *button,
+     }
+ 
+   /* Set https support for the browser as well */
+-  if (g_str_equal (content_type, "x-scheme-handler/https"))
++  if (g_str_equal (content_type, "x-scheme-handler/http"))
+     {
+       if (g_app_info_set_as_default_for_type (info, "x-scheme-handler/https", &error) == FALSE)
+         {
+-- 
+1.7.5.3
+

@@ -1,0 +1,46 @@
+From 246dfbcca4906db9c2ef01990ad482270324309e Mon Sep 17 00:00:00 2001
+From: Marek Kasik <mkasik@redhat.com>
+Date: Mon, 20 Jun 2011 15:04:25 +0000
+Subject: Printers: Include cups/ppd.h explicitly
+
+cups/ppd.h is not included by cups/cups.h since CUPS 1.5.
+---
+diff --git a/configure.ac b/configure.ac
+index b26fb7c..b7e6259 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -145,7 +145,7 @@ if test x"$enable_cups" != x"no" ; then
+   CUPS_API_MAJOR=`echo $ECHO_N $CUPS_API_VERSION | cut -d . -f 1`
+   CUPS_API_MINOR=`echo $ECHO_N $CUPS_API_VERSION | cut -d . -f 2`
+ 
+-  AC_CHECK_HEADERS([cups/cups.h cups/http.h cups/ipp.h],,
++  AC_CHECK_HEADERS([cups/cups.h cups/http.h cups/ipp.h cups/ppd.h],,
+                    AC_MSG_ERROR([CUPS headers not found but CUPS support requested]))
+ 
+   if ! test $CUPS_API_MAJOR -gt 1 -o \
+diff --git a/panels/printers/pp-new-printer-dialog.c b/panels/printers/pp-new-printer-dialog.c
+index 0b9ece9..69372c2 100644
+--- a/panels/printers/pp-new-printer-dialog.c
++++ b/panels/printers/pp-new-printer-dialog.c
+@@ -31,6 +31,7 @@
+ #include <gtk/gtk.h>
+ 
+ #include <cups/cups.h>
++#include <cups/ppd.h>
+ 
+ #include "pp-new-printer-dialog.h"
+ #include "pp-utils.h"
+diff --git a/panels/printers/pp-utils.c b/panels/printers/pp-utils.c
+index 8dbe04f..cb7c29f 100644
+--- a/panels/printers/pp-utils.c
++++ b/panels/printers/pp-utils.c
+@@ -25,6 +25,7 @@
+ #include <glib/gstdio.h>
+ #include <gtk/gtk.h>
+ #include <cups/cups.h>
++#include <cups/ppd.h>
+ #include <dbus/dbus-glib.h>
+ 
+ #include "pp-utils.h"
+--
+cgit v0.9
