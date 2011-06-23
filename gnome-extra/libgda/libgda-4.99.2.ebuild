@@ -5,6 +5,7 @@
 EAPI="3"
 GNOME2_LA_PUNT="yes"
 GCONF_DEBUG="yes"
+GNOME_TARBALL_SUFFIX="xz" # remove when python eclass supports EAPI 4
 PYTHON_DEPEND="2"
 
 inherit autotools db-use eutils flag-o-matic gnome2 java-pkg-opt-2 python
@@ -115,20 +116,8 @@ src_prepare() {
 	# Fix compilation failure of keyword_hash.c, upstream #630959
 	#epatch "${FILESDIR}/${PN}-4.2.0-missing-include-in-keyword_hash-generator.patch"
 
-	# Fix compilation without ldap, bug #370233, upstream #651713
-	# XXX: remove patch on 4.99.2 bump
-	epatch "${FILESDIR}/${PN}-4.2.8-ldap.patch"
-
-	# Fix sandbox violations with USE doc, bug #370013, upstream #651922
-	# XXX: remove patch on 4.99.2 bump
-	epatch "${FILESDIR}/${PN}-4.2.8-sandbox-fix.patch"
-
 	# Disable broken tests so we can check the others
 	epatch "${FILESDIR}/${PN}-9999-disable-broken-tests.patch"
-
-	# Put subdirectories for conversion scripts in /usr/share, not /usr/bin
-	# https://bugzilla.gnome.org/show_bug.cgi?id=594115 comment 2
-	epatch "${FILESDIR}/${PN}-4.1.1-no-subdir-in-bindir.patch"
 
 	# Prevent file collisions with libgda:4
 	epatch "${FILESDIR}/${PN}-4.99.1-gda-browser-help-collision.patch"
