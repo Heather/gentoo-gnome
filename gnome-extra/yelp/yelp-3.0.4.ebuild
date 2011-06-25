@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/yelp/yelp-2.30.1-r1.ebuild,v 1.1 2010/06/13 20:04:06 pacho Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
@@ -31,6 +31,7 @@ DEPEND="${RDEPEND}
 	>=sys-devel/gettext-0.17
 	>=dev-util/intltool-0.41.0
 	>=dev-util/pkgconfig-0.9
+	gnome-base/gnome-common
 	doc? ( >=dev-util/gtk-doc-1.13 )"
 # If eautoreconf:
 #	gnome-base/gnome-common
@@ -45,10 +46,10 @@ pkg_setup() {
 }
 
 src_prepare() {
-	gnome2_src_prepare
-
 	# Fix compatibility with Gentoo's sys-apps/man
 	# https://bugzilla.gnome.org/show_bug.cgi?id=648854
 	epatch "${FILESDIR}/${PN}-3.0.3-man-compatibility.patch"
-	eautoreconf || die
+	eautoreconf
+
+	gnome2_src_prepare
 }
