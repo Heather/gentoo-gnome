@@ -81,7 +81,7 @@ index 339f3cc..29d16dc 100644
  /**
 + * Parse the inittab file used by getty to spawn VTs to find unused ttys
 + */
-+int
++static int
 +get_free_vt_from_inittab ()
 +{
 +        GFile *gfile;
@@ -146,7 +146,7 @@ index 339f3cc..29d16dc 100644
 +/**
 + * Query the VT_* kernel ioctls to find an empty tty
 + */
-+int
++static int
 +get_free_vt_from_kernel()
 +{
 +        int fd, vtno = 0;
@@ -159,7 +159,7 @@ index 339f3cc..29d16dc 100644
 +        return vtno;
 +}
 +
-+gchar*
++static gchar*
 +get_free_vt ()
 +{
 +        int inittab_vtno, kernel_vtno;
