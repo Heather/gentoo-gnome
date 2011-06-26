@@ -2,10 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="yes"
 
-inherit autotools eutils gnome2 pam
+inherit autotools eutils gnome2 pam systemd
 
 DESCRIPTION="GNOME Display Manager"
 HOMEPAGE="http://www.gnome.org/projects/gdm/"
@@ -133,13 +133,15 @@ src_install() {
 
 	local gentoodir="${WORKDIR}/${GDM_EXTRA}"
 
+	# Install the systemd unit file
+	systemd_dounit "${FILESDIR}/gdm@.service"
+
 	# FIXME: Remove dosym usage, gone in EAPI 4
 	# gdm-binary should be gdm to work with our init (#5598)
-	rm -f "${D}/usr/sbin/gdm"
-	dosym /usr/sbin/gdm-binary /usr/sbin/gdm
-
+	rm -f "${ED}/usr/sbin/gdm"
+	ln -sfn /usr/sbin/gdm-binary "${ED}/usr/sbin/gdm"
 	# our x11's scripts point to /usr/bin/gdm
-	dosym /usr/sbin/gdm-binary /usr/bin/gdm
+	ln -sfn /usr/sbin/gdm-binary "${ED}/usr/bin/gdm"
 
 	# log, etc.
 	keepdir /var/log/gdm
