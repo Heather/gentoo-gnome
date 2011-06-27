@@ -23,13 +23,13 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 	DOCS="AUTHORS ChangeLog ChangeLog.pre-1-2 NEWS README TODO"
 fi
-IUSE="archive avahi bluetooth cdda doc fuse gdu gnome-keyring gphoto2 +http ios samba +udev"
+IUSE="archive avahi bluetooth cdda doc fuse gdu gnome-keyring gphoto2 +http ios prefix samba +udev"
 
 RDEPEND=">=dev-libs/glib-2.27.4
 	>=sys-apps/dbus-1.0
 	dev-libs/libxml2
 	net-misc/openssh
-	>=sys-fs/udev-138
+	!prefix? ( >=sys-fs/udev-138 )
 	archive? ( app-arch/libarchive )
 	avahi? ( >=net-dns/avahi-0.6 )
 	bluetooth? (
@@ -64,7 +64,6 @@ pkg_setup() {
 	fi
 
 	G2CONF="${G2CONF}
-		--enable-udev
 		--disable-bash-completion
 		--disable-hal
 		--disable-schemas-compile
@@ -80,7 +79,8 @@ pkg_setup() {
 		$(use_enable udev gudev)
 		$(use_enable http)
 		$(use_enable gnome-keyring keyring)
-		$(use_enable samba)"
+		$(use_enable samba)
+		$(use_enable !prefix udev)"
 }
 
 src_prepare() {
@@ -95,7 +95,13 @@ src_prepare() {
 		echo "mount-archive.desktop.in.in" >> po/POTFILES.in
 	fi
 
-	use gphoto2 || use archive && eautoreconf
+	if use prefix; then
+		sed -i -e 's/gvfsd-burn/ /' daemon/Makefile.am || die
+		sed -i -e 's/burn.mount.in/ /' daemon/Makefile.am || die
+		sed -i -e 's/burn.mount/ /' daemon/Makefile.am || die
+	fi
+
+	{ use gphoto2 || use archive || use prefix; } && eautoreconf
 }
 
 src_install() {
