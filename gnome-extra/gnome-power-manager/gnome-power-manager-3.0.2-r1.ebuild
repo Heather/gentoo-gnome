@@ -5,7 +5,7 @@
 EAPI="3"
 GCONF_DEBUG="no"
 
-inherit gnome2 virtualx
+inherit eutils gnome2 virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -79,6 +79,14 @@ pkg_setup() {
 
 src_prepare() {
 	gnome2_src_prepare
+
+	# https://bugzilla.redhat.com/show_bug.cgi?id=679083
+	# will be in next release
+	epatch "${FILESDIR}/${P}-idle-status.patch"
+
+	# https://bugzilla.gnome.org/show_bug.cgi?id=650464
+	# will be in next release
+	epatch "${FILESDIR}/${P}-screensaver.patch"
 
 	# Drop debugger CFLAGS from configure
 	# XXX: touch configure.ac only if running eautoreconf, otherwise

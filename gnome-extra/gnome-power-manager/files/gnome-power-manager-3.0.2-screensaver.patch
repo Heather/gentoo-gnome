@@ -1,0 +1,146 @@
+From c36c35b2ecd818e54de975fe81885eca05a1be98 Mon Sep 17 00:00:00 2001
+From: Gary Ching-Pang Lin <chingpang@gmail.com>
+Date: Wed, 08 Jun 2011 16:01:33 +0000
+Subject: Query gnome-screensaver settings with GSettings
+
+https://bugzilla.gnome.org/show_bug.cgi?id=650464
+---
+diff --git a/configure.ac b/configure.ac
+index 90bbe5f..3134ae4 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -107,7 +107,6 @@ PKG_CHECK_MODULES(CANBERRA, libcanberra-gtk3 >= 0.10)
+ 
+ PKG_CHECK_MODULES(GNOME, [
+  gtk+-3.0 >= 2.91.0
+- gconf-2.0 >= 2.31.1
+  gnome-keyring-1 >= 0.6.0
+  cairo >= 1.0.0])
+ 
+diff --git a/src/gpm-common.h b/src/gpm-common.h
+index b540c05..dabda1a 100644
+--- a/src/gpm-common.h
++++ b/src/gpm-common.h
+@@ -129,8 +129,8 @@ G_BEGIN_DECLS
+ #define GPM_SETTINGS_INFO_LAST_DEVICE			"info-last-device"
+ 
+ /* gnome-screensaver */
+-#define GS_CONF_DIR					"/apps/gnome-screensaver"
+-#define GS_CONF_PREF_LOCK_ENABLED			GS_CONF_DIR "/lock_enabled"
++#define GS_SETTINGS_SCHEMA				"org.gnome.desktop.screensaver"
++#define GS_SETTINGS_PREF_LOCK_ENABLED			"lock-enabled"
+ 
+ typedef enum {
+ 	GPM_ICON_POLICY_PRESENT,
+diff --git a/src/gpm-control.c b/src/gpm-control.c
+index 0fc864d..902db44 100644
+--- a/src/gpm-control.c
++++ b/src/gpm-control.c
+@@ -38,7 +38,6 @@
+ 
+ #include <glib/gi18n.h>
+ #include <gnome-keyring.h>
+-#include <gconf/gconf-client.h>
+ #include <libupower-glib/upower.h>
+ 
+ #include "egg-console-kit.h"
+@@ -51,8 +50,8 @@
+ 
+ struct GpmControlPrivate
+ {
+-	GConfClient		*conf;
+ 	GSettings		*settings;
++	GSettings		*settings_ss;
+ 	UpClient		*client;
+ };
+ 
+@@ -118,7 +117,7 @@ gpm_control_get_lock_policy (GpmControl *control, const gchar *policy)
+ 	   See bug #331164 for all the juicy details. :-) */
+ 	use_ss_setting = g_settings_get_boolean (control->priv->settings, GPM_SETTINGS_LOCK_USE_SCREENSAVER);
+ 	if (use_ss_setting) {
+-		do_lock = gconf_client_get_bool (control->priv->conf, GS_CONF_PREF_LOCK_ENABLED, NULL);
++		do_lock = g_settings_get_boolean (control->priv->settings_ss, GS_SETTINGS_PREF_LOCK_ENABLED);
+ 		g_debug ("Using ScreenSaver settings (%i)", do_lock);
+ 	} else {
+ 		do_lock = g_settings_get_boolean (control->priv->settings, policy);
+@@ -256,8 +255,8 @@ gpm_control_finalize (GObject *object)
+ 	g_return_if_fail (GPM_IS_CONTROL (object));
+ 	control = GPM_CONTROL (object);
+ 
+-	g_object_unref (control->priv->conf);
+ 	g_object_unref (control->priv->settings);
++	g_object_unref (control->priv->settings_ss);
+ 	g_object_unref (control->priv->client);
+ 
+ 	g_return_if_fail (control->priv != NULL);
+@@ -306,7 +305,7 @@ gpm_control_init (GpmControl *control)
+ 
+ 	control->priv->client = up_client_new ();
+ 	control->priv->settings = g_settings_new (GPM_SETTINGS_SCHEMA);
+-	control->priv->conf = gconf_client_get_default ();
++	control->priv->settings_ss = g_settings_new (GS_SETTINGS_SCHEMA);
+ }
+ 
+ /**
+diff --git a/src/gpm-screensaver.c b/src/gpm-screensaver.c
+index 842ea7c..f41baed 100644
+--- a/src/gpm-screensaver.c
++++ b/src/gpm-screensaver.c
+@@ -25,7 +25,6 @@
+ #include <glib.h>
+ #include <glib/gi18n.h>
+ #include <gio/gio.h>
+-#include <gconf/gconf-client.h>
+ 
+ #include "gpm-screensaver.h"
+ #include "gpm-common.h"
+@@ -41,7 +40,7 @@ static void     gpm_screensaver_finalize   (GObject		*object);
+ struct GpmScreensaverPrivate
+ {
+ 	GDBusProxy		*proxy;
+-	GConfClient		*conf;
++	GSettings		*settings;
+ };
+ 
+ enum {
+@@ -63,7 +62,7 @@ gpm_screensaver_lock_enabled (GpmScreensaver *screensaver)
+ {
+ 	gboolean enabled;
+ 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
+-	enabled = gconf_client_get_bool (screensaver->priv->conf, GS_CONF_PREF_LOCK_ENABLED, NULL);
++	enabled = g_settings_get_boolean (screensaver->priv->settings, GS_SETTINGS_PREF_LOCK_ENABLED);
+ 	return enabled;
+ }
+ 
+@@ -296,7 +295,7 @@ gpm_screensaver_init (GpmScreensaver *screensaver)
+ 		g_warning ("failed to setup screensaver proxy: %s", error->message);
+ 		g_error_free (error);
+ 	}
+-	screensaver->priv->conf = gconf_client_get_default ();
++	screensaver->priv->settings = g_settings_new (GS_SETTINGS_SCHEMA) ;
+ }
+ 
+ /**
+@@ -313,7 +312,7 @@ gpm_screensaver_finalize (GObject *object)
+ 	screensaver = GPM_SCREENSAVER (object);
+ 	screensaver->priv = GPM_SCREENSAVER_GET_PRIVATE (screensaver);
+ 
+-	g_object_unref (screensaver->priv->conf);
++	g_object_unref (screensaver->priv->settings);
+ 	g_object_unref (screensaver->priv->proxy);
+ 
+ 	G_OBJECT_CLASS (gpm_screensaver_parent_class)->finalize (object);
+diff --git a/src/gpm-statistics.c b/src/gpm-statistics.c
+index e7eb21b..a444c2e 100644
+--- a/src/gpm-statistics.c
++++ b/src/gpm-statistics.c
+@@ -27,7 +27,6 @@
+ #include <glib/gi18n.h>
+ 
+ #include <gtk/gtk.h>
+-#include <gconf/gconf-client.h>
+ #include <libupower-glib/upower.h>
+ 
+ #include "gpm-array-float.h"
+--
+cgit v0.9
