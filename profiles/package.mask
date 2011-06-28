@@ -6,6 +6,14 @@
 # NOTE: Please add your entry at the top!
 #
 
+# Alexandre Rostovtsev <tetromino@gmail.com> (28 Jun 2011)
+# GNOME 3.1.x pre-release packages
+# Warning: these are not supported in any way whatsoever
+=dev-libs/glib-2.29*
+=dev-libs/gobject-introspection-1*
+=x11-libs/gtk+-3.1*
+=x11-libs/pango-1.29*
+
 # Nirbheek Chauhan <nirbheek@gentoo.org> (11 Jan 2011)
 # Don't use this, use >=gnome-media-2.32.0-r300 instead
 # we can't use this until everything that uses libgnome-media-profiles.so is
