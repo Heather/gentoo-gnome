@@ -6,7 +6,7 @@ EAPI="3"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
+inherit eutils gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -21,26 +21,31 @@ if [[ ${PV} = 9999 ]]; then
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 fi
-IUSE="+cups debug packagekit policykit smartcard +udev"
+IUSE="+cups debug packagekit policykit short-touchpad-timeout smartcard +udev"
 
 # Latest gsettings-desktop-schemas is needed due to commit e8d1de92
+# <gnome-color-manager-3.1.1 has file collisions with g-s-d-3.1.x
 COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	>=dev-libs/glib-2.26.0:2
 	>=x11-libs/gtk+-2.99.3:3
 	>=gnome-base/gconf-2.6.1:2
 	>=gnome-base/libgnomekbd-2.91.1
-	>=gnome-base/gnome-desktop-2.91.5:3
+	>=gnome-base/gnome-desktop-3.1.2:3
 	>=gnome-base/gsettings-desktop-schemas-0.1.7.1
 	media-fonts/cantarell
 	media-libs/fontconfig
-
-	>=x11-libs/libnotify-0.6.1
+	>=media-libs/lcms-2.2:2
+	>=x11-libs/libnotify-0.7.3
 	x11-libs/libXi
 	x11-libs/libXext
+	x11-libs/libXfixes
 	x11-libs/libXxf86misc
 	>=x11-libs/libxklavier-5.0
+	>=x11-misc/colord-0.1.9
 	>=media-sound/pulseaudio-0.9.16
 	media-libs/libcanberra[gtk3]
+
+	!<gnome-extra/gnome-color-manager-3.1.1
 
 	cups? ( >=net-print/cups-1.4[dbus] )
 	packagekit? (
@@ -68,6 +73,8 @@ DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.40
 	>=dev-util/pkgconfig-0.19
 	x11-proto/inputproto
+	x11-proto/kbproto
+	x11-proto/xf86miscproto
 	x11-proto/xproto"
 
 pkg_setup() {
@@ -77,6 +84,7 @@ pkg_setup() {
 		--disable-static
 		--disable-schemas-compile
 		--enable-gconf-bridge
+		--with-pnpids=${EROOT}usr/share/libgnome-desktop-3.0/pnp.ids
 		$(use_enable cups)
 		$(use_enable debug)
 		$(use_enable debug more-warnings)
@@ -86,6 +94,16 @@ pkg_setup() {
 		$(use_enable udev gudev)"
 }
 
+src_prepare() {
+	# https://bugzilla.gnome.org/show_bug.cgi?id=621836
+	# Apparently this change severely affects touchpad usability for some
+	# people, so revert it if USE=short-touchpad-timeout.
+	# Revisit if/when upstream adds a setting for customizing the timeout.
+	use short-touchpad-timeout &&
+		epatch "${FILESDIR}/${PN}-3.0.2-short-touchpad-timeout.patch"
+
+	gnome2_src_prepare
+}
 
 src_install() {
 	gnome2_src_install
