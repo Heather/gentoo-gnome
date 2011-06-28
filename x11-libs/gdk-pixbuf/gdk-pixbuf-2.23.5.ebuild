@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/gdk-pixbuf/gdk-pixbuf-2.22.1.ebuild,v 1.1 2010/11/08 23:22:59 eva Exp $
 
-EAPI="3"
+EAPI="4"
 
 inherit gnome.org multilib libtool autotools
 
