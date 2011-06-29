@@ -2,8 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/clutter/clutter-9999.ebuild,v 1.3 2011/02/21 20:56:53 nirbheek Exp $
 
-EAPI="3"
-GNOME_TARBALL_SUFFIX="xz"
+EAPI="4"
+CLUTTER_LA_PUNT="yes"
 WANT_AUTOMAKE="1.11"
 
 # Inherit gnome2 after clutter to download sources from gnome.org
