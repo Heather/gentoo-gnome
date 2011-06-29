@@ -11,6 +11,7 @@
 # Warning: these are not supported in any way whatsoever
 =dev-libs/glib-2.29*
 =dev-libs/gobject-introspection-1*
+=media-libs/cogl-1.7*
 =x11-libs/gtk+-3.1*
 =x11-libs/pango-1.29*
 
