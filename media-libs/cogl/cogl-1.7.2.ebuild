@@ -49,11 +49,9 @@ DEPEND="${COMMON_DEPEND}
 
 pkg_setup() {
 	DOCS="NEWS README"
-	EXAMPLES="examples/*.c"
+	EXAMPLES="examples/{*.c,*.jpg}"
 	# XXX: think about gles, quartz, wayland
-	# --with-pic needed due to https://bugzilla.gnome.org/show_bug.cgi?id=653615
 	G2CONF="${G2CONF}
-		--with-pic=both
 		--disable-profile
 		--disable-maintainer-flags
 		--enable-cairo
