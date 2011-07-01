@@ -62,9 +62,11 @@ RDEPEND="${CDEPEND}
 	>=sys-apps/portage-2.2_rc39
 	sys-auth/consolekit
 "
+# docbook-xml-dtd:4.2 needed for man page generation
 DEPEND="${CDEPEND}
 	nsplugin? ( >=net-libs/xulrunner-1.9.1 )
 	test? ( qt4? ( dev-util/cppunit >=x11-libs/qt-gui-4.4.0 ) )
+	app-text/docbook-xml-dtd:4.2
 	dev-libs/libxslt
 	>=dev-util/intltool-0.35.0
 	dev-util/pkgconfig
