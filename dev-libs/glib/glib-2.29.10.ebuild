@@ -6,7 +6,7 @@ EAPI="3"
 GNOME_TARBALL_SUFFIX="xz"
 PYTHON_DEPEND="2"
 
-inherit autotools gnome.org libtool eutils flag-o-matic pax-utils python virtualx
+inherit autotools gnome.org libtool eutils flag-o-matic multilib pax-utils python virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -18,7 +18,7 @@ SRC_URI="${SRC_URI}
 
 LICENSE="LGPL-2"
 SLOT="2"
-IUSE="debug doc fam +introspection selinux +static-libs test xattr"
+IUSE="debug doc fam +introspection selinux +static-libs systemtap test xattr"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -37,6 +37,7 @@ DEPEND="${RDEPEND}
 		>=dev-libs/libxslt-1.0
 		>=dev-util/gtk-doc-1.15
 		~app-text/docbook-xml-dtd-4.1.2 )
+	systemtap? ( >=dev-util/systemtap-1.3 )
 	test? ( dev-util/pkgconfig
 		>=sys-apps/dbus-1.2.14 )
 	!<dev-util/gtk-doc-1.15-r2"
@@ -76,34 +77,38 @@ src_prepare() {
 	sed 's:^\(.*"/desktop-app-info/delete".*\):/*\1*/:' \
 		-i "${S}"/gio/tests/desktop-app-info.c || die "sed failed"
 
-	# Disable tests requiring dev-util/desktop-file-utils when not installed, bug #286629
-	if ! has_version dev-util/desktop-file-utils ; then
-		ewarn "Some tests will be skipped due dev-util/desktop-file-utils not being present on your system,"
-		ewarn "think on installing it to get these tests run."
-		sed -i -e "/appinfo\/associations/d" gio/tests/appinfo.c || die
-		sed -i -e "/desktop-app-info\/default/d" gio/tests/desktop-app-info.c || die
-		sed -i -e "/desktop-app-info\/fallback/d" gio/tests/desktop-app-info.c || die
-		sed -i -e "/desktop-app-info\/lastused/d" gio/tests/desktop-app-info.c || die
-	fi
-
-	# Disable tests requiring dev-python/dbus-python, bug #349236
-	if ! has_version dev-python/dbus-python ; then
-		ewarn "Some tests will be skipped due dev-python/dbus-python not being present on your system,"
-		ewarn "think on installing it to get these tests run."
-		sed -i -e "/connection\/filter/d" gio/tests/gdbus-connection.c || die
-		sed -i -e "/connection\/large_message/d" gio/tests/gdbus-connection-slow.c || die
-		sed -i -e "/gdbus\/proxy/d" gio/tests/gdbus-proxy.c || die
-		sed -i -e "/gdbus\/bus-watch-name/d" gio/tests/gdbus-names.c || die
-		sed -i -e "/gdbus\/proxy-well-known-name/d" gio/tests/gdbus-proxy-well-known-name.c || die
-		sed -i -e "/gdbus\/introspection-parser/d" gio/tests/gdbus-introspection.c || die
-		sed -i -e "/gdbus\/method-calls-in-thread/d" gio/tests/gdbus-threading.c || die
-	fi
-
 	if ! use test; then
 		# don't waste time building tests
-		sed 's/^\(SUBDIRS =.*\)tests\(.*\)$/\1\2/' -i Makefile.am Makefile.in \
-			|| die "sed failed"
+		sed 's/^\(.*\SUBDIRS .*\=.*\)tests\(.*\)$/\1\2/' -i $(find . -name Makefile.am -o -name Makefile.in) || die
+	else
+		# Disable tests requiring dev-util/desktop-file-utils when not installed, bug #286629
+		if ! has_version dev-util/desktop-file-utils ; then
+			ewarn "Some tests will be skipped due dev-util/desktop-file-utils not being present on your system,"
+			ewarn "think on installing it to get these tests run."
+			sed -i -e "/appinfo\/associations/d" gio/tests/appinfo.c || die
+			sed -i -e "/desktop-app-info\/default/d" gio/tests/desktop-app-info.c || die
+			sed -i -e "/desktop-app-info\/fallback/d" gio/tests/desktop-app-info.c || die
+			sed -i -e "/desktop-app-info\/lastused/d" gio/tests/desktop-app-info.c || die
+		fi
+
+		# Disable tests requiring dev-python/dbus-python, bug #349236
+		if ! has_version dev-python/dbus-python ; then
+			ewarn "Some tests will be skipped due dev-python/dbus-python not being present on your system,"
+			ewarn "think on installing it to get these tests run."
+			sed -i -e "/connection\/filter/d" gio/tests/gdbus-connection.c || die
+			sed -i -e "/connection\/large_message/d" gio/tests/gdbus-connection-slow.c || die
+			sed -i -e "/gdbus\/proxy/d" gio/tests/gdbus-proxy.c || die
+			sed -i -e "/gdbus\/bus-watch-name/d" gio/tests/gdbus-names.c || die
+			sed -i -e "/gdbus\/proxy-well-known-name/d" gio/tests/gdbus-proxy-well-known-name.c || die
+			sed -i -e "/gdbus\/introspection-parser/d" gio/tests/gdbus-introspection.c || die
+			sed -i -e "/gdbus\/method-calls-in-thread/d" gio/tests/gdbus-threading.c || die
+		fi
 	fi
+
+	python_convert_shebangs -r 2 gio/gdbus-codegen/
+
+	# disable pyc compiling
+	ln -sfn $(type -P true) py-compile
 
 	# Needed for the punt-python-check patch, disabling timeout test
 	# Also needed to prevent croscompile failures, see bug #267603
@@ -131,11 +136,11 @@ src_configure() {
 		$(use_enable fam) \
 		$(use_enable selinux) \
 		$(use_enable static-libs static) \
+		$(use_enable systemtap dtrace) \
+		$(use_enable systemtap systemtap) \
 		--enable-regex \
 		--with-pcre=internal \
-		--with-threads=posix \
-		--disable-dtrace \
-		--disable-systemtap
+		--with-threads=posix
 }
 
 src_install() {
@@ -200,4 +205,12 @@ pkg_postinst() {
 		ewarn "If you experience a breakage after updating dev-libs/glib try"
 		ewarn "rebuilding dev-libs/dbus-glib"
 	fi
+
+	python_need_rebuild
+	python_mod_optimize /usr/$(get_libdir)/gdbus-codegen
+
+}
+
+pkg_postrm() {
+	python_mod_cleanup /usr/$(get_libdir)/gdbus-codegen
 }
