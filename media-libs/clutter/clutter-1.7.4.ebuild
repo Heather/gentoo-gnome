@@ -8,7 +8,7 @@ WANT_AUTOMAKE="1.11"
 
 # Inherit gnome2 after clutter to download sources from gnome.org
 # since clutter-project.org doesn't provide .xz tarballs
-inherit clutter eutils gnome2
+inherit clutter gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -74,9 +74,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# cogl-1.7.2 compatibility, will be in next release
-	epatch "${FILESDIR}/${P}-cogl-1.7.2-xlib.patch"
-
 	# Some gettext stuff, we can't run gettextize because that does too much
 	[[ ${PV} = 9999 ]] && cp "${ROOT}/usr/share/gettext/po/Makefile.in.in" "${S}/po"
 
@@ -85,7 +82,7 @@ src_prepare() {
 	# We only need conformance tests, the rest are useless for us
 	sed -e 's/^\(SUBDIRS =\).*/\1/g' \
 		-i tests/Makefile.am || die "am tests sed failed"
-	sed -e 's/^\(SUBDIRS =\).*/\1/g' \
+	sed -e 's/^\(SUBDIRS =\)[^\]*/\1/g' \
 		-i tests/Makefile.in || die "in tests sed failed"
 }
 
