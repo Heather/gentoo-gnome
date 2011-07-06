@@ -3,6 +3,7 @@
 # $Header: $
 
 EAPI="3"
+GNOME_TARBALL_SUFFIX="xz"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2:2.6"
