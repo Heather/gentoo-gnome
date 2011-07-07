@@ -4,8 +4,9 @@
 
 EAPI="3"
 GCONF_DEBUG="no"
+GNOME2_LA_PUNT="yes"
 
-inherit gnome2
+inherit eutils gnome2
 
 DESCRIPTION="Compatibility library for accessing secrets"
 HOMEPAGE="http://live.gnome.org/GnomeKeyring"
@@ -34,14 +35,18 @@ pkg_setup() {
 src_prepare() {
 	gnome2_src_prepare
 
+	# Memory leak fixes, will be in next release
+	epatch "${FILESDIR}/${P}-memory-leaks.patch"
+	epatch "${FILESDIR}/${P}-memory-leaks-crash.patch"
+
 	# FIXME: Remove silly CFLAGS
 	sed -e 's:CFLAGS="$CFLAGS -Werror:CFLAGS="$CFLAGS:' \
 		-e 's:CFLAGS="$CFLAGS -g -O0:CFLAGS="$CFLAGS:' \
-		-i configure.in configure || die "sed failed"
+		-i configure.ac configure || die "sed failed"
 
 	# FIXME: Remove DISABLE_DEPRECATED flags
 	sed -e '/-D[A-Z_]*DISABLE_DEPRECATED/d' \
-		-i configure.in configure || die "sed 2 failed"
+		-i configure.ac configure || die "sed 2 failed"
 }
 
 src_test() {

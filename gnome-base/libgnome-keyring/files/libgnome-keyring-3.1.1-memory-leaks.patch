@@ -1,0 +1,58 @@
+From b49e32b32d4d7c326c3bd7dd44ca1c35944a94c4 Mon Sep 17 00:00:00 2001
+From: landijk <landijk-user@yahoo.com>
+Date: Sun, 22 May 2011 11:27:10 +0000
+Subject: Fix memory leaks.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=650606
+---
+diff --git a/library/gnome-keyring.c b/library/gnome-keyring.c
+index d25ad0c..dc271dd 100644
+--- a/library/gnome-keyring.c
++++ b/library/gnome-keyring.c
+@@ -2279,6 +2279,8 @@ find_items_1_reply (GkrOperation *op, DBusMessage *reply, gpointer data)
+ 	/* Did we find anything? */
+ 	if (!n_unlocked && !n_locked) {
+ 		gkr_operation_complete (op, GNOME_KEYRING_RESULT_NO_MATCH);
++		dbus_free_string_array (locked);
++		dbus_free_string_array (unlocked);
+ 		return;
+ 	}
+ 
+@@ -2434,12 +2436,15 @@ gnome_keyring_find_itemsv (GnomeKeyringItemType                  type,
+ {
+ 	GnomeKeyringAttributeList *attributes;
+ 	va_list args;
++	gpointer ret;
+ 
+ 	va_start (args, destroy_data);
+ 	attributes = make_attribute_list_va (args);
+ 	va_end (args);
+ 
+-	return gnome_keyring_find_items (type, attributes, callback, data, destroy_data);
++	ret = gnome_keyring_find_items (type, attributes, callback, data, destroy_data);
++	gnome_keyring_attribute_list_free (attributes);
++	return ret;
+ }
+ 
+ /**
+@@ -2506,6 +2511,7 @@ gnome_keyring_find_itemsv_sync  (GnomeKeyringItemType        type,
+ {
+ 	GnomeKeyringAttributeList *attributes;
+ 	va_list args;
++	GnomeKeyringResult ret;
+ 
+ 	g_return_val_if_fail (found, GNOME_KEYRING_RESULT_BAD_ARGUMENTS);
+ 
+@@ -2513,7 +2519,9 @@ gnome_keyring_find_itemsv_sync  (GnomeKeyringItemType        type,
+ 	attributes = make_attribute_list_va (args);
+ 	va_end (args);
+ 
+-	return gnome_keyring_find_items_sync (type, attributes, found);
++	ret = gnome_keyring_find_items_sync (type, attributes, found);
++	gnome_keyring_attribute_list_free (attributes);
++	return ret;
+ }
+ 
+ /**
+--
+cgit v0.9
