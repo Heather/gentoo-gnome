@@ -36,9 +36,11 @@ COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
 	virtual/opengl
 	x11-libs/libSM
 	x11-libs/libICE
+	x11-libs/libXau
 	x11-libs/libX11
 	x11-libs/libXcomposite
 	x11-libs/libXext
+	x11-libs/libXrender
 	x11-libs/libXtst
 	x11-misc/xdg-user-dirs
 	x11-misc/xdg-user-dirs-gtk
