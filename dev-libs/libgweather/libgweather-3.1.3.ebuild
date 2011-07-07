@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/libgweather/libgweather-2.30.3.ebuild,v 1.3 2010/11/14 23:05:07 eva Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -34,7 +34,7 @@ COMMON_DEPEND=">=x11-libs/gtk+-2.90.0:3[introspection?]
 
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )"
 DEPEND="${COMMON_DEPEND}
-	>=dev-util/intltool-0.40.3
+	>=dev-util/intltool-0.40.6
 	>=dev-util/pkgconfig-0.19
 	>=dev-util/gtk-doc-am-1.9
 	sys-devel/gettext
