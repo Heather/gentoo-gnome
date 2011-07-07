@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -21,16 +21,16 @@ if [[ ${PV} = 9999 ]]; then
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux"
 fi
-IUSE="doc exif gnome +introspection sendto xmp"
+IUSE="doc exif gnome +introspection packagekit sendto xmp"
 
 COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
 	>=x11-libs/pango-1.28.3
-	>=x11-libs/gtk+-3.0.8:3[introspection?]
+	>=x11-libs/gtk+-3.1.6:3[introspection?]
 	>=dev-libs/libxml2-2.7.8:2
 	>=gnome-base/gnome-desktop-3.0.0:3
 
 	gnome-base/gsettings-desktop-schemas
-	x11-libs/libnotify
+	>=x11-libs/libnotify-0.7
 	x11-libs/libX11
 	x11-libs/libXext
 	x11-libs/libXrender
@@ -43,8 +43,10 @@ DEPEND="${COMMON_DEPEND}
 	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.40.1
 	sys-devel/gettext
+	x11-proto/xproto
 	doc? ( >=dev-util/gtk-doc-1.4 )"
 RDEPEND="${COMMON_DEPEND}
+	packagekit? ( app-portage/packagekit )
 	sendto? ( !gnome-extra/nautilus-sendto )"
 # For eautoreconf
 #	gnome-base/gnome-common
@@ -56,9 +58,9 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-maintainer-mode
 		--disable-update-mimedb
-		--disable-packagekit
 		$(use_enable exif libexif)
 		$(use_enable introspection)
+		$(use_enable packagekit)
 		$(use_enable sendto nst-extension)
 		$(use_enable xmp)"
 	DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS README THANKS TODO"
