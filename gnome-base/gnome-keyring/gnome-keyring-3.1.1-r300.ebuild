@@ -24,14 +24,16 @@ else
 fi
 
 # USE=valgrind is probably not a good idea for the tree
-
+#
+# XXX: ARGH: libgcr is slotted, but libgck is not.
+# Hence, gtk2/3 versions are not parallel installable.
 RDEPEND=">=dev-libs/glib-2.25:2
-	>=x11-libs/gtk+-2.20:2
+	>=x11-libs/gtk+-2.90.0:3
 	gnome-base/gconf:2
 	>=sys-apps/dbus-1.0
 	>=dev-libs/libgcrypt-1.2.2
 	>=dev-libs/libtasn1-1
-	caps? ( sys-libs/libcap )
+	caps? ( sys-libs/libcap-ng )
 	pam? ( virtual/pam )
 "
 #	valgrind? ( dev-util/valgrind )
@@ -50,13 +52,13 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_enable debug)
 		$(use_enable test tests)
-		$(use_with caps libcap)
+		$(use_with caps libcap-ng)
 		$(use_enable pam)
 		$(use_with pam pam-dir $(getpam_mod_dir))
 		--with-root-certs=${EPREFIX}/etc/ssl/certs/
 		--enable-ssh-agent
 		--enable-gpg-agent
-		--with-gtk=2.0"
+		--with-gtk=3.0"
 #		$(use_enable valgrind)
 }
 
@@ -67,7 +69,7 @@ src_prepare() {
 		-i gcr/Makefile.* || die "sed failed"
 
 	# https://bugzilla.gnome.org/show_bug.cgi?id=649936
-	epatch "${FILESDIR}"/${PN}-3.0.2-automagic-libcap.patch
+	epatch "${FILESDIR}"/${PN}-3.1.1-automagic-libcap-ng.patch
 	eautoreconf
 	gnome2_src_prepare
 }
