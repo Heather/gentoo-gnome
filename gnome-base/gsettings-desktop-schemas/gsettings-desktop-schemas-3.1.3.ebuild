@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gsettings-desktop-schemas/gsettings-desktop-schemas-0.1.5.ebuild,v 1.1 2011/02/02 05:53:24 nirbheek Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="no"
 
 inherit gnome2
