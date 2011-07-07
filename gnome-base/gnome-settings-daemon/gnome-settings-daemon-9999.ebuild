@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-settings-daemon/gnome-settings-daemon-2.32.1.ebuild,v 1.1 2010/12/04 16:50:12 pacho Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -30,11 +30,12 @@ COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	>=x11-libs/gtk+-2.99.3:3
 	>=gnome-base/gconf-2.6.1:2
 	>=gnome-base/libgnomekbd-2.91.1
-	>=gnome-base/gnome-desktop-3.1.2:3
+	>=gnome-base/gnome-desktop-3.1.3:3
 	>=gnome-base/gsettings-desktop-schemas-0.1.7.1
 	media-fonts/cantarell
 	media-libs/fontconfig
 	>=media-libs/lcms-2.2:2
+	>=sys-power/upower-0.9.1
 	>=x11-libs/libnotify-0.7.3
 	x11-libs/libXi
 	x11-libs/libXext
@@ -49,11 +50,9 @@ COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 
 	cups? ( >=net-print/cups-1.4[dbus] )
 	packagekit? (
-		dev-libs/glib:2
 		|| ( sys-fs/udev[gudev]
 			sys-fs/udev[extras] )
-		>=app-portage/packagekit-0.6.4
-		>=sys-power/upower-0.9.1 )
+		>=app-portage/packagekit-0.6.4 )
 	policykit? (
 		>=sys-auth/polkit-0.97
 		>=sys-apps/dbus-1.1.2 )
