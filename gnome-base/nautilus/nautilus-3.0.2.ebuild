@@ -43,6 +43,7 @@ DEPEND="${COMMON_DEPEND}
 	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.40.1
 	sys-devel/gettext
+	x11-proto/xproto
 	doc? ( >=dev-util/gtk-doc-1.4 )"
 RDEPEND="${COMMON_DEPEND}
 	sendto? ( !gnome-extra/nautilus-sendto )"
