@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-session/gnome-session-2.32.1.ebuild,v 1.4 2011/01/03 11:41:21 pacho Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="yes"
 
 inherit gnome2
@@ -30,15 +30,16 @@ COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
 	>=dev-libs/dbus-glib-0.76
 	>=gnome-base/gconf-2:2
 	>=sys-power/upower-0.9.0
-	gnome-base/librsvg:2
 	elibc_FreeBSD? ( dev-libs/libexecinfo )
 
 	virtual/opengl
 	x11-libs/libSM
 	x11-libs/libICE
+	x11-libs/libXau
 	x11-libs/libX11
 	x11-libs/libXcomposite
 	x11-libs/libXext
+	x11-libs/libXrender
 	x11-libs/libXtst
 	x11-misc/xdg-user-dirs
 	x11-misc/xdg-user-dirs-gtk
@@ -54,7 +55,7 @@ DEPEND="${COMMON_DEPEND}
 	>=dev-lang/perl-5
 	>=sys-devel/gettext-0.10.40
 	>=dev-util/pkgconfig-0.17
-	>=dev-util/intltool-0.40
+	>=dev-util/intltool-0.40.6
 	!<gnome-base/gdm-2.20.4
 	doc? (
 		app-text/xmlto
