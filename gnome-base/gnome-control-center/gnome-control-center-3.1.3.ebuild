@@ -42,9 +42,9 @@ COMMON_DEPEND="
 	app-text/iso-codes
 	dev-libs/libxml2:2
 	gnome-base/gnome-menus
-	gnome-base/gnome-online-accounts
 	gnome-base/libgtop:2
 	media-libs/fontconfig
+	net-libs/gnome-online-accounts
 
 	>=media-libs/libcanberra-0.13[gtk3]
 	>=media-sound/pulseaudio-0.9.16[glib]
