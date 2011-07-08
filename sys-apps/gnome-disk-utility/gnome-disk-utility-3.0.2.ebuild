@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-apps/gnome-disk-utility/gnome-disk-utility-2.32.0.ebuild,v 1.3 2011/01/07 21:04:46 pacho Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -72,6 +72,10 @@ src_prepare() {
 	# Keep avahi optional, upstream bug #631986
 	epatch "${FILESDIR}/${PN}-2.91.6-optional-avahi.patch"
 
-	intltoolize --force --copy --automake || die
-	eautoreconf
+	if [[ ${PV} != 9999 ]]; then
+		intltoolize --force --copy --automake || die
+		eautoreconf
+	fi
+
+	gnome2_src_prepare
 }
