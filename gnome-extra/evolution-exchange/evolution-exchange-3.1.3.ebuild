@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/evolution-exchange/evolution-exchange-2.32.2.ebuild,v 1.1 2011/02/07 11:40:13 pacho Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
