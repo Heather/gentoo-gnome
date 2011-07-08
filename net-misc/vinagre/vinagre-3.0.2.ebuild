@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/net-misc/vinagre/vinagre-2.30.3.ebuild,v 1.4 2011/01/19 21:26:57 hwoarang Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -35,7 +35,9 @@ RDEPEND=">=dev-libs/glib-2.25.11:2
 	avahi? ( >=net-dns/avahi-0.6.26[dbus,gtk3] )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.3 )
 	ssh? ( >=x11-libs/vte-0.20:2.90 )
-	telepathy? ( >=net-libs/telepathy-glib-0.11.6 )
+	telepathy? (
+		dev-libs/dbus-glib
+		>=net-libs/telepathy-glib-0.11.6 )
 "
 DEPEND="${RDEPEND}
 	gnome-base/gnome-common
