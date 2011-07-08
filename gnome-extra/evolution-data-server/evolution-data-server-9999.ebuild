@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/evolution-data-server/evolution-data-server-2.32.1-r1.ebuild,v 1.4 2011/01/15 19:55:02 nirbheek Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -21,7 +21,7 @@ if [[ ${PV} = 9999 ]]; then
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-solaris"
 fi
-IUSE="doc +introspection ipv6 ldap kerberos ssl +weather"
+IUSE="doc +gnome-online-accounts +introspection ipv6 ldap kerberos ssl +weather"
 
 # GNOME3: How do we slot libedataserverui-3.0.so?
 # Also, libedata-cal-1.2.so and libecal-1.2.so use gtk-3, but aren't slotted
@@ -29,7 +29,7 @@ RDEPEND=">=dev-libs/glib-2.28:2
 	>=x11-libs/gtk+-3.0:3
 	>=gnome-base/gconf-2
 	>=dev-db/sqlite-3.5
-	>=dev-libs/libgdata-0.7.0
+	>=dev-libs/libgdata-0.9.1
 	>=gnome-base/gnome-keyring-2.20.1
 	>=dev-libs/libical-0.43
 	>=net-libs/libsoup-2.31.2:2.4
@@ -37,6 +37,9 @@ RDEPEND=">=dev-libs/glib-2.28:2
 	>=sys-libs/db-4
 	sys-libs/zlib
 	virtual/libiconv
+	gnome-online-accounts? (
+		>=net-libs/gnome-online-accounts-3.1.1
+		>=net-libs/liboauth-0.9.4 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.12 )
 	kerberos? ( virtual/krb5 )
 	ldap? ( >=net-nds/openldap-2 )
@@ -46,6 +49,7 @@ RDEPEND=">=dev-libs/glib-2.28:2
 	weather? ( >=dev-libs/libgweather-2.90.0:2 )
 "
 DEPEND="${RDEPEND}
+	dev-lang/perl
 	dev-util/gperf
 	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.35.5
@@ -59,12 +63,13 @@ DEPEND="${RDEPEND}
 #	>=dev-util/gtk-doc-am-1.9
 
 # FIXME
-RESTRIC="test"
+RESTRICT="test"
 
 pkg_setup() {
 	DOCS="ChangeLog MAINTAINERS NEWS TODO"
 	# Uh, what to do about dbus-call-timeout ?
 	G2CONF="${G2CONF}
+		$(use_enable gnome-online-accounts goa)
 		$(use_enable ipv6)
 		$(use_with kerberos krb5 /usr)
 		$(use_with ldap openldap)
@@ -78,8 +83,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# WTF: libebook-1.2 links against system libcamel-1.2
-	#      libedata-book-1.2 links against system libebackend-1.2
 	gnome2_src_prepare
 
 	# Adjust to gentoo's /etc/service
@@ -107,6 +110,13 @@ src_prepare() {
 }
 
 src_install() {
+	# Prevent this evolution-data-server from linking to libs in the installed
+	# evolution-data-server libraries by adding -L arguments for build dirs to
+	# every .la file's relink_command field, forcing libtool to look there
+	# first during relinking. This will mangle the .la files installed by
+	# make install, but we don't care because we will be punting them anyway.
+	perl "${FILESDIR}/fix_relink_command.pl" . ||
+		die "fix_relink_command.pl failed"
 	gnome2_src_install
 
 	if use ldap; then
