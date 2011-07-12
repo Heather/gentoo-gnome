@@ -19,14 +19,10 @@ RDEPEND=">=dev-libs/dbus-glib-0.74
 	>=sys-apps/dbus-1.1.2
 	>=sys-auth/polkit-0.92"
 DEPEND="${RDEPEND}
-	>=dev-util/intltool-0.40.0
+	>=dev-util/intltool-0.40.6
 	dev-util/pkgconfig
 	sys-devel/gettext"
 
 src_prepare() {
 	DOCS="AUTHORS HACKING NEWS README"
-}
-
-src_configure() {
-	econf --disable-maintainer-mode
 }
