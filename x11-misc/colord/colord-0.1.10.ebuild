@@ -2,21 +2,33 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="3"
+EAPI="4"
 
 inherit base
+if [[ ${PV} = 9999 ]]; then
+	GCONF_DEBUG="no"
+	inherit gnome2-live # need all the hacks from gnome2-live_src_prepare
+fi
 
 DESCRIPTION="System service to accurately color manage input and output devices"
 HOMEPAGE="http://colord.hughsie.com/"
-SRC_URI="http://people.freedesktop.org/~hughsient/releases/${P}.tar.xz"
+if [[ ${PV} = 9999 ]]; then
+	EGIT_REPO_URI="git://gitorious.org/colord/master.git"
+else
+	SRC_URI="http://www.freedesktop.org/software/colord/releases/${P}.tar.xz"
+fi
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
-IUSE="scanner +udev"
+if [[ ${PV} = 9999 ]]; then
+	KEYWORDS=""
+else
+	KEYWORDS="~amd64 ~x86"
+fi
+IUSE="doc examples scanner +udev"
 
 # XXX: raise to libusb-1.0.9:1 when available
-RDEPEND="
+COMMON_DEPEND="
 	dev-db/sqlite:3
 	>=dev-libs/glib-2.28.0:2
 	>=dev-libs/libusb-1.0.8:1
@@ -25,12 +37,18 @@ RDEPEND="
 	scanner? ( media-gfx/sane-backends )
 	udev? ( || ( sys-fs/udev[gudev] sys-fs/udev[extras] ) )
 "
-DEPEND="${RDEPEND}
+RDEPEND="${COMMON_DEPEND}
+	media-gfx/shared-color-profiles"
+DEPEND="${COMMON_DEPEND}
 	app-text/docbook-sgml-utils
 	dev-libs/libxslt
 	>=dev-util/intltool-0.35
 	dev-util/pkgconfig
 	>=sys-devel/gettext-0.17
+	doc? (
+		app-text/docbook-xml-dtd:4.1.2
+		>=dev-util/gtk-doc-1.9
+	)
 "
 
 # FIXME: needs pre-installed dbus service files
@@ -44,11 +62,23 @@ src_configure() {
 		--disable-static \
 		--enable-polkit \
 		--enable-reverse \
+		$(use_enable doc gtk-doc) \
 		$(use_enable scanner sane) \
 		$(use_enable udev gudev)
+	# parallel make fails in doc/api
+	use doc && MAKEOPTS=-j1
 }
 
 src_install() {
 	base_src_install
+
+	# additional documentation files not included in tarball releases
+	[[ ${PV} = 9999 ]] && use doc && dodoc doc/*.txt doc/*.svg
+
+	if use examples; then
+		insinto /usr/share/doc/${PF}/examples
+		doins examples/*.c
+	fi
+
 	find "${D}" -name "*.la" -delete
 }
