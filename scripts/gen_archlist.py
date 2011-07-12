@@ -390,6 +390,7 @@ def prettify(cpv_kws):
     max_len = 0
     kws_all = []
     pretty_list = []
+    cpv_block_size = 0
 
     for each in cpv_kws:
         # Ignore comments/whitespace carried over from original list
@@ -405,10 +406,18 @@ def prettify(cpv_kws):
     kws_all.sort()
 
     for each in cpv_kws:
-        # Ignore comments/whitespace carried over from original list
+        # Handle comments/whitespace carried over from original list
         if type(each) is not list:
+            # If the prev cpv block has just one line, don't print an extra \n
+            # XXX: This code relies on blocks of dep-cpvs being separated by \n
+            if CHECK_DEPS and cpv_block_size is 1:
+                cpv_block_size = 0
+                continue
             pretty_list.append([each, []])
+            cpv_block_size = 0
             continue
+        # The size of the current cpv list block
+        cpv_block_size += 1
         # Pad the cpvs with space
         each[0] += n_sep(max_len - len(each[0]))
         for i in range(0, len(kws_all)):
