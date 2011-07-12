@@ -107,8 +107,11 @@ src_prepare() {
 	# cups-1.5 compatibility; will be in next release
 	epatch "${FILESDIR}/${P}-cups-ppd.h.patch"
 
-	# https://bugzilla.gnome.org/show_bug.cgi?id=653211
-	epatch "${FILESDIR}/${PN}-3.0.2-https-handler.patch"
+	# https://bugzilla.gnome.org/show_bug.cgi?id=653211, will be in next release
+	epatch "${FILESDIR}/${P}-https-handler.patch"
+
+	# fix deleting users on 32-bit systems, will be in next release
+	epatch "${FILESDIR}/${P}-delete-users-32-bit.patch"
 
 	gnome2_src_prepare
 }
