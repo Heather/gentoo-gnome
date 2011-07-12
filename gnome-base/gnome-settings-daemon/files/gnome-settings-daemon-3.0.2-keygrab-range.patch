@@ -1,0 +1,24 @@
+From 74631cb8e0950c7a648df53195377b0c96a09008 Mon Sep 17 00:00:00 2001
+From: Bastien Nocera <hadess@hadess.net>
+Date: Fri, 01 Jul 2011 12:38:50 +0000
+Subject: common: Fix keys range check
+
+That could never happen...
+---
+diff --git a/plugins/common/gsd-keygrab.c b/plugins/common/gsd-keygrab.c
+index 31c1ba6..304c8c2 100644
+--- a/plugins/common/gsd-keygrab.c
++++ b/plugins/common/gsd-keygrab.c
+@@ -146,8 +146,8 @@ grab_key_unsafe (Key                 *key,
+          * (which are useful to grab without a modifier).
+          */
+         if ((modifiers & gsd_used_mods) == 0 &&
+-            IN_RANGE(key->keysym, XF86KEYS_RANGE_MIN, XF86KEYS_RANGE_MAX) &&
+-            IN_RANGE(key->keysym, FKEYS_RANGE_MIN, FKEYS_RANGE_MAX)) {
++            (IN_RANGE(key->keysym, XF86KEYS_RANGE_MIN, XF86KEYS_RANGE_MAX) ||
++             IN_RANGE(key->keysym, FKEYS_RANGE_MIN, FKEYS_RANGE_MAX))) {
+                 GString *keycodes;
+ 
+                 keycodes = g_string_new ("");
+--
+cgit v0.9

@@ -89,6 +89,8 @@ pkg_setup() {
 src_prepare() {
 	# Patch from upstream git, will be in next release
 	epatch "${FILESDIR}/${P}-wacom-touch.patch"
+	# Patches for various keyboard shortcut bugs, will be in next release
+	epatch "${FILESDIR}/${P}-keygrab-"{defines,function-keys,range,pause}.patch
 
 	# https://bugzilla.gnome.org/show_bug.cgi?id=621836
 	# Apparently this change severely affects touchpad usability for some

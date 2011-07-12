@@ -1,0 +1,25 @@
+From 65a5ca27a24a2d5a59797d13f305b13026794fc2 Mon Sep 17 00:00:00 2001
+From: Bastien Nocera <hadess@hadess.net>
+Date: Fri, 01 Jul 2011 12:39:45 +0000
+Subject: common: Allow the "Pause" key to be used
+
+That'd be the "Pause"/"PrtScreen" key, not AudioPause.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=653524
+---
+diff --git a/plugins/common/gsd-keygrab.c b/plugins/common/gsd-keygrab.c
+index 304c8c2..70fde7a 100644
+--- a/plugins/common/gsd-keygrab.c
++++ b/plugins/common/gsd-keygrab.c
+@@ -147,7 +147,8 @@ grab_key_unsafe (Key                 *key,
+          */
+         if ((modifiers & gsd_used_mods) == 0 &&
+             (IN_RANGE(key->keysym, XF86KEYS_RANGE_MIN, XF86KEYS_RANGE_MAX) ||
+-             IN_RANGE(key->keysym, FKEYS_RANGE_MIN, FKEYS_RANGE_MAX))) {
++             IN_RANGE(key->keysym, FKEYS_RANGE_MIN, FKEYS_RANGE_MAX) ||
++             key->keysym == GDK_KEY_Pause)) {
+                 GString *keycodes;
+ 
+                 keycodes = g_string_new ("");
+--
+cgit v0.9
