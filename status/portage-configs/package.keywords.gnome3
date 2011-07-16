@@ -134,12 +134,11 @@ media-libs/clutter-gtk:1.0
 media-libs/clutter-gst:1.0
 
 # Colord
->=media-libs/lcms-2.2:2
+~media-libs/lcms-2.2:2
 x11-misc/colord
 gnome-extra/gnome-color-manager
 
 # libcanberra
->=sys-fs/udev-160
 media-libs/libcanberra
 
 # libsocialweb
@@ -163,7 +162,6 @@ net-im/telepathy-mission-control
 net-libs/farsight2
 net-libs/libnice
 net-libs/telepathy-farsight
->=net-libs/telepathy-glib-0.13.12
 net-voip/telepathy-gabble
 app-misc/geoclue
 net-im/empathy
@@ -181,13 +179,10 @@ net-wireless/wimax
 >=gnome-extra/nm-applet-0.8.990
 
 # Nautilus
->=media-libs/libexif-0.6.20
+~media-libs/libexif-0.6.20
 gnome-base/nautilus
 
 # Rhythmbox, Sound Juicer, Totem
-=sys-devel/autoconf-2.68*
->=media-libs/quvi-0.2.14-r1
->=dev-libs/totem-pl-parser-2.32.4
 media-libs/libgnome-media-profiles:3
 media-libs/libdmapsharing:3.0
 media-sound/rhythmbox
@@ -195,15 +190,13 @@ media-sound/rhythmbox
 >=media-video/totem-3.0
 
 # GNOME Shell
->=net-libs/xulrunner-2.0
+=net-libs/xulrunner-2.0*
 dev-libs/gjs
 net-im/telepathy-logger
->=net-libs/telepathy-glib-0.13.12
 gnome-base/gnome-shell
 
 # Not needed by GNOME 3, but will cause conflicts due to xulrunner-2.0
->=media-libs/libpng-1.4.7
->=www-client/firefox-4.0
+=www-client/firefox-4.0*
 
 # GNOME Fallback
 >=x11-wm/metacity-2.30.3-r1
@@ -228,16 +221,10 @@ x11-libs/gnome-pty-helper
 x11-libs/vte:0
 x11-libs/vte:2.90
 
-# Docs
->=app-text/gnome-doc-utils-0.20.5
-
 # Extras
 gnome-extra/drwright
 gnome-extra/gnome-tweak-tool
 gnome-extra/mousetweaks
-
-# Xdg
->=x11-misc/xdg-utils-1.1.0_rc1_p20110329
 
 #################
 ## END GNOME 3 ##
