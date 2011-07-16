@@ -88,6 +88,8 @@ src_prepare() {
 	# Adjust to gentoo's /etc/service
 	epatch "${FILESDIR}/${PN}-2.31-gentoo_etc_services.patch"
 
+	epatch "${FILESDIR}/${PN}-compile-fix.patch"
+
 	# GNOME bug 611353 (skips failing test atm)
 	# XXX: uncomment when there's a proper fix
 	#epatch "${FILESDIR}/e-d-s-camel-skip-failing-test.patch"
