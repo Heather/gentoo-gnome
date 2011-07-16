@@ -14,7 +14,7 @@ HOMEPAGE="http://telepathy.freedesktop.org/wiki/Folks"
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~ia64 ~ppc ~sparc x86"
+KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~sparc ~x86"
 IUSE="vala"
 
 # FIXME: links against system libfolks instead of the built one
