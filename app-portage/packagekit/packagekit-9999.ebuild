@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="2"
+EAPI="3"
 
 inherit eutils multilib python nsplugins
 if [[ ${PV} = 9999 ]]; then
@@ -21,7 +21,7 @@ if [[ ${PV} = 9999 ]]; then
 	DOCS="AUTHORS MAINTAINERS NEWS README TODO"
 else
 	MY_P=${MY_PN}-${PV}
-	SRC_URI="http://www.packagekit.org/releases/${MY_P}.tar.gz"
+	SRC_URI="http://www.packagekit.org/releases/${MY_P}.tar.xz"
 	KEYWORDS="~amd64 ~ppc ~x86"
 	S="${WORKDIR}/${MY_P}"
 	DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README TODO"
@@ -35,6 +35,7 @@ CDEPEND="
 	connman? ( net-misc/connman )
 	gtk? ( dev-libs/dbus-glib
 		media-libs/fontconfig
+		>=x11-libs/gtk+-2.14.0:2
 		>=x11-libs/gtk+-2.91.0:3
 		x11-libs/pango )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.8 )
@@ -88,6 +89,10 @@ RESTRICT="test"
 # UPSTREAM:
 # documentation/website with --enable-doc-install
 # failing tests
+
+pkg_setup() {
+	python_set_active_version 2
+}
 
 src_prepare() {
 	if [[ ${PV} = 9999 ]]; then
@@ -154,7 +159,7 @@ src_install() {
 }
 
 pkg_postinst() {
-	python_mod_optimize $(python_get_sitedir)/${PN}
+	python_mod_optimize ${PN}
 }
 
 pkg_prerm() {
@@ -164,5 +169,5 @@ pkg_prerm() {
 }
 
 pkg_postrm() {
-	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages/${PN}
+	python_mod_cleanup ${PN}
 }
