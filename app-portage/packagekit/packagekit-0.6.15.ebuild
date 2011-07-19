@@ -1,8 +1,8 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="2"
+EAPI="3"
 
 inherit eutils multilib python nsplugins
 if [[ ${PV} = 9999 ]]; then
@@ -45,7 +45,6 @@ CDEPEND="
 		dev-libs/nspr
 		x11-libs/cairo
 		>=x11-libs/gtk+-2.14.0:2
-		>=x11-libs/gtk+-2.91.0:3
 		x11-libs/pango )
 	qt4? ( >=x11-libs/qt-core-4.4.0
 		>=x11-libs/qt-dbus-4.4.0
@@ -160,7 +159,7 @@ src_install() {
 }
 
 pkg_postinst() {
-	python_mod_optimize $(python_get_sitedir)/${PN}
+	python_mod_optimize ${PN}
 }
 
 pkg_prerm() {
@@ -170,5 +169,5 @@ pkg_prerm() {
 }
 
 pkg_postrm() {
-	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages/${PN}
+	python_mod_cleanup ${PN}
 }
