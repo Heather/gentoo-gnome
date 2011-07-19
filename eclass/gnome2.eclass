@@ -133,12 +133,12 @@ gnome2_src_configure() {
 	fi
 
 	# Prevent a QA warning
-	if hasq doc ${IUSE} ; then
+	if has doc ${IUSE} ; then
 		G2CONF="${G2CONF} $(use_enable doc gtk-doc)"
 	fi
 
-	# Avoid sandbox violations caused by misbehaving packages (bug #128289)
-	addwrite "/root/.gnome2"
+	# Avoid sandbox violations caused by gnome-vfs (bug #128289 and #345659)
+	addwrite "$(unset HOME; echo ~)/.gnome2"
 
 	# GST_REGISTRY is to work around gst-inspect trying to read/write /root
 	GST_REGISTRY="${S}/registry.xml" econf "$@" ${G2CONF}
