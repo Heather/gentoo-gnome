@@ -26,7 +26,7 @@ fi
 RDEPEND=">=dev-libs/glib-2.25.5:2
 	>=x11-libs/gtk+-3.0.2:3
 	sys-apps/file
-	nautilus? ( >=gnome-base/nautilus-2.22.2 )
+	nautilus? ( >=gnome-base/nautilus-3.0.0 )
 	packagekit? ( app-admin/packagekit-base )
 "
 DEPEND="${RDEPEND}
