@@ -14,17 +14,16 @@ HOMEPAGE="http://projects.gnome.org/gnome-color-manager/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="+introspection packagekit raw"
+IUSE="+introspection packagekit raw scanner"
 
 # FIXME: raise libusb:1 to 1.0.9 when available
 # FIXME: fix detection of docbook2man
-RDEPEND=">=dev-libs/glib-2.25.9:2
+COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 	>=dev-libs/libusb-1:1
 	>=gnome-base/gnome-control-center-3
 	gnome-base/gnome-settings-daemon
 
 	media-libs/lcms:2
-	media-gfx/sane-backends
 	>=media-libs/libcanberra-0.10[gtk3]
 	media-libs/libexif
 	media-libs/tiff
@@ -38,10 +37,17 @@ RDEPEND=">=dev-libs/glib-2.25.9:2
 	>=x11-libs/vte-0.25.1:2.90
 
 	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
+	scanner? ( media-gfx/sane-backends )
 	packagekit? ( app-admin/packagekit-base )
 	raw? ( media-gfx/exiv2 )
 "
+RDEPEND="${RDEPEND}
+	media-gfx/shared-color-profiles
+"
+# docbook-sgml-{utils,dtd:4.1} needed to generate man pages
 DEPEND="${RDEPEND}
+	app-text/docbook-sgml-dtd:4.1
+	app-text/docbook-sgml-utils
 	app-text/gnome-doc-utils
 	dev-libs/libxslt
 	>=dev-util/intltool-0.35
@@ -56,11 +62,11 @@ pkg_setup() {
 		--disable-static
 		--disable-schemas-compile
 		--disable-scrollkeeper
-		--enable-sane
 		--enable-tests
 		$(use_enable packagekit)
 		$(use_enable introspection)
-		$(use_enable raw exiv)"
+		$(use_enable raw exiv)
+		$(use_enable scanner sane)"
 }
 
 src_prepare() {
