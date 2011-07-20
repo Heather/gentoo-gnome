@@ -5,7 +5,7 @@
 EAPI="3"
 GCONF_DEBUG="yes"
 
-inherit gnome2
+inherit eutils gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -68,4 +68,12 @@ pkg_setup() {
 		--disable-schemas-compile"
 	# xscreensaver and custom screensaver capability removed
 	# poke and inhibit commands were also removed, bug 579430
+}
+
+src_prepare() {
+	# Upstream patch to fix crash in user switcher; will be in next release
+	epatch "${FILESDIR}/${P}-user-switcher-crash.patch"
+
+	# https://bugzilla.gnome.org/show_bug.cgi?id=648145
+	epatch "${FILESDIR}/${PN}-3.0.0-ui-timers.patch"
 }
