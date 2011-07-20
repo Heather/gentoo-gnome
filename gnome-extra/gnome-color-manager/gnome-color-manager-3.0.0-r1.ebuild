@@ -67,5 +67,15 @@ src_prepare() {
 	# Fix build
 	epatch "${FILESDIR}/${P}-packagename.patch"
 
+	# Upstream renamed 95-gcm-colorimeters.rules to 69-gcm-colorimeters.rules
+	# for next release (see commit dc276cbe) to fix colorimeter udev ACLs.
+	mv -f rules/{95,69}-gcm-colorimeters.rules || die "mv failed"
+	sed -e 's:95-gcm-colorimeters.rules:69-gcm-colorimeters.rules:' \
+		-i rules/Makefile.* || die "sed rules/Makefile.* failed"
+
+	# Upstream patch to fix a bug in control center panel when plugging in a
+	# colorimeter; will be in next release
+	epatch "${FILESDIR}/${P}-cc-panel.patch"
+
 	gnome2_src_prepare
 }
