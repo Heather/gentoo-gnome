@@ -47,7 +47,9 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 RDEPEND="${COMMON_DEPEND}
 	media-gfx/shared-color-profiles
 "
+# docbook-sgml-{utils,dtd:4.1} needed to generate man pages
 DEPEND="${COMMON_DEPEND}
+	app-text/docbook-sgml-dtd:4.1
 	app-text/docbook-sgml-utils
 	app-text/gnome-doc-utils
 	dev-libs/libxslt
