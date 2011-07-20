@@ -77,7 +77,9 @@ DEPEND="${COMMON_DEPEND}
 	test? (
 		media-fonts/font-misc-misc
 		media-fonts/font-cursor-misc )"
+# >=dev-libs/glib-2.29.12 needed at runtime, see gnome bugs 654627, 654695
 RDEPEND="${COMMON_DEPEND}
+	>=dev-libs/glib-2.29.12
 	!<gnome-base/gail-1000
 	packagekit? ( app-admin/packagekit-base )"
 PDEPEND="vim-syntax? ( app-vim/gtk-syntax )"
@@ -120,7 +122,7 @@ src_prepare() {
 		[[ ${PV} != 9999 ]] && strip_builddir SRC_SUBDIRS demos Makefile.in
 	fi
 
-	[[ ${PV} = 9999 ]] && gnome2-live_src_prepare
+	gnome2_src_prepare
 }
 
 src_configure() {
