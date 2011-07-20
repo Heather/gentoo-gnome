@@ -51,7 +51,7 @@ COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	packagekit? (
 		|| ( sys-fs/udev[gudev]
 			sys-fs/udev[extras] )
-		>=app-portage/packagekit-0.6.4
+		>=app-admin/packagekit-base-0.6.4
 		>=sys-power/upower-0.9.1 )
 	policykit? (
 		>=sys-auth/polkit-0.97

@@ -79,7 +79,7 @@ DEPEND="${COMMON_DEPEND}
 		media-fonts/font-cursor-misc )"
 RDEPEND="${COMMON_DEPEND}
 	!<gnome-base/gail-1000
-	packagekit? ( app-portage/packagekit )"
+	packagekit? ( app-admin/packagekit-base )"
 PDEPEND="vim-syntax? ( app-vim/gtk-syntax )"
 
 strip_builddir() {

@@ -9,12 +9,13 @@ gnome-base/gnome-core-libs
 
 # Core
 app-accessibility/orca
+app-admin/packagekit-base
+app-admin/packagekit-gtk
 app-arch/file-roller
 app-cdr/brasero
 app-crypt/seahorse
 app-crypt/seahorse-plugins
 app-pda/libimobiledevice
-app-portage/packagekit
 app-text/evince
 app-text/poppler
 dev-lang/orc

@@ -46,7 +46,7 @@ DEPEND="${COMMON_DEPEND}
 	x11-proto/xproto
 	doc? ( >=dev-util/gtk-doc-1.4 )"
 RDEPEND="${COMMON_DEPEND}
-	packagekit? ( app-portage/packagekit )
+	packagekit? ( app-admin/packagekit-base )
 	sendto? ( !gnome-extra/nautilus-sendto )"
 # For eautoreconf
 #	gnome-base/gnome-common

@@ -50,7 +50,7 @@ RDEPEND="${COMMON_DEPEND}
 		app-cdr/cdrdao
 		app-cdr/dvd+rw-tools
 		virtual/cdrtools )
-	packagekit? ( app-portage/packagekit )"
+	packagekit? ( app-admin/packagekit-base )"
 DEPEND="${COMMON_DEPEND}
 	app-text/gnome-doc-utils
 	dev-util/pkgconfig
