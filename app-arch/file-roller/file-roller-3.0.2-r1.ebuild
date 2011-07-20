@@ -26,7 +26,7 @@ fi
 RDEPEND=">=dev-libs/glib-2.25.5:2
 	>=x11-libs/gtk+-3.0.2:3
 	sys-apps/file
-	nautilus? ( >=gnome-base/nautilus-2.22.2 )
+	nautilus? ( >=gnome-base/nautilus-3.0.0 )
 	packagekit? ( app-admin/packagekit-base )
 "
 DEPEND="${RDEPEND}
@@ -57,6 +57,9 @@ src_prepare() {
 	# Use absolute path to GNU tar since star doesn't have the same
 	# options. On Gentoo, star is /usr/bin/tar, GNU tar is /bin/tar
 	epatch "${FILESDIR}"/${PN}-2.10.3-use_bin_tar.patch
+
+	# Upstream patch to fix path parsing in 7z files, will be in next release
+	epatch "${FILESDIR}/${P}-pointer-arithmetic.patch"
 }
 
 pkg_postinst() {
