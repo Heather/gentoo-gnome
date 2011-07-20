@@ -38,7 +38,7 @@ RDEPEND=">=dev-libs/glib-2.25.9:2
 	>=x11-libs/vte-0.25.1:2.90
 
 	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
-	packagekit? ( app-portage/packagekit )
+	packagekit? ( app-admin/packagekit-base )
 	raw? ( media-gfx/exiv2 )
 "
 DEPEND="${RDEPEND}
