@@ -64,10 +64,12 @@ COMMON_DEPEND="
 	cups? ( >=net-print/cups-1.4[dbus] )
 	networkmanager? ( >=net-misc/networkmanager-0.8.997 )
 	socialweb? ( net-libs/libsocialweb )"
+# <gnome-color-manager-3.1.2 has file collisions with g-c-c-3.1.x
 RDEPEND="${COMMON_DEPEND}
 	sys-apps/accountsservice
 	cups? ( net-print/cups-pk-helper )
 
+	!<gnome-extra/gnome-color-manager-3.1.2
 	!gnome-extra/gnome-media[pulseaudio]
 	!<gnome-extra/gnome-media-2.32.0-r300
 	!<gnome-base/gdm-2.91.94"

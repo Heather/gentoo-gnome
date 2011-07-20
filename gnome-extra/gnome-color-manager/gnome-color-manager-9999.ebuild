@@ -2,46 +2,53 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/gnome-color-manager/gnome-color-manager-2.32.0.ebuild,v 1.6 2011/03/23 06:10:42 ssuominen Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit eutils gnome2
+inherit autotools eutils gnome2
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Color profile manager for the GNOME desktop"
 HOMEPAGE="http://projects.gnome.org/gnome-color-manager/"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
-IUSE="+introspection packagekit raw"
+if [[ ${PV} = 9999 ]]; then
+	KEYWORDS=""
+else
+	KEYWORDS="~amd64 ~x86"
+fi
+IUSE="clutter +introspection packagekit raw"
 
-# FIXME: raise libusb:1 to 1.0.9 when available
 # FIXME: fix detection of docbook2man
-RDEPEND=">=dev-libs/glib-2.25.9:2
-	>=dev-libs/libusb-1:1
-	>=gnome-base/gnome-control-center-3
-	gnome-base/gnome-settings-daemon
+COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 
-	media-libs/lcms:2
-	media-gfx/sane-backends
+	>=media-libs/lcms-2.2:2
 	>=media-libs/libcanberra-0.10[gtk3]
 	media-libs/libexif
 	media-libs/tiff
-	net-print/cups
 
-	|| ( sys-fs/udev[gudev] sys-fs/udev[extras] )
 	x11-libs/libX11
 	x11-libs/libXrandr
 	>=x11-libs/gtk+-2.91:3
-	>=x11-libs/libnotify-0.7
 	>=x11-libs/vte-0.25.1:2.90
+	>=x11-misc/colord-0.1.9
 
+	clutter? (
+		media-libs/clutter-gtk:1.0
+		media-libs/mash:0.1 )
 	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
 	packagekit? ( app-admin/packagekit-base )
 	raw? ( media-gfx/exiv2 )
 "
-DEPEND="${RDEPEND}
+RDEPEND="${COMMON_DEPEND}
+	media-gfx/shared-color-profiles
+"
+DEPEND="${COMMON_DEPEND}
+	app-text/docbook-sgml-utils
 	app-text/gnome-doc-utils
 	dev-libs/libxslt
 	>=dev-util/intltool-0.35
@@ -56,16 +63,16 @@ pkg_setup() {
 		--disable-static
 		--disable-schemas-compile
 		--disable-scrollkeeper
-		--enable-sane
 		--enable-tests
+		$(use_enable clutter)
 		$(use_enable packagekit)
-		$(use_enable introspection)
 		$(use_enable raw exiv)"
 }
 
 src_prepare() {
-	# Fix build
-	epatch "${FILESDIR}/${P}-packagename.patch"
+	# https://bugzilla.gnome.org/show_bug.cgi?id=654954
+	epatch "${FILESDIR}/${PN}-3.1.2-automagic-clutter.patch"
 
+	[[ ${PV} = 9999 ]] || eautoreconf
 	gnome2_src_prepare
 }

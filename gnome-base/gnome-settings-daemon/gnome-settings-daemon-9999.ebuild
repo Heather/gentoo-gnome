@@ -24,7 +24,6 @@ fi
 IUSE="+cups debug packagekit policykit short-touchpad-timeout smartcard +udev"
 
 # Latest gsettings-desktop-schemas is needed due to commit e8d1de92
-# <gnome-color-manager-3.1.1 has file collisions with g-s-d-3.1.x
 COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	>=dev-libs/glib-2.26.0:2
 	>=x11-libs/gtk+-2.99.3:3
@@ -46,8 +45,6 @@ COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	>=media-sound/pulseaudio-0.9.16
 	media-libs/libcanberra[gtk3]
 
-	!<gnome-extra/gnome-color-manager-3.1.1
-
 	cups? ( >=net-print/cups-1.4[dbus] )
 	packagekit? (
 		|| ( sys-fs/udev[gudev]
@@ -60,12 +57,14 @@ COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	udev? ( || ( sys-fs/udev[gudev]
 		sys-fs/udev[extras] ) )"
 # Themes needed by g-s-d, gnome-shell, gtk+:3 apps to work properly
+# <gnome-color-manager-3.1.1 has file collisions with g-s-d-3.1.x
 RDEPEND="${COMMON_DEPEND}
 	gnome-base/dconf
 	>=x11-themes/gnome-themes-standard-2.91
 	>=x11-themes/gnome-icon-theme-2.91
 	>=x11-themes/gnome-icon-theme-symbolic-2.91
-	!<gnome-base/gnome-control-center-2.22"
+	!<gnome-base/gnome-control-center-2.22
+	!<gnome-extra/gnome-color-manager-3.1.1"
 DEPEND="${COMMON_DEPEND}
 	cups? ( sys-apps/sed )
 	sys-devel/gettext
