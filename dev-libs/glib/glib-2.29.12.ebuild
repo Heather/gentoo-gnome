@@ -206,9 +206,16 @@ pkg_postinst() {
 		ewarn "rebuilding dev-libs/dbus-glib"
 	fi
 
+	if has_version '<x11-libs/gtk+-3.1.8-r1'; then
+		# To have a clear upgrade path for gtk+-3.0.x users, have to resort to
+		# a warning instead of a blocker
+		ewarn
+		ewarn "Using gtk+-3.0.x with ${P} results in frequent crashes."
+		ewarn "You should upgrade to >=gtk+-3.1.8-r1 immediately."
+	fi
+
 	python_need_rebuild
 	python_mod_optimize /usr/$(get_libdir)/gdbus-codegen
-
 }
 
 pkg_postrm() {
