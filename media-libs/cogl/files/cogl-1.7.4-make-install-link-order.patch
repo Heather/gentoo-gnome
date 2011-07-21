@@ -1,0 +1,50 @@
+From e70f5a11359c23d9d7424edeffd5cc0d1fa7722d Mon Sep 17 00:00:00 2001
+From: Alexandre Rostovtsev <tetromino@gmail.com>
+Date: Thu, 21 Jul 2011 01:09:04 -0400
+Subject: [PATCH] cogl-pango: prevent linking to systemwide libcogl during
+ make install (#655026)
+
+At the moment, on make install, libcogl-pango will link to the
+version of libcogl that is installed systemwide. This leads to
+interesting problems when the version installed systemwide is
+incompatible with the version of cogl being built.
+
+E.g., when building cogl-1.7.4 (with --enable-cogl-pango and
+--prefix=/usr) on a system that has cogl-1.7.2 installed in /usr:
+
+$ make
+[...]
+$ ldd cogl-pango/.libs/libcogl-pango.so | grep cogl
+	libcogl.so.2 => /var/tmp/cogl-1.7.4/cogl/.libs/libcogl.so.2 (0x00007eff4bfb2000)
+$ make DESTDIR=/var/tmp/cogl-1.7.4/dest install
+[...]
+$ ldd /var/tmp/cogl-1.7.4/dest/usr/lib64/libcogl-pango.so | grep cogl
+	libcogl.so.1 => /usr/lib64/libcogl.so.1 (0x00007f4647747000)
+
+This problem can be avoided by reordering libcogl_pango_la_LIBADD
+to ensure that during make installs' relinking phase, libtool looks
+at the libcogl in the build directory before the systemwide libcogl.
+
+Addresses Gnome bug #655026.
+---
+ cogl-pango/Makefile.am |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/cogl-pango/Makefile.am b/cogl-pango/Makefile.am
+index afd96d6..9805c58 100644
+--- a/cogl-pango/Makefile.am
++++ b/cogl-pango/Makefile.am
+@@ -28,8 +28,8 @@ lib_LTLIBRARIES = libcogl-pango.la
+ 
+ libcogl_pango_la_SOURCES = $(source_c) $(source_h) $(source_h_priv)
+ libcogl_pango_la_CFLAGS = $(COGL_DEP_CFLAGS) $(COGL_EXTRA_CFLAGS) $(MAINTAINER_CFLAGS)
+-libcogl_pango_la_LIBADD = $(COGL_DEP_LIBS) $(COGL_EXTRA_LDFLAGS)
+-libcogl_pango_la_LIBADD += $(top_builddir)/cogl/libcogl.la
++libcogl_pango_la_LIBADD = $(top_builddir)/cogl/libcogl.la
++libcogl_pango_la_LIBADD += $(COGL_DEP_LIBS) $(COGL_EXTRA_LDFLAGS)
+ libcogl_pango_la_LDFLAGS = \
+ 	-export-dynamic \
+ 	-export-symbols-regex "^cogl_pango_.*"
+-- 
+1.7.6
+

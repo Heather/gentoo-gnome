@@ -8,7 +8,7 @@ WANT_AUTOMAKE="1.11"
 
 # Inherit gnome2 after clutter to download sources from gnome.org
 # since clutter-project.org doesn't provide .xz tarballs
-inherit clutter gnome2
+inherit clutter eutils gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -29,7 +29,7 @@ RDEPEND="
 	>=dev-libs/glib-2.26:2
 	>=dev-libs/atk-1.17[introspection?]
 	>=dev-libs/json-glib-0.12[introspection?]
-	>=media-libs/cogl-1.7.2:1.0[introspection?,pango]
+	>=media-libs/cogl-1.7.4:1.0[introspection?,pango]
 	>=x11-libs/cairo-1.10[glib]
 	>=x11-libs/pango-1.20[introspection?]
 	
@@ -74,6 +74,11 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# cogl-1.7.4 compatibility patches, will be in next release
+	epatch "${FILESDIR}/${P}-cogl_set_default_context.patch"
+	epatch "${FILESDIR}/${P}-cogl_egl_context.patch"
+	epatch "${FILESDIR}/${P}-cogl_x11_onscreen.patch"
+
 	# Some gettext stuff, we can't run gettextize because that does too much
 	[[ ${PV} = 9999 ]] && cp "${ROOT}/usr/share/gettext/po/Makefile.in.in" "${S}/po"
 

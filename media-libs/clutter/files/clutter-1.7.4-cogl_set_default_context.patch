@@ -1,0 +1,40 @@
+From 71d0872b76ec6678f03fddf4731f394eaa06ba9f Mon Sep 17 00:00:00 2001
+From: Robert Bragg <robert@linux.intel.com>
+Date: Fri, 01 Jul 2011 00:44:13 +0000
+Subject: don't call cogl_set_default_context since it's been removed
+
+cogl_set_default_context has been removed from Cogl so this updates
+Clutter in-line with that change.
+---
+diff --git a/clutter/cogl/clutter-backend-cogl.c b/clutter/cogl/clutter-backend-cogl.c
+index a712a4e..c97448c 100644
+--- a/clutter/cogl/clutter-backend-cogl.c
++++ b/clutter/cogl/clutter-backend-cogl.c
+@@ -347,10 +347,6 @@ clutter_backend_cogl_create_context (ClutterBackend  *backend,
+   if (!backend->cogl_context)
+     goto error;
+ 
+-  /* XXX: eventually this should go away but a lot of Cogl code still
+-   * depends on a global default context. */
+-  cogl_set_default_context (backend->cogl_context);
+-
+   return TRUE;
+ 
+ error:
+diff --git a/clutter/win32/clutter-backend-win32.c b/clutter/win32/clutter-backend-win32.c
+index 220d517..b16e10e 100644
+--- a/clutter/win32/clutter-backend-win32.c
++++ b/clutter/win32/clutter-backend-win32.c
+@@ -252,10 +252,6 @@ clutter_backend_win32_create_context (ClutterBackend  *backend,
+   if (!backend->cogl_context)
+     goto error;
+ 
+-  /* XXX: eventually this should go away but a lot of Cogl code still
+-   * depends on a global default context. */
+-  cogl_set_default_context (backend->cogl_context);
+-
+   return TRUE;
+ 
+ error:
+--
+cgit v0.9

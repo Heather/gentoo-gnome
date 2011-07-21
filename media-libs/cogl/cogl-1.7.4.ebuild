@@ -7,7 +7,7 @@ CLUTTER_LA_PUNT="yes"
 
 # Inherit gnome2 after clutter to download sources from gnome.org
 # since clutter-project.org doesn't provide .xz tarballs
-inherit clutter gnome2
+inherit autotools clutter eutils gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -60,6 +60,14 @@ pkg_setup() {
 		--enable-glx
 		$(use_enable introspection)
 		$(use_enable pango cogl-pango)"
+}
+
+src_prepare() {
+	# https://bugzilla.gnome.org/show_bug.cgi?id=655026
+	epatch "${FILESDIR}/${PN}-1.7.4-make-install-link-order.patch"
+	eautoreconf
+
+	gnome2_src_prepare
 }
 
 src_install() {

@@ -1,0 +1,24 @@
+From d182d5a1714be65004e6c68c347a7f45deaf47d8 Mon Sep 17 00:00:00 2001
+From: Robert Bragg <robert@linux.intel.com>
+Date: Fri, 01 Jul 2011 00:50:30 +0000
+Subject: backend-cogl: update _get_egl_context symbol name
+
+Cogl changed has changed the name of cogl_context_egl_get_egl_context to
+cogl_egl_context_get_egl_context to be consistent with other platform
+specific symbols.
+---
+diff --git a/clutter/cogl/clutter-backend-cogl.c b/clutter/cogl/clutter-backend-cogl.c
+index c97448c..1ca8850 100644
+--- a/clutter/cogl/clutter-backend-cogl.c
++++ b/clutter/cogl/clutter-backend-cogl.c
+@@ -504,7 +504,7 @@ clutter_egl_get_egl_display (void)
+       return 0;
+     }
+ 
+-  return cogl_context_egl_get_egl_display (backend_singleton->cogl_context);
++  return cogl_egl_context_get_egl_display (backend_singleton->cogl_context);
+ }
+ #endif
+ 
+--
+cgit v0.9

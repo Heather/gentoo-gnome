@@ -29,7 +29,7 @@ RDEPEND="
 	>=dev-libs/glib-2.26:2
 	>=dev-libs/atk-1.17[introspection?]
 	>=dev-libs/json-glib-0.12[introspection?]
-	>=media-libs/cogl-1.7.2:1.0[introspection?,pango]
+	>=media-libs/cogl-1.7.4:1.0[introspection?,pango]
 	>=x11-libs/cairo-1.10[glib]
 	>=x11-libs/pango-1.20[introspection?]
 	
