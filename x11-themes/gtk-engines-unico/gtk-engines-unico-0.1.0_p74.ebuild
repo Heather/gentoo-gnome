@@ -16,8 +16,6 @@ MY_PV=${PV/_p/+r}
 DESCRIPTION="Unico Gtk+ 3 theme engine"
 HOMEPAGE="https://launchpad.net/unico"
 if [[ ${PV} = 9999 ]]; then
-	EBZR_REPO_URI='lp:unico'
-	SRC_URI=
 	S="${WORKDIR}/${P}"
 else
 	SRC_URI="https://launchpad.net/ubuntu/oneiric/+source/gtk3-engines-unico/${MY_PV}-0ubuntu1/+files/gtk3-engines-unico_${MY_PV}.orig.tar.gz"
