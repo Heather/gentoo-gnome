@@ -7,8 +7,8 @@ EAPI="4"
 inherit eutils linux-info
 
 DESCRIPTION="System-wide Linux Profiler"
-HOMEPAGE="http://www.daimi.au.dk/~sandmann/sysprof/"
-SRC_URI="http://www.daimi.au.dk/~sandmann/${PN}/${P}.tar.gz"
+HOMEPAGE="http://sysprof.com/"
+SRC_URI="http://sysprof.com/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -22,7 +22,7 @@ RDEPEND=">=dev-libs/glib-2.6:2
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9"
 
-DOCS="AUTHORS ChangeLog NEWS README TODO"
+DOCS="AUTHORS NEWS README TODO" # ChangeLog is empty
 
 pkg_pretend() {
 	kernel_is -ge 2 6 31 && return
