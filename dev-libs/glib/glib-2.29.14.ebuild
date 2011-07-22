@@ -206,7 +206,7 @@ pkg_postinst() {
 		ewarn "rebuilding dev-libs/dbus-glib"
 	fi
 
-	if has_version '<x11-libs/gtk+-3.1.8-r1'; then
+	if has_version '<x11-libs/gtk+-3.1.8-r1:3'; then
 		# To have a clear upgrade path for gtk+-3.0.x users, have to resort to
 		# a warning instead of a blocker
 		ewarn
