@@ -84,6 +84,10 @@ pkg_pretend() {
 }
 
 src_prepare() {
+	# Add useful patches from upstream git (fixing crashes, SSID parsing bugs,
+	# and significant usability problems).
+	epatch "${FILESDIR}/${PV}/"*.patch
+
 	# Don't build tests
 	epatch "${FILESDIR}/${PN}-fix-tests.patch"
 	eautoreconf
