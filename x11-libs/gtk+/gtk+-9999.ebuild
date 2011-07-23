@@ -49,8 +49,8 @@ COMMON_DEPEND="!aqua? (
 		>=x11-libs/gdk-pixbuf-2.22.0:2[introspection?]
 	)
 	xinerama? ( x11-libs/libXinerama )
-	>=dev-libs/glib-2.29.4
-	>=x11-libs/pango-1.24.0[introspection?]
+	>=dev-libs/glib-2.29.14
+	>=x11-libs/pango-1.29.0[introspection?]
 	>=dev-libs/atk-1.30[introspection?]
 	>=x11-libs/gtk+-2.24:2
 	media-libs/fontconfig
@@ -77,9 +77,7 @@ DEPEND="${COMMON_DEPEND}
 	test? (
 		media-fonts/font-misc-misc
 		media-fonts/font-cursor-misc )"
-# >=dev-libs/glib-2.29.12 needed at runtime, see gnome bugs 654627, 654695
 RDEPEND="${COMMON_DEPEND}
-	>=dev-libs/glib-2.29.12
 	!<gnome-base/gail-1000
 	packagekit? ( app-admin/packagekit-base )"
 PDEPEND="vim-syntax? ( app-vim/gtk-syntax )"
