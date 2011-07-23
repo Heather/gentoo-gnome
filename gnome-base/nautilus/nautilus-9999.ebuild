@@ -51,7 +51,9 @@ RDEPEND="${COMMON_DEPEND}
 # For eautoreconf
 #	gnome-base/gnome-common
 #	dev-util/gtk-doc-am"
-PDEPEND="gnome? ( >=x11-themes/gnome-icon-theme-1.1.91 )
+PDEPEND="gnome? (
+		>=x11-themes/gnome-icon-theme-1.1.91
+		x11-themes/gnome-icon-theme-symbolic )
 	>=gnome-base/gvfs-0.1.2"
 
 pkg_setup() {
