@@ -7,7 +7,7 @@ GCONF_DEBUG="no"
 
 inherit gnome2
 
-DESCRIPTION="GNOME symbolic icon theme"
+DESCRIPTION="Symbolic icons for GNOME default icon theme"
 HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="CCPL-Attribution-ShareAlike-3.0"

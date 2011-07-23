@@ -7,7 +7,7 @@ GCONF_DEBUG="no"
 
 inherit gnome2 eutils autotools
 
-DESCRIPTION="GNOME default icon themes"
+DESCRIPTION="GNOME default icon theme"
 HOMEPAGE="http://www.gnome.org/ http://people.freedesktop.org/~jimmac/icons/#git"
 
 SRC_URI="${SRC_URI}
