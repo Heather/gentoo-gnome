@@ -6,11 +6,11 @@ EAPI="3"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2 systemd
+inherit eutils gnome2 systemd
 
 DESCRIPTION="D-Bus interfaces for querying and manipulating user account information"
 HOMEPAGE="http://www.fedoraproject.org/wiki/Features/UserAccountDialog"
-SRC_URI="http://www.freedesktop.org/software/${PN}/${P}.tar.bz2"
+SRC_URI="http://www.freedesktop.org/software/${PN}/${P}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -43,4 +43,14 @@ pkg_setup() {
 		$(systemd_with_unitdir)
 		$(use_enable introspection)"
 	DOCS="AUTHORS NEWS README TODO"
+}
+
+src_prepare() {
+	# Useful patches from upstream git, will be in next release
+	epatch "${FILESDIR}/${P}-SetAutomaticLogin-false.patch" \
+		"${FILESDIR}/${P}-PATH_GDM_CUSTOM.patch" \
+		"${FILESDIR}/${P}-monitor-etc-gdm-custom.conf.patch" \
+		"${FILESDIR}/${P}-etc-passwd-timeout.patch"
+
+	gnome2_src_prepare
 }
