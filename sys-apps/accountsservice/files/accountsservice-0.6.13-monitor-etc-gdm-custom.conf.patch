@@ -1,0 +1,115 @@
+From 07ea415a5ea0fc5039c947f967c5683ef0e31201 Mon Sep 17 00:00:00 2001
+From: Vincent Untz <vuntz@gnome.org>
+Date: Thu, 21 Jul 2011 08:20:08 +0200
+Subject: [PATCH 3/4] daemon: Monitor /etc/gdm/custom.conf for changes in
+ autologin config
+
+We also emit relevant signals when loading the file.
+
+https://bugs.freedesktop.org/show_bug.cgi?id=39413
+---
+ src/daemon.c |   51 +++++++++++++++++++++++++++++++++++++++++++++++----
+ 1 files changed, 47 insertions(+), 4 deletions(-)
+
+diff --git a/src/daemon.c b/src/daemon.c
+index eb9aa61..882fb2f 100644
+--- a/src/daemon.c
++++ b/src/daemon.c
+@@ -107,6 +107,7 @@ struct DaemonPrivate {
+ 
+         GFileMonitor *passwd_monitor;
+         GFileMonitor *shadow_monitor;
++        GFileMonitor *gdm_monitor;
+ 
+         guint reload_id;
+         guint autologin_id;
+@@ -451,7 +452,7 @@ reload_autologin_timeout (Daemon *daemon)
+         gboolean enabled;
+         gchar *name = NULL;
+         GError *error = NULL;
+-        User *user;
++        User *user = NULL;
+ 
+         daemon->priv->autologin_id = 0;
+ 
+@@ -463,11 +464,23 @@ reload_autologin_timeout (Daemon *daemon)
+                 return FALSE;
+         }
+ 
++        if (enabled && name)
++                user = daemon_local_find_user_by_name (daemon, name);
++
++        if (daemon->priv->autologin != NULL && daemon->priv->autologin != user) {
++                g_object_set (daemon->priv->autologin, "automatic-login", FALSE, NULL);
++                g_signal_emit_by_name (daemon->priv->autologin, "changed", 0);
++                g_object_unref (daemon->priv->autologin);
++                daemon->priv->autologin = NULL;
++        }
++
+         if (enabled) {
+                 g_debug ("automatic login is enabled for '%s'\n", name);
+-                user = daemon_local_find_user_by_name (daemon, name);
+-                g_object_set (user, "automatic-login", TRUE, NULL);
+-                daemon->priv->autologin = g_object_ref (user);
++                if (daemon->priv->autologin != user) {
++                        g_object_set (user, "automatic-login", TRUE, NULL);
++                        daemon->priv->autologin = g_object_ref (user);
++                        g_signal_emit_by_name (daemon->priv->autologin, "changed", 0);
++                }
+         }
+         else {
+                 g_debug ("automatic login is disabled\n");
+@@ -513,6 +526,21 @@ on_passwd_monitor_changed (GFileMonitor      *monitor,
+         reload_users (daemon);
+ }
+ 
++static void
++on_gdm_monitor_changed (GFileMonitor      *monitor,
++                        GFile             *file,
++                        GFile             *other_file,
++                        GFileMonitorEvent  event_type,
++                        Daemon            *daemon)
++{
++        if (event_type != G_FILE_MONITOR_EVENT_CHANGED &&
++            event_type != G_FILE_MONITOR_EVENT_CREATED) {
++                return;
++        }
++
++        queue_reload_autologin (daemon);
++}
++
+ static uid_t
+ get_minimal_uid (void)
+ {
+@@ -603,6 +631,12 @@ daemon_init (Daemon *daemon)
+                                                             NULL,
+                                                             &error);
+         g_object_unref (file);
++        file = g_file_new_for_path (PATH_GDM_CUSTOM);
++        daemon->priv->gdm_monitor = g_file_monitor_file (file,
++                                                         G_FILE_MONITOR_NONE,
++                                                         NULL,
++                                                         &error);
++        g_object_unref (file);
+ 
+         if (daemon->priv->passwd_monitor != NULL) {
+                 g_signal_connect (daemon->priv->passwd_monitor,
+@@ -622,6 +656,15 @@ daemon_init (Daemon *daemon)
+                 g_warning ("Unable to monitor %s: %s", PATH_SHADOW, error->message);
+                 g_error_free (error);
+        }
++        if (daemon->priv->gdm_monitor != NULL) {
++                g_signal_connect (daemon->priv->gdm_monitor,
++                                  "changed",
++                                  G_CALLBACK (on_gdm_monitor_changed),
++                                  daemon);
++        } else {
++                g_warning ("Unable to monitor %s: %s", PATH_GDM_CUSTOM, error->message);
++                g_error_free (error);
++       }
+ 
+         queue_reload_users (daemon);
+         queue_reload_autologin (daemon);
+-- 
+1.7.6
+
