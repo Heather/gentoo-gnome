@@ -22,21 +22,17 @@ IUSE="debug devhelp doc glade graphviz +introspection subversion test vala"
 RDEPEND=">=dev-libs/glib-2.28.0:2
 	x11-libs/gdk-pixbuf:2
 	>=x11-libs/gtk+-3.0.0:3
-	>=dev-libs/dbus-glib-0.70
 	>=x11-libs/vte-0.27.6:2.90
 	>=dev-libs/libxml2-2.4.23
-	>=dev-libs/gdl-2.91.4
+	>=dev-libs/gdl-2.91.4:3
 	>=x11-libs/gtksourceview-2.91.8:3.0
 
-	dev-libs/libxslt
-	>=dev-lang/perl-5
-	dev-perl/Locale-gettext
 	sys-devel/autogen
 
 	>=gnome-extra/libgda-4.2.0:4
 	dev-util/ctags
 
-	x11-libs/libXft
+	x11-libs/libXext
 	x11-libs/libXrender
 
 	devhelp? ( >=dev-util/devhelp-3.0.0 )
@@ -50,6 +46,7 @@ RDEPEND=">=dev-libs/glib-2.28.0:2
 		>=dev-libs/apr-util-1 )
 	vala? ( >=dev-lang/vala-0.11.2:0.12 )"
 DEPEND="${RDEPEND}
+	>=dev-lang/perl-5
 	!!dev-libs/gnome-build
 	>=sys-devel/gettext-0.17
 	>=dev-util/intltool-0.40.1
@@ -120,4 +117,14 @@ pkg_postinst() {
 	elog "Some project templates may require additional development"
 	elog "libraries to function correctly. It goes beyond the scope"
 	elog "of this ebuild to provide them."
+
+	if use vala; then
+		elog ""
+		elog "To create a generic vala project you will need to specify"
+		elog "desired valac versioned binary to be used, to do that you"
+		elog "will need to:"
+		elog "1. Go to 'Build' -> 'Configure project'"
+		elog "2. Add 'VALAC=/usr/bin/valac-X.XX' (respecting quotes) to"
+		elog "'Configure options'."
+	fi
 }
