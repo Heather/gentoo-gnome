@@ -8,6 +8,7 @@ GCONF_DEBUG="yes"
 inherit gnome2
 
 DESCRIPTION="a tool to generate images and thumbnails from HTML files"
+HOMEPAGE="ftp://ftp.gnome.org/pub/gnome/sources/gnome-web-photo"
 
 LICENSE="GPL-2"
 SLOT="0"
