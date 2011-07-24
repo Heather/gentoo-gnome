@@ -3,6 +3,7 @@
 # $Header: $
 
 EAPI="3"
+GNOME_TARBALL_SUFFIX="xz"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="python? 2:2.5"
@@ -17,7 +18,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="LGPL-2"
 SLOT="0"
-IUSE="doc +gtk glade python seed vala"
+IUSE="doc gjs +gtk glade python seed vala"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -26,8 +27,9 @@ fi
 
 RDEPEND=">=dev-libs/glib-2.23.6:2
 	>=dev-libs/gobject-introspection-0.10.1
+	gjs? ( >=dev-libs/gjs-0.7.8 )
 	glade? ( >=dev-util/glade-3.9.1:3.10 )
-	gtk? ( >=x11-libs/gtk+-2.90:3[introspection] )
+	gtk? ( >=x11-libs/gtk+-2.91.1:3[introspection] )
 	python? ( >=dev-python/pygobject-2.28:2[introspection] )
 	seed? ( >=dev-libs/seed-2.91.91 )"
 DEPEND="${RDEPEND}
@@ -40,12 +42,15 @@ DOCS="AUTHORS ChangeLog NEWS README"
 
 pkg_setup() {
 	G2CONF="${G2CONF}
+		$(use_enable deprecated deprecation)
+		$(use_enable gjs)
 		$(use_enable glade glade-catalog)
 		$(use_enable gtk)
 		$(use_enable python)
 		$(use_enable seed)
 		$(use_enable vala)
 		VALAC=$(type -P valac-0.12)
+		--disable-deprecation
 		--disable-static
 		--disable-maintainer-mode
 		--disable-gtk2-test-build"
@@ -63,5 +68,4 @@ src_test() {
 	# >>> Gtk.IconTheme.get_default().has_icon("gtk-about")
 	# This should return True, it returns False for Xvfb
 	Xemake check || die
-
 }
