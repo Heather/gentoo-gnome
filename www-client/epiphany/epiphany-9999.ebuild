@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/www-client/epiphany/epiphany-2.30.2.ebuild,v 1.1 2010/06/13 21:09:33 pacho Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="yes"
 
 inherit eutils gnome2
@@ -30,7 +30,7 @@ RDEPEND=">=dev-libs/glib-2.25.13:2
 	>=x11-libs/startup-notification-0.5
 	>=dev-libs/dbus-glib-0.71
 	>=app-text/iso-codes-0.35
-	>=net-libs/webkit-gtk-1.3.13:3[introspection?]
+	>=net-libs/webkit-gtk-1.4.2:3[introspection?]
 	>=net-libs/libsoup-gnome-2.33.1:2.4
 	>=gnome-base/gnome-keyring-2.26.0
 	>=gnome-base/gsettings-desktop-schemas-0.0.1
@@ -45,14 +45,15 @@ RDEPEND=">=dev-libs/glib-2.25.13:2
 	avahi? ( >=net-dns/avahi-0.6.22 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 	networkmanager? ( net-misc/networkmanager )
-	nss? ( dev-libs/nss )"
+	nss? ( dev-libs/nss )
+"
 DEPEND="${RDEPEND}
 	app-text/gnome-doc-utils
 	>=dev-util/intltool-0.40
 	dev-util/pkgconfig
 	sys-devel/gettext
-	doc? ( >=dev-util/gtk-doc-1 )"
-
+	doc? ( >=dev-util/gtk-doc-1 )
+"
 
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS README TODO"
