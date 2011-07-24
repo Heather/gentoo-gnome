@@ -56,6 +56,7 @@ DEPEND="${RDEPEND}
 	dev-util/gtk-doc-am
 	gnome-base/gnome-common
 	sys-devel/bison
+	sys-devel/flex
 	doc? ( >=dev-util/gtk-doc-1.4 )
 	test? (
 		~app-text/docbook-xml-dtd-4.1.2
