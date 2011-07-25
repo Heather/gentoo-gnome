@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/atk/atk-1.32.0.ebuild,v 1.3 2011/01/29 16:32:15 grobian Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="no"
 
 inherit gnome2
