@@ -1,0 +1,44 @@
+From 742b77d217dced55b8b07616bf6a70ec167ffc01 Mon Sep 17 00:00:00 2001
+From: Alexandre Rostovtsev <tetromino@gmail.com>
+Date: Mon, 25 Jul 2011 15:03:00 +0000
+Subject: gs-window-x11: use g_timeout_add_seconds for watch dog
+
+The watch dog timer runs sort of arbitrarily every 30 seconds.
+We don't need much precision on when it runs, it just needs to
+run once in a while.
+
+This commit changes the timer setup call from g_timeout_add
+to g_timeout_add_seconds so the watch dog will wake up with
+any other pending timeouts that happen to expire around the same
+time, saving a little power.
+
+http://bugzilla.gnome.org/show_bug.cgi?id=648145
+---
+diff --git a/src/gs-window-x11.c b/src/gs-window-x11.c
+index 5120476..e7a475e 100644
+--- a/src/gs-window-x11.c
++++ b/src/gs-window-x11.c
+@@ -481,9 +481,9 @@ static void
+ add_watchdog_timer (GSWindow *window,
+                     glong     timeout)
+ {
+-        window->priv->watchdog_timer_id = g_timeout_add (timeout,
+-                                                         (GSourceFunc)watchdog_timer,
+-                                                         window);
++        window->priv->watchdog_timer_id = g_timeout_add_seconds (timeout,
++                                                                 (GSourceFunc)watchdog_timer,
++                                                                 window);
+ }
+ 
+ static void
+@@ -671,7 +671,7 @@ gs_window_real_show (GtkWidget *widget)
+         window->priv->timer = g_timer_new ();
+ 
+         remove_watchdog_timer (window);
+-        add_watchdog_timer (window, 30000);
++        add_watchdog_timer (window, 30);
+ 
+         select_popup_events ();
+         window_select_shape_events (window);
+--
+cgit v0.9

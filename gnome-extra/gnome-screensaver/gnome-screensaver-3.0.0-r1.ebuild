@@ -74,6 +74,10 @@ src_prepare() {
 	# Upstream patch to fix crash in user switcher; will be in next release
 	epatch "${FILESDIR}/${P}-user-switcher-crash.patch"
 
-	# https://bugzilla.gnome.org/show_bug.cgi?id=648145
-	epatch "${FILESDIR}/${PN}-3.0.0-ui-timers.patch"
+	# Upstream patches to fix timers and update the clock properly; will be
+	# in next release
+	epatch "${FILESDIR}/${P}-watchdog-add_seconds.patch"
+	epatch "${FILESDIR}/${P}-clock-skew.patch"
+
+	gnome2_src_prepare
 }
