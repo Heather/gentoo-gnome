@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/mousetweaks/mousetweaks-2.32.1.ebuild,v 1.8 2011/03/23 08:21:12 nirbheek Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="no"
 
 inherit gnome2
