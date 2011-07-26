@@ -44,7 +44,7 @@ RDEPEND=">=dev-libs/glib-2.28.0:2
 		>=net-libs/neon-0.28.2
 		>=dev-libs/apr-1
 		>=dev-libs/apr-util-1 )
-	vala? ( >=dev-lang/vala-0.11.2:0.12 )"
+	vala? ( >=dev-lang/vala-0.13.0:0.14 )"
 DEPEND="${RDEPEND}
 	>=dev-lang/perl-5
 	!!dev-libs/gnome-build
@@ -78,7 +78,7 @@ pkg_setup() {
 		$(use_enable vala)"
 
 	if use vala; then
-		G2CONF="${G2CONF} VALAC=$(type -P valac-0.12)"
+		G2CONF="${G2CONF} VALAC=$(type -P valac-0.14)"
 	fi
 
 	# Conflics with -pg in a plugin, bug #266777
