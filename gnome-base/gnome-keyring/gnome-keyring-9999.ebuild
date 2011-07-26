@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-keyring/gnome-keyring-2.32.1.ebuild,v 1.4 2011/01/02 21:32:23 mr_bones_ Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -24,15 +24,13 @@ else
 fi
 
 # USE=valgrind is probably not a good idea for the tree
-#
-# XXX: ARGH: libgcr is slotted, but libgck is not.
-# Hence, gtk2/3 versions are not parallel installable.
 RDEPEND=">=dev-libs/glib-2.25:2
 	>=x11-libs/gtk+-2.90.0:3
 	gnome-base/gconf:2
 	>=sys-apps/dbus-1.0
 	>=dev-libs/libgcrypt-1.2.2
 	>=dev-libs/libtasn1-1
+	dev-libs/p11-kit
 	caps? ( sys-libs/libcap-ng )
 	pam? ( virtual/pam )
 "
@@ -57,8 +55,7 @@ pkg_setup() {
 		$(use_with pam pam-dir $(getpam_mod_dir))
 		--with-root-certs=${EPREFIX}/etc/ssl/certs/
 		--enable-ssh-agent
-		--enable-gpg-agent
-		--with-gtk=3.0"
+		--enable-gpg-agent"
 #		$(use_enable valgrind)
 }
 
@@ -70,6 +67,7 @@ src_prepare() {
 
 	# https://bugzilla.gnome.org/show_bug.cgi?id=649936
 	epatch "${FILESDIR}"/${PN}-3.1.1-automagic-libcap-ng.patch
+	[[ ${PV} = 9999 ]] || eautoreconf
 	gnome2_src_prepare
 }
 
