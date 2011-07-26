@@ -13,7 +13,7 @@ HOMEPAGE="http://live.gnome.org/Accessibility"
 
 LICENSE="LGPL-2"
 SLOT="2"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~x86"
 IUSE="doc +introspection"
 
 RDEPEND="
@@ -24,7 +24,7 @@ RDEPEND="
 	x11-libs/libXtst
 	introspection? ( >=dev-libs/gobject-introspection-0.9.6 )
 "
-DEPEND="${DEPEND}
+DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
 	doc? ( >=dev-util/gtk-doc-1.9 )
 "
