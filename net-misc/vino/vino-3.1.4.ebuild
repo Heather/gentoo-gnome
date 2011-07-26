@@ -42,14 +42,13 @@ RDEPEND=">=dev-libs/glib-2.26:2
 	jpeg? ( virtual/jpeg:0 )
 	libnotify? ( >=x11-libs/libnotify-0.7.0 )
 	networkmanager? ( >=net-misc/networkmanager-0.7 )
-	ssl? ( >=net-libs/gnutls-1.0.0 )
+	ssl? ( >=net-libs/gnutls-2.2.0 )
 	telepathy? ( >=net-libs/telepathy-glib-0.11.6 )
 	zlib? ( sys-libs/zlib )"
 DEPEND="${RDEPEND}
 	>=dev-lang/perl-5
 	>=dev-util/pkgconfig-0.16
 	>=dev-util/intltool-0.40
-	>=sys-devel/gettext-0.17
 	|| (
 		gnome-base/libgnome-keyring
 		<gnome-base/gnome-keyring-2.29.4 )"
