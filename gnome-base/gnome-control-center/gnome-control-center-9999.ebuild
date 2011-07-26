@@ -27,16 +27,17 @@ fi
 # XXX: NetworkManager-0.9 support is automagic, make hard-dep once it's released
 #
 # gnome-session-2.91.6-r1 is needed so that 10-user-dirs-update is run at login
-# Latest gsettings-desktop-schemas is needed for commit 73f9bffb
+# Latest gsettings-desktop-schemas is neededfor commit 73f9bffb
+# gnome-settings-daemon-3.1.4 is needed for power panel (commit 4f08a325)
 COMMON_DEPEND="
-	>=dev-libs/glib-2.25.11:2
+	>=dev-libs/glib-2.29.14:2
 	>=x11-libs/gdk-pixbuf-2.23.0:2
 	>=x11-libs/gtk+-3.1.3:3
 	>=gnome-base/gsettings-desktop-schemas-3.0.2
 	>=gnome-base/gconf-2.0:2
 	>=dev-libs/dbus-glib-0.73
 	>=gnome-base/gnome-desktop-3.1.0:3
-	>=gnome-base/gnome-settings-daemon-2.91.94
+	>=gnome-base/gnome-settings-daemon-3.1.4
 	>=gnome-base/libgnomekbd-2.91.91
 
 	app-text/iso-codes
