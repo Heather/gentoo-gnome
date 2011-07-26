@@ -1,0 +1,102 @@
+From 843cc40119d36873f9670975c7815fbd38481093 Mon Sep 17 00:00:00 2001
+From: Chris Kühl <chrisk@openismus.com>
+Date: Thu, 12 May 2011 21:43:31 +0000
+Subject: Fix for issues on 32-bit machines.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=649842
+---
+diff --git a/src/load-graph.cpp b/src/load-graph.cpp
+index a6d2a7e..9291179 100644
+--- a/src/load-graph.cpp
++++ b/src/load-graph.cpp
+@@ -399,7 +399,7 @@ net_scale (LoadGraph *g, guint64 din, guint64 dout)
+ 	  new_max = 1.1 * new_max;
+ 	  // make sure max is not 0 to avoid / 0
+ 	  // default to 125 bytes == 1kbit
+-	  new_max = std::max(new_max, 125UL);
++	  new_max = std::max(new_max, G_GUINT64_CONSTANT(125));
+ 
+ 	} else {
+ 	  // round up to get some extra space
+@@ -407,7 +407,7 @@ net_scale (LoadGraph *g, guint64 din, guint64 dout)
+ 	  new_max = 1.1 * new_max;
+ 	  // make sure max is not 0 to avoid / 0
+ 	  // default to 1 KiB
+-	  new_max = std::max(new_max, 1024UL);
++	  new_max = std::max(new_max, G_GUINT64_CONSTANT(1024));
+ 
+ 	  // decompose new_max = coef10 * 2**(base10 * 10)
+ 	  // where coef10 and base10 are integers and coef10 < 2**10
+@@ -417,8 +417,8 @@ net_scale (LoadGraph *g, guint64 din, guint64 dout)
+ 
+ 	  guint64 pow2 = std::floor(log2(new_max));
+ 	  guint64 base10 = pow2 / 10.0;
+-	  guint64 coef10 = std::ceil(new_max / double(1UL <<(base10 * 10)));
+-	  g_assert(new_max <= (coef10 * (1UL << (base10 * 10))));
++	  guint64 coef10 = std::ceil(new_max / double(G_GUINT64_CONSTANT(1) << (base10 * 10)));
++	  g_assert(new_max <= (coef10 * (G_GUINT64_CONSTANT(1) << (base10 * 10))));
+ 
+ 	  // then decompose coef10 = x * 10**factor10
+ 	  // where factor10 is integer and x < 10
+@@ -431,13 +431,16 @@ net_scale (LoadGraph *g, guint64 din, guint64 dout)
+ 	  if (coef10 % g->num_bars() != 0)
+ 	    coef10 = coef10 + (g->num_bars() - coef10 % g->num_bars());
+ 	  g_assert(coef10 % g->num_bars() == 0);
+-
+-	  new_max = coef10 * (1UL << guint64(base10 * 10));
+-	  procman_debug("bak %lu new_max %lu pow2 %lu coef10 %lu", bak_max, new_max, pow2, coef10);
++	  new_max = coef10 * (G_GUINT64_CONSTANT(1) << guint64(base10 * 10));
++	  procman_debug("bak %" G_GUINT64_FORMAT " new_max %" G_GUINT64_FORMAT
++                        "pow2 %" G_GUINT64_FORMAT " coef10 %" G_GUINT64_FORMAT,
++                        bak_max, new_max, pow2, coef10);
+ 	}
+ 
+ 	if (bak_max > new_max) {
+-	  procman_debug("overflow detected: bak=%lu new=%lu", bak_max, new_max);
++	  procman_debug("overflow detected: bak=%" G_GUINT64_FORMAT
++                        " new=%" G_GUINT64_FORMAT,
++                        bak_max, new_max);
+ 	  new_max = bak_max;
+ 	}
+ 
+@@ -455,7 +458,10 @@ net_scale (LoadGraph *g, guint64 din, guint64 dout)
+ 		}
+ 	}
+ 
+-	procman_debug("rescale dmax = %lu max = %lu new_max = %lu", dmax, g->net.max, new_max);
++	procman_debug("rescale dmax = %" G_GUINT64_FORMAT
++                      " max = %" G_GUINT64_FORMAT
++                      " new_max = %" G_GUINT64_FORMAT,
++                      dmax, g->net.max, new_max);
+ 
+ 	g->net.max = new_max;
+ 
+diff --git a/src/util.cpp b/src/util.cpp
+index 234e6fc..7183ff4 100644
+--- a/src/util.cpp
++++ b/src/util.cpp
+@@ -163,14 +163,14 @@ procman::format_size(guint64 size, guint64 max_size, bool want_bits)
+ 	};
+ 
+ 	const Format all_formats[2][4] = {
+-		{ { 1UL << 10,	   N_("%.1f KiB")  },
+-		  { 1UL << 20,	   N_("%.1f MiB")  },
+-		  { 1UL << 30,	   N_("%.1f GiB")  },
+-                  { 1UL << 40,     N_("%.1f TiB")  } },
+-		{ { 1000,	   N_("%.1f kbit") },
+-		  { 1000000,	   N_("%.1f Mbit") },
+-		  { 1000000000,	   N_("%.1f Gbit") },
+-                  { 1000000000000, N_("%.1f Tbit") } }
++          { { G_GUINT64_CONSTANT(1) << 10,       N_("%.1f KiB")  },
++            { G_GUINT64_CONSTANT(1) << 20,       N_("%.1f MiB")  },
++            { G_GUINT64_CONSTANT(1) << 30,       N_("%.1f GiB")  },
++            { G_GUINT64_CONSTANT(1) << 40,       N_("%.1f TiB")  } },
++          { { G_GUINT64_CONSTANT(1000),          N_("%.1f kbit") },
++            { G_GUINT64_CONSTANT(1000000),       N_("%.1f Mbit") },
++            { G_GUINT64_CONSTANT(1000000000),    N_("%.1f Gbit") },
++            { G_GUINT64_CONSTANT(1000000000000), N_("%.1f Tbit") } }
+ 	};
+ 
+ 	const Format (&formats)[4] = all_formats[want_bits ? 1 : 0];
+--
+cgit v0.9

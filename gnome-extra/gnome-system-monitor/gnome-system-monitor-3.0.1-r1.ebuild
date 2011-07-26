@@ -5,7 +5,7 @@
 EAPI="3"
 GCONF_DEBUG="no"
 
-inherit gnome2
+inherit eutils gnome2
 
 DESCRIPTION="The Gnome System Monitor"
 HOMEPAGE="http://www.gnome.org/"
@@ -36,4 +36,14 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-schemas-compile
 		--disable-scrollkeeper"
+}
+
+src_prepare() {
+	# Add some useful patches from upstream git master
+	# Use the correct maximum nice value on Linux
+	epatch "${FILESDIR}/${PN}-3.0.1-linux-nice.patch"
+	# Don't overflow the network history totals counters on 32-bit machines
+	epatch "${FILESDIR}/${PN}"-3.0.1-32-bit-network-totals-overflow-{1,2,3}.patch
+
+	gnome2_src_prepare
 }
