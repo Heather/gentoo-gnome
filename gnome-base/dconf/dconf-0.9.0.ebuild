@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="no"
 
 inherit gnome2 bash-completion
@@ -27,14 +27,15 @@ COMMON_DEPEND=">=dev-libs/glib-2.27.2:2
 	X? (
 		>=dev-libs/libxml2-2.7.7:2
 		x11-libs/gtk+:3 )"
+# vala:0.14 due to an automagic version-check #ifdef (commit a15d9621)
 DEPEND="${COMMON_DEPEND}
-	>=dev-lang/vala-0.11.7:0.12
+	dev-lang/vala:0.14
 	doc? ( >=dev-util/gtk-doc-1.15 )"
 
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-schemas-compile
-		VALAC=$(type -p valac-0.12)
+		VALAC=$(type -p valac-0.14)
 		$(use_enable X editor)"
 		#$(use_enable vala)
 }
