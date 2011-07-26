@@ -29,11 +29,13 @@ COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	>=x11-libs/gtk+-2.99.3:3
 	>=gnome-base/gconf-2.6.1:2
 	>=gnome-base/libgnomekbd-2.91.1
-	>=gnome-base/gnome-desktop-3.1.3:3
+	>=gnome-base/gnome-desktop-3.1.4:3
 	>=gnome-base/gsettings-desktop-schemas-0.1.7.1
 	media-fonts/cantarell
 	media-libs/fontconfig
 	>=media-libs/lcms-2.2:2
+	media-libs/libcanberra[gtk3]
+	>=media-sound/pulseaudio-0.9.16
 	>=sys-power/upower-0.9.1
 	>=x11-libs/libnotify-0.7.3
 	x11-libs/libXi
@@ -43,7 +45,6 @@ COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	>=x11-libs/libxklavier-5.0
 	>=x11-misc/colord-0.1.9
 	>=media-sound/pulseaudio-0.9.16
-	media-libs/libcanberra[gtk3]
 
 	cups? ( >=net-print/cups-1.4[dbus] )
 	packagekit? (
@@ -58,13 +59,16 @@ COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 		sys-fs/udev[extras] ) )"
 # Themes needed by g-s-d, gnome-shell, gtk+:3 apps to work properly
 # <gnome-color-manager-3.1.1 has file collisions with g-s-d-3.1.x
+# <gnome-power-manager-3.1.4 has file collisions with g-s-d-3.1.x
 RDEPEND="${COMMON_DEPEND}
 	gnome-base/dconf
 	>=x11-themes/gnome-themes-standard-2.91
 	>=x11-themes/gnome-icon-theme-2.91
 	>=x11-themes/gnome-icon-theme-symbolic-2.91
 	!<gnome-base/gnome-control-center-2.22
-	!<gnome-extra/gnome-color-manager-3.1.1"
+	!!<gnome-extra/gnome-color-manager-3.1.1
+	!!<gnome-extra/gnome-power-manager-3.1.3"
+# xproto-7.0.15 needed for power plugin
 DEPEND="${COMMON_DEPEND}
 	cups? ( sys-apps/sed )
 	sys-devel/gettext
@@ -73,7 +77,7 @@ DEPEND="${COMMON_DEPEND}
 	x11-proto/inputproto
 	x11-proto/kbproto
 	x11-proto/xf86miscproto
-	x11-proto/xproto"
+	>=x11-proto/xproto-7.0.15"
 
 pkg_setup() {
 	# README is empty
