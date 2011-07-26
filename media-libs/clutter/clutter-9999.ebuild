@@ -25,6 +25,7 @@ fi
 
 # NOTE: glx flavour uses libdrm + >=mesa-7.3
 # XXX: uprof needed for profiling
+# >=libX11-1.3.1 needed for X Generic Event support
 RDEPEND="
 	>=dev-libs/glib-2.26:2
 	>=dev-libs/atk-1.17[introspection?]
@@ -35,7 +36,7 @@ RDEPEND="
 	
 	virtual/opengl
 	x11-libs/libdrm
-	x11-libs/libX11
+	>=x11-libs/libX11-1.3.1
 	x11-libs/libXext
 	x11-libs/libXdamage
 	x11-proto/inputproto
