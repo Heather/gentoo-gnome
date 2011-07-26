@@ -1,0 +1,105 @@
+From 1638c5ddbaa8e55a1c212b739cc4dd12c8e264ff Mon Sep 17 00:00:00 2001
+From: Alexandre Rostovtsev <tetromino@gmail.com>
+Date: Mon, 25 Jul 2011 22:42:22 -0400
+Subject: [PATCH] Prevent file collisions between libcryptui and seahorse
+ (#655291)
+
+To prevent file collisions between seahorse and libcryptui:
+* install pixmaps in /usr/share/pixmaps/cryptui (and set pixmapsdir
+  to the correct value, so daemon/seahorse-gtkstock.c can actually
+  load them);
+* install ui files in /usr/share/cryptui/ui;
+* rename seahorse.schemas to cryptui.schemas;
+* use "cryptui" as the gettext translation domain.
+
+Addresses Gnome bug #655291.
+---
+ configure.ac                                     |    2 +-
+ daemon/Makefile.am                               |    4 ++--
+ data/Makefile.am                                 |    2 +-
+ data/{seahorse.schemas.in => cryptui.schemas.in} |    0
+ pixmaps/22x22/Makefile.am                        |    2 +-
+ pixmaps/48x48/Makefile.am                        |    2 +-
+ pixmaps/scalable/Makefile.am                     |    2 +-
+ 7 files changed, 7 insertions(+), 7 deletions(-)
+ rename data/{seahorse.schemas.in => cryptui.schemas.in} (100%)
+
+diff --git a/configure.ac b/configure.ac
+index 6d36575..d6741fd 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -325,7 +325,7 @@ dnl *******************
+ dnl ***** gettext *****
+ dnl *******************
+ 
+-GETTEXT_PACKAGE=seahorse
++GETTEXT_PACKAGE=cryptui
+ AC_SUBST(GETTEXT_PACKAGE)
+ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [Name of the gettext domain.])
+ 
+diff --git a/daemon/Makefile.am b/daemon/Makefile.am
+index 08ff418..d214559 100644
+--- a/daemon/Makefile.am
++++ b/daemon/Makefile.am
+@@ -1,7 +1,7 @@
+ 
+ localedir = $(datadir)/locale
+-pixmapsdir = $(datadir)/pixmaps/
+-uidir = $(datadir)/seahorse/ui/
++pixmapsdir = $(datadir)/pixmaps/cryptui/
++uidir = $(datadir)/cryptui/ui/
+ 
+ INCLUDES = -I$(top_builddir) \
+ 	-I$(top_srcdir) \
+diff --git a/data/Makefile.am b/data/Makefile.am
+index d343d5f..d6e2d44 100644
+--- a/data/Makefile.am
++++ b/data/Makefile.am
+@@ -1,7 +1,7 @@
+ @INTLTOOL_SCHEMAS_RULE@
+ 
+ schemasdir = $(GCONF_SCHEMA_FILE_DIR)
+-schemas_in_files = seahorse.schemas.in
++schemas_in_files = cryptui.schemas.in
+ schemas_DATA = $(schemas_in_files:.schemas.in=.schemas)
+ 
+ if GCONF_SCHEMAS_INSTALL
+diff --git a/data/seahorse.schemas.in b/data/cryptui.schemas.in
+similarity index 100%
+rename from data/seahorse.schemas.in
+rename to data/cryptui.schemas.in
+diff --git a/pixmaps/22x22/Makefile.am b/pixmaps/22x22/Makefile.am
+index 60922ce..7fda357 100644
+--- a/pixmaps/22x22/Makefile.am
++++ b/pixmaps/22x22/Makefile.am
+@@ -1,5 +1,5 @@
+ 
+-icon22dir = $(datadir)/pixmaps/seahorse/22x22/
++icon22dir = $(datadir)/pixmaps/cryptui/22x22/
+ icon22_DATA =   seahorse-key.png \
+                 seahorse-key-personal.png \
+                 seahorse-key-ssh.png \
+diff --git a/pixmaps/48x48/Makefile.am b/pixmaps/48x48/Makefile.am
+index a91f86f..c908b1e 100644
+--- a/pixmaps/48x48/Makefile.am
++++ b/pixmaps/48x48/Makefile.am
+@@ -1,5 +1,5 @@
+ 
+-icon48dir = $(datadir)/pixmaps/seahorse/48x48/
++icon48dir = $(datadir)/pixmaps/cryptui/48x48/
+ icon48_DATA =   seahorse-key.png \
+                 seahorse-key-personal.png \
+                 seahorse-key-ssh.png \
+diff --git a/pixmaps/scalable/Makefile.am b/pixmaps/scalable/Makefile.am
+index e43463b..27c0d44 100644
+--- a/pixmaps/scalable/Makefile.am
++++ b/pixmaps/scalable/Makefile.am
+@@ -1,4 +1,4 @@
+-iconsvgdir = $(datadir)/pixmaps/seahorse/scalable/
++iconsvgdir = $(datadir)/pixmaps/cryptui/scalable/
+ iconsvg_DATA =  seahorse-key.svg \
+                 seahorse-key-personal.svg \
+                 seahorse-key-ssh.svg \
+-- 
+1.7.6
+
