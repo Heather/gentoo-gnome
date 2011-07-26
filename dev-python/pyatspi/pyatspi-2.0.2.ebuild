@@ -15,24 +15,24 @@ HOMEPAGE="http://live.gnome.org/Accessibility"
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~x86"
 IUSE="test"
 
-RDEPEND="
+COMMON_DEPEND="dev-python/dbus-python
 	>=dev-python/pygobject-2.26:2
 "
-DEPEND="${RDEPEND}
+RDEPEND="${COMMON_DEPEND}
+	>=sys-apps/dbus-1
+	!<gnome-extra/at-spi-1.32.0-r1
+"
+DEPEND="${COMMON_DEPEND}
 	dev-util/pkgconfig
 	test? (
 		>=dev-libs/atk-1.17
 		>=dev-libs/dbus-glib-0.7
 		dev-libs/glib:2
 		dev-libs/libxml2:2
-		dev-python/dbus-python
-		>=sys-apps/dbus-1
 		>=x11-libs/gtk+-2.10:2 )"
-RDEPEND="${RDEPEND}
-	!<gnome-extra/at-spi-1.32.0-r1"
 
 pkg_setup() {
 	G2CONF="${G2CONF} $(use_enable test tests)"
@@ -74,5 +74,4 @@ pkg_postinst() {
 pkg_postrm() {
 	gnome2_pkg_postrm
 	python_mod_cleanup pyatspi
-
 }
