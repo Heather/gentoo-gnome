@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-arch/file-roller/file-roller-2.32.1.ebuild,v 1.2 2010/12/07 19:37:09 eva Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -57,9 +57,6 @@ src_prepare() {
 	# Use absolute path to GNU tar since star doesn't have the same
 	# options. On Gentoo, star is /usr/bin/tar, GNU tar is /bin/tar
 	epatch "${FILESDIR}"/${PN}-2.10.3-use_bin_tar.patch
-
-	# Upstream patch to fix path parsing in 7z files, will be in next release
-	epatch "${FILESDIR}/${P}-pointer-arithmetic.patch"
 }
 
 pkg_postinst() {
