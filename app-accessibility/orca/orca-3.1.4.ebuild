@@ -3,9 +3,11 @@
 # $Header: $
 
 EAPI="3"
+GNOME_TARBALL_SUFFIX="xz"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2:2.6"
+PYTHON_USE_WITH="threads"
 # FIXME: multiple python support
 
 inherit gnome2 python
@@ -23,11 +25,8 @@ IUSE=""
 # XXX: Check deps for correctness
 RDEPEND=">=dev-libs/glib-2.10:2
 	>=gnome-extra/at-spi-1.32:1
-	>=gnome-base/orbit-2:2
-	>=dev-python/pyorbit-2.24
-	>=gnome-base/libbonobo-2.24
-	>=dev-python/libbonobo-python-2.24:2
 
+	dev-python/pyatspi
 	dev-python/pygobject:2
 	dev-python/pycairo
 	dev-python/pyxdg
@@ -35,11 +34,9 @@ RDEPEND=">=dev-libs/glib-2.10:2
 	>=dev-python/pygtk-2.12:2
 
 	>=dev-python/libwnck-python-2.24
-	>=dev-python/gconf-python-2.24:2
 	>=dev-python/libgnome-python-2.14:2
 
-	>=app-accessibility/gnome-speech-0.3.10:1
-	>=app-accessibility/gnome-mag-0.12.5:1"
+	app-accessibility/speech-dispatcher"
 
 DEPEND="${RDEPEND}
 	>=app-text/gnome-doc-utils-0.17.3
@@ -60,9 +57,6 @@ src_prepare() {
 }
 
 src_configure() {
-	# FIXME: Workaround for bug #325611 until root cause is found
-	addpredict "$(unset HOME; echo ~)/.gconf"
-	addpredict "$(unset HOME; echo ~)/.gconfd"
 	# Needed for import pyatspi
 	unset DBUS_SESSION_BUS_ADDRESS
 	PYTHON="$(PYTHON)" gnome2_src_configure
