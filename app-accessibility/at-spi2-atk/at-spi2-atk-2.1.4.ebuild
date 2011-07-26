@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -18,7 +18,7 @@ IUSE=""
 
 COMMON_DEPEND="
 	>=app-accessibility/at-spi2-core-1.91.92
-	>=dev-libs/atk-1.29.3
+	>=dev-libs/atk-2.1.0
 	dev-libs/glib:2
 	>=sys-apps/dbus-1
 	x11-libs/libX11
