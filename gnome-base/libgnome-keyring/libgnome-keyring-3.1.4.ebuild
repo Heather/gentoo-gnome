@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/libgnome-keyring/libgnome-keyring-2.32.0.ebuild,v 1.5 2011/02/24 19:18:29 tomka Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -34,10 +34,6 @@ pkg_setup() {
 
 src_prepare() {
 	gnome2_src_prepare
-
-	# Memory leak fixes, will be in next release
-	epatch "${FILESDIR}/${P}-memory-leaks.patch"
-	epatch "${FILESDIR}/${P}-memory-leaks-crash.patch"
 
 	# FIXME: Remove silly CFLAGS
 	sed -e 's:CFLAGS="$CFLAGS -Werror:CFLAGS="$CFLAGS:' \
