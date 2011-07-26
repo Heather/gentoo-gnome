@@ -23,7 +23,7 @@ else
 fi
 IUSE="doc exif gnome +introspection packagekit sendto xmp"
 
-COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
+COMMON_DEPEND=">=dev-libs/glib-2.29.13:2
 	>=x11-libs/pango-1.28.3
 	>=x11-libs/gtk+-3.1.6:3[introspection?]
 	>=dev-libs/libxml2-2.7.8:2
