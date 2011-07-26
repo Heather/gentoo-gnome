@@ -3,6 +3,7 @@
 # $Header: $
 
 EAPI="3"
+GNOME_TARBALL_SUFFIX="xz"
 GCONF_DEBUG="no"
 PYTHON_DEPEND="2:2.4"
 SUPPORT_PYTHON_ABIS="1"
@@ -13,7 +14,8 @@ inherit gnome2 python
 DESCRIPTION="Python binding to at-spi library"
 HOMEPAGE="http://live.gnome.org/Accessibility"
 
-LICENSE="LGPL-2"
+# Note: only some of the tests are GPL-licensed, everything else is LGPL
+LICENSE="LGPL-2 GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="test"
@@ -28,7 +30,7 @@ RDEPEND="${COMMON_DEPEND}
 DEPEND="${COMMON_DEPEND}
 	dev-util/pkgconfig
 	test? (
-		>=dev-libs/atk-1.17
+		>=dev-libs/atk-2.1.0
 		>=dev-libs/dbus-glib-0.7
 		dev-libs/glib:2
 		dev-libs/libxml2:2
