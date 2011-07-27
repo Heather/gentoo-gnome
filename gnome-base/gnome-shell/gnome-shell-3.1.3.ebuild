@@ -3,11 +3,12 @@
 # $Header: $
 
 EAPI="3"
+GNOME_TARBALL_SUFFIX="xz"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2:2.5"
 
-inherit eutils gnome2 python
+inherit gnome2 python
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -28,6 +29,7 @@ fi
 # FIXME: Automagic gnome-bluetooth[introspection] support.
 # latest gsettings-desktop-schemas is needed due to commit 602fa1c6
 # latest g-c-c is needed due to https://bugs.gentoo.org/show_bug.cgi?id=360057
+# libXfixes-5.0 needed for pointer barriers
 COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 	>=dev-libs/gjs-0.7.11
 	>=dev-libs/gobject-introspection-0.10.1
@@ -36,19 +38,19 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 	>=media-libs/clutter-1.5.15:1.0[introspection]
 	>=gnome-base/gnome-desktop-2.91.2:3
 	>=gnome-base/gsettings-desktop-schemas-2.91.91
-	>=gnome-extra/evolution-data-server-2.32.0
+	>=gnome-extra/evolution-data-server-2.91.6
 	>=media-libs/gstreamer-0.10.16:0.10
 	>=media-libs/gst-plugins-base-0.10.16:0.10
 	>=net-im/telepathy-logger-0.2.4[introspection]
-	>=net-libs/telepathy-glib-0.13.12[introspection]
-	>=net-wireless/gnome-bluetooth-2.90.0[introspection]
+	>=net-libs/telepathy-glib-0.15.0[introspection]
+	>=net-wireless/gnome-bluetooth-3.1.0[introspection]
 	>=sys-auth/polkit-0.100[introspection]
 	>=x11-wm/mutter-3.0.0[introspection]
 
 	dev-libs/dbus-glib
 	dev-libs/libxml2:2
 	x11-libs/pango[introspection]
-	dev-libs/libcroco:0.6
+	>=dev-libs/libcroco-0.6.2:0.6
 
 	gnome-base/gconf:2[introspection]
 	gnome-base/gnome-menus
@@ -56,9 +58,9 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 	media-libs/libcanberra
 	media-sound/pulseaudio
 
-	x11-libs/startup-notification
+	>=x11-libs/startup-notification-0.11
 	x11-libs/libX11
-	x11-libs/libXfixes
+	>=x11-libs/libXfixes-5.0
 	x11-apps/mesa-progs"
 # Runtime-only deps are probably incomplete and approximate.
 # Each block:
@@ -86,9 +88,9 @@ RDEPEND="${COMMON_DEPEND}
 		>=gnome-extra/nm-applet-0.8.999
 		>=net-misc/networkmanager-0.8.999[introspection] )"
 DEPEND="${COMMON_DEPEND}
-	sys-devel/gettext
+	>=sys-devel/gettext-0.17
 	>=dev-util/pkgconfig-0.22
-	>=dev-util/intltool-0.26
+	>=dev-util/intltool-0.40
 	gnome-base/gnome-common
 	!!<dev-lang/spidermonkey-2"
 # libmozjs.so is picked up from /usr/lib while compiling, so block at build-time
@@ -101,13 +103,6 @@ pkg_setup() {
 		--enable-compile-warnings=maximum
 		--disable-schemas-compile
 		--disable-jhbuild-wrapper-script"
-}
-
-src_prepare() {
-	# https://bugzilla.gnome.org/show_bug.cgi?id=647893
-	# can trigger the crash even with accountsservice-0.6.12
-	epatch "${FILESDIR}/${PN}-3.0.2-user-removed-signals.patch"
-	gnome2_src_prepare
 }
 
 src_install() {
