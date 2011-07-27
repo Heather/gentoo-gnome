@@ -70,9 +70,9 @@ src_prepare() {
 		-e 's/-Werror//' \
 		-i configure.ac configure || die "sed failed"
 
-	# Prevent file collisions with app-crypt/seahorse
+	# Prevent file collisions with app-crypt/seahorse, will be in next release
 	# https://bugzilla.gnome.org/show_bug.cgi?id=655291
-	epatch "${FILESDIR}/${PN}-3.1.4-seahorse-file-collisions.patch"
+	epatch "${FILESDIR}/${P}-seahorse-file-collisions.patch"
 	mv data/seahorse.schemas.in data/cryptui.schemas.in || die "mv failed"
 	[[ ${PV} = 9999 ]] || eautoreconf
 
