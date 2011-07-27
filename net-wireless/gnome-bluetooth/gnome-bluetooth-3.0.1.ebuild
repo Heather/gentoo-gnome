@@ -38,6 +38,7 @@ RDEPEND="${COMMON_DEPEND}
 	app-mobilephone/obexd
 	sys-fs/udev"
 DEPEND="${COMMON_DEPEND}
+	<gnome-base/gnome-control-center-3.1.4
 	!!net-wireless/bluez-gnome
 	app-text/docbook-xml-dtd:4.1.2
 	app-text/gnome-doc-utils
