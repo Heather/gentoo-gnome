@@ -30,6 +30,7 @@ RDEPEND=">=dev-libs/glib-2.29.7:2
 	>=dev-libs/libffi-3.0"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
+	sys-devel/bison
 	sys-devel/flex
 	doc? ( >=dev-util/gtk-doc-1.12 )
 	test? ( x11-libs/cairo )"
