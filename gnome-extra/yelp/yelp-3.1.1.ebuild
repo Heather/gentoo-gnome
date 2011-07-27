@@ -16,13 +16,14 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~sparc ~x86 ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 IUSE="doc"
 
+# yelp-xsl-3.1.1 neded due to commit ee830ed9
 RDEPEND="
 	>=x11-libs/gtk+-2.91.8:3
 	>=dev-libs/glib-2.25.11:2
 	>=dev-libs/libxml2-2.6.5:2
 	>=dev-libs/libxslt-1.1.4
 	>=dev-libs/dbus-glib-0.71
-	>=gnome-extra/yelp-xsl-3.0.1
+	>=gnome-extra/yelp-xsl-3.1.1
 	>=net-libs/webkit-gtk-1.3.2:3
 	>=app-arch/xz-utils-4.9
 	app-arch/bzip2
@@ -49,6 +50,12 @@ src_prepare() {
 	# Fix compatibility with Gentoo's sys-apps/man
 	# https://bugzilla.gnome.org/show_bug.cgi?id=648854
 	epatch "${FILESDIR}/${PN}-3.0.3-man-compatibility.patch"
+
+	# Patches to fix crashes from upstream git, will be in next release
+	epatch "${FILESDIR}/${P}-64-bit-search-crash.patch"
+	epatch "${FILESDIR}/${P}-window_deleted-crash.patch"
+	epatch "${FILESDIR}/${P}-NULL-uri-crash.patch"
+
 	eautoreconf
 
 	gnome2_src_prepare
