@@ -5,6 +5,7 @@
 EAPI="3"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
+GNOME_TARBALL_SUFFIX="xz"
 PYTHON_DEPEND="2:2.4"
 
 inherit eutils gnome2 multilib python
@@ -23,7 +24,7 @@ else
 	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~sparc ~x86"
 fi
 # FIXME: Add location support once geoclue stops being idiotic with automagic deps
-IUSE="debug eds +gnome +map +networkmanager sendto spell test webkit"
+IUSE="debug eds +map +geoloc +networkmanager sendto spell test +video webkit" # gnome
 
 # FIXME: gst-plugins-bad is required for the valve plugin. This should move to good
 # eventually at which point the dep can be dropped
@@ -35,31 +36,36 @@ RDEPEND=">=dev-libs/glib-2.28:2
 	>=x11-libs/libnotify-0.7
 	>=gnome-base/gnome-keyring-2.91.4-r300
 	>=net-libs/gnutls-2.8.5
-	>=dev-libs/folks-0.5.2
+	>=dev-libs/folks-0.5.1
 
+	dev-libs/libxml2:2
 	gnome-base/gsettings-desktop-schemas
-	net-libs/farsight2
+	media-libs/clutter:1.0
+	>=media-libs/clutter-gtk-0.90.3:1.0
+	media-libs/clutter-gst:1.0
 	media-libs/gstreamer:0.10
 	media-libs/gst-plugins-base:0.10
 	media-libs/gst-plugins-bad
+	>=net-im/telepathy-logger-0.2.8
+	net-libs/farsight2
 	>=net-libs/telepathy-farsight-0.0.14
-	dev-libs/libxml2:2
-	x11-libs/libX11
 	net-voip/telepathy-connection-managers
-	>=net-im/telepathy-logger-0.2.10
+	x11-libs/libX11
 
 	eds? ( >=gnome-extra/evolution-data-server-1.2 )
-	gnome? ( >=gnome-base/gnome-control-center-2.31.4 )
-	map? (
-		media-libs/libchamplain:0.10[gtk]
-		media-libs/clutter-gtk:1.0 )
+	geoloc? ( >=app-misc/geoclue-0.11 )
+	map? ( media-libs/libchamplain:0.10[gtk] )
 	networkmanager? ( >=net-misc/networkmanager-0.7 )
 	sendto? ( >=gnome-extra/nautilus-sendto-2.90.0 )
 	spell? (
 		>=app-text/enchant-1.2
 		>=app-text/iso-codes-0.35 )
+	video? (
+		|| ( sys-fs/udev[gudev] sys-fs/udev[extras] )
+		>=media-video/cheese-2.91.91.1 )
 	webkit? ( >=net-libs/webkit-gtk-1.3.2:3 )
 "
+	# gnome? ( >=gnome-base/gnome-control-center-2.31.4 )
 DEPEND="${RDEPEND}
 	app-text/scrollkeeper
 	>=app-text/gnome-doc-utils-0.17.3
@@ -74,23 +80,27 @@ PDEPEND=">=net-im/telepathy-mission-control-5.7.6"
 
 pkg_setup() {
 	DOCS="CONTRIBUTORS AUTHORS ChangeLog NEWS README"
-
 	# TODO: Re-add location support
 	G2CONF="${G2CONF}
 		--disable-coding-style-checks
 		--disable-schemas-compile
 		--disable-static
 		--disable-meego
-		--disable-location
 		--disable-Werror
+		--enable-call
 		$(use_enable debug)
 		$(use_with eds)
-		$(use_enable gnome control-center-embedding)
+		$(use_enable geoloc location)
 		$(use_enable map)
 		$(use_with networkmanager connectivity nm)
 		$(use_enable sendto nautilus-sendto)
 		$(use_enable spell)
-		$(use_enable webkit)"
+		$(use_with video cheese)
+		$(use_enable video gudev)
+		$(use_enable webkit)
+		--disable-control-center-embedding"
+	#	$(use_enable gnome control-center-embedding)
+	# gnome-control-center-3.1.4 dropped support for third-party panels
 
 	# Build time python tools needs python2
 	python_set_active_version 2
