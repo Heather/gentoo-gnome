@@ -28,6 +28,7 @@ fi
 # FIXME: Automagic gnome-bluetooth[introspection] support.
 # latest gsettings-desktop-schemas is needed due to commit 602fa1c6
 # latest g-c-c is needed due to https://bugs.gentoo.org/show_bug.cgi?id=360057
+# libXfixes-5.0 needed for pointer barriers
 COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 	>=dev-libs/gjs-0.7.11
 	>=dev-libs/gobject-introspection-0.10.1
@@ -58,7 +59,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 
 	x11-libs/startup-notification
 	x11-libs/libX11
-	x11-libs/libXfixes
+	>=x11-libs/libXfixes-5.0
 	x11-apps/mesa-progs"
 # Runtime-only deps are probably incomplete and approximate.
 # Each block:
