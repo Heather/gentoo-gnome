@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="3"
+EAPI="4"
 
 inherit gnome.org
 
@@ -20,6 +20,7 @@ DEPEND="${RDEPEND}
 	sys-apps/gawk
 	sys-devel/gettext
 	>=dev-util/intltool-0.40
+	dev-util/itstool
 	>=dev-util/pkgconfig-0.9"
 
 src_install() {
