@@ -50,7 +50,7 @@ RDEPEND=">=dev-libs/glib-2.27.2:2
 
 	eds? ( >=gnome-extra/evolution-data-server-1.2 )
 	geoloc? ( >=app-misc/geoclue-0.11 )
-	gnome? ( >=gnome-base/gnome-control-center-2.31.4 )
+	gnome? ( >=gnome-base/gnome-control-center-3.0.0 )
 	map? (
 		media-libs/libchamplain:0.10[gtk]
 		media-libs/clutter-gtk:1.0 )
@@ -61,11 +61,14 @@ RDEPEND=">=dev-libs/glib-2.27.2:2
 		>=app-text/iso-codes-0.35 )
 	webkit? ( >=net-libs/webkit-gtk-1.3.2:3 )
 "
+# Will not build with gnome-control-center-3.1.4 due to removed headers,
+# but should (probably) continue to run
 DEPEND="${RDEPEND}
 	app-text/scrollkeeper
 	>=app-text/gnome-doc-utils-0.17.3
 	>=dev-util/intltool-0.35.0
 	>=dev-util/pkgconfig-0.16
+	gnome? ( <gnome-base/gnome-control-center-3.1.4 )
 	test? (
 		sys-apps/grep
 		>=dev-libs/check-0.9.4 )
