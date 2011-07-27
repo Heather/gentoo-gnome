@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/net-wireless/gnome-bluetooth/gnome-bluetooth-2.32.0.ebuild,v 1.4 2010/12/19 11:51:36 pacho Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="yes"
 # libgnome-bluetooth-applet.la is needed by gnome-shell during compilation
 GNOME2_LA_PUNT="no"
@@ -28,12 +28,12 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.7:2
 	>=x11-libs/gtk+-2.91.3:3[introspection?]
 	>=x11-libs/libnotify-0.7.0
 	>=dev-libs/dbus-glib-0.74
-	>=gnome-base/gnome-control-center-2.91
 
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 	sendto? ( >=gnome-extra/nautilus-sendto-2.91 )
 "
 RDEPEND="${COMMON_DEPEND}
+	>=gnome-base/gnome-control-center-2.91
 	>=net-wireless/bluez-4.34
 	app-mobilephone/obexd
 	sys-fs/udev"
@@ -68,6 +68,14 @@ pkg_setup() {
 	DOCS="AUTHORS README NEWS ChangeLog"
 
 	enewgroup plugdev
+}
+
+src_prepare() {
+	# Add missing files for intltool checks
+	echo "sendto/bluetooth-sendto.desktop.in" >> po/POTFILES.in
+	echo "wizard/bluetooth-wizard.desktop.in" >> po/POTFILES.in
+
+	gnome2_src_prepare
 }
 
 src_install() {

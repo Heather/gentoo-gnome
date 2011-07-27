@@ -1,0 +1,280 @@
+From e4ceaa852b837d0f52b391d75fdf1d786cceafba Mon Sep 17 00:00:00 2001
+From: Bastien Nocera <hadess@hadess.net>
+Date: Fri, 15 Jul 2011 09:57:41 +0000
+Subject: properties: Work-around CC library disappearing
+
+I was asking for ridicule in the code dept.
+---
+diff --git a/configure.ac b/configure.ac
+index 5405a6b..87f52b9 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -83,11 +83,12 @@ dnl Requires for the properties window
+ PANELS_DIR="${libdir}/control-center-1/panels"
+ AC_SUBST(PANELS_DIR)
+ 
++dnl Missing libgnome-control-center
++dnl which will be resolved at run-time
+ PKG_CHECK_MODULES(PROPS,
+ 		  dbus-glib-1 >= $DBUS_GLIB_REQUIRED
+ 		  glib-2.0 >= $GLIB_REQUIRED
+-		  gtk+-3.0 >= 2.90.7
+-		  libgnome-control-center)
++		  gtk+-3.0 >= 2.90.7)
+ 
+ dnl Requires for the applet
+ PKG_CHECK_MODULES(APPLET,
+@@ -213,6 +214,7 @@ AC_OUTPUT(Makefile
+ 	  applet/bluetooth-applet.desktop.in
+ 	  properties/Makefile
+ 	  properties/bluetooth-properties.desktop.in
++	  properties/cut-n-paste/Makefile
+ 	  wizard/Makefile
+ 	  wizard/bluetooth-wizard.desktop.in
+ 	  sendto/Makefile
+diff --git a/properties/Makefile.am b/properties/Makefile.am
+index 08b4b21..0a716f8 100644
+--- a/properties/Makefile.am
++++ b/properties/Makefile.am
+@@ -1,4 +1,6 @@
+ 
++SUBDIRS = cut-n-paste
++
+ ccpanelsdir = $(PANELS_DIR)
+ ccpanels_LTLIBRARIES = libbluetooth.la
+ 
+diff --git a/properties/cc-bluetooth-panel.c b/properties/cc-bluetooth-panel.c
+index 26199f6..4aad398 100644
+--- a/properties/cc-bluetooth-panel.c
++++ b/properties/cc-bluetooth-panel.c
+@@ -26,7 +26,7 @@
+ #endif
+ 
+ #include <glib/gi18n-lib.h>
+-#include <libgnome-control-center/cc-shell.h>
++#include "cut-n-paste/cc-shell.h"
+ 
+ #include "cc-bluetooth-panel.h"
+ 
+diff --git a/properties/cc-bluetooth-panel.h b/properties/cc-bluetooth-panel.h
+index a074783..d3d7625 100644
+--- a/properties/cc-bluetooth-panel.h
++++ b/properties/cc-bluetooth-panel.h
+@@ -25,7 +25,7 @@
+ #ifndef _CC_BLUETOOTH_PANEL_H
+ #define _CC_BLUETOOTH_PANEL_H
+ 
+-#include <libgnome-control-center/cc-panel.h>
++#include "cut-n-paste/cc-panel.h"
+ 
+ G_BEGIN_DECLS
+ 
+diff --git a/properties/cut-n-paste/Makefile.am b/properties/cut-n-paste/Makefile.am
+new file mode 100644
+index 0000000..1e49a32
+--- a/dev/null
++++ b/properties/cut-n-paste/Makefile.am
+@@ -0,0 +1,3 @@
++
++
++EXTRA_DIST = cc-shell.h cc-panel.h
+diff --git a/properties/cut-n-paste/cc-panel.h b/properties/cut-n-paste/cc-panel.h
+new file mode 100644
+index 0000000..57169a9
+--- a/dev/null
++++ b/properties/cut-n-paste/cc-panel.h
+@@ -0,0 +1,81 @@
++/* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*-
++ *
++ * Copyright (C) 2010 Red Hat, Inc.
++ * Copyright (C) 2010 Intel, Inc
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
++ *
++ * Authors: William Jon McCann <jmccann@redhat.com>
++ *          Thomas Wood <thomas.wood@intel.com>
++ */
++
++
++#ifndef __CC_PANEL_H
++#define __CC_PANEL_H
++
++#include <glib-object.h>
++#include <gtk/gtk.h>
++
++
++G_BEGIN_DECLS
++
++#define CC_TYPE_PANEL         (cc_panel_get_type ())
++#define CC_PANEL(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), CC_TYPE_PANEL, CcPanel))
++#define CC_PANEL_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), CC_TYPE_PANEL, CcPanelClass))
++#define CC_IS_PANEL(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), CC_TYPE_PANEL))
++#define CC_IS_PANEL_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), CC_TYPE_PANEL))
++#define CC_PANEL_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), CC_TYPE_PANEL, CcPanelClass))
++
++typedef struct CcPanelPrivate CcPanelPrivate;
++
++typedef struct _CcPanel       CcPanel;
++typedef struct _CcPanelClass  CcPanelClass;
++
++/* cc-shell.h requires CcPanel, so make sure it is defined first */
++#include <cut-n-paste/cc-shell.h>
++
++/**
++ * CcPanel:
++ *
++ * The contents of this struct are private and should not be accessed directly.
++ */
++struct _CcPanel
++{
++  /*< private >*/
++  GtkBin          parent;
++  CcPanelPrivate *priv;
++};
++/**
++ * CcPanelClass:
++ *
++ * The contents of this struct are private and should not be accessed directly.
++ */
++struct _CcPanelClass
++{
++  /*< private >*/
++  GtkBinClass parent_class;
++
++  GPermission * (* get_permission) (CcPanel *panel);
++};
++
++GType        cc_panel_get_type         (void);
++
++CcShell*     cc_panel_get_shell        (CcPanel     *panel);
++
++GPermission *cc_panel_get_permission   (CcPanel     *panel);
++
++G_END_DECLS
++
++#endif /* __CC_PANEL_H */
+diff --git a/properties/cut-n-paste/cc-shell.h b/properties/cut-n-paste/cc-shell.h
+new file mode 100644
+index 0000000..bc142f1
+--- a/dev/null
++++ b/properties/cut-n-paste/cc-shell.h
+@@ -0,0 +1,105 @@
++/* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*-
++ *
++ * Copyright (c) 2010 Intel, Inc.
++ *
++ * The Control Center is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by the
++ * Free Software Foundation; either version 2 of the License, or (at your
++ * option) any later version.
++ *
++ * The Control Center is distributed in the hope that it will be useful, but
++ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
++ * or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
++ * for more details.
++ *
++ * You should have received a copy of the GNU General Public License along
++ * with the Control Center; if not, write to the Free Software Foundation,
++ * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
++ *
++ * Author: Thomas Wood <thos@gnome.org>
++ */
++
++#ifndef _CC_SHELL_H
++#define _CC_SHELL_H
++
++#include <gtk/gtk.h>
++
++G_BEGIN_DECLS
++
++#define CC_TYPE_SHELL cc_shell_get_type()
++
++#define CC_SHELL(obj) \
++  (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
++  CC_TYPE_SHELL, CcShell))
++
++#define CC_SHELL_CLASS(klass) \
++  (G_TYPE_CHECK_CLASS_CAST ((klass), \
++  CC_TYPE_SHELL, CcShellClass))
++
++#define CC_IS_SHELL(obj) \
++  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), \
++  CC_TYPE_SHELL))
++
++#define CC_IS_SHELL_CLASS(klass) \
++  (G_TYPE_CHECK_CLASS_TYPE ((klass), \
++  CC_TYPE_SHELL))
++
++#define CC_SHELL_GET_CLASS(obj) \
++  (G_TYPE_INSTANCE_GET_CLASS ((obj), \
++  CC_TYPE_SHELL, CcShellClass))
++
++
++#define CC_SHELL_PANEL_EXTENSION_POINT "control-center-1"
++
++typedef struct _CcShell CcShell;
++typedef struct _CcShellClass CcShellClass;
++typedef struct _CcShellPrivate CcShellPrivate;
++
++/* cc-panel.h requires CcShell, so make sure they are defined first */
++#include <cut-n-paste/cc-panel.h>
++
++/**
++ * CcShell:
++ *
++ * The contents of this struct are private should not be accessed directly.
++ */
++struct _CcShell
++{
++  /*< private >*/
++  GObject parent;
++
++  CcShellPrivate *priv;
++};
++
++/**
++ * CcShellClass:
++ * @set_active_panel_from_id: virtual function to set the active panel from an
++ *                            id string
++ *
++ */
++struct _CcShellClass
++{
++  /*< private >*/
++  GObjectClass parent_class;
++
++  /*< public >*/
++  /* vfuncs */
++  gboolean    (*set_active_panel_from_id) (CcShell      *shell,
++                                           const gchar  *id,
++                                           GError      **error);
++  GtkWidget * (*get_toplevel)             (CcShell      *shell);
++};
++
++GType           cc_shell_get_type                 (void) G_GNUC_CONST;
++
++CcPanel*        cc_shell_get_active_panel         (CcShell      *shell);
++void            cc_shell_set_active_panel         (CcShell      *shell,
++                                                   CcPanel      *panel);
++gboolean        cc_shell_set_active_panel_from_id (CcShell      *shell,
++                                                   const gchar  *id,
++                                                   GError      **error);
++GtkWidget *     cc_shell_get_toplevel             (CcShell      *shell);
++
++G_END_DECLS
++
++#endif /* _CC_SHELL_H */
+--
+cgit v0.9

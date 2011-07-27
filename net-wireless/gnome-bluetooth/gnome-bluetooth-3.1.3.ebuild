@@ -2,12 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/net-wireless/gnome-bluetooth/gnome-bluetooth-2.32.0.ebuild,v 1.4 2010/12/19 11:51:36 pacho Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="yes"
 # libgnome-bluetooth-applet.la is needed by gnome-shell during compilation
 GNOME2_LA_PUNT="no"
 
-inherit eutils gnome2 multilib
+inherit autotools eutils gnome2 multilib
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -28,12 +28,12 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.7:2
 	>=x11-libs/gtk+-2.91.3:3[introspection?]
 	>=x11-libs/libnotify-0.7.0
 	>=dev-libs/dbus-glib-0.74
-	>=gnome-base/gnome-control-center-2.91
 
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 	sendto? ( >=gnome-extra/nautilus-sendto-2.91 )
 "
 RDEPEND="${COMMON_DEPEND}
+	>=gnome-base/gnome-control-center-2.91
 	>=net-wireless/bluez-4.34
 	app-mobilephone/obexd
 	sys-fs/udev"
@@ -71,6 +71,11 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# Fix gnome-control-center-3.1.4 compatibility, will be in next release
+	mkdir properties/cut-n-paste || die
+	epatch "${FILESDIR}/${P}-cc-panel.patch"
+	eautoreconf
+
 	# Add missing files for intltool checks
 	echo "sendto/bluetooth-sendto.desktop.in" >> po/POTFILES.in
 	echo "wizard/bluetooth-wizard.desktop.in" >> po/POTFILES.in
