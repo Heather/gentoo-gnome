@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -78,12 +78,9 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# Fix argb window shadows: https://bugzilla.gnome.org/show_bug.cgi?id=635268
-	# The first two patches are from upstream git master branch:
-	epatch "${FILESDIR}/${PN}-3.0.2-frame-region-cairo-region.patch"
-	epatch "${FILESDIR}/${PN}-3.0.2-argb-windows-shadow.patch"
-	# The third is from comment 33 in the gnome bug and unbreaks XShape handling
-	epatch "${FILESDIR}/${PN}-3.0.2-fix-xshape.patch"
+	# Crash fixes from upstream git, will be in next release
+	epatch "${FILESDIR}/${P}-crash-on-exit.patch"
+	epatch "${FILESDIR}/${P}-meta_later-reentrant.patch"
 
 	gnome2_src_prepare
 }
