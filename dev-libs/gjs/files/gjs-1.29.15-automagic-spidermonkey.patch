@@ -1,0 +1,126 @@
+From 57e3cd2303f8d36ae232ec3df986d986f1457361 Mon Sep 17 00:00:00 2001
+From: Alexandre Rostovtsev <tetromino@gmail.com>
+Date: Thu, 28 Jul 2011 03:40:49 -0400
+Subject: [PATCH] Make choice of javascript package non-automagic
+
+Add a --with-js-package configure flag to allow selecting which
+javascript package to build against, e.g. to force building against
+xulrunner on a system that happens to have spidermonkey installed.
+
+By default, the behavior is the same as before (first check for
+mozjs185, then for mozilla-js).
+
+Addresses bug
+---
+ configure.ac |   84 +++++++++++++++++++++++++++++++++------------------------
+ 1 files changed, 49 insertions(+), 35 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 3b74bc6..38213e3 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -91,52 +91,66 @@ m4_define(gobject_required_version, 2.18.0)
+ AC_CHECK_HEADERS([malloc.h])
+ AC_CHECK_FUNCS(mallinfo)
+ 
+-# First, try separate mozjs185 release
+-AC_MSG_CHECKING([for standalone mozjs185])
+-PKG_CHECK_EXISTS([mozjs185], JS_PACKAGE=mozjs185,)
+-if test x$JS_PACKAGE != x; then
+-    FIREFOX_JS_LIBDIR=
+-    MOZJS_IS_STANDALONE=yes
+-    AC_MSG_RESULT([yes])
+-    PKG_CHECK_MODULES(JS, $JS_PACKAGE)
+-else
+-    AC_MSG_RESULT([no])
+-fi
++AC_ARG_WITH([js-package],
++    AS_HELP_STRING([--with-js-package[=@<:@auto/mozjs185/mozilla-js@:>@]],
++                   [Choose JavaScript package: 'mozjs185' (i.e. spidermonkey), 'mozilla-js' (i.e. xulrunner or firefox), or 'auto' (detect automatically)]),
++    [with_js_package=$withval],
++    [with_js_package="auto"])
+ 
+-# If we didn't find mozjs185 (the standalone spidermonkey), look for mozilla-js
+-if test x$JS_PACKAGE = x; then
+-    AC_MSG_CHECKING([for mozilla-js 1.9.2])
+-    PKG_CHECK_EXISTS([mozilla-js >= 1.9.2], JS_PACKAGE=mozilla-js,)
++# First, try separate mozjs185 release
++if test $with_js_package = mozjs185 -o $with_js_package = auto; then
++    AC_MSG_CHECKING([for standalone mozjs185])
++    PKG_CHECK_EXISTS([mozjs185], JS_PACKAGE=mozjs185,)
+     if test x$JS_PACKAGE != x; then
++        FIREFOX_JS_LIBDIR=
++        MOZJS_IS_STANDALONE=yes
+         AC_MSG_RESULT([yes])
++        PKG_CHECK_MODULES(JS, $JS_PACKAGE)
+     else
+-        AC_MSG_ERROR([Could not find mozilla-js 1.9.2])
++        AC_MSG_RESULT([no])
+     fi
++fi
+ 
+-    PKG_CHECK_MODULES(JS, $JS_PACKAGE)
+-
+-    ## some flavors of Firefox .pc only set sdkdir, not libdir
+-    FIREFOX_JS_SDKDIR=`$PKG_CONFIG --variable=sdkdir $JS_PACKAGE`
+-    FIREFOX_JS_LIBDIR=`$PKG_CONFIG --variable=libdir $JS_PACKAGE`
+-
+-    ## Ubuntu does not set libdir in mozilla-js.pc
+-    if test x"$FIREFOX_JS_LIBDIR" = x; then
+-        ## Ubuntu returns xulrunner-devel as the sdkdir, but for the
+-        ## libdir we want the runtime location on the target system,
+-        ## so can't use -devel.
+-        ## The library is in the non-devel directory also.
+-        ## Don't ask me why it's in two places.
+-        FIREFOX_JS_LIBDIR=`echo "$FIREFOX_JS_SDKDIR" | sed -e 's/-devel//g'`
+-        if ! test -d "$FIREFOX_JS_LIBDIR"; then
+-            FIREFOX_JS_LIBDIR=
++if test $with_js_package = mozilla-js -o $with_js_package = auto; then
++    # If we didn't find mozjs185 (the standalone spidermonkey), look for mozilla-js
++    if test x$JS_PACKAGE = x; then
++        AC_MSG_CHECKING([for mozilla-js 1.9.2])
++        PKG_CHECK_EXISTS([mozilla-js >= 1.9.2], JS_PACKAGE=mozilla-js,)
++        if test x$JS_PACKAGE != x; then
++            AC_MSG_RESULT([yes])
++        else
++            AC_MSG_ERROR([Could not find mozilla-js 1.9.2])
++        fi
++
++        PKG_CHECK_MODULES(JS, $JS_PACKAGE)
++
++        ## some flavors of Firefox .pc only set sdkdir, not libdir
++        FIREFOX_JS_SDKDIR=`$PKG_CONFIG --variable=sdkdir $JS_PACKAGE`
++        FIREFOX_JS_LIBDIR=`$PKG_CONFIG --variable=libdir $JS_PACKAGE`
++
++        ## Ubuntu does not set libdir in mozilla-js.pc
++        if test x"$FIREFOX_JS_LIBDIR" = x; then
++            ## Ubuntu returns xulrunner-devel as the sdkdir, but for the
++            ## libdir we want the runtime location on the target system,
++            ## so can't use -devel.
++            ## The library is in the non-devel directory also.
++            ## Don't ask me why it's in two places.
++            FIREFOX_JS_LIBDIR=`echo "$FIREFOX_JS_SDKDIR" | sed -e 's/-devel//g'`
++            if ! test -d "$FIREFOX_JS_LIBDIR"; then
++                FIREFOX_JS_LIBDIR=
++            fi
+         fi
+-    fi
+ 
+-    if test x"$FIREFOX_JS_LIBDIR" = x; then
+-        AC_MSG_ERROR([Could not figure out where the Firefox JavaScript library lives])
++        if test x"$FIREFOX_JS_LIBDIR" = x; then
++            AC_MSG_ERROR([Could not figure out where the Firefox JavaScript library lives])
++        fi
+     fi
+ fi
+ 
++if test x$JS_PACKAGE = x; then
++    AC_MSG_ERROR([No appropriate JavaScript package found])
++fi
++
+ echo "Using JS_PACKAGE: $JS_PACKAGE"
+ echo "Using JS_CFLAGS: $JS_CFLAGS"
+ echo "Using JS_LIBS: $JS_LIBS"
+-- 
+1.7.6
+
