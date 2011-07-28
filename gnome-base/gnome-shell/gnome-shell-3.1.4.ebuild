@@ -31,18 +31,19 @@ fi
 # latest g-c-c is needed due to https://bugs.gentoo.org/show_bug.cgi?id=360057
 # libXfixes-5.0 needed for pointer barriers
 COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
-	>=dev-libs/gjs-0.7.11
+	>=dev-libs/gjs-1.29.15
 	>=dev-libs/gobject-introspection-0.10.1
 	x11-libs/gdk-pixbuf:2[introspection]
 	>=x11-libs/gtk+-3.0.0:3[introspection]
-	>=media-libs/clutter-1.5.15:1.0[introspection]
+	>=media-libs/clutter-1.7.5:1.0[introspection]
 	>=gnome-base/gnome-desktop-2.91.2:3
 	>=gnome-base/gsettings-desktop-schemas-2.91.91
 	>=gnome-extra/evolution-data-server-2.91.6
 	>=media-libs/gstreamer-0.10.16:0.10
 	>=media-libs/gst-plugins-base-0.10.16:0.10
 	>=net-im/telepathy-logger-0.2.4[introspection]
-	>=net-libs/telepathy-glib-0.15.0[introspection]
+	net-libs/libsoup:2.4[introspection]
+	>=net-libs/telepathy-glib-0.15.3[introspection]
 	>=net-wireless/gnome-bluetooth-3.1.0[introspection]
 	>=sys-auth/polkit-0.100[introspection]
 	>=x11-wm/mutter-3.0.0[introspection]
@@ -92,7 +93,7 @@ DEPEND="${COMMON_DEPEND}
 	>=dev-util/pkgconfig-0.22
 	>=dev-util/intltool-0.40
 	gnome-base/gnome-common
-	!!<dev-lang/spidermonkey-2"
+	!!<dev-lang/spidermonkey-1.8.5"
 # libmozjs.so is picked up from /usr/lib while compiling, so block at build-time
 # https://bugs.gentoo.org/show_bug.cgi?id=360413
 

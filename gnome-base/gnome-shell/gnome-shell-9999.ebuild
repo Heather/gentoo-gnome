@@ -31,7 +31,7 @@ fi
 # latest g-c-c is needed due to https://bugs.gentoo.org/show_bug.cgi?id=360057
 # libXfixes-5.0 needed for pointer barriers
 COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
-	>=dev-libs/gjs-0.7.11
+	>=dev-libs/gjs-1.29.15
 	>=dev-libs/gobject-introspection-0.10.1
 	x11-libs/gdk-pixbuf:2[introspection]
 	>=x11-libs/gtk+-3.0.0:3[introspection]
@@ -93,7 +93,7 @@ DEPEND="${COMMON_DEPEND}
 	>=dev-util/pkgconfig-0.22
 	>=dev-util/intltool-0.40
 	gnome-base/gnome-common
-	!!<dev-lang/spidermonkey-2"
+	!!<dev-lang/spidermonkey-1.8.5"
 # libmozjs.so is picked up from /usr/lib while compiling, so block at build-time
 # https://bugs.gentoo.org/show_bug.cgi?id=360413
 
