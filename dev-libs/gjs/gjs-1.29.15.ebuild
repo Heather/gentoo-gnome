@@ -61,7 +61,7 @@ pkg_setup() {
 src_prepare() {
 	# Make spidermonkey detection non-automagic
 	# https://bugzilla.gnome.org/show_bug.cgi?id=655479
-	epatch "${FILESDIR}/${PN}-1.29.15-automagic-spidermonkey.patch"
+	epatch "${FILESDIR}/${P}-automagic-spidermonkey.patch"
 	[[ ${PV} != 9999 ]] && eautoreconf
 
 	gnome2_src_prepare
