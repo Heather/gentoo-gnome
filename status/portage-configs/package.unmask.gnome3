@@ -1,6 +1,9 @@
 # GNOME 3
+=dev-libs/gjs-1.29*
+=dev-libs/gobject-introspection-1.29*
 dev-libs/seed
 gnome-base/gdm
+=media-libs/clutter-1.7*
 net-misc/networkmanager
 =x11-misc/notification-daemon-0.7*
 =x11-wm/metacity-2.34*
