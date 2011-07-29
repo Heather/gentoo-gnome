@@ -13,12 +13,12 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-RDEPEND=">=dev-libs/dbus-glib-0.74
-	>=dev-libs/glib-2.14:2
+COMMON_DEPEND=">=dev-libs/glib-2.29.8:2
 	net-print/cups
-	>=sys-apps/dbus-1.1.2
-	>=sys-auth/polkit-0.92"
-DEPEND="${RDEPEND}
+	>=sys-auth/polkit-0.97"
+RDEPEND="${COMMON_DEPEND}
+	sys-apps/dbus"
+DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.40.6
 	dev-util/pkgconfig
 	sys-devel/gettext"
