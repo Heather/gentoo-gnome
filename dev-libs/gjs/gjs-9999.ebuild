@@ -18,7 +18,7 @@ HOMEPAGE="http://live.gnome.org/Gjs"
 
 LICENSE="MIT MPL-1.1 LGPL-2 GPL-2"
 SLOT="0"
-IUSE="examples spidermonkey test"
+IUSE="examples test xulrunner"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -33,10 +33,10 @@ RDEPEND=">=dev-libs/glib-2.18:2
 	dev-libs/dbus-glib
 	sys-libs/readline
 	x11-libs/cairo
-	spidermonkey? ( =dev-lang/spidermonkey-1.8.5* )
-	!spidermonkey? (
+	xulrunner? (
 		>=net-libs/xulrunner-2.0:1.9
-		!=dev-lang/spidermonkey-1.8.2* )"
+		!=dev-lang/spidermonkey-1.8.2* )
+	!xulrunner? ( =dev-lang/spidermonkey-1.8.5* )"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.9"
@@ -52,10 +52,10 @@ pkg_setup() {
 		--disable-systemtap
 		--disable-dtrace
 		--disable-coverage"
-	if use spidermonkey; then
-		G2CONF="${G2CONF} --with-js-package=mozjs185"
-	else
+	if use xulrunner; then
 		G2CONF="${G2CONF} --with-js-package=mozilla-js"
+	else
+		mG2CONF="${G2CONF} --with-js-package=mozjs185"
 	fi
 }
 
