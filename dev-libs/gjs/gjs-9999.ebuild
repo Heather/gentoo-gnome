@@ -34,12 +34,13 @@ RDEPEND=">=dev-libs/glib-2.18:2
 	sys-libs/readline
 	x11-libs/cairo
 	spidermonkey? ( =dev-lang/spidermonkey-1.8.5* )
-	!spidermonkey? ( >=net-libs/xulrunner-2.0:1.9 )"
+	!spidermonkey? (
+		>=net-libs/xulrunner-2.0:1.9
+		!=dev-lang/spidermonkey-1.8.2* )"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
-	>=dev-util/pkgconfig-0.9
-	!<dev-lang/spidermonkey-1.8.5"
-# HACK HACK: gjs-tests picks up /usr/lib/libmozjs.so with old spidermonkey installed
+	>=dev-util/pkgconfig-0.9"
+# HACK HACK: gjs-tests picks up /usr/lib/libmozjs.so with spidermonkey-1.8.2* installed
 
 pkg_setup() {
 	# AUTHORS, ChangeLog are empty
