@@ -18,7 +18,7 @@ HOMEPAGE="http://www.rhythmbox.org/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="cdr daap dbus doc gnome-keyring html ipod +lastfm libnotify lirc musicbrainz mtp nsplugin python test udev upnp vala webkit"
+IUSE="cdr clutter daap dbus doc gnome-keyring html ipod +lastfm libnotify lirc musicbrainz mtp nsplugin python test udev upnp vala webkit"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -26,7 +26,7 @@ else
 fi
 
 # FIXME: double check what to do with fm-radio plugin
-# FIXME: Zeitgesti python plugin
+# FIXME: Zeitgeist python plugin
 # NOTE:: Rhythmbox Uses dbus-glib, gdbus, and dbus-python right now
 COMMON_DEPEND=">=dev-libs/glib-2.26.0:2
 	dev-libs/libxml2:2
@@ -39,9 +39,13 @@ COMMON_DEPEND=">=dev-libs/glib-2.26.0:2
 	>=media-libs/libgnome-media-profiles-2.91.0:3
 	>=net-libs/libsoup-2.26:2.4
 	>=net-libs/libsoup-gnome-2.26:2.4
-	>=media-libs/gst-plugins-base-0.10.24:0.10
-	media-libs/gstreamer:0.10[introspection]
+	>=media-libs/gst-plugins-base-0.10.32:0.10
+	>=media-libs/gstreamer-0.10.32:0.10[introspection]
 
+	clutter? (
+		media-libs/clutter
+		media-libs/clutter-gst
+		media-libs/clutter-gtk )
 	cdr? ( >=app-cdr/brasero-2.91.90 )
 	daap? (
 		>=net-libs/libdmapsharing-2.9.11:3.0
@@ -155,6 +159,7 @@ pkg_setup() {
 		--disable-schemas-compile
 		--disable-static
 		--without-hal
+		$(use_enable clutter visualizer)
 		$(use_enable daap)
 		$(use_enable lastfm)
 		$(use_enable libnotify)
