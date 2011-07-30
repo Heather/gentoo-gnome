@@ -21,7 +21,6 @@ KEYWORDS="~amd64 ~x86"
 # FIXME: https://bugzilla.mozilla.org/show_bug.cgi?id=628723 instead of libxul
 RDEPEND=">=dev-libs/glib-2.18:2
 	>=dev-libs/gobject-introspection-0.10.1
-	>=net-libs/xulrunner-2.0:1.9
 
 	dev-libs/dbus-glib
 	sys-libs/readline
