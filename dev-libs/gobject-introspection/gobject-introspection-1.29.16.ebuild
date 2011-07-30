@@ -51,8 +51,7 @@ src_prepare() {
 	# Don't pre-compile .py
 	ln -sf $(type -P true) py-compile
 
-	# Fix Darwin bundles
-	elibtoolize
+	gnome2_src_prepare
 }
 
 src_install() {
