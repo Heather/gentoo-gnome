@@ -63,6 +63,10 @@ src_prepare() {
 	# Make spidermonkey detection non-automagic
 	# https://bugzilla.gnome.org/show_bug.cgi?id=655479
 	epatch "${FILESDIR}/${P}-automagic-spidermonkey.patch"
+
+	# Install gi/ headers again, help unbreak libpeas; will be in next release
+	epatch "${FILESDIR}/${P}-install-gi-headers.patch"
+
 	[[ ${PV} != 9999 ]] && eautoreconf
 
 	gnome2_src_prepare
