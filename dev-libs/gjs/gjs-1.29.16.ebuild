@@ -8,7 +8,7 @@ GNOME_TARBALL_SUFFIX="xz"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2"
 
-inherit autotools eutils gnome2 python virtualx
+inherit gnome2 python virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -60,15 +60,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# Make spidermonkey detection non-automagic
-	# https://bugzilla.gnome.org/show_bug.cgi?id=655479
-	epatch "${FILESDIR}/${P}-automagic-spidermonkey.patch"
-
-	# Install gi/ headers again, help unbreak libpeas; will be in next release
-	epatch "${FILESDIR}/${P}-install-gi-headers.patch"
-
-	[[ ${PV} != 9999 ]] && eautoreconf
-
 	gnome2_src_prepare
 	python_convert_shebangs 2 "${S}"/scripts/make-tests
 }
