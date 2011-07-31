@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE guide SYSTEM "/dtd/guide.dtd">
+<!-- $Header$ -->
+
+<guide link="/proj/en/desktop/gnome/howtos/gnome-3.0-upgrade.xml" lang="en">
+<title>Gnome 3.0 Upgrade Guide</title>
+
+<author title="Alexandre Rostovtsev">
+  <mail link="tetromino@gmail.com">Alexandre Rostovtsev</mail>
+</author>
+
+<abstract>
+This is a guide for upgrading from GNOME 2.32.x to GNOME 3.0.x
+</abstract>
+
+<!-- The content of this document is licensed under the CC-BY-SA license -->
+<!-- See http://creativecommons.org/licenses/by-sa/2.5 -->
+<license/>
+
+<version>0.1</version>
+<date>2011-07-30</date>
+
+<chapter>
+<title>Changes</title>
+
+<section>
+<title>General changes</title>
+<body>
+
+<p>
+Please see the <uri link="http://library.gnome.org/misc/release-notes/3.0/">GNOME
+3.0 Release Notes</uri> for what is new in this major release of GNOME.
+</p>
+
+<p>
+Briefly: GNOME 3.0 includes two desktop modes&mdash;standard and fallback.
+Fallback mode uses <c>gnome-base/gnome-panel</c> and <c>x11-wm/metacity</c>, and
+is similar in appearance and behavior to GNOME 2. Standard mode uses
+<c>gnome-base/gnome-shell</c> and <c>x11-wm/mutter</c>, and looks and behaves
+<e>completely</e> differently from previous GNOME releases. By default, the
+choice of desktop mode is determined by the system's graphics hardware and
+drivers (the standard mode requires modern 3D graphics capabilities).
+</p>
+
+<p>For a comprehensive introduction to using standard mode's GNOME Shell, please
+see <uri link="https://live.gnome.org/GnomeShell/CheatSheet">the GNOME Shell
+cheat sheet</uri>. GNOME Shell at first may feel alien and limited to an
+experienced GNOME 2 user. We strongly encourage users to persist and force
+themselves to use GNOME Shell for a few days; users who take the time to get
+used to GNOME Shell's behavior grow to love it and don't want to go back to an
+old-fashioned GNOME 2-like desktop environment.
+</p>
+</body>
+</section>
+
+<section>
+<title>Languages and encodings</title>
+<body>
+
+<p>
+GNOME 3.0 obtains user language settings from <c>sys-apps/accountsservice</c>.
+The language can be set in GNOME from the <e>My Account</e> entry in the upper
+right corner menu. Alternatively, you can directly edit accountsservice user
+files. For example, to have user <c>jrandom</c> use British English with UTF-8
+Unicode text encoding, you can (as root) edit
+<c>/var/lib/AccountsService/users/jrandom</c> so it reads the following:
+</p>
+<pre>
+[User]
+Language=en_GB.utf8
+</pre>
+
+</body>
+</section>
+
+<section>
+<title>Fonts</title>
+<body>
+
+<p>
+GNOME 3.0 uses <c>media-fonts/cantarell</c> as its default font. Unfortunately,
+Cantarell only includes a subset of the extended Latin alphabet. Users of
+languages whose writing systems are not covered by Cantarell will probably want
+to switch to another font, such as <c>media-fonts/dejavu</c>:
+</p>
+
+<pre caption="Set DejaVu (size 10) as the default font">
+$ <i>export GSETTINGS_BACKEND=dconf</i>
+$ <i>gsettings set org.gnome.desktop.interface font-name 'DejaVu Sans 10'</i>
+$ <i>gsettings set org.gnome.desktop.interface document-font-name 'DejaVu Sans 10'</i>
+$ <i>gconftool-2 -s -t string /apps/metacity/general/titlebar_font 'DejaVu Sans Bold 10'</i>
+</pre>
+
+</body>
+</section>
+
+<section>
+<title>Applets <e>(FIXME add a gnome-applets snapshot)</e></title>
+<body>
+<p>
+GNOME 2 applets cannot be used in GNOME 3.0. The fallback mode allows applets,
+although most have not yet been ported to the new, gtk3-based APIs. In the
+standard mode, there are no applets at all. Some traditional applet
+functionality can be replicated using third-party GNOME Shell extensions.
+</p>
+</body>
+</section>
+
+<section>
+<title>Shut down and reboot <e>(FIXME: fix bug 377107)</e> </title>
+<body>
+<p>
+GNOME Shell developers made a <uri
+link="https://live.gnome.org/GnomeShell/Design/Whiteboards/SystemStopRestart">controversial
+decision</uri> to not show any sort of shut down or power off menu by default.
+The <em>Power Off</em> menu item becomes visible after clicking on the upper
+right corner menu and holding down Alt.
+</p>
+
+<p>
+If you need an easily discoverable GUI for shutting down the machine (for
+example, if deploying GNOME 3.0 in a corporate environment where users are
+required to turn off their computers at the end of the day), you can install the
+alternative-status-menu extension. To do so, add
+<c>GNOME_SHELL_EXTENSIONS="alternative-status-menu"</c> to your
+<c>/etc/make.conf</c>, and emerge <c>gnome-extra/gnome-shell-extensions</c>.
+</p>
+
+</body>
+</section>
+
+<section>
+<title>Icons on the desktop</title>
+<body>
+
+<p>
+In GNOME 3.0, Nautilus by default no longer manages the desktop, and the
+<c>~/Desktop</c> folder is simply treated as a normal folder with files.
+</p>
+
+</body>
+</section>
+
+<section>
+<title>General configurability and extensions</title>
+<body>
+
+<p>
+GNOME 3.0 is designed to appear significantly less configurable than GNOME 2.
+For example, by default there is no easily discoverable GUI for changing the
+Gtk+ theme. Many configuration settings are hidden, but can still be changed
+from dconf, gconf, or <c>gnome-extra/gnome-tweak-tool</c>. Discussion of such
+hidden settings is outside the scope of this document.
+</p>
+
+<p>
+GNOME Shell's behavior can be significantly altered using <uri
+link="https://live.gnome.org/GnomeShell/Extensions">extensions</uri>. Gentoo
+packages the extensions from the official GNOME repository as
+<c>gnome-extra/gnome-shell-extensions</c>; there are also numerous third-party
+developers publishing extensions on various websites.
+</p>
+
+<impo>
+By default, GNOME Shell loads all installed extensions. However, extension code
+quality is highly variable, and some extensions can render GNOME completely
+unusable. Gentoo cannot offer support for problems caused by third-party
+extensions.
+</impo>
+
+</body>
+</section>
+
+</chapter>
+
+<chapter>
+<title>Troubleshooting</title>
+
+<section>
+<title>GDM freezes after the password has been entered</title>
+
+<body>
+<p>
+As reported in <uri link="https://bugs.gentoo.org/show_bug.cgi?id=375615">bug
+#375615</uri>, for some people certain versions of
+<c>x11-drives/nvidia-drivers</c> cause some Gtk+ applications to crash; one
+effect of this is to break login using GDM. Until the problem is fixed, try
+using a different version of <c>nvidia-drivers</c>; 275.09.07 is believed to
+work well.
+</p>
+
+</body>
+</section>
+
+<section>
+<title>GNOME starts in fallback mode</title>
+<body>
+
+<p>
+GNOME will start in fallback mode if it detects that the graphics hardware and
+drivers are insufficiently capable. To see a more detailed explanation of why
+GNOME does not start in standard mode, run
+<c>/usr/libexec/gnome-session-check-accelerated-helper</c>:
+</p>
+
+<pre caption="Sample gnome-session-check-accelerated-helper output">
+$ <i>/usr/libexec/gnome-session-check-accelerated-helper</i>
+gnome-session-is-accelerated: No hardware 3D support.
+</pre>
+
+</body>
+</section>
+
+<section>
+<title>GNOME starts in standard mode</title>
+<body>
+
+<p>
+To force GNOME to start in fallback mode (e.g. due to poor performance or
+personal taste), open System Settings (<c>gnome-control-center</c> from the
+terminal), go to <e>System Info &rarr; Graphics</e>, and turn on <e>Forced
+Fallback Mode</e>. Alternatively, from a terminal:
+</p>
+
+<pre caption="Force GNOME to start in fallback mode">
+$ <i>export GSETTINGS_BACKEND=dconf</i>
+$ <i>gsettings set org.gnome.desktop.session session-name gnome-fallback</i>
+</pre>
+
+</body>
+</section>
+
+</chapter>
+</guide>
