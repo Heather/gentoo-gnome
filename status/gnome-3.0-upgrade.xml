@@ -3,9 +3,9 @@
 <!-- $Header$ -->
 
 <guide link="/proj/en/desktop/gnome/howtos/gnome-3.0-upgrade.xml" lang="en">
-<title>Gnome 3.0 Upgrade Guide</title>
+<title>GNOME 3.0 Upgrade Guide</title>
 
-<author title="Alexandre Rostovtsev">
+<author title="Author">
   <mail link="tetromino@gmail.com">Alexandre Rostovtsev</mail>
 </author>
 
@@ -39,15 +39,17 @@ is similar in appearance and behavior to GNOME 2. Standard mode uses
 <c>gnome-base/gnome-shell</c> and <c>x11-wm/mutter</c>, and looks and behaves
 <e>completely</e> differently from previous GNOME releases. By default, the
 choice of desktop mode is determined by the system's graphics hardware and
-drivers (the standard mode requires modern 3D graphics capabilities).
+drivers (standard mode requires modern 3D graphics capabilities).
 </p>
 
-<p>For a comprehensive introduction to using standard mode's GNOME Shell, please
-see <uri link="https://live.gnome.org/GnomeShell/CheatSheet">the GNOME Shell
+<p>There is a <uri link="https://live.gnome.org/GnomeShell/Tour">quick
+tour</uri> of standard mode's GNOME Shell available on the GNOME website.
+For an in-depth guide to using GNOME Shell, see
+<uri link="https://live.gnome.org/GnomeShell/CheatSheet">the GNOME Shell
 cheat sheet</uri>. GNOME Shell at first may feel alien and limited to an
-experienced GNOME 2 user. We strongly encourage users to persist and force
-themselves to use GNOME Shell for a few days; users who take the time to get
-used to GNOME Shell's behavior grow to love it and don't want to go back to an
+experienced GNOME 2 user. We strongly encourage users to persist and make
+themselves use it for a few days; those who take the time to get used to GNOME
+Shell's behavior usually grow to love it and don't want to go back to an
 old-fashioned GNOME 2-like desktop environment.
 </p>
 </body>
@@ -61,9 +63,9 @@ old-fashioned GNOME 2-like desktop environment.
 GNOME 3.0 obtains user language settings from <c>sys-apps/accountsservice</c>.
 The language can be set in GNOME from the <e>My Account</e> entry in the upper
 right corner menu. Alternatively, you can directly edit accountsservice user
-files. For example, to have user <c>jrandom</c> use British English with UTF-8
-Unicode text encoding, you can (as root) edit
-<c>/var/lib/AccountsService/users/jrandom</c> so it reads the following:
+files. For example, to have user <c>jrandom</c> use British English, you can 
+(as root) edit <path>/var/lib/AccountsService/users/jrandom</path> so it reads
+the following:
 </p>
 <pre>
 [User]
@@ -85,7 +87,6 @@ to switch to another font, such as <c>media-fonts/dejavu</c>:
 </p>
 
 <pre caption="Set DejaVu (size 10) as the default font">
-$ <i>export GSETTINGS_BACKEND=dconf</i>
 $ <i>gsettings set org.gnome.desktop.interface font-name 'DejaVu Sans 10'</i>
 $ <i>gsettings set org.gnome.desktop.interface document-font-name 'DejaVu Sans 10'</i>
 $ <i>gconftool-2 -s -t string /apps/metacity/general/titlebar_font 'DejaVu Sans Bold 10'</i>
@@ -98,8 +99,8 @@ $ <i>gconftool-2 -s -t string /apps/metacity/general/titlebar_font 'DejaVu Sans 
 <title>Applets <e>(FIXME add a gnome-applets snapshot)</e></title>
 <body>
 <p>
-GNOME 2 applets cannot be used in GNOME 3.0. The fallback mode allows applets,
-although most have not yet been ported to the new, gtk3-based APIs. In the
+GNOME 2 applets cannot be used in GNOME 3.0. Fallback mode allows applets,
+although most have not yet been ported to the new, gtk3-based APIs. In
 standard mode, there are no applets at all. Some traditional applet
 functionality can be replicated using third-party GNOME Shell extensions.
 </p>
@@ -107,7 +108,7 @@ functionality can be replicated using third-party GNOME Shell extensions.
 </section>
 
 <section>
-<title>Shut down and reboot <e>(FIXME: fix bug 377107)</e> </title>
+<title>Shut down and reboot <e>(FIXME: fix bug 377107 to allow GNOME_SHELL_EXTENSIONS)</e> </title>
 <body>
 <p>
 GNOME Shell developers made a <uri
@@ -135,7 +136,18 @@ alternative-status-menu extension. To do so, add
 
 <p>
 In GNOME 3.0, Nautilus by default no longer manages the desktop, and the
-<c>~/Desktop</c> folder is simply treated as a normal folder with files.
+<path>~/Desktop</path> folder is simply treated as a normal folder with files.
+</p>
+
+</body>
+</section>
+
+<section>
+<title>Compiz</title>
+<body>
+
+<p>
+GNOME 3.0 standard mode (i.e. GNOME Shell) is incompatible with Compiz.
 </p>
 
 </body>
@@ -149,8 +161,8 @@ In GNOME 3.0, Nautilus by default no longer manages the desktop, and the
 GNOME 3.0 is designed to appear significantly less configurable than GNOME 2.
 For example, by default there is no easily discoverable GUI for changing the
 Gtk+ theme. Many configuration settings are hidden, but can still be changed
-from dconf, gconf, or <c>gnome-extra/gnome-tweak-tool</c>. Discussion of such
-hidden settings is outside the scope of this document.
+from gsettings (dconf), gconf, or using the <c>gnome-extra/gnome-tweak-tool</c>
+GUI. Discussion of such hidden settings is outside the scope of this guide.
 </p>
 
 <p>
@@ -167,6 +179,14 @@ quality is highly variable, and some extensions can render GNOME completely
 unusable. Gentoo cannot offer support for problems caused by third-party
 extensions.
 </impo>
+
+<p>
+Extensions can be disabled on a per-user basis (e.g. if a user does not want
+to load a particular extension installed systemwide) using gsettings:
+</p>
+<pre caption="Disabling dock and xrandr-indicator extensions">
+$ <i>gsettings set org.gnome.shell disabled-extensions '["dock", "xrandr-indicator"]'</i>
+</pre>
 
 </body>
 </section>
@@ -200,7 +220,7 @@ work well.
 GNOME will start in fallback mode if it detects that the graphics hardware and
 drivers are insufficiently capable. To see a more detailed explanation of why
 GNOME does not start in standard mode, run
-<c>/usr/libexec/gnome-session-check-accelerated-helper</c>:
+<path>/usr/libexec/gnome-session-check-accelerated-helper</path>:
 </p>
 
 <pre caption="Sample gnome-session-check-accelerated-helper output">
@@ -217,15 +237,31 @@ gnome-session-is-accelerated: No hardware 3D support.
 
 <p>
 To force GNOME to start in fallback mode (e.g. due to poor performance or
-personal taste), open System Settings (<c>gnome-control-center</c> from the
-terminal), go to <e>System Info &rarr; Graphics</e>, and turn on <e>Forced
-Fallback Mode</e>. Alternatively, from a terminal:
+personal taste), open System Settings (or <path>gnome-control-center</path>
+from the terminal), go to <e>System Info &rarr; Graphics</e>, and turn on
+<e>Forced Fallback Mode</e>. Alternatively, from a terminal:
 </p>
 
 <pre caption="Force GNOME to start in fallback mode">
-$ <i>export GSETTINGS_BACKEND=dconf</i>
 $ <i>gsettings set org.gnome.desktop.session session-name gnome-fallback</i>
 </pre>
+
+</body>
+</section>
+
+<section>
+<title>Epiphany and Adobe Flash</title>
+<body>
+
+<p>
+Out of the box, Epiphany 3 cannot load <c>www-plugins/adobe-flash</c> because
+the browser links to Gtk+-3 while the plugin links to Gtk+-2. On amd64, there
+is a workaround: if you emerge <c>adobe-flash</c> with <c>USE=-64bit</c>, the
+plugin will be called through <c>www-plugins/nspluginwrapper</c>, avoiding
+incompatibility between Gtk+ versions. On x86, unfortunately there is no good
+workaround at this time; we suggest using a gtk2-based browser (such as
+<c>www-clients/firefox</c> or <c>www-clients/chromium</c>).
+</p>
 
 </body>
 </section>
