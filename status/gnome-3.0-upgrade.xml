@@ -104,6 +104,12 @@ although most have not yet been ported to the new, gtk3-based APIs. In
 standard mode, there are no applets at all. Some traditional applet
 functionality can be replicated using third-party GNOME Shell extensions.
 </p>
+<p>
+In order to manage gnome-panel settings (either add/remove or rearrange
+applet positions) one has to hold down the <c>Alt</c> key when clicking
+on the panel. This opens relevant menu for changing either panel or applet
+settings.
+</p>
 </body>
 </section>
 
@@ -115,7 +121,7 @@ GNOME Shell developers made a <uri
 link="https://live.gnome.org/GnomeShell/Design/Whiteboards/SystemStopRestart">controversial
 decision</uri> to not show any sort of shut down or power off menu by default.
 The <em>Power Off</em> menu item becomes visible after clicking on the upper
-right corner menu and holding down Alt.
+right corner menu and holding down the <c>Alt</c> key.
 </p>
 
 <p>
