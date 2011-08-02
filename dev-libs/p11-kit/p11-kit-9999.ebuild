@@ -17,7 +17,7 @@ else
 	SRC_URI="http://p11-glue.freedesktop.org/releases/${P}.tar.gz"
 fi
 
-LICENSE="BSD Apache-2.0"
+LICENSE="BSD"
 SLOT="0"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
@@ -36,7 +36,7 @@ DEPEND="${RDEPEND}
 	)
 "
 
-DOCS=(AUTHORS ChangeLog NEWS) # README is empty
+DOCS=(AUTHORS ChangeLog NEWS README)
 
 src_configure() {
 	econf \
