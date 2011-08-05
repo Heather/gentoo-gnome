@@ -277,10 +277,10 @@ workaround at this time; we suggest using a gtk2-based browser (such as
 
 <body>
 <p>
-Support for the long-deprecated <c>G_CONST_RETURN</c> macro was removed from
-<c>dev-libs/glib</c> and GNOME during the GNOME 3.1 development cycle.
+Support for the <c>G_CONST_RETURN</c> macro was formally deprecated in
+<c>dev-libs/glib</c> and removed from GNOME during the GNOME 3.1 development cycle.
 However, a number of GNOME 3.0 packages still use that macro, and so, when
-built against <c>>=dev-libs/glib-2.29.8</c>, will fail with error messages
+built against <c>&gt;=dev-libs/glib-2.29.8</c>, will fail with error messages
 similar to the following:
 </p>
 <pre caption="Typical error message when building GNOME 3.0 against &gt;=glib-2.29.8">
@@ -316,7 +316,8 @@ In file included from /usr/include/pango-1.0/pango/pango-script.h:138,
 </pre>
 
 <p>
-To build GNOME 3.0, you should downgrade to <c>=dev-libs/glib-2.28*</c>.
+The most straightforward solution is to install <c>=dev-libs/glib-2.28*</c>
+in order to build GNOME 3.0.
 </p>
 </body>
 </section>
