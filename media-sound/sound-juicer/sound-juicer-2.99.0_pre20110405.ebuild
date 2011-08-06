@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit autotools gnome2
+inherit autotools eutils gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -63,6 +63,10 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# Use non-generic application name. See bug #377855, upstream bug 616860,
+	# and https://live.gnome.org/GnomeGoals/CorrectDesktopFiles
+	epatch "${FILESDIR}/${PN}-correct-desktop-files.patch"
+
 	gnome-doc-common
 	gnome-doc-prepare --automake
 	intltoolize --force
