@@ -1,0 +1,29 @@
+From c3271e552b5071d5663a57a6f8d185258a47a704 Mon Sep 17 00:00:00 2001
+From: Alexandre Rostovtsev <tetromino@gmail.com>
+Date: Sat, 6 Aug 2011 19:16:54 -0400
+Subject: [PATCH] Use gtk.SELECTION_BROWSE mode for menu_tree (bgo 652454)
+
+Use gtk.SELECTION_BROWSE selection mode for menu_tree to ensure that
+one row is always selected and valid iters are returned from the
+selection's get_selected().
+
+Addresses https://bugzilla.gnome.org/show_bug.cgi?id=652454
+---
+ Alacarte/MainWindow.py |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/Alacarte/MainWindow.py b/Alacarte/MainWindow.py
+index 260efe5..c2b4780 100644
+--- a/Alacarte/MainWindow.py
++++ b/Alacarte/MainWindow.py
+@@ -174,6 +174,7 @@ class MainWindow:
+ 		menus.append_column(column)
+ 		menus.enable_model_drag_source(gtk.gdk.BUTTON1_MASK, self.dnd_menus, gtk.gdk.ACTION_COPY)
+ 		menus.enable_model_drag_dest(self.dnd_both, gtk.gdk.ACTION_PRIVATE)
++		menus.get_selection().set_mode(gtk.SELECTION_BROWSE)
+ 
+ 	def setupItemTree(self):
+ 		items = self.tree.get_object('item_tree')
+-- 
+1.7.6
+
