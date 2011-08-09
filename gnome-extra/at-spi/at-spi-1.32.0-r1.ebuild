@@ -13,7 +13,7 @@ HOMEPAGE="http://projects.gnome.org/accessibility/"
 
 LICENSE="LGPL-2"
 SLOT="1"
-KEYWORDS="alpha amd64 arm ia64 ppc ppc64 sh sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc"
 
 RDEPEND=">=dev-libs/atk-1.29.2
