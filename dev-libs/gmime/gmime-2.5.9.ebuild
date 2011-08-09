@@ -37,7 +37,7 @@ DEPEND="${RDEPEND}
 
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS PORTING README TODO"
-	G2CONF="${G2CONF} $(use_enable mono) --enable-cryptography"
+	G2CONF="${G2CONF} $(use_enable mono) --enable-cryptography --disable-static"
 }
 
 src_prepare() {
@@ -73,6 +73,8 @@ src_compile() {
 src_install() {
 	emake GACUTIL_FLAGS="/root '${ED}/usr/$(get_libdir)' /gacdir '${EPREFIX}/usr/$(get_libdir)' /package ${PN}" \
 		DESTDIR="${D}" install
+
+	find "${D}" -name '*.la' -exec rm -f {} + || die "la file removal failed"
 
 	if use doc ; then
 		# we don't use docinto/dodoc, because we don't want html doc gzipped
