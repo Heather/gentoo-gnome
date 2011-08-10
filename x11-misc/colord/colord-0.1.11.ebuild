@@ -11,7 +11,7 @@ if [[ ${PV} = 9999 ]]; then
 fi
 
 DESCRIPTION="System service to accurately color manage input and output devices"
-HOMEPAGE="http://colord.hughsie.com/"
+HOMEPAGE="http://www.freedesktop.org/software/colord/"
 if [[ ${PV} = 9999 ]]; then
 	EGIT_REPO_URI="git://gitorious.org/colord/master.git"
 else
@@ -25,7 +25,7 @@ if [[ ${PV} = 9999 ]]; then
 else
 	KEYWORDS="~amd64 ~x86"
 fi
-IUSE="doc examples scanner +udev"
+IUSE="doc examples +introspection scanner +udev"
 
 # XXX: raise to libusb-1.0.9:1 when available
 COMMON_DEPEND="
@@ -34,11 +34,13 @@ COMMON_DEPEND="
 	>=dev-libs/libusb-1.0.8:1
 	>=media-libs/lcms-2.2:2
 	>=sys-auth/polkit-0.97
+	introspection? ( >=dev-libs/gobject-introspection-0.9.8 )
 	scanner? ( media-gfx/sane-backends )
 	udev? ( || ( sys-fs/udev[gudev] sys-fs/udev[extras] ) )
 "
 RDEPEND="${COMMON_DEPEND}
 	media-gfx/shared-color-profiles"
+# XXX: automagic build-time vala dependency if USE=introspection
 DEPEND="${COMMON_DEPEND}
 	app-text/docbook-sgml-utils
 	dev-libs/libxslt
@@ -49,6 +51,7 @@ DEPEND="${COMMON_DEPEND}
 		app-text/docbook-xml-dtd:4.1.2
 		>=dev-util/gtk-doc-1.9
 	)
+	introspection? ( dev-lang/vala:0.12 )
 "
 
 # FIXME: needs pre-installed dbus service files
@@ -63,8 +66,10 @@ src_configure() {
 		--enable-polkit \
 		--enable-reverse \
 		$(use_enable doc gtk-doc) \
+		$(use_enable introspection) \
 		$(use_enable scanner sane) \
-		$(use_enable udev gudev)
+		$(use_enable udev gudev) \
+		VAPIGEN=$(type -p vapigen-0.12)
 	# parallel make fails in doc/api
 	use doc && MAKEOPTS=-j1
 }
@@ -80,5 +85,5 @@ src_install() {
 		doins examples/*.c
 	fi
 
-	find "${D}" -name "*.la" -delete
+	find "${D}" -name "*.la" -delete || die
 }
