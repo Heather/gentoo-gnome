@@ -1,0 +1,275 @@
+# -*-eselect-*-  vim: ft=eselect
+# Copyright 2009-2011 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2 or later
+# $Id: $
+
+DESCRIPTION="Manage default settings for systemwide GNOME Shell extensions"
+AUTHOR="tetromino@gmail.com"
+MAINTAINER="gnome@gentoo.org"
+SVN_DATE='$Date: 2011/08/11 19:00:00 -0400 $'
+VERSION=$(svn_date_to_version "${SVN_DATE}")
+
+#
+# Basic idea: eselect manages a gschema override file located in
+# /etc/eselect/gnome-shell-extensions/ that overrides GNOME Shell's
+# 'disabled-extensions' GSettings key; the override file is symlinked
+# from /usr/share/glib-2.0/schemas/
+#
+
+gse_prepare() {
+	EXTDIR="${EROOT}/usr/share/gnome-shell/extensions"
+	ETCDIR="${EROOT}/etc/eselect/gnome-shell-extensions"
+	SCHEMADIR="${EROOT}/usr/share/glib-2.0/schemas"
+	OVERRIDE_FILE="eselect-gnome-shell-extensions.gschema.override"
+	CONFIG_FILE="config"
+	if [[ ! -d "${SCHEMADIR}" ]]; then
+		die -q "No ${SCHEMADIR} directory."
+	elif [[ ! -d "${ETCDIR}" ]]; then
+		die -q "No ${ETCDIR} directory."
+	fi
+
+	warnings=()
+	errors=()
+	available=()
+	enabled=()
+
+	if [[ -e "${ETCDIR}/${CONFIG_FILE}" ]]; then
+		source "${ETCDIR}/${CONFIG_FILE}" || die -q "Failed to source ${ETCDIR}/${CONFIG_FILE}"
+		enabled=( "${enabled_saved[@]}" )
+	fi
+}
+
+has() {
+	# Copied from portage's isolated-functions.sh
+	local needle=$1
+	shift
+
+	local x
+	for x in "$@"; do
+		[[ "${x}" = "${needle}" ]] && return 0
+	done
+	return 1
+}
+
+gse_print_warnings() {
+	local n
+
+	for (( n = 0; n < ${#warnings[@]}; ++n )); do
+		write_warning_msg "${warnings[n]}"
+	done
+
+	for (( n = 0; n < ${#errors[@]}-1; ++n )); do
+		write_error_msg "${errors[n]}"
+	done
+	[[ ${#errors[@]} = 0 ]] && return
+	die -q "${errors[n]}"
+}
+
+gse_die() {
+	errors=( "${errors[@]}" "$@" )
+	gse_print_warnings
+	die # should not happen...
+}
+
+gse_read_available() {
+	local d
+
+	gse_prepare
+	if ! pushd "${EXTDIR}" > /dev/null; then
+		warnings=( "${warnings[@]}" "Failed to open ${EXTDIR}" )
+		return 1
+	fi
+	# Do not expand * to '*' if EXTDIR is empty
+	shopt -s nullglob
+	for d in *; do
+		# skip invalid extension directories
+		if ! [[ -d "${d}" && -f "${d}/metadata.json" && -s "${d}/metadata.json" ]]; then
+			warnings=( "${warnings[@]}" "${EXTDIR}/${d} is not a valid extension" )
+			continue
+		fi
+		available=( "${available[@]}" "${d}" )
+	done
+	popd > /dev/null
+}
+
+gse_write_config_file() {
+	local f="${ETCDIR}/${CONFIG_FILE}"
+
+	# Sort and uniquefy 'enabled'
+	eval enabled_saved=( $(printf '%q\n' "${enabled[@]}" | sort -u ) )
+
+	if [[ -e "${f}" ]]; then
+		[[ -f "${f}" && -w "${f}" ]] || gse_die "${f} is not writable"
+	else
+		[[ -w "${ETCDIR}" ]] || gse_die "${ETCDIR} is not writable"
+	fi
+
+	cat > "${f}" <<EOF || gse_die "Failed to write ${f}"
+# Generated and used by eselect gnome-shell-extensions; do not edit manually
+$(declare -p enabled_saved)
+EOF
+}
+
+gse_write_override_file() {
+	local f="${ETCDIR}/${OVERRIDE_FILE}"
+	local disstring e
+
+	for e in "${available[@]}"; do
+		has "${e}" "${enabled[@]}" || disstring+="'${e}', "
+	done
+	disstring=`echo "${disstring}" | sed -e 's:, $::'`
+
+	if [[ -e "${f}" ]]; then
+		[[ -f "${f}" && -w "${f}" ]] || gse_die "${f} not writable"
+	else
+		[[ -w "${ETCDIR}" ]] || gse_die "${ETCDIR}/ not writable"
+	fi
+
+	cat > "${f}" <<EOF || gse_die "Failed to write ${f}"
+# Generated and used by eselect gnome-shell-extensions; do not edit manually
+[org.gnome.shell]
+disabled-extensions=[${disstring}]
+EOF
+	glib-compile-schemas "${SCHEMADIR}" || gse_die "Failed to compile schemas in ${SCHEMADIR}"
+}
+
+gse_get_name() {
+	perl -e 'use JSON; undef $/; print decode_json(<>)->{name};' \
+		"${EXTDIR}/${1}/metadata.json" 
+}
+
+gse_get_description() {
+	perl -e 'use JSON; undef $/; print decode_json(<>)->{description};' \
+		"${EXTDIR}/${1}/metadata.json"
+}
+
+### list action
+
+describe_list() {
+	echo "List ids of available GNOME Shell extensions"
+}
+
+describe_list_options() {
+	echo "-v, --verbose : Display extension names and descriptions"
+}
+
+do_list() {
+	local n
+
+	gse_read_available
+	write_list_start "Available extensions ($(highlight '*') means enabled by default):"
+	for (( n = 0; n < ${#available[@]}; ++n )); do
+		has "${available[n]}" "${enabled[@]}" &&
+			available[n]=$(highlight_marker "${available[n]}")
+		if [[ $1 = "--verbose" || $1 = "-v" ]]; then
+			available[n]+="\n\tfull name   : $(gse_get_name ${available[n]})\n\tdescription : $(gse_get_description ${available[n]})"
+		fi
+	done
+	write_numbered_list -m "(none found)" "${available[@]}"
+	gse_print_warnings
+}
+
+### enable action
+
+describe_enable() {
+	echo "Enable specified extension(s) by default"
+}
+
+describe_enable_parameters() {
+	echo "<extension>"
+}
+
+describe_enable_options() {
+	echo "<extension> : Extension id or number (from 'list' action)"
+}
+
+do_enable() {
+	local arg ext n
+
+	gse_read_available
+	for arg in "$@"; do
+		local found=
+		for (( n = 0; n < ${#available[@]}; ++n )); do
+			ext="${available[n]}"
+			if [[ "${arg}" = $((n+1)) || "${arg}" = "${ext}" ]]; then
+				has "${ext}" "${enabled[@]}" &&
+					warnings=( "${warnings[@]}" "Extension ${arg} is already enabled" )
+				# will be uniquefied in gse_write_config_file
+				enabled=( "${enabled[@]}" "${ext}" )
+				found=yes
+				break
+			fi
+		done
+		[[ ${found} = "yes" ]] || errors=( "${errors[@]}" "Failed to find extension ${arg}" )
+	done
+	gse_write_override_file
+	gse_write_config_file
+	gse_print_warnings
+}
+
+### disable action
+
+describe_disable() {
+	echo "Disable specified extension(s) by default"
+}
+
+describe_disable_parameters() {
+	echo "<extension>"
+}
+
+describe_disable_options() {
+	echo "<extension> : Extension id or number (from 'list' action)"
+}
+
+gse_unenable() {
+	# remove $1 from the enabled array
+	local found e
+	local new_enabled=()
+
+	for e in "${enabled[@]}"; do
+		if [[ "$1" = "${e}" ]]; then
+			found="yes"
+		else
+			new_enabled=( "${new_enabled[@]}" "${e}" )
+		fi
+	done
+	enabled=( "${new_enabled[@]}" )
+	[[ "${found}" = "yes" ]] && return 0
+	return 1
+}
+
+do_disable() {
+	local arg ext n
+
+	gse_read_available
+	for arg in "$@"; do
+		local found=
+		for (( n = 0; n < ${#available[@]}; ++n )); do
+			ext="${available[n]}"
+			if [[ "${arg}" = $((n+1)) || "${arg}" = "${ext}" ]]; then
+				gse_unenable "${ext}" ||
+					warnings=( "${warnings[@]}" "Extension ${arg} is already marked as disabled" )
+				found=yes
+				break
+			fi
+		done
+		[[ ${found} = "yes" ]] ||
+			errors=( "${errors[@]}" "Failed to find extension ${arg}" )
+	done
+	gse_write_override_file
+	gse_write_config_file
+	gse_print_warnings
+}
+
+### update action
+
+describe_update() {
+	echo "Scan for installed extensions and disable ones that haven't been enabled earlier"
+}
+
+do_update() {
+	# Run this after emerging a new extension package
+	gse_read_available
+	gse_write_override_file
+	gse_print_warnings
+}
