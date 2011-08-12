@@ -26,7 +26,7 @@ DEPEND="${COMMON_DEPEND}
 	>=dev-util/pkgconfig-0.9
 	app-text/scrollkeeper
 	>=dev-util/intltool-0.40.0
-	>=app-text/gnome-doc-utils-0.3.2
+	>=app-text/gnome-doc-utils-0.9.0
 	>=sys-devel/gettext-0.17"
 
 pkg_setup() {
