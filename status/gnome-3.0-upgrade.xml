@@ -18,7 +18,7 @@ This is a guide for upgrading from GNOME 2.32.x to GNOME 3.0.x
 <license/>
 
 <version>0.1</version>
-<date>2011-07-30</date>
+<date>2011-08-12</date>
 
 <chapter>
 <title>Changes</title>
@@ -114,7 +114,7 @@ settings.
 </section>
 
 <section>
-<title>Shut down and reboot <e>(FIXME: fix bug 377107 to allow GNOME_SHELL_EXTENSIONS)</e> </title>
+<title>Shut down and reboot</title>
 <body>
 <p>
 GNOME Shell developers made a <uri
@@ -128,10 +128,11 @@ right corner menu and holding down the <c>Alt</c> key.
 If you need an easily discoverable GUI for shutting down the machine (for
 example, if deploying GNOME 3.0 in a corporate environment where users are
 required to turn off their computers at the end of the day), you can install the
-alternative-status-menu extension. To do so, add
-<c>GNOME_SHELL_EXTENSIONS="alternative-status-menu"</c> to your
-<c>/etc/make.conf</c>, and emerge <c>gnome-extra/gnome-shell-extensions</c>.
-</p>
+alternative-status-menu extension. To do so, emerge <c>gnome-extra/gnome-shell-extensions</c>
+and run</p>
+<pre caption="Enabling the alternative-status-menu extension"> 
+# <i>eselect gnome-shell-extensions enable 'alternative-status-menu@gnome-shell-extensions.gnome.org'</i>
+</pre>
 
 </body>
 </section>
@@ -179,24 +180,83 @@ packages the extensions from the official GNOME repository as
 developers publishing extensions on various websites.
 </p>
 
+<p>
+Gentoo uses <c>eselect gnome-shell-extensions</c> to manage system defaults that
+control whether extensions should be enabled. Newly-installed extensions start
+out disabled.
+</p>
+
 <impo>
-By default, GNOME Shell loads all installed extensions. However, extension code
+<c>eselect gnome-shell-extensions</c> only manages shell extensions that are
+installed in <path>/usr/share/gnome-shell/extensions</path>. GNOME Shell will
+automatically load extensions installed under a user's home directory (as long
+as they have different ids from extensions installed systemwide). However, extension code
 quality is highly variable, and some extensions can render GNOME completely
 unusable. Gentoo cannot offer support for problems caused by third-party
 extensions.
 </impo>
 
 <p>
-Extensions can be disabled on a per-user basis (e.g. if a user does not want
-to load a particular extension installed systemwide) using gsettings:
+Defaults managed by <c>eselect gnome-shell-extensions</c> can be overridden on a
+per-user basis using <c>gnome-tweak-tool</c>, or from the command line using
+<c>gsettings</c>. For example, to load all extensions with the exception of
+dock and gajim, a user can run
 </p>
-<pre caption="Disabling dock and xrandr-indicator extensions">
-$ <i>gsettings set org.gnome.shell disabled-extensions '["dock", "xrandr-indicator"]'</i>
+<pre caption="Disabling dock and extensions (and enabling all others!)">
+$ <i>gsettings set org.gnome.shell disabled-extensions \</i>
+  <i>'["dock@gnome-shell-extensions.gnome.org", "gajim@gnome-shell-extensions.gnome.org"]'</i>
 </pre>
 
 </body>
 </section>
 
+</chapter>
+
+<chapter>
+<title>Video card compatibility</title>
+
+<section>
+<title>AMD / ATI</title>
+
+<body>
+<p>
+GNOME Shell shows <uri link="http://ati.cchtml.com/show_bug.cgi?id=99">graphical
+corruption</uri> under current versions of <c>x11-drivers/ati-drivers</c>
+(i.e. FGLRX binary drivers); driver versions 11.8 and below are known
+to be affected. As a workaround, you can force GNOME to start in fallback
+mode (see <e>Troubleshooting</e> section below), or alternatively, switch to
+open-source drivers.
+</p>
+
+<p>
+If using open-source AMD / ATI drivers, <c>media-libs/mesa</c> should be built with
+<c>USE=gallium</c>, otherwise GNOME will only run in fallback mode.
+</p>
+</body>
+</section>
+
+<section>
+<title>NVIDIA</title>
+
+<body>
+<p>
+As reported in <uri link="https://bugs.gentoo.org/show_bug.cgi?id=375615">bug
+#375615</uri>, for some people, certain versions of <c>x11-drivers/nvidia-drivers</c>
+(275.19, 275.21, 280.13 are known to be affected) cause some Gtk+ applications
+to crash when terminating. One effect of this is to make GDM freeze after the
+password has been entered. Some (but not all) of the people who are suffering
+from this bug have reported that emerging <c>x11-libs/cairo</c> with <c>USE=-opengl</c>
+resolves the problem.
+</p>
+
+<p>
+Under some versions of <c>x11-drivers/nvidia-drivers</c> (275.09.07, 275.19, and
+275.21), GNOME Shell system tray shows 
+<uri link="http://www.nvnews.net/vbulletin/showthread.php?t=163178">graphical corruption</uri>
+(all icons are rendered identically). This problem was fixed in driver version 280.13.
+</p>
+</body>
+</section>
 </chapter>
 
 <chapter>
@@ -207,12 +267,8 @@ $ <i>gsettings set org.gnome.shell disabled-extensions '["dock", "xrandr-indicat
 
 <body>
 <p>
-As reported in <uri link="https://bugs.gentoo.org/show_bug.cgi?id=375615">bug
-#375615</uri>, for some people certain versions of
-<c>x11-drives/nvidia-drivers</c> cause some Gtk+ applications to crash; one
-effect of this is to break login using GDM. Until the problem is fixed, try
-using a different version of <c>nvidia-drivers</c>; 275.09.07 is believed to
-work well.
+This is caused by a bug in <c>x11-drivers/nvidia-drivers</c>.
+See <e>Video card compatibility</e> section above.
 </p>
 
 </body>
@@ -279,7 +335,7 @@ workaround at this time; we suggest using a gtk2-based browser (such as
 <p>
 Support for the <c>G_CONST_RETURN</c> macro was formally deprecated in
 <c>dev-libs/glib</c> and removed from GNOME during the GNOME 3.1 development cycle.
-However, a number of GNOME 3.0 packages still use that macro, and so, when
+However, some GNOME 3.0 packages still use that macro, and so, when
 built against <c>&gt;=dev-libs/glib-2.29.8</c>, will fail with error messages
 similar to the following:
 </p>
