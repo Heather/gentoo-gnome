@@ -4,12 +4,11 @@
 
 EAPI="4"
 GCONF_DEBUG="no"
-GNOME_TARBALL_SUFFIX="bz2"
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2
 if [[ ${PV} = 9999 ]]; then
-	EGIT_BRANCH="gnome-3-0"
+#	EGIT_BRANCH="gnome-3-0"
 	inherit gnome2-live
 fi
 
@@ -31,7 +30,8 @@ COMMON_DEPEND="
 	app-admin/eselect-gnome-shell-extensions"
 RDEPEND="${COMMON_DEPEND}
 	gnome-base/gnome-desktop:3[introspection]
-	=gnome-base/gnome-shell-3.0*
+	=gnome-base/gnome-shell-3.1*
+	>=gnome-base/libgtop-2.28.3
 	media-libs/clutter:1.0[introspection]
 	net-libs/telepathy-glib[introspection]
 	x11-libs/gtk+:3[introspection]
@@ -54,8 +54,8 @@ src_prepare() {
 
 	# xrandr-indicator crashes gnome-shell with <gjs-0.7.15;
 	# see gnome bug 649077. For simplicity, just disable it for gnome-3.0.
-	sed -e 's:\(ALL_EXTENSIONS=.*\)xrandr-indicator:\1:' \
-		-i configure || die
+	# sed -e 's:\(ALL_EXTENSIONS=.*\)xrandr-indicator:\1:' \
+	#	-i configure || die
 }
 
 src_install() {
