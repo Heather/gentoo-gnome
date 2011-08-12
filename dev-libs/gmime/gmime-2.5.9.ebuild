@@ -20,7 +20,7 @@ if [[ ${PV} = 9999 ]]; then
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~x86-solaris"
 fi
-IUSE="doc mono"
+IUSE="doc mono static-libs"
 
 RDEPEND=">=dev-libs/glib-2.18:2
 	>=app-crypt/gpgme-1.1.6
@@ -37,7 +37,10 @@ DEPEND="${RDEPEND}
 
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS PORTING README TODO"
-	G2CONF="${G2CONF} $(use_enable mono) --enable-cryptography --disable-static"
+	G2CONF="${G2CONF}
+		$(use_enable mono)
+		$(use_enable static-libs static)
+		--enable-cryptography"
 }
 
 src_prepare() {
@@ -74,7 +77,9 @@ src_install() {
 	emake GACUTIL_FLAGS="/root '${ED}/usr/$(get_libdir)' /gacdir '${EPREFIX}/usr/$(get_libdir)' /package ${PN}" \
 		DESTDIR="${D}" install
 
-	find "${D}" -name '*.la' -exec rm -f {} + || die "la file removal failed"
+	if ! use static-libs; then
+		find "${D}" -name '*.la' -exec rm -f {} + || die "la file removal failed"
+	fi
 
 	if use doc ; then
 		# we don't use docinto/dodoc, because we don't want html doc gzipped
