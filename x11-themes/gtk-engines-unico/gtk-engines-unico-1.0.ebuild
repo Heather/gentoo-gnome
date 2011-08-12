@@ -30,12 +30,12 @@ fi
 
 RDEPEND=">=dev-libs/glib-2.26.0:2
 	>=x11-libs/cairo-1.10[glib]
-	>=x11-libs/gtk+-3.1.6:3"
+	>=x11-libs/gtk+-3.1.10:3"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
 
 pkg_setup() {
-	DOCS="AUTHORS TODO" # ChangeLog, NEWS, README are empty
+	DOCS="AUTHORS NEWS" # ChangeLog, README are empty
 }
 
 src_unpack() {
