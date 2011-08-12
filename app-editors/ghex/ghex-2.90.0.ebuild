@@ -17,7 +17,6 @@ KEYWORDS="~amd64 ~ppc ~sparc ~x86 ~x86-interix ~amd64-linux ~x86-linux"
 IUSE=""
 
 COMMON_DEPEND=">=x11-libs/gtk+-3.0:3
-	dev-libs/popt
 	>=dev-libs/atk-1
 	gnome-base/gconf:2"
 # File collisions with gtk2-based program's icons etc.
