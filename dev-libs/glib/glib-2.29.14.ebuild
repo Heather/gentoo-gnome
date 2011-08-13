@@ -38,8 +38,7 @@ DEPEND="${RDEPEND}
 		>=dev-util/gtk-doc-1.15
 		~app-text/docbook-xml-dtd-4.1.2 )
 	systemtap? ( >=dev-util/systemtap-1.3 )
-	test? ( dev-util/pkgconfig
-		>=sys-apps/dbus-1.2.14 )
+	test? ( >=sys-apps/dbus-1.2.14 )
 	!<dev-util/gtk-doc-1.15-r2"
 PDEPEND="introspection? ( dev-libs/gobject-introspection )
 	!<gnome-base/gvfs-1.6.4-r990" # Earlier versions do not work with glib
@@ -120,6 +119,12 @@ src_prepare() {
 }
 
 src_configure() {
+	# Avoid circular depend with dev-util/pkgconfig
+	if ! has_version dev-util/pkgconfig; then
+		export DBUS1_CFLAGS="-I/usr/include/dbus-1.0 -I/usr/$(get_libdir)/dbus-1.0/include"
+		export DBUS1_LIBS="-ldbus-1"
+	fi
+
 	local myconf
 
 	# Building with --disable-debug highly unrecommended.  It will build glib in
@@ -162,6 +167,9 @@ src_install() {
 		newins "${ED}/etc/bash_completion.d/${f}-bash-completion.sh" ${f} || die
 	done
 	rm -rf "${ED}/etc"
+
+	# Redudant with pkg-config files in place
+	use static-libs || find "${ED}" -name '*.la' -exec rm -f {} +
 }
 
 src_test() {
@@ -206,12 +214,12 @@ pkg_postinst() {
 		ewarn "rebuilding dev-libs/dbus-glib"
 	fi
 
-	if has_version '<x11-libs/gtk+-3.1.8-r1:3'; then
+	if has_version '<x11-libs/gtk+-3.0.12:3'; then
 		# To have a clear upgrade path for gtk+-3.0.x users, have to resort to
 		# a warning instead of a blocker
 		ewarn
-		ewarn "Using gtk+-3.0.x with ${P} results in frequent crashes."
-		ewarn "You should upgrade to >=gtk+-3.1.8-r1 immediately."
+		ewarn "Using <gtk+-3.0.12:3 with ${P} results in frequent crashes."
+		ewarn "You should upgrade to a newer version of gtk+:3 immediately."
 	fi
 
 	python_need_rebuild
