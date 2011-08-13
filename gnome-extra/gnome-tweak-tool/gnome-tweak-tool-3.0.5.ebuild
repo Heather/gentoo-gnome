@@ -23,9 +23,15 @@ COMMON_DEPEND="
 	>=gnome-base/gsettings-desktop-schemas-2.91.92
 	>=dev-python/pygobject-2.28.0:2[introspection]
 	gnome-base/gconf:2"
+# g-s-d, gnome-shell etc. needed at runtime for the gsettings schemas
 RDEPEND="${COMMON_DEPEND}
+	gnome-base/gconf:2[introspection]
 	x11-libs/gtk+:3[introspection]
-	gnome-base/gconf:2[introspection]"
+
+	>=gnome-base/gnome-settings-daemon-3
+	gnome-base/gnome-shell
+	>=gnome-base/nautilus-3
+	x11-wm/metacity"
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.40.0
 	>=dev-util/pkgconfig-0.9
