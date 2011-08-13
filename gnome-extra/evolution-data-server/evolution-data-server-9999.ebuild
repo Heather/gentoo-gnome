@@ -21,7 +21,7 @@ if [[ ${PV} = 9999 ]]; then
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-solaris"
 fi
-IUSE="doc +gnome-online-accounts +introspection ipv6 ldap kerberos ssl +weather"
+IUSE="doc +gnome-online-accounts +introspection ipv6 ldap kerberos ssl vala +weather"
 
 # GNOME3: How do we slot libedataserverui-3.0.so?
 # Also, libedata-cal-1.2.so and libecal-1.2.so use gtk-3, but aren't slotted
@@ -57,10 +57,13 @@ DEPEND="${RDEPEND}
 	>=gnome-base/gnome-common-2
 	>=dev-util/gtk-doc-am-1.9
 	>=sys-devel/gettext-0.17
-	doc? ( >=dev-util/gtk-doc-1.9 )"
+	doc? ( >=dev-util/gtk-doc-1.9 )
+	vala? ( >=dev-lang/vala-0.13.0:0.14[vapigen] )"
 # eautoreconf needs:
 #	>=gnome-base/gnome-common-2
 #	>=dev-util/gtk-doc-am-1.9
+
+REQUIRED_USE="vala? ( introspection )"
 
 # FIXME
 RESTRICT="test"
@@ -75,11 +78,16 @@ pkg_setup() {
 		$(use_with ldap openldap)
 		$(use_enable ssl ssl)
 		$(use_enable ssl smime)
+		$(use_enable vala vala-bindings)
 		$(use_enable weather)
 		--enable-calendar
 		--enable-nntp
 		--enable-largefile
 		--with-libdb=/usr"
+	if use vala; then
+		G2CONF="${G2CONF}
+			VALAC=$(type -P valac-0.14) VAPIGEN=$(type -P vapigen-0.14)"
+	fi
 }
 
 src_prepare() {
