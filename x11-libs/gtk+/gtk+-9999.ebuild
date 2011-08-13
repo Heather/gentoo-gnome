@@ -14,11 +14,11 @@ HOMEPAGE="http://www.gtk.org/"
 
 LICENSE="LGPL-2"
 SLOT="3"
-# NOTE: *-macos support is BROKEN. See `quartz-backend` etc in configure
 # NOTE: This gtk+ has multi-gdk-backend support, see:
 #  * http://blogs.gnome.org/kris/2010/12/29/gdk-3-0-on-mac-os-x/
 #  * http://mail.gnome.org/archives/gtk-devel-list/2010-November/msg00099.html
-# NOTE: Lots of aqua stuff in this ebuild is probably very broken
+# I tried this and got it all compiling, but the end result is unusable as it
+# horribly mixes up the backends -- grobian
 IUSE="aqua colord cups debug doc examples +introspection packagekit test vim-syntax xinerama"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
@@ -42,11 +42,11 @@ COMMON_DEPEND="!aqua? (
 		x11-libs/libXcomposite
 		x11-libs/libXdamage
 		>=x11-libs/cairo-1.10.0[X,svg]
-		>=x11-libs/gdk-pixbuf-2.22.0:2[X,introspection?]
+		>=x11-libs/gdk-pixbuf-2.23.5:2[X,introspection?]
 	)
 	aqua? (
 		>=x11-libs/cairo-1.10.0[aqua,svg]
-		>=x11-libs/gdk-pixbuf-2.22.0:2[introspection?]
+		>=x11-libs/gdk-pixbuf-2.23.5:2[introspection?]
 	)
 	xinerama? ( x11-libs/libXinerama )
 	>=dev-libs/glib-2.29.14
@@ -65,9 +65,6 @@ DEPEND="${COMMON_DEPEND}
 		x11-proto/xproto
 		x11-proto/inputproto
 		x11-proto/damageproto
-	)
-	x86-interix? (
-		sys-libs/itx-bind
 	)
 	xinerama? ( x11-proto/xineramaproto )
 	>=dev-util/gtk-doc-am-1.11
@@ -101,12 +98,6 @@ src_prepare() {
 		-i gtk/tests/testing.c || die "sed 1 failed"
 	sed '\%/recent-manager/add%,/recent_manager_purge/ d' \
 		-i gtk/tests/recentmanager.c || die "sed 2 failed"
-
-	if use x86-interix; then
-		# activate the itx-bind package...
-		append-flags "-I${EPREFIX}/usr/include/bind"
-		append-ldflags "-L${EPREFIX}/usr/lib/bind"
-	fi
 
 	if ! use test; then
 		# don't waste time building tests
@@ -158,14 +149,12 @@ src_test() {
 }
 
 src_install() {
-	emake DESTDIR="${D}" install || die "Installation failed"
+	emake DESTDIR="${D}" install
 
-	# see bug #133241
-	echo 'gtk-fallback-icon-theme = "gnome"' > "${T}/gtkrc"
 	insinto /etc/gtk-3.0
-	doins "${T}"/gtkrc || die "doins gtkrc failed"
+	doins "${FILESDIR}"/settings.ini
 
-	dodoc AUTHORS ChangeLog* HACKING NEWS* README* || die "dodoc failed"
+	dodoc AUTHORS ChangeLog* HACKING NEWS* README*
 
 	# Remove unneeded *.la files
 	find "${ED}" -name "*.la" -delete
@@ -190,7 +179,7 @@ pkg_postinst() {
 	if ! has_version "app-text/evince"; then
 		elog "Please install app-text/evince for print preview functionality."
 		elog "Alternatively, check \"gtk-print-preview-command\" documentation and"
-		elog "add it to your gtkrc."
+		elog "add it to your settings.ini file."
 	fi
 }
 
