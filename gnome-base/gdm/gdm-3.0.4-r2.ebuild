@@ -69,11 +69,13 @@ DEPEND="${COMMON_DEPEND}
 	>=app-text/scrollkeeper-0.1.4
 	>=app-text/gnome-doc-utils-0.3.2"
 # XXX: These deps are from the gnome-session gdm.session file
+# at-spi is needed for at-spi-registryd-wrapper.desktop
 RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/gnome-session-2.91.92
 	>=gnome-base/gnome-settings-daemon-2.91
 	x11-wm/metacity
 
+	accessibility? ( gnome-extra/at-spi:1 )
 	consolekit? ( gnome-extra/polkit-gnome )
 
 	!gnome-extra/fast-user-switch-applet"
@@ -84,12 +86,15 @@ pkg_setup() {
 	# PAM is the only auth scheme supported
 	# even though configure lists shadow and crypt
 	# they don't have any corresponding code
+	# --with-at-spi-registryd-directory= needs to be passed explicitly because
+	# of https://bugzilla.gnome.org/show_bug.cgi?id=607643#c4
 	G2CONF="${G2CONF}
 		--disable-schemas-install
-		--localstatedir=/var
+		--localstatedir=${EROOT}var
 		--with-xdmcp=yes
 		--enable-authentication-scheme=pam
-		--with-pam-prefix=/etc
+		--with-pam-prefix=${EROOT}etc
+		--with-at-spi-registryd-directory=${EROOT}usr/libexec
 		$(use_with accessibility xevie)
 		$(use_enable ipv6)
 		$(use_enable xklavier libxklavier)
@@ -122,6 +127,12 @@ src_prepare() {
 
 	# fix libxklavier automagic support
 	epatch "${FILESDIR}/${PN}-2.32.0-automagic-libxklavier-support.patch"
+
+	# don't ignore all non-i18n environment variables, gnome bug 656094
+	epatch "${FILESDIR}/${PN}-3.0.4-hardcoded-gnome-session-path-env.patch"
+
+	# don't load accessibility support at runtime when USE=-accessibility
+	use accessibility || epatch "${FILESDIR}/${PN}-3.0.4-disable-a11y.patch"
 
 	mkdir -p "${S}"/m4
 	intltoolize --force --copy --automake || die "intltoolize failed"
