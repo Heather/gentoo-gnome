@@ -4,6 +4,7 @@
 
 EAPI="4"
 GCONF_DEBUG="no"
+GNOME2_LA_PUNT="yes"
 
 inherit gnome2 eutils mono libtool
 if [[ ${PV} = 9999 ]]; then
@@ -74,12 +75,8 @@ src_compile() {
 }
 
 src_install() {
-	emake GACUTIL_FLAGS="/root '${ED}/usr/$(get_libdir)' /gacdir '${EPREFIX}/usr/$(get_libdir)' /package ${PN}" \
-		DESTDIR="${D}" install
-
-	if ! use static-libs; then
-		find "${D}" -name '*.la' -exec rm -f {} + || die "la file removal failed"
-	fi
+	GACUTIL_FLAGS="/root '${ED}/usr/$(get_libdir)' /gacdir '${EPREFIX}/usr/$(get_libdir)' /package ${PN}" \
+		gnome2_src_install
 
 	if use doc ; then
 		# we don't use docinto/dodoc, because we don't want html doc gzipped
