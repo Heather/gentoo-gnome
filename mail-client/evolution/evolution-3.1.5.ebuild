@@ -8,7 +8,7 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="python? 2:2.4"
 
-inherit autotools flag-o-matic gnome2 python
+inherit autotools eutils flag-o-matic gnome2 python
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -100,6 +100,7 @@ pkg_setup() {
 	DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS* README"
 	# image-inline plugin needs a gtk+:3 gtkimageview, which does not exist yet
 	G2CONF="${G2CONF}
+		--disable-maintainer-mode
 		--without-glade-catalog
 		--without-kde-applnk-path
 		--enable-plugins=experimental
@@ -156,6 +157,9 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# https://bugzilla.gnome.org/show_bug.cgi?id=656537
+	epatch "${FILESDIR}/${P}-mallard-relaxng-validation-errors.patch"
+
 	# Use NSS/NSPR only if 'ssl' is enabled.
 	if use ssl ; then
 		sed -e 's|mozilla-nss|nss|' \

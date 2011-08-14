@@ -100,6 +100,7 @@ pkg_setup() {
 	DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS* README"
 	# image-inline plugin needs a gtk+:3 gtkimageview, which does not exist yet
 	G2CONF="${G2CONF}
+		--disable-maintainer-mode
 		--without-glade-catalog
 		--without-kde-applnk-path
 		--enable-plugins=experimental
