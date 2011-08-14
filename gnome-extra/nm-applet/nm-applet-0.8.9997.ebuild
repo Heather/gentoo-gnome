@@ -12,7 +12,7 @@ if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
 
-DESCRIPTION="Gnome applet for NetworkManager."
+DESCRIPTION="GNOME applet for NetworkManager"
 HOMEPAGE="http://projects.gnome.org/NetworkManager/"
 
 LICENSE="GPL-2"
@@ -25,7 +25,6 @@ else
 	KEYWORDS="~amd64 ~ppc ~x86"
 fi
 
-# FIXME: bluetooth is automagic
 RDEPEND=">=dev-libs/glib-2.16:2
 	>=dev-libs/dbus-glib-0.88
 	>=gnome-base/gconf-2.20:2
@@ -35,22 +34,20 @@ RDEPEND=">=dev-libs/glib-2.16:2
 	>=x11-libs/gtk+-2.91.4:3
 	>=x11-libs/libnotify-0.7.0
 
-	>=dev-libs/libnl-1.1
 	>=net-misc/networkmanager-${PV}
-	>=net-wireless/wireless-tools-28_pre9
-	>=net-wireless/wpa_supplicant-0.5.7
 	net-misc/mobile-broadband-provider-info
 
 	bluetooth? ( >=net-wireless/gnome-bluetooth-2.27.6 )"
 
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
-	>=dev-util/intltool-0.35"
+	>=dev-util/intltool-0.40"
 
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS README"
 	G2CONF="${G2CONF}
 		--with-gtkver=3
 		--disable-more-warnings
-		--localstatedir=/var"
+		--localstatedir=/var
+		$(use_with bluetooth)"
 }
