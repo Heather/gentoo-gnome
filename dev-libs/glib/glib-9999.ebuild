@@ -4,7 +4,7 @@
 
 EAPI="3"
 GNOME_TARBALL_SUFFIX="xz"
-PYTHON_DEPEND="2"
+PYTHON_DEPEND="2:2.5"
 
 inherit autotools gnome.org libtool eutils flag-o-matic multilib pax-utils python virtualx
 if [[ ${PV} = 9999 ]]; then
@@ -168,8 +168,9 @@ src_install() {
 	done
 	rm -rf "${ED}/etc"
 
-	# Redudant with pkg-config files in place
-	use static-libs || find "${ED}" -name '*.la' -exec rm -f {} +
+	# Completely useless with or without USE static-libs, people need to use
+	# pkg-config
+	find "${ED}" -name '*.la' -exec rm -f {} +
 }
 
 src_test() {
