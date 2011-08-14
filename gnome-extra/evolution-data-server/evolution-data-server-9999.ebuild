@@ -74,7 +74,7 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_enable gnome-online-accounts goa)
 		$(use_enable ipv6)
-		$(use_with kerberos krb5 /usr)
+		$(use_with kerberos krb5 ${EROOT}usr)
 		$(use_with ldap openldap)
 		$(use_enable ssl ssl)
 		$(use_enable ssl smime)
@@ -83,7 +83,8 @@ pkg_setup() {
 		--enable-calendar
 		--enable-nntp
 		--enable-largefile
-		--with-libdb=/usr"
+		--with-libdb=${EROOT}usr
+		--disable-maintainer-mode"
 	if use vala; then
 		G2CONF="${G2CONF}
 			VALAC=$(type -P valac-0.14) VAPIGEN=$(type -P vapigen-0.14)"
