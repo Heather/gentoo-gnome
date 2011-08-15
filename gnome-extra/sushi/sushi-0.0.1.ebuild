@@ -5,6 +5,7 @@
 EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
+GNOME_TARBALL_SUFFIX="bz2"
 
 inherit gnome2
 if [[ ${PV} = 9999 ]]; then
