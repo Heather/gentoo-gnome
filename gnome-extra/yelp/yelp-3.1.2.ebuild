@@ -51,11 +51,6 @@ src_prepare() {
 	# https://bugzilla.gnome.org/show_bug.cgi?id=648854
 	epatch "${FILESDIR}/${PN}-3.0.3-man-compatibility.patch"
 
-	# Patches to fix crashes from upstream git, will be in next release
-	epatch "${FILESDIR}/${P}-64-bit-search-crash.patch"
-	epatch "${FILESDIR}/${P}-window_deleted-crash.patch"
-	epatch "${FILESDIR}/${P}-NULL-uri-crash.patch"
-
 	eautoreconf
 
 	gnome2_src_prepare
