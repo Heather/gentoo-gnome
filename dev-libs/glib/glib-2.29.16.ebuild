@@ -4,7 +4,7 @@
 
 EAPI="3"
 GNOME_TARBALL_SUFFIX="xz"
-PYTHON_DEPEND="2"
+PYTHON_DEPEND="2:2.5"
 
 inherit autotools gnome.org libtool eutils flag-o-matic multilib pax-utils python virtualx
 if [[ ${PV} = 9999 ]]; then
