@@ -30,7 +30,7 @@ src_install() {
 	keepdir "/etc/eselect/gnome-shell-extensions"
 	# The actual gschema override file will be greated in pkg_postinst.
 	dosym "/etc/eselect/gnome-shell-extensions/${PN}.gschema.override" \
-		"/usr/share/glib-2.0/schemas/"
+		"/usr/share/glib-2.0/schemas/${PN}.gschema.override"
 }
 
 pkg_postinst() {
