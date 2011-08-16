@@ -16,9 +16,9 @@ SLOT="3"
 KEYWORDS="~amd64 ~ppc ~sparc ~x86 ~x86-interix ~amd64-linux ~x86-linux"
 IUSE=""
 
-COMMON_DEPEND=">=x11-libs/gtk+-3.0:3
-	>=dev-libs/atk-1
-	gnome-base/gconf:2"
+COMMON_DEPEND=">=dev-libs/glib-2.26:2
+	>=x11-libs/gtk+-3.0:3
+	>=dev-libs/atk-1"
 # File collisions with gtk2-based program's icons etc.
 RDEPEND="${COMMON_DEPEND}
 	!<app-editors/ghex-2.24.0-r200:2"
