@@ -1,0 +1,24 @@
+From 890bd73c60d542023a71767d4f6e9925147dc2cc Mon Sep 17 00:00:00 2001
+From: Luke Yelavich <luke.yelavich@canonical.com>
+Date: Tue, 16 Aug 2011 13:21:29 +1000
+Subject: [PATCH] Add accidentally dropped closing quotes for documentation
+
+---
+ pyatspi/text.py |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/pyatspi/text.py b/pyatspi/text.py
+index 0c08e22..1a3381d 100644
+--- a/pyatspi/text.py
++++ b/pyatspi/text.py
+@@ -466,6 +466,7 @@ class Text:
+                 the resulting substring, if one exists. 
+                 @return a string which is a substring of the text content of
+                 the object, delimited by the specified boundary condition.
++                """
+                 ret = exwrap(Atspi.Text.get_text_before_offset, self.obj, offset, type)
+                 return textRangeToList(ret)
+ 
+-- 
+1.7.6
+
