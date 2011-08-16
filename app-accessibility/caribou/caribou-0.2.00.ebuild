@@ -11,27 +11,26 @@ RESTRICT_PYTHON_ABIS="3.*"
 inherit gnome2-python
 
 DESCRIPTION="Input assistive technology intended for switch and pointer users"
-HOMEPAGE=""
+HOMEPAGE="https://live.gnome.org/Caribou"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-RDEPEND=">=dev-python/pygobject-2.27.92:2
-	dev-python/python-virtkey
+COMMON_DEPEND=">=dev-python/pygobject-2.27.92:2
 	>=x11-libs/gtk+-2.91.8:3
-	>=media-libs/clutter-1.5.11:1.0
-"
+	>=media-libs/clutter-1.5.11:1.0"
+# gsettings-desktop-schemas is needed for the 'toolkit-accessibility' key
+RDEPEND="${COMMON_DEPEND}
+	dev-python/pyatspi
+	dev-python/python-virtkey
+	gnome-base/gsettings-desktop-schemas"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35.5
-	app-text/gnome-doc-utils
-"
+	app-text/gnome-doc-utils"
 
-pkg_setup() {
-	DOCS="AUTHORS ChangeLog NEWS README"
-	gnome2-python_pkg_setup
-}
+DOCS="AUTHORS ChangeLog NEWS README"
 
 src_install() {
 	gnome2-python_src_install
