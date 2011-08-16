@@ -23,13 +23,13 @@ HOMEPAGE="http://www.pygtk.org/"
 LICENSE="LGPL-2.1"
 SLOT="3"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
-IUSE="doc +cairo examples libffi test +threads"
+IUSE="doc +cairo examples test +threads"
 RESTRICT="test" # FIXME: tests require >=gobject-introspection-1.29.17
 
 COMMON_DEPEND=">=dev-libs/glib-2.24.0:2
 	>=dev-libs/gobject-introspection-0.10.2
-	cairo? ( >=dev-python/pycairo-1.10.0 )
-	libffi? ( virtual/libffi )"
+	virtual/libffi
+	cairo? ( >=dev-python/pycairo-1.10.0 )"
 DEPEND="${COMMON_DEPEND}
 	doc? (
 		app-text/docbook-xml-dtd:4.1.2
@@ -50,8 +50,11 @@ RDEPEND="${COMMON_DEPEND}
 
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog* NEWS README"
+	# Hard-enable libffi support since both gobject-introspection and
+	# glib-2.29.x rdepend on it anyway
 	G2CONF="${G2CONF}
 		--disable-dependency-tracking
+		--with-ffi
 		$(use_enable doc docs)
 		$(use_enable cairo)
 		$(use_with libffi ffi)
