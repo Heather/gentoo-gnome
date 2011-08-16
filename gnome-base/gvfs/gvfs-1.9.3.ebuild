@@ -25,7 +25,7 @@ else
 fi
 IUSE="archive avahi bluetooth cdda doc fuse gdu gnome-keyring gphoto2 +http ios prefix samba +udev"
 
-RDEPEND=">=dev-libs/glib-2.27.4
+RDEPEND=">=dev-libs/glib-2.29.14
 	>=sys-apps/dbus-1.0
 	dev-libs/libxml2
 	net-misc/openssh
