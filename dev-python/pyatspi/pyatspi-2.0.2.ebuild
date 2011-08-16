@@ -23,6 +23,7 @@ COMMON_DEPEND="dev-python/dbus-python
 "
 RDEPEND="${COMMON_DEPEND}
 	>=sys-apps/dbus-1
+	app-accessibility/at-spi2-core[introspection]
 	!<gnome-extra/at-spi-1.32.0-r1
 "
 DEPEND="${COMMON_DEPEND}
