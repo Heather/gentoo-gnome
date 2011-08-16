@@ -5,6 +5,7 @@
 EAPI="3"
 GCONF_DEBUG="no"
 GNOME_TARBALL_SUFFIX="xz"
+GNOME2_LA_PUNT="yes"
 SUPPORT_PYTHON_ABIS="1"
 # pygobject is partially incompatible with Python 3.
 # PYTHON_DEPEND="2:2.6 3:3.1"
