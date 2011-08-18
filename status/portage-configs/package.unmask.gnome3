@@ -1,7 +1,9 @@
 # GNOME 3.1
 =dev-libs/gjs-1.29*
 =dev-libs/gobject-introspection-1.29*
-dev-libs/seed
+>=dev-libs/seed-3.0
+=gnome-base/gnome-desktop-3.1*
+=gnome-base/gsettings-desktop-schemas-3.1*
 =media-libs/clutter-1.7*
 
 # Copied from package.mask in portage
@@ -14,14 +16,11 @@ dev-libs/seed
 # Libraries
 >=dev-libs/atk-2.0
 >=dev-cpp/libgdamm-4.99
->=gnome-base/gnome-desktop-3.0
->=gnome-base/gsettings-desktop-schemas-3.0
 >=gnome-base/libgnomekbd-3.0
+>=dev-libs/libgweather-3.0
 >=gnome-extra/gtkhtml-4.0
 >=gnome-extra/libgda-4.99
 =media-libs/libcanberra-0.28-r4
->=net-libs/gtk-vnc-0.4.3-r300
->=x11-libs/gdk-pixbuf-2.23
 >=x11-misc/notification-daemon-0.7
 # Core Applications
 >=app-accessibility/orca-3.0
@@ -32,6 +31,7 @@ dev-libs/seed
 >=gnome-base/gnome-panel-3.0
 >=gnome-base/gnome-session-3.0
 >=gnome-base/gnome-settings-daemon-3.0
+>=gnome-base/gnome-control-center-3.0
 >=gnome-base/gnome-shell-3.0
 >=gnome-base/gvfs-1.8
 >=gnome-base/libgnome-keyring-3.0
@@ -90,7 +90,6 @@ dev-libs/seed
 >=net-misc/networkmanager-openvpn-0.8.99
 >=net-misc/networkmanager-openswan-0.8.99
 >=net-misc/networkmanager-vpnc-0.8.99
->=net-misc/modemmanager-0.4.99
 >=gnome-extra/nm-applet-0.8.99
 # Meta packages
 >=gnome-base/gnome-core-apps-3.0
