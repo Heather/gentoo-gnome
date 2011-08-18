@@ -12,14 +12,10 @@ gnome-base/gdm
 # Libraries
 >=dev-libs/atk-2.0
 >=dev-cpp/libgdamm-4.99
->=gnome-base/gnome-desktop-3.0
->=gnome-base/gsettings-desktop-schemas-3.0
 >=gnome-base/libgnomekbd-3.0
 >=gnome-extra/gtkhtml-4.0
 >=gnome-extra/libgda-4.99
 =media-libs/libcanberra-0.28-r4
->=net-libs/gtk-vnc-0.4.3-r300
->=x11-libs/gdk-pixbuf-2.23
 >=x11-misc/notification-daemon-0.7
 # Core Applications
 >=app-accessibility/orca-3.0
@@ -88,7 +84,6 @@ gnome-base/gdm
 >=net-misc/networkmanager-openvpn-0.8.99
 >=net-misc/networkmanager-openswan-0.8.99
 >=net-misc/networkmanager-vpnc-0.8.99
->=net-misc/modemmanager-0.4.99
 >=gnome-extra/nm-applet-0.8.99
 # Meta packages
 >=gnome-base/gnome-core-apps-3.0
