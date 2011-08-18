@@ -1,0 +1,21 @@
+From 908348d355ba22ea364318f32dc033a8c9761f04 Mon Sep 17 00:00:00 2001
+From: Michael Biebl <biebl@debian.org>
+Date: Thu, 30 Jun 2011 13:23:49 +0000
+Subject: configure: Update smclient check for gdk targets
+
+---
+diff --git a/configure.ac b/configure.ac
+index 20301dd..768c922 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -179,7 +179,7 @@ PKG_CHECK_MODULES([SHELL_CORE],[libxml-2.0 >= $LIBXML_REQUIRED gtk+-3.0 >= $GTK_
+ # SM client
+ # *********
+ 
+-GDK_TARGET="$($PKG_CONFIG --variable target gdk-3.0)"
++GDK_TARGET="$($PKG_CONFIG --variable targets gdk-3.0)"
+ 
+ AC_MSG_CHECKING([which smclient backend to use])
+ AC_ARG_WITH([smclient],
+--
+cgit v0.9.0.2

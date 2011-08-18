@@ -2,11 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-text/evince/evince-2.32.0.ebuild,v 1.2 2010/12/07 19:38:52 eva Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit autotools eutils gnome2
+inherit eutils gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -99,14 +99,6 @@ src_prepare() {
 
 	# Fix .desktop file so menu item shows up
 	epatch "${FILESDIR}"/${PN}-0.7.1-display-menu.patch
-
-	# Fix building of EvinceView-3.0.gir, needs eautoreconf
-	epatch "${FILESDIR}"/${PN}-2.91.5-fix-evinceview-introspection.patch
-
-	if [[ ${PV} != 9999 ]]; then
-		intltoolize --force --copy --automake || die "intltoolize failed"
-		eautoreconf
-	fi
 
 	gnome2_src_prepare
 }
