@@ -90,7 +90,7 @@ def get_obsolete(cp):
     # Ignore PORTDIR package.masked cpvs
     for cpv in cpvs:
         try:
-            metadata = {'SLOT': portdb.aux_get(cpv, ['SLOT'])}
+            metadata = {'SLOT': portdb.aux_get(cpv, ['SLOT'])[0]}
         except KeyError:
             # masked by corruption
             continue
