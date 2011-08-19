@@ -25,11 +25,11 @@ IUSE="+cups debug packagekit policykit short-touchpad-timeout smartcard +udev"
 
 # Latest gsettings-desktop-schemas is needed due to commit e8d1de92
 COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
-	>=dev-libs/glib-2.26.0:2
+	>=dev-libs/glib-2.29.14:2
 	>=x11-libs/gtk+-2.99.3:3
 	>=gnome-base/gconf-2.6.1:2
 	>=gnome-base/libgnomekbd-2.91.1
-	>=gnome-base/gnome-desktop-3.1.4:3
+	>=gnome-base/gnome-desktop-3.1.5:3
 	>=gnome-base/gsettings-desktop-schemas-0.1.7.1
 	media-fonts/cantarell
 	media-libs/fontconfig
@@ -50,7 +50,7 @@ COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	packagekit? (
 		|| ( sys-fs/udev[gudev]
 			sys-fs/udev[extras] )
-		>=app-admin/packagekit-base-0.6.4 )
+		>=app-admin/packagekit-base-0.6.12 )
 	policykit? (
 		>=sys-auth/polkit-0.97
 		>=sys-apps/dbus-1.1.2 )
@@ -59,7 +59,7 @@ COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 		sys-fs/udev[extras] ) )"
 # Themes needed by g-s-d, gnome-shell, gtk+:3 apps to work properly
 # <gnome-color-manager-3.1.1 has file collisions with g-s-d-3.1.x
-# <gnome-power-manager-3.1.4 has file collisions with g-s-d-3.1.x
+# <gnome-power-manager-3.1.3 has file collisions with g-s-d-3.1.x
 RDEPEND="${COMMON_DEPEND}
 	gnome-base/dconf
 	>=x11-themes/gnome-themes-standard-2.91
