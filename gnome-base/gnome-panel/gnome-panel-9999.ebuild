@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-panel/gnome-panel-2.32.1.ebuild,v 1.3 2011/01/15 19:54:59 nirbheek Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -33,10 +33,10 @@ RDEPEND=">=gnome-base/gnome-desktop-2.91:3
 	dev-libs/libxml2:2
 	gnome-base/dconf
 	>=gnome-base/gconf-2.6.1:2[introspection?]
-	>=gnome-base/gnome-menus-2.27.92
+	>=gnome-base/gnome-menus-3.1.4:3
 	gnome-base/librsvg:2
 	>=net-libs/telepathy-glib-0.14.0
-	>=x11-libs/cairo-1
+	>=x11-libs/cairo-1[X]
 	x11-libs/libXau
 	x11-libs/libICE
 	x11-libs/libSM
