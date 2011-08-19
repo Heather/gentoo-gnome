@@ -4,22 +4,20 @@
 
 EAPI="4"
 
-S=${WORKDIR}
 DESCRIPTION="Meta package for the GNOME desktop, merge this package to install"
 HOMEPAGE="http://www.gnome.org/"
 LICENSE="as-is"
 SLOT="2.0"
-IUSE="cups +fallback"
+IUSE="cups +fallback +shell"
 
 # when unmasking for an arch
 # double check none of the deps are still masked !
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 
-# Note to developers:
-# This is a wrapper for the 'light' GNOME 3 desktop,
-# This should only consist of the bare minimum of libs/apps needed
-# It is basically gnome-base/gnome without the apps,
-# but should not be used by users unless they know what they are doing
+# XXX: Note to developers:
+# This is a wrapper for the 'light' GNOME 3 desktop, and should only consist of
+# the bare minimum of libs/apps needed. It is basically gnome-base/gnome without
+# any apps, but shouldn't be used by users unless they know what they are doing.
 RDEPEND="!gnome-base/gnome
 	>=gnome-base/gnome-core-libs-${PV}[cups?]
 
@@ -30,8 +28,9 @@ RDEPEND="!gnome-base/gnome
 
 	>=gnome-base/nautilus-${PV}
 
-	>=x11-wm/mutter-${PV}
-	>=gnome-base/gnome-shell-${PV}
+	shell? (
+		>=x11-wm/mutter-${PV}
+		>=gnome-base/gnome-shell-${PV} )
 
 	fallback? (
 		>=x11-wm/metacity-2.34.0
@@ -45,3 +44,14 @@ RDEPEND="!gnome-base/gnome
 "
 DEPEND=""
 PDEPEND=">=gnome-base/gvfs-1.8.0"
+S=${WORKDIR}
+
+pkg_pretend() {
+	if ! use fallback && ! use shell; then
+		# Users probably want to use e16, sawfish, etc
+		ewarn "You're installing neither GNOME Shell nor GNOME Fallback!"
+		ewarn "You will have to install and manage a window manager by yourself"
+		# https://bugs.gentoo.org/show_bug.cgi?id=303375
+		ewarn "See: <add link to docs about component handling in gnome-session>"
+	fi
+}
