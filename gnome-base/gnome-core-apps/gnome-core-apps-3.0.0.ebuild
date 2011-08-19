@@ -4,7 +4,7 @@
 
 EAPI="4"
 
-DESCRIPTION="Meta package for the core applications integrated with GNOME 3"
+DESCRIPTION="Sub-meta package for the core applications integrated with GNOME 3"
 HOMEPAGE="http://www.gnome.org/"
 LICENSE="as-is"
 SLOT="3.0"

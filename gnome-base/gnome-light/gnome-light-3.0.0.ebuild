@@ -4,7 +4,7 @@
 
 EAPI="4"
 
-DESCRIPTION="Meta package for the GNOME desktop, merge this package to install"
+DESCRIPTION="Meta package for GNOME-Light, merge this package to install"
 HOMEPAGE="http://www.gnome.org/"
 LICENSE="as-is"
 SLOT="2.0"
@@ -32,9 +32,7 @@ RDEPEND="!gnome-base/gnome
 		>=x11-wm/mutter-${PV}
 		>=gnome-base/gnome-shell-${PV} )
 
-	fallback? (
-		>=x11-wm/metacity-2.34.0
-		>=gnome-base/gnome-panel-${PV} )
+	fallback? ( >=gnome-base/gnome-fallback-${PV} )
 
 	>=x11-themes/gnome-icon-theme-${PV}
 	>=x11-themes/gnome-icon-theme-symbolic-${PV}

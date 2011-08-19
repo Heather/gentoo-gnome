@@ -4,11 +4,11 @@
 
 EAPI="4"
 
-DESCRIPTION="Meta package for GNOME 3 fallback mode"
+DESCRIPTION="Sub-meta package for GNOME 3 fallback mode"
 HOMEPAGE="http://www.gnome.org/"
 LICENSE="as-is"
 SLOT="3.0"
-IUSE="+bluetooth cups +cdr"
+IUSE="cups"
 
 # when unmasking for an arch
 # double check none of the deps are still masked !
@@ -18,7 +18,6 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-freebsd ~amd64-l
 # This is a wrapper for the GNOME 3 fallback apps list
 RDEPEND="
 	>=gnome-base/gnome-core-libs-${PV}[cups?]
-	>=gnome-base/gnome-core-apps-${PV}[cups?,bluetooth?,cdr?]
 
 	>=x11-wm/metacity-2.34.0
 	>=x11-misc/notification-daemon-0.7
