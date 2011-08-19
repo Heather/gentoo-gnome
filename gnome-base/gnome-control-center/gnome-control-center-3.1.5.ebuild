@@ -42,7 +42,7 @@ COMMON_DEPEND="
 
 	app-text/iso-codes
 	dev-libs/libxml2:2
-	gnome-base/gnome-menus
+	gnome-base/gnome-menus:3
 	gnome-base/libgtop:2
 	media-libs/fontconfig
 	net-libs/gnome-online-accounts
@@ -51,6 +51,7 @@ COMMON_DEPEND="
 	>=media-sound/pulseaudio-0.9.16[glib]
 	>=sys-auth/polkit-0.97
 	>=sys-power/upower-0.9.1
+	>=x11-libs/libnotify-0.7.3
 	>=x11-misc/colord-0.1.8
 
 	x11-apps/xmodmap
