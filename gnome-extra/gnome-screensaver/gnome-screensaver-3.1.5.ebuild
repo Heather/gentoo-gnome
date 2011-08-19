@@ -2,10 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/gnome-screensaver/gnome-screensaver-2.30.2.ebuild,v 1.2 2010/11/02 02:33:58 ford_prefect Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="yes"
 
-inherit eutils gnome2
+inherit gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -26,7 +26,6 @@ RDEPEND="
 	>=dev-libs/glib-2.25.6:2
 	>=x11-libs/gtk+-2.99.3:3
 	>=gnome-base/gnome-desktop-2.91.5:3
-	>=gnome-base/gnome-menus-2.12
 	>=gnome-base/gsettings-desktop-schemas-0.1.7
 	>=gnome-base/libgnomekbd-0.1
 	>=dev-libs/dbus-glib-0.71
@@ -68,16 +67,4 @@ pkg_setup() {
 		--disable-schemas-compile"
 	# xscreensaver and custom screensaver capability removed
 	# poke and inhibit commands were also removed, bug 579430
-}
-
-src_prepare() {
-	# Upstream patch to fix crash in user switcher; will be in next release
-	epatch "${FILESDIR}/${P}-user-switcher-crash.patch"
-
-	# Upstream patches to fix timers and update the clock properly; will be
-	# in next release
-	epatch "${FILESDIR}/${P}-watchdog-add_seconds.patch"
-	epatch "${FILESDIR}/${P}-clock-skew.patch"
-
-	gnome2_src_prepare
 }

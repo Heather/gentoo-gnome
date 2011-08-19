@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/gnome-screensaver/gnome-screensaver-2.30.2.ebuild,v 1.2 2010/11/02 02:33:58 ford_prefect Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="yes"
 
 inherit gnome2
@@ -26,7 +26,6 @@ RDEPEND="
 	>=dev-libs/glib-2.25.6:2
 	>=x11-libs/gtk+-2.99.3:3
 	>=gnome-base/gnome-desktop-2.91.5:3
-	>=gnome-base/gnome-menus-2.12
 	>=gnome-base/gsettings-desktop-schemas-0.1.7
 	>=gnome-base/libgnomekbd-0.1
 	>=dev-libs/dbus-glib-0.71
