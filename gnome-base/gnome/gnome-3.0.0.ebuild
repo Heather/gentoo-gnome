@@ -4,7 +4,7 @@
 
 EAPI="4"
 
-DESCRIPTION="Meta package for GNOME 3"
+DESCRIPTION="Meta package for GNOME 3, merge this package to install"
 HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="as-is"
