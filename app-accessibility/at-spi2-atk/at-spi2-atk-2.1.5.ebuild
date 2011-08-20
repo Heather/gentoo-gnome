@@ -17,7 +17,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 COMMON_DEPEND="
-	>=app-accessibility/at-spi2-core-1.91.92
+	>=app-accessibility/at-spi2-core-2.1.4
 	>=dev-libs/atk-2.1.0
 	dev-libs/glib:2
 	>=sys-apps/dbus-1
