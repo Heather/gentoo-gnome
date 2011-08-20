@@ -57,6 +57,9 @@ src_prepare() {
 	# Use absolute path to GNU tar since star doesn't have the same
 	# options. On Gentoo, star is /usr/bin/tar, GNU tar is /bin/tar
 	epatch "${FILESDIR}"/${PN}-2.10.3-use_bin_tar.patch
+
+	# File providing Gentoo package names for various archivers
+	cp -f "${FILESDIR}/3.1.2-packages.match" data/packages.match || die
 }
 
 pkg_postinst() {
