@@ -196,7 +196,9 @@ gnome2_src_install() {
 	# Delete all .la files
 	if [[ "${GNOME2_LA_PUNT}" != "no" ]]; then
 		ebegin "Removing .la files"
-		find "${D}" -name '*.la' -exec rm -f {} + || die
+		if ! { has static-libs ${IUSE//+} && use static-libs; }; then
+			find "${D}" -name '*.la' -exec rm -f {} + || die "la file removal failed"
+		fi
 		eend
 	fi
 }
