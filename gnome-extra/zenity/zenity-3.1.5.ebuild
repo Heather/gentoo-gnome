@@ -4,10 +4,9 @@
 
 EAPI="4"
 GCONF_DEBUG="yes"
-GNOME_TARBALL_SUFFIX="bz2"
 GNOME2_LA_PUNT="yes"
 
-inherit eutils gnome2
+inherit gnome2
 
 DESCRIPTION="Tool to display dialogs from the commandline and shell scripts"
 HOMEPAGE="http://live.gnome.org/Zenity"
@@ -15,11 +14,15 @@ HOMEPAGE="http://live.gnome.org/Zenity"
 LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux"
-IUSE="libnotify"
+IUSE="libnotify webkit"
 
-RDEPEND=">=x11-libs/gtk+-3.0.0:3
-	>=dev-libs/glib-2.8:2
-	libnotify? ( >=x11-libs/libnotify-0.6.1 )"
+RDEPEND=">=dev-libs/glib-2.8:2
+	x11-libs/gdk-pixbuf:2
+	>=x11-libs/gtk+-3.0.0:3
+	x11-libs/libX11
+	x11-libs/pango
+	libnotify? ( >=x11-libs/libnotify-0.6.1 )
+	webkit? ( >=net-libs/webkit-gtk-1.4.0:3 )"
 
 DEPEND="${RDEPEND}
 	app-text/scrollkeeper
@@ -35,13 +38,9 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-scrollkeeper
 		$(use_enable libnotify)
+		$(use_enable webkit webkitgtk)
 		PERL=$(type -P false)"
 	DOCS="AUTHORS ChangeLog HACKING NEWS README THANKS TODO"
-}
-
-src_prepare() {
-	epatch "${FILESDIR}/${P}-libnotify-ifdef.patch"
-	gnome2_src_prepare
 }
 
 src_install() {
