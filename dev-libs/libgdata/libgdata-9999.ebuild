@@ -4,6 +4,7 @@
 
 EAPI="4"
 GCONF_DEBUG="yes"
+GNOME2_LA_PUNT="yes"
 
 inherit eutils gnome2
 if [[ ${PV} = 9999 ]]; then
@@ -15,7 +16,7 @@ HOMEPAGE="http://live.gnome.org/libgdata"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-IUSE="doc gnome +introspection"
+IUSE="doc gnome +introspection static-libs"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -23,6 +24,7 @@ else
 fi
 
 # gtk+ is needed for gdk
+# configure checks for gtk:3, but only uses it for demos which are not installed
 RDEPEND=">=dev-libs/glib-2.19:2
 	|| (
 		>=x11-libs/gdk-pixbuf-2.14:2
@@ -39,7 +41,7 @@ DEPEND="${RDEPEND}
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog HACKING NEWS README"
 	G2CONF="${G2CONF}
-		--disable-static
+		$(use_enable static-libs static)
 		$(use_enable gnome)
 		$(use_enable introspection)"
 }
