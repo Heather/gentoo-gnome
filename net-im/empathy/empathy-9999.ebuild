@@ -24,19 +24,21 @@ else
 	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~sparc ~x86"
 fi
 # FIXME: Add location support once geoclue stops being idiotic with automagic deps
-IUSE="debug eds +map +geoloc +networkmanager sendto spell test +video webkit" # gnome
+IUSE="debug eds +map +geoloc +networkmanager sendto spell test +video" # gnome
 
 # FIXME: gst-plugins-bad is required for the valve plugin. This should move to good
 # eventually at which point the dep can be dropped
 RDEPEND=">=dev-libs/glib-2.28:2
 	>=x11-libs/gtk+-3.0.2:3
 	>=dev-libs/dbus-glib-0.51
-	>=net-libs/telepathy-glib-0.15.3
-	>=media-libs/libcanberra-0.25[gtk3]
-	>=x11-libs/libnotify-0.7
+	>=dev-libs/folks-0.6.0
 	>=gnome-base/gnome-keyring-2.91.4-r300
+	>=media-libs/libcanberra-0.25[gtk3]
+	media-sound/pulseaudio[glib]
 	>=net-libs/gnutls-2.8.5
-	>=dev-libs/folks-0.5.1
+	>=net-libs/telepathy-glib-0.15.3
+	>=net-libs/webkit-gtk-1.3.13:3
+	>=x11-libs/libnotify-0.7
 
 	dev-libs/libxml2:2
 	gnome-base/gsettings-desktop-schemas
@@ -49,6 +51,7 @@ RDEPEND=">=dev-libs/glib-2.28:2
 	>=net-im/telepathy-logger-0.2.8
 	net-libs/farsight2
 	>=net-libs/telepathy-farsight-0.0.14
+	net-libs/telepathy-farstream
 	net-voip/telepathy-connection-managers
 	x11-libs/libX11
 
@@ -63,7 +66,6 @@ RDEPEND=">=dev-libs/glib-2.28:2
 	video? (
 		|| ( sys-fs/udev[gudev] sys-fs/udev[extras] )
 		>=media-video/cheese-2.91.91.1 )
-	webkit? ( >=net-libs/webkit-gtk-1.3.2:3 )
 "
 	# gnome? ( >=gnome-base/gnome-control-center-2.31.4 )
 DEPEND="${RDEPEND}
@@ -97,7 +99,6 @@ pkg_setup() {
 		$(use_enable spell)
 		$(use_with video cheese)
 		$(use_enable video gudev)
-		$(use_enable webkit)
 		--disable-control-center-embedding"
 	#	$(use_enable gnome control-center-embedding)
 	# gnome-control-center-3.1.4 dropped support for third-party panels
