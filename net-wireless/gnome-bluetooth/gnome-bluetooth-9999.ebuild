@@ -7,7 +7,7 @@ GCONF_DEBUG="yes"
 # libgnome-bluetooth-applet.la is needed by gnome-shell during compilation
 GNOME2_LA_PUNT="no"
 
-inherit eutils gnome2 multilib
+inherit gnome2 multilib
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi

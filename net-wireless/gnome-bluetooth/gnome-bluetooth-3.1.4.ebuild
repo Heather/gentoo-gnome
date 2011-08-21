@@ -7,7 +7,7 @@ GCONF_DEBUG="yes"
 # libgnome-bluetooth-applet.la is needed by gnome-shell during compilation
 GNOME2_LA_PUNT="no"
 
-inherit autotools eutils gnome2 multilib
+inherit gnome2 multilib
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -71,11 +71,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# Fix gnome-control-center-3.1.4 compatibility, will be in next release
-	mkdir properties/cut-n-paste || die
-	epatch "${FILESDIR}/${P}-cc-panel.patch"
-	eautoreconf
-
 	# Add missing files for intltool checks
 	echo "sendto/bluetooth-sendto.desktop.in" >> po/POTFILES.in
 	echo "wizard/bluetooth-wizard.desktop.in" >> po/POTFILES.in
