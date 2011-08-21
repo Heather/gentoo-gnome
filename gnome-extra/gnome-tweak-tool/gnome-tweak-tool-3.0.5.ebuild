@@ -9,7 +9,7 @@ PYTHON_DEPEND="2:2.6"
 SUPPORT_PYTHON_ABIS="1"
 RESTRICT_PYTHON_ABIS="2.4 2.5 3.*"
 
-inherit gnome2-python
+inherit eutils gnome2-python
 
 DESCRIPTION="Tool to customize GNOME 3 options"
 HOMEPAGE="http://live.gnome.org/GnomeTweakTool"
