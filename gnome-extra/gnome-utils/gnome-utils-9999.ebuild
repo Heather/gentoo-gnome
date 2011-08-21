@@ -24,7 +24,7 @@ else
 fi
 
 # libcanberra 0.26-r2 is needed for gtk+:3 fixes
-COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
+COMMON_DEPEND=">=dev-libs/glib-2.29.14:2
 	>=x11-libs/gtk+-3.0.3:3
 	>=gnome-base/gconf-2:2
 	>=gnome-base/gsettings-desktop-schemas-0.1.0
@@ -40,8 +40,10 @@ DEPEND="${COMMON_DEPEND}
 	>=dev-util/pkgconfig-0.9
 	doc? ( >=dev-util/gtk-doc-1.10 )"
 
-# file collisions
+# file collisions with g-c-c
+# nautilus is used via dbus
 RDEPEND="${COMMON_DEPEND}
+	>=gnome-base/nautilus-3.0.0
 	!<gnome-base/gnome-control-center-2.90"
 
 pkg_setup() {
