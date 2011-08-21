@@ -46,6 +46,7 @@ DEPEND="${RDEPEND}
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README TODO"
 	python_set_active_version 2
+	G2CONF="${G2CONF} --disable-maintainer-mode"
 }
 
 src_prepare() {
