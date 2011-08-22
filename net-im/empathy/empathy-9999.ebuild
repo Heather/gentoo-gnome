@@ -36,7 +36,7 @@ RDEPEND=">=dev-libs/glib-2.28:2
 	>=media-libs/libcanberra-0.25[gtk3]
 	media-sound/pulseaudio[glib]
 	>=net-libs/gnutls-2.8.5
-	>=net-libs/telepathy-glib-0.15.3
+	>=net-libs/telepathy-glib-0.15.5
 	>=net-libs/webkit-gtk-1.3.13:3
 	>=x11-libs/libnotify-0.7
 
@@ -73,6 +73,7 @@ DEPEND="${RDEPEND}
 	>=app-text/gnome-doc-utils-0.17.3
 	>=dev-util/intltool-0.35.0
 	>=dev-util/pkgconfig-0.16
+	>=sys-devel/gettext-0.17
 	test? (
 		sys-apps/grep
 		>=dev-libs/check-0.9.4 )
