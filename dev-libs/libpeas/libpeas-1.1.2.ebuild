@@ -18,7 +18,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="LGPL-2"
 SLOT="0"
-IUSE="doc +gtk glade python seed vala" # gjs
+IUSE="doc gjs +gtk glade python seed vala"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -27,11 +27,11 @@ fi
 
 RDEPEND=">=dev-libs/glib-2.23.6:2
 	>=dev-libs/gobject-introspection-0.10.1
+	gjs? ( >=dev-libs/gjs-1.29.16 )
 	glade? ( >=dev-util/glade-3.9.1:3.10 )
 	gtk? ( >=x11-libs/gtk+-2.91.1:3[introspection] )
-	python? ( >=dev-python/pygobject-2.28:2[introspection] )
+	python? ( >=dev-python/pygobject-2.90.2:3 )
 	seed? ( >=dev-libs/seed-2.91.91 )"
-	# gjs? ( >=dev-libs/gjs-0.7.8 )
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
 	>=sys-devel/gettext-0.17
@@ -43,6 +43,7 @@ DOCS="AUTHORS ChangeLog NEWS README"
 pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_enable deprecated deprecation)
+		$(use_enable gjs)
 		$(use_enable glade glade-catalog)
 		$(use_enable gtk)
 		$(use_enable python)
@@ -51,10 +52,7 @@ pkg_setup() {
 		VALAC=$(type -P valac-0.12)
 		--disable-deprecation
 		--disable-static
-		--disable-maintainer-mode
-		--disable-gtk2-test-build"
-	#	$(use_enable gjs)
-	# breaks with gjs-1.29.15; https://bugzilla.gnome.org/show_bug.cgi?id=655481
+		--disable-maintainer-mode"
 	# Wtf, --disable-gcov, --enable-gcov=no, --enable-gcov, all enable gcov
 	# What do we do about gdb, valgrind, gcov, etc?
 
