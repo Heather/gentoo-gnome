@@ -8,7 +8,7 @@ GNOME_TARBALL_SUFFIX="xz"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2:2.5"
 
-inherit gnome2 python libtool
+inherit autotools eutils gnome2 python
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -50,6 +50,10 @@ src_prepare() {
 
 	# Don't pre-compile .py
 	ln -sf $(type -P true) py-compile
+
+	# Don't build tests when FEATURES=-test; bug #379929
+	epatch "${FILESDIR}/${PN}-0.10.8-make-check.patch"
+	eautoreconf
 
 	gnome2_src_prepare
 }
