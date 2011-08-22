@@ -86,7 +86,7 @@ pkg_setup() {
 		--disable-static
 		--disable-schemas-compile
 		--enable-gconf-bridge
-		--with-pnpids=${EROOT}usr/share/libgnome-desktop-3.0/pnp.ids
+		--with-pnpids=${EPREFIX}/usr/share/libgnome-desktop-3.0/pnp.ids
 		$(use_enable cups)
 		$(use_enable debug)
 		$(use_enable debug more-warnings)

@@ -90,11 +90,11 @@ pkg_setup() {
 	# of https://bugzilla.gnome.org/show_bug.cgi?id=607643#c4
 	G2CONF="${G2CONF}
 		--disable-schemas-install
-		--localstatedir=${EROOT}var
+		--localstatedir=${EPREFIX}/var
 		--with-xdmcp=yes
 		--enable-authentication-scheme=pam
-		--with-pam-prefix=${EROOT}etc
-		--with-at-spi-registryd-directory=${EROOT}usr/libexec
+		--with-pam-prefix=${EPREFIX}/etc
+		--with-at-spi-registryd-directory=${EPREFIX}/usr/libexec
 		$(use_with accessibility xevie)
 		$(use_enable ipv6)
 		$(use_enable xklavier libxklavier)
