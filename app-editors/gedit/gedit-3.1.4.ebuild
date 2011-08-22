@@ -49,7 +49,7 @@ RDEPEND="
 		>=x11-libs/gtk+-3.0:3[introspection]
 		>=x11-libs/gtksourceview-2.91.9:3.0[introspection]
 		>=dev-libs/libpeas-0.7.4[gtk]
-		>=dev-python/pygobject-2.28.0[introspection] )
+		>=dev-python/pygobject-2.90.2:3 )
 	spell? (
 		>=app-text/enchant-1.2
 		>=app-text/iso-codes-0.35
@@ -77,6 +77,7 @@ pkg_setup() {
 		--enable-updater
 		--enable-gvfs-metadata
 		$(use_enable introspection)
+		$(use_enable python)
 		$(use_enable spell)"
 
 	if use python || use introspection; then
