@@ -39,6 +39,7 @@ pkg_setup() {
 	DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README"
 	G2CONF="${G2CONF}
 		--disable-deprecations
+		--disable-maintainer-mode
 		--enable-providers
 		$(use_enable glade glade-catalog)
 		$(use_enable introspection)"
