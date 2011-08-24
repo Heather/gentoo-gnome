@@ -31,13 +31,12 @@ COMMON_DEPEND="
 	gnome-base/gsettings-desktop-schemas
 
 	gnome? (
-		dev-libs/glib:2[introspection]
 		gnome-extra/gnome-utils
 		x11-libs/gtk+:3[introspection] )"
 RDEPEND="${COMMON_DEPEND}
 	gnome? (
 		>=dev-libs/libpeas-1.0.0[gtk,python]
-		dev-python/pygobject[introspection]
+		|| ( dev-python/pygobject:2[introspection] dev-python/pygobject:3 )
 		gnome-extra/gucharmap:2.90[introspection] )"
 DEPEND="${COMMON_DEPEND}
 	>=app-text/scrollkeeper-0.1.4
