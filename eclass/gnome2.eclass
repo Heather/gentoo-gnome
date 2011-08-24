@@ -108,6 +108,9 @@ gnome2_src_prepare() {
 	# http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
 	chmod 0700 "${XDG_RUNTIME_DIR}"
 
+	# GST_REGISTRY is to work around gst utilities trying to read/write /root
+	export GST_REGISTRY="${S}/registry.xml"
+
 	# Prevent scrollkeeper access violations
 	gnome2_omf_fix
 
@@ -140,8 +143,7 @@ gnome2_src_configure() {
 	# Avoid sandbox violations caused by gnome-vfs (bug #128289 and #345659)
 	addwrite "$(unset HOME; echo ~)/.gnome2"
 
-	# GST_REGISTRY is to work around gst-inspect trying to read/write /root
-	GST_REGISTRY="${S}/registry.xml" econf "$@" ${G2CONF}
+	econf "$@" ${G2CONF}
 }
 
 # @FUNCTION: gnome2_src_compile
