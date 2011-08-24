@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/gcalctool/gcalctool-5.32.2.ebuild,v 1.1 2010/11/28 14:53:45 pacho Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="no"
 
 inherit gnome2
@@ -39,7 +39,6 @@ RDEPEND="${COMMON_DEPEND}
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-maintainer-mode
-		--disable-schemas-compile
-		--with-gtk=3.0"
+		--disable-schemas-compile"
 	DOCS="AUTHORS ChangeLog* NEWS README"
 }
