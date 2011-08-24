@@ -31,7 +31,6 @@ COMMON_DEPEND="
 	gnome-base/gsettings-desktop-schemas
 
 	gnome? (
-		dev-libs/glib:2[introspection]
 		gnome-extra/gnome-utils
 		x11-libs/gtk+:3[introspection] )"
 RDEPEND="${COMMON_DEPEND}
