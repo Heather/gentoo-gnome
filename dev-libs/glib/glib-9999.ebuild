@@ -2,11 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="3"
-GNOME_TARBALL_SUFFIX="xz"
-PYTHON_DEPEND="2:2.5"
+EAPI="4"
 
-inherit autotools gnome.org libtool eutils flag-o-matic multilib pax-utils python virtualx
+inherit autotools gnome.org libtool eutils flag-o-matic multilib pax-utils virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -38,16 +36,14 @@ DEPEND="${RDEPEND}
 		>=dev-util/gtk-doc-1.15
 		~app-text/docbook-xml-dtd-4.1.2 )
 	systemtap? ( >=dev-util/systemtap-1.3 )
-	test? ( >=sys-apps/dbus-1.2.14 )
+	test? (
+		dev-util/gdbus-codegen
+		>=sys-apps/dbus-1.2.14 )
 	!<dev-util/gtk-doc-1.15-r2"
 PDEPEND="introspection? ( dev-libs/gobject-introspection )
 	!<gnome-base/gvfs-1.6.4-r990" # Earlier versions do not work with glib
 
 # XXX: Consider adding test? ( sys-devel/gdb ); assert-msg-test tries to use it
-
-pkg_setup() {
-	python_set_active_version 2
-}
 
 src_prepare() {
 	[[ ${PV} = 9999 ]] && gnome2-live_src_prepare
@@ -89,28 +85,17 @@ src_prepare() {
 			sed -i -e "/desktop-app-info\/fallback/d" gio/tests/desktop-app-info.c || die
 			sed -i -e "/desktop-app-info\/lastused/d" gio/tests/desktop-app-info.c || die
 		fi
-
-		# Disable tests requiring dev-python/dbus-python, bug #349236
-		if ! has_version dev-python/dbus-python ; then
-			ewarn "Some tests will be skipped due dev-python/dbus-python not being present on your system,"
-			ewarn "think on installing it to get these tests run."
-			sed -i -e "/connection\/filter/d" gio/tests/gdbus-connection.c || die
-			sed -i -e "/connection\/large_message/d" gio/tests/gdbus-connection-slow.c || die
-			sed -i -e "/gdbus\/proxy/d" gio/tests/gdbus-proxy.c || die
-			sed -i -e "/gdbus\/bus-watch-name/d" gio/tests/gdbus-names.c || die
-			sed -i -e "/gdbus\/proxy-well-known-name/d" gio/tests/gdbus-proxy-well-known-name.c || die
-			sed -i -e "/gdbus\/introspection-parser/d" gio/tests/gdbus-introspection.c || die
-			sed -i -e "/gdbus\/method-calls-in-thread/d" gio/tests/gdbus-threading.c || die
-		fi
 	fi
 
-	python_convert_shebangs -r 2 gio/gdbus-codegen/
+	# gdbus-codegen is a separate package
+	epatch "${FILESDIR}/${PN}-2.29.16-external-gdbus-codegen.patch"
 
 	# disable pyc compiling
 	ln -sfn $(type -P true) py-compile
 
 	# Needed for the punt-python-check patch, disabling timeout test
 	# Also needed to prevent croscompile failures, see bug #267603
+	# Also needed for the no-gdbus-codegen patch
 	AT_M4DIR="${WORKDIR}" eautoreconf
 
 	[[ ${CHOST} == *-freebsd* ]] && elibtoolize
@@ -222,11 +207,4 @@ pkg_postinst() {
 		ewarn "Using <gtk+-3.0.12:3 with ${P} results in frequent crashes."
 		ewarn "You should upgrade to a newer version of gtk+:3 immediately."
 	fi
-
-	python_need_rebuild
-	python_mod_optimize /usr/$(get_libdir)/gdbus-codegen
-}
-
-pkg_postrm() {
-	python_mod_cleanup /usr/$(get_libdir)/gdbus-codegen
 }
