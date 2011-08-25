@@ -40,6 +40,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.29.13:2
 	xmp? ( >=media-libs/exempi-2.1.0 )"
 DEPEND="${COMMON_DEPEND}
 	>=dev-lang/perl-5
+	dev-util/gdbus-codegen
 	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.40.1
 	sys-devel/gettext
