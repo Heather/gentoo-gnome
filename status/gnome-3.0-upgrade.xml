@@ -17,8 +17,8 @@ This is a guide for upgrading from GNOME 2.32.x to GNOME 3.0.x
 <!-- See http://creativecommons.org/licenses/by-sa/2.5 -->
 <license/>
 
-<version>0.1</version>
-<date>2011-08-12</date>
+<version>0.1.1</version>
+<date>2011-08-25</date>
 
 <chapter>
 <title>Changes</title>
@@ -138,6 +138,23 @@ and run</p>
 </section>
 
 <section>
+<title>Suspend on laptop lid close</title>
+<body>
+
+<p>
+GNOME 3 will, by default, suspend a laptop when the lid is closed. If you
+do not like this behavior, you can change it via the <c>gnome-tweak-tool</c>
+GUI, or using <c>gsettings</c> from the terminal:
+</p>
+
+<pre caption="Only turn off the screen when laptop lid is closed on AC power"> 
+$ <i>gsettings set org.gnome.settings-daemon.plugins.power lid-close-ac-action blank</i>
+</pre>
+
+</body>
+</section>
+
+<section>
 <title>Icons on the desktop</title>
 <body>
 
@@ -145,6 +162,15 @@ and run</p>
 In GNOME 3.0, Nautilus by default no longer manages the desktop, and the
 <path>~/Desktop</path> folder is simply treated as a normal folder with files.
 </p>
+
+<p>
+If you want to have Nautilus manage the desktop like in GNOME 2, you can change
+the corresponding setting in the <c>gnome-tweak-tool</c> GUI, or use the 
+<c>gsettings</c> command from the terminal:
+</p>
+<pre caption="Making Nautilus manage the desktop"> 
+$ <i>gsettings set org.gnome.desktop.background show-desktop-icons true</i>
+</pre>
 
 </body>
 </section>
@@ -161,6 +187,69 @@ GNOME 3.0 standard mode (i.e. GNOME Shell) is incompatible with Compiz.
 </section>
 
 <section>
+<title>Touchpad and other input device customization</title>
+<body>
+
+<p>
+In GNOME 3, if you have "disable touchpad while typing" selected, the touchpad
+will be disabled for 2 seconds after a keyboard key is pressed. In GNOME 2,
+this interval was 500 milliseconds. If you like to disable the touchpad
+while typing, but prefer the shorter timeout interval like in GNOME 2, you can
+emerge <c>gnome-base/gnome-settings-daemon</c> with the
+<c>short-touchpad-timeout</c> USE flag enabled.
+</p>
+
+<p>
+GNOME 3 allows setting a custom command for advanced customization of input
+device settings. For example, suppose that you want to configure your touchpad
+to enable two-finger scrolling (both vertical and horizontal) <e>and</e> edge
+scrolling (vertical only). You could do
+</p>
+
+<pre caption="Setting a new GNOME input device hotplug script"> 
+$ <i>cp /usr/share/gnome-settings-daemon-3.0/input-device-example.sh ~/input-device.sh</i>
+$ <i>chmod +x ~/input-device.sh</i>
+$ <i>gsettings set org.gnome.settings-daemon.peripherals.input-devices hotplug-command ~/input-device.sh</i>
+</pre>
+
+<p>
+and edit <path>input-device.sh</path> so it ends as follows:
+</p>
+
+<pre>
+# If the device is a touchpad ...
+if [[ -z "${device#*TouchPad*}" ]]; then
+	# ... enable two-finger scrolling (vertical and horizontal) ...
+	xinput set-prop "${device}" "Synaptics Two-Finger Scrolling" 1 1
+	# ... and edge scrolling (vertical only, no horizontal, no coasting) ...
+	xinput set-prop "${device}" "Synaptics Edge Scrolling" 1 0 0
+fi
+# All further processing will be disabled if $retval == 0
+exit $retval
+</pre>
+
+<note>
+If the custom hotplug command does not terminate with exit value 0,
+<c>gnome-settings-daemon</c> will set its own settings on the input device,
+likely clobbering the settings that the hotplug command had changed.
+</note>
+
+<p>
+If, for whatever reason, you want to completely prevent GNOME 3 from
+automatically modifying your mouse and touchpad settings (note that this will
+<e>also</e> prevent custom input hotplug commands, such as
+<path>input-device.sh</path> above, from modifying mice and touchpads!), you
+can run the following:
+</p>
+
+<pre caption="Prevent GNOME from managing the mouse and touchpad">
+$ <i>gsettings set org.gnome.settings-daemon.plugins.mouse active false</i>
+</pre>
+
+</body>
+</section>
+
+<section>
 <title>General configurability and extensions</title>
 <body>
 
@@ -169,7 +258,8 @@ GNOME 3.0 is designed to appear significantly less configurable than GNOME 2.
 For example, by default there is no easily discoverable GUI for changing the
 Gtk+ theme. Many configuration settings are hidden, but can still be changed
 from gsettings (dconf), gconf, or using the <c>gnome-extra/gnome-tweak-tool</c>
-GUI. Discussion of such hidden settings is outside the scope of this guide.
+GUI. Discussion of most of these hidden settings is outside the scope of this
+guide.
 </p>
 
 <p>
@@ -244,15 +334,18 @@ As reported in <uri link="https://bugs.gentoo.org/show_bug.cgi?id=375615">bug
 #375615</uri>, for some people, certain versions of <c>x11-drivers/nvidia-drivers</c>
 (275.19, 275.21, 280.13 are known to be affected) cause some Gtk+ applications
 to crash when terminating. One effect of this is to make GDM freeze after the
-password has been entered. Some (but not all) of the people who are suffering
+password has been entered; similarly, GNOME will freeze when logging out.
+Some (but not all) of the people who are suffering
 from this bug have reported that emerging <c>x11-libs/cairo</c> with <c>USE=-opengl</c>
-resolves the problem.
+resolves the problem. Another workaround is to set the environment variable
+<c>__GL_NO_DSO_FINALIZER</c> to 1 systemwide; note that this will have
+no effect if you are using <c>gnome-base/gdm-3.0.4-r1</c> or older.
 </p>
 
 <p>
 Under some versions of <c>x11-drivers/nvidia-drivers</c> (275.09.07, 275.19, and
 275.21), GNOME Shell system tray shows 
-<uri link="http://www.nvnews.net/vbulletin/showthread.php?t=163178">graphical corruption</uri>
+<uri link="https://bugs.gentoo.org/show_bug.cgi?id=380245">graphical corruption</uri>
 (all icons are rendered identically). This problem was fixed in driver version 280.13.
 </p>
 </body>
