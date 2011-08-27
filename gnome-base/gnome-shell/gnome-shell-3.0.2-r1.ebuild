@@ -108,6 +108,10 @@ src_prepare() {
 	# https://bugzilla.gnome.org/show_bug.cgi?id=647893
 	# can trigger the crash even with accountsservice-0.6.12
 	epatch "${FILESDIR}/${PN}-3.0.2-user-removed-signals.patch"
+
+	# https://bugzilla.gnome.org/show_bug.cgi?id=650971
+	# Don't clobber extensions' styles
+	epatch "${FILESDIR}/${PN}-3.0.2-unbreak-extension-css.patch"
 	gnome2_src_prepare
 }
 

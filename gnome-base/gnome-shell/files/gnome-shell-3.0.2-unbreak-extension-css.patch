@@ -1,0 +1,93 @@
+From 2674d96e547b27ed5c377804c1059bdfd926086e Mon Sep 17 00:00:00 2001
+From: Giovanni Campagna <gcampagna@src.gnome.org>
+Date: Thu, 02 Jun 2011 15:05:08 +0000
+Subject: StTheme: retrive the list of custom stylesheets and use it in loadTheme()
+
+Using the list of stylesheets loaded with st_theme_load_stylesheet(),
+one can build an StTheme that is completely identical to the previous
+one, except for one property (application-stylesheet).
+This allows rt and the user-theme extension to work while respecting
+the theming of other extensions.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=650971
+---
+diff --git a/js/ui/main.js b/js/ui/main.js
+index 1d27b4c..c0f4845 100644
+--- a/js/ui/main.js
++++ b/js/ui/main.js
+@@ -393,12 +393,21 @@ function setThemeStylesheet(cssStylesheet)
+  */
+ function loadTheme() {
+     let themeContext = St.ThemeContext.get_for_stage (global.stage);
++    let previousTheme = themeContext.get_theme();
+ 
+     let cssStylesheet = _defaultCssStylesheet;
+     if (_cssStylesheet != null)
+         cssStylesheet = _cssStylesheet;
+ 
+     let theme = new St.Theme ({ application_stylesheet: cssStylesheet });
++
++    if (previousTheme) {
++        let customStylesheets = previousTheme.get_custom_stylesheets();
++
++        for (let i = 0; i < customStylesheets.length; i++)
++            theme.load_stylesheet(customStylesheets[i]);
++    }
++
+     themeContext.set_theme (theme);
+ }
+ 
+diff --git a/src/st/st-theme.c b/src/st/st-theme.c
+index 326d9de..2058e32 100644
+--- a/src/st/st-theme.c
++++ b/src/st/st-theme.c
+@@ -256,6 +256,30 @@ st_theme_unload_stylesheet (StTheme    *theme,
+   cr_stylesheet_unref (stylesheet);
+ }
+ 
++/**
++ * st_theme_get_custom_stylesheets:
++ * @theme: an #StTheme
++ *
++ * Returns: (transfer full) (element-type utf8): the list of stylesheet filenames
++ *          that were loaded with st_theme_load_stylesheet()
++ */
++GSList*
++st_theme_get_custom_stylesheets (StTheme *theme)
++{
++  GSList *result = NULL;
++  GSList *iter;
++
++  for (iter = theme->custom_stylesheets; iter; iter = iter->next)
++    {
++      CRStyleSheet *stylesheet = iter->data;
++      gchar *filename = g_hash_table_lookup (theme->filenames_by_stylesheet, stylesheet);
++
++      result = g_slist_prepend (result, g_strdup (filename));
++    }
++
++  return result;
++}
++
+ static GObject *
+ st_theme_constructor (GType                  type,
+                       guint                  n_construct_properties,
+diff --git a/src/st/st-theme.h b/src/st/st-theme.h
+index 003c2a7..0a044bf 100644
+--- a/src/st/st-theme.h
++++ b/src/st/st-theme.h
+@@ -51,9 +51,9 @@ StTheme *st_theme_new (const char *application_stylesheet,
+                        const char *theme_stylesheet,
+                        const char *default_stylesheet);
+ 
+-gboolean st_theme_load_stylesheet (StTheme *theme, const char *path, GError **error);
+-
+-void st_theme_unload_stylesheet (StTheme *theme, const char *path);
++gboolean  st_theme_load_stylesheet        (StTheme *theme, const char *path, GError **error);
++void      st_theme_unload_stylesheet      (StTheme *theme, const char *path);
++GSList   *st_theme_get_custom_stylesheets (StTheme *theme);
+ 
+ G_END_DECLS
+ 
+--
+cgit v0.9.0.2
