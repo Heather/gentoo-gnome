@@ -19,6 +19,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.29.8:2
 RDEPEND="${COMMON_DEPEND}
 	sys-apps/dbus"
 DEPEND="${COMMON_DEPEND}
+	dev-util/gdbus-codegen
 	>=dev-util/intltool-0.40.6
 	dev-util/pkgconfig
 	sys-devel/gettext"
