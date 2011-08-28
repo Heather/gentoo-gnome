@@ -109,7 +109,7 @@ gnome2_src_prepare() {
 	chmod 0700 "${XDG_RUNTIME_DIR}"
 
 	# GST_REGISTRY is to work around gst utilities trying to read/write /root
-	export GST_REGISTRY="${S}/registry.xml"
+	export GST_REGISTRY="${T}/registry.xml"
 
 	# Prevent scrollkeeper access violations
 	gnome2_omf_fix
