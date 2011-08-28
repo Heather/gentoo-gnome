@@ -14,7 +14,9 @@ HOMEPAGE="http://www.gnome.org/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~sparc ~x86 ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
-IUSE="doc"
+# FIXME: gtk-doc scanner fails assertion in gtk_icon_theme_get_for_screen().
+# How? Why?
+IUSE="" # doc
 
 # yelp-xsl-3.1.1 neded due to commit ee830ed9
 RDEPEND="
@@ -32,8 +34,8 @@ DEPEND="${RDEPEND}
 	>=sys-devel/gettext-0.17
 	>=dev-util/intltool-0.41.0
 	>=dev-util/pkgconfig-0.9
-	gnome-base/gnome-common
-	doc? ( >=dev-util/gtk-doc-1.13 )"
+	gnome-base/gnome-common"
+#	doc? ( >=dev-util/gtk-doc-1.13 )
 # If eautoreconf:
 #	gnome-base/gnome-common
 
