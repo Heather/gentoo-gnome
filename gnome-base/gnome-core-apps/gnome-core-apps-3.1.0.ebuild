@@ -17,11 +17,14 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-freebsd ~amd64-l
 # Note to developers:
 # This is a wrapper for the core apps tightly integrated with GNOME 3
 # gtk-engines:2 is still around because it's needed for gtk2 apps
+# gnome-menus:0 is used by older packages, and is listed here for a
+# clean upgrade from gnome-3.0
 RDEPEND="
 	>=gnome-base/gnome-core-libs-${PV}[cups?]
 
 	>=gnome-base/gnome-session-${PV}
-	>=gnome-base/gnome-menus-${PV}
+	>=gnome-base/gnome-menus-${PV}:3
+	>=gnome-base/gnome-menus-3.0.1-r50:0
 	>=gnome-base/gnome-settings-daemon-${PV}[cups?]
 	>=gnome-base/gnome-control-center-${PV}[cups?]
 
@@ -41,7 +44,7 @@ RDEPEND="
 	>=net-im/empathy-${PV}
 	>=x11-terms/gnome-terminal-${PV}
 
-	>=gnome-extra/gnome-user-docs-${PV}
+	>=gnome-extra/gnome-user-docs-3.0.0
 	>=gnome-extra/yelp-${PV}
 
 	>=x11-themes/gtk-engines-2.20.2:2
@@ -50,7 +53,7 @@ RDEPEND="
 	>=x11-themes/gnome-themes-standard-${PV}
 
 	bluetooth? ( >=net-wireless/gnome-bluetooth-${PV} )
-	cdr? ( >=app-cdr/brasero-${PV} )
+	cdr? ( >=app-cdr/brasero-3.0.0 )
 "
 DEPEND=""
 S=${WORKDIR}

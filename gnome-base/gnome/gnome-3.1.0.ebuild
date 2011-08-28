@@ -24,19 +24,19 @@ RDEPEND="
 	>=gnome-base/gnome-core-libs-${PV}[cups?]
 	>=gnome-base/gnome-core-apps-${PV}[cups?,bluetooth,cdr?]
 
-	>=gnome-base/gdm-${PV}
+	>=gnome-base/gdm-3.0.0
 
 	>=x11-wm/mutter-${PV}
 	>=gnome-base/gnome-shell-${PV}
 
 	>=x11-themes/gnome-backgrounds-${PV}
-	>=x11-themes/gnome-icon-theme-extras-${PV}
+	>=x11-themes/gnome-icon-theme-extras-3.0.0
 	x11-themes/sound-theme-freedesktop
 
 	extras? ( >=gnome-base/gnome-extra-apps-${PV} )
 	fallback? ( >=gnome-base/gnome-fallback-${PV} )"
 DEPEND=""
-PDEPEND=">=gnome-base/gvfs-1.8.0[gdu]"
+PDEPEND=">=gnome-base/gvfs-1.9.0[gdu]"
 # Broken from assumptions of gnome-vfs headers being included in nautilus headers,
 # which isn't the case with nautilus-2.22, bug #216019
 #	>=app-admin/gnome-system-tools-2.32.0
