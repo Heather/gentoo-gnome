@@ -57,7 +57,6 @@ pkg_setup() {
 		--with-ffi
 		$(use_enable doc docs)
 		$(use_enable cairo)
-		$(use_with libffi ffi)
 		$(use_enable threads thread)"
 }
 
