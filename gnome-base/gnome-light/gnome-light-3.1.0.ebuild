@@ -38,7 +38,7 @@ RDEPEND="!gnome-base/gnome
 	>=x11-themes/gnome-icon-theme-symbolic-${PV}
 	>=x11-themes/gnome-themes-standard-${PV}
 
-	>=x11-terms/gnome-terminal-${PV}
+	>=x11-terms/gnome-terminal-3.0.0
 "
 DEPEND=""
 PDEPEND=">=gnome-base/gvfs-1.8.0"

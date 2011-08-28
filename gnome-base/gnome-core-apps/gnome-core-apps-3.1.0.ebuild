@@ -42,7 +42,7 @@ RDEPEND="
 	>=media-gfx/eog-${PV}
 	>=media-video/totem-${PV}
 	>=net-im/empathy-${PV}
-	>=x11-terms/gnome-terminal-${PV}
+	>=x11-terms/gnome-terminal-3.0.0
 
 	>=gnome-extra/gnome-user-docs-3.0.0
 	>=gnome-extra/yelp-${PV}
