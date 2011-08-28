@@ -39,7 +39,6 @@ pkg_setup() {
 		G2CONF="${G2CONF} --enable-debug=minimum"
 	fi
 
-	# Disable python because gmenu-simple-editor will be installed by slot 3
 	G2CONF="${G2CONF}
 		--disable-static
 		$(use_enable python)
