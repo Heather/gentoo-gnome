@@ -19,6 +19,12 @@ SLOT="0"
 KEYWORDS="~amd64 ~ppc ~sparc ~x86 ~x86-fbsd"
 IUSE="debug devhelp doc glade graphviz +introspection subversion test vala"
 
+# FIXME: tests do not work. First, anjuta.lst is missing from tarballs (see
+# upstream bug 657589). Second, in any case, anjuta.lst is out of date (no
+# vala:0.14, no libgda:5). Third, AFAICT, the tests could only pass if anjuta
+# is built a specific set of USE flags.
+RESTRICT="test"
+
 RDEPEND=">=dev-libs/glib-2.28.0:2
 	x11-libs/gdk-pixbuf:2
 	>=x11-libs/gtk+-3.0.0:3
@@ -29,7 +35,7 @@ RDEPEND=">=dev-libs/glib-2.28.0:2
 
 	sys-devel/autogen
 
-	>=gnome-extra/libgda-4.2.0:4
+	>=gnome-extra/libgda-4.99.0:5
 	dev-util/ctags
 
 	x11-libs/libXext
@@ -44,7 +50,7 @@ RDEPEND=">=dev-libs/glib-2.28.0:2
 		>=net-libs/neon-0.28.2
 		>=dev-libs/apr-1
 		>=dev-libs/apr-util-1 )
-	vala? ( >=dev-lang/vala-0.13.0:0.14 )"
+	vala? ( >=dev-lang/vala-0.13.3:0.14 )"
 DEPEND="${RDEPEND}
 	>=dev-lang/perl-5
 	!!dev-libs/gnome-build
