@@ -1,0 +1,29 @@
+From b11cd319e0dbf9ed56be11f8bdb20f1be477a509 Mon Sep 17 00:00:00 2001
+From: Alexandre Rostovtsev <tetromino@gmail.com>
+Date: Sun, 28 Aug 2011 21:59:00 -0400
+Subject: [PATCH] Need to set VTE_API_VERSION
+
+Configure needs to properly set VTE_API_VERSION to use the same library
+names as previous gtk3-based vte releases, and to prevent file collisions
+with gtk2-based vte.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=657584
+---
+ configure.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/configure.in b/configure.in
+index a4ef0b7..0193fe6 100644
+--- a/configure.in
++++ b/configure.in
+@@ -40,6 +40,7 @@ AC_SUBST([LT_VERSION_INFO])
+ 
+ VTE_API_MAJOR_VERSION=2
+ VTE_API_MINOR_VERSION=90
++VTE_API_VERSION=$VTE_API_MAJOR_VERSION.$VTE_API_MINOR_VERSION
+ VTE_PC_VERSION=-$VTE_API_VERSION
+ VTE_LIBRARY_SUFFIX=$VTE_API_VERSION
+ VTE_SEAL_CFLAGS="-DVTE_SEAL_ENABLE"
+-- 
+1.7.6.1
+
