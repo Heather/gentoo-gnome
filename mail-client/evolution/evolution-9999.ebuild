@@ -8,7 +8,7 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="python? 2:2.4"
 
-inherit autotools flag-o-matic gnome2 python
+inherit autotools eutils flag-o-matic gnome2 python
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -118,7 +118,7 @@ pkg_setup() {
 		$(use_enable python)
 		$(use_with clutter)
 		$(use_with ldap openldap)
-		$(use_with kerberos krb5 /usr)"
+		$(use_with kerberos krb5 ${EPREFIX}/usr)"
 
 	# workaround for lack of EAPI 4 support in python.eclass
 	local myconf="--disable-contact-maps"

@@ -118,7 +118,7 @@ pkg_setup() {
 		$(use_enable python)
 		$(use_with clutter)
 		$(use_with ldap openldap)
-		$(use_with kerberos krb5 /usr)"
+		$(use_with kerberos krb5 ${EPREFIX}/usr)"
 
 	# workaround for lack of EAPI 4 support in python.eclass
 	local myconf="--disable-contact-maps"
@@ -157,9 +157,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# https://bugzilla.gnome.org/show_bug.cgi?id=656537
-	epatch "${FILESDIR}/${P}-mallard-relaxng-validation-errors.patch"
-
 	# Use NSS/NSPR only if 'ssl' is enabled.
 	if use ssl ; then
 		sed -e 's|mozilla-nss|nss|' \

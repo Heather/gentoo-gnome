@@ -41,7 +41,7 @@ DEPEND="${RDEPEND}
 
 pkg_setup() {
 	G2CONF="${G2CONF}
-		--with-krb5=/usr
+		--with-krb5=${EPREFIX}/usr
 		--with-openldap
 		--disable-static
 		--disable-maintainer-mode
