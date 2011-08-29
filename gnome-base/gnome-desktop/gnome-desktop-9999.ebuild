@@ -25,8 +25,10 @@ fi
 
 # TODO: Add RDEPEND on pciutils (requires support for reading gzipped pnp.ids)
 # Latest schemas needed due to commit 7f3e3d52
+# cairo[X] needed for gnome-bg
 RDEPEND="
 	>=dev-libs/glib-2.19.1:2
+	x11-libs/cairo[X]
 	>=x11-libs/gdk-pixbuf-2.21.3:2[introspection?]
 	>=x11-libs/gtk+-3.0.0:3[introspection?]
 	>=x11-libs/libXext-1.2
