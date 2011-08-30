@@ -37,7 +37,7 @@ DEPEND="${RDEPEND}
 		~app-text/docbook-xml-dtd-4.1.2 )
 	systemtap? ( >=dev-util/systemtap-1.3 )
 	test? (
-		dev-util/gdbus-codegen
+		>=dev-util/gdbus-codegen-2.29.18
 		>=sys-apps/dbus-1.2.14 )
 	!<dev-util/gtk-doc-1.15-r2"
 PDEPEND="introspection? ( dev-libs/gobject-introspection )
@@ -88,7 +88,7 @@ src_prepare() {
 	fi
 
 	# gdbus-codegen is a separate package
-	epatch "${FILESDIR}/${PN}-2.29.16-external-gdbus-codegen.patch"
+	epatch "${FILESDIR}/${PN}-2.29.18-external-gdbus-codegen.patch"
 
 	# disable pyc compiling
 	ln -sfn $(type -P true) py-compile
