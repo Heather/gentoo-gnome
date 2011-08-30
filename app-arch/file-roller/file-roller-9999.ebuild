@@ -23,9 +23,15 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux"
 fi
 
+# gdk-pixbuf used extensively in the source
+# cairo used in eggtreemultidnd.c
+# pango used in fr-window
 RDEPEND=">=dev-libs/glib-2.25.5:2
-	>=x11-libs/gtk+-3.0.2:3
 	sys-apps/file
+	x11-libs/cairo
+	x11-libs/gdk-pixbuf:2
+	>=x11-libs/gtk+-3.0.2:3
+	x11-libs/pango
 	nautilus? ( >=gnome-base/nautilus-3.0.0 )
 	packagekit? ( app-admin/packagekit-base )
 "
@@ -38,13 +44,14 @@ DEPEND="${RDEPEND}
 #	gnome-base/gnome-common
 
 pkg_setup() {
+	# --disable-debug because enabling it adds -O0 to CFLAGS
 	G2CONF="${G2CONF}
 		--disable-dependency-tracking
 		--disable-scrollkeeper
 		--disable-run-in-place
 		--disable-static
-		--disable-deprecations
 		--disable-schemas-compile
+		--disable-debug
 		--enable-magic
 		$(use_enable nautilus nautilus-actions)
 		$(use_enable packagekit)"
