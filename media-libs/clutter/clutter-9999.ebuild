@@ -31,6 +31,7 @@ RDEPEND="
 	>=dev-libs/atk-1.17[introspection?]
 	>=dev-libs/json-glib-0.12[introspection?]
 	>=media-libs/cogl-1.7.6:1.0[introspection?,pango]
+	media-libs/fontconfig
 	>=x11-libs/cairo-1.10[glib]
 	>=x11-libs/pango-1.20[introspection?]
 	
