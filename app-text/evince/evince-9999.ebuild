@@ -25,11 +25,17 @@ fi
 
 # Since 2.26.2, can handle poppler without cairo support. Make it optional ?
 # not mature enough
+# atk used in libview
+# gdk-pixbuf used all over the place
+# libX11 used for totem-screensaver
 RDEPEND="
 	>=app-text/libspectre-0.2.0
+	dev-libs/atk
 	>=dev-libs/glib-2.25.11:2
 	>=dev-libs/libxml2-2.5:2
+	x11-libs/gdk-pixbuf:2
 	>=x11-libs/gtk+-3.0.2:3[introspection?]
+	x11-libs/libX11
 	>=x11-libs/libSM-1
 	x11-libs/libICE
 	gnome-base/gsettings-desktop-schemas
@@ -41,6 +47,7 @@ RDEPEND="
 	djvu? ( >=app-text/djvu-3.5.17 )
 	dvi? (
 		virtual/tex-base
+		dev-libs/kpathsea
 		t1lib? ( >=media-libs/t1lib-5.0.0 ) )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-2.22.0 )
 	introspection? ( >=dev-libs/gobject-introspection-0.6 )

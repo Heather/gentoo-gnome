@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit autotools eutils gnome2
+inherit eutils gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -25,11 +25,17 @@ fi
 
 # Since 2.26.2, can handle poppler without cairo support. Make it optional ?
 # not mature enough
+# atk used in libview
+# gdk-pixbuf used all over the place
+# libX11 used for totem-screensaver
 RDEPEND="
 	>=app-text/libspectre-0.2.0
+	dev-libs/atk
 	>=dev-libs/glib-2.25.11:2
 	>=dev-libs/libxml2-2.5:2
+	x11-libs/gdk-pixbuf:2
 	>=x11-libs/gtk+-3.0.2:3[introspection?]
+	x11-libs/libX11
 	>=x11-libs/libSM-1
 	x11-libs/libICE
 	gnome-base/gsettings-desktop-schemas
@@ -41,6 +47,7 @@ RDEPEND="
 	djvu? ( >=app-text/djvu-3.5.17 )
 	dvi? (
 		virtual/tex-base
+		dev-libs/kpathsea
 		t1lib? ( >=media-libs/t1lib-5.0.0 ) )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-2.22.0 )
 	introspection? ( >=dev-libs/gobject-introspection-0.6 )
@@ -99,19 +106,6 @@ src_prepare() {
 
 	# Fix .desktop file so menu item shows up
 	epatch "${FILESDIR}"/${PN}-0.7.1-display-menu.patch
-
-	# Various patches from upstream git, will be in next release
-	# Fix building of EvinceView-3.0.gir, needs eautoreconf
-	epatch "${FILESDIR}/${P}-fix-evinceview-introspection.patch"
-	# Adapt to changes in gdk-3.0.pc, needs eautoreconf
-	epatch "${FILESDIR}/${P}-gdk-targets.patch"
-	# Don't hang nautilus when a document takes too long to thumbnail
-	epatch "${FILESDIR}/${P}-limit-thumbnailing-time.patch"
-
-	if [[ ${PV} != 9999 ]]; then
-		intltoolize --force --copy --automake || die "intltoolize failed"
-		eautoreconf
-	fi
 
 	gnome2_src_prepare
 }
