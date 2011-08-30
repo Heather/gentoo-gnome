@@ -1,0 +1,138 @@
+From fb93262ca182aeb54632a3ddead4ed8e84b80ddc Mon Sep 17 00:00:00 2001
+From: José Alburquerque <jaalburqu@svn.gnome.org>
+Date: Mon, 22 Aug 2011 22:03:27 +0000
+Subject: TimeZoneMonitor: Remove as was done in glib.
+
+	* gio/src/filelist.am:
+	* gio/src/timezonemonitor.{ccg,hg}: Remove sources and the mention
+	from the build.
+	* glib/src/timezone.hg (refresh_local): Remove this method as the
+	function that it wraps was also removed from glib.
+	* tools/extra_defs_gen/generate_defs_gio.cc
+	(G_TYPE_TIME_ZONE_MONITOR): Remove this GType from the list of types
+	for which properties and signals are generated.
+
+	See the glib commit:
+	http://git.gnome.org/browse/glib/commit/?id=5b68b49b2072c371c72ee96175e3d6a727eb5e8b
+
+[Alexandre Rostovtsev <tetromino@gmail.com>: backport to 2.29.11 tarball release]
+---
+diff -ur a/gio/giomm/wrap_init.cc b/gio/giomm/wrap_init.cc
+--- a/gio/giomm/wrap_init.cc
++++ b/gio/giomm/wrap_init.cc
+@@ -90,7 +90,6 @@
+ #include "tcpconnection.h"
+ #include "themedicon.h"
+ #include "threadedsocketservice.h"
+-#include "timezonemonitor.h"
+ #ifndef G_OS_WIN32
+ #include "unixconnection.h"
+ #endif //G_OS_WIN32
+@@ -172,7 +171,6 @@
+ GType g_tcp_connection_get_type(void);
+ GType g_themed_icon_get_type(void);
+ GType g_threaded_socket_service_get_type(void);
+-GType g_time_zone_monitor_get_type(void);
+ #ifndef G_OS_WIN32
+ GType g_unix_connection_get_type(void);
+ #endif //G_OS_WIN32
+@@ -258,7 +256,6 @@
+ namespace Gio {  class TcpConnection_Class { public: static Glib::ObjectBase* wrap_new(GObject*); };  }
+ namespace Gio {  class ThemedIcon_Class { public: static Glib::ObjectBase* wrap_new(GObject*); };  }
+ namespace Gio {  class ThreadedSocketService_Class { public: static Glib::ObjectBase* wrap_new(GObject*); };  }
+-namespace Gio {  class TimeZoneMonitor_Class { public: static Glib::ObjectBase* wrap_new(GObject*); };  }
+ #ifndef G_OS_WIN32
+ namespace Gio {  class UnixConnection_Class { public: static Glib::ObjectBase* wrap_new(GObject*); };  }
+ #endif //G_OS_WIN32
+@@ -344,7 +341,6 @@
+   Glib::wrap_register(g_tcp_connection_get_type(), &Gio::TcpConnection_Class::wrap_new);
+   Glib::wrap_register(g_themed_icon_get_type(), &Gio::ThemedIcon_Class::wrap_new);
+   Glib::wrap_register(g_threaded_socket_service_get_type(), &Gio::ThreadedSocketService_Class::wrap_new);
+-  Glib::wrap_register(g_time_zone_monitor_get_type(), &Gio::TimeZoneMonitor_Class::wrap_new);
+ #ifndef G_OS_WIN32
+   Glib::wrap_register(g_unix_connection_get_type(), &Gio::UnixConnection_Class::wrap_new);
+ #endif //G_OS_WIN32
+@@ -421,7 +417,6 @@
+   Gio::TcpConnection::get_type();
+   Gio::ThemedIcon::get_type();
+   Gio::ThreadedSocketService::get_type();
+-  Gio::TimeZoneMonitor::get_type();
+ #ifndef G_OS_WIN32
+   Gio::UnixConnection::get_type();
+ #endif //G_OS_WIN32
+diff -ur a/gio/src/filelist.am b/gio/src/filelist.am
+--- a/gio/src/filelist.am
++++ b/gio/src/filelist.am
+@@ -88,7 +88,6 @@
+ 	tcpconnection.hg			\
+ 	threadedsocketservice.hg	\
+ 	themedicon.hg			\
+-	timezonemonitor.hg		\
+ 	volume.hg			\
+ 	volumemonitor.hg
+ 
+diff -ur a/glib/glibmm/timezone.cc b/glib/glibmm/timezone.cc
+--- a/glib/glibmm/timezone.cc
++++ b/glib/glibmm/timezone.cc
+@@ -118,12 +118,6 @@
+ }
+ 
+ 
+-void TimeZone::refresh_local()
+-{
+-g_time_zone_refresh_local();
+-}
+-
+-
+ int TimeZone::find_interval(TimeType type, gint64 time) const
+ {
+   return g_time_zone_find_interval(const_cast<GTimeZone*>(gobj()), ((GTimeType)(type)), time);
+diff -ur a/glib/glibmm/timezone.h b/glib/glibmm/timezone.h
+--- a/glib/glibmm/timezone.h
++++ b/glib/glibmm/timezone.h
+@@ -161,22 +161,6 @@
+   static TimeZone create_utc();
+ 
+   
+-  /** Notifies TimeZone that the local timezone may have changed.
+-   * 
+-   * In response, TimeZone will drop its cache of the local time zone.
+-   * No existing TimeZone will be modified and no DateTime will change
+-   * its timezone but future calls to g_time_zone_new_local() will start
+-   * returning the new timezone.
+-   * 
+-   * TimeZone does no monitoring of the local timezone on its own, which
+-   * is why you have to call this function to notify it of the change.
+-   * 
+-   * If you use TimeZoneMonitor to watch for changes then this function
+-   * will automatically be called for you.
+-   */
+-  static void refresh_local();
+-
+-  
+   /** Finds an the interval within @a tz that corresponds to the given @a time.
+    * The meaning of @a time depends on @a type.
+    * 
+diff -ur a/glib/src/timezone.hg b/glib/src/timezone.hg
+--- a/glib/src/timezone.hg
++++ b/glib/src/timezone.hg
+@@ -62,8 +62,6 @@
+   _WRAP_METHOD(static TimeZone create_local(), g_time_zone_new_local)
+   _WRAP_METHOD(static TimeZone create_utc(), g_time_zone_new_utc)
+ 
+-  _WRAP_METHOD(static void refresh_local(), g_time_zone_refresh_local)
+-
+   _WRAP_METHOD(int find_interval(TimeType type, gint64 time) const, g_time_zone_find_interval)
+   _WRAP_METHOD(int adjust_time(TimeType type, gint64& time) const, g_time_zone_adjust_time)
+   _WRAP_METHOD(Glib::ustring get_abbreviation(int interval) const, g_time_zone_get_abbreviation)
+diff -ur a/tools/extra_defs_gen/generate_defs_gio.cc b/tools/extra_defs_gen/generate_defs_gio.cc
+--- a/tools/extra_defs_gen/generate_defs_gio.cc
++++ b/tools/extra_defs_gen/generate_defs_gio.cc
+@@ -82,7 +82,6 @@
+             << get_defs(G_TYPE_SETTINGS_BACKEND)
+             << get_defs(G_TYPE_SIMPLE_ASYNC_RESULT)
+             << get_defs(G_TYPE_THEMED_ICON)
+-            << get_defs(G_TYPE_TIME_ZONE_MONITOR)
+ 
+             //TODO: This causes a g_warning:
+             //GLib-GObject-CRITICAL **: g_param_spec_pool_list: assertion `pool != NULL' failed"

@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
+inherit autotools eutils gnome2
 
 DESCRIPTION="C++ interface for glib2"
 HOMEPAGE="http://www.gtkmm.org"
@@ -32,6 +32,13 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# Backport of upstream patch for glib-2.29.18 compatibility
+	rm gio/src/timezonemonitor.{ccg,hg} \
+		gio/giomm/private/timezonemonitor_p.h \
+		gio/giomm/timezonemonitor.{cc,h} || die "rm failed"
+	epatch "${FILESDIR}/${P}-timezonemonitor.patch"
+	eautoreconf
+
 	gnome2_src_prepare
 
 	if ! use test; then
