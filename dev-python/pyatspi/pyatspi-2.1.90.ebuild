@@ -9,7 +9,7 @@ PYTHON_DEPEND="2:2.4"
 SUPPORT_PYTHON_ABIS="1"
 RESTRICT_PYTHON_ABIS="3.* *-jython"
 
-inherit eutils gnome2 python
+inherit gnome2 python
 
 DESCRIPTION="Python binding to at-spi library"
 HOMEPAGE="http://live.gnome.org/Accessibility"
@@ -21,7 +21,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE="test"
 
 COMMON_DEPEND="dev-python/dbus-python
-	>=dev-python/pygobject-2.26:2
+	|| ( >=dev-python/pygobject-2.26:2[introspection] dev-python/pygobject:3 )
 "
 RDEPEND="${COMMON_DEPEND}
 	>=sys-apps/dbus-1
@@ -44,9 +44,6 @@ pkg_setup() {
 
 src_prepare() {
 	gnome2_src_prepare
-
-	# Fix missing quotes, will be in next release
-	epatch "${FILESDIR}/${P}-quotes.patch"
 
 	# disable pyc compiling
 	mv config/py-compile config/py-compile.orig
