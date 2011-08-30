@@ -23,17 +23,22 @@ else
 fi
 IUSE="avahi crypt ipv6 jpeg gnome-keyring libnotify networkmanager ssl +telepathy +zlib"
 
+# cairo used in vino-fb
+# libSM and libICE used in eggsmclient-xsmp
 RDEPEND=">=dev-libs/glib-2.26:2
 	>=x11-libs/gtk+-3.0.0:3
 	>=dev-libs/libgcrypt-1.1.90
 	>=net-libs/libsoup-2.24:2.4
 
 	dev-libs/dbus-glib
+	x11-libs/cairo
 	x11-libs/pango[X]
+	x11-libs/libICE
 	x11-libs/libX11
 	x11-libs/libXdamage
 	x11-libs/libXext
 	x11-libs/libXfixes
+	x11-libs/libSM
 	x11-libs/libXtst
 
 	avahi? ( >=net-dns/avahi-0.6[dbus] )
