@@ -23,13 +23,14 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 	DOCS="AUTHORS ChangeLog ChangeLog.pre-1-2 NEWS README TODO"
 fi
-IUSE="archive avahi bluetooth cdda doc fuse gdu gnome-keyring gphoto2 +http ios prefix samba +udev"
+IUSE="afp archive avahi bluetooth bluray cdda doc fuse gdu gnome-keyring gphoto2 +http ios prefix samba +udev"
 
 RDEPEND=">=dev-libs/glib-2.29.14
 	>=sys-apps/dbus-1.0
 	dev-libs/libxml2
 	net-misc/openssh
 	!prefix? ( >=sys-fs/udev-138 )
+	afp? ( >=dev-libs/libgcrypt-1.2.2 )
 	archive? ( app-arch/libarchive )
 	avahi? ( >=net-dns/avahi-0.6 )
 	bluetooth? (
@@ -37,6 +38,7 @@ RDEPEND=">=dev-libs/glib-2.29.14
 		dev-libs/dbus-glib
 		net-wireless/bluez
 		dev-libs/expat )
+	bluray? ( media-libs/libbluray )
 	fuse? ( >=sys-fs/fuse-2.8.0 )
 	gdu? ( >=sys-apps/gnome-disk-utility-3.0.2 )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-1.0 )
@@ -68,9 +70,11 @@ pkg_setup() {
 		--disable-hal
 		--disable-schemas-compile
 		--with-dbus-service-dir=/usr/share/dbus-1/services
+		$(use_enable afp)
 		$(use_enable archive)
 		$(use_enable avahi)
 		$(use_enable bluetooth obexftp)
+		$(use_enable bluray)
 		$(use_enable cdda)
 		$(use_enable fuse)
 		$(use_enable gdu)
