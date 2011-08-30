@@ -28,7 +28,7 @@ for (( i=4; i<16; i++ )); do
 	RDEPEND="${RDEPEND} !!~dev-libs/glib-2.29.${i}"
 done
 
-S="${WORKDIR}/glib-${PV}/gio/${PN}"
+S="${WORKDIR}/glib-${PV}/gio/gdbus-2.0/codegen"
 
 src_prepare() {
 	python_convert_shebangs 2 gdbus-codegen.in
@@ -43,7 +43,7 @@ pkg_setup() {
 }
 
 src_install() {
-	insinto "/usr/$(get_libdir)/gdbus-codegen"
+	insinto "/usr/$(get_libdir)/gdbus-2.0/codegen"
 	# keep in sync with Makefile.am
 	doins __init__.py \
 		codegen.py \
@@ -65,9 +65,9 @@ src_test() {
 
 pkg_postinst() {
 	python_need_rebuild
-	python_mod_optimize /usr/$(get_libdir)/gdbus-codegen
+	python_mod_optimize /usr/$(get_libdir)/gdbus-2.0/codegen
 }
 
 pkg_postrm() {
-	python_mod_cleanup /usr/$(get_libdir)/gdbus-codegen
+	python_mod_cleanup /usr/$(get_libdir)/gdbus-2.0/codegen
 }
