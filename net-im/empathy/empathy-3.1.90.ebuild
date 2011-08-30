@@ -28,10 +28,15 @@ IUSE="debug eds +map +geoloc +networkmanager sendto spell test +video" # gnome
 
 # FIXME: gst-plugins-bad is required for the valve plugin. This should move to good
 # eventually at which point the dep can be dropped
+# libgee extensively used in libempathy
+# gdk-pixbuf and pango extensively used in libempathy-gtk
 RDEPEND=">=dev-libs/glib-2.28:2
+	x11-libs/gdk-pixbuf:2
 	>=x11-libs/gtk+-3.0.2:3
+	x11-libs/pango
 	>=dev-libs/dbus-glib-0.51
 	>=dev-libs/folks-0.6.0
+	dev-libs/libgee
 	>=gnome-base/gnome-keyring-2.91.4-r300
 	>=media-libs/libcanberra-0.25[gtk3]
 	media-sound/pulseaudio[glib]
