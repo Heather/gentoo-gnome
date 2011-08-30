@@ -38,7 +38,7 @@ DEPEND="${RDEPEND}
 
 	socialweb? ( >=net-libs/libsocialweb-0.25.15[vala] )
 	vala? (
-		>=dev-lang/vala-0.13.0:0.14[vapigen]
+		>=dev-lang/vala-0.13.3:0.14[vapigen]
 		>=net-libs/telepathy-glib-0.13.1[vala]
 		eds? ( >=gnome-extra/evolution-data-server-3.0.1[vala] ) )
 "
