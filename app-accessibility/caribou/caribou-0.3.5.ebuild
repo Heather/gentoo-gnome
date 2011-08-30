@@ -41,7 +41,8 @@ RDEPEND="${COMMON_DEPEND}
 	gnome-base/gsettings-desktop-schemas
 	gnome-base/librsvg[gtk3]
 	sys-apps/dbus"
-DEPEND="${RDEPEND}
+DEPEND="${COMMON_DEPEND}
+	dev-libs/libxslt
 	>=dev-util/intltool-0.35.5
 	app-text/gnome-doc-utils"
 
