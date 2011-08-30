@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit eutils gnome2
+inherit eutils gnome2 virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -38,6 +38,7 @@ COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	>=media-sound/pulseaudio-0.9.16
 	>=sys-power/upower-0.9.1
 	>=x11-libs/libnotify-0.7.3
+	x11-libs/libX11
 	x11-libs/libXi
 	x11-libs/libXext
 	x11-libs/libXfixes
@@ -105,6 +106,10 @@ src_prepare() {
 		epatch "${FILESDIR}/${PN}-3.0.2-short-touchpad-timeout.patch"
 
 	gnome2_src_prepare
+}
+
+src_test() {
+	Xemake check
 }
 
 src_install() {
