@@ -55,7 +55,8 @@ pkg_setup() {
 		$(use_with pam pam-dir $(getpam_mod_dir))
 		--with-root-certs=${EPREFIX}/etc/ssl/certs/
 		--enable-ssh-agent
-		--enable-gpg-agent"
+		--enable-gpg-agent
+		--disable-update-mime"
 #		$(use_enable valgrind)
 }
 

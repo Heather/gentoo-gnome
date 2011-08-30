@@ -55,7 +55,8 @@ pkg_setup() {
 		$(use_with pam pam-dir $(getpam_mod_dir))
 		--with-root-certs=${EPREFIX}/etc/ssl/certs/
 		--enable-ssh-agent
-		--enable-gpg-agent"
+		--enable-gpg-agent
+		--disable-update-mime"
 #		$(use_enable valgrind)
 }
 
@@ -64,6 +65,9 @@ src_prepare() {
 	# ** WARNING **: couldn't load PKCS#11 module: /usr/lib64/pkcs11/gnome-keyring-pkcs11.so: Couldn't initialize module: The device was removed or unplugged
 	sed -e 's/^\(SUBDIRS = \.\)\(.*\)/\1/' \
 		-i gcr/Makefile.* || die "sed failed"
+
+	# Upstream patch to initialize variables properly, will be in next release
+	epatch "${FILESDIR}/${P}-debug.patch"
 
 	# https://bugzilla.gnome.org/show_bug.cgi?id=649936
 	epatch "${FILESDIR}"/${PN}-3.1.1-automagic-libcap-ng.patch
