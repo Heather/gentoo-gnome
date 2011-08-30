@@ -28,7 +28,7 @@ fi
 # Things are untested and broken with anything other than xulrunner-2.0
 # or spidermonkey-1.8.5
 RDEPEND=">=dev-libs/glib-2.18:2
-	>=dev-libs/gobject-introspection-1.29.15
+	>=dev-libs/gobject-introspection-1.29.16
 
 	dev-libs/dbus-glib
 	sys-libs/readline

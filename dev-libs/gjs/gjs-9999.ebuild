@@ -8,7 +8,7 @@ GNOME_TARBALL_SUFFIX="xz"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2"
 
-inherit autotools eutils gnome2 python virtualx
+inherit gnome2 python virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -18,7 +18,7 @@ HOMEPAGE="http://live.gnome.org/Gjs"
 
 LICENSE="MIT MPL-1.1 LGPL-2 GPL-2"
 SLOT="0"
-IUSE="examples test xulrunner"
+IUSE="examples test +xulrunner"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -28,7 +28,7 @@ fi
 # Things are untested and broken with anything other than xulrunner-2.0
 # or spidermonkey-1.8.5
 RDEPEND=">=dev-libs/glib-2.18:2
-	>=dev-libs/gobject-introspection-1.29.15
+	>=dev-libs/gobject-introspection-1.29.16
 
 	dev-libs/dbus-glib
 	sys-libs/readline
@@ -55,7 +55,7 @@ pkg_setup() {
 	if use xulrunner; then
 		G2CONF="${G2CONF} --with-js-package=mozilla-js"
 	else
-		mG2CONF="${G2CONF} --with-js-package=mozjs185"
+		G2CONF="${G2CONF} --with-js-package=mozjs185"
 	fi
 }
 
