@@ -28,13 +28,17 @@ fi
 # null applet still needs bonobo support for gnome-panel?
 #
 # Latest gnome-panel needed due to commit 45a4988a6
+# atk, cairo, pango used in multiple applets
 RDEPEND=">=x11-libs/gtk+-3.0.0:3
+	dev-libs/atk
 	>=dev-libs/glib-2.22:2
 	>=gnome-base/gconf-2.8:2
 	>=gnome-base/gnome-panel-2.91.91
+	x11-libs/cairo
 	>=x11-libs/libxklavier-4.0
 	>=x11-libs/libwnck-2.91.0:3
 	>=x11-libs/libnotify-0.7
+	x11-libs/pango
 	>=sys-apps/dbus-1.1.2
 	>=dev-libs/dbus-glib-0.74
 	>=dev-libs/libxml2-2.5.0
