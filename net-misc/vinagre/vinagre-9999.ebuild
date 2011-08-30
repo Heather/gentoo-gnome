@@ -23,11 +23,15 @@ else
 fi
 IUSE="avahi +ssh +telepathy test"
 
+# cairo used in vinagre-tab
+# gdk-pixbuf used all over the place
 RDEPEND=">=dev-libs/glib-2.28.0:2
 	>=x11-libs/gtk+-3.0.3:3
+	>=gnome-base/gnome-keyring-1
 	>=dev-libs/libxml2-2.6.31:2
 	>=net-libs/gtk-vnc-0.4.3[gtk3]
-	>=gnome-base/gnome-keyring-1
+	x11-libs/cairo
+	x11-libs/gdk-pixbuf:2
 	x11-themes/gnome-icon-theme
 
 	avahi? ( >=net-dns/avahi-0.6.26[dbus,gtk3] )
