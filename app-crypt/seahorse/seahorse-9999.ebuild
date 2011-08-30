@@ -24,10 +24,9 @@ else
 fi
 
 COMMON_DEPEND="
-	>=gnome-base/gconf-2:2
 	>=dev-libs/glib-2.10:2
 	>=x11-libs/gtk+-2.90.0:3
-	>=gnome-base/gnome-keyring-3.1.2
+	>=gnome-base/gnome-keyring-3.1.5
 	net-libs/libsoup:2.4
 	x11-misc/shared-mime-info
 
