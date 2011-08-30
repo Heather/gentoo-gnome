@@ -25,8 +25,11 @@ IUSE="doc ipv6 elibc_FreeBSD"
 # x11-misc/xdg-user-dirs{,-gtk} are needed to create the various XDG_*_DIRs, and
 # create .config/user-dirs.dirs which is read by glib to get G_USER_DIRECTORY_*
 # xdg-user-dirs-update is run during login (see 10-user-dirs-update below).
+# gdk-pixbuf used in the inhibit dialog
 COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
+	x11-libs/gdk-pixbuf:2
 	>=x11-libs/gtk+-2.90.7:3
+	>=dev-libs/json-glib-0.10
 	>=dev-libs/dbus-glib-0.76
 	>=gnome-base/gconf-2:2
 	>=sys-power/upower-0.9.0
