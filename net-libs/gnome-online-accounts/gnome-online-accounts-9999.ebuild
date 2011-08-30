@@ -22,14 +22,18 @@ else
 	KEYWORDS="~amd64"
 fi
 
+# pango used in goaeditablelabel
+# libsoup used in goaoauthprovider
 RDEPEND="
 	>=dev-libs/glib-2.29.5:2
-	dev-libs/json-glib[introspection?]
+	dev-libs/json-glib
 	gnome-base/libgnome-keyring
-	net-libs/rest:0.7[introspection?]
-	net-libs/webkit-gtk:3[introspection?]
-	>=x11-libs/gtk+-3.0.0:3[introspection?]
+	net-libs/libsoup:2.4
+	net-libs/rest:0.7
+	net-libs/webkit-gtk:3
+	>=x11-libs/gtk+-3.0.0:3
 	>=x11-libs/libnotify-0.7
+	x11-libs/pango
 
 	introspection? ( >=dev-libs/gobject-introspection-0.6.2 )"
 DEPEND="${RDEPEND}
