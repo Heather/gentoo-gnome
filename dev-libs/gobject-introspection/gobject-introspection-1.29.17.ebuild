@@ -8,7 +8,7 @@ GNOME_TARBALL_SUFFIX="xz"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2:2.5"
 
-inherit autotools eutils gnome2 python
+inherit gnome2 python
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -32,7 +32,7 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	sys-devel/bison
 	sys-devel/flex
-	doc? ( >=dev-util/gtk-doc-1.12 )
+	doc? ( >=dev-util/gtk-doc-1.15 )
 	test? ( x11-libs/cairo )"
 
 pkg_setup() {
@@ -50,18 +50,18 @@ src_prepare() {
 
 	# Don't pre-compile .py
 	ln -sf $(type -P true) py-compile
-
-	# Don't build tests when FEATURES=-test; bug #379929
-	epatch "${FILESDIR}/${PN}-0.10.8-make-check.patch"
-	eautoreconf
+	ln -sf $(type -P true) build-aux/py-compile
 
 	gnome2_src_prepare
 }
 
 src_install() {
 	gnome2_src_install
-	python_convert_shebangs 2 "${ED}"usr/bin/g-ir-scanner
-	python_convert_shebangs 2 "${ED}"usr/bin/g-ir-annotation-tool
+	python_convert_shebangs 2 "${ED}"usr/bin/g-ir-{annotation-tool,doc-tool,scanner}
+
+	# https://bugzilla.gnome.org/show_bug.cgi?id=657686
+	insinto /usr/$(get_libdir)/${PN}/giscanner
+	newins "${FILESDIR}/${PV}-docbookdescription.py" docbookdescription.py
 }
 
 pkg_postinst() {
