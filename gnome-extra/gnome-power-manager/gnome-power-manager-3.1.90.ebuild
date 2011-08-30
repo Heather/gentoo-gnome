@@ -20,42 +20,29 @@ if [[ ${PV} = 9999 ]]; then
 else
 	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 fi
-IUSE="doc test"
+IUSE="test"
 
 # FIXME: Interactive testsuite (upstream ? I'm so...pessimistic)
 RESTRICT="test"
 
-# Latest libcanberra is needed due to gtk+:3 API changes
 COMMON_DEPEND=">=dev-libs/glib-2.25.9
 	>=x11-libs/gtk+-2.91.7:3
-	>=gnome-base/gnome-keyring-0.6.0
-	>=x11-libs/libnotify-0.7.0
 	>=x11-libs/cairo-1.0.0
-	>=sys-power/upower-0.9.1
-	>=x11-apps/xrandr-1.3
-	x11-libs/libX11
-	x11-libs/libXext
-	x11-libs/libXrender"
+	>=sys-power/upower-0.9.1"
 RDEPEND="${COMMON_DEPEND}
 	>=sys-auth/consolekit-0.4[policykit]
 	sys-auth/polkit
 	gnome-extra/polkit-gnome"
 DEPEND="${COMMON_DEPEND}
 	x11-proto/randrproto
-	x11-proto/xproto
 
 	sys-devel/gettext
 	app-text/scrollkeeper
-	app-text/docbook-xml-dtd:4.3
+	app-text/docbook-sgml-utils
+	app-text/docbook-sgml-dtd:4.1
 	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.35
 	>=app-text/gnome-doc-utils-0.3.2
-	doc? (
-		app-text/xmlto
-		app-text/docbook-sgml-utils
-		app-text/docbook-xml-dtd:4.4
-		app-text/docbook-sgml-dtd:4.1
-		app-text/docbook-xml-dtd:4.1.2 )
 	test? ( sys-apps/dbus )"
 
 # docbook-sgml-utils and docbook-sgml-dtd-4.1 used for creating man pages
@@ -65,15 +52,10 @@ DEPEND="${COMMON_DEPEND}
 pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_enable test tests)
-		$(use_enable doc docbook-docs)
 		--disable-strict
 		--enable-compile-warnings=minimum
 		--disable-schemas-compile"
-	DOCS="AUTHORS ChangeLog NEWS README TODO"
-
-	if ! use doc; then
-		G2CONF="${G2CONF} DOCBOOK2MAN=$(type -p false)"
-	fi
+	DOCS="AUTHORS ChangeLog NEWS README"
 }
 
 src_prepare() {
