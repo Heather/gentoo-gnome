@@ -1,0 +1,75 @@
+From 14e8cba2b184b16d0dbd9beb929860a1e1155709 Mon Sep 17 00:00:00 2001
+From: Dan Winship <danw@gnome.org>
+Date: Tue, 30 Aug 2011 16:07:11 +0000
+Subject: Add some (element-type) annotations to appease g-i master
+
+---
+diff --git a/src/gvc/gvc-mixer-card.c b/src/gvc/gvc-mixer-card.c
+index 56502e3..168bc79 100644
+--- a/src/gvc/gvc-mixer-card.c
++++ b/src/gvc/gvc-mixer-card.c
+@@ -263,6 +263,11 @@ gvc_mixer_card_change_profile (GvcMixerCard *card,
+         return TRUE;
+ }
+ 
++/**
++ * gvc_mixer_card_get_profiles:
++ *
++ * Return value: (transfer none) (element-type GvcMixerCardProfile):
++ */
+ const GList *
+ gvc_mixer_card_get_profiles (GvcMixerCard *card)
+ {
+@@ -281,6 +286,10 @@ sort_profiles (GvcMixerCardProfile *a,
+         return -1;
+ }
+ 
++/**
++ * gvc_mixer_card_set_profiles:
++ * @profiles: (transfer full) (element-type GvcMixerCardProfile):
++ */
+ gboolean
+ gvc_mixer_card_set_profiles (GvcMixerCard *card,
+                              GList        *profiles)
+diff --git a/src/gvc/gvc-mixer-stream.c b/src/gvc/gvc-mixer-stream.c
+index 78de6b3..f35954a 100644
+--- a/src/gvc/gvc-mixer-stream.c
++++ b/src/gvc/gvc-mixer-stream.c
+@@ -508,6 +508,11 @@ gvc_mixer_stream_change_port (GvcMixerStream *stream,
+         return GVC_MIXER_STREAM_GET_CLASS (stream)->change_port (stream, port);
+ }
+ 
++/**
++ * gvc_mixer_stream_get_ports:
++ *
++ * Return value: (transfer none) (element-type GvcMixerStreamPort):
++ */
+ const GList *
+ gvc_mixer_stream_get_ports (GvcMixerStream *stream)
+ {
+@@ -526,6 +531,10 @@ sort_ports (GvcMixerStreamPort *a,
+         return -1;
+ }
+ 
++/**
++ * gvc_mixer_stream_set_ports:
++ * @ports: (transfer full) (element-type GvcMixerStreamPort):
++ */
+ gboolean
+ gvc_mixer_stream_set_ports (GvcMixerStream *stream,
+                             GList          *ports)
+diff --git a/src/shell-app.c b/src/shell-app.c
+index 75444b6..0455f42 100644
+--- a/src/shell-app.c
++++ b/src/shell-app.c
+@@ -1051,7 +1051,7 @@ _gather_pid_callback (GDesktopAppInfo   *gapp,
+ /**
+  * shell_app_launch:
+  * @timestamp: Event timestamp, or 0 for current event timestamp
+- * @uris: List of uris to pass to application
++ * @uris: (element-type utf8): List of uris to pass to application
+  * @workspace: Start on this workspace, or -1 for default
+  * @startup_id: (out): Returned startup notification ID, or %NULL if none
+  * @error: A #GError
+--
+cgit v0.9.0.2

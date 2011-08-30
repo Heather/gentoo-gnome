@@ -18,7 +18,7 @@ HOMEPAGE="http://live.gnome.org/GnomeShell"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="+nm-applet"
+IUSE=""
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -36,14 +36,17 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 	x11-libs/gdk-pixbuf:2[introspection]
 	>=x11-libs/gtk+-3.0.0:3[introspection]
 	>=media-libs/clutter-1.7.5:1.0[introspection]
+	>=dev-libs/folks-0.5.2
 	>=gnome-base/gnome-desktop-2.91.2:3
 	>=gnome-base/gsettings-desktop-schemas-2.91.91
+	gnome-base/libgnome-keyring
 	>=gnome-extra/evolution-data-server-2.91.6
 	>=media-libs/gstreamer-0.10.16:0.10
 	>=media-libs/gst-plugins-base-0.10.16:0.10
 	>=net-im/telepathy-logger-0.2.4[introspection]
 	net-libs/libsoup:2.4[introspection]
-	>=net-libs/telepathy-glib-0.15.3[introspection]
+	>=net-libs/telepathy-glib-0.15.5[introspection]
+	>=net-misc/networkmanager-0.8.999[introspection]
 	>=net-wireless/gnome-bluetooth-3.1.0[introspection]
 	>=sys-auth/polkit-0.100[introspection]
 	>=x11-wm/mutter-3.0.0[introspection]
@@ -54,7 +57,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 	>=dev-libs/libcroco-0.6.2:0.6
 
 	gnome-base/gconf:2[introspection]
-	gnome-base/gnome-menus
+	>=gnome-base/gnome-menus-2.29.10:3[introspection]
 	gnome-base/librsvg
 	media-libs/libcanberra
 	media-sound/pulseaudio
@@ -70,7 +73,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 # 3. gnome-session is needed for gnome-session-quit
 # 4. Control shell settings
 # 5. accountsservice is needed for GdmUserManager
-# 6. nm-applet is needed for auth prompting and the wireless connection dialog
+# 6. caribou needed for on-screen keyboard
 RDEPEND="${COMMON_DEPEND}
 	>=sys-auth/polkit-0.101[introspection]
 
@@ -85,9 +88,11 @@ RDEPEND="${COMMON_DEPEND}
 
 	>=sys-apps/accountsservice-0.6.12
 
-	nm-applet? (
-		>=gnome-extra/nm-applet-0.8.999
-		>=net-misc/networkmanager-0.8.999[introspection] )"
+	>=app-accessibility/caribou-0.3
+
+	!!<=gnome-extra/gnome-shell-extensions-3.1.4"
+# The *presence* of <=gnome-shell-extensions-3.1.4 destabilizes gnome-shell.
+# Disabling the extensions is not enough; they must be physically uninstalled.
 DEPEND="${COMMON_DEPEND}
 	>=sys-devel/gettext-0.17
 	>=dev-util/pkgconfig-0.22
@@ -104,6 +109,14 @@ pkg_setup() {
 		--enable-compile-warnings=maximum
 		--disable-schemas-compile
 		--disable-jhbuild-wrapper-script"
+
+	ewarn
+	ewarn "${PN} tends to crash at login or shortly thereafter if there are any"
+	ewarn "old shell extensions *installed*, whether systemwide or in a user's"
+	ewarn "home directory."
+	ewarn "Disabling the extensions is not enough. You should uninstall the"
+	ewarn "extensions before upgrading gnome-shell to ${PV}."
+	ewarn
 }
 
 src_install() {

@@ -1,0 +1,43 @@
+From 8cf6b4c7283a383883bdec6ee13b194ae3a5137b Mon Sep 17 00:00:00 2001
+From: Guillaume Desmottes <guillaume.desmottes@collabora.co.uk>
+Date: Tue, 30 Aug 2011 12:35:20 +0000
+Subject: don't translate IM status
+
+They are well-known strings defined in the Telepathy spec and so shouldn't be
+translated.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=657696
+---
+diff --git a/js/ui/userMenu.js b/js/ui/userMenu.js
+index 33c3315..115bcf7 100644
+--- a/js/ui/userMenu.js
++++ b/js/ui/userMenu.js
+@@ -250,19 +250,19 @@ IMStatusChooserItem.prototype = {
+     _statusForPresence: function(presence) {
+         switch(presence) {
+             case Tp.ConnectionPresenceType.AVAILABLE:
+-                return _("Available");
++                return 'available';
+             case Tp.ConnectionPresenceType.BUSY:
+-                return _("Busy");
++                return 'busy';
+             case Tp.ConnectionPresenceType.OFFLINE:
+-                return _("Unavailable");
++                return 'offline';
+             case Tp.ConnectionPresenceType.HIDDEN:
+-                return _("Hidden");
++                return 'hidden';
+             case Tp.ConnectionPresenceType.AWAY:
+-                return _("Away");
++                return 'away';
+             case Tp.ConnectionPresenceType.EXTENDED_AWAY:
+-                return _("Idle");
++                return 'xa';
+             default:
+-                return _("Unknown");
++                return 'unknown';
+         }
+     },
+ 
+--
+cgit v0.9.0.2
