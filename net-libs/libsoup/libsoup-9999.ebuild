@@ -21,12 +21,14 @@ if [[ ${PV} = 9999 ]]; then
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x86-solaris"
 fi
-IUSE="debug doc +introspection ssl test"
+IUSE="debug doc +introspection samba ssl test"
 
+# glib-networking-2.29.18 needed to avoid a tls bug, see NEWS file
 RDEPEND=">=dev-libs/glib-2.27.5:2
 	>=dev-libs/libxml2-2:2
-	net-libs/glib-networking[ssl?]
-	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )"
+	>=net-libs/glib-networking-2.29.18[ssl?]
+	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
+	samba? ( net-fs/samba )"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9
 	>=dev-util/gtk-doc-am-1.10
@@ -46,7 +48,8 @@ pkg_setup() {
 		--disable-tls-check
 		--without-gnome
 		--with-apache-module-dir="${T}"
-		$(use_enable introspection)"
+		$(use_enable introspection)
+		$(use_with samba ntlm-auth ${EPREFIX}/usr/bin/ntlm_auth)"
 }
 
 src_configure() {
