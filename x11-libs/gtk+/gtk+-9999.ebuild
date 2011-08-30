@@ -51,7 +51,7 @@ COMMON_DEPEND="!aqua? (
 	xinerama? ( x11-libs/libXinerama )
 	>=dev-libs/glib-2.29.14
 	>=x11-libs/pango-1.29.0[introspection?]
-	>=dev-libs/atk-1.30[introspection?]
+	>=dev-libs/atk-2.1.5[introspection?]
 	>=x11-libs/gtk+-2.24:2
 	media-libs/fontconfig
 	x11-misc/shared-mime-info
