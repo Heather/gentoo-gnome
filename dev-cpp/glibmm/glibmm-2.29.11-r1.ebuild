@@ -20,7 +20,9 @@ RDEPEND=">=dev-libs/libsigc++-2.2:2
 	>=dev-libs/glib-2.29.8:2"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
-	doc? ( app-doc/doxygen )"
+	doc? ( app-doc/doxygen )
+	dev-cpp/mm-common"
+# dev-cpp/mm-common needed for eautoreconf
 
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS README"
