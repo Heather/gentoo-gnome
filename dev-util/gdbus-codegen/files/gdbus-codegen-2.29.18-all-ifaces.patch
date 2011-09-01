@@ -1,0 +1,26 @@
+From a020fbf8f6cd345c0e7cbd5eb0dae194c5dc6650 Mon Sep 17 00:00:00 2001
+From: Will Thompson <will.thompson@collabora.co.uk>
+Date: Thu, 01 Sep 2011 18:28:57 +0000
+Subject: gdbus-codegen: post-process all interfaces when parsing >1 file
+
+This also fixes a crash when you run gdbus-codegen with no arguments.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=656323
+
+Signed-off-by: David Zeuthen <davidz@redhat.com>
+---
+diff --git a/gio/gdbus-2.0/codegen/codegen_main.py b/gio/gdbus-2.0/codegen/codegen_main.py
+index 067ac5e..76c838c 100755
+--- a/gio/gdbus-2.0/codegen/codegen_main.py
++++ b/gio/gdbus-2.0/codegen/codegen_main.py
+@@ -174,7 +174,7 @@ def codegen_main():
+     if opts.annotate != None:
+         apply_annotations(all_ifaces, opts.annotate)
+ 
+-    for i in parsed_ifaces:
++    for i in all_ifaces:
+         i.post_process(opts.interface_prefix, opts.c_namespace)
+ 
+     docbook = opts.generate_docbook
+--
+cgit v0.9.0.2
