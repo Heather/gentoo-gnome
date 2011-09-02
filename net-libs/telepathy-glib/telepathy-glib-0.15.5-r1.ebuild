@@ -5,7 +5,7 @@
 EAPI="3"
 PYTHON_DEPEND="2:2.5"
 
-inherit python virtualx
+inherit eutils python virtualx
 
 DESCRIPTION="GLib bindings for the Telepathy D-Bus protocol."
 HOMEPAGE="http://telepathy.freedesktop.org"
@@ -20,13 +20,17 @@ RDEPEND=">=dev-libs/glib-2.28:2
 	>=dev-libs/dbus-glib-0.82
 	introspection? ( >=dev-libs/gobject-introspection-0.9.6 )
 	vala? (
-		>=dev-lang/vala-0.11.2:0.12[vapigen]
+		dev-lang/vala:0.14[vapigen]
 		>=dev-libs/gobject-introspection-0.9.6 )"
 DEPEND="${RDEPEND}
 	dev-libs/libxslt
 	>=dev-util/pkgconfig-0.21"
 
 src_prepare() {
+	# Important upstream patches, will be in next release
+	epatch "${FILESDIR}/${P}-gobject-introspection.patch"
+	epatch "${FILESDIR}/${P}-tpbasechannelclass-close-null.patch"
+
 	python_convert_shebangs -r 2 examples tests tools
 	default_src_prepare
 }
@@ -36,8 +40,8 @@ src_configure() {
 
 	if use vala; then
 		myconf="--enable-introspection
-			VALAC=$(type -p valac-0.12)
-			VAPIGEN=$(type -p vapigen-0.12)"
+			VALAC=$(type -p valac-0.14)
+			VAPIGEN=$(type -p vapigen-0.14)"
 	fi
 
 	econf --disable-static \

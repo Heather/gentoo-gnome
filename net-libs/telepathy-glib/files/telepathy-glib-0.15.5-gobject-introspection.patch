@@ -1,0 +1,31 @@
+From 7f465e4a7d2d552f8ded3fd58e537f84b6b9f3a2 Mon Sep 17 00:00:00 2001
+From: Xavier Claessens <xclaesse@gmail.com>
+Date: Wed, 17 Aug 2011 13:31:15 +0000
+Subject: Hide tp_g_value_slice_new_foo() from g-i scanner
+
+This is a workaround for GNOME bug #656743
+---
+diff --git a/telepathy-glib/dbus.h b/telepathy-glib/dbus.h
+index de33e5a..bee7019 100644
+--- a/telepathy-glib/dbus.h
++++ b/telepathy-glib/dbus.h
+@@ -53,6 +53,9 @@ gboolean tp_dbus_check_valid_member_name (const gchar *name,
+ gboolean tp_dbus_check_valid_object_path (const gchar *path,
+     GError **error);
+ 
++/* The scanner warns about these, but they're skipped anyway.
++ * See GNOME bug#656743 */
++#ifndef __GI_SCANNER__
+ GValue *tp_g_value_slice_new_bytes (guint length, gconstpointer bytes)
+   G_GNUC_WARN_UNUSED_RESULT;
+ GValue *tp_g_value_slice_new_take_bytes (GArray *bytes)
+@@ -63,6 +66,7 @@ GValue *tp_g_value_slice_new_static_object_path (const gchar *path)
+   G_GNUC_WARN_UNUSED_RESULT;
+ GValue *tp_g_value_slice_new_take_object_path (gchar *path)
+   G_GNUC_WARN_UNUSED_RESULT;
++#endif /* __GI_SCANNER__ */
+ 
+ #define tp_asv_size(asv) _tp_asv_size_inline (asv)
+ 
+--
+cgit v0.9.0.2-2-gbebe
