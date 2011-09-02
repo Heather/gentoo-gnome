@@ -20,8 +20,8 @@ IUSE=""
 KEYWORDS="~amd64 ~x86"
 
 COMMON_DEPEND="
-	>=gnome-base/gsettings-desktop-schemas-2.91.92
-	>=dev-python/pygobject-2.28.0:2[introspection]
+	>=gnome-base/gsettings-desktop-schemas-3.0.0
+	>=dev-python/pygobject-2.90.0:3
 	gnome-base/gconf:2"
 # g-s-d, gnome-shell etc. needed at runtime for the gsettings schemas
 RDEPEND="${COMMON_DEPEND}
