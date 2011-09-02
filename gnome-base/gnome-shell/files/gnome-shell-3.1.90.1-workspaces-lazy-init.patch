@@ -1,0 +1,52 @@
+From 3aa904da0aa938c3fee09357bcff3a1de6321308 Mon Sep 17 00:00:00 2001
+From: Jasper St. Pierre <jstpierre@mecheye.net>
+Date: Thu, 01 Sep 2011 20:09:46 +0000
+Subject: workspacesView: Only connect to nWorkspacesChanged after we've lazily inited
+
+We lazily init this._workspaces, so we shouldn't try to run any code that uses
+it until after it's been created.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=658007
+---
+diff --git a/js/ui/workspacesView.js b/js/ui/workspacesView.js
+index 955aee0..f240682 100644
+--- a/js/ui/workspacesView.js
++++ b/js/ui/workspacesView.js
+@@ -567,8 +567,6 @@ WorkspacesDisplay.prototype = {
+         this._updateAlwaysZoom();
+ 
+         Main.layoutManager.connect('monitors-changed', Lang.bind(this, this._updateAlwaysZoom));
+-        global.screen.connect('notify::n-workspaces',
+-                              Lang.bind(this, this._workspacesChanged));
+ 
+         Main.xdndHandler.connect('drag-begin', Lang.bind(this, function(){
+             this._alwaysZoomOut = true;
+@@ -581,6 +579,7 @@ WorkspacesDisplay.prototype = {
+ 
+         this._switchWorkspaceNotifyId = 0;
+ 
++        this._nWorkspacesChangedId = 0;
+         this._itemDragBeginId = 0;
+         this._itemDragCancelledId = 0;
+         this._itemDragEndId = 0;
+@@ -589,7 +588,7 @@ WorkspacesDisplay.prototype = {
+         this._windowDragEndId = 0;
+     },
+ 
+-   show: function() {
++    show: function() {
+         this._zoomOut = this._alwaysZoomOut;
+         this._zoomFraction = this._alwaysZoomOut ? 1 : 0;
+         this._updateZoom();
+@@ -612,6 +611,9 @@ WorkspacesDisplay.prototype = {
+             global.screen.connect('restacked',
+                                   Lang.bind(this, this._onRestacked));
+ 
++        if (this._nWorkspacesChangedId == 0)
++            this._nWorkspacesChangedId = global.screen.connect('notify::n-workspaces',
++                                                               Lang.bind(this, this._workspacesChanged));
+         if (this._itemDragBeginId == 0)
+             this._itemDragBeginId = Main.overview.connect('item-drag-begin',
+                                                           Lang.bind(this, this._dragBegin));
+--
+cgit v0.9.0.2

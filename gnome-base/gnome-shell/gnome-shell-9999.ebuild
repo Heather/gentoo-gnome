@@ -88,11 +88,7 @@ RDEPEND="${COMMON_DEPEND}
 
 	>=sys-apps/accountsservice-0.6.12
 
-	>=app-accessibility/caribou-0.3
-
-	!!<=gnome-extra/gnome-shell-extensions-3.1.4"
-# The *presence* of <=gnome-shell-extensions-3.1.4 destabilizes gnome-shell.
-# Disabling the extensions is not enough; they must be physically uninstalled.
+	>=app-accessibility/caribou-0.3"
 DEPEND="${COMMON_DEPEND}
 	>=sys-devel/gettext-0.17
 	>=dev-util/pkgconfig-0.22
@@ -109,14 +105,6 @@ pkg_setup() {
 		--enable-compile-warnings=maximum
 		--disable-schemas-compile
 		--disable-jhbuild-wrapper-script"
-
-	ewarn
-	ewarn "${PN} tends to crash at login or shortly thereafter if there are any"
-	ewarn "old shell extensions *installed*, whether systemwide or in a user's"
-	ewarn "home directory."
-	ewarn "Disabling the extensions is not enough. You should uninstall the"
-	ewarn "extensions before upgrading gnome-shell to ${PV}."
-	ewarn
 }
 
 src_install() {

@@ -110,12 +110,8 @@ pkg_setup() {
 src_prepare() {
 	gnome2_src_prepare
 	# Useful patches from upstream git, will be in next release
-	epatch "${FILESDIR}/${P}-default-avatar.patch"
-	epatch "${FILESDIR}/${P}-folks-crash.patch"
-	epatch "${FILESDIR}/${P}-gdm-batch.patch"
-	epatch "${FILESDIR}/${P}-telepathy-status.patch"
-	# gobject-introspection-1.29.17 compat, will be in next release
-	epatch "${FILESDIR}/${P}-gi-1.29.17.patch"
+	epatch "${FILESDIR}/${P}-telepathy-gettext.patch"
+	epatch "${FILESDIR}/${P}-workspaces-lazy-init.patch"
 }
 
 src_install() {
