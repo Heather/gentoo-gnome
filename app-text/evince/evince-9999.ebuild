@@ -33,6 +33,7 @@ RDEPEND="
 	dev-libs/atk
 	>=dev-libs/glib-2.25.11:2
 	>=dev-libs/libxml2-2.5:2
+	sys-libs/zlib
 	x11-libs/gdk-pixbuf:2
 	>=x11-libs/gtk+-3.0.2:3[introspection?]
 	x11-libs/libX11
