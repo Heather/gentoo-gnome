@@ -144,11 +144,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# XXX: useful upstream fixes, will be included in next release
-	epatch "${FILESDIR}/0001-Bug-651039-Always-update-signature-in-composer-on-ac.patch"
-	epatch "${FILESDIR}/0002-Bug-651062-refresh_folders_exec-reports-progress-inc.patch"
-	epatch "${FILESDIR}/0003-Bug-651135-Crash-using-saved-search-with-an-empty-ex.patch"
-
 	# Use NSS/NSPR only if 'ssl' is enabled.
 	if use ssl ; then
 		sed -e 's|mozilla-nss|nss|' \
