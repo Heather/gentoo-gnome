@@ -8,7 +8,7 @@ GNOME_TARBALL_SUFFIX="xz"
 PYTHON_DEPEND="2:2.5"
 PYTHON_USE_WITH="xml"
 
-inherit eutils gnome.org multilib python
+inherit gnome.org multilib python
 
 DESCRIPTION="GDBus code and documentation generator"
 
@@ -36,9 +36,6 @@ src_prepare() {
 		-i gdbus-codegen.in || die "sed gdbus-codegen.in failed"
 	sed -e "s:\"/usr/local\":\"${EPREFIX}/usr\":" \
 		-i config.py || die "sed config.py failed"
-
-	# Process all interfaces when running on >1 file; will be in next release
-	epatch "${FILESDIR}/${P}-all-ifaces.patch"
 }
 
 pkg_setup() {
