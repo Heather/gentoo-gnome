@@ -3,6 +3,7 @@
 # $Header: $
 
 EAPI="3"
+GNOME_TARBALL_SUFFIX="xz"
 GCONF_DEBUG="no"
 PYTHON_DEPEND="2"
 
@@ -16,15 +17,18 @@ SLOT="0"
 KEYWORDS="~amd64 ~ppc ~x86"
 IUSE="doc nls test udev"
 
+# gdk-pixbuf ised in gpk-animated-icon
+# pango used on gpk-common
 RDEPEND="
 	>=dev-libs/glib-2.25.9:2
+	x11-libs/gdk-pixbuf:2
 	>=x11-libs/gtk+-2.91.0:3
 	>=x11-libs/libnotify-0.7.0
+	x11-libs/pango
 	>=dev-libs/dbus-glib-0.73
 
 	>=app-admin/packagekit-base-0.6.5[udev]
 	>=app-admin/packagekit-gtk-0.6.5
-	>=gnome-base/gnome-menus-2.24.1
 	>=media-libs/libcanberra-0.10[gtk3]
 	>=sys-apps/dbus-1.1.2
 	>=sys-power/upower-0.9.0
@@ -41,12 +45,6 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	sys-devel/gettext
 	doc? ( >=dev-util/gtk-doc-1.9 )"
-
-# Fails, recheck for next release
-# (gpk-self-test:9412): GnomePackageKit-WARNING **: Unknown error
-# FAILED [failed to get cannot-fetch-sources]
-# FAIL: gpk-self-test
-RESTRICT="test"
 
 # NOTES:
 # app-text/docbook-sgml-utils required for man pages
@@ -85,6 +83,10 @@ src_prepare() {
 
 	# fix pyc/pyo generation
 	ln -sfn $(type -P true) py-compile
+
+	# disable tests with graphical dialogs and that require packagekitd to be
+	# run with the dummy backend
+	epatch "${FILESDIR}/${PN}-3.1.90-tests.patch"
 }
 
 src_test() {
