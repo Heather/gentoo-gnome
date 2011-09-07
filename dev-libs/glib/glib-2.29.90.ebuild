@@ -58,6 +58,9 @@ src_prepare() {
 		fi
 	fi
 
+	# Fixes g_settings_apply threading bug; will be in next release
+	epatch "${FILESDIR}/${P}-gsettings-threading.patch"
+
 	# Don't fail gio tests when ran without userpriv, upstream bug 552912
 	# This is only a temporary workaround, remove as soon as possible
 	epatch "${FILESDIR}/${PN}-2.18.1-workaround-gio-test-failure-without-userpriv.patch"
