@@ -105,6 +105,13 @@ src_prepare() {
 	use short-touchpad-timeout &&
 		epatch "${FILESDIR}/${PN}-3.0.2-short-touchpad-timeout.patch"
 
+	# Add useful patches from upstream (will be in next release)
+	epatch "${FILESDIR}/${P}-gconf-leak.patch"
+	epatch "${FILESDIR}/${P}-exit-value.patch"
+	epatch "${FILESDIR}/${P}-disabled-devices.patch"
+	epatch "${FILESDIR}/${P}-disabled-touchpad.patch"
+	epatch "${FILESDIR}/${P}-divide-by-zero.patch"
+
 	gnome2_src_prepare
 }
 
