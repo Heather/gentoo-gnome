@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit autotools eutils gnome2
+inherit gnome2
 if [[ ${PV} = 9999 ]]; then
 	EGIT_BRANCH=${EGIT_BRANCH:-"vte-0-30"}
 	inherit gnome2-live
@@ -53,15 +53,4 @@ pkg_setup() {
 		$(use_enable glade glade-catalogue)
 		$(use_enable introspection)"
 	DOCS="AUTHORS ChangeLog HACKING NEWS README"
-}
-
-src_prepare() {
-	# https://bugzilla.gnome.org/show_bug.cgi?id=657581
-	epatch "${FILESDIR}/${PN}-0.29.0-fix-gdk-targets.patch"
-	# https://bugzilla.gnome.org/show_bug.cgi?id=657584
-	epatch "${FILESDIR}/${PN}-0.29.0-api-version.patch"
-
-	[[ ${PV} != 9999 ]] && eautoreconf
-
-	gnome2_src_prepare
 }
