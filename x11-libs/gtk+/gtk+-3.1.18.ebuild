@@ -111,6 +111,9 @@ src_prepare() {
 		[[ ${PV} != 9999 ]] && strip_builddir SRC_SUBDIRS demos Makefile.in
 	fi
 
+	# Useful upstream patches, will be in next release
+	epatch "${FILESDIR}/${P}"-*.patch
+
 	gnome2_src_prepare
 }
 
