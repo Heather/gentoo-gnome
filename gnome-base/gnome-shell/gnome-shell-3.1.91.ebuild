@@ -107,13 +107,6 @@ pkg_setup() {
 		--disable-jhbuild-wrapper-script"
 }
 
-src_prepare() {
-	gnome2_src_prepare
-	# Useful patches from upstream git, will be in next release
-	epatch "${FILESDIR}/${P}-telepathy-gettext.patch"
-	epatch "${FILESDIR}/${P}-workspaces-lazy-init.patch"
-}
-
 src_install() {
 	gnome2_src_install
 	python_convert_shebangs 2 "${D}"/usr/bin/gnome-shell-extension-tool
