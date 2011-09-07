@@ -17,7 +17,7 @@ KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~sparc ~x86"
 IUSE="eds socialweb vala"
 
 # TODO: tracker backend
-RDEPEND=">=dev-libs/glib-2.24:2
+COMMON_DEPEND=">=dev-libs/glib-2.24:2
 	>=net-libs/telepathy-glib-0.13.1
 	dev-libs/dbus-glib
 	<dev-libs/libgee-0.7
@@ -26,11 +26,16 @@ RDEPEND=">=dev-libs/glib-2.24:2
 	sys-libs/readline
 
 	eds? ( >=gnome-extra/evolution-data-server-3.0.1 )
-	socialweb? ( >=net-libs/libsocialweb-0.25.15 )
-"
+	socialweb? ( >=net-libs/libsocialweb-0.25.15 )"
+
+# telepathy-mission-control needed at runtime; it is used by the telepathy
+# backend via telepathy-glib's AccountManager binding.
+RDEPEND="${COMMON_DEPEND}
+	net-im/telepathy-mission-control"
+
 # folks socialweb backend requires that libsocialweb be built with USE=vala,
 # even when building folks with --disable-vala.
-DEPEND="${RDEPEND}
+DEPEND="${COMMON_DEPEND}
 	>=dev-libs/gobject-introspection-0.9.12
 	>=dev-util/intltool-0.35.0
 	>=dev-util/pkgconfig-0.21
@@ -40,8 +45,7 @@ DEPEND="${RDEPEND}
 	vala? (
 		>=dev-lang/vala-0.13.3:0.14[vapigen]
 		>=net-libs/telepathy-glib-0.13.1[vala]
-		eds? ( >=gnome-extra/evolution-data-server-3.0.1[vala] ) )
-"
+		eds? ( >=gnome-extra/evolution-data-server-3.0.1[vala] ) )"
 
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS README"
