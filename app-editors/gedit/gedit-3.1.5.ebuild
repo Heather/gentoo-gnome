@@ -26,7 +26,7 @@ else
 fi
 
 # X libs are not needed for OSX (aqua)
-RDEPEND="
+COMMON_DEPEND="
 	>=x11-libs/libSM-1.0
 	>=dev-libs/libxml2-2.5.0:2
 	>=dev-libs/glib-2.28:2
@@ -55,7 +55,10 @@ RDEPEND="
 		>=app-text/iso-codes-0.35
 	)"
 
-DEPEND="${RDEPEND}
+RDEPEND="${COMMON_DEPEND}
+	x11-themes/gnome-icon-theme-symbolic"
+
+DEPEND="${COMMON_DEPEND}
 	>=sys-devel/gettext-0.17
 	>=dev-util/intltool-0.40
 	>=dev-util/pkgconfig-0.9
