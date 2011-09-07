@@ -28,7 +28,7 @@ fi
 # >=libX11-1.3.1 needed for X Generic Event support
 RDEPEND="
 	>=dev-libs/glib-2.26:2
-	>=dev-libs/atk-1.17[introspection?]
+	>=dev-libs/atk-2.1.5[introspection?]
 	>=dev-libs/json-glib-0.12[introspection?]
 	>=media-libs/cogl-1.7.6:1.0[introspection?,pango]
 	media-libs/fontconfig
