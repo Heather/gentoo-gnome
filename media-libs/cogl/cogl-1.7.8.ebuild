@@ -5,10 +5,8 @@
 EAPI="4"
 CLUTTER_LA_PUNT="yes"
 
-# Normally, inherit gnome2 after clutter to download sources from gnome.org
-inherit clutter gnome2
-# XXX: but 1.7.6 wasn't uploaded to gnome.org for some reason :/
-SRC_URI="http://www.clutter-project.org/sources/${PN}/1.7/${P}.tar.xz"
+# Inherit gnome2 after clutter to download sources from gnome.org
+inherit eutils clutter gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -61,6 +59,12 @@ pkg_setup() {
 		--enable-glx
 		$(use_enable introspection)
 		$(use_enable pango cogl-pango)"
+}
+
+src_prepare() {
+	# Upstream patch to fix a typo in cogl/cogl-display.h
+	epatch "${FILESDIR}/${P}-rendrer-typo.patch"
+	gnome2_src_prepare
 }
 
 src_install() {

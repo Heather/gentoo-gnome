@@ -6,7 +6,6 @@ EAPI="4"
 CLUTTER_LA_PUNT="yes"
 
 # Inherit gnome2 after clutter to download sources from gnome.org
-# since clutter-project.org doesn't provide .xz tarballs
 inherit clutter gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
