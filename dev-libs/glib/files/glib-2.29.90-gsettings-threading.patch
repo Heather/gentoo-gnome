@@ -1,0 +1,39 @@
+commit 27fbaf371278e792c79a3478c2282e43f12472f5
+Author: Ryan Lortie <desrt@desrt.ca>
+Date:   Tue Sep 6 14:01:52 2011 -0400
+
+    GSettingsBackend: emit changes to correct thread
+    
+    When g_settings_apply() is called on a delayed settings backend and
+    there is a D-Bus error when communicating with dconf-service, recent
+    versions of the dconf GSettingsBackend call a function in GLib that
+    improperly delivered the signal directly instead of using
+    g_main_context_invoke().
+    
+    This patch fixes this function to route in the same way as the others so
+    that the signal is dispatched in the proper GMainContext.
+
+diff --git a/gio/gsettingsbackend.c b/gio/gsettingsbackend.c
+index 4757d63..71341ce 100644
+--- a/gio/gsettingsbackend.c
++++ b/gio/gsettingsbackend.c
+@@ -676,7 +676,6 @@ g_settings_backend_changed_tree (GSettingsBackend *backend,
+                                  GTree            *tree,
+                                  gpointer          origin_tag)
+ {
+-  GSettingsBackendWatch *watch;
+   const gchar **keys;
+   gchar *path;
+ 
+@@ -696,10 +695,7 @@ g_settings_backend_changed_tree (GSettingsBackend *backend,
+   }
+ #endif
+ 
+-  for (watch = backend->priv->watches; watch; watch = watch->next)
+-    watch->vtable->keys_changed (watch->target, backend,
+-                                 path, keys, origin_tag);
+-
++  g_settings_backend_keys_changed (backend, path, keys, origin_tag);
+   g_free (path);
+   g_free (keys);
+ }
