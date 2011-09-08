@@ -16,8 +16,9 @@ SLOT="3.0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 IUSE="doc examples test"
 
+# glibmm-2.29.12 needed for Gio::Application
 RDEPEND="
-	>=dev-cpp/glibmm-2.27.93:2
+	>=dev-cpp/glibmm-2.29.12:2
 	>=x11-libs/gtk+-3.1.18:3
 	>=x11-libs/gdk-pixbuf-2.22.1:2
 	>=dev-cpp/atkmm-2.22.2
