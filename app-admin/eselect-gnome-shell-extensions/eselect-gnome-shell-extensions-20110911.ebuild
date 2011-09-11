@@ -36,12 +36,15 @@ src_install() {
 pkg_postinst() {
 	einfo "Updating list of installed extensions"
 	eselect gnome-shell-extensions update || die
+	local keyname="disabled-extensions"
+	has_version ">=gnome-base/gnome-shell-3.1.90" &&
+		keyname="enabled-extensions"
 	elog
 	elog "eselect gnome-shell-extensions manages the system default value of"
-	elog "the org.gnome.shell disabled-extensions key. To override the default"
+	elog "the org.gnome.shell ${keyname} key. To override the default"
 	elog "for an individual user, use the gsettings command, e.g."
-	elog "\$ gsettings set org.gnome.shell disabled-extensions \"['foo', 'bar']\""
+	elog "\$ gsettings set org.gnome.shell ${keyname} \"['foo', 'bar']\""
 	elog "To undo per-user changes and use the system default, do"
-	elog "\$ gsettings reset org.gnome.shell disabled-extensions"
+	elog "\$ gsettings reset org.gnome.shell ${keyname}"
 	elog
 }
