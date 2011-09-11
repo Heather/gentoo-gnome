@@ -24,7 +24,7 @@ else
 fi
 
 COMMON_DEPEND="gnome-base/librsvg:2
-	>=x11-libs/gtk+-3.1.11:3
+	>=x11-libs/gtk+-3.1.18:3
 	>=x11-themes/gtk-engines-2.15.3:2"
 DEPEND="${COMMON_DEPEND}
 	>=x11-misc/icon-naming-utils-0.8.7
