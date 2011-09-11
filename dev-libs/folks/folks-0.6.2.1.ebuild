@@ -14,18 +14,18 @@ HOMEPAGE="http://telepathy.freedesktop.org/wiki/Folks"
 LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~sparc ~x86"
-IUSE="eds socialweb vala"
+IUSE="eds socialweb test vala"
 
 # TODO: tracker backend
 COMMON_DEPEND=">=dev-libs/glib-2.24:2
 	>=net-libs/telepathy-glib-0.13.1
 	dev-libs/dbus-glib
-	<dev-libs/libgee-0.7
+	<dev-libs/libgee-0.7:0
 	dev-libs/libxml2
 	sys-libs/ncurses
 	sys-libs/readline
 
-	eds? ( >=gnome-extra/evolution-data-server-3.0.1 )
+	eds? ( >=gnome-extra/evolution-data-server-3.1.5 )
 	socialweb? ( >=net-libs/libsocialweb-0.25.15 )"
 
 # telepathy-mission-control needed at runtime; it is used by the telepathy
@@ -42,10 +42,14 @@ DEPEND="${COMMON_DEPEND}
 	sys-devel/gettext
 
 	socialweb? ( >=net-libs/libsocialweb-0.25.15[vala] )
+	test? ( sys-apps/dbus )
 	vala? (
-		>=dev-lang/vala-0.13.3:0.14[vapigen]
+		>=dev-lang/vala-0.13.4:0.14[vapigen]
 		>=net-libs/telepathy-glib-0.13.1[vala]
 		eds? ( >=gnome-extra/evolution-data-server-3.0.1[vala] ) )"
+
+# XXX: tests appear to use installed version of folks
+RESTRICT="test"
 
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS README"
@@ -72,5 +76,5 @@ src_test() {
 		-i tests/eds/Makefile || die "sed failed"
 	# Don't run make check in po/
 	cd tests
-	emake check
+	dbus-launch emake check
 }
