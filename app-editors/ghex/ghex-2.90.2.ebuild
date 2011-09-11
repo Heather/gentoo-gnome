@@ -24,12 +24,14 @@ RDEPEND="${COMMON_DEPEND}
 	!<app-editors/ghex-2.24.0-r200:2"
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/pkgconfig-0.9
-	app-text/scrollkeeper
-	>=dev-util/intltool-0.40.0
+	>=dev-util/intltool-0.41.0
 	>=app-text/gnome-doc-utils-0.9.0
 	>=sys-devel/gettext-0.17"
 
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS README"
-	G2CONF="${G2CONF} --disable-static"
+	G2CONF="${G2CONF}
+		--disable-schemas-compile
+		--disable-scrollkeeper
+		--disable-static"
 }
