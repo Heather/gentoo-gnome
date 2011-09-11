@@ -24,7 +24,7 @@ else
 	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~sparc ~x86"
 fi
 # FIXME: Add location support once geoclue stops being idiotic with automagic deps
-IUSE="debug eds +map +geoloc +networkmanager sendto spell test +video" # gnome
+IUSE="debug eds +map +geoloc gnome-online-accounts +networkmanager sendto spell test +video" # gnome
 
 # FIXME: gst-plugins-bad is required for the valve plugin. This should move to good
 # eventually at which point the dep can be dropped
@@ -36,7 +36,7 @@ RDEPEND=">=dev-libs/glib-2.28:2
 	x11-libs/pango
 	>=dev-libs/dbus-glib-0.51
 	>=dev-libs/folks-0.6.0
-	dev-libs/libgee
+	dev-libs/libgee:0
 	>=gnome-base/gnome-keyring-2.91.4-r300
 	>=media-libs/libcanberra-0.25[gtk3]
 	media-sound/pulseaudio[glib]
@@ -62,6 +62,7 @@ RDEPEND=">=dev-libs/glib-2.28:2
 
 	eds? ( >=gnome-extra/evolution-data-server-1.2 )
 	geoloc? ( >=app-misc/geoclue-0.11 )
+	gnome-online-accounts? ( net-libs/gnome-online-accounts )
 	map? ( media-libs/libchamplain:0.10[gtk] )
 	networkmanager? ( >=net-misc/networkmanager-0.7 )
 	sendto? ( >=gnome-extra/nautilus-sendto-2.90.0 )
@@ -99,6 +100,7 @@ pkg_setup() {
 		$(use_enable debug)
 		$(use_with eds)
 		$(use_enable geoloc location)
+		$(use_enable gnome-online-accounts goa)
 		$(use_enable map)
 		$(use_with networkmanager connectivity nm)
 		$(use_enable sendto nautilus-sendto)
