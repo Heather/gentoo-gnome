@@ -11,7 +11,7 @@ PYTHON_USE_WITH="xml"
 SUPPORT_PYTHON_ABIS="1"
 RESTRICT_PYTHON_ABIS="3.*"
 
-inherit eutils gnome2-python
+inherit gnome2-python
 
 DESCRIPTION="Input assistive technology intended for switch and pointer users"
 HOMEPAGE="https://live.gnome.org/Caribou"
@@ -21,11 +21,11 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-COMMON_DEPEND=">=dev-python/pygobject-2.27.92:2[introspection]
+COMMON_DEPEND=">=dev-python/pygobject-2.90.3:3
 	>=x11-libs/gtk+-3.0.0:3[introspection]
 	x11-libs/gtk+:2
 	>=dev-libs/gobject-introspection-0.10.7
-	dev-libs/libgee
+	dev-libs/libgee:0
 	dev-libs/libxml2
 	>=media-libs/clutter-1.5.11:1.0[introspection]
 	x11-libs/libX11
@@ -61,8 +61,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# https://bugzilla.gnome.org/show_bug.cgi?id=657666
-	epatch "${FILESDIR}/${PN}-0.3.5-pygobject-3.patch"
 	# delete custom PYTHONPATH, useless on Gentoo and potential bug source
 	sed -e '/export PYTHONPATH=.*python/ d' \
 		-i bin/{antler-keyboard,caribou,caribou-preferences}.in ||
