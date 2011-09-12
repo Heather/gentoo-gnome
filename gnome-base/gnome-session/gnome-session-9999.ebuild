@@ -24,7 +24,7 @@ IUSE="doc ipv6 elibc_FreeBSD"
 
 # x11-misc/xdg-user-dirs{,-gtk} are needed to create the various XDG_*_DIRs, and
 # create .config/user-dirs.dirs which is read by glib to get G_USER_DIRECTORY_*
-# xdg-user-dirs-update is run during login (see 10-user-dirs-update below).
+# xdg-user-dirs-update is run during login (see 10-user-dirs-update-gnome below).
 # gdk-pixbuf used in the inhibit dialog
 COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
 	x11-libs/gdk-pixbuf:2
@@ -50,10 +50,12 @@ COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
 # Pure-runtime deps from the session files should *NOT* be added here
 # Otherwise, things like gdm pull in gnome-shell
 # gnome-themes-standard is needed for the failwhale dialog themeing
+# sys-apps/dbus[X] is needed for session management
 RDEPEND="${COMMON_DEPEND}
 	gnome-base/gnome-settings-daemon
 	>=gnome-base/gsettings-desktop-schemas-0.1.7
-	>=x11-themes/gnome-themes-standard-2.91.92"
+	>=x11-themes/gnome-themes-standard-2.91.92
+	sys-apps/dbus[X]"
 DEPEND="${COMMON_DEPEND}
 	>=dev-lang/perl-5
 	>=sys-devel/gettext-0.10.40
@@ -81,20 +83,20 @@ pkg_setup() {
 src_install() {
 	gnome2_src_install
 
-	dodir /etc/X11/Sessions || die "dodir failed"
+	dodir /etc/X11/Sessions
 	exeinto /etc/X11/Sessions
-	doexe "${FILESDIR}/Gnome" || die "doexe failed"
+	doexe "${FILESDIR}/Gnome"
 
-	dodir /usr/share/gnome/applications/ || die
+	dodir /usr/share/gnome/applications/
 	insinto /usr/share/gnome/applications/
-	doins "${FILESDIR}/defaults.list" || die
+	doins "${FILESDIR}/defaults.list"
 
-	dodir /etc/X11/xinit/xinitrc.d/ || die
+	dodir /etc/X11/xinit/xinitrc.d/
 	exeinto /etc/X11/xinit/xinitrc.d/
-	doexe "${FILESDIR}/15-xdg-data-gnome" || die
+	doexe "${FILESDIR}/15-xdg-data-gnome"
 
-	# FIXME: this should be done by x11-misc/xdg-user-dirs
-	doexe "${FILESDIR}/10-user-dirs-update" || die "doexe failed"
+	# This should be done here as discussed in bug #270852
+	doexe "${FILESDIR}/10-user-dirs-update-gnome"
 }
 
 pkg_postinst() {
