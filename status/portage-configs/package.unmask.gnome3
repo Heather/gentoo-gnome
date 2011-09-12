@@ -15,10 +15,8 @@
 #
 # Libraries
 >=dev-libs/atk-2.0
->=dev-cpp/libgdamm-4.99
->=gnome-base/libgnomekbd-3.0
 >=dev-libs/libgweather-3.0
->=gnome-extra/gtkhtml-4.0
+>=gnome-base/libgnomekbd-3.0
 >=gnome-extra/libgda-4.99
 =media-libs/libcanberra-0.28-r4
 >=x11-misc/notification-daemon-0.7
@@ -61,9 +59,11 @@
 >=gnome-extra/gnome-screensaver-3.0
 >=gnome-extra/gnome-system-monitor-3.0
 >=gnome-extra/gnome-tweak-tool-3.0
+>=gnome-extra/gnome-user-share-3.0
 >=gnome-extra/gnome-utils-3.0
 >=gnome-extra/gucharmap-3.0
 >=gnome-extra/mousetweaks-3.0
+>=gnome-extra/nautilus-sendto-3.0
 >=gnome-extra/zenity-3.0
 >=mail-client/evolution-3.0
 >=media-gfx/eog-3.0
@@ -87,6 +87,7 @@
 # NetworkManager
 >=net-misc/networkmanager-0.8.99
 >=net-misc/networkmanager-pptp-0.8.99
+>=net-misc/networkmanager-openconnect-0.8.99
 >=net-misc/networkmanager-openvpn-0.8.99
 >=net-misc/networkmanager-openswan-0.8.99
 >=net-misc/networkmanager-vpnc-0.8.99
