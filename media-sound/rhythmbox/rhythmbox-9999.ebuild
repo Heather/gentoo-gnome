@@ -66,6 +66,9 @@ RDEPEND="${COMMON_DEPEND}
 		>=media-plugins/gst-plugins-cdio-0.10 )
 	>=media-plugins/gst-plugins-meta-0.10-r2:0.10
 	>=media-plugins/gst-plugins-taglib-0.10.6
+	upnp? (
+		>=media-libs/grilo-0.1.17
+		>=media-plugins/grilo-plugins-0.1.17[upnp] )
 	python? (
 		>=dev-python/gst-python-0.10.8
 
@@ -78,12 +81,7 @@ RDEPEND="${COMMON_DEPEND}
 		webkit? (
 			dev-python/mako
 			>=net-libs/webkit-gtk-1.3.9:3[introspection] )
-		upnp? (
-			>=dev-python/gconf-python-2.22
-			>=dev-python/pygtk-2.8:2
-			dev-python/louie
-			media-video/coherence
-			dev-python/twisted[gtk] ) )
+	)
 
 	nsplugin? ( net-libs/xulrunner )"
 # gtk-doc-am needed for eautoreconf
@@ -137,10 +135,6 @@ pkg_setup() {
 			ewarn "You need python support in addition to webkit to be able to use"
 			ewarn "the context panel plugin."
 		fi
-
-		if use upnp; then
-			ewarn "You need python support in addition to upnp"
-		fi
 	fi
 
 	if use gnome-keyring && ! use python; then
@@ -151,6 +145,7 @@ pkg_setup() {
 		MOZILLA_PLUGINDIR=/usr/$(get_libdir)/nsbrowser/plugins
 		VALAC=$(type -P valac-0.10)
 		--enable-mmkeys
+		--disable-maintainer-mode
 		--disable-scrollkeeper
 		--disable-schemas-compile
 		--disable-static
@@ -162,6 +157,7 @@ pkg_setup() {
 		$(use_enable musicbrainz)
 		$(use_enable nsplugin browser-plugin)
 		$(use_enable python)
+		$(use_enable upnp grilo)
 		$(use_enable vala)
 		$(use_with cdr brasero)
 		$(use_with daap mdns avahi)
