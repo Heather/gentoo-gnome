@@ -1,0 +1,35 @@
+From 252cd9b20d7857091c0529955998b86d7a90e6c5 Mon Sep 17 00:00:00 2001
+From: Hubert Figuiere <hub@figuiere.net>
+Date: Thu, 22 Jul 2010 07:04:54 +0000
+Subject: Install the GdkPixbuf in the right place. (Closes #29208) (Vincent Untz)
+
+---
+diff --git a/configure.in b/configure.in
+index 1d44b9c..c16a20c 100644
+--- a/configure.in
++++ b/configure.in
+@@ -137,8 +137,7 @@ if test x$enable_gnome = xyes ; then
+    if test x$HAVE_LIBGLIB = xyes ; then
+       PKG_CHECK_MODULES(LIBGDKPIXBUF, gdk-pixbuf-2.0 >= $LIBGDKPIXBUF_REQUIRED,
+                      [AC_DEFINE(HAVE_LIBGDKPIXBUF, 1, [Define to 1 to enable libgdkpixbuf support])
+-		      GTK_VERSION=`$PKG_CONFIG --variable=gtk_binary_version gtk+-2.0`
+-		      GDK_PIXBUF_DIR="gtk-2.0/$GTK_VERSION/loaders"
++		      GDK_PIXBUF_DIR=`$PKG_CONFIG --variable=gdk_pixbuf_moduledir gdk-pixbuf-2.0`
+ 		      AC_SUBST(GDK_PIXBUF_DIR)
+ 		      HAVE_LIBGDKPIXBUF=yes],
+                      [HAVE_LIBGDKPIXBUF=no])
+diff --git a/gnome/Makefile.am b/gnome/Makefile.am
+index ecfe27d..2c0bca5 100644
+--- a/gnome/Makefile.am
++++ b/gnome/Makefile.am
+@@ -16,7 +16,7 @@ pkgconfig_DATA = $(PKG_CONFIG_FILES)
+ 
+ lib_LTLIBRARIES = $(GNOME_TARGETS)
+ 
+-loaderdir = $(libdir)/$(GDK_PIXBUF_DIR)
++loaderdir = $(GDK_PIXBUF_DIR)
+ loader_LTLIBRARIES = $(GDK_PIXBUF_PLUGIN)
+ 
+ libopenrawgnome_la_LDFLAGS = \
+--
+cgit v0.9.0.2-2-gbebe
