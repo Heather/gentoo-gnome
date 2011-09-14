@@ -20,7 +20,7 @@ IUSE="eds socialweb test vala"
 COMMON_DEPEND=">=dev-libs/glib-2.24:2
 	>=net-libs/telepathy-glib-0.13.1
 	dev-libs/dbus-glib
-	<dev-libs/libgee-0.7:0
+	<dev-libs/libgee-0.7:0[introspection]
 	dev-libs/libxml2
 	sys-libs/ncurses
 	sys-libs/readline
