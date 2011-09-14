@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
+inherit eutils gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit git-2 gnome2-live
 fi
@@ -84,4 +84,12 @@ src_unpack() {
 		ln -sf "${WORKDIR}/hwdata/pnp.ids" "${S}/libgnome-desktop/" ||
 			die "ln -sf failed"
 	fi
+}
+
+src_prepare() {
+	gnome2_src_prepare
+
+	# Upstream patches to prevent crashes, will be in next release
+	epatch "${FILESDIR}/${P}-wall-clock-dispose.patch"
+	epatch "${FILESDIR}/${P}-update_brightness_limites-crash.patch"
 }
