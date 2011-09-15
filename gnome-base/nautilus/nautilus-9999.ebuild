@@ -21,7 +21,7 @@ if [[ ${PV} = 9999 ]]; then
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux"
 fi
-IUSE="doc exif gnome +introspection packagekit sendto xmp"
+IUSE="doc exif gnome +introspection packagekit +previewer sendto xmp"
 
 COMMON_DEPEND=">=dev-libs/glib-2.29.13:2
 	>=x11-libs/pango-1.28.3
@@ -55,6 +55,7 @@ RDEPEND="${COMMON_DEPEND}
 PDEPEND="gnome? (
 		>=x11-themes/gnome-icon-theme-1.1.91
 		x11-themes/gnome-icon-theme-symbolic )
+	previewer? ( >=gnome-extra/sushi-0.1.9 )
 	>=gnome-base/gvfs-0.1.2"
 
 pkg_setup() {
@@ -88,7 +89,11 @@ src_test() {
 pkg_postinst() {
 	gnome2_pkg_postinst
 
-	elog "nautilus can use gstreamer to preview audio files. Just make sure"
-	elog "to have the necessary plugins available to play the media type you"
-	elog "want to preview"
+	if use previewer; then
+		elog "nautilus uses gnome-extra/sushi to preview media files."
+		elog "To activate the previewer, select a file and press space; to"
+		elog "close the previewer, press space again."
+	else
+		elog "To preview media files, emerge nautilus with USE=previewer"
+	fi
 }
