@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~sh ~sparc ~x86"
 
 IUSE_LIBC="elibc_glibc"
-IUSE="accessibility +consolekit ipv6 gnome-keyring selinux tcpd test xinerama +xklavier $IUSE_LIBC"
+IUSE="accessibility +consolekit fprint +gnome-shell ipv6 gnome-keyring +introspection selinux smartcard tcpd test xinerama +xklavier $IUSE_LIBC"
 
 # Name of the tarball with gentoo specific files
 GDM_EXTRA="${PN}-2.20.9-gentoo-files-r1"
@@ -24,17 +24,26 @@ SRC_URI="${SRC_URI}
 	mirror://gentoo/${GDM_EXTRA}.tar.bz2"
 
 # NOTE: x11-base/xorg-server dep is for X_SERVER_PATH etc, bug #295686
+# nspr used by smartcard extension
+# dconf, dbus and g-s-d are needed at build time for make-dconf-override-db.sh
 COMMON_DEPEND="
 	>=dev-libs/dbus-glib-0.74
-	>=dev-libs/glib-2.27.4:2
+	>=dev-libs/glib-2.29.3:2
 	>=x11-libs/gtk+-2.91.1:3
 	>=x11-libs/pango-1.3
+	dev-libs/nspr
+	>=dev-libs/nss-3.11.1
 	>=media-libs/fontconfig-2.5.0
 	>=media-libs/libcanberra-0.4[gtk3]
 	>=gnome-base/gconf-2.31.3
 	>=x11-misc/xdg-utils-1.0.2-r3
 	>=sys-power/upower-0.9
 	>=sys-apps/accountsservice-0.6.12
+
+	gnome-base/dconf
+	>=gnome-base/gnome-settings-daemon-3.1.4
+	gnome-base/gsettings-desktop-schemas
+	sys-apps/dbus
 
 	app-text/iso-codes
 
@@ -53,6 +62,7 @@ COMMON_DEPEND="
 
 	accessibility? ( x11-libs/libXevie )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-2.22[pam] )
+	introspection? ( >=dev-libs/gobject-introspection-0.9.12 )
 	selinux? ( sys-libs/libselinux )
 	tcpd? ( >=sys-apps/tcp-wrappers-7.6 )
 	xinerama? ( x11-libs/libXinerama )
@@ -68,15 +78,26 @@ DEPEND="${COMMON_DEPEND}
 	>=dev-util/pkgconfig-0.19
 	>=app-text/scrollkeeper-0.1.4
 	>=app-text/gnome-doc-utils-0.3.2"
-# XXX: These deps are from the gnome-session gdm.session file
-# at-spi is needed for at-spi-registryd-wrapper.desktop
+# XXX: These deps are from session and desktop files in data/ directory
+# at-spi:1 is needed for at-spi-registryd (spawned by simple-chooser)
+# fprintd is used via dbus by gdm-fingerprint-extension
 RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/gnome-session-2.91.92
-	>=gnome-base/gnome-settings-daemon-2.91
-	x11-wm/metacity
 
-	accessibility? ( gnome-extra/at-spi:1 )
+	accessibility? (
+		app-accessibility/gnome-mag
+		app-accessibility/gok
+		app-accessibility/orca
+		gnome-extra/at-spi:1 )
 	consolekit? ( gnome-extra/polkit-gnome )
+	fprint? (
+		sys-auth/fprintd
+		sys-auth/pam_fprint )
+	gnome-shell? ( >=gnome-base/gnome-shell-3.1.90 )
+	!gnome-shell? ( x11-wm/metacity )
+	smartcard? (
+		app-crypt/coolkey
+		sys-auth/pam_pkcs11 )
 
 	!gnome-extra/fast-user-switch-applet"
 
@@ -85,11 +106,13 @@ pkg_setup() {
 
 	# PAM is the only auth scheme supported
 	# even though configure lists shadow and crypt
-	# they don't have any corresponding code
+	# they don't have any corresponding code.
 	# --with-at-spi-registryd-directory= needs to be passed explicitly because
 	# of https://bugzilla.gnome.org/show_bug.cgi?id=607643#c4
 	G2CONF="${G2CONF}
 		--disable-schemas-install
+		--disable-maintainer-mode
+		--disable-static
 		--localstatedir=${EPREFIX}/var
 		--with-xdmcp=yes
 		--enable-authentication-scheme=pam
@@ -129,10 +152,26 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-2.32.0-automagic-libxklavier-support.patch"
 
 	# don't ignore all non-i18n environment variables, gnome bug 656094
-	epatch "${FILESDIR}/${PN}-3.0.4-hardcoded-gnome-session-path-env.patch"
+	epatch "${FILESDIR}/${PN}-3.1.91-hardcoded-gnome-session-path-env.patch"
 
 	# don't load accessibility support at runtime when USE=-accessibility
-	use accessibility || epatch "${FILESDIR}/${PN}-3.0.4-disable-a11y.patch"
+	if ! use accessibility; then
+		epatch "${FILESDIR}/${PN}-3.1.91-disable-accessibility.patch"
+		# force gsettings override db to be regenerated
+		rm -f data/dconf-override-db
+	fi
+
+	# make gdm-fallback session the default if USE=-gnome-shell
+	if ! use gnome-shell; then
+		sed -e 's:"gdm-shell":"gdm-fallback":' \
+			-i data/make-dconf-override-db.sh || die "sed failed"
+		rm -f data/dconf-override-db
+	fi
+
+	# Useful upstream patches, will be in next release
+	epatch "${FILESDIR}/${P}-gdm-slave-memory-leak.patch"
+	epatch "${FILESDIR}/${P}-gdm-slave-dbus_error_init.patch"
+	epatch "${FILESDIR}/${P}-daemon-autologin.patch"
 
 	mkdir -p "${S}"/m4
 	intltoolize --force --copy --automake || die "intltoolize failed"
@@ -147,7 +186,6 @@ src_install() {
 	# Install the systemd unit file
 	systemd_dounit "${FILESDIR}/gdm@.service"
 
-	# FIXME: Remove dosym usage, gone in EAPI 4
 	# gdm-binary should be gdm to work with our init (#5598)
 	rm -f "${ED}/usr/sbin/gdm"
 	ln -sfn /usr/sbin/gdm-binary "${ED}/usr/sbin/gdm"
@@ -166,9 +204,14 @@ src_install() {
 	echo 'XDG_DATA_DIRS="/usr/share/gdm"' > 99xdg-gdm
 	doenvd 99xdg-gdm || die "doenvd failed"
 
+	# install PAM files
+	cp "${FILESDIR}"/3.1.91-pam.d/gdm-{password,fingerprint,smartcard} \
+		"${gentoodir}"/pam.d/
 	use gnome-keyring && sed -i "s:#Keyring=::g" "${gentoodir}"/pam.d/*
 
-	dopamd "${gentoodir}"/pam.d/gdm{,-autologin}
+	dopamd "${gentoodir}"/pam.d/gdm{,-autologin,-password,-fingerprint,-smartcard}
+	# gdm-welcome is the PAM file for the gdm greeter itself
+	pamd_mimic system-services gdm-welcome auth account session
 }
 
 pkg_postinst() {

@@ -1,8 +1,8 @@
-From ece7e78e3ef5278382acbf8258950c8607a5d7df Mon Sep 17 00:00:00 2001
+From 791fb64fbf7d4752c4e607708739f627f09b71e2 Mon Sep 17 00:00:00 2001
 From: Alexandre Rostovtsev <tetromino@gmail.com>
 Date: Sun, 7 Aug 2011 02:15:11 -0400
-Subject: [PATCH] Don't hardcode gnome-session path, don't drop harmless env
- variables
+Subject: [PATCH 1/2] Don't hardcode gnome-session path, don't drop harmless
+ env variables
 
 Don't hardcode the location of the gnome-session executable to /usr/bin.
 The system administrator may want have installed a custom wrapper in
@@ -23,28 +23,28 @@ driver bugs.
 Addresses https://bugzilla.gnome.org/show_bug.cgi?id=656094
 ---
  daemon/gdm-greeter-session.c |    2 +-
- daemon/gdm-welcome-session.c |   43 ++++++++++++++++++++++++++---------------
- 2 files changed, 28 insertions(+), 17 deletions(-)
+ daemon/gdm-welcome-session.c |   44 ++++++++++++++++++++++++++---------------
+ 2 files changed, 29 insertions(+), 17 deletions(-)
 
 diff --git a/daemon/gdm-greeter-session.c b/daemon/gdm-greeter-session.c
-index a401508..7429314 100644
+index 8032065..73653b9 100644
 --- a/daemon/gdm-greeter-session.c
 +++ b/daemon/gdm-greeter-session.c
-@@ -148,7 +148,7 @@ gdm_greeter_session_new (const char *display_name,
+@@ -78,7 +78,7 @@ gdm_greeter_session_new (const char *display_name,
          GObject *object;
  
          object = g_object_new (GDM_TYPE_GREETER_SESSION,
--                               "command", BINDIR "/gnome-session --session gdm --autostart="DATADIR"/gdm/autostart/LoginWindow/",
-+                               "command", "gnome-session --session gdm --autostart="DATADIR"/gdm/autostart/LoginWindow/",
+-                               "command", BINDIR "/gnome-session -f --debug",
++                               "command", "gnome-session -f --debug",
                                 "server-dbus-path", GDM_GREETER_SERVER_DBUS_PATH,
                                 "server-dbus-interface", GDM_GREETER_SERVER_DBUS_INTERFACE,
                                 "server-env-var-name", "GDM_GREETER_DBUS_ADDRESS",
 diff --git a/daemon/gdm-welcome-session.c b/daemon/gdm-welcome-session.c
-index b8ec8d7..d0e6030 100644
+index 41144a8..ff11da9 100644
 --- a/daemon/gdm-welcome-session.c
 +++ b/daemon/gdm-welcome-session.c
-@@ -350,32 +350,28 @@ get_welcome_environment (GdmWelcomeSession *welcome_session,
-         GPtrArray     *env;
+@@ -238,32 +238,28 @@ build_welcome_environment (GdmWelcomeSession *welcome_session,
+ {
          GHashTable    *hash;
          struct passwd *pwent;
 -        static const char * const optional_environment[] = {
@@ -52,20 +52,20 @@ index b8ec8d7..d0e6030 100644
                  "LANG", "LANGUAGE", "LC_CTYPE", "LC_NUMERIC", "LC_TIME",
                  "LC_COLLATE", "LC_MONETARY", "LC_MESSAGES", "LC_PAPER",
                  "LC_NAME", "LC_ADDRESS", "LC_TELEPHONE", "LC_MEASUREMENT",
-                 "LC_IDENTIFICATION", "LC_ALL",
+                 "LC_IDENTIFICATION", "LC_ALL", "WINDOWPATH",
                  NULL
          };
 +        static const char * const drop_environment[] = {
 +                "MAIL", NULL
 +        };
 +        char **curr_environment;
+         char *system_data_dirs;
          int i;
  
          load_lang_config_file (LANG_CONFIG_FILE,
 -                               (const char **) optional_environment);
 +                               (const char **) lang_environment);
 +        curr_environment = g_listenv ();
-         env = g_ptr_array_new ();
  
 -        /* create a hash table of current environment, then update keys has necessary */
 +        /* Create a hash table for environment variables.
@@ -82,10 +82,10 @@ index b8ec8d7..d0e6030 100644
 -                                     g_strdup (g_getenv (optional_environment[i])));
 -        }
 -
-         if (welcome_session->priv->dbus_bus_address != NULL) {
-                 g_hash_table_insert (hash,
-                                      g_strdup ("DBUS_SESSION_BUS_ADDRESS"),
-@@ -409,7 +405,6 @@ get_welcome_environment (GdmWelcomeSession *welcome_session,
+         system_data_dirs = g_strjoinv (":", (char **) g_get_system_data_dirs ());
+ 
+         g_hash_table_insert (hash,
+@@ -292,7 +288,6 @@ build_welcome_environment (GdmWelcomeSession *welcome_session,
          g_hash_table_insert (hash, g_strdup ("USERNAME"), g_strdup (welcome_session->priv->user_name));
  
          g_hash_table_insert (hash, g_strdup ("GDM_VERSION"), g_strdup (VERSION));
@@ -93,12 +93,12 @@ index b8ec8d7..d0e6030 100644
  
          g_hash_table_insert (hash, g_strdup ("HOME"), g_strdup ("/"));
          g_hash_table_insert (hash, g_strdup ("PWD"), g_strdup ("/"));
-@@ -435,15 +430,31 @@ get_welcome_environment (GdmWelcomeSession *welcome_session,
+@@ -318,12 +313,28 @@ build_welcome_environment (GdmWelcomeSession *welcome_session,
                  g_hash_table_insert (hash, g_strdup ("GDM_SEAT_ID"), g_strdup (seat_id));
          }
  
 -        g_hash_table_insert (hash, g_strdup ("PATH"), g_strdup (g_getenv ("PATH")));
--        g_hash_table_insert (hash, g_strdup ("WINDOWPATH"), g_strdup (g_getenv ("WINDOWPATH")));
+-
          g_hash_table_insert (hash, g_strdup ("RUNNING_UNDER_GDM"), g_strdup ("true"));
          g_hash_table_insert (hash, g_strdup ("GVFS_DISABLE_FUSE"), g_strdup ("1"));
          g_hash_table_insert (hash, g_strdup ("DCONF_PROFILE"), g_strdup ("gdm"));
@@ -119,14 +119,19 @@ index b8ec8d7..d0e6030 100644
 +        for (i = 0; drop_environment[i] != NULL; i++)
 +                g_hash_table_remove (hash, drop_environment[i]);
 +
++        g_strfreev (curr_environment);
++
+         return hash;
+ }
+ 
+@@ -337,6 +348,7 @@ get_welcome_environment (GdmWelcomeSession *welcome_session,
+         hash = build_welcome_environment (welcome_session, start_session);
+ 
+         env = g_ptr_array_new ();
++
          g_hash_table_foreach (hash, (GHFunc)listify_hash, env);
          g_hash_table_destroy (hash);
  
-+        g_strfreev (curr_environment);
-+
-         g_ptr_array_add (env, NULL);
- 
-         return env;
 -- 
-1.7.6
+1.7.6.1
 
