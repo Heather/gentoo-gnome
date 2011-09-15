@@ -26,7 +26,7 @@ if [[ ${PV} = 9999 ]]; then
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 fi
-IUSE="bluetooth doc grilo +introspection iplayer lirc nautilus nsplugin +python +youtube vala zeroconf"
+IUSE="bluetooth doc grilo +introspection iplayer lirc nautilus nsplugin +python +youtube vala" # zeroconf
 
 # TODO:
 # Cone (VLC) plugin needs someone with the right setup (remi ?)
@@ -73,7 +73,7 @@ RDEPEND=">=dev-libs/glib-2.27.92:2
 		>=x11-misc/shared-mime-info-0.22 )
 	python? (
 		>=dev-libs/gobject-introspection-0.6.7
-		>=dev-python/pygobject-2.27.0[introspection]
+		>=dev-python/pygobject-2.90.3:3
 		>=x11-libs/gtk+-2.91.7:3[introspection]
 		dev-python/pyxdg
 		dev-python/gst-python:0.10
@@ -87,8 +87,9 @@ RDEPEND=">=dev-libs/glib-2.27.92:2
 		>=dev-libs/libgdata-0.7.0
 		net-libs/libsoup:2.4
 		media-plugins/gst-plugins-soup:0.10
-		>=dev-libs/totem-pl-parser-2.32.4[quvi] )
-	zeroconf? ( >=net-libs/libepc-0.3 )"
+		>=dev-libs/totem-pl-parser-2.32.4[quvi] )"
+#	zeroconf? ( >=net-libs/libepc-0.5.0 )
+# XXX: zeroconf requires unreleased version of libepc
 
 DEPEND="${RDEPEND}
 	sys-devel/gettext
@@ -143,7 +144,8 @@ pkg_setup() {
 	use python && plugins="${plugins},dbusservice,pythonconsole,opensubtitles"
 	use vala && plugins="${plugins},rotation"
 	use youtube && plugins="${plugins},youtube"
-	use zeroconf && plugins="${plugins},publish"
+	# XXX: zeroconf requires unreleased version of libepc
+	# use zeroconf && plugins="${plugins},publish"
 
 	G2CONF="${G2CONF} --with-plugins=${plugins}"
 
