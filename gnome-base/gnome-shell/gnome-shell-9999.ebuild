@@ -74,7 +74,8 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 # 2. Introspection stuff + dconf needed via imports.gi.*
 # 3. gnome-session is needed for gnome-session-quit
 # 4. Control shell settings
-# 5. accountsservice is needed for GdmUserManager
+# 5. accountsservice is needed for GdmUserManager (0.6.14 needed for fast
+#    user switching with gdm-3.1.x)
 # 6. caribou needed for on-screen keyboard
 RDEPEND="${COMMON_DEPEND}
 	>=sys-auth/polkit-0.101[introspection]
@@ -88,7 +89,7 @@ RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/gnome-settings-daemon-2.91
 	>=gnome-base/gnome-control-center-2.91.92-r1
 
-	>=sys-apps/accountsservice-0.6.12
+	>=sys-apps/accountsservice-0.6.14
 
 	>=app-accessibility/caribou-0.3"
 DEPEND="${COMMON_DEPEND}
