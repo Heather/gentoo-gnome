@@ -25,7 +25,7 @@ fi
 RDEPEND="
 	>=dev-libs/glib-2.25.6:2
 	>=x11-libs/gtk+-2.99.3:3
-	>=gnome-base/gnome-desktop-2.91.5:3
+	>=gnome-base/gnome-desktop-3.1.91:3
 	>=gnome-base/gsettings-desktop-schemas-0.1.7
 	>=gnome-base/libgnomekbd-0.1
 	>=dev-libs/dbus-glib-0.71
@@ -64,7 +64,8 @@ pkg_setup() {
 		--with-pam-prefix=/etc
 		--with-xf86gamma-ext
 		--with-kbd-layout-indicator
-		--disable-schemas-compile"
+		--disable-schemas-compile
+		--disable-maintainer-mode"
 	# xscreensaver and custom screensaver capability removed
 	# poke and inhibit commands were also removed, bug 579430
 }
