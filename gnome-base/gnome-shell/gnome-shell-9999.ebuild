@@ -36,7 +36,9 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 	x11-libs/gdk-pixbuf:2[introspection]
 	>=x11-libs/gtk+-3.0.0:3[introspection]
 	>=media-libs/clutter-1.7.5:1.0[introspection]
+	app-misc/ca-certificates
 	>=dev-libs/folks-0.5.2
+	>=dev-libs/json-glib-0.13.2
 	>=gnome-base/gnome-desktop-2.91.2:3
 	>=gnome-base/gsettings-desktop-schemas-2.91.91
 	gnome-base/libgnome-keyring
@@ -99,12 +101,21 @@ DEPEND="${COMMON_DEPEND}
 # https://bugs.gentoo.org/show_bug.cgi?id=360413
 
 pkg_setup() {
-	DOCS="AUTHORS README"
+	DOCS="AUTHORS NEWS README"
 	# Don't error out on warnings
 	G2CONF="${G2CONF}
+		--disable-maintainer-mode
 		--enable-compile-warnings=maximum
 		--disable-schemas-compile
-		--disable-jhbuild-wrapper-script"
+		--disable-jhbuild-wrapper-script
+		--with-ca-certificates=${EPREFIX}/etc/ssl/certs/ca-certificates.crt"
+}
+
+src_prepare() {
+	gnome2_src_prepare
+	# Use the correct Gentoo directory for browser plugins
+	sed -e 's:$(libdir)/mozilla/plugins:$(libdir)/nsbrowser/plugins:g' \
+		-i browser-plugin/Makefile.* || die "sed failed"
 }
 
 src_install() {
