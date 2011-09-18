@@ -19,7 +19,7 @@ IUSE="doc examples test"
 # glibmm-2.29.12 needed for Gio::Application
 RDEPEND="
 	>=dev-cpp/glibmm-2.29.12:2
-	>=x11-libs/gtk+-3.1.18:3
+	>=x11-libs/gtk+-3.1.90:3
 	>=x11-libs/gdk-pixbuf-2.22.1:2
 	>=dev-cpp/atkmm-2.22.2
 	>=dev-cpp/cairomm-1.9.2.2
