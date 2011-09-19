@@ -45,6 +45,8 @@ media-plugins/gst-plugins-twolame
 media-plugins/gst-plugins-x264
 
 media-libs/gst-plugins-bad
+media-plugins/gst-plugins-assrender
+media-plugins/gst-plugins-dts
 media-plugins/gst-plugins-dvb
 media-plugins/gst-plugins-faac
 media-plugins/gst-plugins-faad
@@ -57,6 +59,7 @@ media-plugins/gst-plugins-mplex
 media-plugins/gst-plugins-musepack
 media-plugins/gst-plugins-mythtv
 media-plugins/gst-plugins-neon
+media-plugins/gst-plugins-ofa
 media-plugins/gst-plugins-resindvd
 media-plugins/gst-plugins-schroedinger
 media-plugins/gst-plugins-vp8
