@@ -60,6 +60,9 @@ DEPEND="${RDEPEND}
 	>=app-text/gnome-doc-utils-0.9
 	doc? ( >=dev-util/gtk-doc-1 )"
 
+# XXX: some tests fail when run from portage (but pass when building by hand)
+RESTRICT="test"
+
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS README"
 

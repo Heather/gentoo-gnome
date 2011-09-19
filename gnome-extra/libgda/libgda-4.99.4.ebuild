@@ -60,6 +60,9 @@ DEPEND="${RDEPEND}
 	>=app-text/gnome-doc-utils-0.9
 	doc? ( >=dev-util/gtk-doc-1 )"
 
+# XXX: some tests fail when run from portage (but pass when building by hand)
+RESTRICT="test"
+
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS README"
 
@@ -115,6 +118,9 @@ src_prepare() {
 
 	# Fix compilation failure of keyword_hash.c, upstream #630959
 	#epatch "${FILESDIR}/${PN}-4.2.0-missing-include-in-keyword_hash-generator.patch"
+
+	# Upstream patch to fix a serious statement rewriting bug, in next release
+	epatch "${FILESDIR}/${P}-statement-rewriting-fix.patch"
 
 	# Disable broken tests so we can check the others
 	epatch "${FILESDIR}/${PN}-9999-disable-broken-tests.patch"
