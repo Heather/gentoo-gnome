@@ -81,6 +81,11 @@ gnome2-live_src_prepare() {
 		mkdir -p "$i"
 	done
 
+	# Generate po/Makefile.in.in if it doesn't exist
+	if [[ -d po && ! -e po/Makefile.in.in && ! -e po/Makefile.am ]]; then
+		eautopoint --force
+	fi
+
 	# We don't run gettextize because that does too much stuff
 	if grep -qe 'GETTEXT' configure.*; then
 		local aux_dir=${S}/$(gnome2-live_get_var AC_CONFIG_AUX_DIR configure.*)
