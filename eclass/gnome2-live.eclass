@@ -81,13 +81,16 @@ gnome2-live_src_prepare() {
 		mkdir -p "$i"
 	done
 
-	# Generate po/Makefile.in.in if it doesn't exist
-	if [[ -d po && ! -e po/Makefile.in.in && ! -e po/Makefile.am ]]; then
-		eautopoint --force
-	fi
-
 	# We don't run gettextize because that does too much stuff
 	if grep -qe 'GETTEXT' configure.*; then
+		# Generate po/Makefile.in.in if it doesn't exist for packages that use
+		# AM_GNU_GETTEXT and AM_GNU_GETTEXT_VERSION (e.g. media-libs/cogl).
+		# Logic is inspired by gnome-autogen.sh
+		if ! grep -qe '^AM_GLIB_GNU_GETTEXT' configure.* &&
+		   grep -qe '^AM_GNU_GETTEXT_VERSION' configure.* &&
+		   [[ -d po && ! -e po/Makefile.in.in && ! -e po/Makefile.am ]]; then
+			eautopoint --force
+		fi
 		local aux_dir=${S}/$(gnome2-live_get_var AC_CONFIG_AUX_DIR configure.*)
 		mkdir -p "${aux_dir}"
 		test -e "${aux_dir}/config.rpath" || :> "${aux_dir}/config.rpath"
