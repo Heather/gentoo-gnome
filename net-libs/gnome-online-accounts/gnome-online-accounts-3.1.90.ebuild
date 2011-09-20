@@ -38,6 +38,7 @@ RDEPEND="
 	introspection? ( >=dev-libs/gobject-introspection-0.6.2 )"
 DEPEND="${RDEPEND}
 	dev-libs/libxslt
+	dev-util/gdbus-codegen
 	dev-util/intltool
 	sys-devel/gettext
 
