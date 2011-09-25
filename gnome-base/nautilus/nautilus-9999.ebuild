@@ -29,6 +29,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.29.13:2
 	>=dev-libs/libxml2-2.7.8:2
 	>=gnome-base/gnome-desktop-3.0.0:3
 
+	gnome-base/dconf
 	gnome-base/gsettings-desktop-schemas
 	>=x11-libs/libnotify-0.7
 	x11-libs/libX11
