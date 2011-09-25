@@ -12,7 +12,7 @@
 #
 
 
-inherit autotools gnome2 gnome2-utils libtool git
+inherit autotools gnome2 gnome2-utils libtool git-2
 
 # Stolen from git.eclass
 EXPORTED_FUNCTIONS="src_unpack pkg_postinst"
@@ -58,7 +58,7 @@ gnome2-live_src_unpack() {
 	if test -n "${A}"; then
 		unpack ${A}
 	fi
-	git_src_unpack
+	git-2_src_unpack
 	has src_prepare ${EXPORTED_FUNCTIONS} || gnome2-live_src_prepare
 }
 
