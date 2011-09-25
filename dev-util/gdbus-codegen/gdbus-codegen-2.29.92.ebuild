@@ -18,17 +18,15 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND=""
-RDEPEND="${DEPEND}
-	!!=dev-libs/glib-2.29.16"
-
-# There is no good way to specify a block on a range of versions in an ebuild,
-# hence the below horror. Remove it in early 2011-09, since by that time,
-# hopefully overlay users will have upgraded to a compatible glib.
-for (( i=4; i<16; i++ )); do
-	RDEPEND="${RDEPEND} !!~dev-libs/glib-2.29.${i}"
-done
+RDEPEND="${DEPEND}"
+# To prevent circular dependencies with glib[test]
+PDEPEND=">=dev-libs/glib-${PV}:2"
 
 S="${WORKDIR}/glib-${PV}/gio/gdbus-2.0/codegen"
+
+pkg_setup() {
+	python_set_active_version 2
+}
 
 src_prepare() {
 	python_convert_shebangs 2 gdbus-codegen.in
@@ -38,8 +36,9 @@ src_prepare() {
 		-i config.py || die "sed config.py failed"
 }
 
-pkg_setup() {
-	python_set_active_version 2
+src_test() {
+	elog "Skipping tests. To test ${PN}, emerge dev-libs/glib"
+	elog "with FEATURES=test"
 }
 
 src_install() {
@@ -56,11 +55,6 @@ src_install() {
 	newbin gdbus-codegen.in gdbus-codegen || die "dobin failed"
 	doman "${WORKDIR}/glib-${PV}/docs/reference/gio/gdbus-codegen.1" ||
 		die "doman failed"
-}
-
-src_test() {
-	elog "Skipping tests. To test ${PN}, emerge dev-libs/glib"
-	elog "with FEATURES=test"
 }
 
 pkg_postinst() {
