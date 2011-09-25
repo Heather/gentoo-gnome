@@ -26,4 +26,8 @@ DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40.1
 	doc? ( >=dev-util/gtk-doc-1.4 )"
 
-DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README"
+pkg_setup() {
+	G2CONF="--disable-maintainer-mode
+		$(use_enable introspection)"
+	DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README"
+}
