@@ -45,6 +45,9 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# Patch from upstream git master to fix g_irepository_get_c_prefix
+	epatch "${FILESDIR}/${P}-c_prefix.patch"
+
 	# FIXME: Parallel compilation failure with USE=doc
 	use doc && MAKEOPTS="-j1"
 
@@ -58,10 +61,6 @@ src_prepare() {
 src_install() {
 	gnome2_src_install
 	python_convert_shebangs 2 "${ED}"usr/bin/g-ir-{annotation-tool,doc-tool,scanner}
-
-	# https://bugzilla.gnome.org/show_bug.cgi?id=657686
-	insinto /usr/$(get_libdir)/${PN}/giscanner
-	newins "${FILESDIR}/${PV}-docbookdescription.py" docbookdescription.py
 }
 
 pkg_postinst() {
