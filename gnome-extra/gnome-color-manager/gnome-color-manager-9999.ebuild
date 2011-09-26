@@ -21,7 +21,7 @@ if [[ ${PV} = 9999 ]]; then
 else
 	KEYWORDS="~amd64 ~x86"
 fi
-IUSE="clutter +introspection packagekit raw"
+IUSE="clutter packagekit raw"
 
 # FIXME: fix detection of docbook2man
 COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
@@ -35,12 +35,11 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 	x11-libs/libXrandr
 	>=x11-libs/gtk+-2.91:3
 	>=x11-libs/vte-0.25.1:2.90
-	>=x11-misc/colord-0.1.9
+	>=x11-misc/colord-0.1.12
 
 	clutter? (
 		media-libs/clutter-gtk:1.0
-		media-libs/mash:0.1 )
-	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
+		media-libs/mash:0.2 )
 	packagekit? ( app-admin/packagekit-base )
 	raw? ( media-gfx/exiv2 )
 "
@@ -69,12 +68,4 @@ pkg_setup() {
 		$(use_enable clutter)
 		$(use_enable packagekit)
 		$(use_enable raw exiv)"
-}
-
-src_prepare() {
-	# https://bugzilla.gnome.org/show_bug.cgi?id=654954
-	epatch "${FILESDIR}/${PN}-3.1.2-automagic-clutter.patch"
-
-	[[ ${PV} = 9999 ]] || eautoreconf
-	gnome2_src_prepare
 }

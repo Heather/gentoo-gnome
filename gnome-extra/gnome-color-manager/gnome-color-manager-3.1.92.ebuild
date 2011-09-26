@@ -35,11 +35,11 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 	x11-libs/libXrandr
 	>=x11-libs/gtk+-2.91:3
 	>=x11-libs/vte-0.25.1:2.90
-	>=x11-misc/colord-0.1.9
+	>=x11-misc/colord-0.1.12
 
 	clutter? (
 		media-libs/clutter-gtk:1.0
-		media-libs/mash:0.1 )
+		media-libs/mash:0.2 )
 	packagekit? ( app-admin/packagekit-base )
 	raw? ( media-gfx/exiv2 )
 "
@@ -68,15 +68,4 @@ pkg_setup() {
 		$(use_enable clutter)
 		$(use_enable packagekit)
 		$(use_enable raw exiv)"
-}
-
-src_prepare() {
-	# https://bugzilla.gnome.org/show_bug.cgi?id=654954
-	epatch "${FILESDIR}/${PN}-3.1.2-automagic-clutter.patch"
-
-	# Fix --as-needed support, will be in next release
-	epatch "${FILESDIR}/${P}-as-needed.patch"
-
-	[[ ${PV} = 9999 ]] || eautoreconf
-	gnome2_src_prepare
 }
