@@ -23,22 +23,23 @@ HOMEPAGE="http://www.pygtk.org/"
 LICENSE="LGPL-2.1"
 SLOT="3"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
-IUSE="doc +cairo examples test +threads"
+IUSE="+cairo examples test +threads" # doc
 
 COMMON_DEPEND=">=dev-libs/glib-2.24.0:2
-	>=dev-libs/gobject-introspection-0.10.2
+	>=dev-libs/gobject-introspection-1.29
 	virtual/libffi
 	cairo? ( >=dev-python/pycairo-1.10.0 )"
 DEPEND="${COMMON_DEPEND}
-	doc? (
-		app-text/docbook-xml-dtd:4.1.2
-		dev-libs/libxslt
-		>=app-text/docbook-xsl-stylesheets-1.70.1 )
 	test? (
 		media-fonts/font-cursor-misc
 		media-fonts/font-misc-misc
 		>=dev-libs/gobject-introspection-1.29.17 )
 	>=dev-util/pkgconfig-0.12"
+# docs disabled for now per upstream default since they are very out of date
+#	doc? (
+#		app-text/docbook-xml-dtd:4.1.2
+#		dev-libs/libxslt
+#		>=app-text/docbook-xsl-stylesheets-1.70.1 )
 
 # We now disable introspection support in slot 2 per upstream recommendation
 # (see https://bugzilla.gnome.org/show_bug.cgi?id=642048#c9); however,
@@ -55,7 +56,6 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-dependency-tracking
 		--with-ffi
-		$(use_enable doc docs)
 		$(use_enable cairo)
 		$(use_enable threads thread)"
 }
@@ -63,26 +63,11 @@ pkg_setup() {
 src_prepare() {
 	gnome2_src_prepare
 
-	# Drop site-packages/gtk-2.0/dsextras.py, it's installed by slot 2
-	epatch "${FILESDIR}/${PN}-2.90.1-dsextras.py.patch"
-
 	# Do not build tests if unneeded, bug #226345
 	epatch "${FILESDIR}/${PN}-2.90.1-make_check.patch"
 
 	# Support installation for multiple Python versions, upstream bug #648292
-	epatch "${FILESDIR}/${PN}-2.90.1-support_multiple_python_versions.patch"
-
-	# Rename doc directories to prevent file collision with slot 2
-	epatch "${FILESDIR}/${PN}-2.90.1-rename-doc-directories.patch"
-	if [[ ${PV} != 9999 ]]; then
-		# rename and sed pre-built docs so devhelp can display them correctly
-		mv docs/html/pygobject.devhelp docs/html/pygobject-3.0.devhelp || die
-		sed -e 's:PyGObject Reference Manual:PyGObject 3.0 Reference Manual:' \
-			-e 's:name="pygobject":name="pygobject-3.0":' \
-			-i docs/html/pygobject-3.0.devhelp || die
-		sed -e 's:href="pygobject/:href="pygobject-3.0/:g' \
-			-i docs/html/index.sgml || die
-	fi
+	epatch "${FILESDIR}/${PN}-3.0.0-support_multiple_python_versions.patch"
 
 	# Disable tests that fail
 	#epatch "${FILESDIR}/${PN}-2.28.3-disable-failing-tests.patch"
