@@ -27,4 +27,10 @@ src_prepare() {
 	# For simplicity, use the cmake file that Fedora maintainers have created
 	cp "${FILESDIR}/rply_CMakeLists.txt" CMakeLists.txt
 	mkdir -p CMake/export
+
+	# Use int16_t and int32_t instead of assuming e.g. that sizeof(long) == 4
+	epatch "${FILESDIR}/${P}-stdint.h.patch"
+
+	# Switch LC_NUMERIC locale to "C" to ensure "." is the decimal separator
+	epatch "${FILESDIR}/${P}-lc_numeric.patch"
 }
