@@ -168,11 +168,6 @@ src_prepare() {
 		rm -f data/dconf-override-db
 	fi
 
-	# Useful upstream patches, will be in next release
-	epatch "${FILESDIR}/${P}-gdm-slave-memory-leak.patch"
-	epatch "${FILESDIR}/${P}-gdm-slave-dbus_error_init.patch"
-	epatch "${FILESDIR}/${P}-daemon-autologin.patch"
-
 	mkdir -p "${S}"/m4
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
