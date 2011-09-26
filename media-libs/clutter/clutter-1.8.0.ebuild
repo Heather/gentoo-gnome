@@ -27,10 +27,10 @@ fi
 # XXX: uprof needed for profiling
 # >=libX11-1.3.1 needed for X Generic Event support
 RDEPEND="
-	>=dev-libs/glib-2.26:2
+	>=dev-libs/glib-2.28:2
 	>=dev-libs/atk-2.1.5[introspection?]
 	>=dev-libs/json-glib-0.12[introspection?]
-	>=media-libs/cogl-1.7.6:1.0[introspection?,pango]
+	>=media-libs/cogl-1.8.0:1.0[introspection?,pango]
 	media-libs/fontconfig
 	>=x11-libs/cairo-1.10[glib]
 	>=x11-libs/pango-1.20[introspection?]
