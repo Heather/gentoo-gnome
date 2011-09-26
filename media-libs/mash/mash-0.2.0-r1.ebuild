@@ -29,10 +29,11 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 
-# Automagically detects x11-libs/mx, but only uses it for building examples
+# Automagically detects x11-libs/mx, but only uses it for building examples.
+# Note: mash is using a bundled copy of rply because mash developers have
+# modified its API by adding extra arguments to various functions.
 RDEPEND=">=dev-libs/glib-2.16:2
 	>=media-libs/clutter-1.5.10:1.0[introspection?]
-	media-libs/rply
 	virtual/opengl
 
 	introspection? ( >=dev-libs/gobject-introspection-0.6.1 )
@@ -49,12 +50,6 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-static
 		$(use_enable introspection)"
-}
-
-src_prepare() {
-	epatch "${FILESDIR}/${PN}-0.1.0-system-rply.patch"
-	[[ ${PV} = 9999 ]] || eautoreconf
-	gnome2_src_prepare
 }
 
 src_install() {
