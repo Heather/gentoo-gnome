@@ -6,7 +6,7 @@ EAPI="4"
 CLUTTER_LA_PUNT="yes"
 
 # Inherit gnome2 after clutter to download sources from gnome.org
-inherit eutils clutter gnome2
+inherit clutter gnome2 virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -46,6 +46,10 @@ DEPEND="${COMMON_DEPEND}
 	doc? ( app-text/docbook-xml-dtd:4.1.2
 		>=dev-util/gtk-doc-1.13 )"
 
+# XXX: at least when using nvidia-drivers, tests fail under Xemake/Xvfb, no
+# matter whether "eselect opengl" is set to nvidia or xorg-x11.
+RESTRICT="test"
+
 pkg_setup() {
 	DOCS="NEWS README"
 	EXAMPLES="examples/{*.c,*.jpg}"
@@ -61,10 +65,8 @@ pkg_setup() {
 		$(use_enable pango cogl-pango)"
 }
 
-src_prepare() {
-	# Upstream patch to fix a typo in cogl/cogl-display.h
-	epatch "${FILESDIR}/${P}-rendrer-typo.patch"
-	gnome2_src_prepare
+src_test() {
+	Xemake check
 }
 
 src_install() {
