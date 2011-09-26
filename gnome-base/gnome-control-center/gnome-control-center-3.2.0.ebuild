@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes" # gmodule is used, which uses dlopen
 
-inherit eutils gnome2
+inherit gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -32,7 +32,7 @@ fi
 COMMON_DEPEND="
 	>=dev-libs/glib-2.29.14:2
 	>=x11-libs/gdk-pixbuf-2.23.0:2
-	>=x11-libs/gtk+-3.1.3:3
+	>=x11-libs/gtk+-3.1.19:3
 	>=gnome-base/gsettings-desktop-schemas-3.0.2
 	>=gnome-base/gconf-2.0:2
 	>=dev-libs/dbus-glib-0.73
@@ -97,16 +97,8 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-update-mimedb
 		--disable-static
-		--disable-maintainer-mode
 		$(use_with cheese)
 		$(use_enable cups)
 		$(use_with socialweb libsocialweb)"
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
-}
-
-src_prepare() {
-	gnome2_src_prepare
-	# Do not assert & die when systemd's hostnamed is not running.
-	# Whatever upstream thinks, Gnome on Gentoo should not depend on systemd.
-	epatch "${FILESDIR}/${PN}-3.1.90-hostnamed-assert.patch"
 }
