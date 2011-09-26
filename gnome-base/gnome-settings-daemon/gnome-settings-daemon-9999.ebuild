@@ -44,7 +44,7 @@ COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	x11-libs/libXfixes
 	x11-libs/libXxf86misc
 	>=x11-libs/libxklavier-5.0
-	>=x11-misc/colord-0.1.9
+	>=x11-misc/colord-0.1.12
 	>=media-sound/pulseaudio-0.9.16
 
 	cups? ( >=net-print/cups-1.4[dbus] )

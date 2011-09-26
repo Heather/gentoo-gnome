@@ -44,7 +44,7 @@ COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	x11-libs/libXfixes
 	x11-libs/libXxf86misc
 	>=x11-libs/libxklavier-5.0
-	>=x11-misc/colord-0.1.9
+	>=x11-misc/colord-0.1.12
 	>=media-sound/pulseaudio-0.9.16
 
 	cups? ( >=net-print/cups-1.4[dbus] )
@@ -104,13 +104,6 @@ src_prepare() {
 	# Revisit if/when upstream adds a setting for customizing the timeout.
 	use short-touchpad-timeout &&
 		epatch "${FILESDIR}/${PN}-3.0.2-short-touchpad-timeout.patch"
-
-	# Add useful patches from upstream (will be in next release)
-	epatch "${FILESDIR}/${P}-gconf-leak.patch"
-	epatch "${FILESDIR}/${P}-exit-value.patch"
-	epatch "${FILESDIR}/${P}-disabled-devices.patch"
-	epatch "${FILESDIR}/${P}-disabled-touchpad.patch"
-	epatch "${FILESDIR}/${P}-divide-by-zero.patch"
 
 	gnome2_src_prepare
 }
