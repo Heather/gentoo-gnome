@@ -27,7 +27,7 @@ DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1.4 )"
 
 pkg_setup() {
-	G2CONF="--disable-maintainer-mode
+	G2CONF="${G2CONF}
 		$(use_enable introspection)"
 	DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README"
 }
