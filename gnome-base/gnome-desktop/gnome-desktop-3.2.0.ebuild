@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit eutils gnome2
+inherit gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit git-2 gnome2-live
 fi
@@ -31,7 +31,7 @@ RDEPEND="
 	x11-libs/cairo[X]
 	>=x11-libs/gdk-pixbuf-2.21.3:2[introspection?]
 	>=x11-libs/gtk+-3.0.0:3[introspection?]
-	>=x11-libs/libXext-1.2
+	>=x11-libs/libXext-1.1
 	>=x11-libs/libXrandr-1.2
 	x11-libs/libX11
 	>=gnome-base/gsettings-desktop-schemas-2.91.92
@@ -84,12 +84,4 @@ src_unpack() {
 		ln -sf "${WORKDIR}/hwdata/pnp.ids" "${S}/libgnome-desktop/" ||
 			die "ln -sf failed"
 	fi
-}
-
-src_prepare() {
-	gnome2_src_prepare
-
-	# Upstream patches to prevent crashes, will be in next release
-	epatch "${FILESDIR}/${P}-wall-clock-dispose.patch"
-	epatch "${FILESDIR}/${P}-update_brightness_limites-crash.patch"
 }

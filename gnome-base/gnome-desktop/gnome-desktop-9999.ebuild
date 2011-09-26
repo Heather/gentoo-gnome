@@ -31,7 +31,7 @@ RDEPEND="
 	x11-libs/cairo[X]
 	>=x11-libs/gdk-pixbuf-2.21.3:2[introspection?]
 	>=x11-libs/gtk+-3.0.0:3[introspection?]
-	>=x11-libs/libXext-1.2
+	>=x11-libs/libXext-1.1
 	>=x11-libs/libXrandr-1.2
 	x11-libs/libX11
 	>=gnome-base/gsettings-desktop-schemas-2.91.92
