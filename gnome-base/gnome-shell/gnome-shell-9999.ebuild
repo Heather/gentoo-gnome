@@ -31,7 +31,7 @@ fi
 # latest g-c-c is needed due to https://bugs.gentoo.org/show_bug.cgi?id=360057
 # libXfixes-5.0 needed for pointer barriers
 COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
-	>=dev-libs/gjs-1.29.15
+	>=dev-libs/gjs-1.29.18
 	>=dev-libs/gobject-introspection-0.10.1
 	x11-libs/gdk-pixbuf:2[introspection]
 	>=x11-libs/gtk+-3.0.0:3[introspection]
@@ -109,14 +109,8 @@ pkg_setup() {
 		--enable-compile-warnings=maximum
 		--disable-schemas-compile
 		--disable-jhbuild-wrapper-script
-		--with-ca-certificates=${EPREFIX}/etc/ssl/certs/ca-certificates.crt"
-}
-
-src_prepare() {
-	gnome2_src_prepare
-	# Use the correct Gentoo directory for browser plugins
-	sed -e 's:$(libdir)/mozilla/plugins:$(libdir)/nsbrowser/plugins:g' \
-		-i browser-plugin/Makefile.* || die "sed failed"
+		--with-ca-certificates=${EPREFIX}/etc/ssl/certs/ca-certificates.crt
+		BROWSER_PLUGIN_DIR=${EPREFIX}/usr/$(get_libdir)/nsbrowser/plugins"
 }
 
 src_install() {
