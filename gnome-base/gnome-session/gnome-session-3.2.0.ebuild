@@ -5,7 +5,7 @@
 EAPI="4"
 GCONF_DEBUG="yes"
 
-inherit eutils gnome2
+inherit gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -78,13 +78,6 @@ pkg_setup() {
 		$(use_enable doc docbook-docs)
 		$(use_enable ipv6)"
 	DOCS="AUTHORS ChangeLog NEWS README"
-}
-
-src_prepare() {
-	gnome2_src_prepare
-	# Upstream patches to deal with dbus disconnection; will be in next release
-	epatch "${FILESDIR}/${P}-dbus-disconnected.patch"
-	epatch "${FILESDIR}/${P}-dbus-disconnected2.patch"
 }
 
 src_install() {
