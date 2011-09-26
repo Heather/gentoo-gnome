@@ -4,20 +4,24 @@
 
 EAPI="4"
 GCONF_DEBUG="no"
-CLUTTER_LA_PUNT="yes"
+GNOME2_LA_PUNT="yes"
 
-# Inherit clutter after gnome2 to download sources from clutter-project.org
-inherit autotools eutils gnome2 clutter
+# clutter.eclass does not support .xz tarballs
+inherit autotools eutils gnome2 versionator
 if [[ ${PV} = 9999 ]]; then
+	SRC_URI=""
 	EGIT_REPO_URI="git://github.com/clutter-project/mash.git"
 	inherit gnome2-live
+else
+	RV=($(get_version_components))
+	SRC_URI="http://source.clutter-project.org/sources/${PN}/${RV[0]}.${RV[1]}/${P}.tar.xz"
 fi
 
 DESCRIPTION="A library for rendering 3D models with Clutter"
 HOMEPAGE="http://wiki.clutter-project.org/wiki/Mash"
 
 LICENSE="LGPL-2.1"
-SLOT="0.1"
+SLOT="0.2"
 IUSE="doc examples +introspection"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
@@ -27,18 +31,21 @@ fi
 
 # Automagically detects x11-libs/mx, but only uses it for building examples
 RDEPEND=">=dev-libs/glib-2.16:2
-	>=media-libs/clutter-1.2:1.0[introspection?]
+	>=media-libs/clutter-1.5.10:1.0[introspection?]
 	media-libs/rply
 	virtual/opengl
 
-	introspection? ( >=dev-libs/gobject-introspection-0.6.1 )"
+	introspection? ( >=dev-libs/gobject-introspection-0.6.1 )
+
+	!media-libs/mash:0.1"
+# Block on slot 0.1 due to file collisions in /usr/share/gtk-doc
+# XXX: remove blocker in Oct 2011
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.14 )"
 
 pkg_setup() {
 	DOCS="AUTHORS NEWS README"
-	EXAMPLES="example/{*.c,*.ply}"
 	G2CONF="${G2CONF}
 		--disable-static
 		$(use_enable introspection)"
@@ -51,5 +58,10 @@ src_prepare() {
 }
 
 src_install() {
-	clutter_src_install
+	gnome2_src_install
+
+	if use examples; then
+		insinto /usr/share/doc/${PF}/examples
+		doins example/{*.c,*.ply}
+	fi
 }
