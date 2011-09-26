@@ -140,6 +140,11 @@ gnome2_src_configure() {
 		G2CONF="${G2CONF} $(use_enable doc gtk-doc)"
 	fi
 
+	# Pass --disable-maintainer-mode when needed
+	if grep -q "^[[:space:]]*AM_MAINTAINER_MODE(\[enable\])" configure.*; then
+		G2CONF="${G2CONF} --disable-maintainer-mode"
+	fi
+
 	# Avoid sandbox violations caused by gnome-vfs (bug #128289 and #345659)
 	addwrite "$(unset HOME; echo ~)/.gnome2"
 
