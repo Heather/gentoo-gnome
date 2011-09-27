@@ -24,7 +24,7 @@ IUSE=""
 
 RDEPEND=">=dev-libs/glib-2.26.0:2
 	>=x11-libs/gtk+-3.0:3
-	>=x11-libs/vte-0.27.3:2.90
+	>=x11-libs/vte-0.30.0:2.90
 	>=gnome-base/gconf-2.31.3
 	>=gnome-base/gsettings-desktop-schemas-0.1.0
 	x11-libs/libSM
