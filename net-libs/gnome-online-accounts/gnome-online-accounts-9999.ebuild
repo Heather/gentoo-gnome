@@ -24,11 +24,14 @@ fi
 
 # pango used in goaeditablelabel
 # libsoup used in goaoauthprovider
+# Require {glib,gdbus-codegen}-2.30.0 due to GDBus API changes between 2.29.92
+# and 2.30.0
 RDEPEND="
-	>=dev-libs/glib-2.29.5:2
+	>=dev-libs/glib-2.30.0:2
 	dev-libs/json-glib
 	gnome-base/libgnome-keyring
 	net-libs/libsoup:2.4
+	>=net-libs/libsoup-gnome-2.26:2.4
 	net-libs/rest:0.7
 	net-libs/webkit-gtk:3
 	>=x11-libs/gtk+-3.0.0:3
@@ -38,7 +41,7 @@ RDEPEND="
 	introspection? ( >=dev-libs/gobject-introspection-0.6.2 )"
 DEPEND="${RDEPEND}
 	dev-libs/libxslt
-	dev-util/gdbus-codegen
+	>=dev-util/gdbus-codegen-2.30.0
 	dev-util/intltool
 	sys-devel/gettext
 
