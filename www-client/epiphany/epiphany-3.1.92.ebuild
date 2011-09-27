@@ -23,7 +23,9 @@ else
 fi
 
 # XXX: Should we add seed support? Seed seems to be unmaintained now.
-COMMON_DEPEND=">=dev-libs/glib-2.29.10:2
+# Require {glib,gdbus-codegen}-2.30.0 due to GDBus API changes between 2.29.92
+# and 2.30.0
+COMMON_DEPEND=">=dev-libs/glib-2.30.0:2
 	>=x11-libs/gtk+-3.0.2:3[introspection?]
 	>=dev-libs/libxml2-2.6.12:2
 	>=dev-libs/libxslt-1.1.7
@@ -49,7 +51,7 @@ RDEPEND="${COMMON_DEPEND}
 	networkmanager? ( >=net-misc/networkmanager-0.8.997 )"
 DEPEND="${COMMON_DEPEND}
 	app-text/gnome-doc-utils
-	dev-util/gdbus-codegen
+	>=dev-util/gdbus-codegen-2.30.0
 	>=dev-util/intltool-0.40
 	dev-util/pkgconfig
 	sys-devel/gettext
