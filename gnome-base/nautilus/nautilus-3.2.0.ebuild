@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit eutils gnome2 virtualx
+inherit gnome2 virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -21,9 +21,11 @@ if [[ ${PV} = 9999 ]]; then
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux"
 fi
-IUSE="doc exif gnome +introspection packagekit +previewer sendto xmp"
+IUSE="doc exif gnome +introspection packagekit +previewer sendto tracker xmp"
 
-COMMON_DEPEND=">=dev-libs/glib-2.29.13:2
+# Require {glib,gdbus-codegen}-2.30.0 due to GDBus API changes between 2.29.92
+# and 2.30.0
+COMMON_DEPEND=">=dev-libs/glib-2.30.0:2
 	>=x11-libs/pango-1.28.3
 	>=x11-libs/gtk+-3.1.6:3[introspection?]
 	>=dev-libs/libxml2-2.7.8:2
@@ -38,10 +40,11 @@ COMMON_DEPEND=">=dev-libs/glib-2.29.13:2
 
 	exif? ( >=media-libs/libexif-0.6.20 )
 	introspection? ( >=dev-libs/gobject-introspection-0.6.4 )
+	tracker? ( >=app-misc/tracker-0.12 )
 	xmp? ( >=media-libs/exempi-2.1.0 )"
 DEPEND="${COMMON_DEPEND}
 	>=dev-lang/perl-5
-	dev-util/gdbus-codegen
+	>=dev-util/gdbus-codegen-2.30.0
 	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.40.1
 	sys-devel/gettext
@@ -67,22 +70,12 @@ pkg_setup() {
 		$(use_enable introspection)
 		$(use_enable packagekit)
 		$(use_enable sendto nst-extension)
+		$(use_enable tracker)
 		$(use_enable xmp)"
 	DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS README THANKS TODO"
 }
 
 src_prepare() {
-	# Gentoo bug #365779 + https://bugzilla.gnome.org/show_bug.cgi?id=651209
-	epatch "${FILESDIR}/${PN}-3.0.2-segfault-in-gtk_icon_info_load_symbolic.patch"
-
-	# Useful patches from upstream, will be in next release
-	epatch "${FILESDIR}/${P}-previewer-gerror-leak.patch"
-	epatch "${FILESDIR}/${P}-XDG_CURRENT_DESKTOP.patch"
-	epatch "${FILESDIR}/${P}-revert-f76c50a0.patch"
-	epatch "${FILESDIR}/${P}-is_renaming.patch"
-	epatch "${FILESDIR}/${P}-window-keybindings.patch"
-	epatch "${FILESDIR}/${P}-window-unref-NULL.patch"
-
 	gnome2_src_prepare
 
 	# Remove crazy CFLAGS
