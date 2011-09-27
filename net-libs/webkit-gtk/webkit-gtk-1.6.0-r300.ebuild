@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/webkit-gtk/webkit-gtk-1.4.2-r200.ebuild,v 1.4 2011/08/14 06:43:26 nirbheek Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/webkit-gtk/webkit-gtk-1.4.2-r300.ebuild,v 1.4 2011/08/14 06:43:26 nirbheek Exp $
 
 EAPI="4"
 
@@ -12,7 +12,7 @@ HOMEPAGE="http://www.webkitgtk.org/"
 SRC_URI="http://www.webkitgtk.org/${MY_P}.tar.gz"
 
 LICENSE="LGPL-2 LGPL-2.1 BSD"
-SLOT="2"
+SLOT="3"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-macos"
 # geoclue
 IUSE="aqua coverage debug doc +gstreamer +introspection +jit spell"
@@ -21,6 +21,8 @@ REQUIRED_USE="introspection? ( gstreamer )"
 
 # use sqlite, svg by default
 # dependency on >=x11-libs/gtk+-2.13:2 for gail
+# Aqua support in gtk3 is untested
+# gtk2 is needed for plugin process support
 RDEPEND="
 	dev-libs/libxml2:2
 	dev-libs/libxslt
@@ -28,7 +30,7 @@ RDEPEND="
 	>=media-libs/libpng-1.4:0
 	>=x11-libs/cairo-1.10
 	>=dev-libs/glib-2.27.90:2
-	>=x11-libs/gtk+-2.13:2[aqua=,introspection?]
+	>=x11-libs/gtk+-3.0:3[aqua=,introspection?]
 	>=dev-libs/icu-3.8.1-r1
 	>=net-libs/libsoup-2.33.6:2.4[introspection?]
 	dev-db/sqlite:3
@@ -37,7 +39,7 @@ RDEPEND="
 
 	gstreamer? (
 		media-libs/gstreamer:0.10
-		>=media-libs/gst-plugins-base-0.10.25:0.10 )
+		>=media-libs/gst-plugins-base-0.10.30:0.10 )
 
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 
@@ -78,13 +80,6 @@ src_prepare() {
 	# XXX: Fails to apply
 	#epatch "${FILESDIR}/${PN}-1.2.5-tests-build.patch"
 
-	# FIXME: mimehandling test fails, so disable it for now
-	# assertion failed (mime_type == "audio/x-vorbis+ogg")
-	epatch "${FILESDIR}/${PN}-1.5.2-mimehandling-test.patch"
-
-	# Upstream patch to fix deprecation failures with glib-2.29.x and gtk+-3.1.x
-	epatch "${FILESDIR}/${P}-deprecations.patch"
-
 	# Prevent maintainer mode from being triggered during make
 	AT_M4DIR=Source/autotools eautoreconf
 }
@@ -103,7 +98,8 @@ src_configure() {
 
 	# XXX: Check Web Audio support
 	# XXX: webgl fails compilation
-	# WebKit2 can only be built with gtk3
+	# XXX: files for generating DerivedSources/WebKit2/* are missing, see
+	#      https://bugs.webkit.org/show_bug.cgi?id=66527
 	myconf="
 		$(use_enable coverage)
 		$(use_enable debug)
@@ -113,10 +109,11 @@ src_configure() {
 		$(use_enable gstreamer video)
 		$(use_enable jit)
 		--disable-webgl
-		--with-gtk=2.0
+		--with-gtk=3.0
 		--disable-webkit2
 		--disable-web-sockets
 		$(use aqua && echo "--with-font-backend=pango --with-target=quartz")"
+		# Aqua support in gtk3 is untested
 		# Disable web-sockets per bug #326547
 
 	econf ${myconf}
