@@ -37,7 +37,7 @@ DEPEND="${RDEPEND}
 		~app-text/docbook-xml-dtd-4.1.2 )
 	systemtap? ( >=dev-util/systemtap-1.3 )
 	test? (
-		>=dev-util/gdbus-codegen-2.29.92
+		>=dev-util/gdbus-codegen-2.30.0
 		>=sys-apps/dbus-1.2.14 )
 	!<dev-util/gtk-doc-1.15-r2"
 PDEPEND="introspection? ( dev-libs/gobject-introspection )
