@@ -16,7 +16,11 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2 FDL-1.1"
 SLOT="2"
-KEYWORDS="~amd64 ~ppc ~sparc ~x86 ~x86-interix ~amd64-linux ~x86-linux"
+if [[ ${PV} = 9999 ]]; then
+	KEYWORDS=""
+else
+	KEYWORDS="~amd64 ~ppc ~sparc ~x86 ~x86-interix ~amd64-linux ~x86-linux"
+fi
 IUSE=""
 
 RDEPEND=">=dev-libs/glib-2.26:2
