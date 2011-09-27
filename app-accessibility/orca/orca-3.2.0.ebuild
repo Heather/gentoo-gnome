@@ -23,22 +23,19 @@ IUSE=""
 # liblouis is not in portage yet
 # it is used to provide contracted braille support
 # XXX: Check deps for correctness
-RDEPEND=">=dev-libs/glib-2.10:2
-	>=gnome-extra/at-spi-1.32:1
-
-	dev-python/pyatspi
-	dev-python/pygobject:2
-	dev-python/pycairo
-	dev-python/pyxdg
+COMMON_DEPEND=">=app-accessibility/at-spi2-core-2.1.5:2
+	>=dev-libs/glib-2.28:2
+	>=dev-python/pygobject-2.90.3:3
+	>=x11-libs/gtk+-3.1.13:3[introspection]"
+RDEPEND="${COMMON_DEPEND}
+	app-accessibility/speech-dispatcher
+	dev-libs/atk[introspection]
 	>=dev-python/dbus-python-0.83
-	>=dev-python/pygtk-2.12:2
-
-	>=dev-python/libwnck-python-2.24
-	>=dev-python/libgnome-python-2.14:2
-
-	app-accessibility/speech-dispatcher"
-
-DEPEND="${RDEPEND}
+	dev-python/pyatspi
+	dev-python/pyxdg
+	x11-libs/libwnck:3[introspection]
+	x11-libs/pango[introspection]"
+DEPEND="${COMMON_DEPEND}
 	>=app-text/gnome-doc-utils-0.17.3
 	>=dev-util/intltool-0.40
 	>=dev-util/pkgconfig-0.9"
@@ -55,19 +52,6 @@ src_prepare() {
 	# disable pyc compiling
 	mv py-compile py-compile.orig
 	ln -s $(type -P true) py-compile
-}
-
-src_configure() {
-	# Needed for import pyatspi
-	unset DBUS_SESSION_BUS_ADDRESS
-	PYTHON="$(PYTHON)" gnome2_src_configure
-}
-
-src_compile() {
-	# FIXME: Workaround for bug #325611 until root cause is found
-	addpredict "$(unset HOME; echo ~)/.gconf"
-	addpredict "$(unset HOME; echo ~)/.gconfd"
-	gnome2_src_compile
 }
 
 pkg_postinst() {
