@@ -10,6 +10,10 @@ SUPPORT_PYTHON_ABIS="1"
 RESTRICT_PYTHON_ABIS="3.* *-jython"
 
 inherit gnome2 python
+if [[ ${PV} = 9999 ]]; then
+	GNOME_LIVE_MODULE="pyatspi2"
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Python binding to at-spi library"
 HOMEPAGE="http://live.gnome.org/Accessibility"
@@ -17,11 +21,15 @@ HOMEPAGE="http://live.gnome.org/Accessibility"
 # Note: only some of the tests are GPL-licensed, everything else is LGPL
 LICENSE="LGPL-2 GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+if [[ ${PV} = 9999 ]]; then
+	KEYWORDS=""
+else
+	KEYWORDS="~amd64 ~x86"
+fi
 IUSE="test"
 
 COMMON_DEPEND="dev-python/dbus-python
-	|| ( >=dev-python/pygobject-2.26:2[introspection] dev-python/pygobject:3 )
+	>=dev-python/pygobject-2.90.1:3
 "
 RDEPEND="${COMMON_DEPEND}
 	>=sys-apps/dbus-1
