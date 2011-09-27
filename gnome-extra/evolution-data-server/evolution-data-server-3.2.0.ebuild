@@ -94,12 +94,6 @@ pkg_setup() {
 src_prepare() {
 	gnome2_src_prepare
 
-	# Important upstream patches, will be in next release
-	epatch "${FILESDIR}/${P}-password-in-logs.patch"
-	epatch "${FILESDIR}/${P}-introspection-ecal.patch"
-	epatch "${FILESDIR}/${P}-introspection-e_source_set_property.patch"
-	epatch "${FILESDIR}/${P}-g_unix_signal.patch"
-
 	# GNOME bug 611353 (skips failing test atm)
 	# XXX: uncomment when there's a proper fix
 	#epatch "${FILESDIR}/e-d-s-camel-skip-failing-test.patch"
