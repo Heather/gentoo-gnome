@@ -13,13 +13,15 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-COMMON_DEPEND=">=dev-libs/glib-2.29.8:2
+# Require {glib,gdbus-codegen}-2.30.0 due to GDBus changes between 2.29.92
+# and 2.30.0
+COMMON_DEPEND=">=dev-libs/glib-2.30.0:2
 	net-print/cups
 	>=sys-auth/polkit-0.97"
 RDEPEND="${COMMON_DEPEND}
 	sys-apps/dbus"
 DEPEND="${COMMON_DEPEND}
-	dev-util/gdbus-codegen
+	>=dev-util/gdbus-codegen-2.30.0
 	>=dev-util/intltool-0.40.6
 	dev-util/pkgconfig
 	sys-devel/gettext"
