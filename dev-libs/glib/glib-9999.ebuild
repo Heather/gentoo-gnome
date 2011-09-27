@@ -16,7 +16,7 @@ SRC_URI="${SRC_URI}
 
 LICENSE="LGPL-2"
 SLOT="2"
-IUSE="debug doc fam +introspection selinux +static-libs systemtap test xattr"
+IUSE="debug doc fam selinux +static-libs systemtap test xattr"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -40,8 +40,7 @@ DEPEND="${RDEPEND}
 		>=dev-util/gdbus-codegen-2.30.0
 		>=sys-apps/dbus-1.2.14 )
 	!<dev-util/gtk-doc-1.15-r2"
-PDEPEND="introspection? ( dev-libs/gobject-introspection )
-	!<gnome-base/gvfs-1.6.4-r990" # Earlier versions do not work with glib
+PDEPEND="!<gnome-base/gvfs-1.6.4-r990" # Earlier versions do not work with glib
 
 # XXX: Consider adding test? ( sys-devel/gdb ); assert-msg-test tries to use it
 
@@ -182,14 +181,12 @@ src_test() {
 
 pkg_preinst() {
 	# Only give the introspection message if:
-	# * The user has it enabled
+	# * The user has gobject-introspection
 	# * Has glib already installed
 	# * Previous version was different from new version
-	if use introspection && has_version "${CATEGORY}/${PN}"; then
-		if ! has_version "=${CATEGORY}/${PF}"; then
-			ewarn "You must rebuild gobject-introspection so that the installed"
-			ewarn "typelibs and girs are regenerated for the new APIs in glib"
-		fi
+	if has_version "dev-libs/gobject-introspection" && ! has_version "=${CATEGORY}/${PF}"; then
+		ewarn "You must rebuild gobject-introspection so that the installed"
+		ewarn "typelibs and girs are regenerated for the new APIs in glib"
 	fi
 }
 

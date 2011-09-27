@@ -8,13 +8,24 @@ GNOME_TARBALL_SUFFIX="xz"
 PYTHON_DEPEND="2:2.5"
 PYTHON_USE_WITH="xml"
 
-inherit gnome.org multilib python
+inherit multilib python
+if [[ ${PV} = 9999 ]]; then
+	EGIT_REPO_URI="git://git.gnome.org/${GNOME_ORG_MODULE}"
+	inherit git-2
+else
+	inherit gnome.org
+fi
 
 DESCRIPTION="GDBus code and documentation generator"
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+if [[ ${PV} = 9999 ]]; then
+	KEYWORDS=""
+else
+	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh
+	~sparc ~x86 ~sparc-fbsd ~x86-fbsd ~x86-linux"
+fi
 IUSE=""
 
 DEPEND=""
