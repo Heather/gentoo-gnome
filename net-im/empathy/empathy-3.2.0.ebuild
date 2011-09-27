@@ -24,7 +24,7 @@ else
 	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~sparc ~x86"
 fi
 # FIXME: Add location support once geoclue stops being idiotic with automagic deps
-IUSE="debug eds +map +geoloc gnome-online-accounts +networkmanager sendto spell test +video" # gnome
+IUSE="debug eds +map +geoloc gnome-online-accounts +networkmanager sendto spell test +video"
 
 # FIXME: gst-plugins-bad is required for the valve plugin. This should move to good
 # eventually at which point the dep can be dropped
@@ -35,7 +35,7 @@ RDEPEND=">=dev-libs/glib-2.28:2
 	>=x11-libs/gtk+-3.0.2:3
 	x11-libs/pango
 	>=dev-libs/dbus-glib-0.51
-	>=dev-libs/folks-0.6.0
+	>=dev-libs/folks-0.6.2
 	dev-libs/libgee:0
 	>=gnome-base/gnome-keyring-2.91.4-r300
 	>=media-libs/libcanberra-0.25[gtk3]
@@ -47,7 +47,7 @@ RDEPEND=">=dev-libs/glib-2.28:2
 
 	dev-libs/libxml2:2
 	gnome-base/gsettings-desktop-schemas
-	media-libs/clutter:1.0
+	>=media-libs/clutter-1.7.14:1.0
 	>=media-libs/clutter-gtk-0.90.3:1.0
 	media-libs/clutter-gst:1.0
 	media-libs/gstreamer:0.10
@@ -63,7 +63,7 @@ RDEPEND=">=dev-libs/glib-2.28:2
 	eds? ( >=gnome-extra/evolution-data-server-1.2 )
 	geoloc? ( >=app-misc/geoclue-0.11 )
 	gnome-online-accounts? ( net-libs/gnome-online-accounts )
-	map? ( media-libs/libchamplain:0.10[gtk] )
+	map? ( media-libs/libchamplain:0.12[gtk] )
 	networkmanager? ( >=net-misc/networkmanager-0.7 )
 	sendto? ( >=gnome-extra/nautilus-sendto-2.90.0 )
 	spell? (
@@ -73,7 +73,6 @@ RDEPEND=">=dev-libs/glib-2.28:2
 		|| ( sys-fs/udev[gudev] sys-fs/udev[extras] )
 		>=media-video/cheese-2.91.91.1 )
 "
-	# gnome? ( >=gnome-base/gnome-control-center-2.31.4 )
 DEPEND="${RDEPEND}
 	app-text/scrollkeeper
 	>=app-text/gnome-doc-utils-0.17.3
@@ -106,10 +105,7 @@ pkg_setup() {
 		$(use_enable sendto nautilus-sendto)
 		$(use_enable spell)
 		$(use_with video cheese)
-		$(use_enable video gudev)
-		--disable-control-center-embedding"
-	#	$(use_enable gnome control-center-embedding)
-	# gnome-control-center-3.1.4 dropped support for third-party panels
+		$(use_enable video gudev)"
 
 	# Build time python tools needs python2
 	python_set_active_version 2
