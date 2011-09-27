@@ -42,7 +42,7 @@ src_configure() {
 	econf \
 		--disable-coverage \
 		--disable-maintainer-mode \
-		--with-pkcs11-dir="${EPREFIX}/etc/pkcs11" \
+		--with-system-config="${EPREFIX}/etc/pkcs11" \
 		$(use_enable doc gtk-doc)
 }
 
