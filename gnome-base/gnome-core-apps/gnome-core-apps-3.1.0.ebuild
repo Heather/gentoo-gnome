@@ -39,6 +39,7 @@ RDEPEND="
 	>=app-crypt/seahorse-${PV}
 	>=app-editors/gedit-${PV}
 	>=app-text/evince-${PV}
+	>=gnome-extra/gnome-contacts-${PV}
 	>=media-gfx/eog-${PV}
 	>=media-video/totem-${PV}
 	>=net-im/empathy-${PV}
