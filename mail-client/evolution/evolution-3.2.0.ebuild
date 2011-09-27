@@ -157,10 +157,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# Important build fixes from upstream, will be in next release
-	epatch "${FILESDIR}/${P}-libm.patch"
-	epatch "${FILESDIR}/${P}-g_unix_signal.patch"
-
 	# Use NSS/NSPR only if 'ssl' is enabled.
 	if use ssl ; then
 		sed -e 's|mozilla-nss|nss|' \
