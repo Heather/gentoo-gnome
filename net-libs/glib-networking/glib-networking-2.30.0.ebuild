@@ -19,7 +19,9 @@ IUSE="+gnome +libproxy +ssl"
 RDEPEND=">=dev-libs/glib-2.29.16:2
 	gnome? ( gnome-base/gsettings-desktop-schemas )
 	libproxy? ( >=net-libs/libproxy-0.4.6-r3 )
-	ssl? ( >=net-libs/gnutls-2.1.7 )
+	ssl? (
+		app-misc/ca-certificates
+		>=net-libs/gnutls-2.1.7 )
 "
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35.0
@@ -36,7 +38,7 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-static
 		--disable-maintainer-mode
-		--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt
+		--with-ca-certificates=${EPREFIX}/etc/ssl/certs/ca-certificates.crt
 		$(use_with gnome gnome-proxy)
 		$(use_with libproxy)
 		$(use_with ssl gnutls)"
