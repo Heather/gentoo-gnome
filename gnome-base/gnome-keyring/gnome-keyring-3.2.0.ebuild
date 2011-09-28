@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit autotools eutils gnome2 multilib pam virtualx
+inherit gnome2 multilib pam virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -26,11 +26,11 @@ fi
 # USE=valgrind is probably not a good idea for the tree
 RDEPEND=">=dev-libs/glib-2.25:2
 	>=x11-libs/gtk+-2.90.0:3
-	gnome-base/gconf:2
-	>=sys-apps/dbus-1.0
+	app-misc/ca-certificates
 	>=dev-libs/libgcrypt-1.2.2
 	>=dev-libs/libtasn1-1
-	dev-libs/p11-kit
+	>=dev-libs/p11-kit-0.6
+	>=sys-apps/dbus-1.0
 	caps? ( sys-libs/libcap-ng )
 	pam? ( virtual/pam )
 "
@@ -66,12 +66,6 @@ src_prepare() {
 	sed -e 's/^\(SUBDIRS = \.\)\(.*\)/\1/' \
 		-i gcr/Makefile.* || die "sed failed"
 
-	# Upstream patch to initialize variables properly, will be in next release
-	epatch "${FILESDIR}/${P}-debug.patch"
-
-	# https://bugzilla.gnome.org/show_bug.cgi?id=649936
-	epatch "${FILESDIR}"/${PN}-3.1.1-automagic-libcap-ng.patch
-	[[ ${PV} = 9999 ]] || eautoreconf
 	gnome2_src_prepare
 }
 
