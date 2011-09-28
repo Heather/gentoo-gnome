@@ -1,8 +1,8 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-cdr/brasero/brasero-2.32.1.ebuild,v 1.2 2010/12/05 18:40:27 eva Exp $
+# $Header: $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -21,12 +21,11 @@ if [[ ${PV} = 9999 ]]; then
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 fi
-IUSE="+css doc +introspection +libburn nautilus packagekit playlist test"
+IUSE="+css doc +introspection +libburn nautilus packagekit playlist test tracker"
 
 COMMON_DEPEND="
-	>=dev-libs/glib-2.28:2
+	>=dev-libs/glib-2.29.14:2
 	>=x11-libs/gtk+-3.0.0:3[introspection?]
-	>=gnome-base/gconf-2.32.0:2
 	>=media-libs/gstreamer-0.10.15:0.10
 	>=media-libs/gst-plugins-base-0.10:0.10
 	>=dev-libs/libxml2-2.6:2
@@ -41,7 +40,8 @@ COMMON_DEPEND="
 		>=dev-libs/libburn-0.4
 		>=dev-libs/libisofs-0.6.4 )
 	nautilus? ( >=gnome-base/nautilus-2.91.90 )
-	playlist? ( >=dev-libs/totem-pl-parser-2.29.1 )"
+	playlist? ( >=dev-libs/totem-pl-parser-2.29.1 )
+	tracker? ( >=app-misc/tracker-0.12 )"
 RDEPEND="${COMMON_DEPEND}
 	media-plugins/gst-plugins-meta:0.10
 	x11-themes/hicolor-icon-theme
@@ -70,7 +70,6 @@ pkg_setup() {
 		--disable-scrollkeeper
 		--disable-caches
 		--disable-dependency-tracking
-		--disable-search
 		$(use_enable !libburn cdrtools)
 		$(use_enable !libburn cdrkit)
 		$(use_enable !libburn cdrdao)
@@ -78,7 +77,8 @@ pkg_setup() {
 		$(use_enable introspection)
 		$(use_enable libburn libburnia)
 		$(use_enable nautilus)
-		$(use_enable playlist)"
+		$(use_enable playlist)
+		$(use_enable tracker search)"
 
 	DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README"
 }
