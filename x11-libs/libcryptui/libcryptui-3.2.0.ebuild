@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit autotools eutils gnome2
+inherit gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -25,7 +25,6 @@ fi
 
 # Pull in libnotify-0.7 because it's controlled via an automagic ifdef
 COMMON_DEPEND="
-	>=gnome-base/gconf-2:2
 	>=dev-libs/glib-2.10:2
 	>=x11-libs/gtk+-2.90.0:3[introspection?]
 	>=dev-libs/dbus-glib-0.72
@@ -41,7 +40,6 @@ COMMON_DEPEND="
 "
 DEPEND="${COMMON_DEPEND}
 	sys-devel/gettext
-	>=app-text/gnome-doc-utils-0.3.2
 	>=app-text/scrollkeeper-0.3
 	>=dev-util/pkgconfig-0.20
 	>=dev-util/intltool-0.35
@@ -69,12 +67,6 @@ src_prepare() {
 	sed -e '/CFLAGS="$CFLAGS -g -O0/d' \
 		-e 's/-Werror//' \
 		-i configure.ac configure || die "sed failed"
-
-	# Prevent file collisions with app-crypt/seahorse, will be in next release
-	# https://bugzilla.gnome.org/show_bug.cgi?id=655291
-	epatch "${FILESDIR}/${P}-seahorse-file-collisions.patch"
-	mv data/seahorse.schemas.in data/cryptui.schemas.in || die "mv failed"
-	[[ ${PV} = 9999 ]] || eautoreconf
 
 	gnome2_src_prepare
 }
