@@ -17,20 +17,20 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-freebsd ~amd64-l
 # Note to developers:
 # This is a wrapper for the core libraries used by GNOME 3
 RDEPEND="
-	>=dev-libs/glib-2.29.14:2
-	>=x11-libs/gdk-pixbuf-2.23.2:2
-	>=x11-libs/pango-1.28.3
-	>=media-libs/clutter-1.7.5:1.0
-	>=x11-libs/gtk+-3.1.12:3[cups?]
-	>=dev-libs/atk-1.33.6
+	>=dev-libs/glib-2.30:2
+	>=x11-libs/gdk-pixbuf-2.24:2
+	>=x11-libs/pango-1.29.3
+	>=media-libs/clutter-1.8:1.0
+	>=x11-libs/gtk+-3.2:3[cups?]
+	>=dev-libs/atk-2.2
 	>=x11-libs/libwnck-${PV}:3
-	>=gnome-base/librsvg-2.32.1[gtk]
+	>=gnome-base/librsvg-2.34[gtk]
 	>=gnome-base/gnome-desktop-${PV}:3
 	>=gnome-base/libgnomekbd-${PV}
 	>=x11-libs/startup-notification-0.10
 
-	>=gnome-base/gvfs-1.9
-	>=gnome-base/dconf-0.7.3
+	>=gnome-base/gvfs-1.10
+	>=gnome-base/dconf-0.10
 
 	>=media-libs/gstreamer-0.10.32:0.10
 	>=media-libs/gst-plugins-base-0.10.32:0.10
@@ -38,7 +38,7 @@ RDEPEND="
 
 	python? (
 		>=dev-python/pygobject-2.28.6-r50:2
-		>=dev-python/pygobject-2.90.2:3 )
+		>=dev-python/pygobject-3:3 )
 "
 DEPEND=""
 S=${WORKDIR}
