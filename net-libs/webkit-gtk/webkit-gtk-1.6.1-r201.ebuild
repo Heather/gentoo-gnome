@@ -108,9 +108,8 @@ src_configure() {
 		--disable-webgl
 		--with-gtk=2.0
 		--disable-webkit2
-		--disable-web-sockets
+		--enable-web-sockets
 		$(use aqua && echo "--with-font-backend=pango --with-target=quartz")"
-		# Disable web-sockets per bug #326547
 
 	econf ${myconf}
 }

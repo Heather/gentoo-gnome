@@ -111,10 +111,9 @@ src_configure() {
 		--disable-webgl
 		--with-gtk=3.0
 		--disable-webkit2
-		--disable-web-sockets
+		--enable-web-sockets
 		$(use aqua && echo "--with-font-backend=pango --with-target=quartz")"
 		# Aqua support in gtk3 is untested
-		# Disable web-sockets per bug #326547
 
 	econf ${myconf}
 }
