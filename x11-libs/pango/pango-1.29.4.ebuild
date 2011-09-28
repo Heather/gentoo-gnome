@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/pango/pango-1.28.4.ebuild,v 1.8 2011/06/22 18:26:42 grobian Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="yes"
@@ -24,7 +24,8 @@ fi
 
 IUSE="X doc +introspection test"
 
-RDEPEND=">=dev-libs/glib-2.26.0:2
+# Use glib-2.29.5 for g_atomic_int_add
+RDEPEND=">=dev-libs/glib-2.29.5:2
 	>=media-libs/fontconfig-2.5.0:1.0
 	media-libs/freetype:2
 	>=x11-libs/cairo-1.7.6[X?]
@@ -76,19 +77,13 @@ src_prepare() {
 }
 
 pkg_postinst() {
-	if [ "${ROOT}" = "/" ] ; then
-		einfo "Generating modules listing..."
+	einfo "Generating modules listing..."
 
-		local PANGO_CONFDIR=
+	local PANGO_CONFDIR="${EROOT}/etc/pango"
+	multilib_enabled && PANGO_CONFDIR+="/${CHOST}"
 
-		if multilib_enabled ; then
-			PANGO_CONFDIR="${EPREFIX}/etc/pango/${CHOST}"
-		else
-			PANGO_CONFDIR="${EPREFIX}/etc/pango"
-		fi
-
-		mkdir -p ${PANGO_CONFDIR}
-
-		pango-querymodules > ${PANGO_CONFDIR}/pango.modules
-	fi
+	mkdir -p "${PANGO_CONFDIR}"
+	pango-querymodules \
+		"${EROOT}"usr/$(get_libdir)/pango/1.6.0/modules/*.so \
+		> "${PANGO_CONFDIR}"/pango.modules
 }
