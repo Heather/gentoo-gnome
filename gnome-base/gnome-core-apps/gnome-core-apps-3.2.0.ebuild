@@ -46,7 +46,7 @@ RDEPEND="
 	>=gnome-extra/yelp-${PV}
 
 	>=x11-themes/gtk-engines-2.20.2:2
-	>=x11-themes/gnome-icon-theme-3.1.90
+	>=x11-themes/gnome-icon-theme-${PV}
 	>=x11-themes/gnome-icon-theme-symbolic-${PV}
 	>=x11-themes/gnome-themes-standard-${PV}
 
