@@ -61,7 +61,6 @@ DEPEND="${COMMON_DEPEND}
 	>=dev-lang/vala-0.11.6:0.12
 	>=app-text/gnome-doc-utils-0.20
 	>=dev-util/intltool-0.40
-	>=sys-devel/gettext-0.17
 	dev-util/pkgconfig
 	x11-proto/xf86vidmodeproto
 	app-text/docbook-xml-dtd:4.3
