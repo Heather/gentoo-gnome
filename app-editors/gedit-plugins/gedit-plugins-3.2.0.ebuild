@@ -28,7 +28,7 @@ RDEPEND=">=app-editors/gedit-3.0.0[python?]
 	>=x11-libs/gtksourceview-3.0.0:3.0
 	python? (
 		>=app-editors/gedit-3.0.0[introspection]
-		dev-python/pygobject:2[introspection]
+		|| ( dev-python/pygobject:2[introspection] dev-python/pygobject:3 )
 		>=x11-libs/gtk+-3.0.0:3[introspection]
 		>=x11-libs/gtksourceview-3.0.0:3.0[introspection]
 		x11-libs/pango[introspection]
