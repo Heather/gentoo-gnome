@@ -30,7 +30,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.30.0:2
 	>=dev-libs/libxml2-2.6.12:2
 	>=dev-libs/libxslt-1.1.7
 	>=app-text/iso-codes-0.35
-	>=net-libs/webkit-gtk-1.5.2:3[introspection?]
+	>=net-libs/webkit-gtk-1.6.1:3[introspection?]
 	>=net-libs/libsoup-gnome-2.33.1:2.4
 	>=gnome-base/gnome-keyring-2.26.0
 	>=gnome-base/gsettings-desktop-schemas-0.0.1
@@ -78,7 +78,10 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# Upstream patch to fix a crash, will be in next release
+	epatch "${FILESDIR}/${P}-networkmanager-crash.patch"
+
 	# Make networkmanager optional for prefix people
-	epatch "${FILESDIR}/${PN}-3.1.91.1-optional-networkmanager.patch"
+	epatch "${FILESDIR}/${PN}-3.2.0-optional-networkmanager.patch"
 	gnome2_src_prepare
 }
