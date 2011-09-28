@@ -5,6 +5,7 @@
 EAPI="4"
 
 inherit autotools gnome.org libtool eutils flag-o-matic multilib pax-utils virtualx
+# Do not inherit python.eclass to avoid python runtime dependency; #377549
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -37,6 +38,7 @@ DEPEND="${RDEPEND}
 		~app-text/docbook-xml-dtd-4.1.2 )
 	systemtap? ( >=dev-util/systemtap-1.3 )
 	test? (
+		=dev-lang/python-2*
 		>=dev-util/gdbus-codegen-2.30.0
 		>=sys-apps/dbus-1.2.14 )
 	!<dev-util/gtk-doc-1.15-r2"
@@ -84,6 +86,27 @@ src_prepare() {
 			sed -i -e "/desktop-app-info\/fallback/d" gio/tests/desktop-app-info.c || die
 			sed -i -e "/desktop-app-info\/lastused/d" gio/tests/desktop-app-info.c || die
 		fi
+
+		# Disable flaky gdbus/connection/life-cycle test; bug #384853
+		sed -i -e "/connection\/life-cycle/d" gio/tests/gdbus-connection.c || die
+
+		# Disable tests requiring dbus-python and pygobject; bugs #349236, #377549, #384853
+		if ! has_version dev-python/dbus-python || ! has_version 'dev-python/pygobject:2' ; then
+			ewarn "Some tests will be skipped due to dev-python/dbus-python or dev-python/pygobject:2"
+			ewarn "not being present on your system, think on installing them to get these tests run."
+			sed -i -e "/connection\/filter/d" gio/tests/gdbus-connection.c || die
+			sed -i -e "/connection\/large_message/d" gio/tests/gdbus-connection-slow.c || die
+			sed -i -e "/gdbus\/proxy/d" gio/tests/gdbus-proxy.c || die
+			sed -i -e "/gdbus\/proxy-well-known-name/d" gio/tests/gdbus-proxy-well-known-name.c || die
+			sed -i -e "/gdbus\/introspection-parser/d" gio/tests/gdbus-introspection.c || die
+			sed -i -e "/g_test_add_func/d" gio/tests/gdbus-threading.c || die
+			sed -i -e "/gdbus\/method-calls-in-thread/d" gio/tests/gdbus-threading.c || die
+			# needed to prevent gdbus-threading from asserting
+			ln -sfn $(type -P true) gio/tests/gdbus-testserver.py
+		else
+			# use python2 for the test server
+			sed -i -e 's:/usr/bin/env python$:/usr/bin/env python2:' gio/tests/gdbus-testserver.py || die
+		fi
 	fi
 
 	# gdbus-codegen is a separate package
@@ -91,6 +114,9 @@ src_prepare() {
 
 	# disable pyc compiling
 	ln -sfn $(type -P true) py-compile
+
+	# python2 needed for gtester-report
+	sed -e 's:/usr/bin/env python$:/usr/bin/env python2:' -i glib/gtester-report || die
 
 	# Needed for the punt-python-check patch, disabling timeout test
 	# Also needed to prevent croscompile failures, see bug #267603
