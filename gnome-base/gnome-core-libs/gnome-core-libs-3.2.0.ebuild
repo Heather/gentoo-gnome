@@ -36,9 +36,7 @@ RDEPEND="
 	>=media-libs/gst-plugins-base-0.10.32:0.10
 	>=media-libs/gst-plugins-good-0.10.23:0.10
 
-	python? (
-		>=dev-python/pygobject-2.28.6-r50:2
-		>=dev-python/pygobject-3:3 )
+	python? ( >=dev-python/pygobject-3.0:3 )
 "
 DEPEND=""
 S=${WORKDIR}
