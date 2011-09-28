@@ -24,7 +24,7 @@ else
 fi
 
 RDEPEND="virtual/libiconv
-	>=dev-libs/libffi-3.0.0
+	virtual/libffi
 	sys-libs/zlib
 	xattr? ( sys-apps/attr )
 	fam? ( virtual/fam )"

@@ -27,7 +27,7 @@ fi
 IUSE="doc test"
 
 RDEPEND=">=dev-libs/glib-2.29.7:2
-	>=dev-libs/libffi-3.0"
+	virtual/libffi"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	sys-devel/bison
