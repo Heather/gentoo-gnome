@@ -60,6 +60,9 @@ pkg_setup() {
 src_prepare() {
 	gnome2_src_prepare
 
+	# Upstream patch to fix pygobject-3 compatibility, will be in next release
+	epatch "${FILESDIR}/${P}-pygobject-3.patch"
+
 	# Don't show KDE standalone settings desktop files in GNOME others menu
 	epatch "${FILESDIR}/${PN}-3.0.0-ignore_kde_standalone.patch"
 

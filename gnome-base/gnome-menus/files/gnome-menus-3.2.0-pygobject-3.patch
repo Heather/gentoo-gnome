@@ -1,0 +1,114 @@
+From f1c76629d33a616089a15bd034708d21e8bd9a87 Mon Sep 17 00:00:00 2001
+From: Vincent Untz <vuntz@gnome.org>
+Date: Tue, 27 Sep 2011 10:09:35 +0000
+Subject: editor: Fix to work with latest pygi
+
+https://bugzilla.gnome.org/show_bug.cgi?id=660112
+---
+diff --git a/simple-editor/GMenuSimpleEditor/main.py b/simple-editor/GMenuSimpleEditor/main.py
+index a107818..7af8ae0 100644
+--- a/simple-editor/GMenuSimpleEditor/main.py
++++ b/simple-editor/GMenuSimpleEditor/main.py
+@@ -17,11 +17,12 @@
+ #
+ 
+ def main (args):
++    import optparse
++
+     import locale
+     import gettext
+ 
+-    import gobject
+-    from gobject.option import OptionParser, make_option
++    from gi.repository import GObject
+ 
+     from gi.repository import Gtk
+ 
+@@ -31,18 +32,14 @@ def main (args):
+     locale.setlocale (locale.LC_ALL, "")
+     gettext.install (config.PACKAGE, config.LOCALEDIR)
+ 
+-    parser = OptionParser (
+-            option_list = [
+-		    # FIXME: remove this when we can get all the default
+-		    # options
+-                    make_option ("--version",
+-                                 action="store_true",
+-                                 dest="version",
+-                                 help=config.VERSION),
+-                ])
+-    parser.parse_args (args)
+-
+-    if parser.values.version:
++    parser = optparse.OptionParser()
++    parser.add_option('--version', dest='version',
++                      action='store_true', default=False,
++                      help=config.VERSION)
++
++    (options, args) = parser.parse_args()
++
++    if options.version:
+         # Translators: %s is the version number 
+         print _("Simple Menu Editor %s") % (config.VERSION)
+     else:
+diff --git a/simple-editor/GMenuSimpleEditor/menufilewriter.py b/simple-editor/GMenuSimpleEditor/menufilewriter.py
+index c31fade..aa6c42e 100644
+--- a/simple-editor/GMenuSimpleEditor/menufilewriter.py
++++ b/simple-editor/GMenuSimpleEditor/menufilewriter.py
+@@ -19,7 +19,7 @@
+ import os
+ import errno
+ import pwd
+-import gobject
++from gi.repository import GObject
+ from gi.repository import Gtk
+ 
+ import menutreemodel
+@@ -86,7 +86,7 @@ class MenuFileWriter:
+ 
+     def __del__ (self):
+         for (path, id) in self.sync_idle_handlers.items():
+-            gobject.source_remove (id)
++            GObject.source_remove (id)
+ 
+     def __append_menu (self, contents, indent, iter, system_menu_file = None):
+         has_changes = False
+@@ -192,5 +192,5 @@ class MenuFileWriter:
+         if self.sync_idle_handlers.has_key (menu_file_path):
+             return
+ 
+-        id = gobject.idle_add (self.__sync_idle_handler_func, menu_file_path)
++        id = GObject.idle_add (self.__sync_idle_handler_func, menu_file_path)
+         self.sync_idle_handlers[menu_file_path] = id
+diff --git a/simple-editor/GMenuSimpleEditor/menutreemodel.py b/simple-editor/GMenuSimpleEditor/menutreemodel.py
+index 9930c4f..2eded47 100644
+--- a/simple-editor/GMenuSimpleEditor/menutreemodel.py
++++ b/simple-editor/GMenuSimpleEditor/menutreemodel.py
+@@ -18,7 +18,7 @@
+ 
+ import os
+ import os.path
+-import gobject
++from gi.repository import GObject
+ from gi.repository import Gio
+ from gi.repository import Gtk
+ from gi.repository import GdkPixbuf
+@@ -61,14 +61,14 @@ class MenuTreeModel (Gtk.TreeStore):
+             if menu_file == "applications.menu" and os.environ.has_key ("XDG_MENU_PREFIX"):
+                 menu_file = os.environ["XDG_MENU_PREFIX"] + menu_file
+ 
+-            tree = gobject.new (GMenu.Tree, menu_basename = menu_file, flags = GMenu.TreeFlags.INCLUDE_EXCLUDED|GMenu.TreeFlags.SORT_DISPLAY_NAME)
++            tree = GObject.new (GMenu.Tree, menu_basename = menu_file, flags = GMenu.TreeFlags.INCLUDE_EXCLUDED|GMenu.TreeFlags.SORT_DISPLAY_NAME)
+             tree.load_sync ()
+ 
+             self.__append_directory (tree.get_root_directory (), None, False, menu_file)
+ 
+             system_file = lookup_system_menu_file (menu_file)
+             if system_file:
+-                system_tree = gobject.new (GMenu.Tree, menu_path = system_file, flags = GMenu.TreeFlags.INCLUDE_EXCLUDED|GMenu.TreeFlags.SORT_DISPLAY_NAME)
++                system_tree = GObject.new (GMenu.Tree, menu_path = system_file, flags = GMenu.TreeFlags.INCLUDE_EXCLUDED|GMenu.TreeFlags.SORT_DISPLAY_NAME)
+                 system_tree.load_sync ()
+ 
+                 self.__append_directory (system_tree.get_root_directory (), None, True, menu_file)
+--
+cgit v0.9.0.2
