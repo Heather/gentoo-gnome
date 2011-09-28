@@ -34,6 +34,7 @@ RDEPEND=">=gnome-base/gnome-desktop-2.91:3
 	gnome-base/dconf
 	>=gnome-base/gconf-2.6.1:2[introspection?]
 	>=gnome-base/gnome-menus-3.1.4:3
+	gnome-base/gsettings-desktop-schemas
 	gnome-base/librsvg:2
 	>=net-libs/telepathy-glib-0.14.0
 	>=x11-libs/cairo-1[X]
