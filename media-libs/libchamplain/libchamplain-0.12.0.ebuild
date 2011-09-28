@@ -32,7 +32,8 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.9 )
-	vala? ( dev-lang/vala:0.12[vapigen] )"
+	vala? ( dev-lang/vala:0.14[vapigen] )"
+# segfaults with vala:0.12
 
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS README"
@@ -43,7 +44,7 @@ pkg_setup() {
 		--disable-maemo
 		--disable-vala-demos
 		--enable-memphis
-		VAPIGEN=$(type -p vapigen-0.12)
+		VAPIGEN=$(type -p vapigen-0.14)
 		$(use_enable debug)
 		$(use_enable gtk)
 		$(use_enable introspection)
