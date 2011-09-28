@@ -1,0 +1,21 @@
+From d9d6f06bcd90ccab5a7f10cc3f505afb2994e2dd Mon Sep 17 00:00:00 2001
+From: Dexter Morgan <dmorganec@gmail.com>
+Date: Mon, 26 Sep 2011 22:27:38 +0000
+Subject: fix format string
+
+---
+diff --git a/libyelp/yelp-man-parser.c b/libyelp/yelp-man-parser.c
+index 3c75642..25b0f0c 100644
+--- a/libyelp/yelp-man-parser.c
++++ b/libyelp/yelp-man-parser.c
+@@ -380,7 +380,7 @@ get_troff (gchar *path, GError **error)
+                                    NULL, NULL, &ystdout, NULL, &err)) {
+         /* We failed to run the man program. Return a "Huh?" error. */
+         *error = g_error_new (YELP_ERROR, YELP_ERROR_UNKNOWN,
+-                              err->message);
++                              "%s", err->message);
+         g_error_free (err);
+         return NULL;
+     }
+--
+cgit v0.9.0.2
