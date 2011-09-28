@@ -5,7 +5,7 @@
 EAPI="4"
 GCONF_DEBUG="yes"
 
-inherit eutils gnome2
+inherit gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -68,10 +68,4 @@ pkg_setup() {
 		--disable-maintainer-mode"
 	# xscreensaver and custom screensaver capability removed
 	# poke and inhibit commands were also removed, bug 579430
-}
-
-src_prepare() {
-	gnome2_src_prepare
-	# Upstream patch to fix clock update, will be in next release
-	epatch "${FILESDIR}/${P}-clock-update.patch"
 }
