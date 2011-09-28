@@ -5,7 +5,7 @@
 EAPI="4"
 GCONF_DEBUG="no"
 
-inherit gnome2 bash-completion
+inherit autotools eutils gnome2 bash-completion
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -15,29 +15,29 @@ HOMEPAGE="http://live.gnome.org/dconf"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-IUSE="doc +X"
+IUSE="doc vala +X"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
 	KEYWORDS="~amd64 ~arm ~sparc ~x86"
 fi
 
-COMMON_DEPEND=">=dev-libs/glib-2.27.2:2
+COMMON_DEPEND=">=dev-libs/glib-2.29.90:2
 	sys-apps/dbus
 	X? (
 		>=dev-libs/libxml2-2.7.7:2
 		x11-libs/gtk+:3 )"
 # vala:0.14 due to an automagic version-check #ifdef (commit a15d9621)
 DEPEND="${COMMON_DEPEND}
-	dev-lang/vala:0.14
-	doc? ( >=dev-util/gtk-doc-1.15 )"
+	doc? ( >=dev-util/gtk-doc-1.15 )
+	vala? ( dev-lang/vala:0.14 )"
 
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-schemas-compile
-		VALAC=$(type -p valac-0.14)
-		$(use_enable X editor)"
-		#$(use_enable vala)
+		$(use_enable vala)
+		$(use_enable X editor)
+		VALAC=$(type -p valac-0.14)"
 }
 
 src_prepare() {
@@ -49,9 +49,13 @@ src_prepare() {
 	fi
 
 	# Fix vala automagic support, upstream bug #634171
-	# FIXME: patch doesn't actually work, forcing vala support above
-	#epatch "${FILESDIR}/${PN}-automagic-vala.patch"
+	epatch "${FILESDIR}/${PN}-automagic-vala.patch"
 
+	if [[ ${PV} != 9999 ]]; then
+		mkdir -p m4 || die
+		AT_M4DIR="." eautoreconf
+		eautoreconf
+	fi
 	gnome2_src_prepare
 }
 
@@ -63,11 +67,10 @@ src_install() {
 	# must have it enabled over gconf if both are installed
 	echo 'CONFIG_PROTECT_MASK="/etc/dconf"' >> 51dconf
 	echo 'GSETTINGS_BACKEND="dconf"' >> 51dconf
-	doenvd 51dconf || die "doenvd failed"
+	doenvd 51dconf
 
 	# Remove bash-completion file installed by build system
 	rm -rv "${ED}/etc/bash_completion.d/" || die
-
 	use bash-completion && \
 		dobashcompletion "${S}/bin/dconf-bash-completion.sh" ${PN}
 }

@@ -22,7 +22,7 @@ else
 	KEYWORDS="~amd64 ~arm ~sparc ~x86"
 fi
 
-COMMON_DEPEND=">=dev-libs/glib-2.27.2:2
+COMMON_DEPEND=">=dev-libs/glib-2.29.90:2
 	sys-apps/dbus
 	X? (
 		>=dev-libs/libxml2-2.7.7:2
