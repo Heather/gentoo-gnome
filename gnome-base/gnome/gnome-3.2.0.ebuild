@@ -24,7 +24,7 @@ RDEPEND="
 	>=gnome-base/gnome-core-libs-${PV}[cups?]
 	>=gnome-base/gnome-core-apps-${PV}[cups?,bluetooth,cdr?]
 
-	>=gnome-base/gdm-3.0.0
+	>=gnome-base/gdm-${PV}
 
 	>=x11-wm/mutter-${PV}
 	>=gnome-base/gnome-shell-${PV}
@@ -34,9 +34,11 @@ RDEPEND="
 	x11-themes/sound-theme-freedesktop
 
 	extras? ( >=gnome-base/gnome-extra-apps-${PV} )
-	fallback? ( >=gnome-base/gnome-fallback-${PV} )"
+	fallback? (
+		>=gnome-base/gnome-applets-${PV}
+		>=gnome-base/gnome-fallback-${PV} )"
 DEPEND=""
-PDEPEND=">=gnome-base/gvfs-1.9.0[gdu]"
+PDEPEND=">=gnome-base/gvfs-1.10.0[gdu]"
 # Broken from assumptions of gnome-vfs headers being included in nautilus headers,
 # which isn't the case with nautilus-2.22, bug #216019
 #	>=app-admin/gnome-system-tools-2.32.0
@@ -49,7 +51,6 @@ PDEPEND=">=gnome-base/gvfs-1.9.0[gdu]"
 #   sound-juicer-2.32
 #
 # Not ported, don't build:
-#	gnome-base/gnome-applets (still a part of the moduleset or not?)
 #	gnome-extra/evolution-webcal-2.32.0
 
 # These don't work with gsettings/dconf
@@ -77,6 +78,8 @@ PDEPEND=">=gnome-base/gvfs-1.9.0[gdu]"
 #   intltool
 #   gtk-doc
 #   gnome-doc-utils
+#   itstool
+#   yelp-tools
 
 #pkg_postinst() {
 # gnome-wm is gone, session files are now used by gnome-session to decide which
