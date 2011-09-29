@@ -15,7 +15,7 @@ LICENSE="LGPL-2 LGPL-2.1 BSD"
 SLOT="3"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-macos"
 # geoclue
-IUSE="aqua coverage debug doc +gstreamer +introspection +jit spell"
+IUSE="aqua coverage debug doc +gstreamer +introspection +jit spell webgl"
 # bug 372493
 REQUIRED_USE="introspection? ( gstreamer )"
 
@@ -44,6 +44,8 @@ RDEPEND="
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 
 	spell? ( >=app-text/enchant-0.22 )
+
+	webgl? ( virtual/opengl )
 "
 DEPEND="${RDEPEND}
 	>=sys-devel/flex-2.5.33
@@ -80,6 +82,9 @@ src_prepare() {
 	# XXX: Fails to apply
 	#epatch "${FILESDIR}/${PN}-1.2.5-tests-build.patch"
 
+	# Required for webgl; https://bugs.webkit.org/show_bug.cgi?id=69085
+	mkdir -p DerivedSources/ANGLE
+
 	# Prevent maintainer mode from being triggered during make
 	AT_M4DIR=Source/autotools eautoreconf
 }
@@ -97,7 +102,6 @@ src_configure() {
 	local myconf
 
 	# XXX: Check Web Audio support
-	# XXX: webgl fails compilation
 	# XXX: files for generating DerivedSources/WebKit2/* are missing, see
 	#      https://bugs.webkit.org/show_bug.cgi?id=66527
 	myconf="
@@ -108,7 +112,7 @@ src_configure() {
 		$(use_enable introspection)
 		$(use_enable gstreamer video)
 		$(use_enable jit)
-		--disable-webgl
+		$(use_enable webgl)
 		--with-gtk=3.0
 		--disable-webkit2
 		--enable-web-sockets
