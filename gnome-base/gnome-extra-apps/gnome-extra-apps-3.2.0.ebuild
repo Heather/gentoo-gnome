@@ -21,25 +21,27 @@ RDEPEND="
 	>=gnome-base/gnome-core-libs-${PV}
 
 	>=app-arch/file-roller-${PV}
+	>=app-misc/tracker-0.12.3
 	>=games-board/aisleriot-${PV}
 	>=gnome-extra/bug-buddy-2.32.0:2
-	>=gnome-extra/gcalctool-6.0.0
+	>=gnome-extra/gcalctool-6.2.0
 	>=gnome-extra/gconf-editor-3.0.0
+	>=gnome-extra/gnome-documents-0.2.0
 	>=gnome-extra/gnome-games-${PV}
 	>=gnome-extra/gnome-system-monitor-${PV}
 	>=gnome-extra/gnome-tweak-tool-${PV}
 	>=gnome-extra/gnome-utils-${PV}
-	>=gnome-extra/gucharmap-3.0.0:2.90
+	>=gnome-extra/gucharmap-${PV}:2.90
+	>=gnome-extra/sushi-0.2.0
 	>=mail-client/evolution-${PV}
+	>=media-gfx/shotwell-0.11
 	>=media-sound/sound-juicer-2.99
-	>=media-video/cheese-3.0.0
+	>=media-video/cheese-${PV}
 	>=net-analyzer/gnome-nettool-3.0.0
 	>=net-misc/vinagre-${PV}
 	>=net-misc/vino-${PV}
-	>=www-client/epiphany-3.0.0
+	>=www-client/epiphany-${PV}
 "
-# Re-add when it stops using outdated libraries like gnome-vfs
-#>=media-gfx/shotwell-0.8.1
 # Note: bug-buddy is broken with GNOME 3
 DEPEND=""
 S=${WORKDIR}
