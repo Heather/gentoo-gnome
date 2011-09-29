@@ -38,10 +38,10 @@ RDEPEND="!gnome-base/gnome
 	>=x11-themes/gnome-icon-theme-symbolic-${PV}
 	>=x11-themes/gnome-themes-standard-${PV}
 
-	>=x11-terms/gnome-terminal-3.0.0
+	>=x11-terms/gnome-terminal-${PV}
 "
 DEPEND=""
-PDEPEND=">=gnome-base/gvfs-1.8.0"
+PDEPEND=">=gnome-base/gvfs-1.10.0"
 S=${WORKDIR}
 
 pkg_pretend() {
