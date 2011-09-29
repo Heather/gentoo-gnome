@@ -26,7 +26,7 @@ fi
 # gdk-pixbuf used extensively in the source
 # cairo used in eggtreemultidnd.c
 # pango used in fr-window
-RDEPEND=">=dev-libs/glib-2.25.5:2
+RDEPEND=">=dev-libs/glib-2.29.14:2
 	sys-apps/file
 	x11-libs/cairo
 	x11-libs/gdk-pixbuf:2
