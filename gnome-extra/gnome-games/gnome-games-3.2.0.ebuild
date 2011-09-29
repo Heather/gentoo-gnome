@@ -51,7 +51,7 @@ COMMON_DEPEND="
 		x11-libs/libX11 )"
 RDEPEND="${COMMON_DEPEND}
 	sudoku? (
-		>=dev-python/pygobject-2.28.3:2[introspection]
+		|| ( dev-python/pygobject:3 >=dev-python/pygobject-2.28.3:2[introspection] )
 		x11-libs/gdk-pixbuf:2[introspection]
 		x11-libs/pango[introspection]
 		>=x11-libs/gtk+-3.0.0:3[introspection] )
