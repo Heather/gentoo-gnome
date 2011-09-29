@@ -3,6 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/gnome-games-extra-data/gnome-games-extra-data-2.30.0.ebuild,v 1.8 2010/10/17 15:46:21 armin76 Exp $
 
 inherit gnome2
+GCONF_DEBUG="no"
 
 DESCRIPTION="Optional additional graphics for gnome-games"
 HOMEPAGE="http://live.gnome.org/GnomeGames/"
