@@ -18,29 +18,23 @@ HOMEPAGE="http://live.gnome.org/Gjs"
 
 LICENSE="MIT MPL-1.1 LGPL-2 GPL-2"
 SLOT="0"
-IUSE="examples test +xulrunner"
+IUSE="examples test"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
 	KEYWORDS="~amd64 ~x86"
 fi
 
-# Things are untested and broken with anything other than xulrunner-2.0
-# or spidermonkey-1.8.5
 RDEPEND=">=dev-libs/glib-2.18:2
 	>=dev-libs/gobject-introspection-1.29.16
 
 	dev-libs/dbus-glib
 	sys-libs/readline
 	x11-libs/cairo
-	xulrunner? (
-		>=net-libs/xulrunner-2.0:1.9
-		!=dev-lang/spidermonkey-1.8.2* )
-	!xulrunner? ( =dev-lang/spidermonkey-1.8.5* )"
+	>=dev-lang/spidermonkey-1.8.5"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.9"
-# HACK HACK: gjs-tests picks up /usr/lib/libmozjs.so with spidermonkey-1.8.2* installed
 
 pkg_setup() {
 	# AUTHORS, ChangeLog are empty
@@ -49,14 +43,10 @@ pkg_setup() {
 	# FIXME: --enable-systemtap installs files in ${D}/${D} for some reason
 	# XXX: Do NOT enable coverage, completely useless for portage installs
 	G2CONF="${G2CONF}
+		--with-js-package=mozjs185
 		--disable-systemtap
 		--disable-dtrace
 		--disable-coverage"
-	if use xulrunner; then
-		G2CONF="${G2CONF} --with-js-package=mozilla-js"
-	else
-		G2CONF="${G2CONF} --with-js-package=mozjs185"
-	fi
 }
 
 src_prepare() {
