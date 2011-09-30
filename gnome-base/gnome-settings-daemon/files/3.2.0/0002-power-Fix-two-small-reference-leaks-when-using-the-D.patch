@@ -1,0 +1,35 @@
+From f24306a2fa496b6f6f2e7c00173834030882d7d5 Mon Sep 17 00:00:00 2001
+From: Richard Hughes <richard@hughsie.com>
+Date: Mon, 26 Sep 2011 10:06:13 +0100
+Subject: [PATCH 02/10] power: Fix two small reference leaks when using the
+ D-Bus interface
+
+Resolves: https://bugzilla.gnome.org/show_bug.cgi?id=660079
+---
+ plugins/power/gsd-power-manager.c |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+diff --git a/plugins/power/gsd-power-manager.c b/plugins/power/gsd-power-manager.c
+index f118642..d786977 100644
+--- a/plugins/power/gsd-power-manager.c
++++ b/plugins/power/gsd-power-manager.c
+@@ -3726,6 +3726,7 @@ handle_method_call_main (GsdPowerManager *manager,
+                 value = device_to_variant_blob (device);
+                 tuple = g_variant_new_tuple (&value, 1);
+                 g_dbus_method_invocation_return_value (invocation, tuple);
++                g_object_unref (device);
+                 return;
+         }
+ 
+@@ -3736,7 +3737,7 @@ handle_method_call_main (GsdPowerManager *manager,
+                 builder = g_variant_builder_new (G_VARIANT_TYPE("a(susdut)"));
+ 
+                 /* add each tuple to the array */
+-                array = g_ptr_array_ref (manager->priv->devices_array);
++                array = manager->priv->devices_array;
+                 for (i=0; i<array->len; i++) {
+                         device = g_ptr_array_index (array, i);
+                         value = device_to_variant_blob (device);
+-- 
+1.7.6.1
+

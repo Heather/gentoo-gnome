@@ -1,0 +1,168 @@
+From 573889e0be2f39f894dfaebedf72b6ae4b626554 Mon Sep 17 00:00:00 2001
+From: Rodrigo Moya <rodrigo@gnome-db.org>
+Date: Thu, 29 Sep 2011 11:57:12 +0200
+Subject: [PATCH 07/10] power, media-keys, xrandr: Use a GCancellable for
+ g_bus_get calls so that they can be cancelled
+
+---
+ plugins/media-keys/gsd-media-keys-manager.c |   16 +++++++++++++++-
+ plugins/power/gsd-power-manager.c           |   16 +++++++++++++++-
+ plugins/xrandr/gsd-xrandr-manager.c         |   16 +++++++++++++++-
+ 3 files changed, 45 insertions(+), 3 deletions(-)
+
+diff --git a/plugins/media-keys/gsd-media-keys-manager.c b/plugins/media-keys/gsd-media-keys-manager.c
+index c2ddf96..522bf1e 100644
+--- a/plugins/media-keys/gsd-media-keys-manager.c
++++ b/plugins/media-keys/gsd-media-keys-manager.c
+@@ -130,6 +130,7 @@ struct GsdMediaKeysManagerPrivate
+ 
+         GDBusNodeInfo   *introspection_data;
+         GDBusConnection *connection;
++        GCancellable    *bus_cancellable;
+         GDBusProxy      *xrandr_proxy;
+         GCancellable    *cancellable;
+ 
+@@ -1753,6 +1754,12 @@ gsd_media_keys_manager_stop (GsdMediaKeysManager *manager)
+ 
+         g_debug ("Stopping media_keys manager");
+ 
++        if (priv->bus_cancellable != NULL) {
++                g_cancellable_cancel (priv->bus_cancellable);
++                g_object_unref (priv->bus_cancellable);
++                priv->bus_cancellable = NULL;
++        }
++
+         for (ls = priv->screens; ls != NULL; ls = ls->next) {
+                 gdk_window_remove_filter (gdk_screen_get_root_window (ls->data),
+                                           (GdkFilterFunc) acme_filter_events,
+@@ -1980,6 +1987,12 @@ on_bus_gotten (GObject             *source_object,
+         GDBusConnection *connection;
+         GError *error = NULL;
+ 
++        if (manager->priv->bus_cancellable == NULL ||
++            g_cancellable_is_cancelled (manager->priv->bus_cancellable)) {
++                g_warning ("Operation has been cancelled, so not retrieving session bus");
++                return;
++        }
++
+         connection = g_bus_get_finish (res, &error);
+         if (connection == NULL) {
+                 g_warning ("Could not get session bus: %s", error->message);
+@@ -2031,10 +2044,11 @@ static void
+ register_manager (GsdMediaKeysManager *manager)
+ {
+         manager->priv->introspection_data = g_dbus_node_info_new_for_xml (introspection_xml, NULL);
++        manager->priv->bus_cancellable = g_cancellable_new ();
+         g_assert (manager->priv->introspection_data != NULL);
+ 
+         g_bus_get (G_BUS_TYPE_SESSION,
+-                   NULL,
++                   manager->priv->bus_cancellable,
+                    (GAsyncReadyCallback) on_bus_gotten,
+                    manager);
+ }
+diff --git a/plugins/power/gsd-power-manager.c b/plugins/power/gsd-power-manager.c
+index d786977..370d90d 100644
+--- a/plugins/power/gsd-power-manager.c
++++ b/plugins/power/gsd-power-manager.c
+@@ -157,6 +157,7 @@ struct GsdPowerManagerPrivate
+         UpClient                *up_client;
+         GDBusNodeInfo           *introspection_data;
+         GDBusConnection         *connection;
++        GCancellable            *bus_cancellable;
+         GDBusProxy              *upower_proxy;
+         GDBusProxy              *upower_kdb_proxy;
+         gint                     kbd_brightness_now;
+@@ -3454,6 +3455,12 @@ gsd_power_manager_stop (GsdPowerManager *manager)
+ {
+         g_debug ("Stopping power manager");
+ 
++        if (manager->priv->bus_cancellable != NULL) {
++                g_cancellable_cancel (manager->priv->bus_cancellable);
++                g_object_unref (manager->priv->bus_cancellable);
++                manager->priv->bus_cancellable = NULL;
++        }
++
+         if (manager->priv->introspection_data) {
+                 g_dbus_node_info_unref (manager->priv->introspection_data);
+                 manager->priv->introspection_data = NULL;
+@@ -3842,6 +3849,12 @@ on_bus_gotten (GObject             *source_object,
+         GError *error = NULL;
+         guint i;
+ 
++        if (manager->priv->bus_cancellable == NULL ||
++            g_cancellable_is_cancelled (manager->priv->bus_cancellable)) {
++                g_warning ("Operation has been cancelled, so not retrieving session bus");
++                return;
++        }
++
+         connection = g_bus_get_finish (res, &error);
+         if (connection == NULL) {
+                 g_warning ("Could not get session bus: %s", error->message);
+@@ -3865,10 +3878,11 @@ static void
+ register_manager_dbus (GsdPowerManager *manager)
+ {
+         manager->priv->introspection_data = g_dbus_node_info_new_for_xml (introspection_xml, NULL);
++        manager->priv->bus_cancellable = g_cancellable_new ();
+         g_assert (manager->priv->introspection_data != NULL);
+ 
+         g_bus_get (G_BUS_TYPE_SESSION,
+-                   NULL,
++                   manager->priv->bus_cancellable,
+                    (GAsyncReadyCallback) on_bus_gotten,
+                    manager);
+ }
+diff --git a/plugins/xrandr/gsd-xrandr-manager.c b/plugins/xrandr/gsd-xrandr-manager.c
+index 4ccf5d1..8b12ddd 100644
+--- a/plugins/xrandr/gsd-xrandr-manager.c
++++ b/plugins/xrandr/gsd-xrandr-manager.c
+@@ -104,6 +104,7 @@ struct GsdXrandrManagerPrivate
+         GSettings       *settings;
+         GDBusNodeInfo   *introspection_data;
+         GDBusConnection *connection;
++        GCancellable    *bus_cancellable;
+ 
+         /* fn-F7 status */
+         int             current_fn_f7_config;             /* -1 if no configs */
+@@ -1899,6 +1900,12 @@ gsd_xrandr_manager_stop (GsdXrandrManager *manager)
+ 
+         manager->priv->running = FALSE;
+ 
++        if (manager->priv->bus_cancellable != NULL) {
++                g_cancellable_cancel (manager->priv->bus_cancellable);
++                g_object_unref (manager->priv->bus_cancellable);
++                manager->priv->bus_cancellable = NULL;
++        }
++
+         if (manager->priv->settings != NULL) {
+                 g_object_unref (manager->priv->settings);
+                 manager->priv->settings = NULL;
+@@ -2066,6 +2073,12 @@ on_bus_gotten (GObject             *source_object,
+         GDBusConnection *connection;
+         GError *error = NULL;
+ 
++        if (manager->priv->bus_cancellable == NULL ||
++            g_cancellable_is_cancelled (manager->priv->bus_cancellable)) {
++                g_warning ("Operation has been cancelled, so not retrieving session bus");
++                return;
++        }
++
+         connection = g_bus_get_finish (res, &error);
+         if (connection == NULL) {
+                 g_warning ("Could not get session bus: %s", error->message);
+@@ -2087,10 +2100,11 @@ static void
+ register_manager_dbus (GsdXrandrManager *manager)
+ {
+         manager->priv->introspection_data = g_dbus_node_info_new_for_xml (introspection_xml, NULL);
++        manager->priv->bus_cancellable = g_cancellable_new ();
+         g_assert (manager->priv->introspection_data != NULL);
+ 
+         g_bus_get (G_BUS_TYPE_SESSION,
+-                   NULL,
++                   manager->priv->bus_cancellable,
+                    (GAsyncReadyCallback) on_bus_gotten,
+                    manager);
+ }
+-- 
+1.7.6.1
+

@@ -1,0 +1,27 @@
+From 15d30558108fcdfe4c688b38a06214427801be78 Mon Sep 17 00:00:00 2001
+From: Bastien Nocera <hadess@hadess.net>
+Date: Tue, 27 Sep 2011 10:20:21 +0100
+Subject: [PATCH 05/10] common: Remove left-over debug
+
+Spotted by Matthias Clasen <mclasen@redhat.com>
+
+https://bugzilla.gnome.org/show_bug.cgi?id=660073
+---
+ plugins/common/gsd-input-helper.c |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
+
+diff --git a/plugins/common/gsd-input-helper.c b/plugins/common/gsd-input-helper.c
+index a2a0451..7b605bf 100644
+--- a/plugins/common/gsd-input-helper.c
++++ b/plugins/common/gsd-input-helper.c
+@@ -345,7 +345,6 @@ get_disabled_devices (GdkDeviceManager *manager)
+ 
+                 /* Check whether the device is actually available */
+                 device = gdk_x11_device_manager_lookup (manager, device_info[i].id);
+-                g_message ("checking whether we have a device for %d: %s", device_info[i].id, device ? "yes" : "no");
+                 if (device != NULL)
+                         continue;
+ 
+-- 
+1.7.6.1
+

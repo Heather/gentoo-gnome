@@ -98,6 +98,9 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# A bunch of important patches from upstream, will be in next release
+	epatch "${FILESDIR}/${PV}/"*.patch
+
 	# https://bugzilla.gnome.org/show_bug.cgi?id=621836
 	# Apparently this change severely affects touchpad usability for some
 	# people, so revert it if USE=short-touchpad-timeout.

@@ -1,0 +1,54 @@
+From 7e9ff82377c6ada10554037c873f53b0fd8fe949 Mon Sep 17 00:00:00 2001
+From: Richard Hughes <richard@hughsie.com>
+Date: Fri, 23 Sep 2011 12:21:51 +0100
+Subject: [PATCH 01/10] power: Don't restore the brightness if it's never been
+ set
+
+---
+ plugins/power/gsd-power-manager.c |   23 +++++++++++++----------
+ 1 files changed, 13 insertions(+), 10 deletions(-)
+
+diff --git a/plugins/power/gsd-power-manager.c b/plugins/power/gsd-power-manager.c
+index b528a97..f118642 100644
+--- a/plugins/power/gsd-power-manager.c
++++ b/plugins/power/gsd-power-manager.c
+@@ -2743,15 +2743,18 @@ idle_set_mode (GsdPowerManager *manager, GsdPowerIdleMode mode)
+                         g_clear_error (&error);
+                 }
+ 
+-                ret = backlight_set_abs (manager,
+-                                         manager->priv->pre_dim_brightness,
+-                                         &error);
+-                if (!ret) {
+-                        g_warning ("failed to restore backlight to %i: %s",
+-                                   manager->priv->pre_dim_brightness,
+-                                   error->message);
+-                        g_error_free (error);
+-                        return;
++                /* reset brightness if we dimmed */
++                if (manager->priv->pre_dim_brightness >= 0) {
++                        ret = backlight_set_abs (manager,
++                                                 manager->priv->pre_dim_brightness,
++                                                 &error);
++                        if (!ret) {
++                                g_warning ("failed to restore backlight to %i: %s",
++                                           manager->priv->pre_dim_brightness,
++                                           error->message);
++                                g_error_free (error);
++                                return;
++                        }
+                 }
+         }
+ }
+@@ -3298,7 +3301,7 @@ gsd_power_manager_start (GsdPowerManager *manager,
+                           manager);
+ 
+         manager->priv->kbd_brightness_old = -1;
+-        manager->priv->pre_dim_brightness = 100;
++        manager->priv->pre_dim_brightness = -1;
+         manager->priv->settings = g_settings_new (GSD_POWER_SETTINGS_SCHEMA);
+         g_signal_connect (manager->priv->settings, "changed",
+                           G_CALLBACK (engine_settings_key_changed_cb), manager);
+-- 
+1.7.6.1
+
