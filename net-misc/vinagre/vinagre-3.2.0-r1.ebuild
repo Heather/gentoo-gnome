@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
+inherit autotools eutils gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -64,6 +64,13 @@ pkg_setup() {
 		$(use_with avahi)
 		$(use_enable ssh)
 		$(use_with telepathy)"
+}
+
+src_prepare() {
+	# https://bugzilla.gnome.org/show_bug.cgi?id=660531
+	epatch "${FILESDIR}/${PN}-3.2.0-implicit-function-declarations.patch"
+	eautoreconf
+	gnome2_src_prepare
 }
 
 src_install() {
