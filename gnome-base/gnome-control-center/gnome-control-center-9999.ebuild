@@ -64,7 +64,9 @@ COMMON_DEPEND="
 		media-libs/gstreamer:0.10
 		>=media-video/cheese-2.91.91.1 )
 	cups? ( >=net-print/cups-1.4[dbus] )
-	networkmanager? ( >=net-misc/networkmanager-0.8.997 )
+	networkmanager? (
+		>=gnome-extra/nm-applet-0.9.1.90
+		>=net-misc/networkmanager-0.8.997 )
 	socialweb? ( net-libs/libsocialweb )"
 # <gnome-color-manager-3.1.2 has file collisions with g-c-c-3.1.x
 RDEPEND="${COMMON_DEPEND}

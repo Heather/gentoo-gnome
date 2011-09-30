@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes" # gmodule is used, which uses dlopen
 
-inherit gnome2
+inherit eutils gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -64,7 +64,9 @@ COMMON_DEPEND="
 		media-libs/gstreamer:0.10
 		>=media-video/cheese-2.91.91.1 )
 	cups? ( >=net-print/cups-1.4[dbus] )
-	networkmanager? ( >=net-misc/networkmanager-0.8.997 )
+	networkmanager? (
+		>=gnome-extra/nm-applet-0.9.1.90
+		>=net-misc/networkmanager-0.8.997 )
 	socialweb? ( net-libs/libsocialweb )"
 # <gnome-color-manager-3.1.2 has file collisions with g-c-c-3.1.x
 RDEPEND="${COMMON_DEPEND}
@@ -101,4 +103,10 @@ pkg_setup() {
 		$(use_enable cups)
 		$(use_with socialweb libsocialweb)"
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
+}
+
+src_prepare() {
+	gnome2_src_prepare
+	# Useful upstream patches, will be in next release
+	epatch "${FILESDIR}/${PV}/"*.patch
 }
