@@ -5,6 +5,7 @@
 EAPI="3"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
+GNOME_TARBALL_SUFFIX="xz"
 PYTHON_DEPEND="python? 2:2.4"
 
 inherit autotools flag-o-matic gnome2 python
@@ -91,7 +92,8 @@ RDEPEND="${COMMON_DEPEND}
 	!<gnome-extra/evolution-exchange-2.32"
 
 # Need EAPI=4 support in python eclass
-#REQUIRED_USE="map? ( clutter )"
+#REQUIRED_USE="map? ( clutter )
+#	^^ ( connman networkmanager )"
 
 pkg_setup() {
 	ELTCONF="--reverse-deps"
@@ -135,6 +137,7 @@ pkg_setup() {
 	fi
 
 	# NM and connman support cannot coexist
+	# XXX: remove with EAPI 4
 	if use networkmanager && use connman ; then
 		ewarn "It is not possible to enable both ConnMan and NetworkManager, disabling connman..."
 		G2CONF="${G2CONF} --disable-connman"
@@ -144,23 +147,12 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# Use NSS/NSPR only if 'ssl' is enabled.
-	if use ssl ; then
-		sed -e 's|mozilla-nss|nss|' \
-			-e 's|mozilla-nspr|nspr|' \
-			-i configure.ac || die "sed 2 failed"
-	fi
+	gnome2_src_prepare
 
 	# Fix compilation flags crazyness
+	# Note: sed configure.ac if eautoreconf, conditional on [[ 9999 ]]
 	sed -e 's/\(AM_CPPFLAGS="\)$WARNING_FLAGS"/\1/' \
-		-i configure.ac || die "sed 1 failed"
-
-	if [[ ${PV} != 9999 ]]; then
-		intltoolize --force --copy --automake || die "intltoolize failed"
-		eautoreconf
-	fi
-
-	gnome2_src_prepare
+		-i configure || die "CPPFLAGS sed failed"
 }
 
 pkg_postinst() {
