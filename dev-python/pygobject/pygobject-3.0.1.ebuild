@@ -7,12 +7,8 @@ GCONF_DEBUG="no"
 GNOME_TARBALL_SUFFIX="xz"
 GNOME2_LA_PUNT="yes"
 SUPPORT_PYTHON_ABIS="1"
-# XXX: is this still true?
-# pygobject is partially incompatible with Python 3.
-# PYTHON_DEPEND="2:2.6 3:3.1"
-# RESTRICT_PYTHON_ABIS="2.4 2.5 3.0 *-jython"
-PYTHON_DEPEND="2:2.6"
-RESTRICT_PYTHON_ABIS="2.4 2.5 3.* *-jython"
+PYTHON_DEPEND="2:2.6 3:3.1"
+RESTRICT_PYTHON_ABIS="2.4 2.5 3.0 *-jython"
 
 # XXX: Is the alternatives stuff needed anymore?
 inherit alternatives autotools gnome2 python virtualx
