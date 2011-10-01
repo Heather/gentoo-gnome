@@ -33,10 +33,11 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.7:2
 	sendto? ( >=gnome-extra/nautilus-sendto-2.91 )
 "
 RDEPEND="${COMMON_DEPEND}
-	>=gnome-base/gnome-control-center-2.91
 	>=net-wireless/bluez-4.34
 	app-mobilephone/obexd
 	sys-fs/udev"
+# To break circular dependencies
+PDEPEND=">=gnome-base/gnome-control-center-2.91"
 DEPEND="${COMMON_DEPEND}
 	!!net-wireless/bluez-gnome
 	app-text/docbook-xml-dtd:4.1.2
