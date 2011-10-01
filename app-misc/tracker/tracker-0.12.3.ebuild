@@ -209,6 +209,12 @@ src_prepare() {
 	gnome2_src_prepare
 }
 
+src_configure() {
+	# Apparently, "firefox --version" on some systems will try write to
+	# /dev/dri/card0 and trigger the sandbox.
+	VIRTUALX_COMMAND="gnome2_src_configure" virtualmake
+}
+
 src_test() {
 	unset DBUS_SESSION_BUS_ADDRESS
 	Xemake check XDG_DATA_HOME="${T}" XDG_CONFIG_HOME="${T}" || die "tests failed"
