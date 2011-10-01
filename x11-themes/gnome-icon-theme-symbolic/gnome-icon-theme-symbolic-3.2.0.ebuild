@@ -15,8 +15,11 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-RDEPEND=">=x11-themes/hicolor-icon-theme-0.10"
-DEPEND="${RDEPEND}
+COMMON_DEPEND=">=x11-themes/hicolor-icon-theme-0.10"
+RDEPEND="${COMMON_DEPEND}
+	!<gnome-extra/gnome-power-manager-3.1.92"
+# keyboard-brightness icon file collision with old gnome-power-manager
+DEPEND="${COMMON_DEPEND}
 	>=x11-misc/icon-naming-utils-0.8.7
 	>=dev-util/pkgconfig-0.19"
 
