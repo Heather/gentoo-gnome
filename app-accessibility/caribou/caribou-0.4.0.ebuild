@@ -33,13 +33,13 @@ COMMON_DEPEND=">=dev-python/pygobject-2.90.3:3
 	x11-libs/libXtst"
 # gsettings-desktop-schemas is needed for the 'toolkit-accessibility' key
 # pyatspi-2.1.90 needed to run caribou if pygobject:3 is installed
-# librsvg[gtk3] needed to load svg images in css styles
+# librsvg needed to load svg images in css styles
 RDEPEND="${COMMON_DEPEND}
 	dev-python/dbus-python
 	>=dev-python/pyatspi-2.1.90
 	gnome-base/gconf[introspection]
 	gnome-base/gsettings-desktop-schemas
-	gnome-base/librsvg[gtk3]
+	gnome-base/librsvg:2
 	sys-apps/dbus"
 DEPEND="${COMMON_DEPEND}
 	dev-libs/libxslt
