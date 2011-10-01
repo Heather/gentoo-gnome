@@ -50,6 +50,7 @@ COMMON_DEPEND="
 RDEPEND="${COMMON_DEPEND}
 	>=media-libs/gst-plugins-bad-0.10.19
 	>=media-libs/gst-plugins-good-0.10.16
+	media-plugins/gst-plugins-jpeg
 	>=media-plugins/gst-plugins-ogg-0.10.20
 	>=media-plugins/gst-plugins-pango-0.10.20
 	>=media-plugins/gst-plugins-theora-0.10.20
