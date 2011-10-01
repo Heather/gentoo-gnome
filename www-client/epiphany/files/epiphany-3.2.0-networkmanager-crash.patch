@@ -1,0 +1,31 @@
+From 1cb7fb1109aecedd224d03fda202165adf3423a7 Mon Sep 17 00:00:00 2001
+From: Ionut Biru <ibiru@archlinux.org>
+Date: Mon, 26 Sep 2011 18:12:40 +0000
+Subject: Don't crash when network manager is not available
+
+https://bugzilla.gnome.org/show_bug.cgi?id=659103
+
+Signed-off-by: Ionut Biru <ibiru@archlinux.org>
+---
+diff --git a/src/ephy-shell.c b/src/ephy-shell.c
+index bf8eb18..c436da1 100644
+--- a/src/ephy-shell.c
++++ b/src/ephy-shell.c
+@@ -470,10 +470,11 @@ impl_get_embed_single (EphyEmbedShell *embed_shell)
+     priv->embed_single_connected = TRUE;
+ 
+     /* Now we need the net monitor   */
+-    ephy_shell_get_net_monitor (shell);
+-    ephy_shell_sync_network_status (priv->nm_proxy,
+-                                    ephy_network_manager_get_state (priv->nm_proxy),
+-                                    shell);
++    if (ephy_shell_get_net_monitor (shell)) {
++        ephy_shell_sync_network_status (priv->nm_proxy,
++                                        ephy_network_manager_get_state (priv->nm_proxy),
++                                        shell);
++    }
+   }
+ 
+   return embed_single;
+--
+cgit v0.9.0.2

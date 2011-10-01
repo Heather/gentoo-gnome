@@ -31,6 +31,9 @@ RDEPEND="
 	>=dev-libs/dbus-glib-0.72
 	>=app-crypt/gpgme-1.0.0
 	>=app-crypt/seahorse-2.91
+	|| (
+		<app-crypt/seahorse-3.1.4
+		>=x11-libs/libcryptui-2.91 )
 	>=gnome-base/gnome-keyring-2.25
 
 	|| (

@@ -2,10 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="3"
-PYTHON_DEPEND="2"
+EAPI="4"
 
-inherit autotools gnome.org libtool eutils flag-o-matic pax-utils python virtualx
+inherit autotools gnome.org libtool eutils flag-o-matic multilib pax-utils virtualx
+# Do not inherit python.eclass to avoid python runtime dependency; #377549
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -17,7 +17,7 @@ SRC_URI="${SRC_URI}
 
 LICENSE="LGPL-2"
 SLOT="2"
-IUSE="debug doc fam +introspection selinux +static-libs test xattr"
+IUSE="debug doc fam selinux +static-libs systemtap test xattr"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -25,26 +25,26 @@ else
 fi
 
 RDEPEND="virtual/libiconv
+	virtual/libffi
 	sys-libs/zlib
 	xattr? ( sys-apps/attr )
 	fam? ( virtual/fam )"
 DEPEND="${RDEPEND}
 	>=sys-devel/gettext-0.11
-	>=dev-util/gtk-doc-am-1.13
+	>=dev-util/gtk-doc-am-1.15
 	doc? (
 		>=dev-libs/libxslt-1.0
-		>=dev-util/gtk-doc-1.13
+		>=dev-util/gtk-doc-1.15
 		~app-text/docbook-xml-dtd-4.1.2 )
-	test? ( dev-util/pkgconfig
-		>=sys-apps/dbus-1.2.14 )"
-PDEPEND="introspection? ( dev-libs/gobject-introspection )
-	!<gnome-base/gvfs-1.6.4-r990" # Earlier versions do not work with glib
+	systemtap? ( >=dev-util/systemtap-1.3 )
+	test? (
+		=dev-lang/python-2*
+		>=dev-util/gdbus-codegen-2.30.0
+		>=sys-apps/dbus-1.2.14 )
+	!<dev-util/gtk-doc-1.15-r2"
+PDEPEND="!<gnome-base/gvfs-1.6.4-r990" # Earlier versions do not work with glib
 
 # XXX: Consider adding test? ( sys-devel/gdb ); assert-msg-test tries to use it
-
-pkg_setup() {
-	python_set_active_version 2
-}
 
 src_prepare() {
 	[[ ${PV} = 9999 ]] && gnome2-live_src_prepare
@@ -75,12 +75,52 @@ src_prepare() {
 
 	if ! use test; then
 		# don't waste time building tests
-		sed 's/^\(SUBDIRS =.*\)tests\(.*\)$/\1\2/' -i Makefile.am Makefile.in \
-			|| die "sed failed"
+		sed 's/^\(.*\SUBDIRS .*\=.*\)tests\(.*\)$/\1\2/' -i $(find . -name Makefile.am -o -name Makefile.in) || die
+	else
+		# Disable tests requiring dev-util/desktop-file-utils when not installed, bug #286629
+		if ! has_version dev-util/desktop-file-utils ; then
+			ewarn "Some tests will be skipped due dev-util/desktop-file-utils not being present on your system,"
+			ewarn "think on installing it to get these tests run."
+			sed -i -e "/appinfo\/associations/d" gio/tests/appinfo.c || die
+			sed -i -e "/desktop-app-info\/default/d" gio/tests/desktop-app-info.c || die
+			sed -i -e "/desktop-app-info\/fallback/d" gio/tests/desktop-app-info.c || die
+			sed -i -e "/desktop-app-info\/lastused/d" gio/tests/desktop-app-info.c || die
+		fi
+
+		# Disable flaky gdbus/connection/life-cycle test; bug #384853
+		sed -i -e "/connection\/life-cycle/d" gio/tests/gdbus-connection.c || die
+
+		# Disable tests requiring dbus-python and pygobject; bugs #349236, #377549, #384853
+		if ! has_version dev-python/dbus-python || ! has_version 'dev-python/pygobject:2' ; then
+			ewarn "Some tests will be skipped due to dev-python/dbus-python or dev-python/pygobject:2"
+			ewarn "not being present on your system, think on installing them to get these tests run."
+			sed -i -e "/connection\/filter/d" gio/tests/gdbus-connection.c || die
+			sed -i -e "/connection\/large_message/d" gio/tests/gdbus-connection-slow.c || die
+			sed -i -e "/gdbus\/proxy/d" gio/tests/gdbus-proxy.c || die
+			sed -i -e "/gdbus\/proxy-well-known-name/d" gio/tests/gdbus-proxy-well-known-name.c || die
+			sed -i -e "/gdbus\/introspection-parser/d" gio/tests/gdbus-introspection.c || die
+			sed -i -e "/g_test_add_func/d" gio/tests/gdbus-threading.c || die
+			sed -i -e "/gdbus\/method-calls-in-thread/d" gio/tests/gdbus-threading.c || die
+			# needed to prevent gdbus-threading from asserting
+			ln -sfn $(type -P true) gio/tests/gdbus-testserver.py
+		else
+			# use python2 for the test server
+			sed -i -e 's:/usr/bin/env python$:/usr/bin/env python2:' gio/tests/gdbus-testserver.py || die
+		fi
 	fi
+
+	# gdbus-codegen is a separate package
+	epatch "${FILESDIR}/${PN}-2.29.18-external-gdbus-codegen.patch"
+
+	# disable pyc compiling
+	ln -sfn $(type -P true) py-compile
+
+	# python2 needed for gtester-report
+	sed -e 's:/usr/bin/env python$:/usr/bin/env python2:' -i glib/gtester-report || die
 
 	# Needed for the punt-python-check patch, disabling timeout test
 	# Also needed to prevent croscompile failures, see bug #267603
+	# Also needed for the no-gdbus-codegen patch
 	AT_M4DIR="${WORKDIR}" eautoreconf
 
 	[[ ${CHOST} == *-freebsd* ]] && elibtoolize
@@ -89,6 +129,12 @@ src_prepare() {
 }
 
 src_configure() {
+	# Avoid circular depend with dev-util/pkgconfig
+	if ! has_version dev-util/pkgconfig; then
+		export DBUS1_CFLAGS="-I/usr/include/dbus-1.0 -I/usr/$(get_libdir)/dbus-1.0/include"
+		export DBUS1_LIBS="-ldbus-1"
+	fi
+
 	local myconf
 
 	# Building with --disable-debug highly unrecommended.  It will build glib in
@@ -105,11 +151,11 @@ src_configure() {
 		$(use_enable fam) \
 		$(use_enable selinux) \
 		$(use_enable static-libs static) \
+		$(use_enable systemtap dtrace) \
+		$(use_enable systemtap systemtap) \
 		--enable-regex \
 		--with-pcre=internal \
-		--with-threads=posix \
-		--disable-dtrace \
-		--disable-systemtap
+		--with-threads=posix
 }
 
 src_install() {
@@ -131,6 +177,10 @@ src_install() {
 		newins "${ED}/etc/bash_completion.d/${f}-bash-completion.sh" ${f} || die
 	done
 	rm -rf "${ED}/etc"
+
+	# Completely useless with or without USE static-libs, people need to use
+	# pkg-config
+	find "${ED}" -name '*.la' -exec rm -f {} +
 }
 
 src_test() {
@@ -157,14 +207,12 @@ src_test() {
 
 pkg_preinst() {
 	# Only give the introspection message if:
-	# * The user has it enabled
+	# * The user has gobject-introspection
 	# * Has glib already installed
 	# * Previous version was different from new version
-	if use introspection && has_version "${CATEGORY}/${PN}"; then
-		if ! has_version "=${CATEGORY}/${PF}"; then
-			ewarn "You must rebuild gobject-introspection so that the installed"
-			ewarn "typelibs and girs are regenerated for the new APIs in glib"
-		fi
+	if has_version "dev-libs/gobject-introspection" && ! has_version "=${CATEGORY}/${PF}"; then
+		ewarn "You must rebuild gobject-introspection so that the installed"
+		ewarn "typelibs and girs are regenerated for the new APIs in glib"
 	fi
 }
 
@@ -173,5 +221,13 @@ pkg_postinst() {
 	if has_version dev-libs/dbus-glib; then
 		ewarn "If you experience a breakage after updating dev-libs/glib try"
 		ewarn "rebuilding dev-libs/dbus-glib"
+	fi
+
+	if has_version '<x11-libs/gtk+-3.0.12:3'; then
+		# To have a clear upgrade path for gtk+-3.0.x users, have to resort to
+		# a warning instead of a blocker
+		ewarn
+		ewarn "Using <gtk+-3.0.12:3 with ${P} results in frequent crashes."
+		ewarn "You should upgrade to a newer version of gtk+:3 immediately."
 	fi
 }

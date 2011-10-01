@@ -1,0 +1,25 @@
+From e25d52d05c2bcd519b55bb3569fa6d58ee820a52 Mon Sep 17 00:00:00 2001
+From: Rodrigo Moya <rodrigo@gnome-db.org>
+Date: Wed, 28 Sep 2011 13:33:06 +0200
+Subject: [PATCH 09/14] shell: Make sure we gtk_widget_show the search view
+
+---
+ shell/gnome-control-center.c |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/shell/gnome-control-center.c b/shell/gnome-control-center.c
+index af8387c..618d31a 100644
+--- a/shell/gnome-control-center.c
++++ b/shell/gnome-control-center.c
+@@ -612,6 +612,8 @@ setup_search (GnomeControlCenter *shell)
+ 
+   g_signal_connect (widget, "icon-release", G_CALLBACK (search_entry_clear_cb),
+                     priv);
++
++  gtk_widget_show (priv->search_view);
+ }
+ 
+ static void
+-- 
+1.7.6.1
+

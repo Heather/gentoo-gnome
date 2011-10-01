@@ -2,11 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-settings-daemon/gnome-settings-daemon-2.32.1.ebuild,v 1.1 2010/12/04 16:50:12 pacho Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit eutils gnome2
+inherit eutils gnome2 virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -24,36 +24,34 @@ fi
 IUSE="+cups debug packagekit policykit short-touchpad-timeout smartcard +udev"
 
 # Latest gsettings-desktop-schemas is needed due to commit e8d1de92
-# <gnome-color-manager-3.1.1 has file collisions with g-s-d-3.1.x
 COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
-	>=dev-libs/glib-2.26.0:2
+	>=dev-libs/glib-2.29.14:2
 	>=x11-libs/gtk+-2.99.3:3
 	>=gnome-base/gconf-2.6.1:2
 	>=gnome-base/libgnomekbd-2.91.1
-	>=gnome-base/gnome-desktop-3.1.2:3
+	>=gnome-base/gnome-desktop-3.1.5:3
 	>=gnome-base/gsettings-desktop-schemas-0.1.7.1
 	media-fonts/cantarell
 	media-libs/fontconfig
 	>=media-libs/lcms-2.2:2
+	media-libs/libcanberra[gtk3]
+	>=media-sound/pulseaudio-0.9.16
+	>=sys-power/upower-0.9.1
 	>=x11-libs/libnotify-0.7.3
+	x11-libs/libX11
 	x11-libs/libXi
 	x11-libs/libXext
 	x11-libs/libXfixes
 	x11-libs/libXxf86misc
 	>=x11-libs/libxklavier-5.0
-	>=x11-misc/colord-0.1.9
+	>=x11-misc/colord-0.1.12
 	>=media-sound/pulseaudio-0.9.16
-	media-libs/libcanberra[gtk3]
-
-	!<gnome-extra/gnome-color-manager-3.1.1
 
 	cups? ( >=net-print/cups-1.4[dbus] )
 	packagekit? (
-		dev-libs/glib:2
 		|| ( sys-fs/udev[gudev]
 			sys-fs/udev[extras] )
-		>=app-admin/packagekit-base-0.6.4
-		>=sys-power/upower-0.9.1 )
+		>=app-admin/packagekit-base-0.6.12 )
 	policykit? (
 		>=sys-auth/polkit-0.97
 		>=sys-apps/dbus-1.1.2 )
@@ -61,12 +59,17 @@ COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	udev? ( || ( sys-fs/udev[gudev]
 		sys-fs/udev[extras] ) )"
 # Themes needed by g-s-d, gnome-shell, gtk+:3 apps to work properly
+# <gnome-color-manager-3.1.1 has file collisions with g-s-d-3.1.x
+# <gnome-power-manager-3.1.3 has file collisions with g-s-d-3.1.x
 RDEPEND="${COMMON_DEPEND}
 	gnome-base/dconf
 	>=x11-themes/gnome-themes-standard-2.91
 	>=x11-themes/gnome-icon-theme-2.91
 	>=x11-themes/gnome-icon-theme-symbolic-2.91
-	!<gnome-base/gnome-control-center-2.22"
+	!<gnome-base/gnome-control-center-2.22
+	!!<gnome-extra/gnome-color-manager-3.1.1
+	!!<gnome-extra/gnome-power-manager-3.1.3"
+# xproto-7.0.15 needed for power plugin
 DEPEND="${COMMON_DEPEND}
 	cups? ( sys-apps/sed )
 	sys-devel/gettext
@@ -75,7 +78,7 @@ DEPEND="${COMMON_DEPEND}
 	x11-proto/inputproto
 	x11-proto/kbproto
 	x11-proto/xf86miscproto
-	x11-proto/xproto"
+	>=x11-proto/xproto-7.0.15"
 
 pkg_setup() {
 	# README is empty
@@ -84,7 +87,7 @@ pkg_setup() {
 		--disable-static
 		--disable-schemas-compile
 		--enable-gconf-bridge
-		--with-pnpids=${EROOT}usr/share/libgnome-desktop-3.0/pnp.ids
+		--with-pnpids=${EPREFIX}/usr/share/libgnome-desktop-3.0/pnp.ids
 		$(use_enable cups)
 		$(use_enable debug)
 		$(use_enable debug more-warnings)
@@ -103,6 +106,10 @@ src_prepare() {
 		epatch "${FILESDIR}/${PN}-3.0.2-short-touchpad-timeout.patch"
 
 	gnome2_src_prepare
+}
+
+src_test() {
+	Xemake check
 }
 
 src_install() {

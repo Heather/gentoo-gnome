@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -29,7 +29,7 @@ COMMON_DEPEND=">=x11-libs/pango-1.2[X,introspection?]
 	>=x11-libs/gtk+-2.91.7:3[introspection?]
 	>=gnome-base/gconf-2:2
 	>=dev-libs/glib-2.14:2
-	>=media-libs/clutter-1.2:1.0
+	>=media-libs/clutter-1.7.5:1.0
 	>=media-libs/libcanberra-0.26[gtk3]
 	>=x11-libs/startup-notification-0.7
 	>=x11-libs/libXcomposite-0.2
@@ -65,6 +65,7 @@ pkg_setup() {
 	DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README *.txt doc/*.txt"
 	G2CONF="${G2CONF}
 		--disable-static
+		--disable-maintainer-mode
 		--enable-gconf
 		--enable-shape
 		--enable-sm

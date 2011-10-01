@@ -1,1 +1,3 @@
+dev-libs/libgee -introspection
 gnome-extra/gnome-games -clutter
+media-libs/clutter-gtk -introspection

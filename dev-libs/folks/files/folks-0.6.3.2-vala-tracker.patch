@@ -1,0 +1,13 @@
+diff --git a/configure.ac b/configure.ac
+index f9abdc5..8734fd0 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -234,7 +234,7 @@ if test "x$enable_vala" = "xyes" ; then
+                              gee-1.0])
+ 
+         if test x$enable_tracker_backend = xyes; then
+-          VALA_CHECK_PACKAGES([tracker-sparql-0.10])
++          VALA_CHECK_PACKAGES([tracker-sparql-0.12])
+         fi
+ 
+         if test x$enable_eds_backend = xyes; then

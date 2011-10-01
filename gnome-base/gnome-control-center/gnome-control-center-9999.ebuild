@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-control-center/gnome-control-center-2.32.1.ebuild,v 1.1 2010/12/04 00:46:57 pacho Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes" # gmodule is used, which uses dlopen
 
@@ -27,28 +27,32 @@ fi
 # XXX: NetworkManager-0.9 support is automagic, make hard-dep once it's released
 #
 # gnome-session-2.91.6-r1 is needed so that 10-user-dirs-update is run at login
-# Latest gsettings-desktop-schemas is needed for commit 73f9bffb
+# Latest gsettings-desktop-schemas is neededfor commit 73f9bffb
+# gnome-settings-daemon-3.1.4 is needed for power panel (commit 4f08a325)
 COMMON_DEPEND="
-	>=dev-libs/glib-2.25.11:2
+	>=dev-libs/glib-2.29.14:2
 	>=x11-libs/gdk-pixbuf-2.23.0:2
-	>=x11-libs/gtk+-3.0.2:3
-	>=gnome-base/gsettings-desktop-schemas-2.91.92
+	>=x11-libs/gtk+-3.1.19:3
+	>=gnome-base/gsettings-desktop-schemas-3.0.2
 	>=gnome-base/gconf-2.0:2
 	>=dev-libs/dbus-glib-0.73
-	>=gnome-base/gnome-desktop-2.91.5:3
-	>=gnome-base/gnome-settings-daemon-2.91.94
+	>=gnome-base/gnome-desktop-3.1.0:3
+	>=gnome-base/gnome-settings-daemon-3.1.4
 	>=gnome-base/libgnomekbd-2.91.91
 
 	app-text/iso-codes
 	dev-libs/libxml2:2
-	gnome-base/gnome-menus
+	gnome-base/gnome-menus:3
 	gnome-base/libgtop:2
 	media-libs/fontconfig
+	net-libs/gnome-online-accounts
 
 	>=media-libs/libcanberra-0.13[gtk3]
 	>=media-sound/pulseaudio-0.9.16[glib]
 	>=sys-auth/polkit-0.97
 	>=sys-power/upower-0.9.1
+	>=x11-libs/libnotify-0.7.3
+	>=x11-misc/colord-0.1.8
 
 	x11-apps/xmodmap
 	x11-libs/libX11
@@ -60,12 +64,16 @@ COMMON_DEPEND="
 		media-libs/gstreamer:0.10
 		>=media-video/cheese-2.91.91.1 )
 	cups? ( >=net-print/cups-1.4[dbus] )
-	networkmanager? ( >=net-misc/networkmanager-0.8.997 )
+	networkmanager? (
+		>=gnome-extra/nm-applet-0.9.1.90
+		>=net-misc/networkmanager-0.8.997 )
 	socialweb? ( net-libs/libsocialweb )"
+# <gnome-color-manager-3.1.2 has file collisions with g-c-c-3.1.x
 RDEPEND="${COMMON_DEPEND}
 	sys-apps/accountsservice
 	cups? ( net-print/cups-pk-helper )
 
+	!<gnome-extra/gnome-color-manager-3.1.2
 	!gnome-extra/gnome-media[pulseaudio]
 	!<gnome-extra/gnome-media-2.32.0-r300
 	!<gnome-base/gdm-2.91.94"

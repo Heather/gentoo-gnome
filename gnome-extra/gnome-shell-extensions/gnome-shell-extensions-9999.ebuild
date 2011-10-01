@@ -4,12 +4,11 @@
 
 EAPI="4"
 GCONF_DEBUG="no"
-GNOME_TARBALL_SUFFIX="bz2"
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2
 if [[ ${PV} = 9999 ]]; then
-	EGIT_BRANCH="gnome-3-0"
+#	EGIT_BRANCH="gnome-3-0"
 	inherit gnome2-live
 fi
 
@@ -27,11 +26,13 @@ fi
 
 COMMON_DEPEND="
 	>=dev-libs/glib-2.26
-	>=gnome-base/gnome-desktop-2.91.6:3
+	>=gnome-base/gnome-desktop-2.91.6:3[introspection]
+	>=gnome-base/libgtop-2.28.3[introspection]
 	app-admin/eselect-gnome-shell-extensions"
 RDEPEND="${COMMON_DEPEND}
-	gnome-base/gnome-desktop:3[introspection]
-	=gnome-base/gnome-shell-3.0*
+	>=dev-libs/gjs-1.29
+	dev-libs/gobject-introspection
+	>=gnome-base/gnome-shell-3.1.91
 	media-libs/clutter:1.0[introspection]
 	net-libs/telepathy-glib[introspection]
 	x11-libs/gtk+:3[introspection]
@@ -54,8 +55,8 @@ src_prepare() {
 
 	# xrandr-indicator crashes gnome-shell with <gjs-0.7.15;
 	# see gnome bug 649077. For simplicity, just disable it for gnome-3.0.
-	sed -e 's:\(ALL_EXTENSIONS=.*\)xrandr-indicator:\1:' \
-		-i configure || die
+	# sed -e 's:\(ALL_EXTENSIONS=.*\)xrandr-indicator:\1:' \
+	#	-i configure || die
 }
 
 src_install() {
@@ -79,7 +80,7 @@ pkg_postinst() {
 	elog "Installed extensions installed are initially disabled by default."
 	elog "To change the system default and enable some extensions, you can use"
 	elog "# eselect gnome-shell-extensions"
-	elog "Alternatively, you can use the org.gnome.shell disabled-extensions"
+	elog "Alternatively, you can use the org.gnome.shell enabled-extensions"
 	elog "gsettings key to change the disabled extension list per-user."
 	elog
 }

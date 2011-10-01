@@ -22,7 +22,7 @@ IUSE=""
 common_depends="
 	>=dev-python/pygobject-2.15.1:2
 	>=dev-python/pygtk-2.13:2
-	>=gnome-base/gnome-menus-2.91.6[python]"
+	>=gnome-base/gnome-menus-2.91.6:0[python]"
 
 RDEPEND="${common_depends}
 	>=gnome-base/gnome-panel-2.16"
