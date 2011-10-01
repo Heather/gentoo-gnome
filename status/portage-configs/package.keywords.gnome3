@@ -16,6 +16,7 @@ app-admin/packagekit-base
 app-admin/packagekit-gtk
 app-arch/file-roller
 app-cdr/brasero
+app-crypt/p11-kit
 app-crypt/seahorse
 app-crypt/seahorse-plugins
 app-misc/tracker
@@ -34,7 +35,6 @@ dev-libs/libgdata
 dev-libs/libgweather
 dev-libs/libpeas
 dev-libs/libunique:3
-dev-libs/p11-kit
 dev-perl/Text-CSV
 dev-python/pyatspi
 dev-python/pycairo

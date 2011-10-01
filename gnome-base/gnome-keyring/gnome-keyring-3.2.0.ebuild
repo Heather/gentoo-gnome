@@ -26,10 +26,10 @@ fi
 # USE=valgrind is probably not a good idea for the tree
 RDEPEND=">=dev-libs/glib-2.25:2
 	>=x11-libs/gtk+-2.90.0:3
+	>=app-crypt/p11-kit-0.6
 	app-misc/ca-certificates
 	>=dev-libs/libgcrypt-1.2.2
 	>=dev-libs/libtasn1-1
-	>=dev-libs/p11-kit-0.6
 	>=sys-apps/dbus-1.0
 	caps? ( sys-libs/libcap-ng )
 	pam? ( virtual/pam )
