@@ -8,6 +8,9 @@ gnome-base/gnome-core-apps
 gnome-base/gnome-core-libs
 
 # Core
+app-accessibility/at-spi2-atk
+app-accessibility/at-spi2-core
+app-accessibility/caribou
 app-accessibility/orca
 app-admin/packagekit-base
 app-admin/packagekit-gtk
@@ -15,6 +18,7 @@ app-arch/file-roller
 app-cdr/brasero
 app-crypt/seahorse
 app-crypt/seahorse-plugins
+app-misc/tracker
 app-pda/libimobiledevice
 app-text/evince
 app-text/poppler
@@ -30,14 +34,15 @@ dev-libs/libgdata
 dev-libs/libgweather
 dev-libs/libpeas
 dev-libs/libunique:3
+dev-libs/p11-kit
 dev-perl/Text-CSV
-dev-python/pygobject
+dev-python/pyatspi
+dev-python/pygobject:2
+dev-python/pygobject:3
 dev-util/anjuta
 dev-util/devhelp
 dev-util/glade
 dev-util/gnome-devel-docs
-dev-util/gtk-doc
-dev-util/gtk-doc-am
 gnome-base/dconf
 gnome-base/gconf
 gnome-base/gdm
@@ -46,8 +51,8 @@ gnome-base/gnome-desktop:2
 gnome-base/gnome-desktop:3
 gnome-base/gnome-keyring
 gnome-base/libgnome-keyring
-gnome-base/gnome-menus
-gnome-base/gnome-panel
+gnome-base/gnome-menus:0
+gnome-base/gnome-menus:3
 gnome-base/gnome-session
 gnome-base/gnome-settings-daemon
 gnome-base/gsettings-desktop-schemas
@@ -60,6 +65,8 @@ gnome-extra/evolution-exchange
 gnome-extra/evolution-mapi
 gnome-extra/gcalctool
 gnome-extra/gconf-editor
+gnome-extra/gnome-contacts
+gnome-extra/gnome-documents
 gnome-extra/gnome-media
 gnome-extra/gnome-packagekit
 gnome-extra/gnome-power-manager
@@ -80,9 +87,11 @@ media-gfx/eog
 net-analyzer/gnome-nettool
 net-dns/avahi
 net-libs/glib-networking
+net-libs/gnome-online-accounts
 net-libs/gtk-vnc
 net-libs/libepc
 net-libs/libmapi
+net-libs/liboauth
 net-libs/libproxy
 net-libs/libsoup
 net-libs/libsoup-gnome
@@ -107,6 +116,13 @@ x11-plugins/pidgin-libnotify
 x11-terms/gnome-terminal
 x11-wm/mutter
 
+# Development utilities
+app-text/yelp-tools
+dev-util/gdbus-codegen
+dev-util/itstool
+dev-util/gtk-doc
+dev-util/gtk-doc-am
+
 # Themes
 x11-themes/gnome-backgrounds
 x11-themes/gnome-icon-theme
@@ -114,6 +130,7 @@ x11-themes/gnome-icon-theme-symbolic
 x11-themes/gnome-icon-theme-extras
 x11-themes/gnome-themes-standard
 x11-themes/gtk-engines-clearlooks
+x11-themes/gtk-engines-unico
 
 # CPP bindings
 dev-cpp/libxmlpp
@@ -130,12 +147,14 @@ dev-cpp/pangomm
 
 # Clutter
 dev-libs/json-glib
+media-libs/cogl:1.0
 media-libs/clutter:1.0
 media-libs/clutter-gtk:1.0
 media-libs/clutter-gst:1.0
 
 # Colord
 ~media-libs/lcms-2.2:2
+media-libs/mash
 x11-misc/colord
 gnome-extra/gnome-color-manager
 
@@ -157,12 +176,14 @@ www-client/epiphany-extensions
 # Empathy
 media-libs/libchamplain:0.8
 media-libs/libchamplain:0.10
+media-libs/libchamplain:0.12
 media-libs/memphis
 net-im/telepathy-logger
 net-im/telepathy-mission-control
 net-libs/farsight2
 net-libs/libnice
 net-libs/telepathy-farsight
+net-libs/telepathy-glib
 net-voip/telepathy-gabble
 app-misc/geoclue
 net-im/empathy
@@ -182,13 +203,21 @@ net-wireless/wimax
 # Nautilus
 ~media-libs/libexif-0.6.20
 gnome-base/nautilus
+gnome-extra/sushi
 
 # Rhythmbox, Sound Juicer, Totem
+dev-libs/gmime:2.4
+dev-libs/gmime:2.6
+dev-libs/totem-pl-parser
 media-libs/libgnome-media-profiles:3
 media-libs/libdmapsharing:3.0
 media-sound/rhythmbox
 >=media-sound/sound-juicer-2.99
 >=media-video/totem-3.0
+
+# Tomboy & clones
+app-misc/gnote
+app-misc/tomboy
 
 # GNOME Shell
 =net-libs/xulrunner-2.0*
@@ -200,9 +229,12 @@ gnome-base/gnome-shell
 =www-client/firefox-4.0*
 
 # GNOME Fallback
+gnome-base/gnome-applets
+gnome-base/gnome-panel
 >=x11-wm/metacity-2.30.3-r1
 
 # GNOME Games
+games-board/aisleriot
 gnome-base/gnome-js-common
 dev-libs/seed
 gnome-extra/gnome-games
