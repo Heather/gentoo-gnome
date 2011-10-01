@@ -18,7 +18,9 @@ HOMEPAGE="http://www.rhythmbox.org/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="cdr clutter daap dbus doc gnome-keyring html ipod +lastfm libnotify lirc musicbrainz mtp nsplugin python test udev upnp vala webkit"
+IUSE="cdr clutter daap dbus doc gnome-keyring html ipod +lastfm libnotify lirc
+musicbrainz mtp nsplugin python test udev upnp webkit"
+# vala
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -27,25 +29,25 @@ fi
 
 # FIXME: double check what to do with fm-radio plugin
 # FIXME: Zeitgeist python plugin
-# NOTE:: Rhythmbox Uses dbus-glib, gdbus, and dbus-python right now
+# NOTE: Rhythmbox uses both gdbus and dbus-python right now
+# NOTE: gst-python is still needed because gstreamer introspection is incomplete
 COMMON_DEPEND=">=dev-libs/glib-2.26.0:2
 	dev-libs/libxml2:2
 	>=x11-libs/gtk+-2.91.4:3[introspection]
-	>=x11-libs/gdk-pixbuf-2.18.0
-	>=dev-libs/dbus-glib-0.71
+	>=x11-libs/gdk-pixbuf-2.18.0:2
 	>=dev-libs/gobject-introspection-0.10.0
 	>=dev-libs/libpeas-0.7.3[gtk,python?]
 	>=dev-libs/totem-pl-parser-2.32.1
-	>=media-libs/libgnome-media-profiles-2.91.0:3
 	>=net-libs/libsoup-2.26:2.4
 	>=net-libs/libsoup-gnome-2.26:2.4
 	>=media-libs/gst-plugins-base-0.10.32:0.10
 	>=media-libs/gstreamer-0.10.32:0.10[introspection]
 
 	clutter? (
-		media-libs/clutter
-		media-libs/clutter-gst
-		media-libs/clutter-gtk )
+		>=media-libs/clutter-1.2:1.0
+		>=media-libs/clutter-gst-1.0:1.0
+		>=media-libs/clutter-gtk-1.0:1.0
+		>=x11-libs/mx-1.0.1:1.0 )
 	cdr? ( >=app-cdr/brasero-2.91.90 )
 	daap? (
 		>=net-libs/libdmapsharing-2.9.11:3.0
@@ -55,8 +57,10 @@ COMMON_DEPEND=">=dev-libs/glib-2.26.0:2
 	lastfm? ( dev-libs/json-glib )
 	libnotify? ( >=x11-libs/libnotify-0.7.0 )
 	lirc? ( app-misc/lirc )
-	musicbrainz? ( media-libs/musicbrainz:3 )
-	python? ( >=dev-python/pygobject-2.28:2[introspection] )
+	musicbrainz? (
+		media-libs/musicbrainz:3
+		gnome-base/gconf:2 )
+	python? ( >=dev-python/pygobject-2.90.2:3[introspection] )
 	udev? (
 		ipod? ( >=media-libs/libgpod-0.7.92[udev] )
 		mtp? ( >=media-libs/libmtp-0.3 )
@@ -84,10 +88,8 @@ RDEPEND="${COMMON_DEPEND}
 		gnome-keyring? ( dev-python/gnome-keyring-python )
 		webkit? (
 			dev-python/mako
-			>=net-libs/webkit-gtk-1.3.9:3[introspection] )
-	)
-
-	nsplugin? ( net-libs/xulrunner )"
+			>=net-libs/webkit-gtk-1.3.9:3[introspection] ) )
+"
 # gtk-doc-am needed for eautoreconf
 #	dev-util/gtk-doc-am
 DEPEND="${COMMON_DEPEND}
@@ -96,9 +98,8 @@ DEPEND="${COMMON_DEPEND}
 	app-text/scrollkeeper
 	>=app-text/gnome-doc-utils-0.9.1
 	doc? ( >=dev-util/gtk-doc-1.4 )
-	test? ( dev-libs/check )
-	vala? ( >=dev-lang/vala-0.9.4:0.10 )
-"
+	test? ( dev-libs/check )"
+#	vala? ( >=dev-lang/vala-0.9.4:0.12 )
 DOCS="AUTHORS ChangeLog DOCUMENTERS INTERNALS \
 	  MAINTAINERS MAINTAINERS.old NEWS README THANKS"
 
@@ -145,14 +146,17 @@ pkg_setup() {
 		ewarn "The magnatune plugin requires USE='python gnome-keyring'"
 	fi
 
+	# --enable-vala just installs the sample vala plugin, and the configure
+	# checks are broken, so don't enable it
 	G2CONF="${G2CONF}
 		MOZILLA_PLUGINDIR=/usr/$(get_libdir)/nsbrowser/plugins
-		VALAC=$(type -P valac-0.10)
+		VALAC=$(type -P valac-0.12)
 		--enable-mmkeys
-		--disable-maintainer-mode
+		--disable-more-warnings
 		--disable-scrollkeeper
 		--disable-schemas-compile
 		--disable-static
+		--disable-vala
 		--without-hal
 		$(use_enable clutter visualizer)
 		$(use_enable daap)
@@ -163,7 +167,6 @@ pkg_setup() {
 		$(use_enable nsplugin browser-plugin)
 		$(use_enable python)
 		$(use_enable upnp grilo)
-		$(use_enable vala)
 		$(use_with cdr brasero)
 		$(use_with daap mdns avahi)
 		$(use_with gnome-keyring)

@@ -216,6 +216,7 @@ dev-libs/gmime:2.6
 dev-libs/totem-pl-parser
 media-libs/libgnome-media-profiles:3
 media-libs/libdmapsharing:3.0
+net-misc/npapi-sdk
 media-sound/rhythmbox
 >=media-sound/sound-juicer-2.99
 >=media-video/totem-3.0

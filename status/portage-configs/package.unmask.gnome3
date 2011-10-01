@@ -57,6 +57,7 @@
 >=gnome-extra/gnome-games-3.0
 >=gnome-extra/gnome-games-extra-data-3.0
 >=gnome-extra/gnome-media-2.32.0-r300
+>=gnome-extra/gnome-packagekit-3.0
 >=gnome-extra/gnome-power-manager-3.0
 >=gnome-extra/gnome-screensaver-3.0
 >=gnome-extra/gnome-system-monitor-3.0
@@ -69,6 +70,7 @@
 >=gnome-extra/zenity-3.0
 >=mail-client/evolution-3.0
 >=media-gfx/eog-3.0
+>=media-sound/rhythmbox-2.90
 >=media-sound/sound-juicer-2.99
 >=media-video/cheese-3.0
 >=media-video/totem-3.0
