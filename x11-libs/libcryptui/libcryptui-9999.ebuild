@@ -47,7 +47,7 @@ DEPEND="${COMMON_DEPEND}
 "
 # Before 3.1.4, libcryptui was part of seahorse
 RDEPEND="${COMMON_DEPEND}
-	!!<app-crypt/seahorse-3.1.4
+	!<app-crypt/seahorse-3.1.4
 "
 
 pkg_setup() {

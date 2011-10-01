@@ -37,7 +37,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.26.0:2
 	sound? ( >=media-libs/libcanberra-0.26[gtk3] )"
 # aisleriot was split off from gnome-games
 RDEPEND="${COMMON_DEPEND}
-	!!<gnome-extra/gnome-games-3.1.1[aisleriot]"
+	!<gnome-extra/gnome-games-3.1.1[aisleriot]"
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.40.4
 	>=dev-util/pkgconfig-0.15

@@ -67,8 +67,8 @@ RDEPEND="${COMMON_DEPEND}
 	>=x11-themes/gnome-icon-theme-2.91
 	>=x11-themes/gnome-icon-theme-symbolic-2.91
 	!<gnome-base/gnome-control-center-2.22
-	!!<gnome-extra/gnome-color-manager-3.1.1
-	!!<gnome-extra/gnome-power-manager-3.1.3"
+	!<gnome-extra/gnome-color-manager-3.1.1
+	!<gnome-extra/gnome-power-manager-3.1.3"
 # xproto-7.0.15 needed for power plugin
 DEPEND="${COMMON_DEPEND}
 	cups? ( sys-apps/sed )

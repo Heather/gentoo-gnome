@@ -23,7 +23,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.16.3
 	gnome? ( gnome-base/gconf:2 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.0 )"
 RDEPEND="${COMMON_DEPEND}
-	!!<gnome-extra/gucharmap-3:0"
+	!<gnome-extra/gucharmap-3:0"
 DEPEND="${RDEPEND}
 	app-text/scrollkeeper
 	>=dev-util/pkgconfig-0.9

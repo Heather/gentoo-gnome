@@ -31,7 +31,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.29.15:2
 		x11-libs/gtk+:3[introspection] )"
 # Older versions of slot 0 install the menu editor and the desktop directories
 RDEPEND="${COMMON_DEPEND}
-	!!<gnome-base/gnome-menus-3.0.1-r50:0"
+	!<gnome-base/gnome-menus-3.0.1-r50:0"
 DEPEND="${COMMON_DEPEND}
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.9
