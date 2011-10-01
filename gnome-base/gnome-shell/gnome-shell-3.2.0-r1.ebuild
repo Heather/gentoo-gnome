@@ -8,7 +8,7 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2:2.5"
 
-inherit gnome2 python
+inherit eutils gnome2 python
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -113,9 +113,20 @@ pkg_setup() {
 		BROWSER_PLUGIN_DIR=${EPREFIX}/usr/$(get_libdir)/nsbrowser/plugins"
 }
 
+src_prepare() {
+	gnome2_src_prepare
+	# Fix recording; will be in next release
+	epatch "${FILESDIR}/${P}-recorder-coglhandle.patch"
+	# Fix multimonitor behavior; will be in next release
+	epatch "${FILESDIR}/${P}-boxpointer-multimonitor.patch"
+	# Fix different icons being cached identically; will be in next release
+	epatch "${FILESDIR}/${P}-st-texture-cache-non-serialized-icons.patch"
+}
+
 src_install() {
 	gnome2_src_install
 	python_convert_shebangs 2 "${D}"/usr/bin/gnome-shell-extension-tool
+
 }
 
 pkg_postinst() {
