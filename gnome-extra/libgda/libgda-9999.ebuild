@@ -110,6 +110,8 @@ pkg_setup() {
 	# Not in portage
 	G2CONF="${G2CONF}
 		--disable-default-binary"
+
+	export XDG_DATA_HOME="${T}/.local"
 }
 
 src_prepare() {
