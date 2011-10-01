@@ -19,7 +19,7 @@ IUSE="doc +introspection"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~x86"
 fi
 
 # pango used in goaeditablelabel

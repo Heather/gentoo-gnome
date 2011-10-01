@@ -20,7 +20,7 @@ IUSE=""
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~x86"
 fi
 
 COMMON_DEPEND="
