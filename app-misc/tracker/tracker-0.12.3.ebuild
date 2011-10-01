@@ -17,7 +17,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 # USE="doc" is managed by eclass.
-IUSE="applet doc eds exif firefox flac flickr gif gnome-keyring gsf gstreamer gtk iptc +jpeg laptop mp3 nautilus networkmanager pdf playlist qt4 rss test thunderbird +tiff upnp +vorbis xine +xml xmp" # strigi
+IUSE="applet doc eds elibc_glibc exif firefox flac flickr gif gnome-keyring gsf gstreamer gtk iptc +jpeg laptop mp3 nautilus networkmanager pdf playlist qt4 rss test thunderbird +tiff upnp +vorbis xine +xml xmp" # strigi
 
 # Test suite highly disfunctional, loops forever
 # putting aside for now
@@ -26,6 +26,7 @@ RESTRICT="test"
 # vala is built with debug by default (see VALAFLAGS)
 # FIXME: what about firefox-bin and thunderbird-bin?
 # According to NEWS, introspection is non-optional
+# glibc-2.12 needed for SCHED_IDLE (see bug #385003)
 RDEPEND="
 	>=app-i18n/enca-1.9
 	>=dev-db/sqlite-3.7[threadsafe]
@@ -46,6 +47,7 @@ RDEPEND="
 	eds? (
 		>=mail-client/evolution-2.91.90
 		>=gnome-extra/evolution-data-server-2.91.90 )
+	elibc_glibc? ( >=sys-libs/glibc-2.12 )
 	exif? ( >=media-libs/libexif-0.6 )
 	firefox? ( >=www-client/firefox-4.0 )
 	flac? ( >=media-libs/flac-1.2.1 )
