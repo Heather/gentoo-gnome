@@ -39,7 +39,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.26.0:2
 	pango? ( >=x11-libs/pango-1.20.0[introspection?] )"
 # before clutter-1.7, cogl was part of clutter
 RDEPEND="${COMMON_DEPEND}
-	!!<media-libs/clutter-1.7"
+	!<media-libs/clutter-1.7"
 DEPEND="${COMMON_DEPEND}
 	dev-util/pkgconfig
 	sys-devel/gettext
