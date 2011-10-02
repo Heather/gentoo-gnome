@@ -70,6 +70,7 @@ COMMON_DEPEND="
 	socialweb? ( net-libs/libsocialweb )"
 # <gnome-color-manager-3.1.2 has file collisions with g-c-c-3.1.x
 RDEPEND="${COMMON_DEPEND}
+	app-admin/apg
 	sys-apps/accountsservice
 	cups? ( net-print/cups-pk-helper )
 
