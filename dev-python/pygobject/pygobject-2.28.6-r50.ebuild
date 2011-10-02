@@ -46,12 +46,13 @@ PDEPEND="introspection? ( dev-python/pygobject:3 )"
 
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog* NEWS README"
-	# --disable-introspection because we use slot 3 for introspection support
+	# --disable-introspection and --disable-cairo because we use pygobject:3
+	# for introspection support
 	G2CONF="${G2CONF}
 		--disable-dependency-tracking
 		--disable-introspection
+		--disable-cairo
 		$(use_enable doc docs)
-		$(use_enable cairo)
 		$(use_with libffi ffi)"
 }
 
