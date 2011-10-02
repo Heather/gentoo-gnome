@@ -8,7 +8,7 @@ GNOME2_LA_PUNT="yes"
 GNOME_TARBALL_SUFFIX="xz"
 PYTHON_DEPEND="2:2.6"
 
-inherit autotools eutils gnome2 linux-info multilib python
+inherit eutils gnome2 linux-info multilib python versionator
 
 DESCRIPTION="A tagging metadata database, search tool and indexer"
 HOMEPAGE="http://www.tracker-project.org/"
@@ -17,14 +17,13 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 # USE="doc" is managed by eclass.
-IUSE="applet doc eds elibc_glibc exif firefox flac flickr gif gnome-keyring gsf gstreamer gtk iptc +jpeg laptop mp3 nautilus networkmanager pdf playlist rss test thunderbird +tiff upnp +vorbis xine +xml xmp" # qt4 strigi
+IUSE="applet doc eds elibc_glibc exif firefox-bookmarks flac flickr gif gnome-keyring gsf gstreamer gtk iptc +jpeg laptop mp3 nautilus networkmanager pdf playlist rss test thunderbird +tiff upnp +vorbis xine +xml xmp" # qt4 strigi
 
 # Test suite highly disfunctional, loops forever
 # putting aside for now
 RESTRICT="test"
 
 # vala is built with debug by default (see VALAFLAGS)
-# FIXME: what about firefox-bin and thunderbird-bin?
 # According to NEWS, introspection is non-optional
 # glibc-2.12 needed for SCHED_IDLE (see bug #385003)
 RDEPEND="
@@ -49,7 +48,9 @@ RDEPEND="
 		>=gnome-extra/evolution-data-server-2.91.90 )
 	elibc_glibc? ( >=sys-libs/glibc-2.12 )
 	exif? ( >=media-libs/libexif-0.6 )
-	firefox? ( >=www-client/firefox-4.0 )
+	firefox-bookmarks? ( || (
+		>=www-client/firefox-4.0
+		>=www-client/firefox-bin-4.0 ) )
 	flac? ( >=media-libs/flac-1.2.1 )
 	flickr? ( net-libs/rest:0.7 )
 	gif? ( media-libs/giflib )
@@ -81,7 +82,9 @@ RDEPEND="
 		>=x11-libs/gtk+-2.12:2 )
 	playlist? ( dev-libs/totem-pl-parser )
 	rss? ( net-libs/libgrss )
-	thunderbird? ( >=mail-client/thunderbird-5.0 )
+	thunderbird? ( || (
+		>=mail-client/thunderbird-5.0
+		>=mail-client/thunderbird-bin-5.0 ) )
 	tiff? ( media-libs/tiff )
 	vorbis? ( >=media-libs/libvorbis-0.22 )
 	xine? ( >=media-libs/xine-lib-1 )
@@ -166,8 +169,8 @@ pkg_setup() {
 		$(use_enable applet tracker-search-bar)
 		$(use_enable eds miner-evolution)
 		$(use_enable exif libexif)
-		$(use_enable firefox miner-firefox)
-		$(use_with firefox firefox-plugin-dir ${EPREFIX}/usr/$(get_libdir)/firefox/extensions)
+		$(use_enable firefox-bookmarks miner-firefox)
+		$(use_with firefox-bookmarks firefox-plugin-dir ${EPREFIX}/usr/$(get_libdir)/firefox/extensions)
 		$(use_enable flac libflac)
 		$(use_enable flickr miner-flickr)
 		$(use_enable gnome-keyring)
@@ -194,6 +197,9 @@ pkg_setup() {
 		$(use_enable xmp exempi)"
 	#	$(use_enable strigi libstreamanalyzer)
 
+	use firefox-bookmarks && G2CONF="${G2CONF} FIREFOX=./firefox-version.sh"
+	use thunderbird && G2CONF="${G2CONF} THUNDERBIRD=./thunderbird-version.sh"
+
 	DOCS="AUTHORS ChangeLog NEWS README"
 
 	python_set_active_version 2
@@ -207,26 +213,56 @@ src_prepare() {
 	find "${S}" -name "*.pyc" -delete
 	python_convert_shebangs -r 2 tests utils examples
 
-	# Don't run firefox or thunderbird. It results in access violations on some
-	# setups (bug #385347) and does nothing useful on Gentoo.
-	local ff_version=$(best_version www-client/firefox)
-	ff_version=${ff_version#www-client/firefox-}
-	local tb_version=$(best_version mail-client/thunderbird)
-	tb_version=${tb_version#mail-client/thunderbird-}
-	sed -e "s:firefox_version=.*:firefox_version='${ff_version}':" \
-		-e "s:thunderbird_version=.*:thunderbird_version='${tb_version}':" \
-		-i configure.ac || die "sed failed"
+	# Don't run 'firefox --version' or 'thunderbird --version'; it results in
+	# access violations on some setups (bug #385347).
+	use firefox-bookmarks && create_version_script \
+		"www-client/firefox" "Mozilla Firefox" firefox-version.sh
+	use thunderbird && create_version_script \
+		"mail-client/thunderbird" "Mozilla Thunderbird" thunderbird-version.sh
 
 	# FIXME: report broken tests
 	sed -e '/\/libtracker-miner\/tracker-password-provider\/setting/,+1 s:^\(.*\)$:/*\1*/:' \
 		-e '/\/libtracker-miner\/tracker-password-provider\/getting/,+1 s:^\(.*\)$:/*\1*/:' \
 		-i tests/libtracker-miner/tracker-password-provider-test.c || die
 
-	eautoreconf
 	gnome2_src_prepare
 }
 
 src_test() {
 	unset DBUS_SESSION_BUS_ADDRESS
 	Xemake check XDG_DATA_HOME="${T}" XDG_CONFIG_HOME="${T}" || die "tests failed"
+}
+
+src_install() {
+	gnome2_src_install
+
+	# Manually symlink extensions for {firefox,thunderbird}-bin
+	if use firefox-bookmarks; then
+		dosym /usr/share/xul-ext/trackerfox \
+			/usr/$(get_libdir)/firefox-bin/extensions/trackerfox@bustany.org || die
+	fi
+
+	if use thunderbird; then
+		dosym /usr/share/xul-ext/trackerbird \
+			/usr/$(get_libdir)/thunderbird-bin/extensions/trackerbird@bustany.org || die
+	fi
+}
+
+create_version_script() {
+	# Create script $3 that prints "$2 MAX(VERSION($1), VERSION($1-bin))"
+
+	local v=$(best_version ${1})
+	v=${v#${1}-}
+	local vbin=$(best_version ${1}-bin)
+	vbin=${vbin#${1}-bin-}
+
+	if [[ -z ${v} ]]; then
+		v=${vbin}
+	else
+		version_compare ${v} ${vbin}
+		[[ $? -eq 1 ]] && v=${vbin}
+	fi
+
+	echo -e "#!/bin/sh\necho $2 $v" > "$3" || die
+	chmod +x "$3" || die
 }
