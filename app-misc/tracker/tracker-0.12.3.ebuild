@@ -95,10 +95,10 @@ DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.20
 	applet? ( >=dev-lang/vala-0.12:0.12 )
 	gtk? (
-		app-office/dia
 		>=dev-lang/vala-0.12:0.12
 		>=dev-libs/libgee-0.3 )
 	doc? (
+		app-office/dia
 		>=dev-util/gtk-doc-1.8
 		media-gfx/graphviz )
 	test? (
