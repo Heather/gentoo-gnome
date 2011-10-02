@@ -221,6 +221,10 @@ media-sound/rhythmbox
 >=media-sound/sound-juicer-2.99
 >=media-video/totem-3.0
 
+# Shotwell
+dev-libs/libunique:1
+media-gfx/shotwell
+
 # Tomboy & clones
 app-misc/gnote
 app-misc/tomboy
