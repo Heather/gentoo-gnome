@@ -8,7 +8,7 @@ GNOME2_LA_PUNT="yes"
 GNOME_TARBALL_SUFFIX="xz"
 PYTHON_DEPEND="2:2.6"
 
-inherit eutils gnome2 linux-info multilib python virtualx
+inherit autotools eutils gnome2 linux-info multilib python
 
 DESCRIPTION="A tagging metadata database, search tool and indexer"
 HOMEPAGE="http://www.tracker-project.org/"
@@ -17,7 +17,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 # USE="doc" is managed by eclass.
-IUSE="applet doc eds elibc_glibc exif firefox flac flickr gif gnome-keyring gsf gstreamer gtk iptc +jpeg laptop mp3 nautilus networkmanager pdf playlist qt4 rss test thunderbird +tiff upnp +vorbis xine +xml xmp" # strigi
+IUSE="applet doc eds elibc_glibc exif firefox flac flickr gif gnome-keyring gsf gstreamer gtk iptc +jpeg laptop mp3 nautilus networkmanager pdf playlist rss test thunderbird +tiff upnp +vorbis xine +xml xmp" # qt4 strigi
 
 # Test suite highly disfunctional, loops forever
 # putting aside for now
@@ -70,8 +70,7 @@ RDEPEND="
 	laptop? ( >=sys-power/upower-0.9 )
 	mp3? (
 		>=media-libs/taglib-1.6
-		gtk? ( x11-libs/gdk-pixbuf:2 )
-		qt4? ( >=x11-libs/qt-gui-4.7.1:4 ) )
+		gtk? ( x11-libs/gdk-pixbuf:2 ) )
 	nautilus? (
 		>=gnome-base/nautilus-2.90
 		x11-libs/gtk+:3 )
@@ -89,6 +88,7 @@ RDEPEND="
 	xml? ( >=dev-libs/libxml2-2.6 )
 	xmp? ( >=media-libs/exempi-2.1 )"
 #	strigi? ( >=app-misc/strigi-0.7 )
+#	mp3? ( qt4? (  >=x11-libs/qt-gui-4.7.1:4 ) )
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
 	>=sys-devel/gettext-0.17
@@ -143,14 +143,17 @@ pkg_setup() {
 		G2CONF="${G2CONF} VALAC=$(type -P valac-0.12)"
 	fi
 
-	if use mp3 && (use gtk || use qt4); then
-		G2CONF="${G2CONF} $(use_enable !qt4 gdkpixbuf) $(use_enable qt4 qt)"
+	# if use mp3 && (use gtk || use qt4); then
+	if use mp3 && use gtk; then
+		#G2CONF="${G2CONF} $(use_enable !qt4 gdkpixbuf) $(use_enable qt4 qt)"
+		G2CONF="${G2CONF} --enable-gdkpixbuf"
 	fi
 
 	# unicode-support: libunistring, libicu or glib ?
 	# According to NEWS, introspection is required
 	# FIXME: disabling streamanalyzer for now since tracker-sparql-builder.h
 	# is not being generated
+	# XXX: disabling qt since tracker-albumart-qt is unstable; bug #385345
 	G2CONF="${G2CONF}
 		--disable-hal
 		--enable-tracker-fts
@@ -159,6 +162,7 @@ pkg_setup() {
 		--enable-guarantee-metadata
 		--enable-introspection
 		--disable-libstreamanalyzer
+		--disable-qt
 		$(use_enable applet tracker-search-bar)
 		$(use_enable eds miner-evolution)
 		$(use_enable exif libexif)
@@ -203,18 +207,23 @@ src_prepare() {
 	find "${S}" -name "*.pyc" -delete
 	python_convert_shebangs -r 2 tests utils examples
 
+	# Don't run firefox or thunderbird. It results in access violations on some
+	# setups (bug #385347) and does nothing useful on Gentoo.
+	local ff_version=$(best_version www-client/firefox)
+	ff_version=${ff_version#www-client/firefox-}
+	local tb_version=$(best_version mail-client/thunderbird)
+	tb_version=${tb_version#mail-client/thunderbird-}
+	sed -e "s:firefox_version=.*:firefox_version='${ff_version}':" \
+		-e "s:thunderbird_version=.*:thunderbird_version='${tb_version}':" \
+		-i configure.ac || die "sed failed"
+
 	# FIXME: report broken tests
 	sed -e '/\/libtracker-miner\/tracker-password-provider\/setting/,+1 s:^\(.*\)$:/*\1*/:' \
 		-e '/\/libtracker-miner\/tracker-password-provider\/getting/,+1 s:^\(.*\)$:/*\1*/:' \
 		-i tests/libtracker-miner/tracker-password-provider-test.c || die
 
+	eautoreconf
 	gnome2_src_prepare
-}
-
-src_configure() {
-	# Apparently, "firefox --version" on some systems will try write to
-	# /dev/dri/card0 and trigger the sandbox.
-	VIRTUALX_COMMAND="gnome2_src_configure" virtualmake
 }
 
 src_test() {
