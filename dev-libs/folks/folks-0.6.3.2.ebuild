@@ -21,6 +21,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.24:2
 	dev-libs/dbus-glib
 	<dev-libs/libgee-0.7:0[introspection]
 	dev-libs/libxml2
+	>=gnome-base/gconf-2.31
 	sys-libs/ncurses
 	sys-libs/readline
 
