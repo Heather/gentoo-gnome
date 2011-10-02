@@ -8,7 +8,7 @@ DESCRIPTION="Sub-meta package for the applications of GNOME 3"
 HOMEPAGE="http://www.gnome.org/"
 LICENSE="as-is"
 SLOT="3.0"
-IUSE=""
+IUSE="+shotwell"
 
 # when unmasking for an arch
 # double check none of the deps are still masked !
@@ -34,13 +34,15 @@ RDEPEND="
 	>=gnome-extra/gucharmap-${PV}:2.90
 	>=gnome-extra/sushi-0.2.0
 	>=mail-client/evolution-${PV}
-	>=media-gfx/shotwell-0.11
 	>=media-sound/sound-juicer-2.99
 	>=media-video/cheese-${PV}
 	>=net-analyzer/gnome-nettool-3.0.0
 	>=net-misc/vinagre-${PV}
 	>=net-misc/vino-${PV}
 	>=www-client/epiphany-${PV}
+
+	shotwell? ( >=media-gfx/shotwell-0.11 )
+
 "
 # Note: bug-buddy is broken with GNOME 3
 DEPEND=""
