@@ -14,7 +14,7 @@ HOMEPAGE="http://live.gnome.org/Zenity"
 LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux"
-IUSE="libnotify webkit"
+IUSE="libnotify +webkit"
 
 RDEPEND=">=dev-libs/glib-2.8:2
 	x11-libs/gdk-pixbuf:2
