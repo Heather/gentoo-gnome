@@ -60,7 +60,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.26.0:2
 	musicbrainz? (
 		media-libs/musicbrainz:3
 		gnome-base/gconf:2 )
-	python? ( >=dev-python/pygobject-2.90.2:3[introspection] )
+	python? ( dev-python/pygobject:3 )
 	udev? (
 		ipod? ( >=media-libs/libgpod-0.7.92[udev] )
 		mtp? ( >=media-libs/libmtp-0.3 )
