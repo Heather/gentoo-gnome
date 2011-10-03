@@ -171,6 +171,7 @@ pkg_setup() {
 		$(use_enable exif libexif)
 		$(use_enable firefox-bookmarks miner-firefox)
 		$(use_with firefox-bookmarks firefox-plugin-dir ${EPREFIX}/usr/$(get_libdir)/firefox/extensions)
+		FIREFOX=${S}/firefox-version.sh
 		$(use_enable flac libflac)
 		$(use_enable flickr miner-flickr)
 		$(use_enable gnome-keyring)
@@ -191,14 +192,12 @@ pkg_setup() {
 		$(use_enable test unit-tests)
 		$(use_enable thunderbird miner-thunderbird)
 		$(use_with thunderbird thunderbird-plugin-dir ${EPREFIX}/usr/$(get_libdir)/thunderbird/extensions)
+		THUNDERBIRD=${S}/thunderbird-version.sh
 		$(use_enable tiff libtiff)
 		$(use_enable vorbis libvorbis)
 		$(use_enable xml libxml2)
 		$(use_enable xmp exempi)"
 	#	$(use_enable strigi libstreamanalyzer)
-
-	use firefox-bookmarks && G2CONF="${G2CONF} FIREFOX=./firefox-version.sh"
-	use thunderbird && G2CONF="${G2CONF} THUNDERBIRD=./thunderbird-version.sh"
 
 	DOCS="AUTHORS ChangeLog NEWS README"
 
@@ -214,11 +213,9 @@ src_prepare() {
 	python_convert_shebangs -r 2 tests utils examples
 
 	# Don't run 'firefox --version' or 'thunderbird --version'; it results in
-	# access violations on some setups (bug #385347).
-	use firefox-bookmarks && create_version_script \
-		"www-client/firefox" "Mozilla Firefox" firefox-version.sh
-	use thunderbird && create_version_script \
-		"mail-client/thunderbird" "Mozilla Thunderbird" thunderbird-version.sh
+	# access violations on some setups (bug #385347, #385495).
+	create_version_script "www-client/firefox" "Mozilla Firefox" firefox-version.sh
+	create_version_script "mail-client/thunderbird" "Mozilla Thunderbird" thunderbird-version.sh
 
 	# FIXME: report broken tests
 	sed -e '/\/libtracker-miner\/tracker-password-provider\/setting/,+1 s:^\(.*\)$:/*\1*/:' \
