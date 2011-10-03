@@ -1,0 +1,24 @@
+From 08e539ecef13de3fdefc83fb422babb9a2201ac3 Mon Sep 17 00:00:00 2001
+From: Damien Lespiau <damien.lespiau@intel.com>
+Date: Fri, 30 Sep 2011 12:00:48 +0000
+Subject: player: Don't try to free NULL GstTagList
+
+When the info is not ready yet, tag lists are NULL. Don't try to free
+NULL tag lists...
+---
+diff --git a/clutter-gst/clutter-gst-player.c b/clutter-gst/clutter-gst-player.c
+index b60161c..9f4ecf5 100644
+--- a/clutter-gst/clutter-gst-player.c
++++ b/clutter-gst/clutter-gst-player.c
+@@ -285,7 +285,8 @@ free_tags_list (GList **listp)
+   l = *listp;
+   while (l)
+     {
+-      gst_tag_list_free (l->data);
++      if (l->data)
++        gst_tag_list_free (l->data);
+       l = g_list_delete_link (l, l);
+     }
+ 
+--
+cgit v0.9.0.2
