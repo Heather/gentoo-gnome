@@ -9,7 +9,7 @@ PYTHON_DEPEND="2:2.4"
 SUPPORT_PYTHON_ABIS="1"
 RESTRICT_PYTHON_ABIS="3.* *-jython"
 
-inherit gnome2 python
+inherit autotools eutils gnome2 python
 if [[ ${PV} = 9999 ]]; then
 	GNOME_LIVE_MODULE="pyatspi2"
 	inherit gnome2-live
@@ -51,6 +51,10 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# remove pygtk cruft; https://bugzilla.gnome.org/show_bug.cgi?id=660826
+	epatch "${FILESDIR}/${PN}-2.2.0-AM_CHECK_PYMOD-pygtk.patch"
+	[[ ${PV} = 9999 ]] || eautoreconf
+
 	gnome2_src_prepare
 
 	# disable pyc compiling
