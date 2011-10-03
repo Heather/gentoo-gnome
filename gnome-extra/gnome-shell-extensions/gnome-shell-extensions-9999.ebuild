@@ -32,7 +32,7 @@ COMMON_DEPEND="
 RDEPEND="${COMMON_DEPEND}
 	>=dev-libs/gjs-1.29
 	dev-libs/gobject-introspection
-	>=gnome-base/gnome-shell-3.1.91
+	>=gnome-base/gnome-shell-3.2
 	media-libs/clutter:1.0[introspection]
 	net-libs/telepathy-glib[introspection]
 	x11-libs/gtk+:3[introspection]
