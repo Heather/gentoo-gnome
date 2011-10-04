@@ -1,0 +1,42 @@
+From 47b210a74dc68917736730c11abc97a0650d4cb2 Mon Sep 17 00:00:00 2001
+From: Richard Hughes <richard@hughsie.com>
+Date: Mon, 3 Oct 2011 16:31:07 +0100
+Subject: [PATCH 7/8] power: Ensure the DPMS state is 'on' at startup
+
+This also has the side-effect of disabling the default DPMS timeouts the session may have set.
+
+Resolves https://bugzilla.gnome.org/show_bug.cgi?id=660482
+---
+ plugins/power/gsd-power-manager.c |    9 +++++++++
+ 1 files changed, 9 insertions(+), 0 deletions(-)
+
+diff --git a/plugins/power/gsd-power-manager.c b/plugins/power/gsd-power-manager.c
+index a1bc213..ae7cfb3 100644
+--- a/plugins/power/gsd-power-manager.c
++++ b/plugins/power/gsd-power-manager.c
+@@ -3293,6 +3293,8 @@ gboolean
+ gsd_power_manager_start (GsdPowerManager *manager,
+                          GError **error)
+ {
++        gboolean ret;
++
+         g_debug ("Starting power manager");
+         gnome_settings_profile_start (NULL);
+ 
+@@ -3440,6 +3442,13 @@ gsd_power_manager_start (GsdPowerManager *manager,
+         if (manager->priv->x11_screen == NULL)
+                 return FALSE;
+ 
++        /* ensure the default dpms timeouts are cleared */
++        ret = gnome_rr_screen_set_dpms_mode (manager->priv->x11_screen,
++                                             GNOME_RR_DPMS_ON,
++                                             error);
++        if (!ret)
++                return FALSE;
++
+         /* coldplug the engine */
+         engine_coldplug (manager);
+         idle_evaluate (manager);
+-- 
+1.7.7
+

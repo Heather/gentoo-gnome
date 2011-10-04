@@ -24,12 +24,14 @@ fi
 IUSE="+cups debug packagekit policykit short-touchpad-timeout smartcard +udev"
 
 # Latest gsettings-desktop-schemas is needed due to commit e8d1de92
+# Latest gnome-desktop needed to fix the DPMS timeout bug #385063
+# colord-0.1.13 needed to avoid polkit errors in CreateProfile and CreateDevice
 COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	>=dev-libs/glib-2.29.14:2
 	>=x11-libs/gtk+-2.99.3:3
 	>=gnome-base/gconf-2.6.1:2
 	>=gnome-base/libgnomekbd-2.91.1
-	>=gnome-base/gnome-desktop-3.1.5:3
+	>=gnome-base/gnome-desktop-3.2.0-r1:3
 	>=gnome-base/gsettings-desktop-schemas-0.1.7.1
 	media-fonts/cantarell
 	media-libs/fontconfig
@@ -44,7 +46,7 @@ COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	x11-libs/libXfixes
 	x11-libs/libXxf86misc
 	>=x11-libs/libxklavier-5.0
-	>=x11-misc/colord-0.1.12
+	>=x11-misc/colord-0.1.13
 	>=media-sound/pulseaudio-0.9.16
 
 	cups? ( >=net-print/cups-1.4[dbus] )

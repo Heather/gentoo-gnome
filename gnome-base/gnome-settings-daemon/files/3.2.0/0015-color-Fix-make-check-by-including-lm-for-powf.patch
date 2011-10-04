@@ -1,0 +1,26 @@
+From 153950e1a5d3ec61be5275c8286067561cfd3ffc Mon Sep 17 00:00:00 2001
+From: Richard Hughes <richard@hughsie.com>
+Date: Mon, 3 Oct 2011 17:53:49 +0100
+Subject: [PATCH 8/8] color: Fix 'make check' by including -lm for powf()
+
+---
+ plugins/color/Makefile.am |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+diff --git a/plugins/color/Makefile.am b/plugins/color/Makefile.am
+index 6d80602..fd68ac0 100644
+--- a/plugins/color/Makefile.am
++++ b/plugins/color/Makefile.am
+@@ -69,7 +69,8 @@ gcm_self_test_SOURCES =			\
+ gcm_self_test_LDADD =			\
+ 	$(COLORD_LIBS)			\
+ 	$(LCMS_LIBS)			\
+-	$(SETTINGS_PLUGIN_LIBS)
++	$(SETTINGS_PLUGIN_LIBS)		\
++	-lm
+ 
+ TESTS = gcm-self-test
+ 
+-- 
+1.7.7
+
