@@ -127,7 +127,19 @@ pkg_setup() {
 		$(use_with xinerama)"
 
 	enewgroup gdm
-	enewuser gdm -1 -1 /var/lib/gdm gdm
+	enewgroup video # Just in case it hasn't been created yet
+	enewuser gdm -1 -1 /var/lib/gdm gdm,video
+
+	# For compatibility with certain versions of nvidia-drivers, etc., need to
+	# ensure that gdm user is in the video group
+	if ! egetent group video | grep -q gdm; then
+		# FIXME XXX: is this at all portable, ldap-safe, etc.?
+		# XXX: egetent does not have a 1-argument form, so we can't use it to
+		# get the list of gdm's groups
+		local g=$(groups gdm)
+		elog "Adding user gdm to video group"
+		usermod -G video,${g// /,} gdm || die "Adding user gdm to video group failed"
+	fi
 }
 
 src_prepare() {
