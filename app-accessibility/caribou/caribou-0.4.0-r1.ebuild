@@ -11,7 +11,7 @@ PYTHON_USE_WITH="xml"
 SUPPORT_PYTHON_ABIS="1"
 RESTRICT_PYTHON_ABIS="3.*"
 
-inherit gnome2-python
+inherit eutils gnome2-python
 
 DESCRIPTION="Input assistive technology intended for switch and pointer users"
 HOMEPAGE="https://live.gnome.org/Caribou"
@@ -61,6 +61,10 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# Do not autostart in all DEs; bug #385603,
+	# https://bugzilla.gnome.org/show_bug.cgi?id=660901
+	epatch "${FILESDIR}/${PN}-0.4.0-autostart-onlyshowin.patch"
+
 	# delete custom PYTHONPATH, useless on Gentoo and potential bug source
 	sed -e '/export PYTHONPATH=.*python/ d' \
 		-i bin/{antler-keyboard,caribou,caribou-preferences}.in ||
