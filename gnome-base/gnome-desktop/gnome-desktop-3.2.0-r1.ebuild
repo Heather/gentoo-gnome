@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
+inherit eutils gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit git-2 gnome2-live
 fi
@@ -84,4 +84,14 @@ src_unpack() {
 		ln -sf "${WORKDIR}/hwdata/pnp.ids" "${S}/libgnome-desktop/" ||
 			die "ln -sf failed"
 	fi
+}
+
+src_prepare() {
+	# Useful upstream patches, will be in next release
+	# Clear DPMS timeouts, bug #385063
+	epatch "${FILESDIR}/${P}-gnome_rr_screen_clear_dpms_timeouts.patch"
+	# Fix GNomeWallClock fallback code
+	epatch "${FILESDIR}/${P}-GnomeWallClock-fallback.patch"
+
+	gnome2_src_prepare
 }
