@@ -107,6 +107,10 @@ src_prepare() {
 	# fixing loading color profiles at startup
 	epatch "${FILESDIR}/${PN}-3.2.0-color-unbreak-loading-profiles.patch"
 
+	# Do not fail to start the power plugin if clearing DPMS timeouts failed
+	# https://bugzilla.gnome.org/show_bug.cgi?id=660859
+	epatch "${FILESDIR}/${PN}-3.2.0-dpms-failure.patch"
+
 	# https://bugzilla.gnome.org/show_bug.cgi?id=621836
 	# Apparently this change severely affects touchpad usability for some
 	# people, so revert it if USE=short-touchpad-timeout.

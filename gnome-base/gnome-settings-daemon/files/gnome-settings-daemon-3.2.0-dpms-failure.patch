@@ -1,0 +1,30 @@
+From a8d56d910350346008aca54b98e10c318f29050f Mon Sep 17 00:00:00 2001
+From: Alexandre Rostovtsev <tetromino@gmail.com>
+Date: Tue, 4 Oct 2011 00:45:17 -0400
+Subject: [PATCH] Power: failing to clear DPMS timeouts should not be fatal
+
+https://bugzilla.gnome.org/show_bug.cgi?id=660859
+---
+ plugins/power/gsd-power-manager.c |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/plugins/power/gsd-power-manager.c b/plugins/power/gsd-power-manager.c
+index ae7cfb3..56934d5 100644
+--- a/plugins/power/gsd-power-manager.c
++++ b/plugins/power/gsd-power-manager.c
+@@ -3446,8 +3446,10 @@ gsd_power_manager_start (GsdPowerManager *manager,
+         ret = gnome_rr_screen_set_dpms_mode (manager->priv->x11_screen,
+                                              GNOME_RR_DPMS_ON,
+                                              error);
+-        if (!ret)
+-                return FALSE;
++        if (!ret) {
++                g_warning ("Failed set DPMS mode: %s", (*error)->message);
++                g_clear_error (error);
++        }
+ 
+         /* coldplug the engine */
+         engine_coldplug (manager);
+-- 
+1.7.7
+
