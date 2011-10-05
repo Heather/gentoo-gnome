@@ -93,5 +93,9 @@ src_prepare() {
 	# Fix GNomeWallClock fallback code
 	epatch "${FILESDIR}/${P}-GnomeWallClock-fallback.patch"
 
+	# Required for setting DPMS timeouts and modes to work on some hardware;
+	# https://bugzilla.gnome.org/show_bug.cgi?id=660962
+	epatch "${FILESDIR}/${P}-dpmssettimeouts-return-value.patch"
+
 	gnome2_src_prepare
 }

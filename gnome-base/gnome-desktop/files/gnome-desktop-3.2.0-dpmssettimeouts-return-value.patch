@@ -1,0 +1,91 @@
+From c33e020e4b6119b08c3748209360b7c826e0dfca Mon Sep 17 00:00:00 2001
+From: Alexandre Rostovtsev <tetromino@gmail.com>
+Date: Wed, 5 Oct 2011 02:27:48 -0400
+Subject: [PATCH] Ignore DPMSSetTimeouts() and DPMSForceLevel() return value
+
+At least with nvidia binary drivers, DPMSSetTimeouts() and DPMSForceLevel()
+always return BadRequest, even if they succeed. On a machine with intel
+graphics, DPMSForceLevel() was also observed to return BadRequest despite
+successfully changing the DPMS level. So we should just ignore the return
+value from these functions, like xset does.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=660962
+---
+ libgnome-desktop/gnome-rr.c |   34 +++++++++++-----------------------
+ 1 files changed, 11 insertions(+), 23 deletions(-)
+
+diff --git a/libgnome-desktop/gnome-rr.c b/libgnome-desktop/gnome-rr.c
+index 465dee9..55ca03b 100644
+--- a/libgnome-desktop/gnome-rr.c
++++ b/libgnome-desktop/gnome-rr.c
+@@ -1240,24 +1240,17 @@ static gboolean
+ gnome_rr_screen_clear_dpms_timeouts (GnomeRRScreen *screen,
+                                      GError **error)
+ {
+-    gboolean ret = TRUE;
+-    gint rc;
+-
+     gdk_error_trap_push ();
+-    rc = DPMSSetTimeouts (screen->priv->xdisplay, 0, 0, 0);
+-    if (gdk_error_trap_pop ())
+-        ret = FALSE;
+-
+-    if (!ret || rc != Success) {
+-        ret = FALSE;
++    /* DPMSSetTimeouts() return value is often a lie, so ignore it */
++    DPMSSetTimeouts (screen->priv->xdisplay, 0, 0, 0);
++    if (gdk_error_trap_pop ()) {
+         g_set_error_literal (error,
+                              GNOME_RR_ERROR,
+                              GNOME_RR_ERROR_UNKNOWN,
+                              "Could not set DPMS timeouts");
+-        goto out;
++        return FALSE;
+     }
+-out:
+-    return ret;
++    return TRUE;
+ }
+ 
+ /**
+@@ -1272,7 +1265,6 @@ gnome_rr_screen_set_dpms_mode (GnomeRRScreen *screen,
+ {
+     CARD16 state = 0;
+     gboolean ret;
+-    gint rc;
+     GnomeRRDpmsMode current_mode;
+ 
+     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+@@ -1305,11 +1297,9 @@ gnome_rr_screen_set_dpms_mode (GnomeRRScreen *screen,
+     }
+ 
+     gdk_error_trap_push ();
+-    rc = DPMSForceLevel (screen->priv->xdisplay, state);
+-    if (gdk_error_trap_pop ())
+-        ret = FALSE;
+-
+-    if (!ret || rc != Success) {
++    /* DPMSForceLevel() return value is often a lie, so ignore it */
++    DPMSForceLevel (screen->priv->xdisplay, state);
++    if (gdk_error_trap_pop ()) {
+         ret = FALSE;
+         g_set_error_literal (error,
+                              GNOME_RR_ERROR,
+@@ -1319,11 +1309,9 @@ gnome_rr_screen_set_dpms_mode (GnomeRRScreen *screen,
+     }
+ 
+     gdk_error_trap_push ();
+-    rc = DPMSSetTimeouts (screen->priv->xdisplay, 0, 0, 0);
+-    if (gdk_error_trap_pop ())
+-        ret = FALSE;
+-
+-    if (!ret || rc != Success) {
++    /* DPMSSetTimeouts() return value is often a lie, so ignore it */
++    DPMSSetTimeouts (screen->priv->xdisplay, 0, 0, 0);
++    if (gdk_error_trap_pop ()) {
+         ret = FALSE;
+         g_set_error_literal (error,
+                              GNOME_RR_ERROR,
+-- 
+1.7.7
+
