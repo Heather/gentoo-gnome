@@ -74,3 +74,47 @@ src_test() {
 	unset DBUS_SESSION_BUS_ADDRESS
 	Xemake check || die "emake check failed!"
 }
+
+pkg_postinst() {
+	use caps && fcaps 0:0 755 cap_ipc_lock "${ROOT}"/usr/bin/gnome-keyring-daemon
+
+	gnome2_pkg_postinst
+}
+
+# borrowed from GSoC2010_Gentoo_Capabilities by constanze and flameyeys
+# @FUNCTION: fcaps
+# @USAGE: fcaps {uid:gid} {file-mode} {cap1[,cap2,...]} {file}
+# @RETURN: 0 if all okay; non-zero if failure and fallback
+# @DESCRIPTION:
+# fcaps sets the specified capabilities in the effective and permitted set of
+# the given file. In case of failure fcaps sets the given file-mode.
+fcaps() {
+	local uid_gid=$1
+	local perms=$2
+	local capset=$3
+	local path=$4
+	local res
+
+	chmod $perms $path && \
+	chown $uid_gid $path
+	res=$?
+
+	use caps || return $res
+
+	#set the capability
+	setcap "$capset=ep" "$path" &> /dev/null
+	#check if the capabilitiy got set correctly
+	setcap -v "$capset=ep" "$path" &> /dev/null
+	res=$?
+
+	if [ $res -ne 0 ]; then
+		ewarn "Failed to set capabilities. Probable reason is missed kernel support."
+		ewarn "Kernel must have SECURITY_FILE_CAPABILITIES, and <FS>_FS_SECURITY"
+		ewarn "enabled (e.g. EXT3_FS_SECURITY) where <FS> is the filesystem to store"
+		ewarn "${path}"
+		ewarn
+		ewarn "Falling back to suid now..."
+		chmod u+s ${path}
+	fi
+	return $res
+}
