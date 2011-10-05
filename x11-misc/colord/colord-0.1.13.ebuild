@@ -41,7 +41,6 @@ RDEPEND="${COMMON_DEPEND}
 	media-gfx/shared-color-profiles"
 # Automagic build-time vala dependency if USE=introspection
 DEPEND="${COMMON_DEPEND}
-	app-text/docbook-sgml-utils
 	dev-libs/libxslt
 	>=dev-util/intltool-0.35
 	dev-util/pkgconfig
@@ -67,6 +66,7 @@ src_prepare() {
 	# Ubuntu patch to allow root and at_console to access colord without polkit;
 	# this behavior matches upstream default polkit settings.
 	epatch "${FILESDIR}/${PN}-0.1.13-use-dbus-security-for-permissions.patch"
+	gnome2_src_prepare
 }
 
 src_configure() {

@@ -41,7 +41,6 @@ RDEPEND="${COMMON_DEPEND}
 	media-gfx/shared-color-profiles"
 # Automagic build-time vala dependency if USE=introspection
 DEPEND="${COMMON_DEPEND}
-	app-text/docbook-sgml-utils
 	dev-libs/libxslt
 	>=dev-util/intltool-0.35
 	dev-util/pkgconfig
@@ -52,6 +51,11 @@ DEPEND="${COMMON_DEPEND}
 	)
 	introspection? ( dev-lang/vala:0.14 )
 "
+if [[ ${PV} =~ 9999 ]]; then
+	# Needed for generating man pages, not needed for tarballs
+	DEPEND="${DEPEND}
+		app-text/docbook-sgml-utils"
+fi
 
 # FIXME: needs pre-installed dbus service files
 RESTRICT="test"
@@ -67,6 +71,7 @@ src_prepare() {
 	# Ubuntu patch to allow root and at_console to access colord without polkit;
 	# this behavior matches upstream default polkit settings.
 	epatch "${FILESDIR}/${PN}-0.1.13-use-dbus-security-for-permissions.patch"
+	gnome2_src_prepare
 }
 
 src_configure() {
