@@ -33,9 +33,6 @@ DOCS="AUTHORS NEWS README"
 EXAMPLES="examples/{*.c,*.png,README}"
 
 src_prepare() {
-	# Patch from upstream to not free a NULL, will be in next release
-	epatch "${FILESDIR}/${P}-null-free.patch"
-
 	# XXX: debug default is "minimum" in even releases; "yes" in odd releases
 	G2CONF="${G2CONF}
 		$(use_enable introspection)"
