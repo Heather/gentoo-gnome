@@ -81,7 +81,7 @@ pkg_postinst() {
 	gnome2_pkg_postinst
 }
 
-# borrowed from GSoC2010_Gentoo_Capabilities by constanze and flameyeys
+# borrowed from GSoC2010_Gentoo_Capabilities by constanze and Flameeyes
 # @FUNCTION: fcaps
 # @USAGE: fcaps {uid:gid} {file-mode} {cap1[,cap2,...]} {file}
 # @RETURN: 0 if all okay; non-zero if failure and fallback
