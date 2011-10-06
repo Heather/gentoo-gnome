@@ -41,11 +41,11 @@ COMMON_DEPEND="!aqua? (
 		x11-libs/libXfixes
 		x11-libs/libXcomposite
 		x11-libs/libXdamage
-		>=x11-libs/cairo-1.10.0[X,svg]
+		>=x11-libs/cairo-1.10.0[X,glib,svg]
 		>=x11-libs/gdk-pixbuf-2.23.5:2[X,introspection?]
 	)
 	aqua? (
-		>=x11-libs/cairo-1.10.0[aqua,svg]
+		>=x11-libs/cairo-1.10.0[aqua,glib,svg]
 		>=x11-libs/gdk-pixbuf-2.23.5:2[introspection?]
 	)
 	xinerama? ( x11-libs/libXinerama )
