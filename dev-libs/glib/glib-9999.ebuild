@@ -133,6 +133,8 @@ src_configure() {
 	if ! has_version dev-util/pkgconfig; then
 		export DBUS1_CFLAGS="-I/usr/include/dbus-1.0 -I/usr/$(get_libdir)/dbus-1.0/include"
 		export DBUS1_LIBS="-ldbus-1"
+		export LIBFFI_CFLAGS="-I$(echo /usr/$(get_libdir)/libffi-*/include)"
+		export LIBFFI_LIBS="-lffi"
 	fi
 
 	local myconf
