@@ -28,3 +28,16 @@ DEPEND=">=app-text/gnome-doc-utils-0.20.5
 RESTRICT="binchecks strip"
 
 DOCS="AUTHORS ChangeLog NEWS README"
+
+pkg_pretend() {
+	if [[ -z ${LINGUAS} ]]; then
+		ewarn "You are building ${PN} with LINGUAS unset, so help files"
+		ewarn "in all languages supported by the package will be built."
+		ewarn
+		ewarn "To decrease build time, it is recommended that you set LINGUAS"
+		ewarn "in /etc/make.conf to the set of language codes that are needed"
+		ewarn "for your system. For example,"
+		ewarn "LINGUAS=\"en es\""
+		ewarn "ensures that only English and Spanish translations are built."
+	fi
+}
