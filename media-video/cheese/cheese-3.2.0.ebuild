@@ -76,3 +76,11 @@ pkg_setup() {
 		--disable-static"
 	DOCS="AUTHORS ChangeLog NEWS README"
 }
+
+src_compile() {
+	# Clutter-related sandbox violations when USE="doc introspection -vala" and
+	# FEATURES="-userpriv" (see bug #385917).
+	# Work around the issue with the same horrible hack as in bug #385433.
+	DISPLAY="999invalid"
+	gnome2_src_compile
+}
