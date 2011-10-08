@@ -1,0 +1,236 @@
+From 75d9c9a2cbb9f42922c8fb27219de0c4784fa255 Mon Sep 17 00:00:00 2001
+From: Alexandre Rostovtsev <tetromino@gmail.com>
+Date: Sat, 8 Oct 2011 03:31:56 -0400
+Subject: [PATCH] Disable code relevant only for an RPM-based distro
+
+---
+ configure.ac                      |    1 -
+ src/daemon/Makefile.am            |   29 +++--------------------------
+ src/daemon/abrt_event.conf        |    2 +-
+ src/plugins/Makefile.am           |   16 ----------------
+ src/plugins/abrt-action-list-dsos |   18 ++++--------------
+ src/plugins/ccpp_event.conf       |    7 +++----
+ src/plugins/koops_event.conf      |    4 ++--
+ src/plugins/python_event.conf     |    6 +++---
+ 8 files changed, 16 insertions(+), 67 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 8debc2d..abe8203 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -60,7 +60,6 @@ PKG_CHECK_MODULES([GTK], [gtk+-2.0])
+ PKG_CHECK_MODULES([GLIB], [glib-2.0 >= 2.21])
+ PKG_CHECK_MODULES([DBUS], [dbus-1])
+ PKG_CHECK_MODULES([LIBXML], [libxml-2.0])
+-PKG_CHECK_MODULES([RPM], [rpm])
+ PKG_CHECK_MODULES([LIBNOTIFY], [libnotify])
+ PKG_CHECK_MODULES([NSS], [nss])
+ PKG_CHECK_MODULES([BTPARSER], [btparser])
+diff --git a/src/daemon/Makefile.am b/src/daemon/Makefile.am
+index e6823bd..24468b7 100644
+--- a/src/daemon/Makefile.am
++++ b/src/daemon/Makefile.am
+@@ -8,9 +8,6 @@ dist_eventsconf_DATA = \
+ bin_SCRIPTS = \
+     abrt-handle-upload
+ 
+-bin_PROGRAMS = \
+-    abrt-action-save-package-data
+-
+ sbin_PROGRAMS = \
+     abrtd \
+     abrt-server
+@@ -62,45 +59,25 @@ abrt_handle_event_LDADD = \
+     ../lib/libabrt.la \
+     $(LIBREPORT_LIBS)
+ 
+-abrt_action_save_package_data_SOURCES = \
+-    rpm.h rpm.c \
+-    abrt-action-save-package-data.c
+-abrt_action_save_package_data_CPPFLAGS = \
+-    -I$(srcdir)/../include \
+-    -I$(srcdir)/../lib \
+-    -DCONF_DIR=\"$(CONF_DIR)\" \
+-    $(GLIB_CFLAGS) \
+-    $(LIBREPORT_CFLAGS) \
+-    -D_GNU_SOURCE \
+-    -Wall -Wwrite-strings -Werror
+-abrt_action_save_package_data_LDADD = \
+-    $(RPM_LIBS) \
+-    $(LIBREPORT_LIBS) \
+-    ../lib/libabrt.la
+-
+ dbusabrtconfdir = ${sysconfdir}/dbus-1/system.d/
+ dist_dbusabrtconf_DATA = dbus-abrt.conf
+ 
+ daemonconfdir = $(CONF_DIR)
+ dist_daemonconf_DATA = \
+-    abrt.conf \
+-    abrt-action-save-package-data.conf \
+-    gpg_keys
++    abrt.conf
+ 
+ comredhatabrtservicedir = ${datadir}/dbus-1/system-services
+ dist_comredhatabrtservice_DATA = com.redhat.abrt.service
+ 
+ MAN_TXT = \
+     abrt-handle-upload.txt \
+-    abrt-action-save-package-data.txt \
+-    abrt-action-save-package-data.conf.txt \
+     abrt.conf.txt \
+     abrtd.txt \
+     abrt-server.txt
+ 
+ # Manual pages are generated from .txt via Docbook
+-man1_MANS = abrt-handle-upload.1 abrt-server.1 abrt-action-save-package-data.1
+-man5_MANS = abrt.conf.5 abrt-action-save-package-data.conf.5
++man1_MANS = abrt-handle-upload.1 abrt-server.1
++man5_MANS = abrt.conf.5
+ man8_MANS = abrtd.8
+ 
+ %.1 %.5 %.8: %.xml
+diff --git a/src/daemon/abrt_event.conf b/src/daemon/abrt_event.conf
+index bf053f7..8c1aacf 100644
+--- a/src/daemon/abrt_event.conf
++++ b/src/daemon/abrt_event.conf
+@@ -44,7 +44,7 @@
+ 
+ 
+ # Determine in which package/component the crash happened (if not yet done):
+-EVENT=post-create component=
++#EVENT=post-create component=
+         abrt-action-save-package-data
+ 
+ 
+diff --git a/src/plugins/Makefile.am b/src/plugins/Makefile.am
+index acd1a31..eb9e45a 100644
+--- a/src/plugins/Makefile.am
++++ b/src/plugins/Makefile.am
+@@ -1,7 +1,6 @@
+ -include ../../config.mak
+ 
+ bin_SCRIPTS = \
+-    abrt-action-install-debuginfo \
+     abrt-action-analyze-core \
+     abrt-action-analyze-vmcore \
+     abrt-action-list-dsos
+@@ -16,8 +15,6 @@ bin_PROGRAMS = \
+     abrt-action-analyze-backtrace \
+     abrt-retrace-client
+ 
+-libexec_PROGRAMS = abrt-action-install-debuginfo-to-abrt-cache
+-
+ #dist_pluginsconf_DATA = Python.conf
+ 
+ eventsdir = $(EVENTS_DIR)
+@@ -70,7 +67,6 @@ man1_MANS = ${MAN_TXT:%.txt=%.1}
+ CLEANFILES = $(man1_MANS)
+ 
+ PYTHON_FILES = \
+-    abrt-action-install-debuginfo.in \
+     abrt-action-list-dsos \
+     abrt-action-analyze-core
+ 
+@@ -179,18 +175,6 @@ abrt_action_analyze_backtrace_LDADD = \
+     $(LIBREPORT_LIBS) \
+     $(BTPARSER_LIBS)
+ 
+-abrt_action_install_debuginfo_to_abrt_cache_SOURCES = \
+-    abrt-action-install-debuginfo-to-abrt-cache.c
+-abrt_action_install_debuginfo_to_abrt_cache_CPPFLAGS = \
+-    -I$(srcdir)/../include \
+-    -I$(srcdir)/../lib \
+-    -D_GNU_SOURCE \
+-    $(LIBREPORT_CFLAGS) \
+-    -Wall -Wwrite-strings
+-abrt_action_install_debuginfo_to_abrt_cache_LDADD = \
+-     $(LIBREPORT_LIBS) \
+-     ../lib/libabrt.la
+-
+ abrt_retrace_client_SOURCES = \
+     abrt-retrace-client.c
+  abrt_retrace_client_CFLAGS = \
+diff --git a/src/plugins/abrt-action-list-dsos b/src/plugins/abrt-action-list-dsos
+index 81a9927..bf1491c 100644
+--- a/src/plugins/abrt-action-list-dsos
++++ b/src/plugins/abrt-action-list-dsos
+@@ -5,7 +5,6 @@
+ import sys
+ import os
+ import getopt
+-import rpm
+ 
+ def log(s):
+     sys.stderr.write("%s\n" % s)
+@@ -68,19 +67,10 @@ if __name__ == "__main__":
+         try:
+             dso_paths = parse_maps(memfile)
+             for path in dso_paths:
+-                ts = rpm.TransactionSet()
+-                mi = ts.dbMatch('basenames', path)
+-                if len(mi):
+-                    for h in mi:
+-                        if outname:
+-                            outfile = xopen(outname, "w")
+-                            outname = None
+-                        outfile.write("%s %s (%s) %s\n" %
+-                                    (path,
+-                                     h[rpm.RPMTAG_NEVRA],
+-                                     h[rpm.RPMTAG_VENDOR],
+-                                     h[rpm.RPMTAG_INSTALLTIME])
+-                                    )
++                if outname:
++                    outfile = xopen(outname, "w")
++                    outname = None
++                outfile.write(path)
+ 
+         except Exception, ex:
+             error_msg_and_die("Can't get the DSO list: %s" % ex)
+diff --git a/src/plugins/ccpp_event.conf b/src/plugins/ccpp_event.conf
+index 4071705..d8bf148 100644
+--- a/src/plugins/ccpp_event.conf
++++ b/src/plugins/ccpp_event.conf
+@@ -28,11 +28,10 @@ EVENT=collect_xsession_errors analyzer=CCpp dso_list~=.*/libX11.*
+ # or was this ability lost with move to python installer?
+ EVENT=analyze_LocalGDB analyzer=CCpp
+         abrt-action-analyze-core --core=coredump -o build_ids &&
+-        /usr/libexec/abrt-action-install-debuginfo-to-abrt-cache --size_mb=4096 &&
+         abrt-action-generate-backtrace &&
+         abrt-action-analyze-backtrace
+ 
+ # Bugzilla requires nonempty duphash
+-EVENT=report_Bugzilla analyzer=CCpp duphash!=
+-        test -f component || abrt-action-save-package-data
+-        reporter-bugzilla -b -c /etc/libreport/plugins/Bugzilla.conf
++# EVENT=report_Bugzilla analyzer=CCpp duphash!=
++#         test -f component || abrt-action-save-package-data
++#         reporter-bugzilla -b -c /etc/libreport/plugins/Bugzilla.conf
+diff --git a/src/plugins/koops_event.conf b/src/plugins/koops_event.conf
+index 3b80a1b..701e6ba 100644
+--- a/src/plugins/koops_event.conf
++++ b/src/plugins/koops_event.conf
+@@ -13,5 +13,5 @@ EVENT=post-create analyzer=Kerneloops
+ EVENT=report_Kerneloops analyzer=Kerneloops
+         reporter-kerneloops
+ 
+-EVENT=report_Bugzilla analyzer=Kerneloops
+-        reporter-bugzilla -b
++# EVENT=report_Bugzilla analyzer=Kerneloops
++#         reporter-bugzilla -b
+diff --git a/src/plugins/python_event.conf b/src/plugins/python_event.conf
+index 7a106b5..bc1533f 100644
+--- a/src/plugins/python_event.conf
++++ b/src/plugins/python_event.conf
+@@ -1,6 +1,6 @@
+ EVENT=post-create analyzer=Python
+         abrt-action-analyze-python
+ 
+-EVENT=report_Bugzilla analyzer=Python
+-        test -f component || abrt-action-save-package-data
+-        reporter-bugzilla -b -c /etc/libreport/plugins/Bugzilla.conf
++# EVENT=report_Bugzilla analyzer=Python
++#         test -f component || abrt-action-save-package-data
++#         reporter-bugzilla -b -c /etc/libreport/plugins/Bugzilla.conf
+-- 
+1.7.7
+
