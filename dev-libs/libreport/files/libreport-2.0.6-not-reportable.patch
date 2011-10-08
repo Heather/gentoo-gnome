@@ -1,0 +1,218 @@
+commit fbcf816140baa534e390fc7d4124189a3d406659
+Author: Nikola Pajkovsky <npajkovs@redhat.com>
+Date:   Wed Oct 5 15:50:20 2011 +0200
+
+    refuse reporting when *not-reportable* file exist
+    
+    Signed-off-by: Nikola Pajkovsky <npajkovs@redhat.com>
+
+diff --git a/src/cli/cli-report.c b/src/cli/cli-report.c
+index 0011ebc..c8fa672 100644
+--- a/src/cli/cli-report.c
++++ b/src/cli/cli-report.c
+@@ -750,6 +750,26 @@ int report(const char *dump_dir_name, int flags)
+     if (!dd)
+         return -1;
+ 
++    char *not_reportable = dd_load_text_ext(dd, FILENAME_NOT_REPORTABLE, 0
++                                            | DD_LOAD_TEXT_RETURN_NULL_ON_FAILURE
++                                            | DD_FAIL_QUIETLY_ENOENT
++                                            | DD_FAIL_QUIETLY_EACCES);
++
++    if (not_reportable)
++    {
++        char *reason = dd_load_text_ext(dd, FILENAME_REASON, 0
++                                        | DD_LOAD_TEXT_RETURN_NULL_ON_FAILURE);
++        char *t = xasprintf("%s%s%s",
++                            not_reportable ?: "",
++                            not_reportable ? ": " : "",
++                            reason ?: _("(no description)"));
++
++        dd_close(dd);
++        error_msg("%s", t);
++        free(t);
++        xfunc_die();
++    }
++
+     if (!(flags & CLI_REPORT_ONLY))
+     {
+         char *analyze_events_as_lines = list_possible_events(dd, NULL, "analyze");
+diff --git a/src/gui-wizard-gtk/wizard.c b/src/gui-wizard-gtk/wizard.c
+index 0279f83..8bdc8d1 100644
+--- a/src/gui-wizard-gtk/wizard.c
++++ b/src/gui-wizard-gtk/wizard.c
+@@ -1032,7 +1032,16 @@ void update_gui_state_from_problem_data(void)
+     gtk_window_set_title(GTK_WINDOW(g_assistant), g_dump_dir_name);
+ 
+     const char *reason = get_problem_item_content_or_NULL(g_cd, FILENAME_REASON);
+-    gtk_label_set_text(g_lbl_cd_reason, reason ? reason : _("(no description)"));
++    const char *not_reportable = get_problem_item_content_or_NULL(g_cd,
++                                                                  FILENAME_NOT_REPORTABLE);
++
++    char *t = xasprintf("%s%s%s",
++                        not_reportable ?: "",
++                        not_reportable ? ": " : "",
++                        reason ?: _("(no description)"));
++
++    gtk_label_set_text(g_lbl_cd_reason, t);
++    free(t);
+ 
+     gtk_list_store_clear(g_ls_details);
+     struct cd_stats stats = { 0 };
+@@ -2281,12 +2290,21 @@ static void add_pages()
+             error_msg_and_die("Can't load %s: %s", g_glade_file, error->message);
+     }
+ 
++    struct dump_dir *dd = dd_opendir(g_dump_dir_name, DD_OPEN_READONLY | DD_FAIL_QUIETLY_EACCES);
++    if (!dd)
++        return;
++    char *not_reportable = dd_load_text_ext(dd, FILENAME_NOT_REPORTABLE, 0
++                                            | DD_LOAD_TEXT_RETURN_NULL_ON_FAILURE
++                                            | DD_FAIL_QUIETLY_ENOENT
++                                            | DD_FAIL_QUIETLY_EACCES);
++    dd_close(dd);
++
+     int i;
+     int page_no = 0;
+     for (i = 0; page_names[i] != NULL; i++)
+     {
+         char *delim = strrchr(page_names[i], '_');
+-        if (delim != NULL)
++        if (!not_reportable && delim)
+         {
+             if (g_report_only && (strncmp(delim + 1, "report", strlen("report"))) != 0)
+             {
+@@ -2308,10 +2326,14 @@ static void add_pages()
+         gtk_assistant_set_page_complete(g_assistant, page, true);
+ 
+         gtk_assistant_set_page_title(g_assistant, page, pages[i].title);
+-        gtk_assistant_set_page_type(g_assistant, page, pages[i].type);
++        if (not_reportable && i == 0)
++            gtk_assistant_set_page_type(g_assistant, pages[i].page_widget, GTK_ASSISTANT_PAGE_SUMMARY);
++        else
++            gtk_assistant_set_page_type(g_assistant, page, pages[i].type);
+ 
+         VERB1 log("added page: %s", page_names[i]);
+     }
++    free(not_reportable);
+ 
+     /* Set pointers to objects we might need to work with */
+     g_lbl_cd_reason        = GTK_LABEL(        gtk_builder_get_object(builder, "lbl_cd_reason"));
+@@ -2369,10 +2391,14 @@ static void add_pages()
+ 
+     /* Add "Close" button */
+     GtkWidget *w;
+-    w = gtk_button_new_from_stock(GTK_STOCK_CLOSE);
+-    g_signal_connect(w, "clicked", G_CALLBACK(gtk_main_quit), NULL);
+-    gtk_widget_show(w);
+-    gtk_assistant_add_action_widget(g_assistant, w);
++    if (!not_reportable)
++    {
++        w = gtk_button_new_from_stock(GTK_STOCK_CLOSE);
++        g_signal_connect(w, "clicked", G_CALLBACK(gtk_main_quit), NULL);
++        gtk_widget_show(w);
++        gtk_assistant_add_action_widget(g_assistant, w);
++    }
++
+     /* and hide "Cancel" button - "Close" is a better name for what we want */
+     gtk_assistant_commit(g_assistant);
+ 
+diff --git a/src/include/internal_libreport.h b/src/include/internal_libreport.h
+index 67a7ea3..5fc09c3 100644
+--- a/src/include/internal_libreport.h
++++ b/src/include/internal_libreport.h
+@@ -581,7 +581,7 @@ int delete_dump_dir_possibly_using_abrtd(const char *dump_dir_name);
+ struct dump_dir *steal_directory(const char *base_dir, const char *dump_dir_name);
+ 
+ #define kernel_tainted_short libreport_kernel_tainted_short
+-char *kernel_tainted_short(unsigned tainted);
++char *kernel_tainted_short(const char *kernel_bt);
+ #define kernel_tainted_long libreport_kernel_tainted_long
+ GList *kernel_tainted_long(unsigned tainted);
+ 
+@@ -635,6 +635,7 @@ GList *kernel_tainted_long(unsigned tainted);
+  */
+ #define FILENAME_REPORTED_TO  "reported_to"
+ #define FILENAME_EVENT_LOG    "event_log"
++#define FILENAME_NOT_REPORTABLE "not-reportable"
+ 
+ // Not stored as files, added "on the fly":
+ #define CD_DUMPDIR            "Directory"
+diff --git a/src/lib/kernel-tainted.c b/src/lib/kernel-tainted.c
+index 3595408..217587c 100644
+--- a/src/lib/kernel-tainted.c
++++ b/src/lib/kernel-tainted.c
+@@ -18,6 +18,12 @@
+ */
+ #include "internal_libreport.h"
+ 
++/* reading /proc/sys/kernel/tainted file after an oops is ALWAYS going
++ * to show it as tainted.
++ *
++ * https://bugzilla.redhat.com/show_bug.cgi?id=724838
++ */
++
+ /* From RHEL6 kernel/panic.c: */
+ static const int tnts_short[] = {
+ 	 'P' ,
+@@ -106,21 +112,16 @@ static const char *const tnts_long[] = {
+     "Tech_preview",
+ };
+ 
+-char *kernel_tainted_short(unsigned tainted)
++char *kernel_tainted_short(const char *kernel_bt)
+ {
+-    char *tnt = xzalloc(ARRAY_SIZE(tnts_short) + 1);
+-    int i = 0;
+-    while (tainted)
+-    {
+-        if (0x1 & tainted)
+-            tnt[i] = tnts_short[i];
+-        else
+-            tnt[i] = '-';
+ 
+-        ++i;
+-        tainted >>= 1;
+-    }
++    /* example of flags: |G    B      | */
++    char *tainted = strstr(kernel_bt, "Tainted: ");
++    if (!tainted)
++        return NULL;
+ 
++    /* 12 == count of flags */
++    char *tnt = xstrndup(tainted + strlen("Tainted: "), 12);
+     return tnt;
+ }
+ 
+diff --git a/src/report-newt/report-newt.c b/src/report-newt/report-newt.c
+index b8dddbc..02f75c8 100644
+--- a/src/report-newt/report-newt.c
++++ b/src/report-newt/report-newt.c
+@@ -318,6 +318,27 @@ static int report(const char *dump_dir_name)
+     if (!(dd = dd_opendir(dump_dir_name, 0)))
+         return -1;
+     events_as_lines = list_possible_events(dd, NULL, "report");
++
++    char *not_reportable = dd_load_text_ext(dd, FILENAME_NOT_REPORTABLE, 0
++                                            | DD_LOAD_TEXT_RETURN_NULL_ON_FAILURE
++                                            | DD_FAIL_QUIETLY_ENOENT
++                                            | DD_FAIL_QUIETLY_EACCES);
++
++    if (not_reportable)
++    {
++        char *reason = dd_load_text_ext(dd, FILENAME_REASON, 0
++                                        | DD_LOAD_TEXT_RETURN_NULL_ON_FAILURE);
++        char *t = xasprintf("%s%s%s",
++                            not_reportable ?: "",
++                            not_reportable ? ": " : "",
++                            reason ?: _("(no description)"));
++
++        dd_close(dd);
++        newtWinMessage(_("Error"), _("Ok"), "%s", t);
++        free(t);
++        return -1;
++    }
++
+     dd_close(dd);
+ 
+     reporters = get_available_reporters(events_as_lines);
