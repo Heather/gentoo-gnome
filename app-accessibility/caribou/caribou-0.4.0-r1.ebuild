@@ -56,7 +56,7 @@ pkg_setup() {
 		--disable-maintainer-mode
 		--enable-gtk3-module
 		--enable-gtk2-module
-		VALAC=/bin/true"
+		VALAC=$(type -P true)"
 	# vala is not needed for tarball builds, but configure checks for it...
 }
 
