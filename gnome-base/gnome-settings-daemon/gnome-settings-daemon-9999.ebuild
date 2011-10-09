@@ -26,6 +26,7 @@ IUSE="+cups debug packagekit policykit short-touchpad-timeout smartcard +udev"
 # Latest gsettings-desktop-schemas is needed due to commit e8d1de92
 # Latest gnome-desktop needed to fix the DPMS timeout bug #385063
 # colord-0.1.13 needed to avoid polkit errors in CreateProfile and CreateDevice
+# upower-0.9.11 needed for UpSleepKind
 COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	>=dev-libs/glib-2.29.14:2
 	>=x11-libs/gtk+-2.99.3:3
@@ -38,7 +39,7 @@ COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	>=media-libs/lcms-2.2:2
 	media-libs/libcanberra[gtk3]
 	>=media-sound/pulseaudio-0.9.16
-	>=sys-power/upower-0.9.1
+	>=sys-power/upower-0.9.11
 	>=x11-libs/libnotify-0.7.3
 	x11-libs/libX11
 	x11-libs/libXi
