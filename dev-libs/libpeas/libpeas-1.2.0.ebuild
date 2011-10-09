@@ -18,7 +18,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="LGPL-2"
 SLOT="0"
-IUSE="doc gjs +gtk glade python seed vala"
+IUSE="doc gjs +gtk glade +python seed vala"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
