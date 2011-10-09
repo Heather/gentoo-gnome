@@ -18,7 +18,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="doc +introspection python spell"
+IUSE="doc +introspection +python spell"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
