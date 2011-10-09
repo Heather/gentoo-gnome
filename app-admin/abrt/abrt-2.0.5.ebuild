@@ -28,7 +28,8 @@ COMMON_DEPEND="dev-libs/btparser
 	x11-libs/libnotify"
 RDEPEND="${COMMON_DEPEND}
 	app-arch/cpio
-	dev-libs/elfutils"
+	dev-libs/elfutils
+	sys-devel/gdb"
 DEPEND="${COMMON_DEPEND}
 	app-text/asciidoc
 	app-text/xmlto

@@ -38,8 +38,6 @@ start() {
 }
 
 stop() {
-	start-stop-daemon --stop --quiet --pidfile /var/run/abrtd.pid
-
 	if [[ "${START_OOPS}" = "yes" ]]; then
 		ebegin "Stopping abrt-dump-oops"
 		start-stop-daemon --stop --quiet \
