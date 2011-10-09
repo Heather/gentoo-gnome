@@ -41,7 +41,7 @@ src_prepare() {
 	python_convert_shebangs 2 "${S}"/scripts/pso2h.py
 
 	# Remove *_DISABLE_DEPRECATED, bug #385171
-	sed -e 's/-D.*_DISABLE_DEPRECATED//g' -i clutter-gst/Makefile.*
+	sed -e 's/-D.*_DISABLE_DEPRECATED//g' -i clutter-gst/Makefile.* || die
 }
 
 src_compile() {
