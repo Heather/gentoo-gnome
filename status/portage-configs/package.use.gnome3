@@ -1,1 +1,3 @@
 net-libs/gtk-vnc gtk3
+net-libs/farsight2 python
+net-libs/libproxy python
