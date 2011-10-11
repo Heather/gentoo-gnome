@@ -24,7 +24,7 @@ else
 	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~sparc ~x86"
 fi
 # FIXME: Add location support once geoclue stops being idiotic with automagic deps
-IUSE="debug eds +map +geoloc gnome-online-accounts +networkmanager sendto spell test +video"
+IUSE="call debug eds +map +geoloc gnome-online-accounts +networkmanager sendto spell test +video"
 
 # FIXME: gst-plugins-bad is required for the valve plugin. This should move to good
 # eventually at which point the dep can be dropped
@@ -47,23 +47,27 @@ RDEPEND=">=dev-libs/glib-2.28:2
 
 	dev-libs/libxml2:2
 	gnome-base/gsettings-desktop-schemas
-	>=media-libs/clutter-1.7.14:1.0
-	>=media-libs/clutter-gtk-0.90.3:1.0
-	media-libs/clutter-gst:1.0
 	media-libs/gstreamer:0.10
 	media-libs/gst-plugins-base:0.10
 	media-libs/gst-plugins-bad
 	>=net-im/telepathy-logger-0.2.8
 	net-libs/farsight2
 	>=net-libs/telepathy-farsight-0.0.14
-	net-libs/telepathy-farstream
 	net-voip/telepathy-connection-managers
 	x11-libs/libX11
 
+	call? (
+		>=media-libs/clutter-1.7.14:1.0
+		>=media-libs/clutter-gtk-0.90.3:1.0
+		media-libs/clutter-gst:1.0
+		net-libs/telepathy-farstream )
 	eds? ( >=gnome-extra/evolution-data-server-1.2 )
 	geoloc? ( >=app-misc/geoclue-0.11 )
 	gnome-online-accounts? ( net-libs/gnome-online-accounts )
-	map? ( media-libs/libchamplain:0.12[gtk] )
+	map? (
+		>=media-libs/clutter-1.7.14:1.0
+		>=media-libs/clutter-gtk-0.90.3:1.0
+		media-libs/libchamplain:0.12[gtk] )
 	networkmanager? ( >=net-misc/networkmanager-0.7 )
 	sendto? ( >=gnome-extra/nautilus-sendto-2.90.0 )
 	spell? (
@@ -95,7 +99,7 @@ pkg_setup() {
 		--disable-static
 		--disable-meego
 		--disable-Werror
-		--enable-call
+		$(use_enable call)
 		$(use_enable debug)
 		$(use_with eds)
 		$(use_enable geoloc location)
