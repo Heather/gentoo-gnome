@@ -6,7 +6,7 @@ EAPI="3"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2 multilib
+inherit eutils gnome2 multilib
 
 DESCRIPTION="Personal file sharing for the GNOME desktop"
 HOMEPAGE="http://www.gnome.org/"
@@ -45,4 +45,13 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--with-httpd=apache2
 		--with-modules-path=/usr/$(get_libdir)/apache2/modules/"
+}
+
+src_prepare() {
+	gnome2_src_prepare
+
+	# Ubuntu patch to work around kernel 3.x's inability to bind to AF_UNSPEC
+	# sockets. See https://bugzilla.gnome.org/show_bug.cgi?id=660658 and
+	# https://bugs.launchpad.net/ubuntu/+source/gnome-user-share/+bug/856732
+	epatch "${FILESDIR}/${PN}-3.0.0-AF_INET.patch"
 }
