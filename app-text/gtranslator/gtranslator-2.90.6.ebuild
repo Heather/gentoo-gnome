@@ -7,7 +7,7 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="gnome? 2"
 
-inherit eutils gnome2 multilib python
+inherit autotools eutils gnome2 multilib python
 
 DESCRIPTION="An enhanced gettext po file editor for GNOME"
 HOMEPAGE="http://gtranslator.sourceforge.net/"
@@ -15,7 +15,7 @@ HOMEPAGE="http://gtranslator.sourceforge.net/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~ppc ~sparc ~x86"
-IUSE="doc gnome"
+IUSE="doc gnome spell"
 
 COMMON_DEPEND="
 	>=dev-libs/glib-2.28.0:2
@@ -32,7 +32,8 @@ COMMON_DEPEND="
 
 	gnome? (
 		gnome-extra/gnome-utils
-		x11-libs/gtk+:3[introspection] )"
+		x11-libs/gtk+:3[introspection] )
+	spell? ( app-text/gtkspell:3 )"
 RDEPEND="${COMMON_DEPEND}
 	gnome? (
 		>=dev-libs/libpeas-1.0.0[gtk,python]
@@ -49,15 +50,18 @@ DEPEND="${COMMON_DEPEND}
 
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog HACKING INSTALL NEWS README THANKS"
-	# gtkspell hasn't been ported to gtk+3 yet
 	G2CONF="${G2CONF}
 		--disable-static
-		--without-gtkspell
 		$(use_with gnome dictionary)
-		$(use_enable gnome introspection)"
+		$(use_enable gnome introspection)
+		$(use_with spell gtkspell3)"
 }
 
 src_prepare() {
+	# Fix gtkspell detection, https://bugzilla.gnome.org/show_bug.cgi?id=660709
+	epatch "${FILESDIR}/${PN}-2.90.6-gtkspell3.patch"
+	eautoreconf
+
 	gnome2_src_prepare
 
 	# disable pyc compiling
