@@ -2,7 +2,7 @@
 <!DOCTYPE guide SYSTEM "/dtd/guide.dtd">
 <!-- $Header$ -->
 
-<guide link="/proj/en/desktop/gnome/howtos/gnome-3.0-upgrade.xml" lang="en">
+<guide link="/proj/en/desktop/gnome/howtos/gnome-3.2-upgrade.xml" lang="en">
 <title>GNOME 3.0 Upgrade Guide</title>
 
 <author title="Author">
@@ -10,15 +10,15 @@
 </author>
 
 <abstract>
-This is a guide for upgrading from GNOME 2.32.x to GNOME 3.0.x
+This is a guide for upgrading from GNOME 2.32.x to GNOME 3.2.x
 </abstract>
 
 <!-- The content of this document is licensed under the CC-BY-SA license -->
 <!-- See http://creativecommons.org/licenses/by-sa/2.5 -->
 <license/>
 
-<version>0.1.1</version>
-<date>2011-08-25</date>
+<version>0.1</version>
+<date>2011-10-12</date>
 
 <chapter>
 <title>Changes</title>
@@ -28,12 +28,13 @@ This is a guide for upgrading from GNOME 2.32.x to GNOME 3.0.x
 <body>
 
 <p>
-Please see the <uri link="http://library.gnome.org/misc/release-notes/3.0/">GNOME
-3.0 Release Notes</uri> for what is new in this major release of GNOME.
+Please see the <uri link="http://library.gnome.org/misc/release-notes/3.2/">GNOME
+3.2 Release Notes</uri> (and <uri link="http://library.gnome.org/misc/release-notes/3.0/">3.0
+Release Notes</uri>) for what is new in this major release of GNOME.
 </p>
 
 <p>
-Briefly: GNOME 3.0 includes two desktop modes&mdash;standard and fallback.
+Briefly: GNOME 3.2 includes two desktop modes&mdash;standard and fallback.
 Fallback mode uses <c>gnome-base/gnome-panel</c> and <c>x11-wm/metacity</c>, and
 is similar in appearance and behavior to GNOME 2. Standard mode uses
 <c>gnome-base/gnome-shell</c> and <c>x11-wm/mutter</c>, and looks and behaves
@@ -60,7 +61,7 @@ old-fashioned GNOME 2-like desktop environment.
 <body>
 
 <p>
-GNOME 3.0 obtains user language settings from <c>sys-apps/accountsservice</c>.
+GNOME 3.2 obtains user language settings from <c>sys-apps/accountsservice</c>.
 The language can be set in GNOME from the <e>My Account</e> entry in the upper
 right corner menu. Alternatively, you can directly edit accountsservice user
 files. For example, to have user <c>jrandom</c> use British English, you can 
@@ -80,7 +81,7 @@ Language=en_GB.utf8
 <body>
 
 <p>
-GNOME 3.0 uses <c>media-fonts/cantarell</c> as its default font. Unfortunately,
+GNOME 3.2 uses <c>media-fonts/cantarell</c> as its default font. Unfortunately,
 Cantarell only includes a subset of the extended Latin alphabet. Users of
 languages whose writing systems are not covered by Cantarell will probably want
 to switch to another font, such as <c>media-fonts/dejavu</c>:
@@ -96,16 +97,16 @@ $ <i>gconftool-2 -s -t string /apps/metacity/general/titlebar_font 'DejaVu Sans 
 </section>
 
 <section>
-<title>Applets <e>(FIXME add a gnome-applets snapshot)</e></title>
+<title>Applets</title>
 <body>
 <p>
-GNOME 2 applets cannot be used in GNOME 3.0. Fallback mode allows applets,
-although most have not yet been ported to the new, gtk3-based APIs. In
+GNOME 2 applets cannot be used in GNOME 3.2. Fallback mode allows applets,
+although some have not yet been ported to the new, gtk3-based APIs. In
 standard mode, there are no applets at all. Some traditional applet
 functionality can be replicated using third-party GNOME Shell extensions.
 </p>
 <p>
-In order to manage gnome-panel settings (either add/remove or rearrange
+In order to manage fallback gnome-panel settings (either add/remove or rearrange
 applet positions) one has to hold down the <c>Alt</c> key when clicking
 on the panel. This opens relevant menu for changing either panel or applet
 settings.
@@ -126,7 +127,7 @@ right corner menu and holding down the <c>Alt</c> key.
 
 <p>
 If you need an easily discoverable GUI for shutting down the machine (for
-example, if deploying GNOME 3.0 in a corporate environment where users are
+example, if deploying GNOME 3.2 in a corporate environment where users are
 required to turn off their computers at the end of the day), you can install the
 alternative-status-menu extension. To do so, emerge <c>gnome-extra/gnome-shell-extensions</c>
 and run</p>
@@ -159,7 +160,7 @@ $ <i>gsettings set org.gnome.settings-daemon.plugins.power lid-close-ac-action b
 <body>
 
 <p>
-In GNOME 3.0, Nautilus by default no longer manages the desktop, and the
+In GNOME 3.2, Nautilus by default no longer manages the desktop, and the
 <path>~/Desktop</path> folder is simply treated as a normal folder with files.
 </p>
 
@@ -180,7 +181,7 @@ $ <i>gsettings set org.gnome.desktop.background show-desktop-icons true</i>
 <body>
 
 <p>
-GNOME 3.0 standard mode (i.e. GNOME Shell) is incompatible with Compiz.
+GNOME 3.2 standard mode (i.e. GNOME Shell) is incompatible with Compiz.
 </p>
 
 </body>
@@ -254,7 +255,7 @@ $ <i>gsettings set org.gnome.settings-daemon.plugins.mouse active false</i>
 <body>
 
 <p>
-GNOME 3.0 is designed to appear significantly less configurable than GNOME 2.
+GNOME 3.2 is designed to appear significantly less configurable than GNOME 2.
 For example, by default there is no easily discoverable GUI for changing the
 Gtk+ theme. Many configuration settings are hidden, but can still be changed
 from gsettings (dconf), gconf, or using the <c>gnome-extra/gnome-tweak-tool</c>
@@ -272,19 +273,9 @@ developers publishing extensions on various websites.
 
 <p>
 Gentoo uses <c>eselect gnome-shell-extensions</c> to manage system defaults that
-control whether extensions should be enabled. Newly-installed extensions start
-out disabled.
+control whether extensions installed systemwide (i.e. in <path>/usr/share/gnome-shell/extensions</path>)
+should be enabled. Newly-installed extensions start out disabled by default.
 </p>
-
-<impo>
-<c>eselect gnome-shell-extensions</c> only manages shell extensions that are
-installed in <path>/usr/share/gnome-shell/extensions</path>. GNOME Shell will
-automatically load extensions installed under a user's home directory (as long
-as they have different ids from extensions installed systemwide). However, extension code
-quality is highly variable, and some extensions can render GNOME completely
-unusable. Gentoo cannot offer support for problems caused by third-party
-extensions.
-</impo>
 
 <p>
 Defaults managed by <c>eselect gnome-shell-extensions</c> can be overridden on a
@@ -292,10 +283,21 @@ per-user basis using <c>gnome-tweak-tool</c>, or from the command line using
 <c>gsettings</c>. For example, to load all extensions with the exception of
 dock and gajim, a user can run
 </p>
-<pre caption="Disabling dock and extensions (and enabling all others!)">
-$ <i>gsettings set org.gnome.shell disabled-extensions \</i>
-  <i>'["dock@gnome-shell-extensions.gnome.org", "gajim@gnome-shell-extensions.gnome.org"]'</i>
+<pre caption="Enabling alterntive status menu and dock extensions (and disabling all others!)">
+$ <i>gsettings set org.gnome.shell enabled-extensions \</i>
+  <i>'["alternative-status-menu@gnome-shell-extensions.gnome.org", "dock@gnome-shell-extensions.gnome.org"]'</i>
 </pre>
+
+<note>
+Instead of <c>enabled-extensions</c>, GNOME 3.0 used the <c>disabled-extensions</c>
+gsettings key. In GNOME 3.2, this key no longer has any effect.
+</note>
+
+<impo>
+Extension code quality is highly variable, and some extensions can render GNOME
+completely unusable. Gentoo cannot offer support for problems caused by third-party
+extensions.
+</impo>
 
 </body>
 </section>
@@ -330,23 +332,28 @@ If using open-source AMD / ATI drivers, <c>media-libs/mesa</c> should be built w
 
 <body>
 <p>
-As reported in <uri link="https://bugs.gentoo.org/show_bug.cgi?id=375615">bug
-#375615</uri>, for some people, certain versions of <c>x11-drivers/nvidia-drivers</c>
-(275.19, 275.21, 280.13 are known to be affected) cause some Gtk+ applications
-to crash when terminating. One effect of this is to make GDM freeze after the
-password has been entered; similarly, GNOME will freeze when logging out.
-Some (but not all) of the people who are suffering
-from this bug have reported that emerging <c>x11-libs/cairo</c> with <c>USE=-opengl</c>
-resolves the problem. Another workaround is to set the environment variable
-<c>__GL_NO_DSO_FINALIZER</c> to 1 systemwide; note that this will have
-no effect if you are using <c>gnome-base/gdm-3.0.4-r1</c> or older.
+Under some versions of <c>x11-drivers/nvidia-drivers</c>, GNOME Shell system tray shows 
+<uri link="https://bugs.gentoo.org/show_bug.cgi?id=380245">graphical corruption</uri>
+(all icons are rendered identically). This problem is fixed in driver versions 280.13
+and newer.
 </p>
 
 <p>
-Under some versions of <c>x11-drivers/nvidia-drivers</c> (275.09.07, 275.19, and
-275.21), GNOME Shell system tray shows 
-<uri link="https://bugs.gentoo.org/show_bug.cgi?id=380245">graphical corruption</uri>
-(all icons are rendered identically). This problem was fixed in driver version 280.13.
+All versions of <c>x11-drivers/nvidia-drivers</c> are incompatible with GNOME's
+color management support. This is GNOME's color management code relies on XRandR,
+and NVIDIA's support for XRandR is currently incomplete.
+There is no workaround at this time.
+</p>
+
+<p>
+As reported in <uri link="https://bugs.gentoo.org/show_bug.cgi?id=375615">bug
+#375615</uri>, for some people, certain versions of <c>x11-drivers/nvidia-drivers</c>
+(275.28, 280.13, and 285.03 are known to be affected) cause some Gtk+ applications
+to hang when terminating. One effect of this is to make GDM freeze after the
+password has been entered; similarly, GNOME will freeze when logging out.
+The affected versions of <c>nvidia-drivers</c> have been masked. To prevent
+this problem, make sure to use an unmasked driver version, for example
+275.09.07 or 285.05.09.
 </p>
 </body>
 </section>
@@ -354,6 +361,18 @@ Under some versions of <c>x11-drivers/nvidia-drivers</c> (275.09.07, 275.19, and
 
 <chapter>
 <title>Troubleshooting</title>
+
+<section>
+<title>GDM shows an "Oh no! Something has gone wrong" screen</title>
+
+<body>
+<p>
+This is may be caused by a GNOME Shell crash. Try rebuilding <c>gnome-base/gdm</c>
+with the <c>gnome-shell</c> USE flag disabled.
+</p>
+
+</body>
+</section>
 
 <section>
 <title>GDM freezes after the password has been entered</title>
@@ -422,31 +441,19 @@ workaround at this time; we suggest using a gtk2-based browser (such as
 </section>
 
 <section>
-<title>Various GNOME 3.0 packages fail to compile, complain about <c>G_CONST_RETURN</c></title>
+<title>Various GNOME 2.x and 3.0 packages fail to compile due to <c>G_CONST_RETURN</c></title>
 
 <body>
 <p>
 Support for the <c>G_CONST_RETURN</c> macro was formally deprecated in
-<c>dev-libs/glib</c> and removed from GNOME during the GNOME 3.1 development cycle.
-However, some GNOME 3.0 packages still use that macro, and so, when
-built against <c>&gt;=dev-libs/glib-2.29.8</c>, will fail with error messages
+<c>dev-libs/glib</c> during the GNOME 3.1 development cycle.
+However, some GNOME 2 and 3.0 packages use the deprecated macro and pass
+<c>-DG_DISABLE_DEPRECATED</c> (or a similar define) to the compiler in
+their configure scripts or makefiles. As a result, when building against
+<c>&gt;=dev-libs/glib-2.29.8</c>, such packages will fail with error messages
 similar to the following:
 </p>
-<pre caption="Typical error message when building GNOME 3.0 against &gt;=glib-2.29.8">
-In file included from /usr/include/pango-1.0/pango/pango-gravity.h:98,
-                 from /usr/include/pango-1.0/pango/pango-types.h:91,
-                 from /usr/include/pango-1.0/pango/pango-font.h:26,
-                 from /usr/include/pango-1.0/pango/pango-attributes.h:25,
-                 from /usr/include/pango-1.0/pango/pango.h:25,
-                 from /usr/include/gtk-3.0/gdk/gdktypes.h:37,
-                 from /usr/include/gtk-3.0/gdk/gdkapplaunchcontext.h:31,
-                 from /usr/include/gtk-3.0/gdk/gdk.h:33,
-                 from /usr/include/gtk-3.0/gdk/gdkx.h:30,
-                 from eggdesktopfile.c:34:
-/usr/include/pango-1.0/pango/pango-script.h:132: error: expected declaration
-specifiers or '...' before 'G_CONST_RETURN'
-/usr/include/pango-1.0/pango/pango-script.h:133: error: expected declaration
-specifiers or '...' before 'G_CONST_RETURN'
+<pre caption="Typical error message when building a GNOME 3.0 package against glib-2.30">
 In file included from /usr/include/pango-1.0/pango/pango-script.h:138,
                  from /usr/include/pango-1.0/pango/pango-gravity.h:98,
                  from /usr/include/pango-1.0/pango/pango-types.h:91,
@@ -465,8 +472,8 @@ In file included from /usr/include/pango-1.0/pango/pango-script.h:138,
 </pre>
 
 <p>
-The most straightforward solution is to install <c>=dev-libs/glib-2.28*</c>
-in order to build GNOME 3.0.
+Any packages failing in this manner should be reported in Gentoo bugzilla
+so that they can be fixed.
 </p>
 </body>
 </section>
