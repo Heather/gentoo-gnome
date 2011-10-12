@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!ENTITY gtkspell-gtkspell SYSTEM "xml/gtkspell.xml">
+<!ENTITY gtkspell-tutorial SYSTEM "tutorial.sgml">
+]>
+<!-- vim: set ts=8 sw=2 : -->
+<book id="index">
+  <bookinfo>
+    <title>GtkSpell Manual</title>
+    <author><firstname>Evan</firstname><surname>Martin</surname></author>
+  </bookinfo>
+
+  <part id="tutorial">
+    <title>Tutorial</title>
+    <partintro><para>GtkSpell is pretty simple to use.  This tutorial
+    walks through the basic steps to incorporate GtkSpell into an application.
+    </para></partintro>
+    &gtkspell-tutorial;
+  </part>
+
+  <part id="reference">
+    <title>Function Reference</title>
+    &gtkspell-gtkspell;
+  </part>
+</book>

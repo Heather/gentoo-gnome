@@ -1,0 +1,23 @@
+<INCLUDE>gtkspell/gtkspell.h</INCLUDE>
+
+<SECTION>
+<FILE>gtkspell</FILE>
+GtkSpell
+gtkspell_new_attach
+gtkspell_set_language
+gtkspell_recheck_all
+gtkspell_get_from_text_view
+gtkspell_detach
+GTKSPELL_ERROR
+GtkSpellError
+<SUBSECTION Private>
+gtkspell_error_quark
+</SECTION>
+
+<SECTION>
+<FILE>deprecated</FILE>
+gtkspell_init
+gtkspell_attach
+GTKSPELL_ERROR_PSPELL
+</SECTION>
+

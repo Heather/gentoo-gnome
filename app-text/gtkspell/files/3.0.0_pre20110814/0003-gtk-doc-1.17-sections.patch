@@ -1,0 +1,41 @@
+
+# HG changeset patch
+# User Daniel Atallah <datallah@users.sf.net>
+# Date 1313371966 14400
+# Node ID 56a41f3309b4c6b9a2ffed4c1ac19597ab6c1177
+# Parent  11db87592868771847fd7c64fd5573c11b51baf8
+The version of gtk-doc that I have (1.17) added these new sections
+
+diff -r 11db87592868 -r 56a41f3309b4 docs/tmpl/deprecated.sgml
+--- a/docs/tmpl/deprecated.sgml	Sun Aug 14 21:29:26 2011 -0400
++++ b/docs/tmpl/deprecated.sgml	Sun Aug 14 21:32:46 2011 -0400
+@@ -17,11 +17,15 @@
+ <!-- ##### SECTION Stability_Level ##### -->
+ 
+ 
++<!-- ##### SECTION Image ##### -->
++
++
+ <!-- ##### FUNCTION gtkspell_init ##### -->
+ <para>
+ 
+ </para>
+ 
++@void: 
+ @Returns: 
+ 
+ 
+diff -r 11db87592868 -r 56a41f3309b4 docs/tmpl/gtkspell.sgml
+--- a/docs/tmpl/gtkspell.sgml	Sun Aug 14 21:29:26 2011 -0400
++++ b/docs/tmpl/gtkspell.sgml	Sun Aug 14 21:32:46 2011 -0400
+@@ -17,6 +17,9 @@
+ <!-- ##### SECTION Stability_Level ##### -->
+ 
+ 
++<!-- ##### SECTION Image ##### -->
++
++
+ <!-- ##### STRUCT GtkSpell ##### -->
+ <para>
+ The opaque GtkSpell object.  It is created with gtkspell_new_attach() and
+

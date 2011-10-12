@@ -1,0 +1,160 @@
+
+# HG changeset patch
+# User Daniel Atallah <datallah@users.sf.net>
+# Date 1313379074 14400
+# Node ID e5e95e6208f9db92a59b7db78de55ab55a80cc6c
+# Parent  1f70e6de755c13c5c2e555935725c1dafd258d6a
+Major version bump to 3.0.0+dev to support GTK3.
+
+Most of this is based on the work of Peter Bloomfield and Ken Vandine.
+This will install alongside gtkspell 2.x.
+
+[Alexandre Rostovtsev <tetromino@gmail.com>: adjust for epatch compat]
+
+diff -r 1f70e6de755c -r e5e95e6208f9 ChangeLog
+--- a/ChangeLog	Sun Aug 14 21:50:15 2011 -0400
++++ b/ChangeLog	Sun Aug 14 23:31:14 2011 -0400
+@@ -1,4 +1,5 @@
+-version 2.0.16+cvs (????-??-??):
++version 3.0.0+dev (????-??-??):
++	* New major version to support GTK+ 3
+ 
+ version 2.0.16 (2009-10-22):
+ 	* Additional and updated translations (see po/ChangeLog).
+diff -r 1f70e6de755c -r e5e95e6208f9 Makefile.am
+--- a/Makefile.am	Sun Aug 14 21:50:15 2011 -0400
++++ b/Makefile.am	Sun Aug 14 23:31:14 2011 -0400
+@@ -1,8 +1,8 @@
+ SUBDIRS=gtkspell examples docs po
+ 
+ pkgconfigdir=$(libdir)/pkgconfig
+-pkgconfig_DATA=gtkspell-2.0.pc
+-DISTCLEANFILES=gtkspell-2.0.pc
++pkgconfig_DATA=gtkspell-3.0.pc
++DISTCLEANFILES=gtkspell-3.0.pc
+ 
+ dist-hook:
+ 	$(MAKE) -C "$(srcdir)/po" "$(GETTEXT_PACKAGE).pot"
+diff -r 1f70e6de755c -r e5e95e6208f9 README
+--- a/README	Sun Aug 14 21:50:15 2011 -0400
++++ b/README	Sun Aug 14 23:31:14 2011 -0400
+@@ -9,7 +9,7 @@
+ suggested replacements.  
+ 
+ GtkSpell is a library, to be used by your software.
+-GtkSpell depends on GTK+ 2.0 (of course), and also on Enchant
++GtkSpell 3 depends on GTK+ 3.0 (of course), and also on Enchant
+ library, which can be found at http://www.abisource.com/projects/enchant/ .
+ 
+ For more information, see http://gtkspell.sf.net .
+diff -r 1f70e6de755c -r e5e95e6208f9 configure.ac
+--- a/configure.ac	Sun Aug 14 21:50:15 2011 -0400
++++ b/configure.ac	Sun Aug 14 23:31:14 2011 -0400
+@@ -1,7 +1,7 @@
+ dnl Process this file with autoconf to produce a configure script.
+ 
+ AC_PREREQ(2.57)
+-AC_INIT([gtkspell],[2.0.16+dev],[gtkspell-devel@lists.sourceforge.net])
++AC_INIT([gtkspell],[3.0.0+dev],[gtkspell-devel@lists.sourceforge.net])
+ dnl N.B. After 0.40, please change to `0.40+dev' instead of `0.41dev'.
+ dnl Rationale: (i) placate simple version comparison software such as
+ dnl `dpkg --compare-versions'.  (ii) We don't always know what the next
+@@ -15,7 +15,7 @@
+ SPELLER_LIB=-lenchant
+       
+ AC_SUBST(SPELLER_LIB)
+-GTKSPELL_PACKAGES=gtk+-2.0
++GTKSPELL_PACKAGES=gtk+-3.0
+ AC_SUBST(GTKSPELL_PACKAGES)
+ PKG_CHECK_MODULES(GTKSPELL, $GTKSPELL_PACKAGES enchant >= 0.4.0 )
+ AC_SUBST(GTKSPELL_CFLAGS)
+@@ -76,7 +76,7 @@
+ # gettext 
+ ALL_LINGUAS="af be cs da de el eo es eu fi fr ga gl hu hy id it ja ky lt lv mn ms nb nl pl pt pt_BR rm ro ru rw sk sl sq sr sv th tr uk vi wa zh_CN zh_HK zh_TW"
+ AM_GLIB_GNU_GETTEXT
+-GETTEXT_PACKAGE=$PACKAGE
++GETTEXT_PACKAGE=gtkspell3
+ AC_SUBST(GETTEXT_PACKAGE)
+ AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["${GETTEXT_PACKAGE}"], [gettext domain])
+ IT_PROG_INTLTOOL([0.35.0])
+@@ -89,7 +89,7 @@
+ 
+ dnl AM_MAINTAINER_MODE
+ 
+-AC_CONFIG_FILES(Makefile gtkspell/Makefile examples/Makefile gtkspell-2.0.pc gtkspell.spec docs/Makefile po/Makefile.in)
++AC_CONFIG_FILES(Makefile gtkspell/Makefile examples/Makefile gtkspell-3.0.pc gtkspell.spec docs/Makefile po/Makefile.in)
+ 
+ GTK_DOC_CHECK(1.0)
+ 
+diff -r 1f70e6de755c -r e5e95e6208f9 docs/Makefile.am
+--- a/docs/Makefile.am	Sun Aug 14 21:50:15 2011 -0400
++++ b/docs/Makefile.am	Sun Aug 14 23:31:14 2011 -0400
+@@ -9,7 +9,7 @@
+ # of using the various options.
+ 
+ # The name of the module, e.g. 'glib'.
+-DOC_MODULE=gtkspell
++DOC_MODULE=gtkspell3
+ 
+ # Uncomment for versioned docs and specify the version of the module, e.g. '2'.
+ #DOC_MODULE_VERSION=2
+diff -r 1f70e6de755c -r e5e95e6208f9 examples/Makefile.am
+--- a/examples/Makefile.am	Sun Aug 14 21:50:15 2011 -0400
++++ b/examples/Makefile.am	Sun Aug 14 23:31:14 2011 -0400
+@@ -1,6 +1,6 @@
+ noinst_PROGRAMS = simple advanced
+ AM_CFLAGS = @GTKSPELL_CFLAGS@ -I$(top_builddir)
+ INCLUDES = -I$(top_srcdir)
+-LDADD = @GTKSPELL_LIBS@ $(top_builddir)/gtkspell/libgtkspell.la
++LDADD = @GTKSPELL_LIBS@ $(top_builddir)/gtkspell/libgtkspell-3.la
+ simple_SOURCES = simple.c
+ advanced_SOURCES = advanced.c
+diff -r 1f70e6de755c -r e5e95e6208f9 gtkspell.spec.in
+--- a/gtkspell.spec.in	Sun Aug 14 21:50:15 2011 -0400
++++ b/gtkspell.spec.in	Sun Aug 14 23:31:14 2011 -0400
+@@ -7,7 +7,7 @@
+ URL: http://gtkspell.sf.net/ 
+ BuildRoot: %{_tmppath}/%{name}-root
+ Requires: /sbin/ldconfig
+-Summary: GTK2 Spell Checker Interface Library.
++Summary: GTK3 Spell Checker Interface Library.
+ %description
+ GtkSpell provides MSWord/MacOSX-style highlighting of misspelled words
+ in a GtkTextView widget. Right-clicking a misspelled word pops up a
+@@ -51,7 +51,7 @@
+ %{_libdir}/*.la
+ %{_libdir}/*.so
+ %{_libdir}/pkgconfig/*
+-%{_includedir}/gtkspell-2.0
++%{_includedir}/gtkspell-3.0
+ 
+ %changelog
+ * Sat Oct 26 2002 Alex Converse 
+diff -r 1f70e6de755c -r e5e95e6208f9 gtkspell/Makefile.am
+--- a/gtkspell/Makefile.am	Sun Aug 14 21:50:15 2011 -0400
++++ b/gtkspell/Makefile.am	Sun Aug 14 23:31:14 2011 -0400
+@@ -1,6 +1,6 @@
+-lib_LTLIBRARIES=libgtkspell.la
++lib_LTLIBRARIES=libgtkspell-3.la
+ AM_CFLAGS=@GTKSPELL_CFLAGS@ -DG_LOG_DOMAIN=\"gtkspell\" -DLOCALEDIR=\""$(datadir)/locale"\"
+-libgtkspell_la_LIBADD=@GTKSPELL_LIBS@ @SPELLER_LIB@
+-libgtkspell_la_includedir=$(includedir)/gtkspell-2.0/gtkspell
+-libgtkspell_la_include_HEADERS=gtkspell.h
+-libgtkspell_la_SOURCES=gtkspell.c deprecated.c gtkspell.h
++libgtkspell_3_la_LIBADD=@GTKSPELL_LIBS@ @SPELLER_LIB@
++libgtkspell_3_la_includedir=$(includedir)/gtkspell-3.0/gtkspell
++libgtkspell_3_la_include_HEADERS=gtkspell.h
++libgtkspell_3_la_SOURCES=gtkspell.c deprecated.c gtkspell.h
+diff -r 1f70e6de755c -r e5e95e6208f9 gtkspell/gtkspell.c
+--- a/gtkspell/gtkspell.c	Sun Aug 14 21:50:15 2011 -0400
++++ b/gtkspell/gtkspell.c	Sun Aug 14 23:31:14 2011 -0400
+@@ -11,7 +11,7 @@
+ #include "../config.h"
+ #include "gtkspell.h"
+ 
+-#define _(String) dgettext (PACKAGE, String)
++#define _(String) dgettext (GETTEXT_PACKAGE, String)
+ 
+ #define GTKSPELL_MISSPELLED_TAG "gtkspell-misspelled"
+ 
+
