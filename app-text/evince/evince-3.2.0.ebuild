@@ -16,7 +16,7 @@ HOMEPAGE="http://www.gnome.org/projects/evince/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="dbus debug djvu doc dvi gnome-keyring +introspection nautilus t1lib tiff"
+IUSE="dbus debug djvu doc dvi gnome-keyring +introspection nautilus t1lib tiff xps"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -54,6 +54,7 @@ RDEPEND="
 	introspection? ( >=dev-libs/gobject-introspection-0.6 )
 	nautilus? ( >=gnome-base/nautilus-2.91.4[introspection?] )
 	tiff? ( >=media-libs/tiff-3.6 )
+	xps? ( >=app-text/libgxps-0.0.1 )
 "
 DEPEND="${RDEPEND}
 	app-text/scrollkeeper
@@ -97,7 +98,7 @@ pkg_setup() {
 		$(use_enable nautilus)
 		$(use_enable t1lib)
 		$(use_enable tiff)
-		--disable-xps"
+		$(use_enable xps)"
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
 }
 
