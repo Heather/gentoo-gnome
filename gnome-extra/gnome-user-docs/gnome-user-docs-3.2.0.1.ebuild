@@ -14,6 +14,12 @@ LICENSE="CC-Attribution-3.0"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE=""
+# Explicit linguas_ handling since building all translations takes forever
+# XXX: keep LANGS list in sync with package! ("C" is always installed)
+LANGS="ca de es fi fr gl hi hu nl ru sl sv vi"
+for x in ${LANGS}; do
+	IUSE="${IUSE} linguas_${x}"
+done
 
 # Newer gnome-doc-utils is needed for RNGs
 # libxml2 needed for xmllint
@@ -29,15 +35,7 @@ RESTRICT="binchecks strip"
 
 DOCS="AUTHORS ChangeLog NEWS README"
 
-pkg_pretend() {
-	if [[ -z ${LINGUAS} ]]; then
-		ewarn "You are building ${PN} with LINGUAS unset, so help files"
-		ewarn "in all languages supported by the package will be built."
-		ewarn
-		ewarn "To decrease build time, it is recommended that you set LINGUAS"
-		ewarn "in /etc/make.conf to the set of language codes that are needed"
-		ewarn "for your system. For example,"
-		ewarn "LINGUAS=\"en es\""
-		ewarn "ensures that only English and Spanish translations are built."
-	fi
+pkg_setup() {
+	# Treat unset LINGUAS as empty (building all translations takes forever).
+	export LINGUAS="${LINGUAS-}"
 }
