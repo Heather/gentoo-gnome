@@ -5,7 +5,7 @@
 EAPI="4"
 GCONF_DEBUG="no"
 
-inherit gnome2
+inherit eutils gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -28,3 +28,10 @@ DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40"
 
 DOCS="AUTHORS HACKING NEWS README"
+
+src_prepare() {
+	# Upstream patch to use x-content/unix-software like all of gnome-3.2.1,
+	# will be in next release
+	epatch "${FILESDIR}/${P}-unix-software.patch"
+	gnome2_src_prepare
+}
