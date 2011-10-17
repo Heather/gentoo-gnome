@@ -3,9 +3,10 @@
 # $Header: $
 
 EAPI="4"
+PYTHON_DEPEND="utils? 2"
+# Avoid runtime dependency on python when USE=test
 
-inherit autotools gnome.org libtool eutils flag-o-matic multilib pax-utils virtualx
-# Do not inherit python.eclass to avoid python runtime dependency; #377549
+inherit autotools gnome.org libtool eutils flag-o-matic multilib pax-utils python virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -17,18 +18,19 @@ SRC_URI="${SRC_URI}
 
 LICENSE="LGPL-2"
 SLOT="2"
-IUSE="debug doc fam selinux +static-libs systemtap test xattr"
+IUSE="debug doc fam selinux +static-libs systemtap test utils xattr"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
+	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd ~x86-linux"
 fi
 
 RDEPEND="virtual/libiconv
 	virtual/libffi
 	sys-libs/zlib
 	xattr? ( sys-apps/attr )
-	fam? ( virtual/fam )"
+	fam? ( virtual/fam )
+	utils? ( >=dev-util/gdbus-codegen-${PV} )"
 DEPEND="${RDEPEND}
 	>=sys-devel/gettext-0.11
 	>=dev-util/gtk-doc-am-1.15
@@ -38,13 +40,20 @@ DEPEND="${RDEPEND}
 		~app-text/docbook-xml-dtd-4.1.2 )
 	systemtap? ( >=dev-util/systemtap-1.3 )
 	test? (
+		sys-devel/gdb
 		=dev-lang/python-2*
-		>=dev-util/gdbus-codegen-2.30.0
+		>=dev-util/gdbus-codegen-${PV}
 		>=sys-apps/dbus-1.2.14 )
 	!<dev-util/gtk-doc-1.15-r2"
 PDEPEND="!<gnome-base/gvfs-1.6.4-r990" # Earlier versions do not work with glib
 
-# XXX: Consider adding test? ( sys-devel/gdb ); assert-msg-test tries to use it
+pkg_setup() {
+	# Needed for gio/tests/gdbus-testserver.py
+	if use test ; then
+		python_set_active_version 2
+		python_pkg_setup
+	fi
+}
 
 src_prepare() {
 	[[ ${PV} = 9999 ]] && gnome2-live_src_prepare
@@ -61,7 +70,7 @@ src_prepare() {
 
 	# Don't fail gio tests when ran without userpriv, upstream bug 552912
 	# This is only a temporary workaround, remove as soon as possible
-	epatch "${FILESDIR}/${PN}-2.18.1-workaround-gio-test-failure-without-userpriv.patch"
+#	epatch "${FILESDIR}/${PN}-2.18.1-workaround-gio-test-failure-without-userpriv.patch"
 
 	# Fix gmodule issues on fbsd; bug #184301
 	epatch "${FILESDIR}"/${PN}-2.12.12-fbsd.patch
@@ -87,9 +96,6 @@ src_prepare() {
 			sed -i -e "/desktop-app-info\/lastused/d" gio/tests/desktop-app-info.c || die
 		fi
 
-		# Disable flaky gdbus/connection/life-cycle test; bug #384853
-		sed -i -e "/connection\/life-cycle/d" gio/tests/gdbus-connection.c || die
-
 		# Disable tests requiring dbus-python and pygobject; bugs #349236, #377549, #384853
 		if ! has_version dev-python/dbus-python || ! has_version 'dev-python/pygobject:2' ; then
 			ewarn "Some tests will be skipped due to dev-python/dbus-python or dev-python/pygobject:2"
@@ -103,20 +109,17 @@ src_prepare() {
 			sed -i -e "/gdbus\/method-calls-in-thread/d" gio/tests/gdbus-threading.c || die
 			# needed to prevent gdbus-threading from asserting
 			ln -sfn $(type -P true) gio/tests/gdbus-testserver.py
-		else
-			# use python2 for the test server
-			sed -i -e 's:/usr/bin/env python$:/usr/bin/env python2:' gio/tests/gdbus-testserver.py || die
 		fi
 	fi
 
 	# gdbus-codegen is a separate package
-	epatch "${FILESDIR}/${PN}-2.29.18-external-gdbus-codegen.patch"
+	epatch "${FILESDIR}/${PN}-2.30.1-external-gdbus-codegen.patch"
+
+	# Handle the G_HOME environment variable to override the passwd entry, upstream bug #142568
+	epatch "${FILESDIR}/${PN}-2.30.1-homedir-env.patch"
 
 	# disable pyc compiling
 	ln -sfn $(type -P true) py-compile
-
-	# python2 needed for gtester-report
-	sed -e 's:/usr/bin/env python$:/usr/bin/env python2:' -i glib/gtester-report || die
 
 	# Needed for the punt-python-check patch, disabling timeout test
 	# Also needed to prevent croscompile failures, see bug #267603
@@ -131,8 +134,10 @@ src_prepare() {
 src_configure() {
 	# Avoid circular depend with dev-util/pkgconfig
 	if ! has_version dev-util/pkgconfig; then
-		export DBUS1_CFLAGS="-I/usr/include/dbus-1.0 -I/usr/$(get_libdir)/dbus-1.0/include"
-		export DBUS1_LIBS="-ldbus-1"
+		if has_version sys-apps/dbus; then
+			export DBUS1_CFLAGS="-I/usr/include/dbus-1.0 -I/usr/$(get_libdir)/dbus-1.0/include"
+			export DBUS1_LIBS="-ldbus-1"
+		fi
 		export LIBFFI_CFLAGS="-I$(echo /usr/$(get_libdir)/libffi-*/include)"
 		export LIBFFI_LIBS="-lffi"
 	fi
@@ -162,7 +167,13 @@ src_configure() {
 
 src_install() {
 	local f
-	emake DESTDIR="${D}" install || die "Installation failed"
+
+	# install-exec-hook substitutes ${PYTHON} in glib/gtester-report
+	emake DESTDIR="${D}" PYTHON="${EPREFIX}/usr/bin/python2" install
+
+	if ! use utils; then
+		rm "${ED}usr/bin/gtester-report"
+	fi
 
 	# Do not install charset.alias even if generated, leave it to libiconv
 	rm -f "${ED}/usr/lib/charset.alias"
@@ -172,17 +183,17 @@ src_install() {
 
 	# This is there for git snapshots and the live ebuild, bug 351966
 	emake README || die "emake README failed"
-	dodoc AUTHORS ChangeLog* NEWS* README || die "dodoc failed"
+	dodoc AUTHORS ChangeLog* NEWS* README
 
 	insinto /usr/share/bash-completion
 	for f in gdbus gsettings; do
-		newins "${ED}/etc/bash_completion.d/${f}-bash-completion.sh" ${f} || die
+		newins "${ED}/etc/bash_completion.d/${f}-bash-completion.sh" ${f}
 	done
 	rm -rf "${ED}/etc"
 
 	# Completely useless with or without USE static-libs, people need to use
 	# pkg-config
-	find "${ED}" -name '*.la' -exec rm -f {} +
+	find "${E}" -name '*.la' -exec rm -f {} +
 }
 
 src_test() {
@@ -204,7 +215,7 @@ src_test() {
 	fi
 
 	# Need X for dbus-launch session X11 initialization
-	Xemake check || die "tests failed"
+	Xemake check
 }
 
 pkg_preinst() {
