@@ -1,0 +1,21 @@
+From 9b141728c889a6d2f88767655661318e3d8d82da Mon Sep 17 00:00:00 2001
+From: Malcolm Lewis <malcolmlewis@opensuse.org>
+Date: Mon, 17 Oct 2011 16:43:06 +0000
+Subject: power: Fix "undefined symbol: WEXITSTATUS" error.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=662020
+---
+diff --git a/plugins/power/gsd-power-manager.c b/plugins/power/gsd-power-manager.c
+index 010d14a..3f10c22 100644
+--- a/plugins/power/gsd-power-manager.c
++++ b/plugins/power/gsd-power-manager.c
+@@ -24,6 +24,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <stdio.h>
++#include <sys/wait.h>
+ #include <glib/gi18n.h>
+ #include <gtk/gtk.h>
+ #include <libupower-glib/upower.h>
+--
+cgit v0.9.0.2

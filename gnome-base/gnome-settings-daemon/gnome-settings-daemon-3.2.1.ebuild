@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit autotools eutils gnome2 virtualx
+inherit eutils gnome2 virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -101,16 +101,12 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# A bunch of important patches from upstream, will be in next release
-	epatch "${FILESDIR}/${PV}/"*.patch
+	# Upstream patch to fix undefined symbol, will be in next release
+	epatch "${FILESDIR}/${P}-WEXITSTATUS.patch"
 
 	# Backport patch from git master branch (not in gnome-3-2 branch yet)
 	# fixing loading color profiles at startup
 	epatch "${FILESDIR}/${PN}-3.2.0-color-unbreak-loading-profiles.patch"
-
-	# Do not fail to start the power plugin if clearing DPMS timeouts failed
-	# https://bugzilla.gnome.org/show_bug.cgi?id=660859
-	epatch "${FILESDIR}/${PN}-3.2.0-dpms-failure.patch"
 
 	# https://bugzilla.gnome.org/show_bug.cgi?id=621836
 	# Apparently this change severely affects touchpad usability for some
@@ -119,7 +115,6 @@ src_prepare() {
 	use short-touchpad-timeout &&
 		epatch "${FILESDIR}/${PN}-3.0.2-short-touchpad-timeout.patch"
 
-	eautoreconf
 	gnome2_src_prepare
 }
 
