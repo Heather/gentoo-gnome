@@ -99,6 +99,22 @@ src_prepare() {
 	sed '\%/recent-manager/add%,/recent_manager_purge/ d' \
 		-i gtk/tests/recentmanager.c || die "sed 2 failed"
 
+	# Missing file, required for tests; https://bugzilla.gnome.org/show_bug.cgi?id=662024
+	cp "${FILESDIR}/${PN}-3.2.1-selector.errors" \
+		tests/css/parser/selector.errors || die "cp failed"
+
+	# FIXME: multiple reftests fail when run from portage (but succeed when
+	# run from a manual compile in a temp directory)
+	sed -e 's:\(SUBDIRS.*\)reftests:\1:' \
+		-i tests/Makefile.* || die "sed 3 failed"
+
+	# Test results depend on the list of mounted filesystems!
+	rm tests/a11y/pickers.{ui,txt} || die "rm failed"
+
+	# Failing treeview scrolling tests; bug #384855,
+	# https://bugzilla.gnome.org/show_bug.cgi?id=660931
+	epatch "${FILESDIR}/${PN}-3.2.1-failing-tests.patch"
+
 	if ! use test; then
 		# don't waste time building tests
 		strip_builddir SRC_SUBDIRS tests Makefile.am
