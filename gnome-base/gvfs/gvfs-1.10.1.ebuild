@@ -105,7 +105,10 @@ src_prepare() {
 		sed -i -e 's/burn.mount/ /' daemon/Makefile.am || die
 	fi
 
-	{ use gphoto2 || use archive || use prefix; } && eautoreconf
+	# Drop G_DISABLE_DEPRECATED (fixed in git master); requires eautoreconf
+	epatch "${FILESDIR}/${PN}-1.10.1-G_DISABLE_DEPRECATED.patch"
+	eautoreconf
+	#{ use gphoto2 || use archive || use prefix; } && eautoreconf
 }
 
 src_install() {
