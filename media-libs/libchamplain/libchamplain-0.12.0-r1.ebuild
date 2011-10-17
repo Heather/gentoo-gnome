@@ -60,5 +60,9 @@ src_prepare() {
 	mv "${S}"/docs/reference/${PN}{,-${SLOT}}-docs.sgml || die "mv (1) failed"
 	mv "${S}"/docs/reference-gtk/${PN}-gtk{,-${SLOT}}-docs.sgml || die "mv (1) failed"
 
+	# Upstream patch from master branch to fix scale redrawing issues;
+	# not in 0.12 branch yet.
+	epatch "${FILESDIR}/${PN}-0.12.0-redrawing.patch"
+
 	gnome2_src_prepare
 }
