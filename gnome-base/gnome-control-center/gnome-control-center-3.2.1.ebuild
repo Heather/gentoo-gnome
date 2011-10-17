@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes" # gmodule is used, which uses dlopen
 
-inherit eutils gnome2
+inherit gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -104,10 +104,4 @@ pkg_setup() {
 		$(use_enable cups)
 		$(use_with socialweb libsocialweb)"
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
-}
-
-src_prepare() {
-	gnome2_src_prepare
-	# Useful upstream patches, will be in next release
-	epatch "${FILESDIR}/${PV}/"*.patch
 }
