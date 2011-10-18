@@ -39,6 +39,7 @@ RDEPEND="
 	x11-libs/pango
 
 	introspection? ( >=dev-libs/gobject-introspection-0.6.2 )"
+PDEPEND=">=gnome-base/gnome-control-center-3.2"
 DEPEND="${RDEPEND}
 	dev-libs/libxslt
 	>=dev-util/gdbus-codegen-2.30.0
