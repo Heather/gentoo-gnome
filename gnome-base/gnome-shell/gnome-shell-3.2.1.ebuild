@@ -8,7 +8,7 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2:2.5"
 
-inherit eutils gnome2 python
+inherit gnome2 python
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -51,7 +51,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
 	>=net-misc/networkmanager-0.8.999[introspection]
 	>=net-wireless/gnome-bluetooth-3.1.0[introspection]
 	>=sys-auth/polkit-0.100[introspection]
-	>=x11-wm/mutter-3.0.0[introspection]
+	>=x11-wm/mutter-3.2.1[introspection]
 
 	dev-libs/dbus-glib
 	dev-libs/libxml2:2
@@ -113,20 +113,9 @@ pkg_setup() {
 		BROWSER_PLUGIN_DIR=${EPREFIX}/usr/$(get_libdir)/nsbrowser/plugins"
 }
 
-src_prepare() {
-	gnome2_src_prepare
-	# Fix recording; will be in next release
-	epatch "${FILESDIR}/${P}-recorder-coglhandle.patch"
-	# Fix multimonitor behavior; will be in next release
-	epatch "${FILESDIR}/${P}-boxpointer-multimonitor.patch"
-	# Fix different icons being cached identically; will be in next release
-	epatch "${FILESDIR}/${P}-st-texture-cache-non-serialized-icons.patch"
-}
-
 src_install() {
 	gnome2_src_install
 	python_convert_shebangs 2 "${D}"/usr/bin/gnome-shell-extension-tool
-
 }
 
 pkg_postinst() {
