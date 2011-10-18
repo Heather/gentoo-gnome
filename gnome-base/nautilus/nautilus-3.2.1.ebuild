@@ -52,14 +52,16 @@ DEPEND="${COMMON_DEPEND}
 	doc? ( >=dev-util/gtk-doc-1.4 )"
 RDEPEND="${COMMON_DEPEND}
 	packagekit? ( app-admin/packagekit-base )
-	sendto? ( !gnome-extra/nautilus-sendto )"
+	sendto? ( !<gnome-extra/nautilus-sendto-3.0.1 )"
 # For eautoreconf
 #	gnome-base/gnome-common
 #	dev-util/gtk-doc-am"
 PDEPEND="gnome? (
 		>=x11-themes/gnome-icon-theme-1.1.91
 		x11-themes/gnome-icon-theme-symbolic )
+	tracker? ( >=gnome-extra/nautilus-tracker-tags-0.12 )
 	previewer? ( >=gnome-extra/sushi-0.1.9 )
+	sendto? ( >=gnome-extra/nautilus-sendto-3.0.1 )
 	>=gnome-base/gvfs-0.1.2"
 
 pkg_setup() {
