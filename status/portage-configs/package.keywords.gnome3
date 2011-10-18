@@ -209,6 +209,7 @@ net-wireless/wimax
 ~media-libs/libexif-0.6.20
 gnome-base/nautilus
 gnome-extra/sushi
+gnome-extra/nautilus-tracker-tags
 
 # Rhythmbox, Sound Juicer, Totem
 dev-libs/gmime:2.4
