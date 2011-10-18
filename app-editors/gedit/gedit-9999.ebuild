@@ -49,7 +49,7 @@ COMMON_DEPEND="
 		>=x11-libs/gtk+-3.0:3[introspection]
 		>=x11-libs/gtksourceview-2.91.9:3.0[introspection]
 		>=dev-libs/libpeas-0.7.4[gtk]
-		>=dev-python/pygobject-2.90.2:3 )
+		>=dev-python/pygobject-3.0.0:3 )
 	spell? (
 		>=app-text/enchant-1.2
 		>=app-text/iso-codes-0.35
