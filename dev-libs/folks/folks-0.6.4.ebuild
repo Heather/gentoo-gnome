@@ -71,14 +71,6 @@ pkg_setup() {
 	fi
 }
 
-src_prepare() {
-	# See https://bugzilla.gnome.org/show_bug.cgi?id=660217
-	epatch "${FILESDIR}/${P}-vala-tracker.patch"
-	eautoreconf
-
-	gnome2_src_prepare
-}
-
 src_test() {
 	# FIXME: several eds backend tests fail
 	sed -e 's/check: .*/check: /' \
