@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit eutils gnome2
+inherit gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -76,10 +76,4 @@ pkg_setup() {
 		--with-libcanberra
 		$(use_enable introspection)
 		$(use_enable xinerama)"
-}
-
-src_prepare() {
-	gnome2_src_prepare
-	# Fix memory leak, will be in next release
-	epatch "${FILESDIR}/${P}-clutter_actor_get_effects-leak.patch"
 }
