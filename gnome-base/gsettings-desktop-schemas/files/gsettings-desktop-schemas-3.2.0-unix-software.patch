@@ -1,0 +1,26 @@
+From 96bf58048800f1336aa8424c475f951702ce4858 Mon Sep 17 00:00:00 2001
+From: Cosimo Cecchi <cosimoc@gnome.org>
+Date: Mon, 03 Oct 2011 19:56:46 +0000
+Subject: media: change x-content/software to x-content/unix-software
+
+The Nautilus handler doesn't claim x-content/software at all now, and
+we're really interested in autorunning UNIX software rather than Win32
+one anyway.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=660803
+---
+diff --git a/schemas/org.gnome.desktop.media-handling.gschema.xml.in.in b/schemas/org.gnome.desktop.media-handling.gschema.xml.in.in
+index a1bd398..1df7aea 100644
+--- a/schemas/org.gnome.desktop.media-handling.gschema.xml.in.in
++++ b/schemas/org.gnome.desktop.media-handling.gschema.xml.in.in
+@@ -16,7 +16,7 @@
+       <_description>If set to true, then Nautilus will never prompt nor autorun/autostart programs when a medium is inserted.</_description>
+     </key>
+     <key name="autorun-x-content-start-app" type="as">
+-      <default>[ 'x-content/software' ]</default>
++      <default>[ 'x-content/unix-software' ]</default>
+       <_summary>List of x-content/* types where the preferred application will be launched</_summary>
+       <_description>List of x-content/* types for which the user have chosen to start an application in the preference capplet. The preferred application for the given type will be started on insertion on media matching these types.</_description>
+     </key>
+--
+cgit v0.9.0.2
