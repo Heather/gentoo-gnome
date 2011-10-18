@@ -49,9 +49,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# Upstream patch to fix g_error_new usage, will be in next release
-	epatch "${FILESDIR}/${P}-format-string.patch"
-
 	# Fix compatibility with Gentoo's sys-apps/man
 	# https://bugzilla.gnome.org/show_bug.cgi?id=648854
 	epatch "${FILESDIR}/${PN}-3.0.3-man-compatibility.patch"
