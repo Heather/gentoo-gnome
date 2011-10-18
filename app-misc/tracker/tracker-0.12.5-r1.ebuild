@@ -72,9 +72,6 @@ RDEPEND="
 	mp3? (
 		>=media-libs/taglib-1.6
 		gtk? ( x11-libs/gdk-pixbuf:2 ) )
-	nautilus? (
-		>=gnome-base/nautilus-2.90
-		x11-libs/gtk+:3 )
 	networkmanager? ( >=net-misc/networkmanager-0.8 )
 	pdf? (
 		>=x11-libs/cairo-1
@@ -109,6 +106,7 @@ DEPEND="${RDEPEND}
 		>=sys-apps/dbus-1.3.1[X] )
 "
 #	strigi? ( >=dev-lang/vala-0.12:0.12 )
+PDEPEND="nautilus? ( >=gnome-extra/nautilus-tracker-tags-${PV} )"
 
 function inotify_enabled() {
 	if linux_config_exists; then
@@ -157,6 +155,7 @@ pkg_setup() {
 	# FIXME: disabling streamanalyzer for now since tracker-sparql-builder.h
 	# is not being generated
 	# XXX: disabling qt since tracker-albumart-qt is unstable; bug #385345
+	# nautilus extension is in a separate package, nautilus-tracker-tags
 	G2CONF="${G2CONF}
 		--disable-hal
 		--enable-tracker-fts
@@ -166,6 +165,7 @@ pkg_setup() {
 		--enable-introspection
 		--disable-libstreamanalyzer
 		--disable-qt
+		--disable-nautilus-extension
 		$(use_enable applet tracker-search-bar)
 		$(use_enable eds miner-evolution)
 		$(use_enable exif libexif)
@@ -183,7 +183,6 @@ pkg_setup() {
 		$(use_enable jpeg libjpeg)
 		$(use_enable laptop upower)
 		$(use_enable mp3 taglib)
-		$(use_enable nautilus nautilus-extension)
 		$(use_enable networkmanager network-manager)
 		$(use_enable pdf poppler)
 		$(use_enable playlist)
