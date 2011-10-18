@@ -21,7 +21,7 @@ SLOT="0"
 IUSE_plugins="charmap synctex terminal"
 IUSE="+python ${IUSE_plugins}"
 
-RDEPEND=">=app-editors/gedit-3.0.0[python?]
+RDEPEND=">=app-editors/gedit-3.2.0[python?]
 	>=dev-libs/glib-2.26.0:2
 	>=dev-libs/libpeas-0.7.3[gtk,python?]
 	>=x11-libs/gtk+-3.0.0:3
