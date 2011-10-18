@@ -24,7 +24,7 @@ fi
 IUSE="clutter packagekit raw"
 
 # FIXME: fix detection of docbook2man
-COMMON_DEPEND=">=dev-libs/glib-2.25.9:2
+COMMON_DEPEND=">=dev-libs/glib-2.30.0:2
 
 	>=media-libs/lcms-2.2:2
 	>=media-libs/libcanberra-0.10[gtk3]
