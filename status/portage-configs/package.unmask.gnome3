@@ -1,9 +1,20 @@
+# Alexandre Rostovtsev <tetromino@gentoo.org> (18 Oct 2011)
+# Gtk+-3.2, friends and dependencies, will be unmasked soon™
+# (before rest of GNOME-3.2)
+>=dev-cpp/gtkmm-3.2
+>=dev-libs/atk-2.2
+>=x11-libs/gtk+-3.2
+>=x11-libs/pango-1.29
+x11-themes/gtk-engines-unico
+>=x11-themes/gnome-themes-standard-3.2
+
 # GNOME 3.2
 >=dev-lang/spidermonkey-1.8.5
 >=dev-libs/gjs-1.29
 >=dev-libs/gobject-introspection-1.29
 >=dev-libs/json-glib-0.13
 >=dev-libs/seed-3.0
+>=dev-python/pygobject-2.28.6-r50
 >=gnome-base/gnome-desktop-3.1
 >=gnome-base/gsettings-desktop-schemas-3.1
 >=media-libs/clutter-1.7
