@@ -53,6 +53,9 @@ pkg_setup() {
 src_prepare() {
 	gnome2_src_prepare
 
+	# Fix popup menus in dock extension; will be in next release
+	epatch "${FILESDIR}/${P}-dock-popup-menus.patch"
+
 	# xrandr-indicator crashes gnome-shell with <gjs-0.7.15;
 	# see gnome bug 649077. For simplicity, just disable it for gnome-3.0.
 	# sed -e 's:\(ALL_EXTENSIONS=.*\)xrandr-indicator:\1:' \
