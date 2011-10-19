@@ -22,6 +22,7 @@ fi
 
 LICENSE="LGPL-2.1"
 SLOT="0"
+IUSE=""
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
