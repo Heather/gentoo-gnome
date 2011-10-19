@@ -52,7 +52,7 @@ RDEPEND=">=x11-libs/gtk+-3.0.0:3
 		>=gnome-extra/gucharmap-2.33.0:2.90
 		>=gnome-base/libgtop-2.11.92
 
-		>=dev-python/pygobject-2.26[introspection]
+		>=dev-python/pygobject-2.26:2[introspection]
 		gnome-base/gconf[introspection]
 		gnome-base/gnome-panel[introspection]
 		x11-libs/gdk-pixbuf[introspection]
