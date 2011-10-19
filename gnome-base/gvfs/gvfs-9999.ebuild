@@ -50,8 +50,7 @@ RDEPEND=">=dev-libs/glib-2.29.14
 		cdda? ( >=dev-libs/libcdio-0.78.2[-minimal] )
 		|| ( >=sys-fs/udev-171[gudev] >=sys-fs/udev-145[extras] ) )
 	http? ( >=net-libs/libsoup-gnome-2.26.0 )
-	samba? ( || ( >=net-fs/samba-3.4.6[smbclient]
-			<=net-fs/samba-3.3 ) )"
+	samba? ( >=net-fs/samba-3.4.6[smbclient] )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
 	dev-util/pkgconfig
@@ -101,10 +100,7 @@ src_prepare() {
 		sed -i -e 's/burn.mount/ /' daemon/Makefile.am || die
 	fi
 
-	# Drop G_DISABLE_DEPRECATED (fixed in git master); requires eautoreconf
-	epatch "${FILESDIR}/${PN}-1.10.1-G_DISABLE_DEPRECATED.patch"
-	eautoreconf
-	#{ use gphoto2 || use archive || use prefix; } && eautoreconf
+	{ use gphoto2 || use archive || use prefix; } && eautoreconf
 }
 
 src_install() {
