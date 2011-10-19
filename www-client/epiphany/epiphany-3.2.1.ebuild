@@ -78,9 +78,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# Upstream patch to fix a crash, will be in next release
-	epatch "${FILESDIR}/${P}-networkmanager-crash.patch"
-
 	# Make networkmanager optional for prefix people
 	epatch "${FILESDIR}/${PN}-3.2.0-optional-networkmanager.patch"
 	gnome2_src_prepare
