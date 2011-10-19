@@ -1,3 +1,7 @@
+# Alexandre Rostovtsev <tetromino@gentoo.org> (19 Oct 2011)
+# Requires nautilus[introspection] to run
+>=dev-python/nautilus-python-1.0
+
 # Alexandre Rostovtsev <tetromino@gentoo.org> (18 Oct 2011)
 # Gtk+-3.2, friends and dependencies, will be unmasked soon™
 # (before rest of GNOME-3.2)
