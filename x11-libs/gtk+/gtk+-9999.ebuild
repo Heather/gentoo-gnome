@@ -127,7 +127,7 @@ src_prepare() {
 		[[ ${PV} != 9999 ]] && strip_builddir SRC_SUBDIRS demos Makefile.in
 	fi
 
-	gnome2_src_prepare
+	[[ ${PV} == 9999 ]] && gnome2_src_prepare
 }
 
 src_configure() {
