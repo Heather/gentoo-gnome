@@ -9,6 +9,7 @@
 >=dev-libs/atk-2.2
 >=x11-libs/gtk+-3.2
 >=x11-libs/pango-1.29
+>=x11-libs/vte-0.30
 x11-themes/gtk-engines-unico
 >=x11-themes/gnome-themes-standard-3.2
 
