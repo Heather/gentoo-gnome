@@ -113,6 +113,14 @@ pkg_setup() {
 		BROWSER_PLUGIN_DIR=${EPREFIX}/usr/$(get_libdir)/nsbrowser/plugins"
 }
 
+src_prepare() {
+	gnome2_src_prepare
+	# Drop G_DISABLE_DEPRECATED for sanity on glib upgrades; bug #384765
+	# Note: sed Makefile.in because it is generated from several Makefile.ams
+	sed -e 's/-DG_DISABLE_DEPRECATED//g' \
+		-i src/Makefile.in browser-plugin/Makefile.in || die "sed failed"
+}
+
 src_install() {
 	gnome2_src_install
 	python_convert_shebangs 2 "${D}"/usr/bin/gnome-shell-extension-tool
