@@ -84,6 +84,7 @@ DEPEND="${COMMON_DEPEND}
 # fprintd is used via dbus by gdm-fingerprint-extension
 RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/gnome-session-2.91.92
+	x11-apps/xhost
 
 	accessibility? (
 		app-accessibility/gnome-mag
