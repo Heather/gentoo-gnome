@@ -84,6 +84,10 @@ pkg_pretend() {
 	fi
 }
 
+pkg_setup() {
+	enewgroup plugdev
+}
+
 src_prepare() {
 	# Don't build tests
 	epatch "${FILESDIR}/${PN}-0.9_rc3-fix-tests.patch"
@@ -133,6 +137,15 @@ src_install() {
 	insinto /etc/NetworkManager
 	newins "${FILESDIR}/nm-system-settings.conf-ifnet" nm-system-settings.conf
 
+	# Allow users in plugdev group to modify system connections
+	insinto /etc/polkit-1/localauthority/10-vendor.d
+	doins "${FILESDIR}/01-org.freedesktop.NetworkManager.settings.modify.system.pkla"
+
 	# Remove useless .la files
 	find "${D}" -name '*.la' -exec rm -f {} + || die "la file removal failed"
+}
+
+pkg_postinst() {
+	elog "To modify system network connections without needing to enter the"
+	elog "root password, add your user account to the 'plugdev' group."
 }
