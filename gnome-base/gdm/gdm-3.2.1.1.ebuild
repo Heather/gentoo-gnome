@@ -3,6 +3,7 @@
 # $Header: $
 
 EAPI="4"
+GNOME2_LA_PUNT="yes"
 GCONF_DEBUG="yes"
 
 inherit autotools eutils gnome2 pam systemd
@@ -25,7 +26,7 @@ SRC_URI="${SRC_URI}
 
 # NOTE: x11-base/xorg-server dep is for X_SERVER_PATH etc, bug #295686
 # nspr used by smartcard extension
-# dconf, dbus and g-s-d are needed at build time for make-dconf-override-db.sh
+# dconf, dbus and g-s-d are needed at install time for dconf update
 COMMON_DEPEND="
 	>=dev-libs/dbus-glib-0.74
 	>=dev-libs/glib-2.29.3:2
@@ -155,7 +156,7 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-2.32.0-fix-vt-problems.patch"
 
 	# make custom session work, bug #216984
-	epatch "${FILESDIR}/${PN}-2.32.0-custom-session.patch"
+	epatch "${FILESDIR}/${PN}-3.2.1.1-custom-session.patch"
 
 	# ssh-agent handling must be done at xinitrc.d, bug #220603
 	epatch "${FILESDIR}/${PN}-2.32.0-xinitrc-ssh-agent.patch"
@@ -167,17 +168,12 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-3.1.91-hardcoded-gnome-session-path-env.patch"
 
 	# don't load accessibility support at runtime when USE=-accessibility
-	if ! use accessibility; then
-		epatch "${FILESDIR}/${PN}-3.1.91-disable-accessibility.patch"
-		# force gsettings override db to be regenerated
-		rm -f data/dconf-override-db
-	fi
+	use accessibility || epatch "${FILESDIR}/${PN}-3.2.1.1-disable-accessibility.patch"
 
 	# make gdm-fallback session the default if USE=-gnome-shell
 	if ! use gnome-shell; then
-		sed -e 's:"gdm-shell":"gdm-fallback":' \
-			-i data/make-dconf-override-db.sh || die "sed failed"
-		rm -f data/dconf-override-db
+		sed -e "s:'gdm-shell':'gdm-fallback':" \
+			-i data/00-upstream-settings || die "sed failed"
 	fi
 
 	mkdir -p "${S}"/m4
@@ -223,6 +219,8 @@ src_install() {
 
 pkg_postinst() {
 	gnome2_pkg_postinst
+
+	dbus-launch dconf update || die "'dconf update' failed"
 
 	ewarn
 	ewarn "This is an EXPERIMENTAL release, please bear with its bugs and"
