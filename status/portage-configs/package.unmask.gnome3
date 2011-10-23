@@ -83,6 +83,7 @@ x11-themes/gtk-engines-unico
 >=gnome-extra/gucharmap-3.0
 >=gnome-extra/mousetweaks-3.0
 >=gnome-extra/nautilus-sendto-3.0
+gnome-extra/office-runner
 >=gnome-extra/zenity-3.0
 >=mail-client/evolution-3.0
 >=media-gfx/eog-3.0

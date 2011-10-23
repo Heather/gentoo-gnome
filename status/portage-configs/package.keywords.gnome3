@@ -268,6 +268,7 @@ x11-libs/vte:2.90
 gnome-extra/drwright
 gnome-extra/gnome-tweak-tool
 gnome-extra/mousetweaks
+gnome-extra/office-runner
 
 #################
 ## END GNOME 3 ##
