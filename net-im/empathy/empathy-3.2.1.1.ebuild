@@ -118,9 +118,6 @@ pkg_setup() {
 src_prepare() {
 	gnome2_src_prepare
 
-	# bug #388051, CVE-2011-3635; fixed in git master
-	epatch "${FILESDIR}/${P}-theme_adium_append_message-escape-alias.patch"
-
 	python_convert_shebangs -r 2 tools
 }
 
