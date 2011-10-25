@@ -23,7 +23,7 @@ RDEPEND="
 	>=dev-libs/glib-2.18.0:2
 	>=dev-libs/libunique-1:1
 	>=gnome-base/gconf-2.22:2
-	>=gnome-base/gnome-menus-2.24.1
+	>=gnome-base/gnome-menus-2.24.1:0
 	media-libs/fontconfig
 	>=media-libs/libcanberra-0.10[gtk]
 	>=sys-apps/dbus-1.1.2
