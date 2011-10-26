@@ -29,7 +29,7 @@ COMMON_DEPEND=">=sys-apps/dbus-1.2
 	|| ( >=sys-fs/udev-171[gudev] >=sys-fs/udev-147[extras] )
 	>=dev-libs/glib-2.26
 	>=sys-auth/polkit-0.97
-	>=dev-libs/libnl-1.1
+	dev-libs/libnl:3
 	>=net-wireless/wpa_supplicant-0.7.3-r3[dbus]
 	bluetooth? ( >=net-wireless/bluez-4.82 )
 	avahi? ( net-dns/avahi[autoipd] )
@@ -91,6 +91,10 @@ pkg_setup() {
 src_prepare() {
 	# Don't build tests
 	epatch "${FILESDIR}/${PN}-0.9_rc3-fix-tests.patch"
+	# Fix libnl detection, will be in next release
+	epatch "${FILESDIR}/${P}-libnl-check-"{1,2,3}.patch
+	# Fix <linux/if.h> & <net/if.h> conflict, in next release (bug #388609)
+	epatch "${FILESDIR}/${P}-if.h.patch"
 	# Fix rfkill handling, will be in next release
 	epatch "${FILESDIR}/${P}-rfkill.patch"
 	eautoreconf

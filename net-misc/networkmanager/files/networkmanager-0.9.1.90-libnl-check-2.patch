@@ -1,0 +1,26 @@
+commit fcc128516e3c3d81773fbdee76d684ad93cb5071
+Author: Thomas Graf <tgraf@redhat.com>
+Date:   Fri Sep 23 12:58:54 2011 +0200
+
+    configure: Fix typo in libnl3 check
+    
+    Check for libnl3 sets $have_libnl2 variable instead of $have_libnl3. Mostly a
+    cosmetic fix since the only usage also has the typo in it.
+    
+    Signed-off-by: Thomas Graf <tgraf@redhat.com>
+
+diff --git a/configure.ac b/configure.ac
+index 57e3aea..8b6782a 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -314,8 +314,8 @@ fi
+ AC_DEFINE_UNQUOTED(NO_CONSOLEKIT, $no_ck, [Define to disable use of ConsoleKit])
+ 
+ have_libnl="no"
+-PKG_CHECK_MODULES(LIBNL3, libnl-3.0, [have_libnl2=yes], [have_libnl2=no])
+-if (test "${have_libnl2}" = "yes"); then
++PKG_CHECK_MODULES(LIBNL3, libnl-3.0, [have_libnl3=yes], [have_libnl3=no])
++if (test "${have_libnl3}" = "yes"); then
+ 	AC_DEFINE(HAVE_LIBNL3, 1, [Define if you require specific libnl-3 support])
+ 	LIBNL_CFLAGS="$LIBNL3_CFLAGS"
+ 	LIBNL_LIBS="$LIBNL3_LIBS"
