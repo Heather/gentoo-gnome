@@ -165,9 +165,6 @@ src_prepare() {
 	# fix libxklavier automagic support
 	epatch "${FILESDIR}/${PN}-2.32.0-automagic-libxklavier-support.patch"
 
-	# don't ignore all non-i18n environment variables, gnome bug 656094
-	epatch "${FILESDIR}/${PN}-3.1.91-hardcoded-gnome-session-path-env.patch"
-
 	# don't load accessibility support at runtime when USE=-accessibility
 	use accessibility || epatch "${FILESDIR}/${PN}-3.2.1.1-disable-accessibility.patch"
 
@@ -209,13 +206,11 @@ src_install() {
 	doenvd 99xdg-gdm || die "doenvd failed"
 
 	# install PAM files
-	cp "${FILESDIR}"/3.1.91-pam.d/gdm-{password,fingerprint,smartcard} \
+	cp "${FILESDIR}"/3.2-pam.d/gdm-{password,fingerprint,smartcard,welcome} \
 		"${gentoodir}"/pam.d/
 	use gnome-keyring && sed -i "s:#Keyring=::g" "${gentoodir}"/pam.d/*
 
-	dopamd "${gentoodir}"/pam.d/gdm{,-autologin,-password,-fingerprint,-smartcard}
-	# gdm-welcome is the PAM file for the gdm greeter itself
-	pamd_mimic system-services gdm-welcome auth account session
+	dopamd "${gentoodir}"/pam.d/gdm{,-autologin,-password,-fingerprint,-smartcard,-welcome}
 }
 
 pkg_postinst() {
@@ -231,6 +226,13 @@ pkg_postinst() {
 	elog "To make GDM start at boot, edit /etc/conf.d/xdm"
 	elog "and then execute 'rc-update add xdm default'."
 	elog "If you already have GDM running, you will need to restart it."
+
+	elog
+	elog "GDM ignores most non-localization environment variables. If you"
+	elog "need GDM to launch gnome-session with a particular environment,"
+	elog "you need to use pam_env.so in /etc/pam.d/gdm-welcome; see"
+	elog "the pam_env man page for more information."
+	elog
 
 	if use gnome-keyring; then
 		elog "For autologin to unlock your keyring, you need to set an empty"
