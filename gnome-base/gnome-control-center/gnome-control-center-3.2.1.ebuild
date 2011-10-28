@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes" # gmodule is used, which uses dlopen
 
-inherit gnome2
+inherit autotools gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -16,7 +16,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2"
 SLOT="2"
-IUSE="+cheese +cups +networkmanager +socialweb"
+IUSE="+cheese +colord +cups +networkmanager +socialweb"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -37,7 +37,7 @@ COMMON_DEPEND="
 	>=gnome-base/gconf-2.0:2
 	>=dev-libs/dbus-glib-0.73
 	>=gnome-base/gnome-desktop-3.1.0:3
-	>=gnome-base/gnome-settings-daemon-3.1.4
+	>=gnome-base/gnome-settings-daemon-3.1.4[colord(+)?]
 	>=gnome-base/libgnomekbd-2.91.91
 
 	app-text/iso-codes
@@ -52,7 +52,6 @@ COMMON_DEPEND="
 	>=sys-auth/polkit-0.97
 	>=sys-power/upower-0.9.1
 	>=x11-libs/libnotify-0.7.3
-	>=x11-misc/colord-0.1.8
 
 	x11-apps/xmodmap
 	x11-libs/libX11
@@ -63,6 +62,7 @@ COMMON_DEPEND="
 	cheese? (
 		media-libs/gstreamer:0.10
 		>=media-video/cheese-2.91.91.1 )
+	colord? ( >=x11-misc/colord-0.1.8 )
 	cups? ( >=net-print/cups-1.4[dbus] )
 	networkmanager? (
 		>=gnome-extra/nm-applet-0.9.1.90
@@ -101,7 +101,16 @@ pkg_setup() {
 		--disable-update-mimedb
 		--disable-static
 		$(use_with cheese)
+		$(use_enable colord color)
 		$(use_enable cups)
 		$(use_with socialweb libsocialweb)"
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
+}
+
+src_prepare() {
+	# Make colord plugin optional; requires eautoreconf
+	epatch "${FILESDIR}/${PN}-3.2.1-optional-colord.patch"
+	eautoreconf
+
+	gnome2_src_prepare
 }

@@ -1,0 +1,66 @@
+From b56f9e04f8822db34b030bea86d39c1d444a3cbb Mon Sep 17 00:00:00 2001
+From: Alexandre Rostovtsev <tetromino@gentoo.org>
+Date: Thu, 27 Oct 2011 23:55:23 -0400
+Subject: [PATCH] Make colord optional.
+
+---
+ configure.ac       |   19 ++++++++++++++++++-
+ panels/Makefile.am |    5 ++++-
+ 2 files changed, 22 insertions(+), 2 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index d552ac8..fd9062e 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -106,7 +106,24 @@ PKG_CHECK_MODULES(NETWORK_PANEL, $COMMON_MODULES)
+ PKG_CHECK_MODULES(ONLINE_ACCOUNTS_PANEL, $COMMON_MODULES goa-1.0 goa-backend-1.0)
+ PKG_CHECK_MODULES(POWER_PANEL, $COMMON_MODULES upower-glib >= 0.9.1
+                   gnome-settings-daemon >= $GSD_REQUIRED_VERSION)
+-PKG_CHECK_MODULES(COLOR_PANEL, $COMMON_MODULES colord >= 0.1.8)
++build_color=false
++AC_ARG_ENABLE(color,
++  AC_HELP_STRING([--disable-color],
++                 [disable color management panel]),
++      [case "${enableval}" in
++              yes) WANT_COLOR=yes ;;
++	      no) WANT_COLOR=no ;;
++	      *) AC_MSG_ERROR(bad value ${enableval} for --disable-color) ;;
++      esac],
++      [WANT_COLOR=yes]) dnl Default value
++
++if test x$WANT_COLOR = xyes; then
++      PKG_CHECK_MODULES(COLOR_PANEL, $COMMON_MODULES colord >= 0.1.8)
++      build_color=true
++fi
++AM_CONDITIONAL(BUILD_COLOR, test "x$build_color" = "xtrue")
++AC_SUBST(COLOR_PANEL_CFLAGS)
++AC_SUBST(COLOR_PANEL_LIBS)
+ PKG_CHECK_MODULES(PRINTERS_PANEL, $COMMON_MODULES dbus-glib-1
+                   polkit-gobject-1 >= $POLKIT_REQUIRED_VERSION)
+ PKG_CHECK_MODULES(REGION_PANEL, $COMMON_MODULES libgnomekbd >= 2.91.91
+diff --git a/panels/Makefile.am b/panels/Makefile.am
+index 566a2f8..a375e2f 100644
+--- a/panels/Makefile.am
++++ b/panels/Makefile.am
+@@ -3,7 +3,6 @@ SUBDIRS= \
+ 	background \
+ 	screen \
+ 	power \
+-	color \
+ 	display \
+ 	media \
+ 	mouse \
+@@ -17,6 +16,10 @@ SUBDIRS= \
+ 	datetime \
+ 	wacom
+ 
++if BUILD_COLOR
++SUBDIRS += color
++endif
++
+ if BUILD_PRINTERS
+ SUBDIRS += printers
+ endif
+-- 
+1.7.7.1
+
