@@ -2,27 +2,18 @@
 # Requires nautilus[introspection] to run
 >=dev-python/nautilus-python-1.0
 
-# Alexandre Rostovtsev <tetromino@gentoo.org> (18 Oct 2011)
-# Gtk+-3.2, friends and dependencies, will be unmasked soon™
-# (before rest of GNOME-3.2)
->=dev-cpp/gtkmm-3.2
->=dev-libs/atk-2.2
->=x11-libs/gtk+-3.2
->=x11-libs/pango-1.29
->=x11-libs/vte-0.30
-x11-themes/gtk-engines-unico
->=x11-themes/gnome-themes-standard-3.2
-
 # GNOME 3.2
 >=dev-lang/spidermonkey-1.8.5
 >=dev-libs/gjs-1.29
 >=dev-libs/gobject-introspection-1.29
 >=dev-libs/json-glib-0.13
+>=dev-libs/libpeas-1.2
 >=dev-libs/seed-3.0
 >=dev-python/pygobject-2.28.6-r50
 >=gnome-base/gnome-desktop-3.1
 >=gnome-base/gsettings-desktop-schemas-3.1
 >=media-libs/clutter-1.7
+>=media-libs/cogl-1.7
 
 # Copied from package.mask in portage
 #
@@ -32,12 +23,8 @@ x11-themes/gtk-engines-unico
 # The "Better late than never!" release
 #
 # Libraries
->=dev-libs/atk-2.0
 >=dev-libs/libgweather-3.0
 >=gnome-base/libgnomekbd-3.0
->=gnome-extra/libgda-4.99
-=media-libs/libcanberra-0.28-r4
->=x11-misc/notification-daemon-0.7
 # Core Applications
 >=app-accessibility/orca-3.0
 >=gnome-base/gdm-3.0
@@ -49,7 +36,6 @@ x11-themes/gtk-engines-unico
 >=gnome-base/gnome-settings-daemon-3.0
 >=gnome-base/gnome-control-center-3.0
 >=gnome-base/gnome-shell-3.0
->=gnome-base/gvfs-1.8
 >=gnome-base/libgnome-keyring-3.0
 >=gnome-base/nautilus-3.0
 >=x11-wm/metacity-2.34
