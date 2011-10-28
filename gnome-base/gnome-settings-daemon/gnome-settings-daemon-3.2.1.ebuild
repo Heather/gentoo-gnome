@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit eutils gnome2 virtualx
+inherit autotools eutils gnome2 virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -21,7 +21,7 @@ if [[ ${PV} = 9999 ]]; then
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 fi
-IUSE="+cups debug packagekit policykit short-touchpad-timeout smartcard +udev"
+IUSE="+colord +cups debug packagekit policykit short-touchpad-timeout smartcard +udev"
 
 # Latest gsettings-desktop-schemas is needed due to commit e8d1de92
 # Latest gnome-desktop needed to fix the DPMS timeout bug #385063
@@ -47,9 +47,9 @@ COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 	x11-libs/libXfixes
 	x11-libs/libXxf86misc
 	>=x11-libs/libxklavier-5.0
-	>=x11-misc/colord-0.1.13
 	>=media-sound/pulseaudio-0.9.16
 
+	colord? ( >=x11-misc/colord-0.1.13 )
 	cups? ( >=net-print/cups-1.4[dbus] )
 	packagekit? (
 		|| ( sys-fs/udev[gudev]
@@ -91,6 +91,7 @@ pkg_setup() {
 		--disable-schemas-compile
 		--enable-gconf-bridge
 		--with-pnpids=${EPREFIX}/usr/share/libgnome-desktop-3.0/pnp.ids
+		$(use_enable colord color)
 		$(use_enable cups)
 		$(use_enable debug)
 		$(use_enable debug more-warnings)
@@ -114,6 +115,10 @@ src_prepare() {
 	# Revisit if/when upstream adds a setting for customizing the timeout.
 	use short-touchpad-timeout &&
 		epatch "${FILESDIR}/${PN}-3.0.2-short-touchpad-timeout.patch"
+
+	# Make colord optional; requires eautoreconf
+	epatch "${FILESDIR}/${PN}-3.2.1-optional-colord.patch"
+	eautoreconf
 
 	gnome2_src_prepare
 }
