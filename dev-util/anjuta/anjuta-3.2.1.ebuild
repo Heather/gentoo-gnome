@@ -2,8 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-util/anjuta/anjuta-2.32.1.1.ebuild,v 1.2 2011/01/24 15:51:47 eva Exp $
 
-EAPI="3"
-GNOME_TARBALL_SUFFIX="xz"
+EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2"
@@ -21,6 +20,9 @@ IUSE="debug devhelp doc glade graphviz +introspection packagekit subversion test
 
 # FIXME: tests are fragile and may require a specific set of USE flags
 #RESTRICT="test"
+
+# FIXME: documentation fails to build when USE=test. But why?
+REQUIRED_USE="test? ( !doc )"
 
 COMMON_DEPEND=">=dev-libs/glib-2.29.2:2
 	x11-libs/gdk-pixbuf:2
@@ -90,12 +92,8 @@ pkg_setup() {
 	# Conflics with -pg in a plugin, bug #266777
 	filter-flags -fomit-frame-pointer
 
+	python_pkg_setup
 	python_set_active_version 2
-
-	# FIXME: documentation fails to build when USE=test. But why?
-	# FIXME: change this to REQUIRED_USE when python.eclass allows EAPI4.
-	use test && use doc &&
-		die "For ${P}, doc USE flag must be disabled when FEATURES=test"
 }
 
 #src_prepare() {
