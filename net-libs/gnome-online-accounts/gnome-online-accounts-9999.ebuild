@@ -15,7 +15,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="LGPL-2"
 SLOT="0"
-IUSE="doc +introspection"
+IUSE="doc gnome +introspection"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -39,7 +39,8 @@ RDEPEND="
 	x11-libs/pango
 
 	introspection? ( >=dev-libs/gobject-introspection-0.6.2 )"
-PDEPEND=">=gnome-base/gnome-control-center-3.2"
+# goa-daemon can launch gnome-control-center
+PDEPEND="gnome? ( >=gnome-base/gnome-control-center-3.2 )"
 DEPEND="${RDEPEND}
 	dev-libs/libxslt
 	>=dev-util/gdbus-codegen-2.30.0
