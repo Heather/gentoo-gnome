@@ -72,7 +72,6 @@ pkg_setup() {
 	# TODO: convert libnotify to a configure option
 	G2CONF="${G2CONF}
 		--disable-deprecation-flags
-		--disable-maintainer-mode
 		--disable-schemas-compile
 		--docdir="${EPREFIX}/usr/share/doc/${PF}"
 		$(use_enable doc docbook-docs)
