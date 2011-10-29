@@ -88,6 +88,9 @@ src_prepare() {
 	# Required for webgl; https://bugs.webkit.org/show_bug.cgi?id=69085
 	mkdir -p DerivedSources/ANGLE
 
+	# Install docs on "make install" when USE=doc
+	epatch "${FILESDIR}/${PN}-1.7.1-install-docs.patch"
+
 	# Prevent maintainer mode from being triggered during make
 	AT_M4DIR=Source/autotools eautoreconf
 }
@@ -130,11 +133,6 @@ src_compile() {
 	# Fix sandbox error with USE="introspection"
 	# https://bugs.webkit.org/show_bug.cgi?id=35471
 	emake XDG_DATA_HOME="${T}/.local"
-
-	# ${PN} neither ships, nor builds documentation on its own
-	if use doc; then
-		emake -C "${S}/Source/WebKit/gtk/docs"
-	fi
 }
 
 src_test() {
@@ -147,11 +145,6 @@ src_test() {
 
 src_install() {
 	default
-
-	# ${PN} doesn't install documentation on its own
-	if use doc; then
-		emake DESTDIR=${D} -C "${S}/Source/WebKit/gtk/docs" install
-	fi
 
 	newdoc Source/WebKit/gtk/ChangeLog ChangeLog.gtk
 	newdoc Source/WebKit/gtk/po/ChangeLog ChangeLog.gtk-po
