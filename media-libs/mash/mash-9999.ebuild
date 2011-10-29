@@ -7,7 +7,7 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
 # clutter.eclass does not support .xz tarballs
-inherit autotools eutils gnome2 versionator
+inherit gnome2 versionator
 if [[ ${PV} = 9999 ]]; then
 	SRC_URI=""
 	EGIT_REPO_URI="git://github.com/clutter-project/mash.git"
@@ -36,11 +36,7 @@ RDEPEND=">=dev-libs/glib-2.16:2
 	>=media-libs/clutter-1.5.10:1.0[introspection?]
 	virtual/opengl
 
-	introspection? ( >=dev-libs/gobject-introspection-0.6.1 )
-
-	!media-libs/mash:0.1"
-# Block on slot 0.1 due to file collisions in /usr/share/gtk-doc
-# XXX: remove blocker in Oct 2011
+	introspection? ( >=dev-libs/gobject-introspection-0.6.1 )"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.14 )"
