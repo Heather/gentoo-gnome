@@ -33,8 +33,9 @@ RDEPEND="
 	>=media-libs/cogl-1.8.0:1.0[introspection?,pango]
 	media-libs/fontconfig
 	>=x11-libs/cairo-1.10[glib]
+	x11-libs/gdk-pixbuf:2
 	>=x11-libs/pango-1.20[introspection?]
-	
+
 	virtual/opengl
 	x11-libs/libdrm
 	>=x11-libs/libX11-1.3.1
