@@ -5,7 +5,7 @@
 EAPI="4"
 GCONF_DEBUG="no"
 
-inherit autotools eutils gnome2 bash-completion
+inherit autotools eutils gnome2 bash-completion-r1
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -19,18 +19,19 @@ IUSE="doc vala +X"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64 ~arm ~sparc ~x86"
+	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86"
 fi
 
-COMMON_DEPEND=">=dev-libs/glib-2.29.90:2
+RDEPEND=">=dev-libs/glib-2.29.90:2
 	sys-apps/dbus
-	X? (
-		>=dev-libs/libxml2-2.7.7:2
+	X? ( >=dev-libs/libxml2-2.7.7:2
 		x11-libs/gtk+:3 )"
 # vala:0.14 due to an automagic version-check #ifdef (commit a15d9621)
-DEPEND="${COMMON_DEPEND}
+DEPEND="${RDEPEND}
+	dev-util/gtk-doc-am
 	doc? ( >=dev-util/gtk-doc-1.15 )
 	vala? ( dev-lang/vala:0.14 )"
+# eautoreconf requires gtk-doc-am
 
 pkg_setup() {
 	G2CONF="${G2CONF}
@@ -49,13 +50,13 @@ src_prepare() {
 	fi
 
 	# Fix vala automagic support, upstream bug #634171
-	epatch "${FILESDIR}/${PN}-automagic-vala.patch"
+	epatch "${FILESDIR}/${PN}-0.8.0-automagic-vala.patch"
 
 	if [[ ${PV} != 9999 ]]; then
 		mkdir -p m4 || die
-		AT_M4DIR="." eautoreconf
 		eautoreconf
 	fi
+
 	gnome2_src_prepare
 }
 
@@ -71,11 +72,18 @@ src_install() {
 
 	# Remove bash-completion file installed by build system
 	rm -rv "${ED}/etc/bash_completion.d/" || die
-	use bash-completion && \
-		dobashcompletion "${S}/bin/dconf-bash-completion.sh" ${PN}
+	newbashcomp "${S}/bin/dconf-bash-completion.sh" ${PN}
 }
 
 pkg_postinst() {
 	gnome2_pkg_postinst
-	use bash-completion && bash-completion_pkg_postinst
+	# Kill existing dconf-service processes as recommended by upstream due to
+	# possible changes in the dconf private dbus API.
+	# dconf-service will be dbus-activated on next use.
+	pids=$(pgrep -x dconf-service)
+	if [[ $? == 0 ]]; then
+		ebegin "Stopping dconf-service; it will automatically restart on demand"
+		kill ${pids}
+		eend $?
+	fi
 }
