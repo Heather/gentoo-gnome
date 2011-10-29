@@ -57,7 +57,7 @@ COMMON_DEPEND=">=dev-libs/dbus-glib-0.74
 		>=app-admin/packagekit-base-0.6.12 )
 	policykit? (
 		>=sys-auth/polkit-0.97
-		>=sys-apps/dbus-1.1.2 )
+		>=sys-apps/dbus-1.1.2[X] )
 	smartcard? ( >=dev-libs/nss-3.11.2 )
 	udev? ( || ( sys-fs/udev[gudev]
 		sys-fs/udev[extras] ) )"
