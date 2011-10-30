@@ -8,6 +8,7 @@
 >=dev-libs/gjs-1.29
 >=dev-libs/gobject-introspection-1.29
 >=dev-libs/json-glib-0.13
+>=dev-libs/libgdata-0.9
 >=dev-libs/libpeas-1.2
 >=dev-libs/seed-3.0
 >=dev-python/pygobject-2.28.6-r50
