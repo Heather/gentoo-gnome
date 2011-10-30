@@ -3,24 +3,33 @@
 >=dev-python/nautilus-python-1.0
 
 # GNOME 3.2
+>=app-accessibility/caribou-0.4
+app-admin/eselect-gnome-shell-extensions
 =app-misc/tracker-0.12*
 >=dev-lang/spidermonkey-1.8.5
+>=dev-libs/folks-0.6
 >=dev-libs/gjs-1.29
 >=dev-libs/gobject-introspection-1.29
 >=dev-libs/json-glib-0.13
 >=dev-libs/libgdata-0.9
 >=dev-libs/libpeas-1.2
 >=dev-libs/seed-3.0
+>=dev-python/pyatspi-2.2
 >=dev-python/pygobject-2.28.6-r50
+>=gnome-base/gconf-3.2
 >=gnome-base/gnome-desktop-3.1
 >=gnome-base/gsettings-desktop-schemas-3.1
+>=gnome-extra/at-spi-2.2
 gnome-extra/gnome-contacts
 gnome-extra/gnome-documents
+gnome-extra/gnome-shell-extensions
 >=gnome-extra/nautilus-tracker-tags-0.12
 gnome-extra/sushi
 >=media-libs/clutter-1.7
 >=media-libs/cogl-1.7
 >=net-libs/gnome-online-accounts-3
+>=x11-libs/libcryptui-3
+>=x11-misc/alacarte-0.13.2-r50
 
 # Copied from package.mask in portage
 #
