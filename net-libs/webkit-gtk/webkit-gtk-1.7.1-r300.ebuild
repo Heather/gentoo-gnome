@@ -4,7 +4,8 @@
 
 EAPI="4"
 
-inherit autotools eutils flag-o-matic eutils virtualx
+# Don't define PYTHON_DEPEND: python only needed at build time
+inherit autotools eutils flag-o-matic eutils python virtualx
 
 MY_P="webkit-${PV}"
 DESCRIPTION="Open source web browser engine"
@@ -51,6 +52,7 @@ RDEPEND="
 	webgl? ( virtual/opengl )
 "
 DEPEND="${RDEPEND}
+	=dev-lang/python-2*
 	>=sys-devel/flex-2.5.33
 	sys-devel/gettext
 	virtual/yacc
@@ -62,6 +64,12 @@ DEPEND="${RDEPEND}
 "
 
 S="${WORKDIR}/${MY_P}"
+
+pkg_setup() {
+	# Needed for CodeGeneratorInspector.py
+	python_set_active_version 2
+	python_pkg_setup
+}
 
 src_prepare() {
 	DOCS="ChangeLog NEWS" # other ChangeLog files handled by src_install
