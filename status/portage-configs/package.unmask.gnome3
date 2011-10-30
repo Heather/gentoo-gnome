@@ -3,6 +3,7 @@
 >=dev-python/nautilus-python-1.0
 
 # GNOME 3.2
+=app-misc/tracker-0.12*
 >=dev-lang/spidermonkey-1.8.5
 >=dev-libs/gjs-1.29
 >=dev-libs/gobject-introspection-1.29
@@ -12,6 +13,10 @@
 >=dev-python/pygobject-2.28.6-r50
 >=gnome-base/gnome-desktop-3.1
 >=gnome-base/gsettings-desktop-schemas-3.1
+gnome-extra/gnome-contacts
+gnome-extra/gnome-documents
+>=gnome-extra/nautilus-tracker-tags-0.12
+gnome-extra/sushi
 >=media-libs/clutter-1.7
 >=media-libs/cogl-1.7
 >=net-libs/gnome-online-accounts-3
