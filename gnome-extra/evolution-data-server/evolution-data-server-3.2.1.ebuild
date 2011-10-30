@@ -83,8 +83,7 @@ pkg_setup() {
 		--enable-calendar
 		--enable-nntp
 		--enable-largefile
-		--with-libdb=${EPREFIX}/usr
-		--disable-maintainer-mode"
+		--with-libdb=${EPREFIX}/usr"
 	if use vala; then
 		G2CONF="${G2CONF}
 			VALAC=$(type -P valac-0.14) VAPIGEN=$(type -P vapigen-0.14)"
