@@ -64,8 +64,7 @@ pkg_setup() {
 		--with-pam-prefix=/etc
 		--with-xf86gamma-ext
 		--with-kbd-layout-indicator
-		--disable-schemas-compile
-		--disable-maintainer-mode"
+		--disable-schemas-compile"
 	# xscreensaver and custom screensaver capability removed
 	# poke and inhibit commands were also removed, bug 579430
 }
