@@ -44,7 +44,6 @@ pkg_setup() {
 		--with-krb5=${EPREFIX}/usr
 		--with-openldap
 		--disable-static
-		--disable-maintainer-mode
 		$(use_enable debug e2k-debug)
 		$(use_with static static-ldap)"
 	DOCS="AUTHORS ChangeLog NEWS README"
@@ -54,6 +53,7 @@ src_prepare() {
 	gnome2_src_prepare
 
 	# FIXME: Fix compilation flags crazyness
+	# Touch configure.ac if eautoreconf
 	sed 's/^\(AM_CPPFLAGS="\)$WARNING_FLAGS/\1/' \
-		-i configure.ac configure || die "sed 1 failed"
+		-i configure || die "sed 1 failed"
 }
