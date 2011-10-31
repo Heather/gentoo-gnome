@@ -1,0 +1,34 @@
+From 1c036f9a0a922f68fbbf09540a14173465e51a1e Mon Sep 17 00:00:00 2001
+From: Alexandre Rostovtsev <tetromino@gentoo.org>
+Date: Mon, 31 Oct 2011 02:15:54 -0400
+Subject: [PATCH] reorder mx-1.0 and clutter-gtk-1.0 in PKG_CHECK_MODULES:q
+
+clutter-gtk-1.0 installs headers in /usr/include/clutter-gtk-1.0/clutter-gtk;
+clutter-gtk-0.10 installs headers in /usr/include/clutter-1.0/clutter-gtk
+
+To ensure that clutter-gtk-1.0's headers (and not 0.10's) are used,
+-I/usr/include/clutter-gtk-1.0 must come before -I/usr/include/clutter-1.0
+in CLUTTER_CFLAGS. And that means clutter-gtk-1.0 must come before mx-1.0
+in PKG_CHECK_MODULES.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=663077
+---
+ configure.ac |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 5c2c5ed..b5c74ee 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -596,7 +596,7 @@ AC_ARG_WITH([clutter],
+ AC_MSG_RESULT($with_clutter)
+ 
+ if test "x$with_clutter" = "xyes"; then
+-   PKG_CHECK_MODULES(CLUTTER, [mx-1.0 clutter-gtk-1.0 >= clutter_gtk_minimum_version clutter-1.0 >= 1.0.0])
++   PKG_CHECK_MODULES(CLUTTER, [clutter-gtk-1.0 >= clutter_gtk_minimum_version mx-1.0 clutter-1.0 >= 1.0.0])
+ 
+    AC_DEFINE(HAVE_CLUTTER, 1, [Clutter available])
+    AM_CONDITIONAL(ENABLE_CLUTTER, true)
+-- 
+1.7.7.1
+

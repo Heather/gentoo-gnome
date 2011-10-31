@@ -2,8 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.32.1-r1.ebuild,v 1.3 2011/01/15 19:56:39 nirbheek Exp $
 
-EAPI="3"
-GNOME_TARBALL_SUFFIX="xz"
+EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="python? 2:2.4"
@@ -57,7 +56,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.28:2
 	clutter? (
 		>=media-libs/clutter-1.0.0:1.0
 		>=media-libs/clutter-gtk-0.90:1.0
-		x11-libs/mx )
+		x11-libs/mx:1.0 )
 	connman? ( net-misc/connman )
 	crypt? ( || (
 		( >=app-crypt/gnupg-2.0.1-r2 ${PINENTRY_DEPEND} )
@@ -92,15 +91,17 @@ DEPEND="${COMMON_DEPEND}
 RDEPEND="${COMMON_DEPEND}
 	!<gnome-extra/evolution-exchange-2.32"
 
-# Need EAPI=4 support in python eclass
-#REQUIRED_USE="map? ( clutter )"
+# contact maps require clutter
+# NM and connman support cannot coexist
+REQUIRED_USE="map? ( clutter )
+	connman? ( !networkmanager )
+	networkmanager? ( !connman )"
 
 pkg_setup() {
 	ELTCONF="--reverse-deps"
 	DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS* README"
 	# image-inline plugin needs a gtk+:3 gtkimageview, which does not exist yet
 	G2CONF="${G2CONF}
-		--disable-maintainer-mode
 		--without-glade-catalog
 		--without-kde-applnk-path
 		--enable-plugins=experimental
@@ -115,21 +116,11 @@ pkg_setup() {
 		$(use_enable connman)
 		$(use_enable gnome-online-accounts goa)
 		$(use_enable gstreamer audio-inline)
+		$(use_enable map contact-maps)
 		$(use_enable python)
 		$(use_with clutter)
 		$(use_with ldap openldap)
 		$(use_with kerberos krb5 ${EPREFIX}/usr)"
-
-	# workaround for lack of EAPI 4 support in python.eclass
-	local myconf="--disable-contact-maps"
-	if use map; then
-		if use clutter; then
-			myconf="--enable-contact-maps"
-		else
-			ewarn "map plugin auto-disabled due to USE=-clutter"
-		fi
-	fi
-	G2CONF="${G2CONF} ${myconf}"
 
 	# dang - I've changed this to do --enable-plugins=experimental.  This will
 	# autodetect new-mail-notify and exchange, but that cannot be helped for the
@@ -147,33 +138,20 @@ pkg_setup() {
 			--without-nss-includes"
 	fi
 
-	# NM and connman support cannot coexist
-	if use networkmanager && use connman ; then
-		ewarn "It is not possible to enable both ConnMan and NetworkManager, disabling connman..."
-		G2CONF="${G2CONF} --disable-connman"
-	fi
-
 	python_set_active_version 2
+	python_pkg_setup
 }
 
 src_prepare() {
-	# Use NSS/NSPR only if 'ssl' is enabled.
-	if use ssl ; then
-		sed -e 's|mozilla-nss|nss|' \
-			-e 's|mozilla-nspr|nspr|' \
-			-i configure.ac || die "sed 2 failed"
-	fi
-
-	# Fix compilation flags crazyness
-	sed -e 's/\(AM_CPPFLAGS="\)$WARNING_FLAGS"/\1/' \
-		-i configure.ac || die "sed 1 failed"
-
-	if [[ ${PV} != 9999 ]]; then
-		intltoolize --force --copy --automake || die "intltoolize failed"
-		eautoreconf
-	fi
+	# https://bugzilla.gnome.org/show_bug.cgi?id=663077, requires eautoreconf
+	epatch "${FILESDIR}/${PN}-3.2.1-reorder-mx-clutter-gtk.patch"
+	[[ ${PV} != 9999 ]] && eautoreconf
 
 	gnome2_src_prepare
+
+	# Fix compilation flags crazyness
+	sed -e 's/\(AM_CPPFLAGS="\)$WARNING_FLAGS/\1/' \
+		-i configure || die "CPPFLAGS sed failed"
 }
 
 pkg_postinst() {
