@@ -107,11 +107,9 @@ src_prepare() {
 	append-cppflags "-I$(db_includedir)"
 
 	# FIXME: Fix compilation flags crazyness
+	# Touch configure.ac if doing eautoreconf
 	sed 's/^\(AM_CPPFLAGS="\)$WARNING_FLAGS/\1/' \
-		-i configure.ac configure || die "sed 3 failed"
-
-	intltoolize --force --copy --automake || die "intltoolize failed"
-	eautoreconf
+		-i configure || die "sed failed"
 }
 
 src_install() {
