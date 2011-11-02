@@ -119,6 +119,10 @@ src_prepare() {
 	# Note: sed Makefile.in because it is generated from several Makefile.ams
 	sed -e 's/-DG_DISABLE_DEPRECATED//g' \
 		-i src/Makefile.in browser-plugin/Makefile.in || die "sed failed"
+
+	# Two chat messageTray fixes taken from git master, not in gnome-3-2 yet
+	epatch "${FILESDIR}"/0001-theme-Lighten-up-the-sent-message-color-clean-up.patch
+	epatch "${FILESDIR}"/0002-messageTray-Reduce-the-scroll-view-fade.patch
 }
 
 src_install() {
