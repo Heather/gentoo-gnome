@@ -56,7 +56,6 @@ RDEPEND="${COMMON_DEPEND}
 pkg_setup() {
 	G2CONF="${G2CONF}
 		UNOCONV=$(type -p false)
-		--disable-static
-		--disable-maintainer-mode"
+		--disable-static"
 	DOCS="AUTHORS NEWS README TODO"
 }
