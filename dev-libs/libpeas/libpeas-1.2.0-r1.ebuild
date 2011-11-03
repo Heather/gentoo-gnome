@@ -2,13 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="3"
-GNOME_TARBALL_SUFFIX="xz"
+EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="python? 2:2.5"
 
-inherit gnome2 python virtualx
+inherit eutils gnome2 python virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -22,7 +21,7 @@ IUSE="doc gjs +gtk glade +python seed vala"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+	KEYWORDS="~amd64 ~x86"
 fi
 
 RDEPEND=">=dev-libs/glib-2.23.6:2
@@ -42,7 +41,6 @@ DOCS="AUTHORS ChangeLog NEWS README"
 
 pkg_setup() {
 	G2CONF="${G2CONF}
-		$(use_enable deprecated deprecation)
 		$(use_enable gjs)
 		$(use_enable glade glade-catalog)
 		$(use_enable gtk)
@@ -51,12 +49,19 @@ pkg_setup() {
 		$(use_enable vala)
 		VALAC=$(type -P valac-0.12)
 		--disable-deprecation
-		--disable-static
-		--disable-maintainer-mode"
+		--disable-static"
 	# Wtf, --disable-gcov, --enable-gcov=no, --enable-gcov, all enable gcov
 	# What do we do about gdb, valgrind, gcov, etc?
 
 	python_set_active_version 2
+	python_pkg_setup
+}
+
+src_prepare() {
+	# Upstream patch to fix g-i annotations; prevents crashes
+	epatch "${FILESDIR}/${P}-PeasPluginInfo-annotation.patch"
+
+	gnome2_src_prepare
 }
 
 src_test() {
@@ -66,5 +71,5 @@ src_test() {
 	# >>> from gi.repository import Gtk
 	# >>> Gtk.IconTheme.get_default().has_icon("gtk-about")
 	# This should return True, it returns False for Xvfb
-	Xemake check || die
+	Xemake check
 }
