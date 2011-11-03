@@ -2,8 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/totem/totem-2.30.0-r1.ebuild,v 1.1 2010/06/13 20:36:55 pacho Exp $
 
-EAPI="3"
-GNOME_TARBALL_SUFFIX="xz"
+EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes" # plugins are dlopened
 WANT_AUTOMAKE="1.11"
@@ -105,17 +104,12 @@ DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1.14 )"
 # docbook-xml-dtd is needed for user doc
 
-pkg_setup() {
-	# To remove when python eclass supports EAPI=4
-	# see bug #359379
-	if use python && ! use introspection; then
-		eerror "USE=python requires USE=introspection"
-		die "USE=python requires USE=introspection"
-	fi
+# see bug #359379
+REQUIRED_USE="python? ( introspection )"
 
+pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
 	G2CONF="${G2CONF}
-		--disable-maintainer-mode
 		--disable-run-in-source-tree
 		--disable-schemas-compile
 		--disable-scrollkeeper
@@ -150,6 +144,7 @@ pkg_setup() {
 	G2CONF="${G2CONF} --with-plugins=${plugins}"
 
 	python_set_active_version 2
+	python_pkg_setup
 }
 
 src_prepare() {
