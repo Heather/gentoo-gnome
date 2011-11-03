@@ -75,11 +75,7 @@ RESTRICT="test"
 pkg_setup() {
 	# Passing --disable-help would drop offline help, that would be inconsistent
 	# with helps of the most of Gnome apps that doesn't require network for that.
-	#
-	# FIXME: XPS support needs >=libgxps-0.0.1
-	# http://git.gnome.org/browse/libgxps <-- no releases
 	G2CONF="${G2CONF}
-		--disable-maintainer-mode
 		--disable-schemas-compile
 		--disable-scrollkeeper
 		--disable-static
