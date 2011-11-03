@@ -2,9 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-editors/gedit/gedit-2.30.2.ebuild,v 1.1 2010/06/13 19:34:52 pacho Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="no"
-GNOME_TARBALL_SUFFIX="xz"
 GNOME2_LA_PUNT="yes" # plugins are dlopened
 PYTHON_DEPEND="2"
 
@@ -48,7 +47,6 @@ COMMON_DEPEND="
 		>=dev-libs/gobject-introspection-0.9.3
 		>=x11-libs/gtk+-3.0:3[introspection]
 		>=x11-libs/gtksourceview-2.91.9:3.0[introspection]
-		>=dev-libs/libpeas-0.7.4[gtk]
 		>=dev-python/pygobject-3.0.0:3 )
 	spell? (
 		>=app-text/enchant-1.2
@@ -74,7 +72,6 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-zeitgeist
 		--disable-deprecations
-		--disable-maintainer-mode
 		--disable-schemas-compile
 		--disable-scrollkeeper
 		--enable-updater
@@ -83,9 +80,8 @@ pkg_setup() {
 		$(use_enable python)
 		$(use_enable spell)"
 
-	if use python || use introspection; then
-		python_set_active_version 2
-	fi
+	python_set_active_version 2
+	python_pkg_setup
 }
 
 src_prepare() {
@@ -100,7 +96,7 @@ src_test() {
 	# FIXME: this should be handled at eclass level
 	"${EROOT}${GLIB_COMPILE_SCHEMAS}" --allow-any-name "${S}/data" || die
 
-	GSETTINGS_SCHEMA_DIR="${S}/data" Xemake check || die "make check failed"
+	GSETTINGS_SCHEMA_DIR="${S}/data" Xemake check
 }
 
 pkg_postinst() {
