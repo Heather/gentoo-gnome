@@ -21,7 +21,7 @@ if [[ ${PV} = 9999 ]]; then
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 fi
-IUSE="+css doc +introspection +libburn nautilus packagekit playlist test tracker"
+IUSE="+css doc +introspection +libburn mp3 nautilus packagekit playlist test tracker"
 
 COMMON_DEPEND="
 	>=dev-libs/glib-2.29.14:2
@@ -43,13 +43,16 @@ COMMON_DEPEND="
 	playlist? ( >=dev-libs/totem-pl-parser-2.29.1 )
 	tracker? ( >=app-misc/tracker-0.12 )"
 RDEPEND="${COMMON_DEPEND}
-	media-plugins/gst-plugins-meta:0.10
+	media-libs/gst-plugins-good:0.10
+	media-plugins/gst-plugins-gconf:0.10
+	media-plugins/gst-plugins-meta:0.10[mp3?]
 	x11-themes/hicolor-icon-theme
 	css? ( media-libs/libdvdcss:1.2 )
 	!libburn? (
 		app-cdr/cdrdao
 		app-cdr/dvd+rw-tools
 		virtual/cdrtools )
+	mp3? ( media-libs/gst-plugins-ugly:0.10 )
 	packagekit? ( app-admin/packagekit-base )"
 DEPEND="${COMMON_DEPEND}
 	app-text/gnome-doc-utils
