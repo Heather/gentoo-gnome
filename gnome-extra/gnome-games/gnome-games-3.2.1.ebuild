@@ -81,8 +81,10 @@ pkg_setup() {
 	# create the games user / group
 	games_pkg_setup
 
+	python_set_active_version 2
+	python_pkg_setup
+
 	G2CONF="${G2CONF}
-		--disable-maintainer-mode
 		--disable-schemas-compile
 		--enable-sound
 		$(use_enable introspection)"

@@ -71,7 +71,6 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		VALAC=$(type -p valac-0.12)
 		$(use_enable introspection)
-		--disable-maintainer-mode
 		--disable-scrollkeeper
 		--disable-static"
 	DOCS="AUTHORS ChangeLog NEWS README"

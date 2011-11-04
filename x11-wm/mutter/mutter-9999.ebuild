@@ -65,7 +65,6 @@ pkg_setup() {
 	DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README *.txt doc/*.txt"
 	G2CONF="${G2CONF}
 		--disable-static
-		--disable-maintainer-mode
 		--enable-gconf
 		--enable-shape
 		--enable-sm

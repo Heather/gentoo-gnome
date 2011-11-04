@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/gnome-screensaver/gnome-screensaver-2.30.2.ebuild,v 1.2 2010/11/02 02:33:58 ford_prefect Exp $
 
-EAPI="3"
+EAPI="4"
 GNOME2_LA_PUNT="yes"
 GCONF_DEBUG="no"
 PYTHON_DEPEND="2:2.6"

@@ -66,7 +66,6 @@ PDEPEND="gnome? (
 
 pkg_setup() {
 	G2CONF="${G2CONF}
-		--disable-maintainer-mode
 		--disable-update-mimedb
 		$(use_enable exif libexif)
 		$(use_enable introspection)

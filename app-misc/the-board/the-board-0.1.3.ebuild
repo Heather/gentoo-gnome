@@ -52,7 +52,6 @@ pkg_setup() {
 	DOCS="AUTHORS NEWS README"
 	G2CONF="${G2CONF}
 		--disable-static
-		--disable-maintainer-mode
 		$(use_with cheese)
 		$(use_with libnotify)
 		$(use_with libsoup)

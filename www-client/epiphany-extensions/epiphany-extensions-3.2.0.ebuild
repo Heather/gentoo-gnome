@@ -48,7 +48,6 @@ pkg_setup() {
 
 	G2CONF="${G2CONF}
 		--disable-schemas-compile
-		--disable-maintainer-mode
 		--with-extensions=$(echo "${extensions}" | sed -e 's/[[:space:]]\+/,/g')"
 	DOCS="AUTHORS ChangeLog HACKING NEWS README"
 }

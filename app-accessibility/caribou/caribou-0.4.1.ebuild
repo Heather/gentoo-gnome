@@ -2,8 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="3"
-GNOME_TARBALL_SUFFIX="xz"
+EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2:2.4"
@@ -53,7 +52,6 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-static
 		--disable-schemas-compile
-		--disable-maintainer-mode
 		--enable-gtk3-module
 		--enable-gtk2-module
 		VALAC=$(type -P true)"

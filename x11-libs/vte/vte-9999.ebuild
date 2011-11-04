@@ -47,7 +47,6 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-gnome-pty-helper
 		--disable-deprecation
-		--disable-maintainer-mode
 		--disable-static
 		$(use_enable debug)
 		$(use_enable glade glade-catalogue)

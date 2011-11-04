@@ -3,7 +3,7 @@
 # $Header: $
 
 PYTHON_DEPEND="2:2.6"
-EAPI="3"
+EAPI="4"
 
 # Need gnome2-utils for gnome2_icon_cache_update
 inherit autotools eutils gnome2-utils python systemd
@@ -39,6 +39,7 @@ DEPEND="${COMMON_DEPEND}
 
 pkg_setup() {
 	python_set_active_version 2
+	python_pkg_setup
 
 	enewgroup abrt
 	enewuser abrt -1 -1 -1 abrt
@@ -78,7 +79,7 @@ src_configure() {
 }
 
 src_install() {
-	emake DESTDIR="${D}" install || die "emake install failed"
+	emake DESTDIR="${D}" install
 	dodoc ChangeLog README
 
 	keepdir /var/run/abrt

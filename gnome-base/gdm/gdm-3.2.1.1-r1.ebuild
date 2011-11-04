@@ -113,7 +113,6 @@ pkg_setup() {
 	# of https://bugzilla.gnome.org/show_bug.cgi?id=607643#c4
 	G2CONF="${G2CONF}
 		--disable-schemas-install
-		--disable-maintainer-mode
 		--disable-static
 		--localstatedir=${EPREFIX}/var
 		--with-xdmcp=yes

@@ -47,7 +47,6 @@ pkg_setup() {
 	# Do not add --disable-all-translations-in-one-xml : it will enable them
 	G2CONF="${G2CONF}
 		--enable-locations-compression
-		--disable-maintainer-mode
 		--disable-static
 		$(use_enable introspection)"
 }

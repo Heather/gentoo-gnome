@@ -62,7 +62,6 @@ pkg_setup() {
 	DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS README TODO"
 	G2CONF="${G2CONF}
 		--enable-shared
-		--disable-maintainer-mode
 		--disable-schemas-compile
 		--disable-scrollkeeper
 		--disable-static

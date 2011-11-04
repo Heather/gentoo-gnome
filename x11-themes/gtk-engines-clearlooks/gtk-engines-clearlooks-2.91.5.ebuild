@@ -29,7 +29,6 @@ S="${WORKDIR}/${MY_PN}-${PV}"
 
 # XXX: Animation fails to compile, disable for now
 G2CONF="${G2CONF}
---disable-maintainer-mode
 --disable-animation
 --disable-paranoia
 --disable-deprecated"

@@ -2,8 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="3"
-GNOME_TARBALL_SUFFIX="xz"
+EAPI="4"
 GCONF_DEBUG="no"
 PYTHON_DEPEND="2"
 
@@ -76,6 +75,7 @@ pkg_setup() {
 		$(use_enable test tests)
 		$(use_enable udev gudev)"
 	python_set_active_version 2
+	python_pkg_setup
 }
 
 src_prepare() {
@@ -91,7 +91,7 @@ src_prepare() {
 
 src_test() {
 	unset DISPLAY
-	Xemake check || die "make check failed"
+	Xemake check
 }
 
 pkg_postinst() {

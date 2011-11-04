@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="3"
+EAPI="4"
 PYTHON_DEPEND="2:2.6"
 
 inherit autotools eutils python
@@ -38,6 +38,7 @@ RESTRICT="tests"
 
 pkg_setup() {
 	python_set_active_version 2
+	python_pkg_setup
 
 	enewgroup abrt
 	enewuser abrt -1 -1 -1 abrt
@@ -81,7 +82,7 @@ src_configure() {
 }
 
 src_install() {
-	emake DESTDIR="${D}" install || die "emake install failed"
+	emake DESTDIR="${D}" install
 	dodoc README
 
 	# Need to set correct ownership for use by app-admin/abrt

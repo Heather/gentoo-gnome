@@ -48,7 +48,6 @@ pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
 	G2CONF="${G2CONF}
 		$(use_enable debug)
-		--disable-maintainer-mode
 		--disable-schemas-compile
 		--disable-scrollkeeper"
 }

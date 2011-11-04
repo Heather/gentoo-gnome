@@ -2,8 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-applets/gnome-applets-2.32.1.1.ebuild,v 1.6 2011/02/08 19:04:13 ssuominen Exp $
 
-EAPI="3"
-GNOME_TARBALL_SUFFIX="xz"
+EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="no" # bug 340725, no other la files
 PYTHON_DEPEND="2:2.4"
@@ -85,6 +84,7 @@ pkg_setup() {
 		$(use_enable policykit polkit)"
 
 	python_set_active_version 2
+	python_pkg_setup
 }
 
 src_prepare() {
@@ -104,7 +104,7 @@ src_prepare() {
 
 src_test() {
 	unset DBUS_SESSION_BUS_ADDRESS
-	emake check || die "emake check failed"
+	emake check
 }
 
 src_install() {

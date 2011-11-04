@@ -60,7 +60,6 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_enable introspection)
 		$(use_enable sendto nautilus-sendto)
-		--disable-maintainer-mode
 		--disable-moblin
 		--disable-desktop-update
 		--disable-icon-update

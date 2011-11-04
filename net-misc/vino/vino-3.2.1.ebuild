@@ -62,7 +62,6 @@ DEPEND="${RDEPEND}
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-schemas-compile
-		--disable-maintainer-mode
 		--enable-http-server
 		--with-gcrypt
 		$(use_with avahi)

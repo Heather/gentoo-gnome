@@ -38,8 +38,7 @@ DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1.9 )"
 
 G2CONF="${G2CONF}
-	--disable-static
-	--disable-maintainer-mode"
+	--disable-static"
 DOCS="AUTHORS ChangeLog NEWS README"
 
 src_prepare() {

@@ -38,7 +38,6 @@ RDEPEND="${COMMON_DEPEND}
 
 pkg_setup() {
 	G2CONF="${G2CONF}
-		--disable-maintainer-mode
 		--disable-schemas-compile"
 	DOCS="AUTHORS ChangeLog* NEWS README"
 }

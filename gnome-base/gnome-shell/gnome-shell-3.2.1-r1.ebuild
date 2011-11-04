@@ -2,8 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="3"
-GNOME_TARBALL_SUFFIX="xz"
+EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2:2.5"
@@ -105,12 +104,13 @@ pkg_setup() {
 	DOCS="AUTHORS NEWS README"
 	# Don't error out on warnings
 	G2CONF="${G2CONF}
-		--disable-maintainer-mode
 		--enable-compile-warnings=maximum
 		--disable-schemas-compile
 		--disable-jhbuild-wrapper-script
 		--with-ca-certificates=${EPREFIX}/etc/ssl/certs/ca-certificates.crt
 		BROWSER_PLUGIN_DIR=${EPREFIX}/usr/$(get_libdir)/nsbrowser/plugins"
+	python_set_active_version 2
+	python_pkg_setup
 }
 
 src_prepare() {
