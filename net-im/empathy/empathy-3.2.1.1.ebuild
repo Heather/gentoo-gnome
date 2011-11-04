@@ -2,13 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/net-im/empathy/empathy-2.32.2.ebuild,v 1.6 2011/02/05 17:10:33 ssuominen Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
-GNOME_TARBALL_SUFFIX="xz"
 PYTHON_DEPEND="2:2.4"
 
-inherit eutils gnome2 multilib python
+inherit gnome2 python
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -21,10 +20,9 @@ SLOT="0"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~sparc ~x86"
+	KEYWORDS="~amd64 ~x86 ~x86-linux"
 fi
-# FIXME: Add location support once geoclue stops being idiotic with automagic deps
-IUSE="call debug eds +map +geoloc gnome-online-accounts +networkmanager sendto spell test +video"
+IUSE="call debug eds +map +geoloc gnome-online-accounts +networkmanager sendto spell test +v4l"
 
 # FIXME: gst-plugins-bad is required for the valve plugin. This should move to good
 # eventually at which point the dep can be dropped
@@ -73,8 +71,9 @@ RDEPEND=">=dev-libs/glib-2.28:2
 	spell? (
 		>=app-text/enchant-1.2
 		>=app-text/iso-codes-0.35 )
-	video? (
+	v4l? (
 		|| ( sys-fs/udev[gudev] sys-fs/udev[extras] )
+		media-plugins/gst-plugins-v4l2:0.10
 		>=media-video/cheese-2.91.91.1 )
 "
 DEPEND="${RDEPEND}
@@ -92,7 +91,6 @@ PDEPEND=">=net-im/telepathy-mission-control-5.7.6"
 
 pkg_setup() {
 	DOCS="CONTRIBUTORS AUTHORS ChangeLog NEWS README"
-	# TODO: Re-add location support
 	G2CONF="${G2CONF}
 		--disable-coding-style-checks
 		--disable-schemas-compile
@@ -108,22 +106,17 @@ pkg_setup() {
 		$(use_with networkmanager connectivity nm)
 		$(use_enable sendto nautilus-sendto)
 		$(use_enable spell)
-		$(use_with video cheese)
-		$(use_enable video gudev)"
+		$(use_with v4l cheese)
+		$(use_enable v4l gudev)"
 
-	# Build time python tools needs python2
+	# Build time python tools need python2
 	python_set_active_version 2
-}
-
-src_prepare() {
-	gnome2_src_prepare
-
-	python_convert_shebangs -r 2 tools
+	python_pkg_setup
 }
 
 src_test() {
 	unset DBUS_SESSION_BUS_ADDRESS
-	emake check || die "emake check failed."
+	emake check
 }
 
 pkg_postinst() {
