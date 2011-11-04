@@ -63,6 +63,6 @@ pkg_setup() {
 
 pkg_postinst() {
 	gnome2_pkg_postinst
-	ewarn "If ${PN} does not rip to some music format, please check your"
-	ewarn "USE flags on media-plugins/gst-plugins-meta"
+	ewarn "If ${PN} does not rip to some music format, please check your USE flags"
+	ewarn "on media-libs/libgnome-media-profiles and media-plugins/gst-plugins-meta"
 }
