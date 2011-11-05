@@ -11,8 +11,8 @@ if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
 
-DESCRIPTION="Upcoming GNOME 3 window manager (derived from metacity)"
-HOMEPAGE="http://blogs.gnome.org/metacity/"
+DESCRIPTION="GNOME 3 compositing window manager based on Clutter"
+HOMEPAGE="http://git.gnome.org/browse/mutter/"
 
 LICENSE="GPL-2"
 SLOT="0"
