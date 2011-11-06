@@ -49,6 +49,8 @@ pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS" # README is empty
 	# configure checks for valac, but will not use it when building from tarball
 	if [[ ${PV} = 9999 ]]; then
-		G2CONF="${G2CONF} VALAC=$(type -p valac-0.14)"
+		G2CONF="${G2CONF} VALAC=$(type -P valac-0.14)"
+	else
+		G2CONF="${G2CONF} VALAC=$(type -P true)"
 	fi
 }
