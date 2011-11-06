@@ -54,7 +54,8 @@ pkg_setup() {
 	if use gnome; then
 		G2CONF="${G2CONF} --with-platform=gnome --with-help-method=ghelp"
 	else
-		G2CONF="${G2CONF} --with-platform=gtk-only --with-help-method=library"
+		G2CONF="${G2CONF} --with-platform=gtk-only --with-help-method=library
+			ITSTOOL=$(type -P true) XMLLINT=$(type -P true)"
 	fi
 
 	G2CONF="${G2CONF}
@@ -64,7 +65,7 @@ pkg_setup() {
 		$(use_enable sound)
 		--disable-schemas-compile
 		--with-card-theme-formats=all
-		--with-kde-card-theme-path=${EPREFIX}usr/share/apps/carddecks
+		--with-kde-card-theme-path=${EPREFIX}/usr/share/apps/carddecks
 		--with-pysol-card-theme-path=${EPREFIX}${GAMES_DATADIR}/pysolfc"
 }
 
