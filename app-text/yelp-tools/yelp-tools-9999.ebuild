@@ -13,7 +13,7 @@ fi
 DESCRIPTION="Collection of tools for building and converting documentation"
 HOMEPAGE="http://www.gnome.org/"
 
-LICENSE="GPL-2 freedist" # yelp.m4 is freely distributable
+LICENSE="|| ( GPL-2 freedist ) GPL-2" # yelp.m4 is GPL2 || freely distributable
 SLOT="0"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
