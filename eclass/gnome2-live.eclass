@@ -184,6 +184,8 @@ gnome2_src_prepare() {
 # @DESCRIPTION:
 # Must be run manually for ebuilds that have a custom pkg_postinst
 gnome2-live_pkg_postinst() {
+	gnome2_pkg_postinst
+
 	ewarn "This is a live ebuild, upstream trunks will mostly be UNstable"
 	ewarn "Do NOT report bugs about this package to Gentoo"
 	ewarn "Report upstream bugs (with patches if possible) instead."
