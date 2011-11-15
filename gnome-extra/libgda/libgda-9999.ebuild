@@ -2,10 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/libgda/libgda-4.2.0.ebuild,v 1.3 2010/11/01 12:18:13 eva Exp $
 
-EAPI="3"
+EAPI="4"
 GNOME2_LA_PUNT="yes"
 GCONF_DEBUG="yes"
-GNOME_TARBALL_SUFFIX="xz" # remove when python eclass supports EAPI 4
 PYTHON_DEPEND="2"
 
 inherit db-use eutils flag-o-matic gnome2 java-pkg-opt-2 python
@@ -112,6 +111,9 @@ pkg_setup() {
 		--disable-default-binary"
 
 	export XDG_DATA_HOME="${T}/.local"
+
+	python_set_active_version 2
+	python_pkg_setup
 }
 
 src_prepare() {

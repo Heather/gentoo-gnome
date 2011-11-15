@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-sound/rhythmbox/rhythmbox-0.12.8-r1.ebuild,v 1.2 2010/07/06 15:46:43 ssuominen Exp $
 
-EAPI="3"
+EAPI="4"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="python? 2:2.5"
 PYTHON_USE_WITH="xml"
@@ -26,6 +26,13 @@ if [[ ${PV} = 9999 ]]; then
 else
 	KEYWORDS="~amd64 ~ppc64 ~x86"
 fi
+
+REQUIRED_USE="
+	ipod? ( udev )
+	mtp? ( udev )
+	dbus? ( python )
+	gnome-keyring? ( python )
+	webkit? ( python )"
 
 # FIXME: double check what to do with fm-radio plugin
 # FIXME: Zeitgeist python plugin
@@ -110,47 +117,11 @@ pkg_setup() {
 		G2CONF="${G2CONF} PYTHON=$(PYTHON -2)"
 	fi
 
-	if ! use udev; then
-		if use ipod; then
-			ewarn "ipod support requires udev support.  Please"
-			ewarn "re-emerge with USE=udev to enable ipod support"
-			G2CONF="${G2CONF} --without-ipod"
-		fi
-
-		if use mtp; then
-			ewarn "MTP support requires udev support.  Please"
-			ewarn "re-emerge with USE=udev to enable MTP support"
-			G2CONF="${G2CONF} --without-mtp"
-		fi
-	else
-		G2CONF="${G2CONF} $(use_with ipod) $(use_with mtp)"
-	fi
-
-	if ! use cdr ; then
-		ewarn "You have cdr USE flag disabled."
-		ewarn "You will not be able to burn CDs."
-	fi
-
-	if ! use python; then
-		if use dbus; then
-			ewarn "You need python support to use the im-status plugin"
-		fi
-
-		if use webkit; then
-			ewarn "You need python support in addition to webkit to be able to use"
-			ewarn "the context panel plugin."
-		fi
-	fi
-
-	if use gnome-keyring && ! use python; then
-		ewarn "The magnatune plugin requires USE='python gnome-keyring'"
-	fi
-
 	# --enable-vala just installs the sample vala plugin, and the configure
 	# checks are broken, so don't enable it
 	G2CONF="${G2CONF}
 		MOZILLA_PLUGINDIR=/usr/$(get_libdir)/nsbrowser/plugins
-		VALAC=$(type -P valac-0.12)
+		VALAC=$(type -P valac-0.14)
 		--enable-mmkeys
 		--disable-more-warnings
 		--disable-scrollkeeper

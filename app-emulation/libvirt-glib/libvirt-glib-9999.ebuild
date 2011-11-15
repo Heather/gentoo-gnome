@@ -7,7 +7,7 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 EGIT_REPO_URI="git://libvirt.org/libvirt-glib.git"
 
-inherit gnome2
+inherit python gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -22,7 +22,7 @@ if [[ ${PV} = 9999 ]]; then
 else
 	KEYWORDS="~amd64 ~x86"
 fi
-IUSE="doc +introspection +vala"
+IUSE="doc +introspection python +vala"
 REQUIRED_USE="vala? ( introspection )"
 
 RDEPEND="
@@ -39,14 +39,12 @@ pkg_setup() {
 	# NEWS, ChangeLog, are empty in git
 	# README is empty
 	DOCS="AUTHORS ChangeLog HACKING NEWS"
-	# TODO: use_with python when python.eclass is fixed
 	G2CONF="--disable-test-coverage
-		--without-python
 		VAPIGEN=$(type -P vapigen-0.14)
 		$(use_enable introspection)
-		$(use_enable vala)"
-}
+		$(use_enable vala)
+		$(use_with python)"
 
-src_prepare() {
-	gnome2_src_prepare
+	python_set_active_version 2
+	python_pkg_setup
 }

@@ -2,9 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/net-libs/gtk-vnc/gtk-vnc-0.4.3-r1.ebuild,v 1.6 2011/10/30 17:24:14 armin76 Exp $
 
-EAPI="3"
+EAPI="4"
 GNOME2_LA_PUNT="yes"
-GNOME_TARBALL_SUFFIX="xz"
 
 inherit autotools eutils base gnome.org python
 if [[ ${PV} = 9999 ]]; then
@@ -22,6 +21,7 @@ else
 	KEYWORDS="alpha amd64 ia64 ppc ppc64 sparc x86 ~x86-fbsd"
 fi
 IUSE="examples +gtk3 +introspection python sasl +vala"
+REQUIRED_USE="vala? ( introspection )"
 
 # libview is used in examples/gvncviewer -- no need
 # TODO: review nsplugin when it will be considered less experimental
@@ -57,6 +57,7 @@ GTK3_BUILDDIR="${WORKDIR}/${P}_gtk3"
 
 pkg_setup() {
 	python_set_active_version 2
+	python_pkg_setup
 }
 
 src_prepare() {
@@ -81,10 +82,9 @@ src_configure() {
 	local myconf
 	myconf="
 		$(use_with examples) \
-		$(use_enable vala) \
-		$(use_enable vala introspection) \
 		$(use_enable introspection) \
 		$(use_with sasl) \
+		$(use_enable vala) \
 		VAPIGEN=$(type -P vapigen-0.14) \
 		--with-coroutine=gthread \
 		--without-libview \

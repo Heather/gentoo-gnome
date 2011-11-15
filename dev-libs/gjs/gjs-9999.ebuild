@@ -2,9 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/gjs/gjs-1.29.0.ebuild,v 1.1 2011/06/14 13:19:59 nirbheek Exp $
 
-EAPI="3"
+EAPI="4"
 GCONF_DEBUG="no"
-GNOME_TARBALL_SUFFIX="xz"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2"
 
@@ -47,6 +46,7 @@ pkg_setup() {
 		--disable-systemtap
 		--disable-dtrace
 		--disable-coverage"
+	python_pkg_setup
 }
 
 src_prepare() {

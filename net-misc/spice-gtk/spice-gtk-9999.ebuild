@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/net-misc/spice-gtk/spice-gtk-0.7.ebuild,v 1.2 2011/10/19 08:37:10 dev-zero Exp $
 
-EAPI=3
+EAPI="4"
 GCONF_DEBUG="no"
 
 inherit eutils python gnome2-utils

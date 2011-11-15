@@ -2,9 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="3"
+EAPI="4"
 GNOME_ORG_MODULE="glib"
-GNOME_TARBALL_SUFFIX="xz"
 PYTHON_DEPEND="2:2.5"
 PYTHON_USE_WITH="xml"
 
@@ -37,6 +36,7 @@ S="${WORKDIR}/glib-${PV}/gio/gdbus-2.0/codegen"
 
 pkg_setup() {
 	python_set_active_version 2
+	python_pkg_setup
 }
 
 src_prepare() {

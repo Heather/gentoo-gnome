@@ -73,6 +73,7 @@ pkg_setup() {
 	DOCS="AUTHORS ChangeLog FUTURE MAINTAINERS NEWS README ROADMAP THANKS TODO"
 
 	G2CONF="${G2CONF}
+		VALAC=$(type -P valac-0.14)
 		--disable-static
 		--disable-schemas-compile
 		--docdir=/usr/share/doc/${PF}
@@ -84,10 +85,6 @@ pkg_setup() {
 		$(use_enable packagekit)
 		$(use_enable subversion plugin-subversion)
 		$(use_enable vala)"
-
-	if use vala; then
-		G2CONF="${G2CONF} VALAC=$(type -P valac-0.14)"
-	fi
 
 	# Conflics with -pg in a plugin, bug #266777
 	filter-flags -fomit-frame-pointer

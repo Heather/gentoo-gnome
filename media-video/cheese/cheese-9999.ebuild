@@ -16,7 +16,7 @@ HOMEPAGE="http://www.gnome.org/projects/cheese/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="doc +introspection vala"
+IUSE="doc +introspection"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -77,7 +77,7 @@ pkg_setup() {
 }
 
 src_compile() {
-	# Clutter-related sandbox violations when USE="doc introspection -vala" and
+	# Clutter-related sandbox violations when USE="doc introspection" and
 	# FEATURES="-userpriv" (see bug #385917).
 	# Work around the issue with the same horrible hack as in bug #385433.
 	DISPLAY="999invalid"
