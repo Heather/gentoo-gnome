@@ -72,7 +72,10 @@ pkg_setup() {
 	DOCS="ChangeLog MAINTAINERS NEWS TODO"
 	# Uh, what to do about dbus-call-timeout ?
 	G2CONF="${G2CONF}
+		VALAC=$(type -P valac-0.14)
+		VAPIGEN=$(type -P vapigen-0.14)
 		$(use_enable gnome-online-accounts goa)
+		$(use_enable introspection)
 		$(use_enable ipv6)
 		$(use_with kerberos krb5 ${EPREFIX}/usr)
 		$(use_with ldap openldap)
@@ -84,10 +87,6 @@ pkg_setup() {
 		--enable-nntp
 		--enable-largefile
 		--with-libdb=${EPREFIX}/usr"
-	if use vala; then
-		G2CONF="${G2CONF}
-			VALAC=$(type -P valac-0.14) VAPIGEN=$(type -P vapigen-0.14)"
-	fi
 }
 
 src_prepare() {
