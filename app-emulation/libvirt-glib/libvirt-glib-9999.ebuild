@@ -5,7 +5,6 @@
 EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
-EGIT_REPO_URI="git://libvirt.org/libvirt-glib.git"
 
 inherit python gnome2
 if [[ ${PV} = 9999 ]]; then
@@ -18,8 +17,10 @@ HOMEPAGE="http://libvirt.org/git/?p=libvirt-glib.git"
 LICENSE="LGPL-2.1"
 SLOT="0"
 if [[ ${PV} = 9999 ]]; then
+	EGIT_REPO_URI="git://libvirt.org/${PN}.git"
 	KEYWORDS=""
 else
+	SRC_URI="ftp://libvirt.org/libvirt/glib/${P}.tar.gz"
 	KEYWORDS="~amd64 ~x86"
 fi
 IUSE="doc +introspection python +vala"
@@ -37,8 +38,7 @@ DEPEND="${RDEPEND}
 
 pkg_setup() {
 	# NEWS, ChangeLog, are empty in git
-	# README is empty
-	DOCS="AUTHORS ChangeLog HACKING NEWS"
+	DOCS="AUTHORS ChangeLog HACKING NEWS README"
 	G2CONF="--disable-test-coverage
 		VAPIGEN=$(type -P vapigen-0.14)
 		$(use_enable introspection)
