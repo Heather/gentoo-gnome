@@ -22,13 +22,20 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 
+# CHECK: We're hard-depending on qemu-kvm[spice]. Does app-emulation/qemu
+# support spice or not?
+#
+# libvirt-glib-0.0.2 is needed for commit ae424a50, which is needed by commit
+# 0d0dcf84 in gnome-boxes
 RDEPEND="
 	>=dev-libs/libxml2-2.7.8:2
 	>=sys-fs/udev-167[gudev]
 	>=dev-libs/glib-2.29.90:2
 	>=dev-libs/gobject-introspection-0.9.6
 	>=sys-libs/libosinfo-0.0.1
-	>=app-emulation/libvirt-glib-0.0.1
+	app-emulation/qemu-kvm[spice]
+	>=app-emulation/libvirt-0.9.3[libvirtd,qemu]
+	>=app-emulation/libvirt-glib-0.0.2
 	>=x11-libs/gtk+-3.2.2-r1:3
 	>=net-libs/gtk-vnc-0.4.4[gtk3]
 	>=net-misc/spice-gtk-0.7.81[gtk3]"
@@ -54,4 +61,17 @@ pkg_setup() {
 	G2CONF="--disable-schemas-compile
 		--disable-strict-cc
 		VALAC=$(type -P valac-0.14)"
+}
+
+pkg_postinst() {
+	gnome2_pkg_postinst
+	elog "You need to start the libvirtd daemon to use ${PN}."
+	elog "If you use openrc, this can be accomplished by running:"
+	elog ""
+	elog "	rc-service libvirtd start"
+	elog ""
+	elog "To add libvirtd to your default runlevel, run:"
+	elog ""
+	elog "	rc-update add libvirtd default"
+	elog ""
 }
