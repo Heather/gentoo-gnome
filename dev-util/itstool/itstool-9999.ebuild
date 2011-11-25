@@ -19,8 +19,8 @@ else
 	SRC_URI="http://files.itstool.org/itstool/${P}.tar.bz2"
 fi
 
-# files in /usr/share/itstool/its are freedist
-LICENSE="GPL-3 freedist"
+# files in /usr/share/itstool/its are as-is
+LICENSE="GPL-3 as-is"
 SLOT="0"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
