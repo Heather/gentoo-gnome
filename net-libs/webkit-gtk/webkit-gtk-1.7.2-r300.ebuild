@@ -10,8 +10,7 @@ inherit autotools eutils flag-o-matic eutils python virtualx
 MY_P="webkit-${PV}"
 DESCRIPTION="Open source web browser engine"
 HOMEPAGE="http://www.webkitgtk.org/"
-# Upstream is still shipping silly gzip files
-SRC_URI="http://www.webkitgtk.org/${MY_P}.tar.gz"
+SRC_URI="http://www.webkitgtk.org/${MY_P}.tar.xz"
 #SRC_URI="mirror://gentoo/${P}.tar.xz"
 
 LICENSE="LGPL-2 LGPL-2.1 BSD"
@@ -95,6 +94,7 @@ src_prepare() {
 
 	# Required for webgl; https://bugs.webkit.org/show_bug.cgi?id=69085
 	mkdir -p DerivedSources/ANGLE
+	epatch "${FILESDIR}/${PN}-1.7.2-fix-webgl-build.patch"
 
 	# Install docs on "make install" when USE=doc
 	epatch "${FILESDIR}/${PN}-1.7.1-install-docs.patch"

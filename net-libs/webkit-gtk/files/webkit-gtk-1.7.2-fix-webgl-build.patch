@@ -1,0 +1,44 @@
+commit f3a5204d163a46adc16fcee03e5478aa5031763a
+Author: mrobinson@webkit.org <mrobinson@webkit.org@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
+Date:   Wed Nov 23 12:48:12 2011 +0000
+
+    Build fix for GTK+.
+    
+    * platform/graphics/gtk/DrawingBufferGtk.cpp:
+    (WebCore::DrawingBuffer::DrawingBuffer): Update signature and ASSERT
+    for the GTK+ port.
+    
+    git-svn-id: http://svn.webkit.org/repository/webkit/trunk@101067 268f45cc-cd09-0410-ab3c-d52691b4dbfc
+
+diff --git a/Source/WebCore/platform/graphics/gtk/DrawingBufferGtk.cpp b/Source/WebCore/platform/graphics/gtk/DrawingBufferGtk.cpp
+index 64a5310..f9a248b 100644
+--- a/Source/WebCore/platform/graphics/gtk/DrawingBufferGtk.cpp
++++ b/Source/WebCore/platform/graphics/gtk/DrawingBufferGtk.cpp
+@@ -36,17 +36,25 @@ namespace WebCore {
+ DrawingBuffer::DrawingBuffer(GraphicsContext3D* context,
+                              const IntSize& size,
+                              bool multisampleExtensionSupported,
+-                             bool packedDepthStencilExtensionSupported)
+-    : m_context(context)
++                             bool packedDepthStencilExtensionSupported,
++                             bool separateBackingTexture)
++    : m_separateBackingTexture(separateBackingTexture)
++    , m_scissorEnabled(false)
++    , m_context(context)
+     , m_size(-1, -1)
+     , m_multisampleExtensionSupported(multisampleExtensionSupported)
+     , m_packedDepthStencilExtensionSupported(packedDepthStencilExtensionSupported)
+     , m_fbo(context->createFramebuffer())
+     , m_colorBuffer(0)
+     , m_depthStencilBuffer(0)
++    , m_depthBuffer(0)
++    , m_stencilBuffer(0)
+     , m_multisampleFBO(0)
+     , m_multisampleColorBuffer(0)
+ {
++    // Support for a separate backing texture has only been enabled for
++    // the chromium port.
++    ASSERT(!m_separateBackingTexture);
+     ASSERT(m_fbo);
+     if (!m_fbo) {
+         clear();
