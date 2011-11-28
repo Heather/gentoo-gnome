@@ -10,7 +10,7 @@ inherit autotools eutils flag-o-matic eutils python virtualx
 MY_P="webkit-${PV}"
 DESCRIPTION="Open source web browser engine"
 HOMEPAGE="http://www.webkitgtk.org/"
-SRC_URI="http://www.webkitgtk.org/${MY_P}.tar.xz"
+SRC_URI="http://www.webkitgtk.org/${MY_P}.tar.gz"
 #SRC_URI="mirror://gentoo/${P}.tar.xz"
 
 LICENSE="LGPL-2 LGPL-2.1 BSD"
@@ -91,8 +91,6 @@ src_prepare() {
 
 	# Required for webgl; https://bugs.webkit.org/show_bug.cgi?id=69085
 	mkdir -p DerivedSources/ANGLE
-	epatch "${FILESDIR}/${PN}-1.7.2-fix-webgl-build.patch"
-	epatch "${FILESDIR}/${P}-fix-gtk2-build.patch"
 
 	# Prevent maintainer mode from being triggered during make
 	AT_M4DIR=Source/autotools eautoreconf
