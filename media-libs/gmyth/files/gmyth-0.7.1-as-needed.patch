@@ -1,0 +1,22 @@
+Patch author: Dominique Leuenberger (dimstar)
+Fixes building with -Wl,--as-nneded
+http://sourceforge.net/tracker/?func=detail&aid=3424823&group_id=177106&atid=879916
+
+Index: gmyth-0.7.1/samples/Makefile.am
+===================================================================
+--- gmyth-0.7.1.orig/samples/Makefile.am
++++ gmyth-0.7.1/samples/Makefile.am
+@@ -6,12 +6,10 @@ gmyth_cat_SOURCES = \
+ gmyth_ls_SOURCES = \
+         gmyth_ls.c
+ 
+-LDADD = \
+-        $(top_builddir)/gmyth/libgmyth.la
+-
+ AM_CFLAGS = -g
+ 
+ AM_LDFLAGS = \
++        $(top_builddir)/gmyth/libgmyth.la \
+         @GLIB_LIBS@ @GOBJECT_LIBS@ @GTHREAD_LIBS@ @LIBCURL_LIBS@
+ 
+ INCLUDES = \
