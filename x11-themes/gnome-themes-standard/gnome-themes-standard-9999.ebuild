@@ -27,7 +27,6 @@ COMMON_DEPEND="gnome-base/librsvg:2
 	>=x11-libs/gtk+-3.1.18:3
 	>=x11-themes/gtk-engines-2.15.3:2"
 DEPEND="${COMMON_DEPEND}
-	>=x11-misc/icon-naming-utils-0.8.7
 	>=dev-util/pkgconfig-0.19
 	>=dev-util/intltool-0.40
 	sys-devel/gettext"
