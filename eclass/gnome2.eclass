@@ -22,6 +22,23 @@ case "${EAPI:-0}" in
 	*) die "EAPI=${EAPI} is not supported" ;;
 esac
 
+if [[ "${I_WANT_GNOME_3_3_X}" != "yes" ]]; then
+	die "
+
+The GNOME overlay is switching to GNOME 3.3.x prerelease packages.
+These are unstable, potentially incompatible with 3.2, and may well
+break your system in intriguing ways.
+
+If you enabled the GNOME overlay to get GNOME 3.2, please disable
+it now, since GNOME 3.2 is already in portage and unmasked.
+
+If you really do want experimental GNOME 3.3.x, please add
+I_WANT_GNOME_3_3_X=yes
+to your /etc/make.conf and continue.
+
+"
+fi
+
 # @ECLASS-VARIABLE: G2CONF
 # @DEFAULT-UNSET
 # @DESCRIPTION:
