@@ -5,7 +5,7 @@
 EAPI="4"
 GCONF_DEBUG="no"
 
-inherit gnome2
+inherit linux-info gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -24,18 +24,23 @@ fi
 
 # CHECK: We're hard-depending on qemu-kvm[spice]. Does app-emulation/qemu
 # support spice or not?
+# NOTE: sys-fs/ stuff is called via exec()
 RDEPEND="
 	>=dev-libs/libxml2-2.7.8:2
 	>=sys-fs/udev-167[gudev]
 	>=dev-libs/glib-2.29.90:2
 	>=dev-libs/gobject-introspection-0.9.6
-	>=sys-libs/libosinfo-0.0.1
+	>=sys-libs/libosinfo-0.0.3
 	app-emulation/qemu-kvm[spice]
 	>=app-emulation/libvirt-0.9.3[libvirtd,qemu]
-	>=app-emulation/libvirt-glib-0.0.2
+	>=app-emulation/libvirt-glib-0.0.3
 	>=x11-libs/gtk+-3.3.3:3
 	>=net-libs/gtk-vnc-0.4.4[gtk3]
-	>=net-misc/spice-gtk-0.7.81[gtk3]"
+	>=net-misc/spice-gtk-0.7.98[gtk3]
+
+	sys-fs/fuse
+	sys-fs/fuseiso
+	sys-fs/mtools"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.22
 	>=dev-util/intltool-0.40
@@ -50,22 +55,27 @@ if [[ ${PV} = 9999 ]]; then
 		>=net-misc/spice-gtk-0.7.1[introspection,vala]"
 fi
 
+pkg_pretend() {
+	linux_config_exists
+
+	if ! { linux_chkconfig_present KVM_AMD || \
+		linux_chkconfig_present KVM_INTEL; }; then
+		ewarn "You need KVM support in your kernel to use GNOME Boxes!"
+	fi
+}
+
 pkg_setup() {
-	DOCS="AUTHORS MAINTAINERS README TODO"
+	DOCS="AUTHORS README NEWS THANKS TODO"
 	G2CONF="--disable-schemas-compile
 		--disable-strict-cc
 		VALAC=$(type -P valac-0.14)"
 }
 
 pkg_postinst() {
-	gnome2_pkg_postinst
-	elog "You need to start the libvirtd daemon to use ${PN}."
-	elog "If you use openrc, this can be accomplished by running:"
-	elog ""
-	elog "	rc-service libvirtd start"
-	elog ""
-	elog "To add libvirtd to your default runlevel, run:"
-	elog ""
-	elog "	rc-update add libvirtd default"
-	elog ""
+	elog "Before running gnome-boxes, you will need to load the KVM modules"
+	elog "If you have an Intel Processor, run:"
+	elog "	modprobe kvm kvm-intel"
+	einfo
+	elog "If you have an AMD Processor, run:"
+	elog "	modprobe kvm kvm-amd"
 }
