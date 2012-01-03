@@ -49,6 +49,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.26.0:2
 	>=net-libs/libsoup-gnome-2.26:2.4
 	>=media-libs/gst-plugins-base-0.10.32:0.10
 	>=media-libs/gstreamer-0.10.32:0.10[introspection]
+	>=sys-libs/tdb-1.2.6
 
 	clutter? (
 		>=media-libs/clutter-1.2:1.0
@@ -147,14 +148,6 @@ pkg_setup() {
 		$(use_with udev gudev)"
 
 	export GST_INSPECT=/bin/true
-}
-
-src_prepare() {
-	gnome2_src_prepare
-
-	# disable pyc compiling
-	mv py-compile py-compile.orig
-	ln -s $(type -P true) py-compile
 }
 
 src_test() {
