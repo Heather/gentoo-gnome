@@ -28,10 +28,9 @@ gnome2-python_pkg_setup() {
 }
 
 gnome2-python_src_prepare() {
+	# disable pyc compiling
 	if [ -f py-compile ]; then
-		# disable pyc compiling
-		mv py-compile py-compile.orig
-		ln -s $(type -P true) py-compile
+		> py-compile
 	fi
 
 	gnome2_src_prepare
