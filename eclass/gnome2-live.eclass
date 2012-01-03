@@ -151,7 +151,8 @@ gnome2-live_src_prepare() {
 	fi
 
 	# Disable pyc compiling. Doesn't harm if DNE
-	> py-compile
+	echo > py-compile
+	chmod +x py-compile
 
 	### Keep this in-sync with gnome2.eclass!
 

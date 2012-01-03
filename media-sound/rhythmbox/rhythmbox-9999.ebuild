@@ -150,6 +150,13 @@ pkg_setup() {
 	export GST_INSPECT=/bin/true
 }
 
+src_prepare() {
+	gnome2_src_prepare
+
+	# Disable pyc compiling
+	echo > py-compile
+}
+
 src_test() {
 	unset SESSION_MANAGER
 	unset DBUS_SESSION_BUS_ADDRESS
