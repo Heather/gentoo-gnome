@@ -101,10 +101,6 @@ src_prepare() {
 	sed '\%/recent-manager/add%,/recent_manager_purge/ d' \
 		-i gtk/tests/recentmanager.c || die "sed 2 failed"
 
-	# Missing file, required for tests; https://bugzilla.gnome.org/show_bug.cgi?id=662024
-	cp "${FILESDIR}/${PN}-3.2.1-selector.errors" \
-		tests/css/parser/selector.errors || die "cp failed"
-
 	# FIXME: multiple reftests fail when run from portage (but succeed when
 	# run from a manual compile in a temp directory)
 	sed -e 's:\(SUBDIRS.*\)reftests:\1:' \
@@ -128,6 +124,8 @@ src_prepare() {
 		strip_builddir SRC_SUBDIRS demos Makefile.am
 		[[ ${PV} != 9999 ]] && strip_builddir SRC_SUBDIRS demos Makefile.in
 	fi
+
+	gnome2_src_prepare
 }
 
 src_configure() {
