@@ -24,8 +24,10 @@ else
 	SRC_URI="http://spice-space.org/download/gtk/${P}.tar.bz2"
 	KEYWORDS="~amd64 ~x86"
 fi
-IUSE="+cairo doc gnome gstreamer gtk3 +introspection kde +pulseaudio python sasl static-libs vala"
+IUSE="doc gnome gstreamer gtk3 +introspection kde policykit +pulseaudio
+python sasl static-libs usbredir vala"
 
+# TODO: check if sys-freebsd/freebsd-lib (from virtual/acl) provides acl/libacl.h
 RDEPEND="pulseaudio? ( !gstreamer? ( media-sound/pulseaudio ) )
 	gstreamer? (
 		media-libs/gstreamer:0.10
@@ -43,14 +45,28 @@ RDEPEND="pulseaudio? ( !gstreamer? ( media-sound/pulseaudio ) )
 	introspection? ( dev-libs/gobject-introspection )
 	python? ( dev-python/pygtk:2 )
 	sasl? ( dev-libs/cyrus-sasl )
-	gnome? ( gnome-base/gconf )"
+	gnome? ( gnome-base/gconf )
+	usbredir? (
+		policykit? (
+			sys-auth/polkit
+			sys-apps/acl )
+		>=dev-libs/libusb-1.0.9_rc1
+		>=sys-apps/usbredir-0.3.1
+		sys-fs/udev[gudev] )"
 DEPEND="${RDEPEND}
 	vala? ( dev-lang/vala:0.14 )
 	dev-lang/python
-	dev-lang/perl
-	dev-perl/Text-CSV
 	dev-python/pyparsing
-	dev-util/pkgconfig"
+	dev-util/pkgconfig
+	>=dev-util/intltool-0.40.0
+	>=sys-devel/gettext-0.17"
+
+if [[ ${PV} = 9999 ]]; then
+	DEPEND="${DEPEND}
+		dev-lang/vala:0.14
+		dev-lang/perl
+		dev-perl/Text-CSV"
+fi
 
 pkg_setup() {
 	if use gstreamer && use pulseaudio ; then
@@ -67,35 +83,34 @@ src_configure() {
 	# TODO: do a double build like gtk-vnc does to install both gtk2 & gtk3 libs
 	use gtk3 && gtk="3.0"
 	if use vala ; then
-		rm -vf gtk/controller/controller.{c,vala.stamp} gtk/controller/menu.c # force vala regen
+		# force vala regen for MinGW, etc
+		rm -fv gtk/controller/controller.{c,vala.stamp} gtk/controller/menu.c
 	fi
 
-	# TODO: usbredirection support
-	#       needs libusbredirhost, newer libusb, policykit, libacl
-	econf \
+	econf --disable-maintainer-mode \
 		VALAC=$(type -P valac-0.14) \
 		VAPIGEN=$(type -P vapigen-0.14) \
 		$(use_enable static-libs static) \
 		$(use_enable introspection) \
 		--with-audio="${audio}" \
-		$(use_with !cairo x11) \
 		$(use_with python) \
 		$(use_with sasl) \
+		$(use_enable usbredir) \
+		$(use_enable policykit polkit) \
 		$(use_enable vala) \
 		--with-gtk="${gtk}" \
 		--disable-smartcard \
-		--disable-usbredir \
 		--disable-werror
 }
 
 src_install() {
-	emake -j1 DESTDIR="${D}" install || die "emake install failed"
+	emake -j1 DESTDIR="${D}" install
 
 	use static-libs || rm -rf "${D}"/usr/lib*/*.la
 	use python && rm -rf "${D}"/usr/lib*/python*/site-packages/*.la
 	use doc || rm -rf "${D}/usr/share/gtk-doc"
 
-	dodoc AUTHORS NEWS README TODO
+	dodoc AUTHORS NEWS README THANKS TODO
 
 	make_desktop_entry spicy Spicy "" net
 
