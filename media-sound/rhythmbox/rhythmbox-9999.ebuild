@@ -19,7 +19,7 @@ HOMEPAGE="http://www.rhythmbox.org/"
 LICENSE="GPL-2"
 SLOT="0"
 IUSE="cdr clutter daap dbus doc gnome-keyring html ipod +lastfm libnotify lirc
-musicbrainz mtp nsplugin python test udev upnp webkit"
+musicbrainz mtp nsplugin +python test +udev upnp webkit"
 # vala
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
