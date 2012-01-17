@@ -66,4 +66,5 @@ src_prepare() {
 		epatch "${FILESDIR}/${PN}-2.34.2-fix-build-without-gnome-with-doc.patch"
 		eautoreconf
 	fi
+	epatch "${FILESDIR}/${P}-thread-crash.patch"
 }

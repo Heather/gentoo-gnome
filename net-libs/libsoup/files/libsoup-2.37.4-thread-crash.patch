@@ -1,0 +1,38 @@
+From b92be4347c981205ca2fb4362f8f03301d1ab905 Mon Sep 17 00:00:00 2001
+From: Dan Winship <danw@gnome.org>
+Date: Tue, 17 Jan 2012 19:02:46 +0000
+Subject: soup-message-io: make soup_message_io_unpause() obey use-thread-context
+
+---
+diff --git a/libsoup/soup-message-io.c b/libsoup/soup-message-io.c
+index b589ef2..16eea04 100644
+--- a/libsoup/soup-message-io.c
++++ b/libsoup/soup-message-io.c
+@@ -1221,15 +1221,23 @@ soup_message_io_unpause (SoupMessage *msg)
+ {
+ 	SoupMessagePrivate *priv = SOUP_MESSAGE_GET_PRIVATE (msg);
+ 	SoupMessageIOData *io = priv->io_data;
+-	gboolean non_blocking;
++	gboolean non_blocking, use_thread_context;
+ 	GMainContext *async_context;
+ 
+ 	g_return_if_fail (io != NULL);
+ 
+ 	g_object_get (io->sock,
+ 		      SOUP_SOCKET_FLAG_NONBLOCKING, &non_blocking,
+-		      SOUP_SOCKET_ASYNC_CONTEXT, &async_context,
++		      SOUP_SOCKET_USE_THREAD_CONTEXT, &use_thread_context,
+ 		      NULL);
++	if (use_thread_context)
++		async_context = g_main_context_ref_thread_default ();
++	else {
++		g_object_get (io->sock,
++			      SOUP_SOCKET_ASYNC_CONTEXT, &async_context,
++			      NULL);
++	}
++
+ 	if (non_blocking) {
+ 		if (!io->unpause_source) {
+ 			io->unpause_source = soup_add_completion (
+--
+cgit v0.9.0.2
