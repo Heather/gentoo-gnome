@@ -1,4 +1,4 @@
-From 80addbb5745904d0cb822445e6181b8265f518ae Mon Sep 17 00:00:00 2001
+From 57588fea518799c2cb69d44772a4ee7799c24eca Mon Sep 17 00:00:00 2001
 From: Priit Laes <plaes@plaes.org>
 Date: Tue, 20 Dec 2011 15:42:44 +0200
 Subject: [PATCH] Split support for libsoup-gnome
@@ -6,9 +6,9 @@ Subject: [PATCH] Split support for libsoup-gnome
 Original patch by Romain Perier.
 ---
  Makefile.am         |   12 ++++++++++--
- configure.ac        |   42 +++++++++++++++++++++++++++---------------
+ configure.ac        |   43 +++++++++++++++++++++++++++----------------
  libsoup/Makefile.am |   50 +++++++++++++++++++++++++++++++++++++++-----------
- 3 files changed, 76 insertions(+), 28 deletions(-)
+ 3 files changed, 76 insertions(+), 29 deletions(-)
 
 diff --git a/Makefile.am b/Makefile.am
 index bb94238..0562574 100644
@@ -41,25 +41,26 @@ index bb94238..0562574 100644
  if BUILD_LIBSOUP_GNOME
  pkgconfig_DATA += libsoup-gnome-2.4.pc
 diff --git a/configure.ac b/configure.ac
-index 5ce2fcf..9126e7c 100644
+index 6394974..5229544 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -72,15 +72,30 @@ dnl ***********************
+@@ -72,16 +72,30 @@ dnl ***********************
  dnl *** Checks for glib ***
  dnl ***********************
  
--AM_PATH_GLIB_2_0(2.31.0,,,gobject gio)
+-GLIB_REQUIRED=2.31.7
+-AM_PATH_GLIB_2_0($GLIB_REQUIRED,,,gobject gio)
 -if test "$GLIB_LIBS" = ""; then
--   AC_MSG_ERROR(GLIB 2.31.0 or later is required to build libsoup)
+-   AC_MSG_ERROR(GLIB $GLIB_REQUIRED or later is required to build libsoup)
 +PKG_PROG_PKG_CONFIG
-+enable_ssl=no
 +AC_ARG_WITH(libsoup-system,
 +   AS_HELP_STRING([--with-libsoup-system], [Use libsoup system library to build(default=no)]),
 +   [with_libsoup_system=$withval], [with_libsoup_system=no])
 +if test "$with_libsoup_system" = "no"; then
-+	AM_PATH_GLIB_2_0(2.31.0,,,gobject gio)
++	GLIB_REQUIRED=2.31.7
++	AM_PATH_GLIB_2_0($GLIB_REQUIRED,,,gobject gio)
 +	if test "$GLIB_LIBS" = ""; then
-+	   AC_MSG_ERROR(GLIB 2.31.0 or later is required to build libsoup)
++	   AC_MSG_ERROR(GLIB $GLIB_REQUIRED or later is required to build libsoup)
 +	fi
 +	GLIB_CFLAGS="$GLIB_CFLAGS -DG_DISABLE_SINGLE_INCLUDES"
 +
@@ -83,7 +84,7 @@ index 5ce2fcf..9126e7c 100644
  
  dnl ***********************
  dnl *** Check for Win32 ***
-@@ -99,13 +114,6 @@ esac
+@@ -100,13 +114,6 @@ esac
  AC_MSG_RESULT([$os_win32])
  AM_CONDITIONAL(OS_WIN32, [test $os_win32 = yes])
  
@@ -97,7 +98,7 @@ index 5ce2fcf..9126e7c 100644
  dnl *********************
  dnl *** GNOME support ***
  dnl *********************
-@@ -130,6 +138,10 @@ AM_CONDITIONAL(BUILD_LIBSOUP_GNOME, test $with_gnome != no)
+@@ -131,6 +138,10 @@ AM_CONDITIONAL(BUILD_LIBSOUP_GNOME, test $with_gnome != no)
  if test $with_gnome != no; then
  	AC_DEFINE(HAVE_GNOME, 1, [Defined if GNOME support is enabled])
  
@@ -241,5 +242,5 @@ index 096f0fb..416e523 100644
  SoupGNOME_2_4_gir_EXPORT_PACKAGES = libsoup-gnome-2.4
  
 -- 
-1.7.8
+1.7.8.3
 

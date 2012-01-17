@@ -16,8 +16,7 @@ SLOT="2.4"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x86-solaris"
 IUSE="debug doc +introspection samba ssl test"
 
-# glib-networking-2.29.18 needed to avoid a tls bug, see NEWS file
-RDEPEND=">=dev-libs/glib-2.31.0:2
+RDEPEND=">=dev-libs/glib-2.31.7:2
 	>=dev-libs/libxml2-2:2
 	>=net-libs/glib-networking-2.30.0[ssl?]
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )

@@ -52,6 +52,6 @@ src_prepare() {
 	gnome2_src_prepare
 
 	# Use lib present on the system
-	epatch "${FILESDIR}"/${PN}-2.37.3-system-lib.patch
+	epatch "${FILESDIR}"/${PN}-2.37-system-lib.patch
 	eautoreconf
 }
