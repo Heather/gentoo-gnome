@@ -12,7 +12,7 @@ HOMEPAGE="http://projects.gnome.org/epiphany/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="avahi doc +introspection +networkmanager +nss test"
+IUSE="avahi doc +introspection nss test"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 
 # XXX: Should we add seed support? Seed seems to be unmaintained now.
@@ -37,12 +37,9 @@ COMMON_DEPEND=">=dev-libs/glib-2.31.2:2
 	avahi? ( >=net-dns/avahi-0.6.22 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 	nss? ( dev-libs/nss )"
-# networkmanager is used purely via dbus
-RDEPEND="${COMMON_DEPEND}
-	networkmanager? ( >=net-misc/networkmanager-0.8.997 )"
+DEPEND="${COMMON_DEPEND}"
 DEPEND="${COMMON_DEPEND}
 	app-text/gnome-doc-utils
-	>=dev-util/gdbus-codegen-2.30.0
 	>=dev-util/intltool-0.40
 	dev-util/pkgconfig
 	sys-devel/gettext
@@ -60,13 +57,4 @@ pkg_setup() {
 		$(use_enable introspection)
 		$(use_enable nss)
 		$(use_enable test tests)"
-	# Upstream no longer makes networkmanager optional, but we still want
-	# to make it possible for prefix users to use epiphany
-	use networkmanager && CFLAGS="${CFLAGS} -DENABLE_NETWORKMANAGER"
-}
-
-src_prepare() {
-	# Make networkmanager optional for prefix people
-	epatch "${FILESDIR}/${PN}-3.3-optional-networkmanager.patch"
-	gnome2_src_prepare
 }
