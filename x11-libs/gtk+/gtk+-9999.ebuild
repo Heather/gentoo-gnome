@@ -49,7 +49,7 @@ COMMON_DEPEND="!aqua? (
 		>=x11-libs/gdk-pixbuf-2.23.5:2[introspection?]
 	)
 	xinerama? ( x11-libs/libXinerama )
-	>=dev-libs/glib-2.31.6
+	>=dev-libs/glib-2.31.10
 	>=x11-libs/pango-1.29.0[introspection?]
 	>=dev-libs/atk-2.1.5[introspection?]
 	>=x11-libs/gtk+-2.24:2
