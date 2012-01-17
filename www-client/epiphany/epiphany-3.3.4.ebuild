@@ -1,14 +1,11 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-client/epiphany/epiphany-2.30.2.ebuild,v 1.1 2010/06/13 21:09:33 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/www-client/epiphany/epiphany-3.2.1.ebuild,v 1.1 2011/11/06 04:57:01 tetromino Exp $
 
 EAPI="4"
 GCONF_DEBUG="yes"
 
 inherit eutils gnome2
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
 
 DESCRIPTION="GNOME webbrowser based on Webkit"
 HOMEPAGE="http://projects.gnome.org/epiphany/"
@@ -16,11 +13,7 @@ HOMEPAGE="http://projects.gnome.org/epiphany/"
 LICENSE="GPL-2"
 SLOT="0"
 IUSE="avahi doc +introspection +networkmanager +nss test"
-if [[ ${PV} = 9999 ]]; then
-	KEYWORDS=""
-else
-	KEYWORDS="~alpha ~amd64 ~ia64 ~sparc ~x86"
-fi
+KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 
 # XXX: Should we add seed support? Seed seems to be unmaintained now.
 COMMON_DEPEND=">=dev-libs/glib-2.31.2:2
@@ -54,7 +47,6 @@ DEPEND="${COMMON_DEPEND}
 	dev-util/pkgconfig
 	sys-devel/gettext
 	doc? ( >=dev-util/gtk-doc-1 )"
-
 
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS README TODO"

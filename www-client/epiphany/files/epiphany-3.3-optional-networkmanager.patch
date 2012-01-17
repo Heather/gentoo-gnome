@@ -1,0 +1,96 @@
+From 0d814802873ca8ca58479b32886ef7c4fef493bb Mon Sep 17 00:00:00 2001
+From: Priit Laes <plaes@plaes.org>
+Date: Tue, 17 Jan 2012 13:05:04 +0200
+Subject: [PATCH] [PATCH] Make networkmanager optional
+
+Original patch by Alexandre Rostovtsev
+---
+ src/ephy-shell.c |   14 ++++++++++++--
+ 1 files changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/src/ephy-shell.c b/src/ephy-shell.c
+index 40d2f72..4a19925 100644
+--- a/src/ephy-shell.c
++++ b/src/ephy-shell.c
+@@ -57,7 +57,9 @@ struct _EphyShellPrivate {
+   GObject *lockdown;
+   EphyBookmarks *bookmarks;
+   EphyExtensionsManager *extensions_manager;
++#ifdef ENABLE_NETWORKMANAGER
+   GNetworkMonitor *network_monitor;
++#endif /* ENABLE_NETWORKMANAGER */
+   GtkWidget *bme;
+   GtkWidget *history_window;
+   GObject *pdm_dialog;
+@@ -549,6 +551,7 @@ ephy_shell_new_window_cb (EphyEmbedSingle *single,
+      NULL, NULL, flags, chromemask, is_popup, 0);
+ }
+ 
++#ifdef ENABLE_NETWORKMANAGER
+ static void
+ ephy_shell_sync_network_status (GNetworkMonitor *monitor,
+                                 gboolean available,
+@@ -563,6 +566,7 @@ ephy_shell_sync_network_status (GNetworkMonitor *monitor,
+ 
+   ephy_embed_single_set_network_status (single, available);
+ }
++#endif /* ENABLE_NETWORKMANAGER */
+ 
+ static GObject*
+ impl_get_embed_single (EphyEmbedShell *embed_shell)
+@@ -581,14 +585,15 @@ impl_get_embed_single (EphyEmbedShell *embed_shell)
+ 
+     priv->embed_single_connected = TRUE;
+ 
++#ifdef ENABLE_NETWORKMANAGER
+     /* Now we need the net monitor   */
+     if (ephy_shell_get_net_monitor (shell)) {
+         ephy_shell_sync_network_status (priv->network_monitor,
+                                         g_network_monitor_get_network_available (priv->network_monitor),
+                                         shell);
+     }
++#endif /* ENABLE_NETWORKMANAGER */
+   }
+-
+   return embed_single;
+ }
+ 
+@@ -663,6 +668,7 @@ ephy_shell_dispose (GObject *object)
+     priv->bookmarks = NULL;
+   }
+ 
++#ifdef ENABLE_NETWORKMANAGER
+   if (priv->network_monitor != NULL) {
+     LOG ("Unref net monitor ");
+     g_signal_handlers_disconnect_by_func
+@@ -670,6 +676,7 @@ ephy_shell_dispose (GObject *object)
+     g_object_unref (priv->network_monitor);
+     priv->network_monitor = NULL;
+   }
++#endif /* ENABLE_NETWORKMANAGER */
+ 
+   G_OBJECT_CLASS (ephy_shell_parent_class)->dispose (object);
+ }
+@@ -969,6 +976,7 @@ ephy_shell_get_extensions_manager (EphyShell *es)
+ GObject *
+ ephy_shell_get_net_monitor (EphyShell *shell)
+ {
++#ifdef ENABLE_NETWORKMANAGER
+   EphyShellPrivate *priv = shell->priv;
+ 
+   if (priv->network_monitor == NULL) {
+@@ -976,8 +984,10 @@ ephy_shell_get_net_monitor (EphyShell *shell)
+     g_signal_connect (priv->network_monitor, "network-changed",
+                       G_CALLBACK (ephy_shell_sync_network_status), shell);
+   }
+-
+   return G_OBJECT (priv->network_monitor);
++#else
++  return NULL;
++#endif /* ENABLE_NETWORKMANAGER */
+ }
+ 
+ static void
+-- 
+1.7.8.3
+
