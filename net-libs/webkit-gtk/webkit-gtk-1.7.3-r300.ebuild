@@ -95,9 +95,6 @@ src_prepare() {
 	# Required for webgl; https://bugs.webkit.org/show_bug.cgi?id=69085
 	mkdir -p DerivedSources/ANGLE
 
-	# Install docs on "make install" when USE=doc
-	#epatch "${FILESDIR}/${PN}-1.7.1-install-docs.patch"
-
 	# Prevent maintainer mode from being triggered during make
 	AT_M4DIR=Source/autotools eautoreconf
 }

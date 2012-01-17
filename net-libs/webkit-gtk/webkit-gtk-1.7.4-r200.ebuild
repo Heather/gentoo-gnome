@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/webkit-gtk/webkit-gtk-1.6.1-r300.ebuild,v 1.1 2011/09/30 13:52:33 nirbheek Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/webkit-gtk/webkit-gtk-1.6.1-r200.ebuild,v 1.1 2011/09/30 13:52:33 nirbheek Exp $
 
 EAPI="4"
 
@@ -10,22 +10,20 @@ inherit autotools eutils flag-o-matic eutils python virtualx
 MY_P="webkit-${PV}"
 DESCRIPTION="Open source web browser engine"
 HOMEPAGE="http://www.webkitgtk.org/"
-SRC_URI="http://www.webkitgtk.org/${MY_P}.tar.gz"
+SRC_URI="http://www.webkitgtk.org/${MY_P}.tar.xz"
 #SRC_URI="mirror://gentoo/${P}.tar.xz"
 
 LICENSE="LGPL-2 LGPL-2.1 BSD"
-SLOT="3"
+SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd
 ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-macos"
 # geoclue
-IUSE="aqua coverage debug doc +gstreamer +introspection +jit spell webgl"
+IUSE="aqua coverage debug +gstreamer +introspection +jit spell webgl"
 # bug 372493
 REQUIRED_USE="introspection? ( gstreamer )"
 
 # use sqlite, svg by default
 # dependency on >=x11-libs/gtk+-2.13:2 for gail
-# Aqua support in gtk3 is untested
-# gtk2 is needed for plugin process support
 RDEPEND="
 	dev-libs/libxml2:2
 	dev-libs/libxslt
@@ -33,7 +31,7 @@ RDEPEND="
 	>=media-libs/libpng-1.4:0
 	>=x11-libs/cairo-1.10
 	>=dev-libs/glib-2.27.90:2
-	>=x11-libs/gtk+-3.0:3[aqua=,introspection?]
+	>=x11-libs/gtk+-2.13:2[aqua=,introspection?]
 	>=dev-libs/icu-3.8.1-r1
 	>=net-libs/libsoup-2.33.6:2.4[introspection?]
 	dev-db/sqlite:3
@@ -58,7 +56,6 @@ DEPEND="${RDEPEND}
 	dev-util/gperf
 	dev-util/pkgconfig
 	dev-util/gtk-doc-am
-	doc? ( >=dev-util/gtk-doc-1.10 )
 	test? ( x11-themes/hicolor-icon-theme )
 "
 
@@ -95,9 +92,6 @@ src_prepare() {
 	# Required for webgl; https://bugs.webkit.org/show_bug.cgi?id=69085
 	mkdir -p DerivedSources/ANGLE
 
-	# Install docs on "make install" when USE=doc
-	epatch "${FILESDIR}/${PN}-1.7.1-install-docs.patch"
-
 	# Prevent maintainer mode from being triggered during make
 	AT_M4DIR=Source/autotools eautoreconf
 }
@@ -115,23 +109,22 @@ src_configure() {
 	local myconf
 
 	# XXX: Check Web Audio support
-	# XXX: files for generating DerivedSources/WebKit2/* are missing, see
-	#      https://bugs.webkit.org/show_bug.cgi?id=66527
+	# WebKit2 can only be built with gtk3
+	# API documentation (gtk-doc) is built in webkit-gtk:3, always disable here
 	myconf="
 		$(use_enable coverage)
 		$(use_enable debug)
 		$(use_enable debug debug-features)
-		$(use_enable doc gtk-doc)
 		$(use_enable spell spellcheck)
 		$(use_enable introspection)
 		$(use_enable gstreamer video)
 		$(use_enable jit)
 		$(use_enable webgl)
 		--enable-web-sockets
-		--with-gtk=3.0
+		--with-gtk=2.0
+		--disable-gtk-doc
 		--disable-webkit2
 		$(use aqua && echo "--with-font-backend=pango --with-target=quartz")"
-		# Aqua support in gtk3 is untested
 
 	econf ${myconf}
 }
