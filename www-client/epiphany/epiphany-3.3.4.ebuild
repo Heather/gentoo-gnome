@@ -12,7 +12,7 @@ HOMEPAGE="http://projects.gnome.org/epiphany/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="avahi doc +introspection nss test"
+IUSE="avahi doc +introspection +nss test"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 
 # XXX: Should we add seed support? Seed seems to be unmaintained now.
