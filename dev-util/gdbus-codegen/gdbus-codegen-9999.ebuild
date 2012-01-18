@@ -16,14 +16,14 @@ else
 fi
 
 DESCRIPTION="GDBus code and documentation generator"
+HOMEPAGE="http://www.gtk.org/"
 
 LICENSE="LGPL-2"
 SLOT="0"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh
-	~sparc ~x86 ~sparc-fbsd ~x86-fbsd ~x86-linux"
+	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd ~x86-linux"
 fi
 IUSE=""
 
@@ -48,13 +48,14 @@ src_prepare() {
 }
 
 src_test() {
-	elog "Skipping tests. To test ${PN}, emerge dev-libs/glib"
-	elog "with FEATURES=test"
+	elog "Skipping tests. This package is tested by dev-libs/glib"
+	elog "when merged with FEATURES=test"
 }
 
 src_install() {
 	insinto "/usr/$(get_libdir)/gdbus-2.0/codegen"
-	# keep in sync with Makefile.am
+
+	# keep in sync with Makefile.am!
 	doins __init__.py \
 		codegen.py \
 		codegen_main.py \
@@ -62,10 +63,11 @@ src_install() {
 		config.py \
 		dbustypes.py \
 		parser.py \
-		utils.py || die "doins failed"
-	newbin gdbus-codegen.in gdbus-codegen || die "dobin failed"
-	doman "${WORKDIR}/glib-${PV}/docs/reference/gio/gdbus-codegen.1" ||
-		die "doman failed"
+		utils.py
+
+	newbin gdbus-codegen.in gdbus-codegen
+
+	doman "${WORKDIR}/glib-${PV}/docs/reference/gio/gdbus-codegen.1"
 }
 
 pkg_postinst() {

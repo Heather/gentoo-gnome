@@ -38,8 +38,8 @@ src_prepare() {
 }
 
 src_test() {
-	elog "Skipping tests. To test ${PN}, emerge dev-libs/glib"
-	elog "with FEATURES=test"
+	elog "Skipping tests. This package is tested by dev-libs/glib"
+	elog "when merged with FEATURES=test"
 }
 
 src_install() {
