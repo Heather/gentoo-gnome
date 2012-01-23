@@ -4,7 +4,7 @@
 
 EAPI="4"
 
-inherit eutils flag-o-matic gnome.org gnome2-utils libtool virtualx
+inherit eutils flag-o-matic gnome.org gnome2 libtool virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
