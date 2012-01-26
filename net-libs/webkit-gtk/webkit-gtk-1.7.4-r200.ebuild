@@ -109,6 +109,7 @@ src_configure() {
 	local myconf
 
 	# XXX: Check Web Audio support
+	# XXX: dependency-tracking is required so parallel builds won't fail
 	# WebKit2 can only be built with gtk3
 	# API documentation (gtk-doc) is built in webkit-gtk:3, always disable here
 	myconf="
@@ -124,6 +125,7 @@ src_configure() {
 		--with-gtk=2.0
 		--disable-gtk-doc
 		--disable-webkit2
+		--enable-dependency-tracking
 		$(use aqua && echo "--with-font-backend=pango --with-target=quartz")"
 
 	econf ${myconf}
