@@ -49,10 +49,10 @@ DEPEND="${RDEPEND}
 if [[ ${PV} = 9999 ]]; then
 	DEPEND="${DEPEND}
 		>=dev-lang/vala-0.14.0:0.14
-		>=sys-libs/libosinfo-0.0.5[introspection,vala]
-		>=app-emulation/libvirt-glib-0.0.4[introspection,vala]
-		>=net-libs/gtk-vnc-0.4.4[gtk3,introspection,vala]
-		>=net-misc/spice-gtk-0.7.1[introspection,vala]"
+		sys-libs/libosinfo[introspection,vala]
+		app-emulation/libvirt-glib[introspection,vala]
+		net-libs/gtk-vnc[introspection,vala]
+		net-misc/spice-gtk[introspection,vala]"
 fi
 
 pkg_pretend() {
