@@ -14,12 +14,14 @@ HOMEPAGE="http://git.gnome.org/browse/glib-networking/"
 LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x86-solaris"
-IUSE="+gnome +libproxy +ssl test" # pkcs11
+IUSE="+gnome +libproxy pkcs11 +ssl test"
 
-# pkcs support requires gnutls-2.12.8, p11-kit-0.8
 RDEPEND=">=dev-libs/glib-2.31.6:2
 	gnome? ( gnome-base/gsettings-desktop-schemas )
 	libproxy? ( >=net-libs/libproxy-0.4.6-r3 )
+	pkcs11? (
+		>=app-crypt/p11-kit-0.8
+		>=net-libs/gnutls-2.12.8[pkcs11] )
 	ssl? (
 		app-misc/ca-certificates
 		>=net-libs/gnutls-2.11.0 )
@@ -32,7 +34,10 @@ DEPEND="${RDEPEND}
 # eautoreconf needs >=sys-devel/autoconf-2.65:2.5
 
 src_prepare() {
+	# Applied upstream
 	epatch "${FILESDIR}/tls-async-crasher.patch"
+	# https://bugzilla.gnome.org/show_bug.cgi?id=668945
+	epatch "${FILESDIR}/skip-broken-assert-in-pkcs11-tests.patch"
 }
 
 pkg_setup() {
@@ -43,9 +48,8 @@ pkg_setup() {
 		--with-ca-certificates="${EPREFIX}"/etc/ssl/certs/ca-certificates.crt
 		$(use_with gnome gnome-proxy)
 		$(use_with libproxy)
-		$(use_with ssl gnutls)
-		--without-pkcs11"
-		#$(use_with pkcs11 pkcs11)
+		$(use_with pkcs11)
+		$(use_with ssl gnutls)"
 }
 
 src_test() {
