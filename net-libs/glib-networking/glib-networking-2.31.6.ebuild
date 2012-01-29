@@ -31,6 +31,10 @@ DEPEND="${RDEPEND}
 	test? ( sys-apps/dbus[X] )"
 # eautoreconf needs >=sys-devel/autoconf-2.65:2.5
 
+src_prepare() {
+	epatch "${FILESDIR}/tls-async-crasher.patch"
+}
+
 pkg_setup() {
 	# AUTHORS, ChangeLog are empty
 	DOCS="NEWS README"
