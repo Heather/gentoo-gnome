@@ -45,7 +45,7 @@ src_test() {
 src_install() {
 	insinto "/usr/$(get_libdir)/gdbus-2.0/codegen"
 
-	# Keep in sync with Makefile.am!
+	# Keep in sync with gio/gdbus-2.0/codegen/Makefile.am!
 	doins __init__.py \
 		codegen.py \
 		codegen_main.py \
