@@ -25,6 +25,7 @@ RDEPEND="virtual/libiconv
 	fam? ( virtual/fam )
 	utils? ( >=dev-util/gdbus-codegen-${PV} )"
 DEPEND="${RDEPEND}
+	dev-libs/elfutils
 	>=sys-devel/gettext-0.11
 	>=dev-util/gtk-doc-am-1.15
 	doc? (
@@ -107,7 +108,7 @@ src_prepare() {
 	fi
 
 	# gdbus-codegen is a separate package
-	epatch "${FILESDIR}/${PN}-2.30.1-external-gdbus-codegen.patch"
+	epatch "${FILESDIR}/${PN}-2.31.x-external-gdbus-codegen.patch"
 
 	# disable pyc compiling
 	ln -sfn $(type -P true) py-compile
