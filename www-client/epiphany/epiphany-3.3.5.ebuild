@@ -17,7 +17,7 @@ KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 
 # XXX: Should we add seed support? Seed seems to be unmaintained now.
 COMMON_DEPEND=">=dev-libs/glib-2.31.2:2
-	>=x11-libs/gtk+-3.3.8:3[introspection?]
+	>=x11-libs/gtk+-3.3.14:3[introspection?]
 	>=dev-libs/libxml2-2.6.12:2
 	>=dev-libs/libxslt-1.1.7
 	>=app-text/iso-codes-0.35
