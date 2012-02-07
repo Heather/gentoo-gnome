@@ -42,14 +42,14 @@ COMMON_DEPEND="!aqua? (
 		x11-libs/libXcomposite
 		x11-libs/libXdamage
 		>=x11-libs/cairo-1.10.0[X,glib,svg]
-		>=x11-libs/gdk-pixbuf-2.23.5:2[X,introspection?]
+		>=x11-libs/gdk-pixbuf-2.25.2:2[X,introspection?]
 	)
 	aqua? (
 		>=x11-libs/cairo-1.10.0[aqua,glib,svg]
-		>=x11-libs/gdk-pixbuf-2.23.5:2[introspection?]
+		>=x11-libs/gdk-pixbuf-2.25.2:2[introspection?]
 	)
 	xinerama? ( x11-libs/libXinerama )
-	>=dev-libs/glib-2.31.13
+	>=dev-libs/glib-2.31.14
 	>=x11-libs/pango-1.29.0[introspection?]
 	>=dev-libs/atk-2.1.5[introspection?]
 	>=x11-libs/gtk+-2.24:2
