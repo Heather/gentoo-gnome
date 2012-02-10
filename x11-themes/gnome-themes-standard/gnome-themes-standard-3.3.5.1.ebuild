@@ -24,7 +24,7 @@ else
 fi
 
 COMMON_DEPEND="gnome-base/librsvg:2
-	>=x11-libs/gtk+-3.3.7:3
+	>=x11-libs/gtk+-3.3.14:3
 	>=x11-themes/gtk-engines-2.15.3:2"
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/pkgconfig-0.19
