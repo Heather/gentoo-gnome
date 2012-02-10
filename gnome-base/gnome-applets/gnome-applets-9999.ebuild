@@ -5,7 +5,7 @@
 EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="no" # bug 340725, no other la files
-PYTHON_DEPEND="2:2.4"
+PYTHON_DEPEND="2:2.5"
 
 inherit eutils gnome2 python
 if [[ ${PV} = 9999 ]]; then

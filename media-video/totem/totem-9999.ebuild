@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes" # plugins are dlopened
 WANT_AUTOMAKE="1.11"
-PYTHON_DEPEND="python? 2:2.4"
+PYTHON_DEPEND="python? 2:2.5"
 PYTHON_USE_WITH="threads"
 PYTHON_USE_WITH_OPT="python"
 

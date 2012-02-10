@@ -5,7 +5,7 @@
 EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
-PYTHON_DEPEND="python? 2:2.4"
+PYTHON_DEPEND="python? 2:2.5"
 
 inherit autotools eutils flag-o-matic gnome2 python
 if [[ ${PV} = 9999 ]]; then
