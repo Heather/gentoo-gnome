@@ -19,7 +19,7 @@ RDEPEND="
 	x11-libs/gtk+:2
 	>=gnome-base/gnome-desktop-2:2
 	>=dev-libs/libunique-1:1
-	gnome-extra/polkit-gnome
+	gnome-extra/polkit-gnome:obsolete
 	>=gnome-base/gconf-2[policykit]
 	>=media-video/cheese-2.30
 	media-libs/gstreamer:0.10
