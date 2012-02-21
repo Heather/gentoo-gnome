@@ -26,7 +26,7 @@ else
 fi
 IUSE="+cairo examples test +threads" # doc
 
-COMMON_DEPEND=">=dev-libs/glib-2.24.0:2
+COMMON_DEPEND=">=dev-libs/glib-2.31.0:2
 	>=dev-libs/gobject-introspection-1.31
 	virtual/libffi
 	cairo? ( >=dev-python/pycairo-1.10.0 )"
