@@ -69,8 +69,8 @@ src_prepare() {
 	# Fix gmodule issues on fbsd; bug #184301
 	epatch "${FILESDIR}"/${PN}-2.12.12-fbsd.patch
 
-	# Fix test failure when upgrading from 2.22 to 2.24, upstream bug 621368
-	epatch "${FILESDIR}/${PN}-2.24-assert-test-failure.patch"
+	# Fix test failure during upgrades, upstream bug 621368
+	epatch "${FILESDIR}/${PN}-2.31-assert-test-failure.patch"
 
 	# Do not try to remove files on live filesystem, upstream bug #619274
 	sed 's:^\(.*"/desktop-app-info/delete".*\):/*\1*/:' \

@@ -6,14 +6,16 @@ This patch exports LD_LIBRARY_PATH before running gdb
 
 https://bugzilla.gnome.org/621368
 
----
+(updated for 2.31.18)
+
 --- tests/run-assert-msg-test.sh
 +++ tests/run-assert-msg-test.sh
-@@ -34,6 +34,7 @@ if [ -e ".libs/lt-$msg_test" ]; then
+@@ -34,7 +34,7 @@
         msg_test="lt-$msg_test"
  fi
  echo_v "Running gdb on assert-msg-test"
-+export LD_LIBRARY_PATH="`dirname $PWD`/glib/.libs:$LD_LIBRARY_PATH"
- OUT=$(gdb --batch --ex run --ex "print (char*) __glib_assert_msg" .libs/$msg_test 2> $error_out) || \
+-OUT=$(gdb --batch --ex run --ex "set print elements 0" --ex "print (char*) __glib_assert_msg" .libs/$msg_test 2> $error_out) || \
++OUT=$(libtool --mode=execute gdb --batch --ex run --ex "set print elements 0" --ex "print (char*) __glib_assert_msg" .libs/$msg_test 2> $error_out) || \
    fail "failed to run gdb"
  
+ echo_v "Checking if assert message is in __glib_assert_msg"
