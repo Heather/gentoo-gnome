@@ -23,8 +23,7 @@ else
 fi
 IUSE="debug doc +introspection samba ssl test"
 
-# glib-networking-2.29.18 needed to avoid a tls bug, see NEWS file
-RDEPEND=">=dev-libs/glib-2.31.0:2
+RDEPEND=">=dev-libs/glib-2.31.7:2
 	>=dev-libs/libxml2-2:2
 	>=net-libs/glib-networking-2.30.0[ssl?]
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )

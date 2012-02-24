@@ -1,19 +1,26 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/libsoup/libsoup-2.36.1.ebuild,v 1.1 2011/10/30 02:33:50 tetromino Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/libsoup/libsoup-2.34.2.ebuild,v 1.5 2011/07/15 11:08:46 xarthisius Exp $
 
 EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
 inherit autotools eutils gnome2
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="An HTTP library implementation in C"
 HOMEPAGE="http://live.gnome.org/LibSoup"
 
 LICENSE="LGPL-2"
 SLOT="2.4"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x86-solaris"
+if [[ ${PV} = 9999 ]]; then
+	KEYWORDS=""
+else
+	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x86-solaris"
+fi
 IUSE="debug doc +introspection samba ssl test"
 
 RDEPEND=">=dev-libs/glib-2.31.7:2
@@ -54,11 +61,19 @@ src_configure() {
 src_prepare() {
 	gnome2_src_prepare
 
+	if [[ ${PV} = 9999 ]]; then
+		# prevent SOUP_MAINTAINER_FLAGS from getting set
+		mv .git .git-bck || die
+	fi
+
 	if ! use test; then
 		# don't waste time building tests (bug #226271)
 		sed 's/^\(SUBDIRS =.*\)tests\(.*\)$/\1\2/' -i Makefile.am Makefile.in \
 			|| die "sed failed"
 	fi
+
+	# https://bugzilla.gnome.org/show_bug.cgi?id=654395
+	epatch "${FILESDIR}/${PN}-et_EE-locale.patch"
 
 	# Patch *must* be applied conditionally (see patch for details)
 	if use doc; then
