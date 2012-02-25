@@ -1,16 +1,21 @@
-Tests fail when upgrading glib from 2.22 to 2.24 if sys-devel/gdb is installed
-because gdb is run on .libs/assert-msg-test before LD_LIBRARY_PATH is set. This
-causes gdb to use the system-wide glib instead, and fail on the test.
+From cf9e76b19482cf494798c24ffe904485a36a0b19 Mon Sep 17 00:00:00 2001
+From: Nirbheek Chauhan <nirbheek@gentoo.org>
+Date: Tue, 21 Feb 2012 19:42:22 +0530
+Subject: [PATCH] [tests] Run gdb under libtool so that local libraries are used
 
-This patch exports LD_LIBRARY_PATH before running gdb
+If this isn't done, the system-wide glib is used for this test,
+and that can cause test failures.
 
 https://bugzilla.gnome.org/621368
+---
+ tests/run-assert-msg-test.sh |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-(updated for 2.31.18)
-
---- tests/run-assert-msg-test.sh
-+++ tests/run-assert-msg-test.sh
-@@ -34,7 +34,7 @@
+diff --git a/tests/run-assert-msg-test.sh b/tests/run-assert-msg-test.sh
+index 194481e..b6045d6 100755
+--- a/tests/run-assert-msg-test.sh
++++ b/tests/run-assert-msg-test.sh
+@@ -34,7 +34,7 @@ if [ -e ".libs/lt-$msg_test" ]; then
         msg_test="lt-$msg_test"
  fi
  echo_v "Running gdb on assert-msg-test"
@@ -19,3 +24,6 @@ https://bugzilla.gnome.org/621368
    fail "failed to run gdb"
  
  echo_v "Checking if assert message is in __glib_assert_msg"
+-- 
+1.7.3.4
+

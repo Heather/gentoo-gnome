@@ -7,6 +7,9 @@ PYTHON_DEPEND="utils? 2"
 # Avoid runtime dependency on python when USE=test
 
 inherit autotools gnome.org libtool eutils flag-o-matic multilib pax-utils python virtualx
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="The GLib library of C routines"
 HOMEPAGE="http://www.gtk.org/"
@@ -16,7 +19,11 @@ SRC_URI="${SRC_URI}
 LICENSE="LGPL-2"
 SLOT="2"
 IUSE="debug doc fam selinux +static-libs systemtap test utils xattr"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd ~x86-linux"
+if [[ ${PV} = 9999 ]]; then
+	KEYWORDS=""
+else
+	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd ~x86-linux"
+fi
 
 RDEPEND="virtual/libiconv
 	virtual/libffi
@@ -51,6 +58,7 @@ pkg_setup() {
 }
 
 src_prepare() {
+	[[ ${PV} = 9999 ]] && gnome2-live_src_prepare
 	mv -vf "${WORKDIR}"/pkg-config-*/pkg.m4 "${WORKDIR}"/ || die
 
 	if use ia64 ; then
@@ -173,6 +181,8 @@ src_install() {
 	# Don't install gdb python macros, bug 291328
 	rm -rf "${ED}/usr/share/gdb/" "${ED}/usr/share/glib-2.0/gdb/"
 
+	# This is there for git snapshots and the live ebuild, bug 351966
+	[[ ${PV} = 9999 ]] && { emake README || die "emake README failed"; }
 	dodoc AUTHORS ChangeLog* NEWS* README
 
 	insinto /usr/share/bash-completion

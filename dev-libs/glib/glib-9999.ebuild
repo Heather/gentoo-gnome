@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/glib/glib-2.30.2.ebuild,v 1.2 2011/11/14 19:06:22 tetromino Exp $
 
 EAPI="4"
 PYTHON_DEPEND="utils? 2"
@@ -37,6 +37,7 @@ DEPEND="${RDEPEND}
 	>=dev-util/gtk-doc-am-1.15
 	doc? (
 		>=dev-libs/libxslt-1.0
+		>=dev-util/gdbus-codegen-${PV}
 		>=dev-util/gtk-doc-1.15
 		~app-text/docbook-xml-dtd-4.1.2 )
 	systemtap? ( >=dev-util/systemtap-1.3 )
@@ -76,14 +77,15 @@ src_prepare() {
 	# Fix gmodule issues on fbsd; bug #184301
 	epatch "${FILESDIR}"/${PN}-2.12.12-fbsd.patch
 
-	# Fix test failure when upgrading from 2.22 to 2.24, upstream bug 621368
-	epatch "${FILESDIR}/${PN}-2.24-assert-test-failure.patch"
+	# Fix test failure during upgrades, upstream bug 621368
+	epatch "${FILESDIR}/${PN}-2.31-assert-test-failure.patch"
 
 	# Do not try to remove files on live filesystem, upstream bug #619274
 	sed 's:^\(.*"/desktop-app-info/delete".*\):/*\1*/:' \
 		-i "${S}"/gio/tests/desktop-app-info.c || die "sed failed"
 
-	if ! use test; then
+	# need to build tests if USE=doc for bug #387385
+	if ! use test && ! use doc; then
 		# don't waste time building tests
 		sed 's/^\(.*\SUBDIRS .*\=.*\)tests\(.*\)$/\1\2/' -i $(find . -name Makefile.am -o -name Makefile.in) || die
 	else
@@ -180,7 +182,7 @@ src_install() {
 	rm -rf "${ED}/usr/share/gdb/" "${ED}/usr/share/glib-2.0/gdb/"
 
 	# This is there for git snapshots and the live ebuild, bug 351966
-	emake README || die "emake README failed"
+	[[ ${PV} = 9999 ]] && { emake README || die "emake README failed"; }
 	dodoc AUTHORS ChangeLog* NEWS* README
 
 	insinto /usr/share/bash-completion
@@ -191,7 +193,7 @@ src_install() {
 
 	# Completely useless with or without USE static-libs, people need to use
 	# pkg-config
-	find "${E}" -name '*.la' -exec rm -f {} +
+	find "${D}" -name '*.la' -exec rm -f {} +
 }
 
 src_test() {
