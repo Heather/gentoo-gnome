@@ -4,7 +4,7 @@
 
 EAPI="4"
 
-inherit eutils flag-o-matic gnome.org gnome2 libtool virtualx
+inherit eutils flag-o-matic gnome.org gnome2-utils libtool virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -53,7 +53,7 @@ COMMON_DEPEND="!aqua? (
 		>=x11-libs/gdk-pixbuf-2.25.2:2[introspection?]
 	)
 	xinerama? ( x11-libs/libXinerama )
-	>=dev-libs/glib-2.31.14
+	>=dev-libs/glib-2.31.18
 	>=x11-libs/pango-1.29.0[introspection?]
 	>=dev-libs/atk-2.1.5[introspection?]
 	>=x11-libs/gtk+-2.24:2
@@ -113,10 +113,6 @@ src_prepare() {
 	# Test results depend on the list of mounted filesystems!
 	rm -v tests/a11y/pickers.{ui,txt} || die "rm failed"
 
-	# Failing treeview scrolling tests; bug #384855,
-	# https://bugzilla.gnome.org/show_bug.cgi?id=660931
-	epatch "${FILESDIR}/${PN}-3.2.1-failing-tests.patch"
-
 	if ! use test; then
 		# don't waste time building tests
 		strip_builddir SRC_SUBDIRS tests Makefile.am
@@ -129,7 +125,7 @@ src_prepare() {
 		[[ ${PV} != 9999 ]] && strip_builddir SRC_SUBDIRS demos Makefile.in
 	fi
 
-	gnome2_src_prepare
+	[[ ${PV} = 9999 ]] && gnome2_src_prepare
 }
 
 src_configure() {

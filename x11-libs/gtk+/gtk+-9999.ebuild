@@ -4,7 +4,7 @@
 
 EAPI="4"
 
-inherit eutils flag-o-matic gnome.org gnome2 libtool virtualx
+inherit eutils flag-o-matic gnome.org gnome2-utils libtool virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -25,6 +25,10 @@ if [[ ${PV} = 9999 ]]; then
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 fi
+
+# Testing is broken badly:
+# https://bugzilla.gnome.org/show_bug.cgi?id=669562
+RESTRICT="test"
 
 # FIXME: introspection data is built against system installation of gtk+:3
 # NOTE: cairo[svg] dep is due to bug 291283 (not patched to avoid eautoreconf)
@@ -49,7 +53,7 @@ COMMON_DEPEND="!aqua? (
 		>=x11-libs/gdk-pixbuf-2.25.2:2[introspection?]
 	)
 	xinerama? ( x11-libs/libXinerama )
-	>=dev-libs/glib-2.31.14
+	>=dev-libs/glib-2.31.18
 	>=x11-libs/pango-1.29.0[introspection?]
 	>=dev-libs/atk-2.1.5[introspection?]
 	>=x11-libs/gtk+-2.24:2
@@ -109,10 +113,6 @@ src_prepare() {
 	# Test results depend on the list of mounted filesystems!
 	rm -v tests/a11y/pickers.{ui,txt} || die "rm failed"
 
-	# Failing treeview scrolling tests; bug #384855,
-	# https://bugzilla.gnome.org/show_bug.cgi?id=660931
-	epatch "${FILESDIR}/${PN}-3.2.1-failing-tests.patch"
-
 	if ! use test; then
 		# don't waste time building tests
 		strip_builddir SRC_SUBDIRS tests Makefile.am
@@ -125,7 +125,7 @@ src_prepare() {
 		[[ ${PV} != 9999 ]] && strip_builddir SRC_SUBDIRS demos Makefile.in
 	fi
 
-	gnome2_src_prepare
+	[[ ${PV} = 9999 ]] && gnome2_src_prepare
 }
 
 src_configure() {
