@@ -7,7 +7,7 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes" # plugins are dlopened
 PYTHON_DEPEND="2"
 
-inherit gnome2 python eutils virtualx
+inherit gnome2 multilib python eutils virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -17,11 +17,11 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="doc +introspection +python spell"
+IUSE="doc +introspection +python spell zeitgeist"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~ia64-linux ~x86-linux"
+	KEYWORDS="~amd64 ~mips ~sh ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~ia64-linux ~x86-linux"
 fi
 
 # X libs are not needed for OSX (aqua)
@@ -47,38 +47,38 @@ COMMON_DEPEND="
 		>=dev-libs/gobject-introspection-0.9.3
 		>=x11-libs/gtk+-3.0:3[introspection]
 		>=x11-libs/gtksourceview-2.91.9:3.0[introspection]
-		>=dev-python/pygobject-3.0.0:3 )
+		dev-python/pycairo
+		>=dev-python/pygobject-3.0.0:3[cairo] )
 	spell? (
 		>=app-text/enchant-1.2
-		>=app-text/iso-codes-0.35
-	)"
+		>=app-text/iso-codes-0.35 )
+	zeitgeist? ( dev-libs/libzeitgeist )"
 
 RDEPEND="${COMMON_DEPEND}
 	x11-themes/gnome-icon-theme-symbolic"
 
 DEPEND="${COMMON_DEPEND}
 	>=sys-devel/gettext-0.17
+	dev-libs/libxml2
 	>=dev-util/intltool-0.40
+	dev-util/itstool
 	>=dev-util/pkgconfig-0.9
 	>=app-text/scrollkeeper-0.3.11
-	>=app-text/gnome-doc-utils-0.9.0
 	~app-text/docbook-xml-dtd-4.1.2
 	doc? ( >=dev-util/gtk-doc-1 )"
-# gnome-common and gtk-doc-am needed to eautoreconf
+# yelp-tools, gnome-common and gtk-doc-am needed to eautoreconf
 
 pkg_setup() {
 	DOCS="AUTHORS BUGS ChangeLog MAINTAINERS NEWS README"
-	# TODO: Zeitgeist support, if GNOME 3 adds it to moduleset (3.2?)
 	G2CONF="${G2CONF}
-		--disable-zeitgeist
 		--disable-deprecations
 		--disable-schemas-compile
-		--disable-scrollkeeper
 		--enable-updater
 		--enable-gvfs-metadata
 		$(use_enable introspection)
 		$(use_enable python)
-		$(use_enable spell)"
+		$(use_enable spell)
+		$(use_enable zeitgeist)"
 
 	python_set_active_version 2
 	python_pkg_setup
@@ -87,15 +87,14 @@ pkg_setup() {
 src_prepare() {
 	gnome2_src_prepare
 
-	# disable pyc compiling
-	mv "${S}"/py-compile "${S}"/py-compile.orig
-	ln -s $(type -P true) "${S}"/py-compile
+	use python && python_clean_py-compile_files
 }
 
 src_test() {
 	# FIXME: this should be handled at eclass level
 	"${EROOT}${GLIB_COMPILE_SCHEMAS}" --allow-any-name "${S}/data" || die
 
+	unset DBUS_SESSION_BUS_ADDRESS
 	GSETTINGS_SCHEMA_DIR="${S}/data" Xemake check
 }
 
