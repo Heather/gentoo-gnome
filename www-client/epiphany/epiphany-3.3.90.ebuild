@@ -5,7 +5,7 @@
 EAPI="4"
 GCONF_DEBUG="yes"
 
-inherit eutils gnome2
+inherit eutils gnome2 versionator virtualx
 
 DESCRIPTION="GNOME webbrowser based on Webkit"
 HOMEPAGE="http://projects.gnome.org/epiphany/"
@@ -16,7 +16,7 @@ IUSE="avahi doc +introspection +nss test"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 
 # XXX: Should we add seed support? Seed seems to be unmaintained now.
-COMMON_DEPEND=">=dev-libs/glib-2.31.2:2
+RDEPEND=">=dev-libs/glib-2.31.2:2
 	>=x11-libs/gtk+-3.3.14:3[introspection?]
 	>=dev-libs/libxml2-2.6.12:2
 	>=dev-libs/libxslt-1.1.7
@@ -31,14 +31,13 @@ COMMON_DEPEND=">=dev-libs/glib-2.31.2:2
 	x11-libs/libSM
 	x11-libs/libX11
 
-	app-misc/ca-certificates
 	x11-themes/gnome-icon-theme
+	x11-themes/gnome-icon-theme-symbolic
 
 	avahi? ( >=net-dns/avahi-0.6.22 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 	nss? ( dev-libs/nss )"
-DEPEND="${COMMON_DEPEND}"
-DEPEND="${COMMON_DEPEND}
+DEPEND="${RDEPEND}
 	app-text/gnome-doc-utils
 	>=dev-util/intltool-0.40
 	dev-util/pkgconfig
@@ -57,4 +56,16 @@ pkg_setup() {
 		$(use_enable introspection)
 		$(use_enable nss)
 		$(use_enable test tests)"
+}
+
+src_test() {
+	# Tests require gsettings schemas from >=epiphany-3.3.5 to be installed
+	local v=$(best_version www-client/epiphany)
+	v=${v/www-client\/epiphany-/}
+	if version_is_at_least 3.3.5 "${v}"; then
+		Xemake check
+	else
+		ewarn "Skipping tests. To run tests, >=${PN}-3.3.5 needs to be already"
+		ewarn "installed on the system."
+	fi
 }
