@@ -32,6 +32,7 @@ EXPORT_FUNCTIONS ${EXPORTED_FUNCTIONS}
 # gnome-base/gnome-common for GNOME_COMMON_INIT
 DEPEND="${DEPEND}
 	app-text/gnome-doc-utils
+	app-text/yelp-tools
 	dev-util/gtk-doc
 	dev-util/intltool
 	gnome-base/gnome-common
