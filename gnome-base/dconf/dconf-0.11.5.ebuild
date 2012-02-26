@@ -6,20 +6,13 @@ EAPI="4"
 GCONF_DEBUG="no"
 
 inherit autotools eutils gnome2 bash-completion-r1
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
 
 DESCRIPTION="Simple low-level configuration system"
 HOMEPAGE="http://live.gnome.org/dconf"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-if [[ ${PV} = 9999 ]]; then
-	KEYWORDS=""
-else
-	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-fi
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc vala +X"
 
 RDEPEND=">=dev-libs/glib-2.29.90:2
@@ -41,20 +34,11 @@ pkg_setup() {
 }
 
 src_prepare() {
-	if [[ ${PV} = 9999 ]]; then
-		# XXX: gtk-doc.make should be in top_srcdir -- file a bug for this
-		# Let's only do this in the live version to avoid gtkdocize in releases
-		sed -e 's:^include gtk-doc.make:include $(top_srcdir)/gtk-doc.make:' \
-			-i docs/Makefile.am || die "Fixing gtk-doc.make failed"
-	fi
-
 	# Fix vala automagic support, upstream bug #634171
 	epatch "${FILESDIR}/${PN}-0.11.5-automagic-vala.patch"
 
-	if [[ ${PV} != 9999 ]]; then
-		mkdir -p m4 || die
-		eautoreconf
-	fi
+	mkdir -p m4 || die
+	eautoreconf
 
 	gnome2_src_prepare
 }
