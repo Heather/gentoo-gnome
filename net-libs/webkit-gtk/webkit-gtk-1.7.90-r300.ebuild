@@ -1,11 +1,11 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/webkit-gtk/webkit-gtk-1.6.1-r200.ebuild,v 1.1 2011/09/30 13:52:33 nirbheek Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/webkit-gtk/webkit-gtk-1.6.1-r300.ebuild,v 1.1 2011/09/30 13:52:33 nirbheek Exp $
 
 EAPI="4"
 
 # Don't define PYTHON_DEPEND: python only needed at build time
-inherit autotools eutils flag-o-matic eutils python virtualx
+inherit autotools eutils flag-o-matic eutils python virtualx gnome2-utils
 
 MY_P="webkit-${PV}"
 DESCRIPTION="Open source web browser engine"
@@ -14,28 +14,29 @@ SRC_URI="http://www.webkitgtk.org/${MY_P}.tar.xz"
 #SRC_URI="mirror://gentoo/${P}.tar.xz"
 
 LICENSE="LGPL-2 LGPL-2.1 BSD"
-SLOT="2"
-KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd
-~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-macos"
+SLOT="3"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-macos"
 # geoclue
-IUSE="aqua coverage debug +gstreamer +introspection +jit spell webgl"
+IUSE="aqua coverage debug doc +gstreamer +introspection +jit spell +webgl"
 # bug 372493
 REQUIRED_USE="introspection? ( gstreamer )"
 
 # use sqlite, svg by default
 # dependency on >=x11-libs/gtk+-2.13:2 for gail
+# Aqua support in gtk3 is untested
+# gtk2 is needed for plugin process support
 RDEPEND="
 	dev-libs/libxml2:2
 	dev-libs/libxslt
 	virtual/jpeg
 	>=media-libs/libpng-1.4:0
 	>=x11-libs/cairo-1.10
-	>=dev-libs/glib-2.27.90:2
-	>=x11-libs/gtk+-2.13:2[aqua=,introspection?]
+	>=dev-libs/glib-2.31.2:2
+	>=x11-libs/gtk+-3.0:3[aqua=,introspection?]
 	>=dev-libs/icu-3.8.1-r1
-	>=net-libs/libsoup-2.33.6:2.4[introspection?]
+	>=net-libs/libsoup-2.37.2.1:2.4[introspection?]
 	dev-db/sqlite:3
-	>=x11-libs/pango-1.12
+	>=x11-libs/pango-1.21
 	x11-libs/libXrender
 
 	gstreamer? (
@@ -49,15 +50,18 @@ RDEPEND="
 	webgl? ( virtual/opengl )
 "
 DEPEND="${RDEPEND}
+	dev-lang/perl
 	=dev-lang/python-2*
+	sys-devel/bison
 	>=sys-devel/flex-2.5.33
 	sys-devel/gettext
-	virtual/yacc
 	dev-util/gperf
 	dev-util/pkgconfig
 	dev-util/gtk-doc-am
+	doc? ( >=dev-util/gtk-doc-1.10 )
 	test? ( x11-themes/hicolor-icon-theme )
 "
+# Need real bison, not yacc
 
 S="${WORKDIR}/${MY_P}"
 
@@ -72,25 +76,42 @@ src_prepare() {
 
 	# FIXME: Fix unaligned accesses on ARM, IA64 and SPARC
 	# https://bugs.webkit.org/show_bug.cgi?id=19775
-	use sparc && epatch "${FILESDIR}"/${PN}-1.2.3-fix-pool-sparc.patch
+	# TODO: FAILS TO APPLY!
+	#use sparc && epatch "${FILESDIR}"/${PN}-1.2.3-fix-pool-sparc.patch
 
 	# intermediate MacPorts hack while upstream bug is not fixed properly
 	# https://bugs.webkit.org/show_bug.cgi?id=28727
-	use aqua && epatch "${FILESDIR}"/${PN}-1.2.5-darwin-quartz.patch
+	use aqua && epatch "${FILESDIR}"/${PN}-1.6.1-darwin-quartz.patch
 
-	# Fix build on Darwin8 (10.4 Tiger)
-	# XXX: Fails to apply
-	#epatch "${FILESDIR}"/${PN}-1.2.5-darwin8.patch
+	# Bug #403049, https://bugs.webkit.org/show_bug.cgi?id=79605
+	epatch "${FILESDIR}/${PN}-1.7.5-linguas.patch"
+
+	# Drop DEPRECATED flags
+	sed -i -e 's:-D[A-Z_]*DISABLE_DEPRECATED:$(NULL):g' GNUmakefile.am || die
 
 	# Don't force -O2
-	sed -i 's/-O2//g' "${S}"/configure.ac
+	sed -i 's/-O2//g' "${S}"/configure.ac || die
 
-	# Don't build tests if not needed, part of bug #343249
-	# XXX: Fails to apply
-	#epatch "${FILESDIR}/${PN}-1.2.5-tests-build.patch"
+	# We need to reset some variables to prevent permissions problems and failures
+	# like https://bugs.webkit.org/show_bug.cgi?id=35471 and bug #323669
+	gnome2_environment_reset
 
-	# Required for webgl; https://bugs.webkit.org/show_bug.cgi?id=69085
-	mkdir -p DerivedSources/ANGLE
+	# https://bugs.webkit.org/show_bug.cgi?id=79498
+	epatch "${FILESDIR}/${PN}-1.7.90-parallel-make-hack.patch"
+
+	# XXX: failing tests
+	# https://bugs.webkit.org/show_bug.cgi?id=50744
+	# testkeyevents is interactive
+	# mimehandling test sometimes fails under Xvfb (works fine manually)
+	sed -e '/Programs\/unittests\/testwebinspector/ d' \
+		-e '/Programs\/unittests\/testkeyevents/ d' \
+		-e '/Programs\/unittests\/testmimehandling/ d' \
+		-i Source/WebKit/gtk/GNUmakefile.am || die
+	# garbage collection test fails intermittently if icedtea-web is installed
+	epatch "${FILESDIR}/${PN}-1.7.90-test_garbage_collection.patch"
+
+	# Respect CC, otherwise fails on prefix #395875
+	tc-export CC
 
 	# Prevent maintainer mode from being triggered during make
 	AT_M4DIR=Source/autotools eautoreconf
@@ -110,39 +131,42 @@ src_configure() {
 
 	# XXX: Check Web Audio support
 	# XXX: dependency-tracking is required so parallel builds won't fail
-	# WebKit2 can only be built with gtk3
-	# API documentation (gtk-doc) is built in webkit-gtk:3, always disable here
 	myconf="
 		$(use_enable coverage)
 		$(use_enable debug)
 		$(use_enable debug debug-features)
+		$(use_enable doc gtk-doc)
 		$(use_enable spell spellcheck)
 		$(use_enable introspection)
 		$(use_enable gstreamer video)
 		$(use_enable jit)
 		$(use_enable webgl)
 		--enable-web-sockets
-		--with-gtk=2.0
-		--disable-gtk-doc
+		--with-gtk=3.0
 		--disable-webkit2
 		--enable-dependency-tracking
 		$(use aqua && echo "--with-font-backend=pango --with-target=quartz")"
+		# Aqua support in gtk3 is untested
 
 	econf ${myconf}
 }
 
 src_compile() {
-	# Fix sandbox error with USE="introspection"
-	# https://bugs.webkit.org/show_bug.cgi?id=35471
-	emake XDG_DATA_HOME="${T}/.local"
+	# Horrible failure of a hack to work around parallel make problems,
+	# see https://bugs.webkit.org/show_bug.cgi?id=79498
+	emake all-built-sources-local
+	emake all-ltlibraries-local
+	emake all-programs-local
+	use introspection && emake WebKit-3.0.gir
+	emake all-data-local
+	default
 }
 
 src_test() {
 	unset DISPLAY
 	# Tests need virtualx, bug #294691, bug #310695
-	# Set XDG_DATA_HOME for introspection tools, bug #323669
 	# Parallel tests sometimes fail
-	Xemake -j1 check XDG_DATA_HOME="${T}/.local"
+	Xemake -j1 check
 }
 
 src_install() {
