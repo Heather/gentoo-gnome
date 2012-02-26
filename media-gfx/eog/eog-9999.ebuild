@@ -20,11 +20,11 @@ IUSE="doc +exif +introspection +jpeg lcms +svg tiff xmp"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+	KEYWORDS="~amd64 ~x86 ~x86-fbsd"
 fi
 
-RDEPEND=">=x11-libs/gtk+-3.0.2:3[introspection]
-	>=dev-libs/glib-2.29.4:2
+RDEPEND=">=x11-libs/gtk+-3.3.6:3[introspection]
+	>=dev-libs/glib-2.31.0:2
 	>=dev-libs/libxml2-2:2
 	>=dev-libs/libpeas-0.7.4[gtk]
 	>=gnome-base/gnome-desktop-2.91.2:3
