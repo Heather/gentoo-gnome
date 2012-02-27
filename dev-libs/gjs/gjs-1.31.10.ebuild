@@ -1,6 +1,6 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/gjs/gjs-1.29.0.ebuild,v 1.1 2011/06/14 13:19:59 nirbheek Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/gjs/gjs-1.30.1.ebuild,v 1.1 2012/01/14 04:54:24 tetromino Exp $
 
 EAPI="4"
 GCONF_DEBUG="no"
@@ -8,9 +8,6 @@ GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2"
 
 inherit gnome2 python virtualx
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
 
 DESCRIPTION="Javascript bindings for GNOME"
 HOMEPAGE="http://live.gnome.org/Gjs"
@@ -18,11 +15,7 @@ HOMEPAGE="http://live.gnome.org/Gjs"
 LICENSE="MIT MPL-1.1 LGPL-2 GPL-2"
 SLOT="0"
 IUSE="examples test"
-if [[ ${PV} = 9999 ]]; then
-	KEYWORDS=""
-else
-	KEYWORDS="~amd64 ~x86"
-fi
+KEYWORDS="~amd64 ~x86"
 
 RDEPEND=">=dev-libs/glib-2.31:2
 	>=dev-libs/gobject-introspection-1.29.16
@@ -57,7 +50,7 @@ src_prepare() {
 
 src_test() {
 	# Tests need dbus
-	Xemake check || die
+	Xemake check
 }
 
 src_install() {
@@ -66,6 +59,6 @@ src_install() {
 
 	if use examples; then
 		insinto /usr/share/doc/${PF}/examples
-		doins ${S}/examples/* || die "doins examples failed!"
+		doins ${S}/examples/*
 	fi
 }
