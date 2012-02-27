@@ -1,15 +1,12 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-keyring/gnome-keyring-2.32.1.ebuild,v 1.4 2011/01/02 21:32:23 mr_bones_ Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-keyring/gnome-keyring-3.2.2.ebuild,v 1.4 2011/11/18 04:41:30 tetromino Exp $
 
 EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2 multilib pam virtualx
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
+inherit gnome2 pam versionator virtualx
 
 DESCRIPTION="Password and keyring managing daemon"
 HOMEPAGE="http://www.gnome.org/"
@@ -17,11 +14,7 @@ HOMEPAGE="http://www.gnome.org/"
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
 IUSE="+caps debug doc pam selinux"
-if [[ ${PV} = 9999 ]]; then
-	KEYWORDS=""
-else
-	KEYWORDS="~amd64 ~mips ~sh ~x86 ~x86-fbsd ~amd64-linux ~sparc-solaris ~x86-linux ~x86-solaris"
-fi
+KEYWORDS="~amd64 ~mips ~sh ~x86 ~x86-fbsd ~amd64-linux ~sparc-solaris ~x86-linux ~x86-solaris"
 
 RDEPEND=">=app-crypt/gcr-3.3.4
 	>=dev-libs/glib-2.28:2
