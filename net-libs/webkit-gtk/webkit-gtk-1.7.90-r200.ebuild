@@ -18,7 +18,7 @@ SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd
 ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-macos"
 # geoclue
-IUSE="aqua coverage debug +gstreamer +introspection +jit spell +webgl"
+IUSE="aqua coverage debug +geoloc +gstreamer +introspection +jit spell +webgl"
 # bug 372493
 REQUIRED_USE="introspection? ( gstreamer )"
 
@@ -37,6 +37,8 @@ RDEPEND="
 	dev-db/sqlite:3
 	>=x11-libs/pango-1.21
 	x11-libs/libXrender
+
+	geoloc? ( app-misc/geoclue )
 
 	gstreamer? (
 		media-libs/gstreamer:0.10
@@ -137,6 +139,7 @@ src_configure() {
 		$(use_enable coverage)
 		$(use_enable debug)
 		$(use_enable debug debug-features)
+		$(use_enable geoloc geolocation)
 		$(use_enable spell spellcheck)
 		$(use_enable introspection)
 		$(use_enable gstreamer video)
