@@ -1,15 +1,12 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-crypt/seahorse/seahorse-2.32.0.ebuild,v 1.1 2010/10/17 19:12:26 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-crypt/seahorse/seahorse-3.2.2.ebuild,v 1.1 2011/11/17 06:11:08 tetromino Exp $
 
 EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
 
 DESCRIPTION="A GNOME application for managing encryption keys"
 HOMEPAGE="http://www.gnome.org/projects/seahorse/index.html"
@@ -17,11 +14,7 @@ HOMEPAGE="http://www.gnome.org/projects/seahorse/index.html"
 LICENSE="GPL-2"
 SLOT="0"
 IUSE="avahi debug ldap"
-if [[ ${PV} = 9999 ]]; then
-	KEYWORDS=""
-else
-	KEYWORDS="~amd64 ~x86 ~x86-fbsd"
-fi
+KEYWORDS="~amd64 ~x86 ~x86-fbsd"
 
 COMMON_DEPEND="
 	>=app-crypt/gcr-3.3.4
