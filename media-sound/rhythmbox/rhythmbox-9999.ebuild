@@ -38,9 +38,9 @@ REQUIRED_USE="
 # FIXME: Zeitgeist python plugin
 # NOTE: Rhythmbox uses both gdbus and dbus-python right now
 # NOTE: gst-python is still needed because gstreamer introspection is incomplete
-COMMON_DEPEND=">=dev-libs/glib-2.26.0:2
+COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
 	dev-libs/libxml2:2
-	>=x11-libs/gtk+-2.91.4:3[introspection]
+	>=x11-libs/gtk+-3.2:3[introspection]
 	>=x11-libs/gdk-pixbuf-2.18.0:2
 	>=dev-libs/gobject-introspection-0.10.0
 	>=dev-libs/libpeas-0.7.3[gtk,python?]
