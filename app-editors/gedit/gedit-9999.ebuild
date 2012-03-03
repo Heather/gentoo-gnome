@@ -29,7 +29,7 @@ COMMON_DEPEND="
 	>=x11-libs/libSM-1.0
 	>=dev-libs/libxml2-2.5.0:2
 	>=dev-libs/glib-2.28:2
-	>=x11-libs/gtk+-3.1.6:3[introspection?]
+	>=x11-libs/gtk+-3.3.15:3[introspection?]
 	>=x11-libs/gtksourceview-3.0.0:3.0[introspection?]
 	>=dev-libs/libpeas-1.1.0[gtk]
 
