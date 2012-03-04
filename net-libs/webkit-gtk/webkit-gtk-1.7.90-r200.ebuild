@@ -92,6 +92,10 @@ src_prepare() {
 	# Don't force -O2
 	sed -i 's/-O2//g' "${S}"/configure.ac || die
 
+	# Build-time segfaults under PaX with USE="introspection jit", bug #404215
+	epatch "${FILESDIR}/${PN}-1.6.3-paxctl-introspection.patch"
+	cp "${FILESDIR}/gir-paxctl-lt-wrapper" "${S}/" || die
+
 	# We need to reset some variables to prevent permissions problems and failures
 	# like https://bugs.webkit.org/show_bug.cgi?id=35471 and bug #323669
 	gnome2_environment_reset
