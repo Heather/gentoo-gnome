@@ -5,7 +5,7 @@
 EAPI="4"
 GCONF_DEBUG="yes"
 
-inherit eutils gnome2 versionator virtualx
+inherit autotools eutils gnome2 pax-utils versionator virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -65,6 +65,14 @@ pkg_setup() {
 		$(use_enable test tests)"
 }
 
+src_prepare() {
+	# Build-time segfaults under PaX with USE=introspection
+	epatch "${FILESDIR}/${PN}-3.3.90-paxctl-introspection.patch"
+	cp "${FILESDIR}/paxctl.sh" "${S}/" || die
+	eautoreconf
+	gnome2_src_prepare
+}
+
 src_test() {
 	# Tests require gsettings schemas from >=epiphany-3.3.5 to be installed
 	local v=$(best_version www-client/epiphany)
@@ -75,4 +83,9 @@ src_test() {
 		ewarn "Skipping tests. To run tests, >=${PN}-3.3.5 needs to be already"
 		ewarn "installed on the system."
 	fi
+}
+
+src_install() {
+	gnome2_src_install
+	pax-mark m "${ED}usr/bin/epiphany"
 }
