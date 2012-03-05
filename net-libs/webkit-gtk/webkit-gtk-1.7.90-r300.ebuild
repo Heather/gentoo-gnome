@@ -5,7 +5,7 @@
 EAPI="4"
 
 # Don't define PYTHON_DEPEND: python only needed at build time
-inherit autotools eutils flag-o-matic eutils python virtualx gnome2-utils
+inherit autotools eutils flag-o-matic gnome2-utils pax-utils python virtualx
 
 MY_P="webkit-${PV}"
 DESCRIPTION="Open source web browser engine"
@@ -186,4 +186,7 @@ src_install() {
 
 	# Remove .la files
 	find "${D}" -name '*.la' -exec rm -f '{}' +
+
+	# Prevents crashes on PaX systems
+	pax-mark m "${ED}usr/bin/jsc-3"
 }
