@@ -72,9 +72,6 @@ src_prepare() {
 			|| die "sed failed"
 	fi
 
-	# https://bugzilla.gnome.org/show_bug.cgi?id=654395
-	epatch "${FILESDIR}/${PN}-et_EE-locale.patch"
-
 	# Patch *must* be applied conditionally (see patch for details)
 	if use doc; then
 		# Fix bug 268592 (upstream #573685) (build fails without gnome && doc)

@@ -59,9 +59,6 @@ src_configure() {
 src_prepare() {
 	gnome2_src_prepare
 
-	# https://bugzilla.gnome.org/show_bug.cgi?id=654395
-	epatch "${FILESDIR}"/libsoup-et_EE-locale.patch
-
 	# Use lib present on the system
 	epatch "${FILESDIR}"/${PN}-system-lib.patch
 	eautoreconf
