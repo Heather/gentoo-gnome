@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/gjs/gjs-1.29.0.ebuild,v 1.1 2011/06/14 13:19:59 nirbheek Exp $
 
@@ -57,7 +57,7 @@ src_prepare() {
 
 src_test() {
 	# Tests need dbus
-	Xemake check || die
+	Xemake check
 }
 
 src_install() {
@@ -66,6 +66,6 @@ src_install() {
 
 	if use examples; then
 		insinto /usr/share/doc/${PF}/examples
-		doins ${S}/examples/* || die "doins examples failed!"
+		doins ${S}/examples/*
 	fi
 }
