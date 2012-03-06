@@ -5,7 +5,7 @@
 EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
-PYTHON_DEPEND="2:2.5"
+PYTHON_DEPEND="2:2.7"
 
 inherit python gnome2
 if [[ ${PV} = 9999 ]]; then
@@ -23,9 +23,10 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 fi
 
-IUSE="doc test"
+IUSE="doc doctool test"
 
 RDEPEND=">=dev-libs/glib-2.29.7:2
+	doctool? ( dev-python/mako )
 	virtual/libffi"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
@@ -41,6 +42,7 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-static
 		YACC=$(type -p yacc)
+		$(use_enable doctool)
 		$(use_enable test tests)"
 
 	python_set_active_version 2
@@ -51,14 +53,9 @@ src_prepare() {
 	# FIXME: Parallel compilation failure with USE=doc
 	use doc && MAKEOPTS="-j1"
 
-	# https://bugzilla.gnome.org/show_bug.cgi?id=659824
-	sed -i -e '/^TAGS/s/[{}]//g' "${S}/giscanner/docbookdescription.py" || die
-
 	gnome2_src_prepare
 
-	# Don't pre-compile .py
-	echo > py-compile
-	echo > build-aux/py-compile
+	python_clean_py-compile_files
 
 	gi_skip_tests=
 	if ! has_version "x11-libs/cairo[glib]"; then
@@ -83,7 +80,8 @@ src_test() {
 
 src_install() {
 	gnome2_src_install
-	python_convert_shebangs 2 "${ED}"usr/bin/g-ir-{annotation-tool,doc-tool,scanner}
+	python_convert_shebangs 2 "${ED}"usr/bin/g-ir-{annotation-tool,scanner}
+	use doctool && python_convert_shebangs 2 "${ED}"usr/bin/g-ir-doc-tool
 }
 
 pkg_postinst() {
