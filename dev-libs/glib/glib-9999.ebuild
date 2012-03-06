@@ -160,7 +160,6 @@ src_configure() {
 		$(use_enable static-libs static) \
 		$(use_enable systemtap dtrace) \
 		$(use_enable systemtap systemtap) \
-		--enable-regex \
 		--with-pcre=internal \
 		--with-threads=posix
 }
