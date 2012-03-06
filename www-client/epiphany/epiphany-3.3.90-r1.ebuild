@@ -37,10 +37,12 @@ RDEPEND=">=dev-libs/glib-2.31.2:2
 	avahi? ( >=net-dns/avahi-0.6.22 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 	nss? ( dev-libs/nss )"
+# paxctl needed for bug #407085
 DEPEND="${RDEPEND}
 	app-text/gnome-doc-utils
 	>=dev-util/intltool-0.40
 	dev-util/pkgconfig
+	sys-apps/paxctl
 	sys-devel/gettext
 	doc? ( >=dev-util/gtk-doc-1 )"
 

@@ -51,6 +51,7 @@ RDEPEND="
 
 	webgl? ( virtual/opengl )
 "
+# paxctl needed for bug #407085
 DEPEND="${RDEPEND}
 	dev-lang/perl
 	=dev-lang/python-2*
@@ -60,6 +61,7 @@ DEPEND="${RDEPEND}
 	dev-util/gperf
 	dev-util/pkgconfig
 	dev-util/gtk-doc-am
+	sys-apps/paxctl
 	doc? ( >=dev-util/gtk-doc-1.10 )
 	test? ( x11-themes/hicolor-icon-theme )
 "
