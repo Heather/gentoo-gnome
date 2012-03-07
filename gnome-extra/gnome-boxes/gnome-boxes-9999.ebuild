@@ -19,7 +19,7 @@ IUSE=""
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64" # qemu-kvm[spice] is 64bit-only
 fi
 
 # CHECK: We're hard-depending on qemu-kvm[spice]. Does app-emulation/qemu
