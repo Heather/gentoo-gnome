@@ -33,13 +33,6 @@ DEPEND="${RDEPEND}
 	test? ( sys-apps/dbus[X] )"
 # eautoreconf needs >=sys-devel/autoconf-2.65:2.5
 
-src_prepare() {
-	# Applied upstream
-	epatch "${FILESDIR}/tls-async-crasher.patch"
-	# https://bugzilla.gnome.org/show_bug.cgi?id=668945
-	epatch "${FILESDIR}/skip-broken-assert-in-pkcs11-tests.patch"
-}
-
 pkg_setup() {
 	# AUTHORS, ChangeLog are empty
 	DOCS="NEWS README"
@@ -50,6 +43,23 @@ pkg_setup() {
 		$(use_with libproxy)
 		$(use_with pkcs11)
 		$(use_with ssl gnutls)"
+}
+
+src_prepare() {
+	gnome2_src_prepare
+
+	# Drop DEPRECATED flags
+	sed -e 's:-D[A-Z_]*DISABLE_DEPRECATED *\\:\\:g' \
+		-e 's:-D[A-Z_]*DISABLE_DEPRECATED:$(NULL):g' \
+		-i Makefile.{decl,in} \
+		proxy/gnome/Makefile.in \
+		proxy/libproxy/Makefile.in \
+		proxy/tests/Makefile.in \
+		tls/gnutls/Makefile.in \
+		tls/pkcs11/Makefile.{am,in} \
+		tls/tests/Makefile.in || die
+	sed -i -e 's:-D[A-Z_]*DISABLE_DEPRECATED:$(NULL):g' \
+		tls/pkcs11/Makefile.{am,in} || die
 }
 
 src_test() {
