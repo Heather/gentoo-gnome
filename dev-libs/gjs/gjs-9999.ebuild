@@ -7,7 +7,7 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2"
 
-inherit gnome2 python virtualx
+inherit gnome2 pax-utils python virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -68,4 +68,7 @@ src_install() {
 		insinto /usr/share/doc/${PF}/examples
 		doins ${S}/examples/*
 	fi
+
+	# Required for gjs-console to run correctly on PaX systems
+	pax-mark mr "${ED}/usr/bin/gjs-console"
 }
