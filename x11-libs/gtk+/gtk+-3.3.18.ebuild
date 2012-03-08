@@ -136,9 +136,9 @@ src_configure() {
 
 	# XXX: Maybe with multi-backend we should enable x11 all the time?
 	if use aqua; then
-		myconf="${myconf} --enable-quartz-backend --disable-xinput"
+		myconf="${myconf} --enable-quartz-backend"
 	else
-		myconf="${myconf} --enable-x11-backend --enable-xinput"
+		myconf="${myconf} --enable-x11-backend"
 	fi
 
 	# Passing --disable-debug is not recommended for production use
