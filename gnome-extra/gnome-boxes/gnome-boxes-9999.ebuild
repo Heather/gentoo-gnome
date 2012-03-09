@@ -30,13 +30,14 @@ RDEPEND="
 	>=sys-fs/udev-147[gudev]
 	>=dev-libs/glib-2.29.90:2
 	>=dev-libs/gobject-introspection-0.9.6
-	>=sys-libs/libosinfo-0.0.5
+	>=sys-libs/libosinfo-0.0.6
 	app-emulation/qemu-kvm[spice]
 	>=app-emulation/libvirt-0.9.3[libvirtd,qemu]
-	>=app-emulation/libvirt-glib-0.0.4
+	>=app-emulation/libvirt-glib-0.0.5
 	>=x11-libs/gtk+-3.3.5:3
 	>=net-libs/gtk-vnc-0.4.4[gtk3]
-	>=net-misc/spice-gtk-0.7.98[gtk3]
+	>=net-misc/spice-gtk-0.9[gtk3]
+	>=app-misc/tracker-0.14
 
 	sys-fs/fuse
 	sys-fs/fuseiso
