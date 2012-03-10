@@ -23,6 +23,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 
+# Need gdk-pixbuf-2.25 for gdk_pixbuf_get_pixels_with_length
 COMMON_DEPEND="
 	>=app-misc/tracker-0.13.1
 	>=app-text/evince-3.3.0[introspection]
@@ -35,7 +36,7 @@ COMMON_DEPEND="
 	>=net-libs/gnome-online-accounts-3.2.0
 	net-libs/liboauth
 	net-libs/libsoup:2.4
-	x11-libs/gdk-pixbuf:2[introspection]
+	>=x11-libs/gdk-pixbuf-2.25:2[introspection]
 	>=x11-libs/gtk+-3.3.6:3[introspection]
 	x11-libs/pango[introspection]"
 RDEPEND="${COMMON_DEPEND}
