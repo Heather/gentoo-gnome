@@ -16,7 +16,8 @@ IUSE="avahi doc +introspection +nss test"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 
 # XXX: Should we add seed support? Seed seems to be unmaintained now.
-RDEPEND=">=dev-libs/glib-2.31.2:2
+RDEPEND="dev-db/sqlite
+	>=dev-libs/glib-2.31.2:2
 	>=x11-libs/gtk+-3.3.14:3[introspection?]
 	>=dev-libs/libxml2-2.6.12:2
 	>=dev-libs/libxslt-1.1.7
