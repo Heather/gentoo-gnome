@@ -21,8 +21,6 @@ app-crypt/seahorse
 app-crypt/seahorse-plugins
 app-misc/tracker
 app-pda/libimobiledevice
-app-text/evince
-app-text/poppler
 dev-lang/orc
 dev-lang/vala
 dev-libs/atk
@@ -258,6 +256,11 @@ net-print/cups-pk-helper
 media-video/gnome-video-effects
 x11-libs/mx
 media-video/cheese
+
+# Evince
+=app-text/libgxps-0.2.1
+~app-text/poppler-0.18.4
+app-text/evince
 
 # Vte
 x11-libs/gnome-pty-helper
