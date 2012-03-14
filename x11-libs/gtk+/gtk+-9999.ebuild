@@ -75,9 +75,10 @@ DEPEND="${COMMON_DEPEND}
 		media-fonts/font-misc-misc
 		media-fonts/font-cursor-misc )"
 # gtk+-3.2.2 breaks Alt key handling in <=x11-libs/vte-0.30.1:2.90
+# gtk+-3.3.18 breaks scrolling in <=x11-libs/vte-0.31.0:2.90
 RDEPEND="${COMMON_DEPEND}
 	!<gnome-base/gail-1000
-	!<x11-libs/vte-0.30.1-r1:2.90
+	!<x11-libs/vte-0.31.0:2.90
 	packagekit? ( app-admin/packagekit-base )"
 PDEPEND="vim-syntax? ( app-vim/gtk-syntax )"
 
