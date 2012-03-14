@@ -58,6 +58,9 @@ src_prepare() {
 	# https://bugzilla.gnome.org/show_bug.cgi?id=663779
 	epatch "${FILESDIR}/${PN}-0.30.1-alt-meta.patch"
 
+	# Fix scrolling with gtk+-3.3.18, in next release
+	epatch "${FILESDIR}/${P}-gdk_scroll_mask.patch"
+
 	gnome2_src_prepare
 }
 
