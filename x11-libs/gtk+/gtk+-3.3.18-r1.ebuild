@@ -96,6 +96,9 @@ src_prepare() {
 	replace-flags -O3 -O2
 	strip-flags
 
+	# https://bugzilla.gnome.org/show_bug.cgi?id=65410
+	epatch "${FILESDIR}/${PN}-3.3.18-fallback-theme.patch"
+
 	# Non-working test in gentoo's env
 	sed 's:\(g_test_add_func ("/ui-tests/keys-events.*\):/*\1*/:g' \
 		-i gtk/tests/testing.c || die "sed 1 failed"
