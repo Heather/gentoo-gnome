@@ -146,6 +146,12 @@ src_prepare() {
 	# Fix build with USE=map; in next version
 	epatch "${FILESDIR}/${P}-map.patch"
 
+	# Fix paths for Gentoo spamassassin executables
+	epatch "${FILESDIR}/${PN}-3.3.91-spamassassin-paths.patch"
+	sed -e "s:@EPREFIX@:${EPREFIX}:g" \
+		-i data/org.gnome.evolution.spamassassin.gschema.xml.in \
+		-i modules/spamassassin/evolution-spamassassin.c || die "sed failed"
+
 	gnome2_src_prepare
 
 	# Fix compilation flags crazyness
