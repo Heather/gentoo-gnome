@@ -1,0 +1,151 @@
+From 5f26596731a40c8103fe403d5aaa7049e3eae496 Mon Sep 17 00:00:00 2001
+From: Travis Reitter <travis.reitter@collabora.co.uk>
+Date: Mon, 5 Mar 2012 15:30:10 -0800
+Subject: [PATCH] Factor out the tracker-sparql major number.
+
+This changes fairly often, so this will make it easier to adjust it all
+in one place.
+---
+ backends/tracker/Makefile.am                       |    2 +-
+ backends/tracker/lib/Makefile.am                   |    4 ++--
+ .../tracker/lib/folks-tracker-uninstalled.pc.in    |    2 +-
+ backends/tracker/lib/folks-tracker.deps            |    4 ----
+ backends/tracker/lib/folks-tracker.deps.in         |    4 ++++
+ backends/tracker/lib/folks-tracker.pc.in           |    2 +-
+ configure.ac                                       |    3 +++
+ tests/lib/tracker/Makefile.am                      |    2 +-
+ tests/tracker/Makefile.am                          |    2 +-
+ 9 files changed, 14 insertions(+), 11 deletions(-)
+ delete mode 100644 backends/tracker/lib/folks-tracker.deps
+ create mode 100644 backends/tracker/lib/folks-tracker.deps.in
+
+diff --git a/backends/tracker/Makefile.am b/backends/tracker/Makefile.am
+index 8cf3484..88aa79a 100644
+--- a/backends/tracker/Makefile.am
++++ b/backends/tracker/Makefile.am
+@@ -26,7 +26,7 @@ tracker_deps = \
+ 	gee-1.0 \
+ 	gio-2.0 \
+ 	gobject-2.0 \
+-	tracker-sparql-0.12 \
++	tracker-sparql-$(TRACKER_SPARQL_MAJOR) \
+ 	$(NULL)
+ 
+ tracker_la_CPPFLAGS = \
+diff --git a/backends/tracker/lib/Makefile.am b/backends/tracker/lib/Makefile.am
+index a4495fd..fab3218 100644
+--- a/backends/tracker/lib/Makefile.am
++++ b/backends/tracker/lib/Makefile.am
+@@ -28,7 +28,7 @@ libfolks_tracker_la_VALAFLAGS = \
+ 	--pkg gobject-2.0 \
+ 	--pkg gio-2.0 \
+ 	--pkg gee-1.0 \
+-	--pkg tracker-sparql-0.12 \
++	--pkg tracker-sparql-$(TRACKER_SPARQL_MAJOR) \
+ 	--includedir folks \
+ 	--vapi folks-tracker.vapi \
+ 	-H folks/folks-tracker.h \
+@@ -39,7 +39,7 @@ folks_backend_tracker_deps = \
+ 	gee-1.0 \
+ 	gio-2.0 \
+ 	gobject-2.0 \
+-	tracker-sparql-0.12 \
++	tracker-sparql-$(TRACKER_SPARQL_MAJOR) \
+ 	$(NULL)
+ 
+ libfolks_tracker_la_CPPFLAGS = \
+diff --git a/backends/tracker/lib/folks-tracker-uninstalled.pc.in b/backends/tracker/lib/folks-tracker-uninstalled.pc.in
+index 6294609..fcffc8c 100644
+--- a/backends/tracker/lib/folks-tracker-uninstalled.pc.in
++++ b/backends/tracker/lib/folks-tracker-uninstalled.pc.in
+@@ -7,6 +7,6 @@ vapidir=@abs_top_srcdir@/folks
+ Name: Folks Tracker support library (uninstalled copy)
+ Description: Tracker support library for the Folks meta-contacts library
+ Version: @VERSION@
+-Requires: folks glib-2.0 gobject-2.0 gee-1.0 tracker-sparql-0.12
++Requires: folks glib-2.0 gobject-2.0 gee-1.0 tracker-sparql-@TRACKER_SPARQL_MAJOR@
+ Libs: ${abs_top_builddir}/backends/telepathy/libfolks-tracker.la
+ Cflags: -I${abs_top_srcdir} -I${abs_top_srcdir}/backends/tracker -I${abs_top_builddir}
+diff --git a/backends/tracker/lib/folks-tracker.deps b/backends/tracker/lib/folks-tracker.deps
+deleted file mode 100644
+index 3374635..0000000
+--- a/backends/tracker/lib/folks-tracker.deps
++++ /dev/null
+@@ -1,4 +0,0 @@
+-glib-2.0
+-gobject-2.0
+-folks
+-tracker-sparql-0.12
+\ No newline at end of file
+diff --git a/backends/tracker/lib/folks-tracker.deps.in b/backends/tracker/lib/folks-tracker.deps.in
+new file mode 100644
+index 0000000..02948c3
+--- /dev/null
++++ b/backends/tracker/lib/folks-tracker.deps.in
+@@ -0,0 +1,4 @@
++glib-2.0
++gobject-2.0
++folks
++tracker-sparql-@TRACKER_SPARQL_MAJOR@
+diff --git a/backends/tracker/lib/folks-tracker.pc.in b/backends/tracker/lib/folks-tracker.pc.in
+index 28becfb..7898842 100644
+--- a/backends/tracker/lib/folks-tracker.pc.in
++++ b/backends/tracker/lib/folks-tracker.pc.in
+@@ -10,6 +10,6 @@ vapidir=@datadir@/vala/vapi
+ Name: Folks tracker support library
+ Description: Tracker support library for the Folks meta-contacts library
+ Version: @VERSION@
+-Requires: folks glib-2.0 gobject-2.0 gee-1.0 tracker-sparql-0.12
++Requires: folks glib-2.0 gobject-2.0 gee-1.0 tracker-sparql-@TRACKER_SPARQL_MAJOR@
+ Libs: -L${libdir} -lfolks-tracker
+ Cflags: -I${includedir}
+diff --git a/configure.ac b/configure.ac
+index a05103e..06cc381 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -154,6 +154,8 @@ GCONF2_REQUIRED=2.31
+ EBOOK_REQUIRED=3.1.5
+ EDATASERVER_REQUIRED=3.1.5
+ 
++AC_SUBST([TRACKER_SPARQL_MAJOR])
++
+ PKG_CHECK_MODULES([GLIB],
+                   [glib-2.0 >= $GLIB_REQUIRED
+                    gobject-2.0 >= $GLIB_REQUIRED])
+@@ -504,6 +506,7 @@ AC_SUBST([ERROR_VALAFLAGS])
+ AC_CONFIG_FILES([
+     backends/telepathy/lib/folks-telepathy.pc
+     backends/telepathy/lib/folks-telepathy-uninstalled.pc
++    backends/tracker/lib/folks-tracker.deps
+     backends/tracker/lib/folks-tracker.pc
+     backends/tracker/lib/folks-tracker-uninstalled.pc
+     backends/eds/lib/folks-eds.pc
+diff --git a/tests/lib/tracker/Makefile.am b/tests/lib/tracker/Makefile.am
+index 9f75fea..bd0776b 100644
+--- a/tests/lib/tracker/Makefile.am
++++ b/tests/lib/tracker/Makefile.am
+@@ -9,7 +9,7 @@ VALAFLAGS += \
+ 	--pkg gio-2.0 \
+ 	--pkg gee-1.0 \
+ 	--pkg folks \
+-	--pkg tracker-sparql-0.12 \
++	--pkg tracker-sparql-$(TRACKER_SPARQL_MAJOR) \
+ 	--pkg folks-tracker \
+ 	-g \
+ 	$(NULL)
+diff --git a/tests/tracker/Makefile.am b/tests/tracker/Makefile.am
+index 54ce842..83d4032 100644
+--- a/tests/tracker/Makefile.am
++++ b/tests/tracker/Makefile.am
+@@ -36,7 +36,7 @@ AM_VALAFLAGS = \
+ 	--pkg folks \
+ 	--pkg folks-test \
+ 	--pkg folks-tracker \
+-	--pkg tracker-sparql-0.12 \
++	--pkg tracker-sparql-$(TRACKER_SPARQL_MAJOR) \
+ 	--pkg tracker-test \
+ 	-g \
+ 	$(NULL)
+-- 
+1.7.8.5
+

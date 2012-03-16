@@ -1,0 +1,27 @@
+From f19d5ad0ab162b41747c0cd10a9c5ed30b23e187 Mon Sep 17 00:00:00 2001
+From: Travis Reitter <travis.reitter@collabora.co.uk>
+Date: Mon, 5 Mar 2012 14:22:13 -0800
+Subject: [PATCH] Bump Tracker version requirements to match current Tracker
+
+---
+ configure.ac |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 06cc381..7cd28e5 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -148,8 +148,8 @@ GLIB_REQUIRED=2.24.0
+ TP_GLIB_REQUIRED=0.13.1
+ VALA_REQUIRED=0.15.1
+ VALADOC_REQUIRED=0.3.1
+-TRACKER_SPARQL_MAJOR=0.12
+-TRACKER_SPARQL_REQUIRED=0.12.0
++TRACKER_SPARQL_MAJOR=0.14
++TRACKER_SPARQL_REQUIRED=0.13.1
+ GCONF2_REQUIRED=2.31
+ EBOOK_REQUIRED=3.1.5
+ EDATASERVER_REQUIRED=3.1.5
+-- 
+1.7.8.5
+
