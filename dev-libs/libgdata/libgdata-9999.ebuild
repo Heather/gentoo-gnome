@@ -28,12 +28,12 @@ fi
 RDEPEND=">=dev-libs/glib-2.30:2
 	>=x11-libs/gdk-pixbuf-2.14:2
 	>=dev-libs/libxml2-2:2
-	>=net-libs/libsoup-2.26.1:2.4[introspection?]
+	>=net-libs/libsoup-2.37.91:2.4[introspection?]
 	>=net-libs/liboauth-0.9.4
 
 	gnome-base/gnome-keyring
 
-	gnome? ( >=net-libs/libsoup-gnome-2.26.1:2.4[introspection?] )
+	gnome? ( >=net-libs/libsoup-gnome-2.37.91:2.4[introspection?] )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.7 )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
