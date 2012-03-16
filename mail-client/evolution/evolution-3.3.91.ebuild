@@ -143,6 +143,9 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# Fix build with USE=map; in next version
+	epatch "${FILESDIR}/${P}-map.patch"
+
 	gnome2_src_prepare
 
 	# Fix compilation flags crazyness

@@ -1,0 +1,59 @@
+From f30355445fd20b6d443d012eb1f1758dbe8d096a Mon Sep 17 00:00:00 2001
+From: Matthew Barnes <mbarnes@redhat.com>
+Date: Fri, 9 Mar 2012 13:38:57 -0500
+Subject: [PATCH] Bug 671716 - Fails to build with --enable-contact-maps
+
+---
+ widgets/misc/e-contact-map-window.c |    4 ++++
+ widgets/misc/e-contact-map.c        |    4 ++++
+ widgets/misc/e-contact-marker.c     |    4 ++++
+ 3 files changed, 12 insertions(+), 0 deletions(-)
+
+diff --git a/widgets/misc/e-contact-map-window.c b/widgets/misc/e-contact-map-window.c
+index 87ce665..d80aa17 100644
+--- a/widgets/misc/e-contact-map-window.c
++++ b/widgets/misc/e-contact-map-window.c
+@@ -39,6 +39,10 @@
+ #include <glib/gi18n.h>
+ #include <glib-object.h>
+ 
++#define E_CONTACT_MAP_WINDOW_GET_PRIVATE(obj) \
++	(G_TYPE_INSTANCE_GET_PRIVATE \
++	((obj), E_TYPE_CONTACT_MAP, EContactMapWindowPrivate))
++
+ G_DEFINE_TYPE (EContactMapWindow, e_contact_map_window, GTK_TYPE_WINDOW)
+ 
+ struct _EContactMapWindowPrivate {
+diff --git a/widgets/misc/e-contact-map.c b/widgets/misc/e-contact-map.c
+index 7158aae..b9c2a99 100644
+--- a/widgets/misc/e-contact-map.c
++++ b/widgets/misc/e-contact-map.c
+@@ -42,6 +42,10 @@
+ #include <glib/gi18n.h>
+ #include <math.h>
+ 
++#define E_CONTACT_MAP_GET_PRIVATE(obj) \
++	(G_TYPE_INSTANCE_GET_PRIVATE \
++	((obj), E_TYPE_CONTACT_MAP, EContactMapPrivate))
++
+ G_DEFINE_TYPE (EContactMap, e_contact_map, GTK_CHAMPLAIN_TYPE_EMBED)
+ 
+ struct _EContactMapPrivate {
+diff --git a/widgets/misc/e-contact-marker.c b/widgets/misc/e-contact-marker.c
+index 2f7c2cb..d7e5ad6 100644
+--- a/widgets/misc/e-contact-marker.c
++++ b/widgets/misc/e-contact-marker.c
+@@ -38,6 +38,10 @@
+ #include <math.h>
+ #include <string.h>
+ 
++#define E_CONTACT_MARKER_GET_PRIVATE(obj) \
++	(G_TYPE_INSTANCE_GET_PRIVATE \
++	((obj), E_TYPE_CONTACT_MARKER, EContactMarkerPrivate))
++
+ G_DEFINE_TYPE (EContactMarker, e_contact_marker, CHAMPLAIN_TYPE_LABEL);
+ 
+ struct _EContactMarkerPrivate
+-- 
+1.7.8.5
+
