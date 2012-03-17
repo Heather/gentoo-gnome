@@ -130,7 +130,7 @@ src_configure() {
 	use alpha && append-ldflags "-Wl,--no-relax"
 
 	# Sigbuses on SPARC with mcpu and co.
-	use sparc && filter-flags "-mcpu=*" "-mvis" "-mtune=*"
+	use sparc && filter-flags "-mvis"
 
 	# https://bugs.webkit.org/show_bug.cgi?id=42070 , #301634
 	use ppc64 && append-flags "-mminimal-toc"
