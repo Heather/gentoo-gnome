@@ -1,6 +1,6 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-themes/gnome-themes-standard/gnome-themes-standard-3.0.2.ebuild,v 1.2 2011/07/07 13:50:51 pacho Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="no"
@@ -24,6 +24,7 @@ else
 fi
 
 COMMON_DEPEND="gnome-base/librsvg:2
+	x11-libs/cairo
 	>=x11-libs/gtk+-3.3.14:3
 	>=x11-themes/gtk-engines-2.15.3:2"
 DEPEND="${COMMON_DEPEND}
@@ -35,11 +36,14 @@ DEPEND="${COMMON_DEPEND}
 RDEPEND="${COMMON_DEPEND}
 	!<x11-themes/gnome-themes-2.32.1-r1"
 
-# This ebuild does not install any binaries
-RESTRICT="binchecks strip"
-# FIXME: --enable-placeholders fails
-G2CONF="--disable-static --disable-placeholders"
-DOCS="ChangeLog NEWS"
+pkg_setup() {
+	DOCS="ChangeLog NEWS"
+	# The icon cache needs to be generated in pkg_postinst()
+	G2CONF="${G2CONF}
+		--disable-static
+		--disable-placeholders
+		GTK_UPDATE_ICON_CACHE=$(type -P true)"
+}
 
 src_prepare() {
 	gnome2_src_prepare
