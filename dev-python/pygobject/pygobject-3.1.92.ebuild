@@ -1,6 +1,6 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/pygobject/pygobject-3.0.3.ebuild,v 1.4 2011/12/31 18:47:31 tetromino Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="no"
@@ -27,7 +27,7 @@ fi
 IUSE="+cairo examples test +threads" # doc
 
 COMMON_DEPEND=">=dev-libs/glib-2.31.0:2
-	>=dev-libs/gobject-introspection-1.31
+	>=dev-libs/gobject-introspection-1.31.20
 	virtual/libffi
 	cairo? ( >=dev-python/pycairo-1.10.0 )"
 DEPEND="${COMMON_DEPEND}
@@ -67,14 +67,10 @@ src_prepare() {
 	# Do not build tests if unneeded, bug #226345
 	epatch "${FILESDIR}/${PN}-2.90.1-make_check.patch"
 
-	# Support installation for multiple Python versions, upstream bug #648292
-	epatch "${FILESDIR}/${PN}-3.0.0-support_multiple_python_versions.patch"
-
 	# Disable tests that fail
 	#epatch "${FILESDIR}/${PN}-2.28.3-disable-failing-tests.patch"
 
-	# disable pyc compiling
-	echo > py-compile
+	python_clean_py-compile_files
 
 	[[ ${PV} != 9999 ]] && eautoreconf
 	gnome2_src_prepare
@@ -83,7 +79,10 @@ src_prepare() {
 }
 
 src_configure() {
-	python_execute_function -s gnome2_src_configure
+	configuration() {
+		PYTHON="$(PYTHON)" gnome2_src_configure
+	}
+	python_execute_function -s configuration
 }
 
 src_compile() {
