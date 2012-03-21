@@ -18,7 +18,7 @@ IUSE="examples test"
 KEYWORDS="~amd64 ~x86"
 
 RDEPEND=">=dev-libs/glib-2.31:2
-	>=dev-libs/gobject-introspection-1.29.16
+	>=dev-libs/gobject-introspection-1.31.22
 
 	dev-libs/dbus-glib
 	sys-libs/readline
