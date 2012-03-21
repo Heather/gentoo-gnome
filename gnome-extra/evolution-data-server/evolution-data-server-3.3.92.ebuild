@@ -31,6 +31,7 @@ RDEPEND=">=dev-libs/glib-2.30:2
 	>=dev-db/sqlite-3.5
 	>=dev-libs/libgdata-0.10
 	>=gnome-base/gnome-keyring-2.20.1
+	>=dev-libs/dbus-glib-0.6
 	>=dev-libs/libical-0.43
 	>=net-libs/libsoup-2.31.2:2.4
 	>=dev-libs/libxml2-2

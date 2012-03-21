@@ -43,6 +43,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.30:2
 	>=gnome-extra/gtkhtml-4.1.2:4.0
 	>=gnome-base/gconf-2:2
 	dev-libs/atk
+	>=dev-libs/dbus-glib-0.6
 	>=dev-libs/libxml2-2.7.3:2
 	>=net-libs/libsoup-gnome-2.31.2:2.4
 	>=x11-misc/shared-mime-info-0.22
