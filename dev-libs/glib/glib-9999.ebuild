@@ -18,7 +18,7 @@ SRC_URI="${SRC_URI}
 
 LICENSE="LGPL-2"
 SLOT="2"
-IUSE="debug doc fam selinux +static-libs systemtap test utils xattr"
+IUSE="debug doc fam selinux static-libs systemtap test utils xattr"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
