@@ -22,7 +22,7 @@ else
 fi
 IUSE="doc vala +X"
 
-RDEPEND=">=dev-libs/glib-2.29.90:2
+RDEPEND=">=dev-libs/glib-2.31.18:2
 	sys-apps/dbus
 	X? ( >=dev-libs/libxml2-2.7.7:2
 		x11-libs/gtk+:3 )"
@@ -70,7 +70,7 @@ src_install() {
 	doenvd 51dconf
 
 	# Remove bash-completion file installed by build system
-	rm -rv "${ED}/etc/bash_completion.d/" || die
+	rm -rv "${ED}etc/bash_completion.d/" || die
 	newbashcomp "${S}/bin/dconf-bash-completion.sh" ${PN}
 }
 
