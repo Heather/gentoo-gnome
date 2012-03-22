@@ -1,12 +1,11 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/gnome-pty-helper/gnome-pty-helper-0.28.1.ebuild,v 1.9 2011/11/22 16:14:40 zmedico Exp $
+# $Header: $
 
-EAPI="3"
+EAPI="4"
 GNOME_ORG_MODULE="vte"
-GNOME_TARBALL_SUFFIX="xz"
 
-inherit gnome.org base
+inherit gnome.org
 
 DESCRIPTION="GNOME Setuid helper for opening ptys"
 HOMEPAGE="http://git.gnome.org/browse/vte/"
