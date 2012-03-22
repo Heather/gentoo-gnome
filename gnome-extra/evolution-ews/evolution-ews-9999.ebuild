@@ -25,7 +25,7 @@ IUSE="" # doc
 
 RDEPEND=">=mail-client/evolution-${PV}:2.0
 	>=gnome-extra/evolution-data-server-${PV}
-	>=dev-libs/glib-2.26
+	>=dev-libs/glib-2.26:2
 	>=dev-libs/libxml2-2
 	>=gnome-base/gconf-2:2
 	>=net-libs/libsoup-2.30:2.4
