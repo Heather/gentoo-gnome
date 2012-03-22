@@ -11,7 +11,7 @@ if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
 
-DESCRIPTION="Evolution module for connecting to Exchange Web Services"
+DESCRIPTION="Evolution module for connecting to Microsoft Exchange Web Services"
 HOMEPAGE="http://www.gnome.org/projects/evolution/"
 
 LICENSE="LGPL-2.1"
