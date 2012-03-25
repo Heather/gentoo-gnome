@@ -6,6 +6,9 @@ EAPI="4"
 GCONF_DEBUG="yes"
 
 inherit autotools eutils gnome2 pax-utils versionator virtualx
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="GNOME webbrowser based on Webkit"
 HOMEPAGE="http://projects.gnome.org/epiphany/"
@@ -13,21 +16,26 @@ HOMEPAGE="http://projects.gnome.org/epiphany/"
 LICENSE="GPL-2"
 SLOT="0"
 IUSE="avahi doc +introspection +nss test"
-KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+if [[ ${PV} = 9999 ]]; then
+	KEYWORDS=""
+else
+	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+fi
 
 # XXX: Should we add seed support? Seed seems to be unmaintained now.
-RDEPEND="dev-db/sqlite
+RDEPEND="
 	>=dev-libs/glib-2.31.2:2
 	>=x11-libs/gtk+-3.3.14:3[introspection?]
 	>=dev-libs/libxml2-2.6.12:2
 	>=dev-libs/libxslt-1.1.7
 	>=app-text/iso-codes-0.35
-	>=net-libs/webkit-gtk-1.7.3:3[introspection?]
+	>=net-libs/webkit-gtk-1.7.92:3[introspection?]
 	>=net-libs/libsoup-gnome-2.37.1:2.4
 	>=gnome-base/gnome-keyring-2.26.0
 	>=gnome-base/gsettings-desktop-schemas-0.0.1
 	>=x11-libs/libnotify-0.5.1
 
+	dev-db/sqlite:3
 	x11-libs/libICE
 	x11-libs/libSM
 	x11-libs/libX11
@@ -70,15 +78,10 @@ src_prepare() {
 }
 
 src_test() {
-	# Tests require gsettings schemas from >=epiphany-3.3.5 to be installed
-	local v=$(best_version www-client/epiphany)
-	v=${v/www-client\/epiphany-/}
-	if version_is_at_least 3.3.5 "${v}"; then
-		Xemake check
-	else
-		ewarn "Skipping tests. To run tests, >=${PN}-3.3.5 needs to be already"
-		ewarn "installed on the system."
-	fi
+	# FIXME: this should be handled at eclass level
+	"${EROOT}${GLIB_COMPILE_SCHEMAS}" --allow-any-name "${S}/data" || die
+
+	GSETTINGS_SCHEMA_DIR="${S}/data" Xemake check
 }
 
 src_install() {
