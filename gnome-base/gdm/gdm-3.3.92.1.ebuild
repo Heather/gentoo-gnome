@@ -1,9 +1,9 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gdm/gdm-3.2.1.1-r2.ebuild,v 1.2 2012/02/14 04:53:07 tetromino Exp $
 
 EAPI="4"
-GCONF_DEBUG="yes"
+GNOME2_LA_PUNT="yes"
 
 inherit autotools eutils gnome2 pam systemd
 
@@ -12,29 +12,30 @@ HOMEPAGE="http://www.gnome.org/projects/gdm/"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~sh ~sparc ~x86"
+KEYWORDS="~amd64 ~sh ~x86"
 
-IUSE_LIBC="elibc_glibc"
-IUSE="accessibility +consolekit ipv6 gnome-keyring selinux tcpd test xinerama +xklavier $IUSE_LIBC"
-
-# Name of the tarball with gentoo specific files
-GDM_EXTRA="${PN}-2.20.9-gentoo-files-r1"
-
-SRC_URI="${SRC_URI}
-	mirror://gentoo/${GDM_EXTRA}.tar.bz2"
+IUSE="accessibility +consolekit +fallback fprint +gnome-shell ipv6 gnome-keyring +introspection selinux smartcard tcpd test xinerama +xklavier"
 
 # NOTE: x11-base/xorg-server dep is for X_SERVER_PATH etc, bug #295686
+# nspr used by smartcard extension
+# dconf, dbus and g-s-d are needed at install time for dconf update
 COMMON_DEPEND="
 	>=dev-libs/dbus-glib-0.74
-	>=dev-libs/glib-2.27.4:2
+	>=dev-libs/glib-2.29.3:2
 	>=x11-libs/gtk+-2.91.1:3
 	>=x11-libs/pango-1.3
+	dev-libs/nspr
+	>=dev-libs/nss-3.11.1
 	>=media-libs/fontconfig-2.5.0
 	>=media-libs/libcanberra-0.4[gtk3]
-	>=gnome-base/gconf-2.31.3
 	>=x11-misc/xdg-utils-1.0.2-r3
 	>=sys-power/upower-0.9
 	>=sys-apps/accountsservice-0.6.12
+
+	gnome-base/dconf
+	>=gnome-base/gnome-settings-daemon-3.1.4
+	gnome-base/gsettings-desktop-schemas
+	sys-apps/dbus
 
 	app-text/iso-codes
 
@@ -53,6 +54,7 @@ COMMON_DEPEND="
 
 	accessibility? ( x11-libs/libXevie )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-2.22[pam] )
+	introspection? ( >=dev-libs/gobject-introspection-0.9.12 )
 	selinux? ( sys-libs/libselinux )
 	tcpd? ( >=sys-apps/tcp-wrappers-7.6 )
 	xinerama? ( x11-libs/libXinerama )
@@ -68,15 +70,29 @@ DEPEND="${COMMON_DEPEND}
 	>=dev-util/pkgconfig-0.19
 	>=app-text/scrollkeeper-0.1.4
 	>=app-text/gnome-doc-utils-0.3.2"
-# XXX: These deps are from the gnome-session gdm.session file
-# at-spi is needed for at-spi-registryd-wrapper.desktop
+# XXX: These deps are from session and desktop files in data/ directory
+# at-spi:1 is needed for at-spi-registryd (spawned by simple-chooser)
+# fprintd is used via dbus by gdm-fingerprint-extension
 RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/gnome-session-2.91.92
-	>=gnome-base/gnome-settings-daemon-2.91
-	x11-wm/metacity
+	x11-apps/xhost
+	x11-themes/gnome-icon-theme-symbolic
 
-	accessibility? ( gnome-extra/at-spi:1 )
+	accessibility? (
+		app-accessibility/gnome-mag
+		app-accessibility/gok
+		app-accessibility/orca
+		gnome-extra/at-spi:1 )
 	consolekit? ( gnome-extra/polkit-gnome )
+	fallback? ( x11-wm/metacity )
+	fprint? (
+		sys-auth/fprintd
+		sys-auth/pam_fprint )
+	gnome-shell? ( >=gnome-base/gnome-shell-3.1.90 )
+	!gnome-shell? ( x11-wm/metacity )
+	smartcard? (
+		app-crypt/coolkey
+		sys-auth/pam_pkcs11 )
 
 	!gnome-extra/fast-user-switch-applet"
 
@@ -85,16 +101,19 @@ pkg_setup() {
 
 	# PAM is the only auth scheme supported
 	# even though configure lists shadow and crypt
-	# they don't have any corresponding code
+	# they don't have any corresponding code.
 	# --with-at-spi-registryd-directory= needs to be passed explicitly because
 	# of https://bugzilla.gnome.org/show_bug.cgi?id=607643#c4
+	# TODO: Add systemd support
 	G2CONF="${G2CONF}
 		--disable-schemas-install
-		--localstatedir=${EROOT}var
+		--disable-static
+		--without-systemd
+		--localstatedir=${EPREFIX}/var
 		--with-xdmcp=yes
 		--enable-authentication-scheme=pam
-		--with-pam-prefix=${EROOT}etc
-		--with-at-spi-registryd-directory=${EROOT}usr/libexec
+		--with-pam-prefix=${EPREFIX}/etc
+		--with-at-spi-registryd-directory=${EPREFIX}/usr/libexec
 		$(use_with accessibility xevie)
 		$(use_enable ipv6)
 		$(use_enable xklavier libxklavier)
@@ -104,12 +123,22 @@ pkg_setup() {
 		$(use_with xinerama)"
 
 	enewgroup gdm
-	enewuser gdm -1 -1 /var/lib/gdm gdm
+	enewgroup video # Just in case it hasn't been created yet
+	enewuser gdm -1 -1 /var/lib/gdm gdm,video
+
+	# For compatibility with certain versions of nvidia-drivers, etc., need to
+	# ensure that gdm user is in the video group
+	if ! egetent group video | grep -q gdm; then
+		# FIXME XXX: is this at all portable, ldap-safe, etc.?
+		# XXX: egetent does not have a 1-argument form, so we can't use it to
+		# get the list of gdm's groups
+		local g=$(groups gdm)
+		elog "Adding user gdm to video group"
+		usermod -G video,${g// /,} gdm || die "Adding user gdm to video group failed"
+	fi
 }
 
 src_prepare() {
-	gnome2_src_prepare
-
 	# remove unneeded linker directive for selinux, bug #41022
 	epatch "${FILESDIR}/${PN}-2.32.0-selinux-remove-attr.patch"
 
@@ -120,7 +149,7 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-2.32.0-fix-vt-problems.patch"
 
 	# make custom session work, bug #216984
-	epatch "${FILESDIR}/${PN}-2.32.0-custom-session.patch"
+	epatch "${FILESDIR}/${PN}-3.2.1.1-custom-session.patch"
 
 	# ssh-agent handling must be done at xinitrc.d, bug #220603
 	epatch "${FILESDIR}/${PN}-2.32.0-xinitrc-ssh-agent.patch"
@@ -128,26 +157,28 @@ src_prepare() {
 	# fix libxklavier automagic support
 	epatch "${FILESDIR}/${PN}-2.32.0-automagic-libxklavier-support.patch"
 
-	# don't ignore all non-i18n environment variables, gnome bug 656094
-	epatch "${FILESDIR}/${PN}-3.0.4-hardcoded-gnome-session-path-env.patch"
-
 	# don't load accessibility support at runtime when USE=-accessibility
-	use accessibility || epatch "${FILESDIR}/${PN}-3.0.4-disable-a11y.patch"
+	use accessibility || epatch "${FILESDIR}/${PN}-3.3.92.1-disable-accessibility.patch"
+
+	# make gdm-fallback session the default if USE=-gnome-shell
+	if ! use gnome-shell; then
+		sed -e "s:'gdm-shell':'gdm-fallback':" \
+			-i data/00-upstream-settings || die "sed failed"
+	fi
 
 	mkdir -p "${S}"/m4
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
+
+	gnome2_src_prepare
 }
 
 src_install() {
 	gnome2_src_install
 
-	local gentoodir="${WORKDIR}/${GDM_EXTRA}"
-
 	# Install the systemd unit file
-	systemd_dounit "${FILESDIR}/gdm@.service"
+	systemd_dounit "${FILESDIR}/3.2.1.1/gdm.service"
 
-	# FIXME: Remove dosym usage, gone in EAPI 4
 	# gdm-binary should be gdm to work with our init (#5598)
 	rm -f "${ED}/usr/sbin/gdm"
 	ln -sfn /usr/sbin/gdm-binary "${ED}/usr/sbin/gdm"
@@ -159,20 +190,25 @@ src_install() {
 
 	# add xinitrc.d scripts
 	exeinto /etc/X11/xinit/xinitrc.d
-	doexe "${FILESDIR}/49-keychain" || die "doexe 2 failed"
-	doexe "${FILESDIR}/50-ssh-agent" || die "doexe 3 failed"
+	doexe "${FILESDIR}/49-keychain"
+	doexe "${FILESDIR}/50-ssh-agent"
 
 	# install XDG_DATA_DIRS gdm changes
 	echo 'XDG_DATA_DIRS="/usr/share/gdm"' > 99xdg-gdm
-	doenvd 99xdg-gdm || die "doenvd failed"
+	doenvd 99xdg-gdm
 
-	use gnome-keyring && sed -i "s:#Keyring=::g" "${gentoodir}"/pam.d/*
-
-	dopamd "${gentoodir}"/pam.d/gdm{,-autologin}
+	# install PAM files
+	mkdir "${T}/pam.d" || die "mkdir failed"
+	cp "${FILESDIR}/3.2.1.1"/gdm{,-autologin,-password,-fingerprint,-smartcard,-welcome} \
+		"${T}/pam.d" || die "cp failed"
+	use gnome-keyring && sed -i "s:#Keyring=::g" "${T}/pam.d"/*
+	dopamd "${T}/pam.d"/*
 }
 
 pkg_postinst() {
 	gnome2_pkg_postinst
+
+	dbus-launch dconf update || die "'dconf update' failed"
 
 	ewarn
 	ewarn "This is an EXPERIMENTAL release, please bear with its bugs and"
@@ -182,6 +218,13 @@ pkg_postinst() {
 	elog "To make GDM start at boot, edit /etc/conf.d/xdm"
 	elog "and then execute 'rc-update add xdm default'."
 	elog "If you already have GDM running, you will need to restart it."
+
+	elog
+	elog "GDM ignores most non-localization environment variables. If you"
+	elog "need GDM to launch gnome-session with a particular environment,"
+	elog "you need to use pam_env.so in /etc/pam.d/gdm-welcome; see"
+	elog "the pam_env man page for more information."
+	elog
 
 	if use gnome-keyring; then
 		elog "For autologin to unlock your keyring, you need to set an empty"
