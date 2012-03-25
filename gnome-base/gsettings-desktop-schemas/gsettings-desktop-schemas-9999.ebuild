@@ -15,7 +15,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE=""
+IUSE="+introspection"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
