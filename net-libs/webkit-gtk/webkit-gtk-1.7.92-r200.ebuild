@@ -61,7 +61,8 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	dev-util/gtk-doc-am
 	introspection? ( jit? ( sys-apps/paxctl ) )
-	test? ( x11-themes/hicolor-icon-theme )
+	test? ( x11-themes/hicolor-icon-theme
+		jit? ( sys-apps/paxctl ) )
 "
 # Need real bison, not yacc
 
