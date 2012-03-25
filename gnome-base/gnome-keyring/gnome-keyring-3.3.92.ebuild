@@ -7,6 +7,9 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2 pam versionator virtualx
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Password and keyring managing daemon"
 HOMEPAGE="http://www.gnome.org/"
@@ -14,7 +17,11 @@ HOMEPAGE="http://www.gnome.org/"
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
 IUSE="+caps debug doc pam selinux"
-KEYWORDS="~amd64 ~mips ~sh ~x86 ~x86-fbsd ~amd64-linux ~sparc-solaris ~x86-linux ~x86-solaris"
+if [[ ${PV} = 9999 ]]; then
+	KEYWORDS=""
+else
+	KEYWORDS="~amd64 ~mips ~sh ~x86 ~x86-fbsd ~amd64-linux ~sparc-solaris ~x86-linux ~x86-solaris"
+fi
 
 RDEPEND=">=app-crypt/gcr-3.3.4
 	>=dev-libs/glib-2.28:2
@@ -47,6 +54,7 @@ pkg_setup() {
 		$(use_with pam pam-dir $(getpam_mod_dir))
 		$(use_enable selinux)
 		--with-root-certs=${EPREFIX}/etc/ssl/certs/
+		--with-ca-certificates=${EPREFIX}/etc/ssl/certs/ca-certificates.crt
 		--enable-ssh-agent
 		--enable-gpg-agent"
 }
