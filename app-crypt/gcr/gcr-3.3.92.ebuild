@@ -42,6 +42,7 @@ pkg_setup() {
 	DOCS="AUTHORS ChangeLog HACKING NEWS README"
 	G2CONF="${G2CONF}
 		$(use_enable debug)
+		--disable-update-icon-cache
 		--disable-update-mime"
 }
 
