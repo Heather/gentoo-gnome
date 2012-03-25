@@ -1,0 +1,124 @@
+diff -Naur gnome-control-center-3.3.92//configure.ac gnome-control-center-3.3.92.new//configure.ac
+--- gnome-control-center-3.3.92//configure.ac	2012-03-19 15:06:11.000000000 +0530
++++ gnome-control-center-3.3.92.new//configure.ac	2012-03-25 17:34:27.124395337 +0530
+@@ -109,7 +109,24 @@
+ PKG_CHECK_MODULES(ONLINE_ACCOUNTS_PANEL, $COMMON_MODULES goa-1.0 goa-backend-1.0)
+ PKG_CHECK_MODULES(POWER_PANEL, $COMMON_MODULES upower-glib >= 0.9.1
+                   gnome-settings-daemon >= $GSD_REQUIRED_VERSION)
+-PKG_CHECK_MODULES(COLOR_PANEL, $COMMON_MODULES colord >= 0.1.8)
++build_color=false
++AC_ARG_ENABLE(color,
++  AC_HELP_STRING([--disable-color],
++                 [disable color management panel]),
++      [case "${enableval}" in
++              yes) WANT_COLOR=yes ;;
++	      no) WANT_COLOR=no ;;
++	      *) AC_MSG_ERROR(bad value ${enableval} for --disable-color) ;;
++      esac],
++      [WANT_COLOR=yes]) dnl Default value
++
++if test x$WANT_COLOR = xyes; then
++      PKG_CHECK_MODULES(COLOR_PANEL, $COMMON_MODULES colord >= 0.1.8)
++      build_color=true
++fi
++AM_CONDITIONAL(BUILD_COLOR, test "x$build_color" = "xtrue")
++AC_SUBST(COLOR_PANEL_CFLAGS)
++AC_SUBST(COLOR_PANEL_LIBS)
+ PKG_CHECK_MODULES(PRINTERS_PANEL, $COMMON_MODULES
+                   polkit-gobject-1 >= $POLKIT_REQUIRED_VERSION)
+ PKG_CHECK_MODULES(REGION_PANEL, $COMMON_MODULES libgnomekbd >= 2.91.91
+@@ -127,10 +144,26 @@
+                   gnome-desktop-3.0
+                   gdk-pixbuf-2.0 >= $GDKPIXBUF_REQUIRED_VERSION
+                   $SYSTEMD)
+-PKG_CHECK_MODULES(WACOM_PANEL, $COMMON_MODULES
+-                  gnome-settings-daemon >= $GSD_REQUIRED_VERSION
+-                  xi >= 1.2 x11 libwacom >= $LIBWACOM_REQUIRED_VERSION
+-                  gnome-desktop-3.0 >= $GNOME_DESKTOP_REQUIRED_VERSION)
++
++build_wacom=false
++AC_ARG_ENABLE(wacom,
++  AC_HELP_STRING([--disable-wacom],
++                 [disable wacom management panel]),
++      [case "${enableval}" in
++              yes) WANT_WACOM=yes ;;
++	      no) WANT_WACOM=no ;;
++	      *) AC_MSG_ERROR(bad value ${enableval} for --disable-wacom) ;;
++      esac],
++      [WANT_WACOM=yes]) dnl Default value
++
++if test x$WANT_WACOM = xyes; then
++     PKG_CHECK_MODULES(WACOM_PANEL, $COMMON_MODULES
++                       gnome-settings-daemon >= $GSD_REQUIRED_VERSION
++                       xi >= 1.2 x11 libwacom >= $LIBWACOM_REQUIRED_VERSION
++                       gnome-desktop-3.0 >= $GNOME_DESKTOP_REQUIRED_VERSION)
++      build_wacom=true
++fi
++AM_CONDITIONAL(BUILD_WACOM, test "x$build_wacom" = "xtrue")
+ 
+ GDESKTOP_PREFIX=`$PKG_CONFIG --variable prefix gsettings-desktop-schemas`
+ AC_SUBST(GDESKTOP_PREFIX)
+@@ -146,10 +179,25 @@
+ fi
+ AM_CONDITIONAL(BUILD_NETWORK, [test x$have_networkmanager = xyes])
+ 
+-# Check for gnome-bluetooth
+-PKG_CHECK_MODULES(BLUETOOTH, $COMMON_MODULES gnome-bluetooth-1.0 >= 3.3.4,
+-		  [have_bluetooth=yes], have_bluetooth=no)
+-AM_CONDITIONAL(BUILD_BLUETOOTH, [test x$have_bluetooth = xyes])
++build_bluetooth=false
++AC_ARG_ENABLE(bluetooth,
++  AC_HELP_STRING([--disable-bluetooth],
++                 [disable bluetooth management panel]),
++      [case "${enableval}" in
++              yes) WANT_BLUETOOTH=yes ;;
++	      no) WANT_BLUETOOTH=no ;;
++	      *) AC_MSG_ERROR(bad value ${enableval} for --disable-bluetooth) ;;
++      esac],
++      [WANT_BLUETOOTH=yes]) dnl Default value
++
++if test x$WANT_BLUETOOTH = xyes; then
++     # Check for gnome-bluetooth
++     PKG_CHECK_MODULES(BLUETOOTH, $COMMON_MODULES gnome-bluetooth-1.0 >= 3.3.4,
++                       [have_bluetooth=yes], have_bluetooth=no)
++     build_bluetooth=true
++fi
++
++AM_CONDITIONAL(BUILD_BLUETOOTH, [test x$build_bluetooth = xyes])
+ 
+ # Check for CUPS 1.4 or newer
+ AC_ARG_ENABLE([cups],
+diff -Naur gnome-control-center-3.3.92//panels/Makefile.am gnome-control-center-3.3.92.new//panels/Makefile.am
+--- gnome-control-center-3.3.92//panels/Makefile.am	2012-02-14 15:42:23.000000000 +0530
++++ gnome-control-center-3.3.92.new//panels/Makefile.am	2012-03-25 17:31:48.801387677 +0530
+@@ -3,7 +3,6 @@
+ 	background \
+ 	screen \
+ 	power \
+-	color \
+ 	display \
+ 	mouse \
+ 	online-accounts \
+@@ -13,8 +12,11 @@
+ 	keyboard \
+ 	universal-access \
+ 	user-accounts \
+-	datetime \
+-	wacom
++	datetime
++
++if BUILD_COLOR
++SUBDIRS += color
++endif
+ 
+ if BUILD_PRINTERS
+ SUBDIRS += printers
+@@ -28,4 +30,8 @@
+ SUBDIRS += bluetooth
+ endif
+ 
++if BUILD_WACOM
++SUBDIRS += wacom
++endif
++
+ -include $(top_srcdir)/git.mk
