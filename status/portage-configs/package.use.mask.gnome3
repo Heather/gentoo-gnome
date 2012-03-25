@@ -4,4 +4,4 @@ gnome-extra/gnome-games -clutter
 media-libs/clutter-gtk -introspection
 sys-apps/gnome-disk-utility -nautilus
 # Requires x11-libs/libxkbcommon from the x11 overlay
-x11-libs/gtk+ wayland
+x11-libs/gtk+ -packagekit

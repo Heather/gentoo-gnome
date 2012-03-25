@@ -16,6 +16,7 @@ app-admin/packagekit-base
 app-admin/packagekit-gtk
 app-arch/file-roller
 app-cdr/brasero
+app-crypt/gcr
 app-crypt/p11-kit
 app-crypt/seahorse
 app-crypt/seahorse-plugins
