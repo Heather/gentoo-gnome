@@ -29,7 +29,7 @@ COMMON_DEPEND="
 	>=app-text/evince-3.3.0[introspection]
 	dev-libs/gjs
 	>=dev-libs/glib-2.31.6:2
-	>=dev-libs/gobject-introspection-0.9.6
+	>=dev-libs/gobject-introspection-1.31.6
 	>=dev-libs/libgdata-0.11.0[introspection]
 	gnome-base/gnome-desktop:3
 	>=media-libs/clutter-gtk-1.0.2:1.0[introspection]
