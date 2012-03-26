@@ -15,7 +15,7 @@ HOMEPAGE="https://live.gnome.org/Design/Apps/Boxes"
 
 LICENSE="LGPL-2"
 SLOT="0"
-IUSE=""
+IUSE="bindist"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -27,17 +27,17 @@ fi
 # NOTE: sys-fs/* stuff is called via exec()
 RDEPEND="
 	>=dev-libs/libxml2-2.7.8:2
-	>=sys-fs/udev-147[gudev]
+	>=sys-fs/udev-165[gudev]
 	>=dev-libs/glib-2.29.90:2
 	>=dev-libs/gobject-introspection-0.9.6
 	>=sys-libs/libosinfo-0.0.6
 	app-emulation/qemu-kvm[spice]
 	>=app-emulation/libvirt-0.9.3[libvirtd,qemu]
-	>=app-emulation/libvirt-glib-0.0.5
+	>=app-emulation/libvirt-glib-0.0.6
 	>=x11-libs/gtk+-3.3.5:3
 	>=net-libs/gtk-vnc-0.4.4[gtk3]
 	>=net-misc/spice-gtk-0.9[gtk3]
-	>=app-misc/tracker-0.14
+	>=app-misc/tracker-0.14[libosinfo]
 
 	sys-fs/fuse
 	sys-fs/fuseiso
@@ -69,6 +69,7 @@ pkg_setup() {
 	DOCS="AUTHORS README NEWS THANKS TODO"
 	G2CONF="--disable-schemas-compile
 		--disable-strict-cc
+		$(use_enable !bindist logos)
 		VALAC=$(type -P valac-0.14)"
 }
 
