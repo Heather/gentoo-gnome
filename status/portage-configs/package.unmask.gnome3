@@ -1,6 +1,7 @@
 # Alexandre Rostovtsev <tetromino@gentoo.org> (27 Mar 2012)
 # NetworkManager-0.9.4, masked for testing
 =gnome-extra/nm-applet-0.9.4*
+=net-misc/modemmanager-0.5.2*
 =net-misc/networkmanager-0.9.4*
 =net-misc/networkmanager-openconnect-0.9.4*
 =net-misc/networkmanager-openswan-0.9.3*
