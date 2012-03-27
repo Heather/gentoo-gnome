@@ -1,6 +1,6 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-session/gnome-session-2.32.1.ebuild,v 1.4 2011/01/03 11:41:21 pacho Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="yes"
@@ -20,7 +20,7 @@ if [[ ${PV} = 9999 ]]; then
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 fi
-IUSE="doc ipv6 elibc_FreeBSD"
+IUSE="doc elibc_FreeBSD ipv6 systemd"
 
 # x11-misc/xdg-user-dirs{,-gtk} are needed to create the various XDG_*_DIRs, and
 # create .config/user-dirs.dirs which is read by glib to get G_USER_DIRECTORY_*
@@ -55,7 +55,8 @@ RDEPEND="${COMMON_DEPEND}
 	gnome-base/gnome-settings-daemon
 	>=gnome-base/gsettings-desktop-schemas-0.1.7
 	>=x11-themes/gnome-themes-standard-2.91.92
-	sys-apps/dbus[X]"
+	sys-apps/dbus[X]
+	systemd? ( >=sys-apps/systemd-31 )"
 DEPEND="${COMMON_DEPEND}
 	>=dev-lang/perl-5
 	>=sys-devel/gettext-0.10.40
@@ -73,10 +74,10 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-deprecation-flags
 		--disable-schemas-compile
-		--disable-systemd
 		--docdir="${EPREFIX}/usr/share/doc/${PF}"
 		$(use_enable doc docbook-docs)
-		$(use_enable ipv6)"
+		$(use_enable ipv6)
+		$(use_enable systemd)"
 	DOCS="AUTHORS ChangeLog NEWS README"
 }
 
@@ -93,10 +94,10 @@ src_install() {
 
 	dodir /etc/X11/xinit/xinitrc.d/
 	exeinto /etc/X11/xinit/xinitrc.d/
-	doexe "${FILESDIR}/15-xdg-data-gnome"
+	newexe "${FILESDIR}/15-xdg-data-gnome-r1" 15-xdg-data-gnome
 
 	# This should be done here as discussed in bug #270852
-	doexe "${FILESDIR}/10-user-dirs-update-gnome"
+	newexe "${FILESDIR}/10-user-dirs-update-gnome-r1" 10-user-dirs-update-gnome
 }
 
 pkg_postinst() {
