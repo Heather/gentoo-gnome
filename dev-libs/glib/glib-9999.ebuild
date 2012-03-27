@@ -47,7 +47,10 @@ DEPEND="${RDEPEND}
 		>=dev-util/gdbus-codegen-${PV}
 		>=sys-apps/dbus-1.2.14 )
 	!<dev-util/gtk-doc-1.15-r2"
-PDEPEND="!<gnome-base/gvfs-1.6.4-r990" # Earlier versions do not work with glib
+PDEPEND="x11-misc/shared-mime-info
+	!<gnome-base/gvfs-1.6.4-r990"
+# shared-mime-info needed for gio/xdgmime, bug #409481
+# Earlier versions of gvfs do not work with glib
 
 pkg_setup() {
 	# Needed for gio/tests/gdbus-testserver.py
