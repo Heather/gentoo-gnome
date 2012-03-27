@@ -3,6 +3,7 @@
 =gnome-extra/nm-applet-0.9.4*
 =net-misc/networkmanager-0.9.4*
 =net-misc/networkmanager-openconnect-0.9.4*
+=net-misc/networkmanager-openswan-0.9.3*
 =net-misc/networkmanager-openswan-0.9.4*
 =net-misc/networkmanager-openvpn-0.9.4*
 =net-misc/networkmanager-pptp-0.9.4*
