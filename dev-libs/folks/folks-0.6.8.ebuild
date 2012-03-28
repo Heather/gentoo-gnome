@@ -33,8 +33,8 @@ COMMON_DEPEND=">=dev-libs/glib-2.24:2
 	sys-libs/readline
 
 	eds? ( >=gnome-extra/evolution-data-server-3.1.5 )
-	socialweb? ( >=net-libs/libsocialweb-0.25.15 )
-	tracker? ( >=app-misc/tracker-0.13.1 )"
+	socialweb? ( >=net-libs/libsocialweb-0.25.20 )
+	tracker? ( >=app-misc/tracker-0.14 )"
 
 # telepathy-mission-control needed at runtime; it is used by the telepathy
 # backend via telepathy-glib's AccountManager binding.
@@ -52,7 +52,7 @@ DEPEND="${COMMON_DEPEND}
 	socialweb? ( >=net-libs/libsocialweb-0.25.15[vala] )
 	test? ( sys-apps/dbus )
 	vala? (
-		>=dev-lang/vala-0.15.1:0.16[vapigen]
+		>=dev-lang/vala-0.15.2:0.16[vapigen]
 		>=net-libs/telepathy-glib-0.13.1[vala]
 		eds? ( >=gnome-extra/evolution-data-server-3.0.1[vala] ) )"
 
@@ -70,19 +70,13 @@ pkg_setup() {
 		$(use_enable vala)
 		--enable-import-tool
 		--disable-docs
+		--disable-fatal-warnings
 		--disable-Werror"
 	if use vala; then
 		G2CONF="${G2CONF}
 			VALAC=$(type -p valac-0.16)
 			VAPIGEN=$(type -p vapigen-0.16)"
 	fi
-}
-
-src_prepare() {
-	# Fix tracker-0.14 support, in next release
-	epatch "${FILESDIR}/${P}-tracker"-{1,2}.patch
-	eautoreconf
-	gnome2_src_prepare
 }
 
 src_test() {
