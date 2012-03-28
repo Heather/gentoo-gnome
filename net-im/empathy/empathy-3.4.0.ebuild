@@ -28,12 +28,14 @@ fi
 # eventually at which point the dep can be dropped
 # libgee extensively used in libempathy
 # gdk-pixbuf and pango extensively used in libempathy-gtk
+# clutter-1.10 dep is missing in configure, newer API is used
+# folks-0.6.8 is needed to load the contacts list, configure is wrong again
 RDEPEND=">=dev-libs/glib-2.30:2
 	x11-libs/gdk-pixbuf:2
 	>=x11-libs/gtk+-3.3.6:3
 	x11-libs/pango
 	>=dev-libs/dbus-glib-0.51
-	>=dev-libs/folks-0.6.6
+	>=dev-libs/folks-0.6.8
 	dev-libs/libgee:0
 	>=gnome-base/gnome-keyring-2.91.4-r300
 	>=media-libs/libcanberra-0.25[gtk3]
@@ -41,7 +43,7 @@ RDEPEND=">=dev-libs/glib-2.30:2
 	>=net-libs/webkit-gtk-1.3.13:3
 	>=x11-libs/libnotify-0.7
 
-	>=media-libs/clutter-1.8.0:1.0
+	>=media-libs/clutter-1.10.0:1.0
 	>=media-libs/clutter-gtk-0.90.3:1.0
 	>=media-libs/clutter-gst-1.5.2:1.0
 
