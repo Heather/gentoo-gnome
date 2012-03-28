@@ -13,8 +13,16 @@
 # Nirbheek Chauhan <nirbheek@gentoo.org> (25 Mar 2012)
 # This is now the GNOME 3.4 mask
 # Core libraries be unmasked first:
+=dev-libs/atk-2.4*
+=dev-libs/gjs-1.32*
 =dev-libs/glib-2.32*:2
+=dev-libs/gobject-introspection-1.32*
+=dev-libs/gobject-introspection-common-1.32*
+=dev-python/pygobject-3.2*
 =dev-util/gdbus-codegen-2.32*
+=gnome-base/dconf-0.12*
+=gnome-base/gvfs-1.12*
+sys-fs/udisks:2
 =x11-libs/gdk-pixbuf-2.26*:2
 =x11-libs/gtk+-3.4*:3
 =x11-libs/gnome-pty-helper-0.32*
