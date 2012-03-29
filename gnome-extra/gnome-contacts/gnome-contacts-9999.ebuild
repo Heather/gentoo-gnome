@@ -22,7 +22,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 
-RDEPEND=">=dev-libs/folks-0.6.1.1
+RDEPEND=">=dev-libs/folks-0.6.1.1[eds]
 	>=dev-libs/glib-2.31.10:2
 	>=x11-libs/gtk+-3.0:3
 	>=gnome-extra/evolution-data-server-3.2[gnome-online-accounts]
