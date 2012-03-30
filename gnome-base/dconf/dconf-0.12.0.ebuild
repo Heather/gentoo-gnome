@@ -5,42 +5,46 @@
 EAPI="4"
 GCONF_DEBUG="no"
 
-inherit autotools eutils gnome2 bash-completion-r1
+inherit eutils gnome2 bash-completion-r1
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Simple low-level configuration system"
 HOMEPAGE="http://live.gnome.org/dconf"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="doc vala +X"
+IUSE="doc +X"
+if [[ ${PV} = 9999 ]]; then
+	KEYWORDS=""
+else
+	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+fi
 
 RDEPEND=">=dev-libs/glib-2.31.18:2
 	sys-apps/dbus
 	X? ( >=dev-libs/libxml2-2.7.7:2
 		x11-libs/gtk+:3 )"
 DEPEND="${RDEPEND}
-	dev-util/gtk-doc-am
-	doc? ( >=dev-util/gtk-doc-1.15 )
-	vala? ( >=dev-lang/vala-0.15.1:0.16 )"
-# eautoreconf requires gtk-doc-am
+	doc? ( >=dev-util/gtk-doc-1.15 )"
+
+if [[ ${PV} = 9999 ]]; then
+	DEPEND="${DEPEND}
+		dev-util/gtk-doc-am
+		>=dev-lang/vala-0.15.1:0.16 )"
+fi
 
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-schemas-compile
-		$(use_enable vala)
-		$(use_enable X editor)
-		VALAC=$(type -p valac-0.16)"
-}
+		VALAC=$(type -p false)
+		$(use_enable X editor)"
 
-src_prepare() {
-	# Fix vala automagic support, upstream bug #634171
-	epatch "${FILESDIR}/${PN}-0.11.5-automagic-vala.patch"
-
-	mkdir -p m4 || die
-	eautoreconf
-
-	gnome2_src_prepare
+	if [[ ${PV} = 9999 ]]; then
+		G2CONF="${G2CONF}
+			VALAC=$(type -p valac-0.16)"
+	fi
 }
 
 src_install() {
