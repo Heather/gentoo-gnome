@@ -87,7 +87,6 @@ media-fonts/cantarell
 media-gfx/eog
 net-analyzer/gnome-nettool
 net-dns/avahi
-net-libs/glib-networking
 net-libs/gnome-online-accounts
 net-libs/gtk-vnc
 net-libs/libepc
@@ -117,6 +116,10 @@ x11-misc/notification-daemon
 x11-plugins/pidgin-libnotify
 x11-terms/gnome-terminal
 x11-wm/mutter
+
+# Glib Networking
+net-libs/gnutls
+net-libs/glib-networking
 
 # Development utilities
 app-text/yelp-tools
