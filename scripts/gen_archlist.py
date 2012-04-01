@@ -44,6 +44,7 @@ LINE_SEP = ''
 DEBUG = False
 EXTREME_DEBUG = False
 CHECK_DEPS = False
+APPEND_SLOTS = False
 # Check for stable keywords
 STABLE = True
 
@@ -79,6 +80,9 @@ else:
 
 if os.environ.has_key('CHECK_DEPS'):
     CHECK_DEPS = os.environ['CHECK_DEPS']
+
+if os.environ.has_key('APPEND_SLOTS'):
+    APPEND_SLOTS = os.environ['APPEND_SLOTS']
 
 if not STABLE:
     print 'Currently broken for anything except STABLEREQ'
@@ -384,6 +388,15 @@ def consolidate_dupes(cpv_kws):
 
     return deduped_cpv_kws
 
+def append_slots(cpv_kws):
+    "Append slots at the end of cpv atoms"
+    slotifyed_cpv_kws = []
+    for (cpv, kws) in cpv_kws:
+        slot = portage.portage.portdb.aux_get(cpv, ['SLOT'])[0]
+        cpv = "%s:%s" % (cpv, slot)
+        slotifyed_cpv_kws.append([cpv, kws])
+    return slotifyed_cpv_kws
+
 # FIXME: This is broken
 def prettify(cpv_kws):
     "Takes a list of [cpv, [kws]] and prettifies it"
@@ -468,6 +481,8 @@ if __name__ == "__main__":
             ALL_CPV_KWS.append(LINE_SEP)
 
     ALL_CPV_KWS = consolidate_dupes(ALL_CPV_KWS)
+    if APPEND_SLOTS:
+        ALL_CPV_KWS = append_slots(ALL_CPV_KWS)
 
     for i in prettify(ALL_CPV_KWS):
         print i[0], flatten(i[1])
