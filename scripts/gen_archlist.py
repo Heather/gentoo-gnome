@@ -388,6 +388,16 @@ def consolidate_dupes(cpv_kws):
 
     return deduped_cpv_kws
 
+def get_per_slot_cpvs(cpvs):
+    "Classify the given cpvs into slots, and yield the best atom for each slot"
+    slots = set()
+    for cpv in cpvs:
+        slot = portage.portage.portdb.aux_get(cpv, ['SLOT'])[0]
+        if slot in slots:
+            continue
+        slots.add(slot)
+        yield cpv
+
 def append_slots(cpv_kws):
     "Append slots at the end of cpv atoms"
     slotifyed_cpv_kws = []
@@ -453,32 +463,36 @@ if __name__ == "__main__":
     array = []
 
     for i in open(CP_FILE).readlines():
-        cpv = i[:-1]
-        if cpv.startswith('#') or cpv.isspace() or not cpv:
-            ALL_CPV_KWS.append(cpv)
+        cp = i[:-1]
+        if cp.startswith('#') or cp.isspace() or not cp:
+            ALL_CPV_KWS.append(cp)
             continue
-        if cpv.find('#') is not -1:
+        if cp.find('#') is not -1:
             raise Exception('Inline comments are not supported')
-        if not portage.catpkgsplit(cpv):
-            # It's actually a cp
-            cpv = match_wanted_atoms(cpv, release=NEW_REL)
-            if not cpv or not cpv[0]:
+        if portage.catpkgsplit(cp):
+            # categ/pkg is already a categ/pkg-ver
+            atoms = [cp]
+        else:
+            # Get all the atoms matching the given cp
+            cpvs = match_wanted_atoms(cp, release=NEW_REL)
+
+        for cpv in get_per_slot_cpvs(cpvs):
+            if not cpv:
                 debug('%s: Invalid cpv' % cpv)
                 continue
-            cpv = cpv[0]
-        kws_missing = max_kws(cpv, release=OLD_REL)
-        if kws_missing == []:
-            # Current cpv has the max keywords => nothing to do
-            nothing_to_be_done(cpv)
-            continue
-        elif kws_missing == None:
-            debug ('No versions with stable keywords for %s' % cpv)
-            # No cpv with stable keywords => select latest
-            arches = make_unstable(ARCHES)
-            kws_missing = [kw[1:] for kw in get_kws(cpv, arches)]
-        ALL_CPV_KWS += fix_nesting(gen_cpv_kws(cpv, kws_missing, set()))
-        if CHECK_DEPS:
-            ALL_CPV_KWS.append(LINE_SEP)
+            kws_missing = max_kws(cpv, release=OLD_REL)
+            if kws_missing == []:
+                # Current cpv has the max keywords => nothing to do
+                nothing_to_be_done(cpv)
+                continue
+            elif kws_missing == None:
+                debug ('No versions with stable keywords for %s' % cpv)
+                # No cpv with stable keywords => select latest
+                arches = make_unstable(ARCHES)
+                kws_missing = [kw[1:] for kw in get_kws(cpv, arches)]
+            ALL_CPV_KWS += fix_nesting(gen_cpv_kws(cpv, kws_missing, set()))
+            if CHECK_DEPS:
+                ALL_CPV_KWS.append(LINE_SEP)
 
     ALL_CPV_KWS = consolidate_dupes(ALL_CPV_KWS)
     if APPEND_SLOTS:
