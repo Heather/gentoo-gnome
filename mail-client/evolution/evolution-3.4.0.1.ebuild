@@ -1,6 +1,6 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.32.1-r1.ebuild,v 1.3 2011/01/15 19:56:39 nirbheek Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="no"
@@ -39,7 +39,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.30:2
 	>=dev-libs/libgweather-2.90.0:2
 	>=media-libs/libcanberra-0.25[gtk3]
 	>=x11-libs/libnotify-0.7
-	>=gnome-extra/evolution-data-server-${PV}[gnome-online-accounts?,weather]
+	>=gnome-extra/evolution-data-server-3.4[gnome-online-accounts?,weather]
 	>=gnome-extra/gtkhtml-4.1.2:4.0
 	>=gnome-base/gconf-2:2
 	dev-libs/atk
@@ -80,7 +80,7 @@ DEPEND="${COMMON_DEPEND}
 	>=sys-devel/gettext-0.17
 	sys-devel/bison
 	app-text/scrollkeeper
-	>=app-text/gnome-doc-utils-0.9.1
+	>=app-text/gnome-doc-utils-0.20.10
 	app-text/docbook-xml-dtd:4.1.2
 	>=gnome-base/gnome-common-2.12
 	>=dev-util/gtk-doc-am-1.9
