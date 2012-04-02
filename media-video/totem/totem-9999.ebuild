@@ -20,8 +20,7 @@ HOMEPAGE="http://projects.gnome.org/totem/"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
-IUSE="doc grilo +introspection iplayer lirc nautilus nsplugin +python test vala
-zeitgeist zeroconf"
+IUSE="doc flash grilo +introspection iplayer lirc nautilus nsplugin +python test vala zeitgeist zeroconf"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -63,6 +62,7 @@ RDEPEND=">=dev-libs/glib-2.27.92:2
 	>=x11-libs/libXxf86vm-1.0.1
 	x11-themes/gnome-icon-theme-symbolic
 
+	flash? ( dev-libs/totem-pl-parser[quvi] )
 	grilo? ( >=media-libs/grilo-0.1.16 )
 	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
 	lirc? ( app-misc/lirc )
@@ -102,7 +102,8 @@ DEPEND="${RDEPEND}
 # docbook-xml-dtd is needed for user doc
 
 # see bug #359379
-REQUIRED_USE="python? ( introspection )
+REQUIRED_USE="flash? ( nsplugin )
+	python? ( introspection )
 	zeitgeist? ( vala )"
 
 # XXX: pylint checks fail because of bad code
@@ -110,6 +111,7 @@ RESTRICT="test"
 
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
+	use nsplugin && DOCS="${DOCS} browser-plugin/README.browser-plugin"
 	G2CONF="${G2CONF}
 		--disable-run-in-source-tree
 		--disable-schemas-compile
@@ -117,10 +119,10 @@ pkg_setup() {
 		--disable-static
 		--with-smclient=auto
 		--enable-easy-codec-installation
+		$(use_enable flash vegas-plugin)
 		$(use_enable introspection)
 		$(use_enable nautilus)
 		$(use_enable nsplugin browser-plugins)
-		$(use_enable nsplugin vegas-plugin)
 		$(use_enable python)
 		$(use_enable python introspection)
 		$(use_enable vala)
