@@ -57,9 +57,7 @@ RDEPEND="
 	flickr? ( net-libs/rest:0.7 )
 	gif? ( media-libs/giflib )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-2.26 )
-	gsf? (
-		app-text/odt2txt
-		>=gnome-extra/libgsf-1.13 )
+	gsf? ( >=gnome-extra/libgsf-1.13 )
 	gstreamer? (
 		>=media-libs/gstreamer-0.10.31:0.10
 		upnp? ( >=media-libs/gupnp-dlna-0.5 )
