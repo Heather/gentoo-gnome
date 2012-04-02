@@ -5,7 +5,7 @@
 EAPI="4"
 GCONF_DEBUG="no"
 
-inherit eutils gnome2 bash-completion-r1
+inherit gnome2 bash-completion-r1
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -38,13 +38,8 @@ fi
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-schemas-compile
-		VALAC=$(type -p false)
-		$(use_enable X editor)"
-
-	if [[ ${PV} = 9999 ]]; then
-		G2CONF="${G2CONF}
-			VALAC=$(type -p valac-0.16)"
-	fi
+		$(use_enable X editor)
+		VALAC=$(type -P valac-0.16)" # harmless even if valac-0.16 not found
 }
 
 src_install() {
