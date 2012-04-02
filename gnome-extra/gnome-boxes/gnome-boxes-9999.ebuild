@@ -33,7 +33,7 @@ RDEPEND="
 	>=sys-libs/libosinfo-0.0.6
 	app-emulation/qemu-kvm[spice]
 	>=app-emulation/libvirt-0.9.3[libvirtd,qemu]
-	>=app-emulation/libvirt-glib-0.0.6
+	>=app-emulation/libvirt-glib-0.0.7
 	>=x11-libs/gtk+-3.3.5:3
 	>=net-libs/gtk-vnc-0.4.4[gtk3]
 	>=net-misc/spice-gtk-0.9[gtk3]
