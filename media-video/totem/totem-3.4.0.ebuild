@@ -104,7 +104,7 @@ DEPEND="${RDEPEND}
 # see bug #359379
 REQUIRED_USE="flash? ( nsplugin )
 	python? ( introspection )
-	zeitgeist? ( vala )"
+	zeitgeist? ( introspection vala )"
 
 # XXX: pylint checks fail because of bad code
 RESTRICT="test"
