@@ -17,9 +17,7 @@ HOMEPAGE="http://live.gnome.org/GnomeShell"
 
 LICENSE="GPL-2"
 SLOT="0"
-# TODO: reinstate this
-#IUSE="+bluetooth +networkmanager"
-IUSE=""
+IUSE="+bluetooth +networkmanager"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -41,6 +39,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.31.6:2
 	>=gnome-base/gsettings-desktop-schemas-2.91.91
 	>=gnome-base/gnome-keyring-3.3.90
 	>=gnome-base/gnome-menus-2.29.10:3[introspection]
+	gnome-base/libgnome-keyring
 	>=gnome-extra/evolution-data-server-2.91.6
 	>=media-libs/gstreamer-0.10.16:0.10
 	>=media-libs/gst-plugins-base-0.10.16:0.10
@@ -64,14 +63,9 @@ COMMON_DEPEND=">=dev-libs/glib-2.31.6:2
 	x11-libs/pango[introspection]
 	x11-apps/mesa-progs
 
-	>=net-wireless/gnome-bluetooth-3.1.0[introspection]
-	gnome-base/libgnome-keyring
-	>=net-misc/networkmanager-0.8.999[introspection]
+	bluetooth? ( >=net-wireless/gnome-bluetooth-3.1.0[introspection] )
+	networkmanager? ( >=net-misc/networkmanager-0.8.999[introspection] )
 "
-#	bluetooth? ( >=net-wireless/gnome-bluetooth-3.1.0[introspection] )
-#	networkmanager? (
-#		gnome-base/libgnome-keyring
-#		>=net-misc/networkmanager-0.8.999[introspection] )"
 # Runtime-only deps are probably incomplete and approximate.
 # Each block:
 # 1. Pull in polkit-0.101 for pretty authorization dialogs
@@ -104,12 +98,10 @@ RDEPEND="${COMMON_DEPEND}
 
 	x11-themes/gnome-icon-theme-symbolic
 
-	net-misc/mobile-broadband-provider-info
-	sys-libs/timezone-data
+	networkmanager? (
+		net-misc/mobile-broadband-provider-info
+		sys-libs/timezone-data )
 "
-#	networkmanager? (
-#		net-misc/mobile-broadband-provider-info
-#		sys-libs/timezone-data )"
 DEPEND="${COMMON_DEPEND}
 	>=sys-devel/gettext-0.17
 	>=dev-util/pkgconfig-0.22
@@ -126,6 +118,8 @@ pkg_setup() {
 		--enable-compile-warnings=maximum
 		--disable-schemas-compile
 		--disable-jhbuild-wrapper-script
+		$(use_with bluetooth)
+		$(use_enable networkmanager)
 		--with-ca-certificates=${EPREFIX}/etc/ssl/certs/ca-certificates.crt
 		BROWSER_PLUGIN_DIR=${EPREFIX}/usr/$(get_libdir)/nsbrowser/plugins
 		--without-systemd"
@@ -136,12 +130,12 @@ pkg_setup() {
 
 src_prepare() {
 	# Fix automagic gnome-bluetooth dep, bug #398145
-	#epatch "${FILESDIR}/${PN}-3.4.0-automagic-gnome-bluetooth.patch"
+	epatch "${FILESDIR}/${PN}-3.2.1-automagic-gnome-bluetooth.patch"
 
 	# Make networkmanager optional, bug #398593
-	#epatch "${FILESDIR}/${PN}-3.4.0-optional-networkmanager.patch"
+	epatch "${FILESDIR}/${PN}-3.4.0-optional-networkmanager.patch"
 
-	#[[ ${PV} != 9999 ]] && eautoreconf
+	[[ ${PV} != 9999 ]] && eautoreconf
 	gnome2_src_prepare
 
 	# Drop G_DISABLE_DEPRECATED for sanity on glib upgrades; bug #384765
