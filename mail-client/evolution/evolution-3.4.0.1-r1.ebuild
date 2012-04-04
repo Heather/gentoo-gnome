@@ -7,7 +7,7 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="python? 2:2.5"
 
-inherit autotools eutils flag-o-matic gnome2 python
+inherit eutils flag-o-matic gnome2 python
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -149,6 +149,9 @@ src_prepare() {
 	sed -e "s:@EPREFIX@:${EPREFIX}:g" \
 		-i data/org.gnome.evolution.spamassassin.gschema.xml.in \
 		-i modules/spamassassin/evolution-spamassassin.c || die "sed failed"
+
+	# Upstream patch to fix spam auto-detection
+	epatch "${FILESDIR}/${P}-spam-detection.patch"
 
 	gnome2_src_prepare
 
