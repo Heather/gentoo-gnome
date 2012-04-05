@@ -170,7 +170,7 @@ src_configure() {
 src_compile() {
 	# Horrible failure of a hack to work around parallel make problems,
 	# see https://bugs.webkit.org/show_bug.cgi?id=79498
-	emake all-built-sources-local
+	emake -j1 all-built-sources-local
 	emake all-ltlibraries-local
 	emake all-programs-local
 	use introspection && emake WebKit-3.0.gir
