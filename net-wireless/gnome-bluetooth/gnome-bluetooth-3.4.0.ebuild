@@ -71,13 +71,6 @@ pkg_setup() {
 	enewgroup plugdev
 }
 
-src_prepare() {
-	# Fix make install, is in next release
-	epatch "${FILESDIR}/${P}-fix-makefile.patch"
-
-	eautoreconf
-}
-
 src_install() {
 	gnome2_src_install
 
