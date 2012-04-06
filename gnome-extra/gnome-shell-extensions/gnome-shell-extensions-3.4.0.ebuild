@@ -14,9 +14,7 @@ fi
 DESCRIPTION="JavaScript extensions for GNOME Shell"
 HOMEPAGE="http://live.gnome.org/GnomeShell/Extensions"
 # Tarball not available from upstream website
-if [[ ${PV} != 9999 ]]; then
-	SRC_URI="http://dev.gentoo.org/~tetromino/distfiles/${PN}/${P}.tar.xz"
-fi
+SRC_URI="http://dev.gentoo.org/~tetromino/distfiles/${PN}/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
