@@ -21,8 +21,7 @@ if [[ ${PV} = 9999 ]]; then
 else
 	KEYWORDS="~amd64 ~arm ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 fi
-IUSE="+colord +cups debug packagekit policykit +short-touchpad-timeout smartcard
-+udev" #wacom
+IUSE="+colord +cups debug packagekit policykit +short-touchpad-timeout smartcard systemd +udev wacom"
 
 # colord-0.1.13 needed to avoid polkit errors in CreateProfile and CreateDevice
 COMMON_DEPEND="
@@ -57,9 +56,10 @@ COMMON_DEPEND="
 	smartcard? (
 		sys-fs/udev[gudev] 
 		>=dev-libs/nss-3.11.2 )
-	udev? ( sys-fs/udev[gudev] )"
-# Needs libwacom
-#	wacom? ( x11-drivers/xf86-input-wacom )"
+	systemd? ( >=sys-apps/systemd-31 )
+	udev? ( sys-fs/udev[gudev] )
+	wacom? ( >=dev-libs/libwacom-0.3
+		x11-drivers/xf86-input-wacom )"
 # Themes needed by g-s-d, gnome-shell, gtk+:3 apps to work properly
 # <gnome-color-manager-3.1.1 has file collisions with g-s-d-3.1.x
 # <gnome-power-manager-3.1.3 has file collisions with g-s-d-3.1.x
@@ -70,7 +70,9 @@ RDEPEND="${COMMON_DEPEND}
 	>=x11-themes/gnome-icon-theme-symbolic-2.91
 	!<gnome-base/gnome-control-center-2.22
 	!<gnome-extra/gnome-color-manager-3.1.1
-	!<gnome-extra/gnome-power-manager-3.1.3"
+	!<gnome-extra/gnome-power-manager-3.1.3
+
+	!systemd? ( sys-auth/consolekit )"
 # xproto-7.0.15 needed for power plugin
 DEPEND="${COMMON_DEPEND}
 	cups? ( sys-apps/sed )
@@ -89,16 +91,15 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-static
 		--disable-schemas-compile
-		--disable-systemd
 		$(use_enable colord color)
 		$(use_enable cups)
 		$(use_enable debug)
 		$(use_enable debug more-warnings)
 		$(use_enable packagekit)
 		$(use_enable smartcard smartcard-support)
-		$(use_enable udev gudev)"
-		# TODO: libwacom is needem
-		#$(use_enable wacom)
+		$(use_enable systemd)
+		$(use_enable udev gudev)
+		$(use_enable wacom)"
 }
 
 src_prepare() {
@@ -110,7 +111,7 @@ src_prepare() {
 		epatch "${FILESDIR}/${PN}-3.0.2-short-touchpad-timeout.patch"
 
 	# Make colord and wacom optional; requires eautoreconf
-	epatch "${FILESDIR}/${PN}-3.3.92-optional-color-wacom.patch"
+	epatch "${FILESDIR}/${PN}-3.4.0-optional-color-wacom.patch"
 
 	eautoreconf
 

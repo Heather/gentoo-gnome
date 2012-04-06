@@ -12,14 +12,14 @@ diff -Naur gnome-settings-daemon-3.3.92//configure.ac gnome-settings-daemon-3.3.
 +       [with_color=$enableval],
 +       [with_color=yes]) dnl Default value
 +
-+if test x$WANT_COLOR = xyes; then
++if test x$with_color = xyes; then
 +       PKG_CHECK_MODULES(COLOR, [colord >= 0.1.9 gnome-desktop-3.0 >= $GNOME_DESKTOP_REQUIRED_VERSION libcanberra-gtk3])
-+       AC_DEFINE(HAVE_WACOM, 1, [Define if wacom plugin is enabled])
++       AC_DEFINE(HAVE_COLOR, 1, [Define if wacom plugin is enabled])
 +fi
-+AM_CONDITIONAL(WITH_COLOR, test "x$with_color" = "xtrue")
++AM_CONDITIONAL(WITH_COLOR, test "x$with_color" = "xyes")
 +
-+AC_SUBST(COLORD_CFLAGS)
-+AC_SUBST(COLORD_LIBS)
++AC_SUBST(COLOR_CFLAGS)
++AC_SUBST(COLOR_LIBS)
  
  dnl ---------------------------------------------------------------------------
  dnl - wacom
@@ -36,7 +36,7 @@ diff -Naur gnome-settings-daemon-3.3.92//configure.ac gnome-settings-daemon-3.3.
 +       PKG_CHECK_MODULES(WACOM, [libwacom >= $LIBWACOM_REQUIRED_VERSION x11 xi xtst $GUDEV_PKG gnome-desktop-3.0 >= $GNOME_DESKTOP_REQUIRED_VERSION xorg-wacom])
 +       AC_DEFINE(HAVE_WACOM, 1, [Define if wacom plugin is enabled])
 +fi
-+AM_CONDITIONAL(WITH_WACOM, test "x$with_wacom" = "xtrue")
++AM_CONDITIONAL(WITH_WACOM, test "x$with_wacom" = "xyes")
 +
 +AC_SUBST(WACOM_CFLAGS)
 +AC_SUBST(WACOM_LIBS)
