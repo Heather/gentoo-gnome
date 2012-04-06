@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/webkit-gtk/webkit-gtk-1.6.1-r200.ebuild,v 1.1 2011/09/30 13:52:33 nirbheek Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/webkit-gtk/webkit-gtk-1.6.1-r300.ebuild,v 1.1 2011/09/30 13:52:33 nirbheek Exp $
 
 EAPI="4"
 
@@ -10,20 +10,21 @@ inherit autotools eutils flag-o-matic gnome2-utils pax-utils python virtualx
 MY_P="webkit-${PV}"
 DESCRIPTION="Open source web browser engine"
 HOMEPAGE="http://www.webkitgtk.org/"
-SRC_URI="http://www.webkitgtk.org/${MY_P}.tar.xz"
+SRC_URI="http://www.webkitgtk.org/releases/${MY_P}.tar.xz"
 #SRC_URI="mirror://gentoo/${P}.tar.xz"
 
 LICENSE="LGPL-2 LGPL-2.1 BSD"
-SLOT="2"
-KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd
-~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-macos"
+SLOT="3"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-macos"
 # geoclue
-IUSE="aqua coverage debug +geoloc +gstreamer +introspection +jit spell +webgl"
+IUSE="aqua coverage debug doc +geoloc +gstreamer +introspection +jit spell +webgl webkit2"
 # bug 372493
 REQUIRED_USE="introspection? ( gstreamer )"
 
 # use sqlite, svg by default
 # dependency on >=x11-libs/gtk+-2.13:2 for gail
+# Aqua support in gtk3 is untested
+# gtk2 is needed for plugin process support
 RDEPEND="
 	dev-libs/libxml2:2
 	dev-libs/libxslt
@@ -31,9 +32,9 @@ RDEPEND="
 	>=media-libs/libpng-1.4:0
 	>=x11-libs/cairo-1.10
 	>=dev-libs/glib-2.31.2:2
-	>=x11-libs/gtk+-2.13:2[aqua=,introspection?]
+	>=x11-libs/gtk+-3.0:3[aqua=,introspection?]
 	>=dev-libs/icu-3.8.1-r1
-	>=net-libs/libsoup-2.33.6:2.4[introspection?]
+	>=net-libs/libsoup-2.37.2.1:2.4[introspection?]
 	dev-db/sqlite:3
 	>=x11-libs/pango-1.21
 	x11-libs/libXrender
@@ -49,6 +50,8 @@ RDEPEND="
 	spell? ( >=app-text/enchant-0.22 )
 
 	webgl? ( virtual/opengl )
+
+	webkit2? ( >=x11-libs/gtk+-2.13:2 )
 "
 # paxctl needed for bug #407085
 DEPEND="${RDEPEND}
@@ -60,9 +63,12 @@ DEPEND="${RDEPEND}
 	dev-util/gperf
 	dev-util/pkgconfig
 	dev-util/gtk-doc-am
+	doc? ( >=dev-util/gtk-doc-1.10 )
 	introspection? ( jit? ( sys-apps/paxctl ) )
-	test? ( x11-themes/hicolor-icon-theme
+	test? (
+		x11-themes/hicolor-icon-theme
 		jit? ( sys-apps/paxctl ) )
+	webkit2? ( app-accessibility/at-spi2-core )
 "
 # Need real bison, not yacc
 
@@ -81,6 +87,9 @@ src_prepare() {
 	# https://bugs.webkit.org/show_bug.cgi?id=19775
 	# TODO: FAILS TO APPLY!
 	#use sparc && epatch "${FILESDIR}"/${PN}-1.2.3-fix-pool-sparc.patch
+
+	# CVE-2011-3064, https://bugzilla.redhat.com/show_bug.cgi?id=807596
+	epatch "${FILESDIR}/${P}-svgimagebuffer-clip.patch"
 
 	# intermediate MacPorts hack while upstream bug is not fixed properly
 	# https://bugs.webkit.org/show_bug.cgi?id=28727
@@ -127,6 +136,10 @@ src_prepare() {
 
 	# Prevent maintainer mode from being triggered during make
 	AT_M4DIR=Source/autotools eautoreconf
+
+	# Ugly hack of a workaround for paludis braindamage, bug #406117
+	# http://paludis.exherbo.org/trac/ticket/1230
+	sed -e '/  --\(en\|dis\)able-dependency-tracking/ d' -i configure || die
 }
 
 src_configure() {
@@ -143,24 +156,23 @@ src_configure() {
 
 	# XXX: Check Web Audio support
 	# XXX: dependency-tracking is required so parallel builds won't fail
-	# WebKit2 can only be built with gtk3
-	# API documentation (gtk-doc) is built in webkit-gtk:3, always disable here
 	myconf="
 		$(use_enable coverage)
 		$(use_enable debug)
 		$(use_enable debug debug-features)
+		$(use_enable doc gtk-doc)
 		$(use_enable geoloc geolocation)
 		$(use_enable spell spellcheck)
 		$(use_enable introspection)
 		$(use_enable gstreamer video)
 		$(use_enable jit)
 		$(use_enable webgl)
+		$(use_enable webkit2)
 		--enable-web-sockets
-		--with-gtk=2.0
-		--disable-gtk-doc
-		--disable-webkit2
+		--with-gtk=3.0
 		--enable-dependency-tracking
 		$(use aqua && echo "--with-font-backend=pango --with-target=quartz")"
+		# Aqua support in gtk3 is untested
 
 	econf ${myconf}
 }
@@ -171,7 +183,7 @@ src_compile() {
 	emake -j1 all-built-sources-local
 	emake all-ltlibraries-local
 	emake all-programs-local
-	use introspection && emake WebKit-1.0.gir
+	use introspection && emake WebKit-3.0.gir
 	emake all-data-local
 	default
 }
@@ -179,6 +191,7 @@ src_compile() {
 src_test() {
 	# Tests expect an out-of-source build in WebKitBuild
 	ln -s . WebKitBuild || die "ln failed"
+
 	# Prevents test failures on PaX systems
 	use jit && pax-mark m $(list-paxables Programs/unittests/test*) \
 		Programs/unittests/.libs/test*
@@ -200,9 +213,5 @@ src_install() {
 	find "${D}" -name '*.la' -exec rm -f '{}' +
 
 	# Prevents crashes on PaX systems
-	use jit && pax-mark m "${ED}usr/bin/jsc-1"
-
-	# File collisions with slot 3
-	# bug #402699, https://bugs.webkit.org/show_bug.cgi?id=78134
-	rm -rf "${ED}usr/share/gtk-doc" || die
+	use jit && pax-mark m "${ED}usr/bin/jsc-3"
 }
