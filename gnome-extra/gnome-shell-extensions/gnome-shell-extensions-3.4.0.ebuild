@@ -14,7 +14,9 @@ fi
 DESCRIPTION="JavaScript extensions for GNOME Shell"
 HOMEPAGE="http://live.gnome.org/GnomeShell/Extensions"
 # Tarball not available from upstream website
-SRC_URI="http://dev.gentoo.org/~tetromino/distfiles/${PN}/${P}.tar.xz"
+if [[ ${PV} != 9999 ]]; then
+	SRC_URI="http://dev.gentoo.org/~tetromino/distfiles/${PN}/${P}.tar.xz"
+fi
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -33,7 +35,7 @@ COMMON_DEPEND="
 RDEPEND="${COMMON_DEPEND}
 	>=dev-libs/gjs-1.29
 	dev-libs/gobject-introspection
-	>=gnome-base/gnome-shell-3.4
+	>=gnome-base/gnome-shell-3.4.0-r1
 	media-libs/clutter:1.0[introspection]
 	net-libs/telepathy-glib[introspection]
 	x11-libs/gtk+:3[introspection]
