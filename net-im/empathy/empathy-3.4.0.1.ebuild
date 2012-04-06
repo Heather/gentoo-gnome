@@ -48,7 +48,7 @@ RDEPEND=">=dev-libs/glib-2.30:2
 	>=media-libs/clutter-gst-1.5.2:1.0
 
 	>=net-libs/telepathy-glib-0.17.5
-	>=net-im/telepathy-logger-0.2.8
+	>=net-im/telepathy-logger-0.2.13
 	>=net-libs/telepathy-farstream-0.2.1
 	net-im/telepathy-connection-managers
 
