@@ -16,7 +16,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2"
 SLOT="2"
-IUSE="+bluetooth +cheese +colord +cups +networkmanager +socialweb"
+IUSE="+bluetooth +cheese +colord +cups +networkmanager +socialweb wacom"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -67,13 +67,16 @@ COMMON_DEPEND="
 	networkmanager? (
 		>=gnome-extra/nm-applet-0.9.1.90
 		>=net-misc/networkmanager-0.8.997 )
-	socialweb? ( net-libs/libsocialweb )"
+	socialweb? ( net-libs/libsocialweb )
+	wacom? ( >=dev-libs/libwacom-0.3
+		x11-libs/libXi )"
 # <gnome-color-manager-3.1.2 has file collisions with g-c-c-3.1.x
 RDEPEND="${COMMON_DEPEND}
 	app-admin/apg
 	sys-apps/accountsservice
 	x11-themes/gnome-icon-theme-symbolic
 	cups? ( net-print/cups-pk-helper )
+	wacom? ( gnome-base/gnome-settings-daemon[wacom] )
 
 	!<gnome-base/gdm-2.91.94
 	!<gnome-extra/gnome-color-manager-3.1.2
@@ -109,7 +112,8 @@ pkg_setup() {
 		$(use_with cheese)
 		$(use_enable colord color)
 		$(use_enable cups)
-		$(use_with socialweb libsocialweb)"
+		$(use_with socialweb libsocialweb)
+		$(use_enable wacom)"
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
 }
 
