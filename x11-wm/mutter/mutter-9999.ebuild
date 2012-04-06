@@ -3,7 +3,6 @@
 # $Header: $
 
 EAPI="4"
-GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2
@@ -27,7 +26,6 @@ COMMON_DEPEND=">=x11-libs/pango-1.2[X,introspection?]
 	>=x11-libs/cairo-1.10[X]
 	x11-libs/gdk-pixbuf:2
 	>=x11-libs/gtk+-3.3.7:3[introspection?]
-	>=gnome-base/gconf-2:2
 	>=dev-libs/glib-2.25.11:2
 	>=media-libs/clutter-1.9.10:1.0
 	>=media-libs/cogl-1.9.6:1.0
@@ -67,7 +65,6 @@ pkg_setup() {
 	DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README *.txt doc/*.txt"
 	G2CONF="${G2CONF}
 		--disable-static
-		--enable-gconf
 		--enable-shape
 		--enable-sm
 		--enable-startup-notification
