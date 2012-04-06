@@ -135,6 +135,10 @@ src_prepare() {
 	# Make networkmanager optional, bug #398593
 	epatch "${FILESDIR}/${PN}-3.4.0-optional-networkmanager.patch"
 
+	# Force /usr/bin/gnome-shell to link to libgnome-shell-js; fixes extensions
+	# https://bugzilla.gnome.org/show_bug.cgi?id=670477
+	epatch "${FILESDIR}/${PN}-3.4.0-libgnome-shell-js.so-link"-{1,2}.patch
+
 	[[ ${PV} != 9999 ]] && eautoreconf
 	gnome2_src_prepare
 
