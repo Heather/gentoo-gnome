@@ -1,13 +1,16 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libpeas/libpeas-1.2.0-r1.ebuild,v 1.2 2011/12/01 17:31:42 darkside Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="python? 2:2.5"
 
-inherit eutils gnome2 python virtualx
+inherit eutils gnome2 multilib python virtualx
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="A GObject plugins library"
 HOMEPAGE="http://www.gnome.org/"
@@ -15,7 +18,11 @@ HOMEPAGE="http://www.gnome.org/"
 LICENSE="LGPL-2"
 SLOT="0"
 IUSE="doc gjs +gtk glade +python seed vala"
-KEYWORDS="~amd64 ~x86 ~x86-freebsd ~x86-interix ~amd64-linux ~ia64-linux ~x86-linux"
+if [[ ${PV} = 9999 ]]; then
+	KEYWORDS=""
+else
+	KEYWORDS="~amd64 ~x86 ~x86-freebsd ~x86-interix ~amd64-linux ~ia64-linux ~x86-linux"
+fi
 
 RDEPEND=">=dev-libs/glib-2.31.2:2
 	>=dev-libs/gobject-introspection-0.10.1
@@ -50,6 +57,11 @@ pkg_setup() {
 	python_pkg_setup
 }
 
+src_prepare() {
+	use python && python_clean_py-compile_files
+	gnome2_src_prepare
+}
+
 src_test() {
 	# FIXME: Tests fail because of some bug involving Xvfb and Gtk.IconTheme
 	# DO NOT REPORT UPSTREAM, this is not a libpeas bug.
@@ -58,4 +70,14 @@ src_test() {
 	# >>> Gtk.IconTheme.get_default().has_icon("gtk-about")
 	# This should return True, it returns False for Xvfb
 	Xemake check
+}
+
+pkg_postinst() {
+	gnome2_pkg_postinst
+	use python && python_mod_optimize /usr/$(get_libdir)/peas-demo
+}
+
+pkg_postrm() {
+	gnome2_pkg_postrm
+	use python && python_mod_cleanup /usr/$(get_libdir)/peas-demo
 }

@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -7,7 +7,7 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="python? 2:2.5"
 
-inherit gnome2 python virtualx
+inherit eutils gnome2 multilib python virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -57,6 +57,11 @@ pkg_setup() {
 	python_pkg_setup
 }
 
+src_prepare() {
+	use python && python_clean_py-compile_files
+	gnome2_src_prepare
+}
+
 src_test() {
 	# FIXME: Tests fail because of some bug involving Xvfb and Gtk.IconTheme
 	# DO NOT REPORT UPSTREAM, this is not a libpeas bug.
@@ -65,4 +70,14 @@ src_test() {
 	# >>> Gtk.IconTheme.get_default().has_icon("gtk-about")
 	# This should return True, it returns False for Xvfb
 	Xemake check
+}
+
+pkg_postinst() {
+	gnome2_pkg_postinst
+	use python && python_mod_optimize /usr/$(get_libdir)/peas-demo
+}
+
+pkg_postrm() {
+	gnome2_pkg_postrm
+	use python && python_mod_cleanup /usr/$(get_libdir)/peas-demo
 }
