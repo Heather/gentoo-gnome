@@ -32,7 +32,6 @@ COMMON_DEPEND="
 	>=x11-libs/gtk+-3.3.11:3[introspection?]
 
 	>=media-libs/libcanberra-0.26[gtk3]
-	x11-libs/libSM
 
 	artworkextra? ( >=gnome-extra/gnome-games-extra-data-3.0.0 )
 	clutter? (
@@ -97,7 +96,6 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--with-scores-group=${GAMES_GROUP}
 		--with-platform=gnome
-		--with-smclient
 		--enable-omitgames=none" # This line should be last for _omitgame
 
 	# FIXME: Use REQUIRED_USE once games.eclass is ported to EAPI 4
