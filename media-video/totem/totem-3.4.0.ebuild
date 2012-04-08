@@ -127,7 +127,10 @@ pkg_setup() {
 		$(use_enable python introspection)
 		$(use_enable vala)
 		VALAC=$(type -P valac-0.14)
-		BROWSER_PLUGIN_DIR=/usr/$(get_libdir)/nsbrowser/plugins"
+		BROWSER_PLUGIN_DIR=/usr/$(get_libdir)/nsbrowser/plugins
+		DISPLAY=999invalid"
+	# Fake DISPLAY to work around sandbox violations when FEATURES=-userpriv
+	# caused by gst-inspect-0.10 (bug #385917)
 
 	if ! use test; then
 		# pylint is checked unconditionally, but is only used for make check
