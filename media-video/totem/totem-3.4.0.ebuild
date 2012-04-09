@@ -130,7 +130,7 @@ pkg_setup() {
 		BROWSER_PLUGIN_DIR=/usr/$(get_libdir)/nsbrowser/plugins
 		DISPLAY=999invalid"
 	# Fake DISPLAY to work around sandbox violations when FEATURES=-userpriv
-	# caused by gst-inspect-0.10 (bug #385917)
+	# caused by gst-inspect-0.10 (bug #358755)
 
 	if ! use test; then
 		# pylint is checked unconditionally, but is only used for make check
