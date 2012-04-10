@@ -127,10 +127,7 @@ pkg_setup() {
 		$(use_enable python introspection)
 		$(use_enable vala)
 		VALAC=$(type -P valac-0.14)
-		BROWSER_PLUGIN_DIR=/usr/$(get_libdir)/nsbrowser/plugins
-		DISPLAY=999invalid"
-	# Fake DISPLAY to work around sandbox violations when FEATURES=-userpriv
-	# caused by gst-inspect-0.10 (bug #358755)
+		BROWSER_PLUGIN_DIR=/usr/$(get_libdir)/nsbrowser/plugins"
 
 	if ! use test; then
 		# pylint is checked unconditionally, but is only used for make check
@@ -169,6 +166,13 @@ src_prepare() {
 	use python && python_clean_py-compile_files
 
 	gnome2_src_prepare
+}
+
+src_configure() {
+	# Work around sandbox violations when FEATURES=-userpriv caused by
+	# gst-inspect-0.10 (bug #358755)
+	unset DISPLAY
+	gnome2_src_configure
 }
 
 pkg_postinst() {
