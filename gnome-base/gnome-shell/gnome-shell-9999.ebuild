@@ -27,7 +27,8 @@ fi
 # gnome-desktop-2.91.2 is needed due to header changes, db82a33 in gnome-desktop
 # latest g-c-c is needed due to https://bugs.gentoo.org/show_bug.cgi?id=360057
 # libXfixes-5.0 needed for pointer barriers
-COMMON_DEPEND=">=dev-libs/glib-2.31.6:2
+COMMON_DEPEND=">=app-crypt/gcr-3.3.90
+	>=dev-libs/glib-2.31.6:2
 	>=dev-libs/gjs-1.31.22
 	>=dev-libs/gobject-introspection-0.10.1
 	>=x11-libs/gtk+-3.3.9:3[introspection]
