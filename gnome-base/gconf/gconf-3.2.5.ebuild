@@ -23,8 +23,7 @@ if [[ ${PV} = 9999 ]]; then
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 fi
-IUSE="debug doc +introspection ldap +orbit policykit"
-# orbit IPC is default for now (dbus IPC is somewhat experimental)
+IUSE="debug doc +introspection ldap orbit policykit"
 
 RDEPEND=">=dev-libs/glib-2.31:2
 	>=x11-libs/gtk+-2.90:3
