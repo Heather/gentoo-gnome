@@ -92,6 +92,13 @@ src_compile() {
 	gnome2_src_compile
 }
 
+src_configure() {
+	# Work around sandbox violations when FEATURES=-userpriv caused by
+	# gst-inspect-0.10 (bug #410061)
+	unset DISPLAY
+	gnome2_src_configure
+}
+
 src_test() {
 	Xemake check
 }
