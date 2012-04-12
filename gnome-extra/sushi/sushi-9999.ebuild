@@ -39,7 +39,7 @@ COMMON_DEPEND=">=x11-libs/gdk-pixbuf-2.22.1[introspection]
 	media-libs/gstreamer:0.10[introspection]
 	media-libs/gst-plugins-base:0.10[introspection]
 	media-libs/clutter-gst:1.0[introspection]
-	media-libs/musicbrainz:3
+	media-libs/musicbrainz:4
 	net-libs/webkit-gtk:3[introspection]
 	x11-libs/gtksourceview:3.0[introspection]
 	x11-libs/libX11
