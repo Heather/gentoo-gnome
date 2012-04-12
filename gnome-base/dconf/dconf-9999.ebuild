@@ -32,7 +32,7 @@ DEPEND="${RDEPEND}
 if [[ ${PV} = 9999 ]]; then
 	DEPEND="${DEPEND}
 		dev-util/gtk-doc-am
-		>=dev-lang/vala-0.15.1:0.16 )"
+		>=dev-lang/vala-0.15.1:0.16"
 fi
 
 pkg_setup() {
