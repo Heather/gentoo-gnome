@@ -1,6 +1,6 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-terms/gnome-terminal/gnome-terminal-2.32.1.ebuild,v 1.1 2010/11/19 22:17:31 pacho Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="no"
@@ -22,8 +22,9 @@ else
 fi
 IUSE=""
 
+# FIXME: automagic dependency on gtk+[X]
 RDEPEND=">=dev-libs/glib-2.26.0:2
-	>=x11-libs/gtk+-3.0:3
+	>=x11-libs/gtk+-3.3.17:3[X]
 	>=x11-libs/vte-0.30.0:2.90
 	>=gnome-base/gconf-2.31.3
 	>=gnome-base/gsettings-desktop-schemas-0.1.0
@@ -31,7 +32,7 @@ RDEPEND=">=dev-libs/glib-2.26.0:2
 	x11-libs/libICE"
 # gtk+:2 needed for gtk-builder-convert, bug 356239
 DEPEND="${RDEPEND}
-	x11-libs/gtk+:2
+	|| ( dev-util/gtk-builder-convert <=x11-libs/gtk+-2.24.10:2 )
 	>=dev-util/intltool-0.40
 	>=dev-util/pkgconfig-0.9
 	>=app-text/gnome-doc-utils-0.3.2
