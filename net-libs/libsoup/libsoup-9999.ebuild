@@ -59,8 +59,6 @@ src_configure() {
 }
 
 src_prepare() {
-	gnome2_src_prepare
-
 	if [[ ${PV} = 9999 ]]; then
 		# prevent SOUP_MAINTAINER_FLAGS from getting set
 		mv .git .git-bck || die
@@ -76,6 +74,8 @@ src_prepare() {
 	if use doc; then
 		# Fix bug 268592 (upstream #573685) (build fails without gnome && doc)
 		epatch "${FILESDIR}/${PN}-2.34.2-fix-build-without-gnome-with-doc.patch"
-		eautoreconf
+		[[ ${PV} != 9999 ]] && eautoreconf
 	fi
+
+	gnome2_src_prepare
 }
