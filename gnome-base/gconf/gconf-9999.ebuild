@@ -35,6 +35,7 @@ RDEPEND=">=dev-libs/glib-2.31:2
 	orbit? ( >=gnome-base/orbit-2.4:2 )
 	policykit? ( sys-auth/polkit )"
 DEPEND="${RDEPEND}
+	dev-libs/libxslt
 	>=dev-util/intltool-0.35
 	>=dev-util/pkgconfig-0.9
 	doc? ( >=dev-util/gtk-doc-1 )"
@@ -92,6 +93,15 @@ pkg_postinst() {
 
 	einfo "changing permissions for gconf files"
 	find  /etc/gconf/ -type f -exec chmod ugo+r "{}" \;
+
+	if ! use orbit; then
+		ewarn "You are using dbus for GConf's IPC. If you are upgrading from"
+		ewarn "<=gconf-3.2.3, or were previously using gconf with USE=orbit,"
+		ewarn "you will need to now restart your desktop session (for example,"
+		ewarn "by logging out and then back in)."
+		ewarn "Otherwise, gconf-based applications may crash with 'Method ..."
+		ewarn "on interface \"org.gnome.GConf.Server\" doesn't exist' errors."
+	fi
 }
 
 kill_gconf() {
