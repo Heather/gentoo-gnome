@@ -57,9 +57,8 @@ src_configure() {
 }
 
 src_prepare() {
-	gnome2_src_prepare
-
 	# Use lib present on the system
 	epatch "${FILESDIR}"/${PN}-system-lib.patch
-	eautoreconf
+	[[ ${PV} != 9999 ]] && eautoreconf
+	gnome2_src_prepare
 }
