@@ -15,7 +15,7 @@ HOMEPAGE="http://projects.gnome.org/epiphany/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="avahi doc +introspection +nss test"
+IUSE="avahi doc +introspection +jit +nss test"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -45,6 +45,7 @@ RDEPEND="
 
 	avahi? ( >=net-dns/avahi-0.6.22 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
+	!jit? ( net-libs/webkit-gtk[-jit] )
 	nss? ( dev-libs/nss )"
 # paxctl needed for bug #407085
 DEPEND="${RDEPEND}
@@ -70,10 +71,13 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# Build-time segfaults under PaX with USE=introspection
-	epatch "${FILESDIR}/${PN}-3.3.90-paxctl-introspection.patch"
-	cp "${FILESDIR}/paxctl.sh" "${S}/" || die
-	eautoreconf
+	# Build-time segfaults under PaX with USE=introspection when building
+	# against webkit-gtk[introspection,jit]
+	if use introspection && use jit; then
+		epatch "${FILESDIR}/${PN}-3.3.90-paxctl-introspection.patch"
+		cp "${FILESDIR}/paxctl.sh" "${S}/" || die
+		[[ ${PV} != 9999 ]] && eautoreconf
+	fi
 	gnome2_src_prepare
 }
 
@@ -86,5 +90,5 @@ src_test() {
 
 src_install() {
 	gnome2_src_install
-	pax-mark m "${ED}usr/bin/epiphany"
+	use jit && pax-mark m "${ED}usr/bin/epiphany"
 }
