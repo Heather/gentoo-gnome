@@ -25,15 +25,15 @@ fi
 
 IUSE="doc doctool test"
 
-RDEPEND=">=dev-libs/glib-2.29.7:2
+RDEPEND=">=dev-libs/gobject-introspection-common-${PV}
+	>=dev-libs/glib-2.31.22:2
 	doctool? ( dev-python/mako )
 	virtual/libffi"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	sys-devel/bison
 	sys-devel/flex
-	doc? ( >=dev-util/gtk-doc-1.15 )
-	test? ( x11-libs/cairo )"
+	doc? ( >=dev-util/gtk-doc-1.15 )"
 # PDEPEND to avoid circular dependencies, bug #391213
 PDEPEND="x11-libs/cairo[glib]"
 
@@ -82,6 +82,11 @@ src_install() {
 	gnome2_src_install
 	python_convert_shebangs 2 "${ED}"usr/bin/g-ir-{annotation-tool,scanner}
 	use doctool && python_convert_shebangs 2 "${ED}"usr/bin/g-ir-doc-tool
+
+	# Prevent collision with gobject-introspection-common
+	rm -v "${ED}"usr/share/aclocal/introspection.m4 \
+		"${ED}"usr/share/gobject-introspection-1.0/Makefile.introspection || die
+	rmdir "${ED}"usr/share/aclocal || die
 }
 
 pkg_postinst() {
@@ -90,5 +95,5 @@ pkg_postinst() {
 }
 
 pkg_postrm() {
-	python_mod_cleanup /usr/lib*/${PN}/giscanner
+	python_mod_cleanup /usr/$(get_libdir)/${PN}/giscanner
 }
