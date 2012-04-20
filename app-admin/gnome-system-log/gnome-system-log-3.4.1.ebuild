@@ -27,7 +27,9 @@ COMMON_DEPEND=">=dev-libs/glib-2.31.0:2
 	>=x11-libs/gtk+-3.0.0:3
 	
 	gnome-base/libgtop:2"
-RDEPEND="${COMMON_DEPEND}"
+RDEPEND="${COMMON_DEPEND}
+	!<gnome-extra/gnome-utils-3.4"
+# ${PN} was part of gnome-utils before 3.4
 DEPEND="${COMMON_DEPEND}
 	app-text/gnome-doc-utils
 	>=dev-util/intltool-0.40

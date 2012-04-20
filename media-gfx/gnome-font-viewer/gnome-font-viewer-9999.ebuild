@@ -26,7 +26,9 @@ fi
 COMMON_DEPEND=">=dev-libs/glib-2.31.0:2
 	>=x11-libs/gtk+-3.0.3:3
 	media-libs/freetype:2"
-RDEPEND="${COMMON_DEPEND}"
+RDEPEND="${COMMON_DEPEND}
+	!<gnome-extra/gnome-utils-3.4"
+# ${PN} was part of gnome-utils before 3.4
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.40
 	>=dev-util/pkgconfig-0.22

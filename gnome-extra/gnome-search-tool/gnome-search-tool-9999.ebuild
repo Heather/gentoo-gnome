@@ -29,7 +29,9 @@ COMMON_DEPEND=">=dev-libs/glib-2.30.0:2
 	gnome-base/gconf:2
 	gnome-base/libgtop:2
 	sys-apps/grep"
-RDEPEND="${COMMON_DEPEND}"
+RDEPEND="${COMMON_DEPEND}
+	!<gnome-extra/gnome-utils-3.4"
+# ${PN} was part of gnome-utils before 3.4
 DEPEND="${COMMON_DEPEND}
 	app-text/gnome-doc-utils
 	>=dev-util/intltool-0.40

@@ -30,7 +30,9 @@ COMMON_DEPEND=">=dev-libs/glib-2.31.0:2
 	>=media-libs/libcanberra-0.26-r2[gtk3]
 	x11-libs/libXext
 	x11-libs/libX11"
-RDEPEND="${COMMON_DEPEND}"
+RDEPEND="${COMMON_DEPEND}
+	!<gnome-extra/gnome-utils-3.4"
+# ${PN} was part of gnome-utils before 3.4
 DEPEND="${COMMON_DEPEND}
 	x11-proto/xextproto
 	>=dev-util/intltool-0.40
