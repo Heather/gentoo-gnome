@@ -21,7 +21,6 @@ app-crypt/p11-kit
 app-crypt/seahorse
 app-crypt/seahorse-plugins
 app-misc/tracker
-app-pda/libimobiledevice
 dev-lang/orc
 dev-lang/vala
 dev-libs/atk
@@ -29,7 +28,6 @@ dev-libs/folks
 dev-libs/gdl:1
 dev-libs/gdl:3
 dev-libs/glib
-dev-libs/gobject-introspection
 dev-libs/libgdata
 dev-libs/libgweather
 dev-libs/libpeas
@@ -76,7 +74,6 @@ gnome-extra/gnome-power-manager
 gnome-extra/gnome-screensaver
 gnome-extra/gnome-system-monitor
 gnome-extra/gnome-user-docs
-gnome-extra/gnome-utils
 gnome-extra/gtkhtml:4.0
 gnome-extra/gucharmap
 gnome-extra/libgda:4
@@ -103,7 +100,6 @@ net-misc/vino
 net-print/cups
 net-wireless/gnome-bluetooth
 sys-apps/accountsservice
-sys-apps/gnome-disk-utility
 sys-libs/libosinfo
 x11-libs/gdk-pixbuf
 x11-libs/goocanvas:2.0
@@ -120,13 +116,36 @@ x11-plugins/pidgin-libnotify
 x11-terms/gnome-terminal
 x11-wm/mutter
 
+# GNOME Disk Utility
+sys-fs/udisks:2
+sys-apps/gnome-disk-utility
+
+# Libraries for Apple products
+app-pda/libplist
+app-pda/libimobiledevice
+
+# Gobject Introspection
+dev-libs/gobject-introspection-common
+dev-libs/gobject-introspection
+
+# GNOME Utils split
+gnome-extra/gnome-utils
+app-dicts/gnome-dictionary
+app-admin/gnome-system-log
+gnome-extra/gnome-search-tool
+media-gfx/gnome-font-viewer
+media-gfx/gnome-screenshot
+sys-apps/baobab
+
 # Glib Networking
 net-libs/gnutls
 net-libs/glib-networking
 
 # Development utilities
+app-text/gnome-doc-utils
 app-text/yelp-tools
 dev-util/gdbus-codegen
+dev-util/gtk-builder-convert
 dev-util/itstool
 dev-util/gtk-doc
 dev-util/gtk-doc-am
@@ -189,9 +208,8 @@ media-libs/libchamplain:0.12
 media-libs/memphis
 net-im/telepathy-logger
 net-im/telepathy-mission-control
-net-libs/farsight2
+net-libs/farstream
 net-libs/libnice
-net-libs/telepathy-farsight
 net-libs/telepathy-farstream
 net-libs/telepathy-glib
 net-voip/telepathy-gabble
