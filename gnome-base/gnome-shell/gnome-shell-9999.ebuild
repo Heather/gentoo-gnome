@@ -48,7 +48,7 @@ COMMON_DEPEND=">=app-crypt/gcr-3.3.90
 	>=net-libs/telepathy-glib-0.17.5[introspection]
 	>=sys-auth/polkit-0.100[introspection]
 	>=x11-libs/libXfixes-5.0
-	>=x11-wm/mutter-3.3.92[introspection]
+	>=x11-wm/mutter-3.4.1[introspection]
 	>=x11-libs/startup-notification-0.11
 
 	app-misc/ca-certificates
