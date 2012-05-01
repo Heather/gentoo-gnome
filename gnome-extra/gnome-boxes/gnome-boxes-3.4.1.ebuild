@@ -30,7 +30,7 @@ RDEPEND="
 	>=sys-fs/udev-165[gudev]
 	>=dev-libs/glib-2.29.90:2
 	>=dev-libs/gobject-introspection-0.9.6
-	>=sys-libs/libosinfo-0.0.6
+	>=sys-libs/libosinfo-0.1.1
 	app-emulation/qemu-kvm[spice]
 	>=app-emulation/libvirt-0.9.3[libvirtd,qemu]
 	>=app-emulation/libvirt-glib-0.0.7
@@ -74,6 +74,7 @@ pkg_setup() {
 }
 
 pkg_postinst() {
+	gnome2_pkg_postinst
 	elog "Before running gnome-boxes, you will need to load the KVM modules"
 	elog "If you have an Intel Processor, run:"
 	elog "	modprobe kvm-intel"
