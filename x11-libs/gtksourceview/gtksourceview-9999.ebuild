@@ -24,7 +24,7 @@ else
 fi
 
 # Note: has native OSX support, prefix teams, attack!
-RDEPEND=">=x11-libs/gtk+-3.0:3[introspection?]
+RDEPEND=">=x11-libs/gtk+-3.3.8:3[introspection?]
 	>=dev-libs/libxml2-2.6:2
 	>=dev-libs/glib-2.28:2
 	glade? ( >=dev-util/glade-3.9:3.10 )
