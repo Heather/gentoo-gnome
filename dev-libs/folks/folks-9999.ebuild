@@ -24,7 +24,7 @@ fi
 IUSE="eds socialweb test tracker utils vala"
 
 COMMON_DEPEND=">=dev-libs/glib-2.24:2
-	>=net-libs/telepathy-glib-0.13.1
+	>=net-libs/telepathy-glib-0.17.5
 	dev-libs/dbus-glib
 	<dev-libs/libgee-0.7:0[introspection]
 	dev-libs/libxml2
