@@ -6,7 +6,7 @@ EAPI="4"
 PYTHON_DEPEND="utils? 2"
 # Avoid runtime dependency on python when USE=test
 
-inherit autotools gnome.org libtool eutils flag-o-matic gnome2-utils multilib pax-utils python virtualx
+inherit autotools gnome.org libtool eutils flag-o-matic gnome2-utils multilib pax-utils python virtualx linux-info
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -18,7 +18,7 @@ SRC_URI="${SRC_URI}
 
 LICENSE="LGPL-2"
 SLOT="2"
-IUSE="debug doc fam selinux static-libs systemtap test utils xattr"
+IUSE="debug doc fam kernel_linux selinux static-libs systemtap test utils xattr"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -57,6 +57,11 @@ pkg_setup() {
 	if use test ; then
 		python_set_active_version 2
 		python_pkg_setup
+	fi
+
+	if use kernel_linux ; then
+		CONFIG_CHECK="~INOTIFY_USER"
+		linux-info_pkg_setup
 	fi
 }
 
