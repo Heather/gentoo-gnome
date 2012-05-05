@@ -35,7 +35,7 @@ DEPEND="${COMMON_DEPEND}
 		media-fonts/font-cursor-misc
 		media-fonts/font-misc-misc
 		>=dev-libs/gobject-introspection-1.29.17 )
-	>=dev-util/pkgconfig-0.12"
+	virtual/pkgconfig"
 # docs disabled for now per upstream default since they are very out of date
 #	doc? (
 #		app-text/docbook-xml-dtd:4.1.2
