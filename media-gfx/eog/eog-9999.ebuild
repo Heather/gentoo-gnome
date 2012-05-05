@@ -48,7 +48,7 @@ DEPEND="${RDEPEND}
 	app-text/gnome-doc-utils
 	sys-devel/gettext
 	>=dev-util/intltool-0.40
-	>=dev-util/pkgconfig-0.17
+	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.10 )"
 
 pkg_setup() {
