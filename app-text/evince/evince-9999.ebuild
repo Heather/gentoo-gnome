@@ -1,6 +1,6 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-text/evince/evince-2.32.0.ebuild,v 1.2 2010/12/07 19:38:52 eva Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="yes"
@@ -53,17 +53,17 @@ RDEPEND="
 	gnome-keyring? ( >=gnome-base/gnome-keyring-2.22.0 )
 	introspection? ( >=dev-libs/gobject-introspection-0.6 )
 	nautilus? ( >=gnome-base/nautilus-2.91.4[introspection?] )
-	tiff? ( >=media-libs/tiff-3.6 )
+	tiff? ( >=media-libs/tiff-3.6:0 )
 	xps? ( >=app-text/libgxps-0.2.1 )
 "
 DEPEND="${RDEPEND}
 	app-text/scrollkeeper
 	>=app-text/gnome-doc-utils-0.3.2
-	~app-text/docbook-xml-dtd-4.1.2
-	>=dev-util/pkgconfig-0.9
+	app-text/docbook-xml-dtd:4.3
 	sys-devel/gettext
 	>=dev-util/intltool-0.35
 	>=dev-util/gtk-doc-am-1.13
+	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.13 )"
 
 ELTCONF="--portage"
@@ -99,11 +99,16 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# Do not depend on gnome-icon-theme, bug #326855
-	sed 's/gnome-icon-theme//' -i configure.ac || die "sed failed"
+	# Regenerate marshalers to allow building with <glib-2.32
+	rm -v cut-n-paste/gimpcellrenderertoggle/gimpwidgetsmarshal.{c,h} \
+		cut-n-paste/toolbar-editor/eggmarshalers.{c,h} \
+		libview/ev-view-marshal.{c,h} || die "rm failed"
 
 	# Fix .desktop file so menu item shows up
 	epatch "${FILESDIR}"/${PN}-0.7.1-display-menu.patch
 
 	gnome2_src_prepare
+	# Do not depend on gnome-icon-theme, bug #326855, #391859
+	sed -e 's/gnome-icon-theme >= $GNOME_ICON_THEME_REQUIRED//g' \
+		-i configure || die "sed failed"
 }
