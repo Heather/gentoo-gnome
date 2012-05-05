@@ -29,7 +29,7 @@ RDEPEND="${COMMON_DEPEND}
 # keyboard-brightness icon file collision with old gnome-power-manager
 DEPEND="${COMMON_DEPEND}
 	>=x11-misc/icon-naming-utils-0.8.7
-	>=dev-util/pkgconfig-0.19"
+	virtual/pkgconfig"
 
 # This ebuild does not install any binaries
 RESTRICT="binchecks strip"
