@@ -12,7 +12,7 @@ if [[ ${PV} = 9999 ]]; then
 fi
 
 DESCRIPTION="Disk usage browser for GNOME 3"
-HOMEPAGE="http://www.gnome.org/"
+HOMEPAGE="https://live.gnome.org/GnomeUtils"
 
 LICENSE="GPL-2 FDL-1.1"
 SLOT="0"
@@ -24,20 +24,24 @@ else
 fi
 
 COMMON_DEPEND=">=dev-libs/glib-2.30.0:2
+	gnome-base/libgtop:2
+	x11-libs/cairo
+	x11-libs/gdk-pixbuf
 	>=x11-libs/gtk+-3.3.18:3
-	
-	gnome-base/libgtop:2"
+	x11-libs/pango"
 RDEPEND="${COMMON_DEPEND}
+	gnome-base/gsettings-desktop-schemas
 	!<gnome-extra/gnome-utils-3.4"
 # ${PN} was part of gnome-utils before 3.4
 DEPEND="${COMMON_DEPEND}
 	dev-util/itstool
 	dev-libs/libxml2:2
 	>=dev-util/intltool-0.40
-	>=dev-util/pkgconfig-0.22
-	>=sys-devel/gettext-0.17"
+	>=sys-devel/gettext-0.17
+	virtual/pkgconfig"
 
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
-	G2CONF="--disable-schemas-compile"
+	G2CONF="${G2CONF}
+		--disable-schemas-compile"
 }

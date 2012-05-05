@@ -1,6 +1,6 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-extra/gnome-utils/gnome-utils-2.32.0-r1.ebuild,v 1.1 2010/12/04 18:08:10 pacho Exp $
+# $Header: $
 
 EAPI="4"
 GNOME2_LA_PUNT="yes"
@@ -11,7 +11,7 @@ if [[ ${PV} = 9999 ]]; then
 fi
 
 DESCRIPTION="Dictionary utility for GNOME 3"
-HOMEPAGE="http://www.gnome.org/"
+HOMEPAGE="https://live.gnome.org/GnomeUtils"
 
 LICENSE="GPL-2 LGPL-2.1 FDL-1.1"
 SLOT="0"
@@ -23,19 +23,23 @@ else
 fi
 
 COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
-	>=x11-libs/gtk+-3.0.0:3"
+	x11-libs/cairo
+	>=x11-libs/gtk+-3.0.0:3
+	x11-libs/pango"
 RDEPEND="${COMMON_DEPEND}
+	gnome-base/gsettings-desktop-schemas
 	!<gnome-extra/gnome-utils-3.4"
 # ${PN} was part of gnome-utils before 3.4
 DEPEND="${COMMON_DEPEND}
 	app-text/gnome-doc-utils
 	>=dev-util/intltool-0.40
-	>=dev-util/pkgconfig-0.22
 	>=sys-devel/gettext-0.17
+	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.15 )"
 
 pkg_setup() {
 	DOCS="AUTHORS NEWS README TODO"
-	G2CONF="--disable-schemas-compile
+	G2CONF="${G2CONF}
+		--disable-schemas-compile
 		$(use_enable ipv6)"
 }
