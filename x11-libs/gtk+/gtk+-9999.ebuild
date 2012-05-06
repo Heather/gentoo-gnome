@@ -52,17 +52,17 @@ COMMON_DEPEND="X? (
 		x11-libs/cairo[opengl]
 		x11-libs/libxkbcommon
 	)
-	>=dev-libs/glib-2.31.20
-	>=x11-libs/pango-1.29.0[introspection?]
-	>=dev-libs/atk-2.1.5[introspection?]
+	>=dev-libs/glib-2.32
+	>=x11-libs/pango-1.30[introspection?]
+	>=dev-libs/atk-2.2[introspection?]
 	>=x11-libs/cairo-1.10.0[aqua?,glib,svg,X?]
-	>=x11-libs/gdk-pixbuf-2.25.2:2[introspection?,X?]
+	>=x11-libs/gdk-pixbuf-2.26:2[introspection?,X?]
 	>=x11-libs/gtk+-2.24:2
 	media-libs/fontconfig
 	x11-misc/shared-mime-info
 	colord? ( >=x11-misc/colord-0.1.9 )
 	cups? ( >=net-print/cups-1.2 )
-	introspection? ( >=dev-libs/gobject-introspection-0.10.1 )"
+	introspection? ( >=dev-libs/gobject-introspection-1.32 )"
 DEPEND="${COMMON_DEPEND}
 	virtual/pkgconfig
 	X? (
@@ -109,6 +109,11 @@ src_prepare() {
 
 	# Apparently needed for new libxkbcommon headers; bug #408131
 	epatch "${FILESDIR}/${PN}-3.3.20-wayland-xkbcommon-headers.patch"
+
+	# Work around https://bugzilla.gnome.org/show_bug.cgi?id=663991
+	if [[ ${CHOST} == *-solaris* ]]; then
+		sed -i -e '/_XOPEN_SOURCE/s/500/600/' gtk/gtksearchenginesimple.c || die
+	fi
 
 	# Non-working test in gentoo's env
 	sed 's:\(g_test_add_func ("/ui-tests/keys-events.*\):/*\1*/:g' \
