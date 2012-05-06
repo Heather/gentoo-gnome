@@ -43,9 +43,9 @@ RDEPEND="
 	sys-fs/fuseiso
 	sys-fs/mtools"
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0.22
 	>=dev-util/intltool-0.40
-	>=sys-devel/gettext-0.17"
+	>=sys-devel/gettext-0.17
+	virtual/pkgconfig"
 
 if [[ ${PV} = 9999 ]]; then
 	DEPEND="${DEPEND}

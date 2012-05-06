@@ -49,8 +49,8 @@ DEPEND="${CDEPEND}
 	app-text/scrollkeeper
 	app-text/gnome-doc-utils
 
-	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.35
+	virtual/pkgconfig
 	>=dev-util/gtk-doc-am-1.13
 
 	doc? ( >=dev-util/gtk-doc-1.3 )"

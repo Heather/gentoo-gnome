@@ -51,9 +51,9 @@ COMMON_DEPEND=">=x11-libs/pango-1.2[X,introspection?]
 "
 DEPEND="${COMMON_DEPEND}
 	>=app-text/gnome-doc-utils-0.8
-	sys-devel/gettext
-	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.35
+	sys-devel/gettext
+	virtual/pkgconfig
 	test? ( app-text/docbook-xml-dtd:4.5 )
 	xinerama? ( x11-proto/xineramaproto )
 	x11-proto/xextproto

@@ -43,8 +43,8 @@ COMMON_DEPEND="
 DEPEND="${COMMON_DEPEND}
 	sys-devel/gettext
 	>=app-text/scrollkeeper-0.3
-	>=dev-util/pkgconfig-0.20
 	>=dev-util/intltool-0.35
+	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.9 )
 "
 # Before 3.1.4, libcryptui was part of seahorse

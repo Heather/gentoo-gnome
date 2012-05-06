@@ -30,7 +30,7 @@ RDEPEND=">=dev-libs/glib-2.18:2
 		dev-lang/mono
 		>=dev-dotnet/glib-sharp-2.4.0:2 )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	doc? (
 		>=dev-util/gtk-doc-1.8
 		app-text/docbook-sgml-utils )

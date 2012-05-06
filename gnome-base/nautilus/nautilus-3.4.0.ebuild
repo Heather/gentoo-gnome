@@ -45,9 +45,9 @@ COMMON_DEPEND=">=dev-libs/glib-2.31.9:2
 DEPEND="${COMMON_DEPEND}
 	>=dev-lang/perl-5
 	>=dev-util/gdbus-codegen-2.31.0
-	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.40.1
 	sys-devel/gettext
+	virtual/pkgconfig
 	x11-proto/xproto
 	doc? ( >=dev-util/gtk-doc-1.4 )"
 RDEPEND="${COMMON_DEPEND}

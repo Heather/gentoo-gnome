@@ -65,7 +65,7 @@ RDEPEND="${COMMON_DEPEND}
 DEPEND="${COMMON_DEPEND}
 	>=dev-lang/vala-0.13.2:0.14
 	>=dev-util/intltool-0.40
-	>=dev-util/pkgconfig-0.24
+	virtual/pkgconfig
 
 	app-text/docbook-xml-dtd:4.3
 	dev-libs/libxml2:2

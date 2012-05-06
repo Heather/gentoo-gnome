@@ -36,7 +36,7 @@ RDEPEND=">=mail-client/evolution-${PV}:2.0
 "
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35.5
-	>=dev-util/pkgconfig-0.9
+	virtual/pkgconfig
 "
 # For now, this package has no gtk-doc documentation to build
 #	doc? ( >=dev-util/gtk-doc-1.9 )

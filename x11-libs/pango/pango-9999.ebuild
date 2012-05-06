@@ -34,7 +34,7 @@ RDEPEND=">=dev-libs/glib-2.29.5:2
 		x11-libs/libX11
 		>=x11-libs/libXft-2.0.0 )"
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0.9
+	virtual/pkgconfig
 	>=dev-util/gtk-doc-am-1.13
 	doc? (
 		>=dev-util/gtk-doc-1.13

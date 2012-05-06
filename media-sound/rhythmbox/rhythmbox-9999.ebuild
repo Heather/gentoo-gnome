@@ -101,8 +101,8 @@ RDEPEND="${COMMON_DEPEND}
 # gtk-doc-am needed for eautoreconf
 #	dev-util/gtk-doc-am
 DEPEND="${COMMON_DEPEND}
-	dev-util/pkgconfig
 	>=dev-util/intltool-0.35
+	virtual/pkgconfig
 	app-text/scrollkeeper
 	>=app-text/gnome-doc-utils-0.9.1
 	doc? ( >=dev-util/gtk-doc-1.4 )

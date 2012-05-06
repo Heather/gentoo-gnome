@@ -33,7 +33,7 @@ RDEPEND=">=dev-libs/glib-2.31:2
 	>=dev-lang/spidermonkey-1.8.5"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
-	>=dev-util/pkgconfig-0.9"
+	virtual/pkgconfig"
 
 pkg_setup() {
 	# AUTHORS, ChangeLog are empty

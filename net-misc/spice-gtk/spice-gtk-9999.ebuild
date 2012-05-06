@@ -57,9 +57,9 @@ DEPEND="${RDEPEND}
 	vala? ( dev-lang/vala:0.14 )
 	dev-lang/python
 	dev-python/pyparsing
-	dev-util/pkgconfig
 	>=dev-util/intltool-0.40.0
-	>=sys-devel/gettext-0.17"
+	>=sys-devel/gettext-0.17
+	virtual/pkgconfig"
 
 if [[ ${PV} = 9999 ]]; then
 	DEPEND="${DEPEND}

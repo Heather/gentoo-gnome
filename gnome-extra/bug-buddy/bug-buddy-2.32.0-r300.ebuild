@@ -36,8 +36,8 @@ RDEPEND=">=gnome-base/libbonobo-2
 	eds? ( >=gnome-extra/evolution-data-server-1.3 )"
 DEPEND="${RDEPEND}
 	>=app-text/gnome-doc-utils-0.3.2
-	>=dev-util/pkgconfig-0.9
-	>=dev-util/intltool-0.40"
+	>=dev-util/intltool-0.40
+	virtual/pkgconfig"
 
 pkg_setup() {
 	G2CONF="${G2CONF}

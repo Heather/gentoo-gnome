@@ -105,9 +105,9 @@ RDEPEND="${COMMON_DEPEND}
 "
 DEPEND="${COMMON_DEPEND}
 	>=sys-devel/gettext-0.17
-	>=dev-util/pkgconfig-0.22
 	>=dev-util/intltool-0.40
 	gnome-base/gnome-common
+	virtual/pkgconfig
 	!!=dev-lang/spidermonkey-1.8.2*"
 # libmozjs.so is picked up from /usr/lib while compiling, so block at build-time
 # https://bugs.gentoo.org/show_bug.cgi?id=360413

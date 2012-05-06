@@ -47,8 +47,8 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=app-text/gnome-doc-utils-0.3.2
 	>=app-text/scrollkeeper-0.3
-	>=dev-util/pkgconfig-0.20
-	>=dev-util/intltool-0.35"
+	>=dev-util/intltool-0.35
+	virtual/pkgconfig"
 
 src_prepare() {
 	G2CONF="${G2CONF}

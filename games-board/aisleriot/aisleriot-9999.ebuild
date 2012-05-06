@@ -41,9 +41,9 @@ RDEPEND="${COMMON_DEPEND}
 	!<gnome-extra/gnome-games-3"
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.40.4
-	>=dev-util/pkgconfig-0.15
 	sys-apps/lsb-release
 	>=sys-devel/gettext-0.12
+	virtual/pkgconfig
 	gnome? (
 		app-text/docbook-xml-dtd:4.3
 		>=app-text/yelp-tools-3.1.1 )"

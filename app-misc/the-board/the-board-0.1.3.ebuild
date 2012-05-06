@@ -45,8 +45,8 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	>=sys-devel/gettext-0.17
-	>=dev-util/pkgconfig-0.22
-	>=dev-util/intltool-0.40"
+	>=dev-util/intltool-0.40
+	virtual/pkgconfig"
 
 pkg_setup() {
 	DOCS="AUTHORS NEWS README"

@@ -67,9 +67,9 @@ DEPEND="${COMMON_DEPEND}
 	x11-proto/inputproto
 	x11-proto/randrproto
 	>=dev-util/intltool-0.40.0
-	>=dev-util/pkgconfig-0.19
 	>=app-text/scrollkeeper-0.1.4
-	>=app-text/gnome-doc-utils-0.3.2"
+	>=app-text/gnome-doc-utils-0.3.2
+	virtual/pkgconfig"
 # XXX: These deps are from session and desktop files in data/ directory
 # at-spi:1 is needed for at-spi-registryd (spawned by simple-chooser)
 # fprintd is used via dbus by gdm-fingerprint-extension

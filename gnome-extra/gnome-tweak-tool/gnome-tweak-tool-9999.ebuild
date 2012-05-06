@@ -39,8 +39,8 @@ RDEPEND="${COMMON_DEPEND}
 	x11-wm/metacity"
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.40.0
-	>=dev-util/pkgconfig-0.9
-	>=sys-devel/gettext-0.17"
+	>=sys-devel/gettext-0.17
+	virtual/pkgconfig"
 
 pkg_setup() {
 	DOCS="AUTHORS NEWS README"

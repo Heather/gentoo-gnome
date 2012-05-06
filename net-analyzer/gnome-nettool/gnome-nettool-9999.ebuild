@@ -40,7 +40,7 @@ RDEPEND="${COMMON_DEPEND}
 
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.40
-	>=dev-util/pkgconfig-0.9
+	virtual/pkgconfig
 	app-text/gnome-doc-utils
 	sys-devel/gettext"
 

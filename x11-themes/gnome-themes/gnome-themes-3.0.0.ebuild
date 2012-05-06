@@ -19,9 +19,9 @@ RDEPEND="x11-libs/gtk+:3
 	x11-themes/gtk-engines:3"
 DEPEND="${RDEPEND}
 	>=x11-misc/icon-naming-utils-0.8.7
-	>=dev-util/pkgconfig-0.19
 	>=dev-util/intltool-0.35
-	sys-devel/gettext"
+	sys-devel/gettext
+	virtual/pkgconfig"
 # For problems related with dev-perl/XML-LibXML please see bug 266136
 
 # This ebuild does not install any binaries

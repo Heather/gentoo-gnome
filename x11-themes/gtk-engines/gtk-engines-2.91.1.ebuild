@@ -19,7 +19,7 @@ IUSE="accessibility"
 RDEPEND=">=x11-libs/gtk+-2.91:3"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.31
-	>=dev-util/pkgconfig-0.9"
+	virtual/pkgconfig"
 
 DOCS="AUTHORS ChangeLog NEWS README"
 

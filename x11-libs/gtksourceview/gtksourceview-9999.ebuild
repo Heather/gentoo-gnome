@@ -32,7 +32,7 @@ RDEPEND=">=x11-libs/gtk+-3.3.8:3[introspection?]
 DEPEND="${RDEPEND}
 	>=sys-devel/gettext-0.17
 	>=dev-util/intltool-0.40
-	>=dev-util/pkgconfig-0.9
+	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.11 )"
 
 pkg_setup() {

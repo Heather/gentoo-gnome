@@ -32,10 +32,10 @@ RDEPEND=">=x11-libs/gtk+-3.0:3
 	>=sys-apps/util-linux-2.16
 	applet? ( >=gnome-base/gnome-panel-3 )"
 DEPEND="${DEPEND}
-	dev-util/pkgconfig
 	>=dev-util/intltool-0.35.0
 	app-text/gnome-doc-utils
-	app-text/docbook-xml-dtd:4.1.2"
+	app-text/docbook-xml-dtd:4.1.2
+	virtual/pkgconfig"
 
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS README TODO"

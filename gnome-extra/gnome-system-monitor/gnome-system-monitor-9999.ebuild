@@ -35,9 +35,9 @@ RDEPEND=">=dev-libs/glib-2.28:2
 	systemd? ( >=sys-apps/systemd-38 )"
 
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0.19
 	>=dev-util/intltool-0.41.0
 	>=sys-devel/gettext-0.17
+	virtual/pkgconfig
 	>=app-text/gnome-doc-utils-0.20
 
 	systemd? ( !=sys-apps/systemd-43* )"

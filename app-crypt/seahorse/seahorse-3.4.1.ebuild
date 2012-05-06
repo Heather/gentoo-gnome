@@ -37,8 +37,8 @@ DEPEND="${COMMON_DEPEND}
 	sys-devel/gettext
 	>=app-text/gnome-doc-utils-0.3.2
 	>=app-text/scrollkeeper-0.3
-	>=dev-util/pkgconfig-0.20
 	>=dev-util/intltool-0.35
+	virtual/pkgconfig
 "
 # Need seahorse-plugins git snapshot
 RDEPEND="${COMMON_DEPEND}

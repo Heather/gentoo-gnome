@@ -32,7 +32,7 @@ RDEPEND="
 	>=dev-libs/glib-2.10:2
 	introspection? ( >=dev-libs/gobject-introspection-0.10.8 )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.10 )
 	vala? ( dev-lang/vala:0.14 )"
 

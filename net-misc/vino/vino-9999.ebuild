@@ -52,8 +52,8 @@ RDEPEND=">=dev-libs/glib-2.26:2
 	zlib? ( sys-libs/zlib )"
 DEPEND="${RDEPEND}
 	>=dev-lang/perl-5
-	>=dev-util/pkgconfig-0.16
 	>=dev-util/intltool-0.40
+	virtual/pkgconfig
 	|| (
 		gnome-base/libgnome-keyring
 		<gnome-base/gnome-keyring-2.29.4 )"

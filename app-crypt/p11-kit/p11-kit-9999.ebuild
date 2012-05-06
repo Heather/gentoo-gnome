@@ -27,8 +27,8 @@ IUSE="debug doc"
 
 RDEPEND=""
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
 	sys-devel/gettext
+	virtual/pkgconfig
 	doc? (
 		app-text/docbook-xml-dtd:4.1.2
 		>=dev-util/gtk-doc-1.15

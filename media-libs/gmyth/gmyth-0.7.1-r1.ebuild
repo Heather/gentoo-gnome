@@ -17,7 +17,7 @@ RDEPEND="net-misc/curl
 	dev-libs/libxml2
 	|| ( dev-db/mysql[minimal] virtual/mysql )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	virtual/pkgconfig"
 
 src_prepare() {
 	# bug #386889; http://sourceforge.net/tracker/?func=detail&aid=3424822&group_id=177106&atid=879916

@@ -21,8 +21,8 @@ IUSE=""
 RDEPEND=">=x11-libs/gtk+-2.91.6:3"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40.0
-	>=dev-util/pkgconfig-0.9
-	sys-devel/gettext"
+	sys-devel/gettext
+	virtual/pkgconfig"
 
 DOCS="AUTHORS ChangeLog NEWS README"
 S="${WORKDIR}/${MY_PN}-${PV}"

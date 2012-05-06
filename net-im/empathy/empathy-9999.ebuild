@@ -84,7 +84,7 @@ DEPEND="${RDEPEND}
 	dev-util/itstool
 
 	>=dev-util/intltool-0.40.0
-	>=dev-util/pkgconfig-0.16
+	virtual/pkgconfig
 	test? (
 		sys-apps/grep
 		>=dev-libs/check-0.9.4 )

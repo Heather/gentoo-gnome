@@ -38,10 +38,10 @@ RDEPEND="dev-libs/libxml2:2
 "
 DEPEND="${RDEPEND}
 	app-text/docbook-xml-dtd:4.1.2
-	>=dev-util/pkgconfig-0.9
 	>=app-text/scrollkeeper-0.3.11
 	>=app-text/gnome-doc-utils-0.3.2
-	>=dev-util/intltool-0.35.0"
+	>=dev-util/intltool-0.35.0
+	virtual/pkgconfig"
 
 src_prepare() {
 	G2CONF="${G2CONF}

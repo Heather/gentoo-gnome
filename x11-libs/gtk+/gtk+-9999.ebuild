@@ -64,7 +64,7 @@ COMMON_DEPEND="X? (
 	cups? ( >=net-print/cups-1.2 )
 	introspection? ( >=dev-libs/gobject-introspection-0.10.1 )"
 DEPEND="${COMMON_DEPEND}
-	>=dev-util/pkgconfig-0.9
+	virtual/pkgconfig
 	X? (
 		x11-proto/xextproto
 		x11-proto/xproto

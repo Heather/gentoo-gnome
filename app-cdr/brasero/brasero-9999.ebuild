@@ -56,11 +56,11 @@ RDEPEND="${COMMON_DEPEND}
 	packagekit? ( app-admin/packagekit-base )"
 DEPEND="${COMMON_DEPEND}
 	app-text/gnome-doc-utils
-	dev-util/pkgconfig
 	sys-devel/gettext
 	dev-util/intltool
 	gnome-base/gnome-common:3
 	>=dev-util/gtk-doc-am-1.12
+	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.12 )
 	test? ( app-text/docbook-xml-dtd:4.3 )"
 # eautoreconf deps

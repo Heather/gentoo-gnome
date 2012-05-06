@@ -35,8 +35,8 @@ RDEPEND="${COMMON_DEPEND}
 # ${PN} was part of seahorse before 3.2
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.35
-	dev-util/pkgconfig
-	sys-devel/gettext"
+	sys-devel/gettext
+	virtual/pkgconfig"
 
 pkg_setup() {
 	DOCS="AUTHORS MAINTAINERS NEWS" # ChangeLog has nothing useful

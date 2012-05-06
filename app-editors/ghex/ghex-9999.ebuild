@@ -27,10 +27,10 @@ RDEPEND=">=dev-libs/glib-2.26:2
 	>=x11-libs/gtk+-3.0:3
 	>=dev-libs/atk-1"
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.41.1
 	>=app-text/gnome-doc-utils-0.9.0
-	>=sys-devel/gettext-0.17"
+	>=sys-devel/gettext-0.17
+	virtual/pkgconfig"
 
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS README"

@@ -32,9 +32,9 @@ DEPEND="${RDEPEND}
 	app-text/docbook-xml-dtd:4.1.2
 	app-text/scrollkeeper
 	>=app-text/gnome-doc-utils-0.3.2
-	dev-util/pkgconfig
 	>=dev-util/intltool-0.35.0
-	>=sys-devel/gettext-0.17"
+	>=sys-devel/gettext-0.17
+	virtual/pkgconfig"
 
 pkg_setup() {
 	DOCS="AUTHORS BUGS ChangeLog HACKING NEWS README TODO"

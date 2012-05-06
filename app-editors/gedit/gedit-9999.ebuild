@@ -62,9 +62,9 @@ DEPEND="${COMMON_DEPEND}
 	dev-libs/libxml2
 	>=dev-util/intltool-0.40
 	dev-util/itstool
-	>=dev-util/pkgconfig-0.9
 	>=app-text/scrollkeeper-0.3.11
-	~app-text/docbook-xml-dtd-4.1.2
+	app-text/docbook-xml-dtd:4.1.2
+	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1 )"
 # yelp-tools, gnome-common and gtk-doc-am needed to eautoreconf
 

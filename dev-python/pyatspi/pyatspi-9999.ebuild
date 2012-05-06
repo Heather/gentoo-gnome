@@ -36,7 +36,7 @@ RDEPEND="${COMMON_DEPEND}
 	!<gnome-extra/at-spi-1.32.0-r1
 "
 DEPEND="${COMMON_DEPEND}
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	test? (
 		>=dev-libs/atk-2.1.0
 		>=dev-libs/dbus-glib-0.7

@@ -60,7 +60,7 @@ RDEPEND=">=dev-libs/glib-2.31.0:2
 	samba? ( >=net-fs/samba-3.4.6[smbclient] )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	dev-util/gtk-doc-am
 	doc? ( >=dev-util/gtk-doc-1 )"
 

@@ -38,7 +38,7 @@ RDEPEND=">=dev-libs/glib-2.16:2
 
 	introspection? ( >=dev-libs/gobject-introspection-0.6.1 )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.14 )"
 
 pkg_setup() {

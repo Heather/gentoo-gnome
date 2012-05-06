@@ -34,7 +34,7 @@ RDEPEND=">=dev-libs/glib-2.26.0:2
 DEPEND="${RDEPEND}
 	|| ( dev-util/gtk-builder-convert <=x11-libs/gtk+-2.24.10:2 )
 	>=dev-util/intltool-0.40
-	>=dev-util/pkgconfig-0.9
+	virtual/pkgconfig
 	>=app-text/gnome-doc-utils-0.3.2
 	>=app-text/scrollkeeper-0.3.11
 	sys-devel/gettext"

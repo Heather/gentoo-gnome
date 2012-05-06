@@ -31,10 +31,10 @@ DEPEND="${COMMON_DEPEND}
 	>=app-text/gnome-doc-utils-0.3.2
 	app-text/scrollkeeper
 	>=dev-util/intltool-0.35
-	>=dev-util/pkgconfig-0.9
 	sys-devel/bison
 	sys-devel/flex
-	sys-devel/gettext"
+	sys-devel/gettext
+	virtual/pkgconfig"
 
 if [[ ${PV} = 9999 ]]; then
 	DEPEND="${DEPEND}

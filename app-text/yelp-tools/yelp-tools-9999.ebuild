@@ -28,6 +28,6 @@ RDEPEND=">=dev-libs/libxml2-2.6.12
 	gnome-extra/yelp-xsl
 	sys-apps/gawk"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	virtual/pkgconfig"
 
 DOCS="AUTHORS NEWS README"

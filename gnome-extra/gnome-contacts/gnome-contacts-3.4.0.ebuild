@@ -36,9 +36,9 @@ RDEPEND=">=dev-libs/folks-0.6.1.1[eds]
 	x11-libs/libnotify
 	x11-libs/pango"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
 	>=dev-util/intltool-0.40
-	>=sys-devel/gettext-0.17"
+	>=sys-devel/gettext-0.17
+	virtual/pkgconfig"
 # Regenerating C from vala sources requires:
 #	>=dev-lang/vala-0.14.0:0.14
 #	net-libs/telepathy-glib[vala]

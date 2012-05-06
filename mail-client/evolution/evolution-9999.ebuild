@@ -75,10 +75,10 @@ COMMON_DEPEND=">=dev-libs/glib-2.30:2
 		>=dev-libs/nspr-4.6.1
 		>=dev-libs/nss-3.11 )"
 DEPEND="${COMMON_DEPEND}
-	>=dev-util/pkgconfig-0.16
 	>=dev-util/intltool-0.40.0
 	>=sys-devel/gettext-0.17
 	sys-devel/bison
+	virtual/pkgconfig
 	app-text/scrollkeeper
 	>=app-text/gnome-doc-utils-0.20.10
 	app-text/docbook-xml-dtd:4.1.2

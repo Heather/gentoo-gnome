@@ -44,8 +44,8 @@ DEPEND="${RDEPEND}
 	dev-lang/vala:0.12
 	gnome-base/gnome-common
 	>=dev-lang/perl-5
-	>=dev-util/pkgconfig-0.16
 	>=dev-util/intltool-0.40
+	virtual/pkgconfig
 	app-text/scrollkeeper
 	app-text/gnome-doc-utils
 	>=sys-devel/gettext-0.17

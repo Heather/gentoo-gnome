@@ -40,8 +40,8 @@ DEPEND="${COMMON_DEPEND}
 	app-text/scrollkeeper
 	app-text/docbook-sgml-utils
 	app-text/docbook-sgml-dtd:4.1
-	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.35
+	virtual/pkgconfig
 	>=app-text/gnome-doc-utils-0.3.2
 	test? ( sys-apps/dbus )"
 

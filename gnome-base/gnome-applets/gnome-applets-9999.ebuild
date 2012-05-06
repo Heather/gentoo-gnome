@@ -62,11 +62,11 @@ RDEPEND=">=x11-libs/gtk+-3.0.0:3
 DEPEND="${RDEPEND}
 	>=app-text/scrollkeeper-0.1.4
 	>=app-text/gnome-doc-utils-0.3.2
-	>=dev-util/pkgconfig-0.19
 	>=dev-util/intltool-0.35
 	dev-libs/libxslt
 	app-text/docbook-xml-dtd:4.1.2
-	app-text/docbook-xml-dtd:4.3"
+	app-text/docbook-xml-dtd:4.3
+	virtual/pkgconfig"
 
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS README"

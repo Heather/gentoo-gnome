@@ -38,13 +38,13 @@ RDEPEND="
 	doc? ( !<gnome-base/gnome-desktop-2.32.1-r50:2[doc] )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.7 )"
 DEPEND="${RDEPEND}
-	~app-text/docbook-xml-dtd-4.1.2
+	app-text/docbook-xml-dtd:4.1.2
 	>=app-text/gnome-doc-utils-0.3.2
 	>=dev-util/intltool-0.40.6
-	>=dev-util/pkgconfig-0.9
 	sys-devel/gettext
 	x11-proto/xproto
 	>=x11-proto/randrproto-1.2
+	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.4 )"
 
 # Includes X11/Xatom.h in libgnome-desktop/gnome-bg.c which comes from xproto

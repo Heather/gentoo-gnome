@@ -53,12 +53,12 @@ RDEPEND=">=dev-libs/glib-2.30:2
 DEPEND="${RDEPEND}
 	dev-lang/perl
 	dev-util/gperf
-	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.35.5
 	sys-devel/bison
 	>=gnome-base/gnome-common-2
 	>=dev-util/gtk-doc-am-1.9
 	>=sys-devel/gettext-0.17
+	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.14 )
 	vala? ( >=dev-lang/vala-0.13.0:0.14[vapigen] )"
 # eautoreconf needs:

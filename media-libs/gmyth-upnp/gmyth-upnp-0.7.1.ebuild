@@ -15,7 +15,7 @@ RDEPEND="net-libs/libupnp
 	dev-libs/glib
 	>=media-libs/gmyth-0.7"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	virtual/pkgconfig"
 
 src_compile() {
 	econf $(use_enable debug)

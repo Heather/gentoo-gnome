@@ -88,7 +88,7 @@ DEPEND="${COMMON_DEPEND}
 
 	>=sys-devel/gettext-0.17
 	>=dev-util/intltool-0.40.1
-	>=dev-util/pkgconfig-0.19
+	virtual/pkgconfig
 
 	app-text/scrollkeeper
 	>=app-text/gnome-doc-utils-0.10.1

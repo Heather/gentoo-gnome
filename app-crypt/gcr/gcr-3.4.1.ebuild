@@ -33,7 +33,7 @@ DEPEND="${COMMON_DEPEND}
 	sys-devel/gettext
 	>=dev-util/gtk-doc-am-1.9
 	>=dev-util/intltool-0.35
-	>=dev-util/pkgconfig-0.9
+	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.9 )"
 # eautoreconf needs:
 #	>=dev-util/gtk-doc-am-1.9

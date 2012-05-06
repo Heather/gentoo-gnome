@@ -47,8 +47,8 @@ RDEPEND="${COMMON_DEPEND}
 	>=media-plugins/gst-plugins-meta-0.10-r2:0.10"
 
 DEPEND="${COMMON_DEPEND}
-	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.40
+	virtual/pkgconfig
 	>=app-text/scrollkeeper-0.3.5
 	app-text/gnome-doc-utils
 	test? ( ~app-text/docbook-xml-dtd-4.3 )"

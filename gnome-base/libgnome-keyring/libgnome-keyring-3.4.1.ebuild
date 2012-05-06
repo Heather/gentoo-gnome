@@ -22,7 +22,7 @@ RDEPEND=">=sys-apps/dbus-1.0
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/intltool-0.35
-	>=dev-util/pkgconfig-0.9
+	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.9 )
 	test? ( =dev-lang/python-2* )"
 

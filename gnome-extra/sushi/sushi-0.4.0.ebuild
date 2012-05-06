@@ -45,9 +45,9 @@ COMMON_DEPEND=">=x11-libs/gdk-pixbuf-2.22.1[introspection]
 	x11-libs/libX11
 "
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0.22
 	>=dev-util/intltool-0.40
 	>=sys-devel/gettext-0.17
+	virtual/pkgconfig
 "
 RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/nautilus-3.1.90

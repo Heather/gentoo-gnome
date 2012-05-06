@@ -45,8 +45,8 @@ DEPEND="${COMMON_DEPEND}
 	dev-libs/libxml2
 	>=dev-util/intltool-0.40.0
 	dev-util/gdbus-codegen
-	dev-util/pkgconfig
 	>=sys-devel/gettext-0.17
+	virtual/pkgconfig
 	x11-libs/libX11
 	x11-libs/libXi
 	x11-proto/xproto

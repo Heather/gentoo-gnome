@@ -43,8 +43,8 @@ RDEPEND="${COMMON_DEPEND}
 DEPEND="${COMMON_DEPEND}
 	dev-libs/libxslt
 	>=dev-util/intltool-0.35
-	dev-util/pkgconfig
 	>=sys-devel/gettext-0.17
+	virtual/pkgconfig
 	doc? (
 		app-text/docbook-xml-dtd:4.1.2
 		>=dev-util/gtk-doc-1.9

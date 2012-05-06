@@ -38,8 +38,8 @@ RDEPEND=">=dev-libs/glib-2.29.14:2
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/intltool-0.40.0
-	dev-util/pkgconfig
-	app-text/gnome-doc-utils"
+	app-text/gnome-doc-utils
+	virtual/pkgconfig"
 # eautoreconf needs:
 #	gnome-base/gnome-common
 

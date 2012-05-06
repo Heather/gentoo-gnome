@@ -36,7 +36,7 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/gtk-doc-am-1.9
 	>=dev-util/intltool-0.35
-	>=dev-util/pkgconfig-0.9
+	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.9 )"
 PDEPEND=">=gnome-base/libgnome-keyring-3.1.92"
 # eautoreconf needs:

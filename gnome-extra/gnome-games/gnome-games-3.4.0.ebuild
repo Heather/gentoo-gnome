@@ -61,9 +61,9 @@ DEPEND="${COMMON_DEPEND}
 	>=dev-lang/vala-0.15.1:0.16
 	dev-libs/libxml2:2
 	dev-util/itstool
-	>=dev-util/pkgconfig-0.15
 	>=dev-util/intltool-0.40.4
 	>=sys-devel/gettext-0.10.40
+	virtual/pkgconfig
 	>=gnome-base/gnome-common-2.12.0
 	test? ( >=dev-libs/check-0.9.4 )"
 

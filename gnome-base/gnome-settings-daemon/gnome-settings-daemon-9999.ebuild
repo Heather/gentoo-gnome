@@ -78,7 +78,7 @@ DEPEND="${COMMON_DEPEND}
 	cups? ( sys-apps/sed )
 	sys-devel/gettext
 	>=dev-util/intltool-0.40
-	>=dev-util/pkgconfig-0.19
+	virtual/pkgconfig
 	x11-proto/inputproto
 	x11-proto/kbproto
 	x11-proto/xf86miscproto

@@ -41,8 +41,8 @@ COMMON_DEPEND=">=dev-libs/glib-2.26.0:2
 RDEPEND="${COMMON_DEPEND}
 	!<media-libs/clutter-1.7"
 DEPEND="${COMMON_DEPEND}
-	dev-util/pkgconfig
 	sys-devel/gettext
+	virtual/pkgconfig
 	doc? ( app-text/docbook-xml-dtd:4.1.2
 		>=dev-util/gtk-doc-1.13 )"
 

@@ -37,7 +37,7 @@ RDEPEND="
 
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.9 )"
 
 pkg_setup() {

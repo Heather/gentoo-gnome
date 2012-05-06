@@ -46,8 +46,8 @@ RDEPEND="${COMMON_DEPEND}
 DEPEND="${COMMON_DEPEND}
 	>=dev-libs/gobject-introspection-1.30
 	>=dev-util/intltool-0.35.0
-	>=dev-util/pkgconfig-0.21
 	sys-devel/gettext
+	virtual/pkgconfig
 
 	socialweb? ( >=net-libs/libsocialweb-0.25.15[vala] )
 	test? ( sys-apps/dbus )

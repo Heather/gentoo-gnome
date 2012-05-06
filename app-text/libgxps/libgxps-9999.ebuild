@@ -30,7 +30,7 @@ RDEPEND=">=app-arch/libarchive-2.8
 	jpeg? ( virtual/jpeg )
 	tiff? ( media-libs/tiff[zlib] )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	doc? (
 		app-text/docbook-xml-dtd:4.1.2
 		>=dev-util/gtk-doc-1.14 )"

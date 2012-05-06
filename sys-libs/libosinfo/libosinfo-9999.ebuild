@@ -31,7 +31,7 @@ RDEPEND="
 	>=dev-libs/libxml2-2.6.0:2
 	introspection? ( >=dev-libs/gobject-introspection-0.9.0 )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.10 )
 	introspection? ( dev-libs/check )
 	vala? ( dev-lang/vala:0.14 )"

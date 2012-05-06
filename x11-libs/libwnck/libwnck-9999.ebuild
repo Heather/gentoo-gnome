@@ -34,8 +34,8 @@ RDEPEND=">=x11-libs/gtk+-3.0:3[introspection?]
 	x86-interix? ( sys-libs/itx-bind )"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
-	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.40
+	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.9 )"
 # eautoreconf needs
 #	dev-util/gtk-doc-am

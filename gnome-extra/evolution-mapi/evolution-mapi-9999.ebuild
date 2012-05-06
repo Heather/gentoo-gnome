@@ -34,7 +34,7 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35.5
 	sys-devel/gettext
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.9 )"
 
 G2CONF="${G2CONF}

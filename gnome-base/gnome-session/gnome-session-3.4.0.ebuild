@@ -60,8 +60,8 @@ RDEPEND="${COMMON_DEPEND}
 DEPEND="${COMMON_DEPEND}
 	>=dev-lang/perl-5
 	>=sys-devel/gettext-0.10.40
-	>=dev-util/pkgconfig-0.17
 	>=dev-util/intltool-0.40.6
+	virtual/pkgconfig
 	!<gnome-base/gdm-2.20.4
 	doc? (
 		app-text/xmlto

@@ -30,9 +30,9 @@ RDEPEND=">=dev-libs/gobject-introspection-common-${PV}
 	doctool? ( dev-python/mako )
 	virtual/libffi"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
 	sys-devel/bison
 	sys-devel/flex
+	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.15 )"
 # PDEPEND to avoid circular dependencies, bug #391213
 PDEPEND="x11-libs/cairo[glib]"

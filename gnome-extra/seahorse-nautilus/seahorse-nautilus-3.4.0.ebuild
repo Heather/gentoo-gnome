@@ -39,8 +39,8 @@ COMMON_DEPEND=">=app-crypt/gpgme-1.0.0
 RDEPEND="${COMMON_DEPEND}
 	!app-crypt/seahorse-plugins[nautilus]"
 DEPEND="${COMMON_DEPEND}
-	dev-util/pkgconfig
-	>=dev-util/intltool-0.35"
+	>=dev-util/intltool-0.35
+	virtual/pkgconfig"
 
 pkg_setup() {
 	DOCS="AUTHORS NEWS README THANKS" # ChangeLog is not used

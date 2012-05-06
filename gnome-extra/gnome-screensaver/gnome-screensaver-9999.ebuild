@@ -42,9 +42,9 @@ RDEPEND="
 	pam? ( virtual/pam )
 "
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0.9
 	>=dev-util/intltool-0.35
 	sys-devel/gettext
+	virtual/pkgconfig
 	doc? (
 		app-text/xmlto
 		~app-text/docbook-xml-dtd-4.1.2

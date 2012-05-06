@@ -38,9 +38,9 @@ COMMON_DEPEND=">=dev-libs/glib-2.10:2
 RDEPEND="${COMMON_DEPEND}"
 DEPEND="${COMMON_DEPEND}
 	>=dev-lang/perl-5
-	dev-util/pkgconfig
 	sys-devel/gettext
 	>=dev-util/intltool-0.40
+	virtual/pkgconfig
 	vala? (
 		dev-lang/vala:0.14
 		>=dev-libs/gobject-introspection-0.9.4 )"

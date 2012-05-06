@@ -45,8 +45,8 @@ RDEPEND="${COMMON_DEPEND}
 	x11-themes/gnome-icon-theme-symbolic"
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.40
-	>=dev-util/pkgconfig-0.22
-	>=sys-devel/gettext-0.17"
+	>=sys-devel/gettext-0.17
+	virtual/pkgconfig"
 
 pkg_setup() {
 	DOCS="AUTHORS NEWS README TODO"

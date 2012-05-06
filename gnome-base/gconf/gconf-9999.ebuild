@@ -37,7 +37,7 @@ RDEPEND=">=dev-libs/glib-2.31:2
 DEPEND="${RDEPEND}
 	dev-libs/libxslt
 	>=dev-util/intltool-0.35
-	>=dev-util/pkgconfig-0.9
+	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1 )"
 
 pkg_setup() {

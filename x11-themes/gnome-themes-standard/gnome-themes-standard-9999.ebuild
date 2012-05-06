@@ -28,9 +28,9 @@ COMMON_DEPEND="gnome-base/librsvg:2
 	>=x11-libs/gtk+-3.3.14:3
 	>=x11-themes/gtk-engines-2.15.3:2"
 DEPEND="${COMMON_DEPEND}
-	>=dev-util/pkgconfig-0.19
 	>=dev-util/intltool-0.40
-	sys-devel/gettext"
+	sys-devel/gettext
+	virtual/pkgconfig"
 # gnome-themes{,-extras} are OBSOLETE for GNOME 3
 # http://comments.gmane.org/gmane.comp.gnome.desktop/44130
 RDEPEND="${COMMON_DEPEND}

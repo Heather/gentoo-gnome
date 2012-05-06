@@ -54,8 +54,8 @@ RDEPEND="
 	>=dev-db/sqlite-3.6.22:3"
 
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0.18
 	>=dev-util/intltool-0.35.5
+	virtual/pkgconfig
 	>=app-text/gnome-doc-utils-0.9
 	doc? ( >=dev-util/gtk-doc-1 )"
 
