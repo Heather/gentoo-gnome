@@ -35,12 +35,12 @@ COMMON_DEPEND=">=x11-libs/gtk+-2.90.0:3[introspection?]
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )"
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.40.6
-	>=dev-util/gtk-doc-am-1.9
 	sys-devel/gettext
 	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.9 )"
 RDEPEND="${COMMON_DEPEND}
 	!<gnome-base/gnome-applets-2.22.0"
+# eautoreconf requires >=dev-util/gtk-doc-am-1.11
 
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog MAINTAINERS NEWS"
