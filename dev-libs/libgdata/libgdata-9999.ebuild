@@ -1,6 +1,6 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libgdata/libgdata-0.8.1.ebuild,v 1.2 2011/07/01 21:08:01 hwoarang Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="yes"
@@ -37,6 +37,7 @@ RDEPEND=">=dev-libs/glib-2.30:2
 	introspection? ( >=dev-libs/gobject-introspection-0.9.7 )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
+	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.14 )"
 
 pkg_setup() {
@@ -48,6 +49,9 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# Regenerate marshalers for <glib-2.31 compat
+	rm -v gdata/gdata-marshal.{c,h} || die
+
 	gnome2_src_prepare
 
 	# Disable tests requiring network access, bug #307725
