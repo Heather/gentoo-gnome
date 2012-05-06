@@ -45,3 +45,12 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-schemas-compile"
 }
+
+pkg_postinst() {
+	gnome2_pkg_postinst
+
+	elog "${P} saves screenshots in ~/Pictures/ and defaults to"
+	elog "non-interactive mode when launched from a terminal. If you want to choose"
+	elog "where to save the screenshot, run"
+	elog " $ gnome-screenshot --interactive"
+}
