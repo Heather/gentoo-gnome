@@ -46,6 +46,7 @@ DEPEND="${RDEPEND}
 	>=dev-util/gdbus-codegen-2.30.0
 	dev-util/intltool
 	sys-devel/gettext
+	virtual/pkgconfig
 
 	doc? ( >=dev-util/gtk-doc-1.3 )"
 
@@ -53,6 +54,8 @@ pkg_setup() {
 	# TODO: Give users a way to set the G/Y!/FB/Twitter/Windows Live secrets
 	G2CONF="${G2CONF}
 		--disable-static
-		--enable-documentation"
+		--enable-documentation
+		--enable-facebook
+		--enable-windows-live"
 	DOCS="NEWS" # README is empty
 }
