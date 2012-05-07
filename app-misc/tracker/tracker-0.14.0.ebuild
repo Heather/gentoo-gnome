@@ -16,10 +16,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 # USE="doc" is managed by eclass.
-IUSE="applet doc eds elibc_glibc exif firefox-bookmarks flac flickr gif
-gnome-keyring gsf gstreamer gtk iptc +jpeg laptop +libosinfo mp3 nautilus
-networkmanager pdf playlist rss test thunderbird +tiff upnp +vorbis xine +xml
-xmp" # qt4 strigi
+IUSE="applet doc eds elibc_glibc exif firefox-bookmarks flac flickr gif gnome-keyring gsf gstreamer gtk iptc +iso +jpeg laptop mp3 nautilus networkmanager pdf playlist rss test thunderbird +tiff upnp +vorbis xine +xml xmp" # qt4 strigi
 
 # Test suite highly disfunctional, loops forever
 # putting aside for now
@@ -67,9 +64,9 @@ RDEPEND="
 		>=dev-libs/libgee-0.3:0
 		>=x11-libs/gtk+-3.0.0:3 )
 	iptc? ( media-libs/libiptcdata )
+	iso? ( >=sys-libs/libosinfo-0.0.2 )
 	jpeg? ( virtual/jpeg:0 )
 	laptop? ( >=sys-power/upower-0.9 )
-	libosinfo? ( >=sys-libs/libosinfo-0.0.2 )
 	mp3? (
 		>=media-libs/taglib-1.6
 		gtk? ( x11-libs/gdk-pixbuf:2 ) )
@@ -182,6 +179,7 @@ pkg_setup() {
 		$(use_enable gtk tracker-preferences)
 		$(use_enable gtk tracker-needle)
 		$(use_enable iptc libiptcdata)
+		$(use_enable iso libosinfo)
 		$(use_enable jpeg libjpeg)
 		$(use_enable laptop upower)
 		$(use_enable mp3 taglib)

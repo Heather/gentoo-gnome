@@ -37,7 +37,7 @@ RDEPEND="
 	>=x11-libs/gtk+-3.3.5:3
 	>=net-libs/gtk-vnc-0.4.4[gtk3]
 	>=net-misc/spice-gtk-0.9[gtk3]
-	>=app-misc/tracker-0.14[libosinfo]
+	>=app-misc/tracker-0.14[iso]
 
 	sys-fs/fuse
 	sys-fs/fuseiso
