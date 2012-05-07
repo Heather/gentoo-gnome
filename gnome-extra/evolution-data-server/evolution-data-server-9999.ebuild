@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit autotools db-use eutils flag-o-matic gnome2 versionator virtualx
+inherit db-use eutils flag-o-matic gnome2 versionator virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -19,12 +19,10 @@ SLOT="0"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-solaris"
+	KEYWORDS="~amd64 ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-solaris"
 fi
 IUSE="doc +gnome-online-accounts +introspection ipv6 ldap kerberos vala +weather"
 
-# GNOME3: How do we slot libedataserverui-3.0.so?
-# Also, libedata-cal-1.2.so and libecal-1.2.so use gtk-3, but aren't slotted
 RDEPEND=">=dev-libs/glib-2.30:2
 	>=x11-libs/gtk+-3.2:3
 	>=gnome-base/gconf-2

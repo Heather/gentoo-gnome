@@ -7,7 +7,7 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="python? 2:2.5"
 
-inherit autotools eutils flag-o-matic gnome2 python
+inherit eutils flag-o-matic gnome2 python
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -20,7 +20,7 @@ SLOT="2.0"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+	KEYWORDS="~amd64 ~x86 ~x86-fbsd"
 fi
 IUSE="clutter connman crypt doc +gnome-online-accounts gstreamer kerberos ldap map networkmanager python ssl"
 
@@ -75,15 +75,13 @@ COMMON_DEPEND=">=dev-libs/glib-2.30:2
 		>=dev-libs/nspr-4.6.1
 		>=dev-libs/nss-3.11 )"
 DEPEND="${COMMON_DEPEND}
-	>=dev-util/intltool-0.40.0
-	>=sys-devel/gettext-0.17
-	sys-devel/bison
-	virtual/pkgconfig
-	app-text/scrollkeeper
-	>=app-text/gnome-doc-utils-0.20.10
 	app-text/docbook-xml-dtd:4.1.2
-	>=gnome-base/gnome-common-2.12
-	>=dev-util/gtk-doc-am-1.9
+	>=app-text/gnome-doc-utils-0.20.10
+	app-text/scrollkeeper
+	>=dev-util/intltool-0.40.0
+	sys-devel/bison
+	>=sys-devel/gettext-0.17
+	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.14 )"
 # eautoreconf needs:
 #	>=gnome-base/gnome-common-2.12
