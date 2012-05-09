@@ -51,6 +51,7 @@ DEPEND="${RDEPEND}
 "
 RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/nautilus-3.1.90
+	x11-themes/gnome-icon-theme-symbolic
 "
 
 pkg_setup() {
