@@ -14,6 +14,7 @@
 =dev-libs/libgdata-0.12*
 =dev-libs/totem-pl-parser-3*
 =dev-util/gnome-devel-docs-3.4*
+=dev-python/pyatspi-2.4*
 =gnome-base/gdm-3.4*
 =gnome-base/gnome-control-center-3.4*
 =gnome-base/gnome-core-apps-3.4*
