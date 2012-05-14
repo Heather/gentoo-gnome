@@ -1,7 +1,3 @@
-app-misc/gnote -applet
-dev-libs/libgee -introspection
-gnome-extra/gnome-games -clutter
-media-libs/clutter-gtk -introspection
-sys-apps/gnome-disk-utility -nautilus
-# Requires x11-libs/libxkbcommon from the x11 overlay
-x11-libs/gtk+ -packagekit
+# Alexandre Rostovtsev <tetromino@gentoo.org> (14 May 2012)
+# This is the GNOME 3.4 package.use mask
+=media-gfx/eog-plugins-3.4* -map
