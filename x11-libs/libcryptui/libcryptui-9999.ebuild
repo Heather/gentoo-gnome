@@ -20,7 +20,7 @@ IUSE="debug doc +introspection libnotify test"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+	KEYWORDS="~amd64 ~x86 ~x86-fbsd"
 fi
 
 # Pull in libnotify-0.7 because it's controlled via an automagic ifdef
