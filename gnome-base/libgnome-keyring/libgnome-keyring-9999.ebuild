@@ -1,19 +1,26 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/libgnome-keyring/libgnome-keyring-3.2.2.ebuild,v 1.2 2012/01/13 20:23:49 tetromino Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2 python
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Compatibility library for accessing secrets"
 HOMEPAGE="http://live.gnome.org/GnomeKeyring"
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~mips ~sh ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~sparc-solaris"
+if [[ ${PV} = 9999 ]]; then
+	KEYWORDS=""
+else
+	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~x86-linux ~sparc-solaris"
+fi
 IUSE="debug doc +introspection test"
 
 RDEPEND=">=sys-apps/dbus-1.0
