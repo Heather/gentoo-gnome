@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -17,7 +17,7 @@ HOMEPAGE="http://live.gnome.org/GnomeShell"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="+bluetooth +networkmanager"
+IUSE="+bluetooth +networkmanager systemd"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -66,6 +66,7 @@ COMMON_DEPEND=">=app-crypt/gcr-3.3.90
 
 	bluetooth? ( >=net-wireless/gnome-bluetooth-3.1.0[introspection] )
 	networkmanager? ( >=net-misc/networkmanager-0.8.999[introspection] )
+	systemd? ( >=sys-apps/systemd-31 )
 "
 # Runtime-only deps are probably incomplete and approximate.
 # Each block:
@@ -89,9 +90,9 @@ RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/gnome-session-2.91.91
 
 	>=gnome-base/gnome-settings-daemon-2.91
-	>=gnome-base/gnome-control-center-2.91.92-r1
+	>=gnome-base/gnome-control-center-2.91.92-r1[bluetooth(+)?]
 
-	>=sys-apps/accountsservice-0.6.14
+	>=sys-apps/accountsservice-0.6.14[introspection]
 
 	>=app-accessibility/caribou-0.3
 
@@ -102,6 +103,8 @@ RDEPEND="${COMMON_DEPEND}
 	networkmanager? (
 		net-misc/mobile-broadband-provider-info
 		sys-libs/timezone-data )
+
+	!systemd? ( sys-auth/consolekit )
 "
 DEPEND="${COMMON_DEPEND}
 	>=sys-devel/gettext-0.17
@@ -121,10 +124,9 @@ pkg_setup() {
 		--disable-jhbuild-wrapper-script
 		$(use_with bluetooth)
 		$(use_enable networkmanager)
+		$(use_with systemd)
 		--with-ca-certificates=${EPREFIX}/etc/ssl/certs/ca-certificates.crt
-		BROWSER_PLUGIN_DIR=${EPREFIX}/usr/$(get_libdir)/nsbrowser/plugins
-		--without-systemd"
-	# TODO: systemd support
+		BROWSER_PLUGIN_DIR=${EPREFIX}/usr/$(get_libdir)/nsbrowser/plugins"
 	python_set_active_version 2
 	python_pkg_setup
 }
@@ -147,7 +149,7 @@ src_prepare() {
 
 src_install() {
 	gnome2_src_install
-	python_convert_shebangs 2 "${D}"/usr/bin/gnome-shell-extension-tool
+	python_convert_shebangs 2 "${ED}/usr/bin/gnome-shell-extension-tool"
 
 	# Required for gnome-shell on hardened/PaX, bug #398941
 	pax-mark mr "${ED}usr/bin/gnome-shell"
