@@ -1,9 +1,10 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
 EAPI="3"
 GNOME_TARBALL_SUFFIX="xz"
+GCONF_DEBUG="yes"
 
 # make sure games is inherited first so that the gnome2
 # functions will be called if they are not overridden
@@ -22,24 +23,27 @@ if [[ ${PV} = 9999 ]]; then
 else
 	KEYWORDS="~amd64 ~x86"
 fi
-IUSE="gnome sound"
+IUSE="gnome"
 
 # FIXME: quartz support?
-COMMON_DEPEND=">=dev-libs/glib-2.26.0:2
-	>=dev-scheme/guile-1.8.0:12[deprecated,regex]
-	>=gnome-base/librsvg-2.32.0
+# Does not build with guile-2.0.0 or 2.0.1
+COMMON_DEPEND=">=dev-libs/glib-2.31.13:2
+	>=dev-scheme/guile-2.0.5:2[deprecated,regex]
+	>=gnome-base/librsvg-2.32.0:2
 	>=x11-libs/cairo-1.10.0
 	x11-libs/gdk-pixbuf:2
 	>=x11-libs/gtk+-3.0.0:3
 	x11-libs/libICE
 	x11-libs/libSM
-	gnome? ( >=gnome-base/gconf-2.0:2 )
-	sound? ( >=media-libs/libcanberra-0.26[gtk3] )"
+	>=media-libs/libcanberra-0.26[gtk3]
+	gnome? ( >=gnome-base/gconf-2.0:2 )"
 # aisleriot was split off from gnome-games
 RDEPEND="${COMMON_DEPEND}
 	!<gnome-extra/gnome-games-3.1.1[aisleriot]
 	!<gnome-extra/gnome-games-3"
 DEPEND="${COMMON_DEPEND}
+	app-arch/gzip
+	dev-libs/libxml2
 	>=dev-util/intltool-0.40.4
 	sys-apps/lsb-release
 	>=sys-devel/gettext-0.12
@@ -60,13 +64,12 @@ pkg_setup() {
 
 	G2CONF="${G2CONF}
 		--with-gtk=3.0
-		--with-smclient
-		--with-guile=1.8
-		$(use_enable sound)
+		--with-guile=2.0
+		--enable-sound
 		--disable-schemas-compile
 		--with-card-theme-formats=all
-		--with-kde-card-theme-path=${EPREFIX}/usr/share/apps/carddecks
-		--with-pysol-card-theme-path=${EPREFIX}${GAMES_DATADIR}/pysolfc"
+		--with-kde-card-theme-path="${EPREFIX}"/usr/share/apps/carddecks
+		--with-pysol-card-theme-path="${EPREFIX}${GAMES_DATADIR}"/pysolfc"
 }
 
 pkg_postinst() {
