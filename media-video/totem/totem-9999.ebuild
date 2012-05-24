@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/totem/totem-3.2.2.ebuild,v 1.2 2012/02/20 08:18:35 tetromino Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="yes"
@@ -87,16 +87,14 @@ RDEPEND=">=dev-libs/glib-2.27.92:2
 # XXX: zeroconf requires unreleased version of libepc
 
 DEPEND="${RDEPEND}
-	sys-devel/gettext
-	x11-proto/xproto
-	x11-proto/xextproto
-	app-text/scrollkeeper
-	>=app-text/gnome-doc-utils-0.20.3
-	>=dev-util/intltool-0.40
-	virtual/pkgconfig
 	app-text/docbook-xml-dtd:4.5
-	gnome-base/gnome-common
-	dev-util/gtk-doc-am
+	>=app-text/gnome-doc-utils-0.20.3
+	app-text/scrollkeeper
+	>=dev-util/intltool-0.40
+	sys-devel/gettext
+	x11-proto/xextproto
+	x11-proto/xproto
+	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.14 )
 	test? ( python? ( dev-python/pylint ) )"
 # docbook-xml-dtd is needed for user doc
@@ -124,7 +122,6 @@ pkg_setup() {
 		$(use_enable nautilus)
 		$(use_enable nsplugin browser-plugins)
 		$(use_enable python)
-		$(use_enable python introspection)
 		$(use_enable vala)
 		VALAC=$(type -P valac-0.14)
 		BROWSER_PLUGIN_DIR=/usr/$(get_libdir)/nsbrowser/plugins"
