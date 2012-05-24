@@ -1,20 +1,27 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gdm/gdm-3.2.1.1-r2.ebuild,v 1.2 2012/02/14 04:53:07 tetromino Exp $
+# $Header: $
 
 EAPI="4"
 GNOME2_LA_PUNT="yes"
 
 inherit autotools eutils gnome2 pam systemd
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="GNOME Display Manager"
 HOMEPAGE="http://www.gnome.org/projects/gdm/"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~sh ~x86"
+if [[ ${PV} = 9999 ]]; then
+	KEYWORDS=""
+else
+	KEYWORDS="~amd64 ~sh ~x86"
+fi
 
-IUSE="accessibility +consolekit +fallback fprint +gnome-shell ipv6 gnome-keyring +introspection selinux smartcard tcpd test xinerama +xklavier"
+IUSE="accessibility +consolekit +fallback fprint +gnome-shell ipv6 gnome-keyring +introspection plymouth selinux smartcard systemd tcpd test xinerama +xklavier"
 
 # NOTE: x11-base/xorg-server dep is for X_SERVER_PATH etc, bug #295686
 # nspr used by smartcard extension
@@ -55,7 +62,9 @@ COMMON_DEPEND="
 	accessibility? ( x11-libs/libXevie )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-2.22[pam] )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.12 )
+	plymouth? ( sys-boot/plymouth )
 	selinux? ( sys-libs/libselinux )
+	systemd? ( >=sys-apps/systemd-39 )
 	tcpd? ( >=sys-apps/tcp-wrappers-7.6 )
 	xinerama? ( x11-libs/libXinerama )
 	xklavier? ( >=x11-libs/libxklavier-4 )"
@@ -104,11 +113,9 @@ pkg_setup() {
 	# they don't have any corresponding code.
 	# --with-at-spi-registryd-directory= needs to be passed explicitly because
 	# of https://bugzilla.gnome.org/show_bug.cgi?id=607643#c4
-	# TODO: Add systemd support
 	G2CONF="${G2CONF}
 		--disable-schemas-install
 		--disable-static
-		--without-systemd
 		--localstatedir=${EPREFIX}/var
 		--with-xdmcp=yes
 		--enable-authentication-scheme=pam
@@ -118,7 +125,9 @@ pkg_setup() {
 		$(use_enable ipv6)
 		$(use_enable xklavier libxklavier)
 		$(use_with consolekit console-kit)
+		$(use_with plymouth)
 		$(use_with selinux)
+		$(use_with systemd)
 		$(use_with tcpd tcp-wrappers)
 		$(use_with xinerama)"
 
