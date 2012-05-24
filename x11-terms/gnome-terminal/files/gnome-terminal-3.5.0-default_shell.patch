@@ -1,0 +1,13 @@
+diff --git a/src/org.gnome.Terminal.Preferences.gschema.xml.in b/src/org.gnome.Terminal.Preferences.gschema.xml.in
+index 6d28344..1a94921 100644
+--- a/src/org.gnome.Terminal.Preferences.gschema.xml.in
++++ b/src/org.gnome.Terminal.Preferences.gschema.xml.in
+@@ -169,7 +169,7 @@
+       <_description>Possible values are "close" to close the terminal, and "restart" to restart the command.</_description>
+     </key>
+     <key name="login-shell" type="b">
+-      <default>false</default>
++      <default>true</default>
+       <_summary>Whether to launch the command in the terminal as a login shell</_summary>
+       <_description>If true, the command inside the terminal will be launched as a login shell. (argv[0] will have a hyphen in front of it.)</_description>
+     </key>
