@@ -16,7 +16,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2"
 SLOT="2"
-IUSE="+bluetooth +cheese +colord +cups +networkmanager +socialweb"
+IUSE="+bluetooth +cheese +colord +cups +networkmanager +socialweb systemd wacom"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -67,18 +67,25 @@ COMMON_DEPEND="
 	networkmanager? (
 		>=gnome-extra/nm-applet-0.9.1.90
 		>=net-misc/networkmanager-0.8.997 )
-	socialweb? ( net-libs/libsocialweb )"
+	socialweb? ( net-libs/libsocialweb )
+	systemd? ( >=sys-apps/systemd-31 )
+	wacom? ( >=dev-libs/libwacom-0.3
+		x11-libs/libXi )"
 # <gnome-color-manager-3.1.2 has file collisions with g-c-c-3.1.x
 RDEPEND="${COMMON_DEPEND}
 	app-admin/apg
 	sys-apps/accountsservice
 	x11-themes/gnome-icon-theme-symbolic
+	colord? ( >=gnome-extra/gnome-color-manager-3 )
 	cups? ( net-print/cups-pk-helper )
+	!systemd? ( sys-auth/consolekit )
+	wacom? ( gnome-base/gnome-settings-daemon[wacom] )
 
 	!<gnome-base/gdm-2.91.94
 	!<gnome-extra/gnome-color-manager-3.1.2
 	!gnome-extra/gnome-media[pulseaudio]
-	!<gnome-extra/gnome-media-2.32.0-r300"
+	!<gnome-extra/gnome-media-2.32.0-r300
+	!<net-wireless/gnome-bluetooth-3.3.2"
 # PDEPEND to avoid circular dependency
 PDEPEND=">=gnome-base/gnome-session-2.91.6-r1"
 DEPEND="${COMMON_DEPEND}
@@ -100,23 +107,29 @@ DEPEND="${COMMON_DEPEND}
 #	gnome-base/gnome-common
 
 pkg_setup() {
-	# TODO: libwacom is needed for wacom support
 	G2CONF="${G2CONF}
 		--disable-update-mimedb
 		--disable-static
-		--disable-wacom
 		$(use_enable bluetooth)
 		$(use_with cheese)
 		$(use_enable colord color)
 		$(use_enable cups)
-		$(use_with socialweb libsocialweb)"
+		$(use_with socialweb libsocialweb)
+		$(use_enable systemd)
+		$(use_enable wacom)"
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
 }
 
 src_prepare() {
 	# Make colord plugin optional; requires eautoreconf
-	epatch "${FILESDIR}/${PN}-3.3.92-optional-bluetooth-colord-wacom.patch"
-	eautoreconf
+	epatch "${FILESDIR}/${PN}-3.4.1-optional-bluetooth-colord-wacom.patch"
+	[[ ${PV} != 9999 ]] && eautoreconf
 
 	gnome2_src_prepare
+
+	# panels/datetime/Makefile.am gets touched as a result of something in our
+	# src_prepare(). We need to touch timedated{c,h} to prevent them from being
+	# regenerated (bug #415901)
+	[[ -f panels/datetime/timedated.h ]] && touch panels/datetime/timedated.h
+	[[ -f panels/datetime/timedated.c ]] && touch panels/datetime/timedated.c
 }
