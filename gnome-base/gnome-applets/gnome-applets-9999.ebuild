@@ -1,6 +1,6 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-applets/gnome-applets-2.32.1.1.ebuild,v 1.6 2011/02/08 19:04:13 ssuominen Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="no"
@@ -60,12 +60,12 @@ RDEPEND=">=x11-libs/gtk+-3.0.0:3
 	networkmanager? ( >=net-misc/networkmanager-0.7.0 )
 	policykit? ( >=sys-auth/polkit-0.92 )"
 DEPEND="${RDEPEND}
-	>=app-text/scrollkeeper-0.1.4
-	>=app-text/gnome-doc-utils-0.3.2
-	>=dev-util/intltool-0.35
-	dev-libs/libxslt
 	app-text/docbook-xml-dtd:4.1.2
 	app-text/docbook-xml-dtd:4.3
+	>=app-text/gnome-doc-utils-0.3.2
+	>=app-text/scrollkeeper-0.1.4
+	>=dev-util/intltool-0.35
+	dev-libs/libxslt
 	virtual/pkgconfig"
 
 pkg_setup() {
@@ -90,9 +90,7 @@ pkg_setup() {
 src_prepare() {
 	gnome2_src_prepare
 
-	# disable pyc compiling
-	mv py-compile py-compile.orig
-	ln -s $(type -P true) py-compile
+	python_clean_py-compile_files
 
 	# Invest applet tests need gconf/proxy/...
 	# Note: for now, invest tests are commented out by upstream
@@ -111,7 +109,7 @@ src_install() {
 	gnome2_src_install
 
 	local APPLETS="accessx-status charpick cpufreq drivemount geyes
-			 gkb-new gweather invest-applet mini-commander
+			 gweather invest-applet mini-commander
 			 multiload null_applet stickynotes trashapplet"
 
 	# mixer is out because gnome3 uses pulseaudio
