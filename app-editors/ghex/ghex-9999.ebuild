@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -19,16 +19,16 @@ SLOT="2"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64 ~ppc ~sparc ~x86 ~x86-interix ~amd64-linux ~x86-linux"
+	KEYWORDS="~amd64 ~ppc ~x86 ~x86-interix ~amd64-linux ~x86-linux"
 fi
 IUSE=""
 
-RDEPEND=">=dev-libs/glib-2.26:2
-	>=x11-libs/gtk+-3.0:3
-	>=dev-libs/atk-1"
+RDEPEND=">=dev-libs/atk-1
+	>=dev-libs/glib-2.31.10:2
+	>=x11-libs/gtk+-3.3.8:3"
 DEPEND="${RDEPEND}
-	>=dev-util/intltool-0.41.1
 	>=app-text/gnome-doc-utils-0.9.0
+	>=dev-util/intltool-0.41.1
 	>=sys-devel/gettext-0.17
 	virtual/pkgconfig"
 
