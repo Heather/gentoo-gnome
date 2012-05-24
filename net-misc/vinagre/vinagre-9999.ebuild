@@ -1,6 +1,6 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-misc/vinagre/vinagre-2.30.3.ebuild,v 1.4 2011/01/19 21:26:57 hwoarang Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="no"
@@ -19,9 +19,9 @@ SLOT="0"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+	KEYWORDS="~amd64 ~x86"
 fi
-IUSE="avahi +ssh +telepathy test"
+IUSE="avahi +ssh spice +telepathy test"
 
 # cairo used in vinagre-tab
 # gdk-pixbuf used all over the place
@@ -36,39 +36,39 @@ RDEPEND=">=dev-libs/glib-2.28.0:2
 
 	avahi? ( >=net-dns/avahi-0.6.26[dbus,gtk3] )
 	ssh? ( >=x11-libs/vte-0.20:2.90 )
+	spice? ( >=net-misc/spice-gtk-0.5[gtk3] )
 	telepathy? (
 		dev-libs/dbus-glib
 		>=net-libs/telepathy-glib-0.11.6 )
 "
 DEPEND="${RDEPEND}
-	dev-lang/vala:0.12
-	gnome-base/gnome-common
 	>=dev-lang/perl-5
+	dev-lang/vala:0.12
+	dev-libs/libxml2
 	>=dev-util/intltool-0.40
-	virtual/pkgconfig
-	app-text/scrollkeeper
-	app-text/gnome-doc-utils
+	dev-util/itstool
 	>=sys-devel/gettext-0.17
-	test? ( ~app-text/docbook-xml-dtd-4.3 )"
+	virtual/pkgconfig
+	test? ( app-text/gnome-doc-utils )"
+# eautoreconf needds:
+#	app-text/yelp-tools
+#	gnome-base/gnome-common
 
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog ChangeLog.pre-git NEWS README"
-	# Spice support?
-	# SSH support fails to compile
 	G2CONF="${G2CONF}
-		VALAC=$(type -p valac-0.12)
+		VALAC=$(type -P valac-0.12)
 		--disable-schemas-compile
-		--disable-scrollkeeper
-		--disable-spice
 		--enable-rdp
 		$(use_with avahi)
 		$(use_enable ssh)
+		$(use_enable spice)
 		$(use_with telepathy)"
 }
 
 src_install() {
 	gnome2_src_install
 
-	# Remove it's own installation of DOCS that go to $PN instead of $P and aren't ecompressed
+	# Remove its own installation of DOCS that go to $PN instead of $P and aren't ecompressed
 	rm -rf "${ED}"/usr/share/doc/vinagre
 }
