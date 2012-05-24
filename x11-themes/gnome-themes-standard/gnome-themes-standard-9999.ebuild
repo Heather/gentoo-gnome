@@ -33,7 +33,10 @@ DEPEND="${COMMON_DEPEND}
 	virtual/pkgconfig"
 # gnome-themes{,-extras} are OBSOLETE for GNOME 3
 # http://comments.gmane.org/gmane.comp.gnome.desktop/44130
+# Depend on gsettings-desktop-schemas-3.4 to make sure 3.2 users don't lose
+# their default background image
 RDEPEND="${COMMON_DEPEND}
+	>=gnome-base/gsettings-desktop-schemas-3.4
 	!<x11-themes/gnome-themes-2.32.1-r1"
 
 pkg_setup() {
