@@ -54,7 +54,7 @@ COMMON_DEPEND="
 		sys-fs/udev[gudev]
 		>=app-admin/packagekit-base-0.6.12 )
 	smartcard? (
-		sys-fs/udev[gudev] 
+		sys-fs/udev[gudev]
 		>=dev-libs/nss-3.11.2 )
 	systemd? ( >=sys-apps/systemd-31 )
 	udev? ( sys-fs/udev[gudev] )
@@ -87,7 +87,6 @@ DEPEND="${COMMON_DEPEND}
 pkg_setup() {
 	# README is empty
 	DOCS="AUTHORS NEWS ChangeLog MAINTAINERS"
-	# TODO: systemd support
 	G2CONF="${G2CONF}
 		--disable-static
 		--disable-schemas-compile
@@ -126,5 +125,5 @@ src_install() {
 	gnome2_src_install
 
 	echo 'GSETTINGS_BACKEND="dconf"' >> 51gsettings-dconf
-	doenvd 51gsettings-dconf || die "doenvd failed"
+	doenvd 51gsettings-dconf
 }
