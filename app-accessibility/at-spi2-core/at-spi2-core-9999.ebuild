@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -19,7 +19,7 @@ SLOT="2"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64 ~arm ~hppa ~x86"
 fi
 IUSE="doc +introspection"
 
@@ -33,6 +33,7 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
+	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.9 )
 "
 
