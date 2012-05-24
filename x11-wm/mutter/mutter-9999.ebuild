@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -24,15 +24,15 @@ fi
 
 COMMON_DEPEND=">=x11-libs/pango-1.2[X,introspection?]
 	>=x11-libs/cairo-1.10[X]
-	x11-libs/gdk-pixbuf:2
+	x11-libs/gdk-pixbuf:2[introspection?]
 	>=x11-libs/gtk+-3.3.7:3[introspection?]
 	>=dev-libs/glib-2.25.11:2
-	>=media-libs/clutter-1.9.10:1.0
-	>=media-libs/cogl-1.9.6:1.0
+	>=media-libs/clutter-1.9.10:1.0[introspection?]
+	>=media-libs/cogl-1.9.6:1.0[introspection?]
 	>=media-libs/libcanberra-0.26[gtk3]
 	>=x11-libs/startup-notification-0.7
 	>=x11-libs/libXcomposite-0.2
-	>=gnome-base/gsettings-desktop-schemas-3.3.0
+	>=gnome-base/gsettings-desktop-schemas-3.3.0[introspection?]
 
 	x11-libs/libICE
 	x11-libs/libSM
