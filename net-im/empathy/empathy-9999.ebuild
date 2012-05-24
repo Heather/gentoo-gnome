@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-im/empathy/empathy-3.2.2.ebuild,v 1.3 2012/02/14 04:57:56 tetromino Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="no"
@@ -17,20 +17,18 @@ HOMEPAGE="http://live.gnome.org/Empathy"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="debug eds +map +geoloc gnome-online-accounts legacy-call +networkmanager sendto spell test +v4l"
+IUSE="debug eds +geocode +geoloc gnome gnome-online-accounts legacy-call +map +networkmanager sendto spell test +v4l"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
 	KEYWORDS="~amd64 ~x86 ~x86-linux"
 fi
 
-# FIXME: gst-plugins-bad is required for the valve plugin. This should move to good
-# eventually at which point the dep can be dropped
 # libgee extensively used in libempathy
 # gdk-pixbuf and pango extensively used in libempathy-gtk
 # clutter-1.10 dep is missing in configure, newer API is used
 # folks-0.6.8 is needed to load the contacts list, configure is wrong again
-RDEPEND=">=dev-libs/glib-2.30:2
+COMMON_DEPEND=">=dev-libs/glib-2.30:2
 	x11-libs/gdk-pixbuf:2
 	>=x11-libs/gtk+-3.3.6:3
 	x11-libs/pango
@@ -44,25 +42,22 @@ RDEPEND=">=dev-libs/glib-2.30:2
 	>=x11-libs/libnotify-0.7
 
 	>=media-libs/clutter-1.10.0:1.0
-	>=media-libs/clutter-gtk-0.90.3:1.0
+	>=media-libs/clutter-gtk-1.1.2:1.0
 	>=media-libs/clutter-gst-1.5.2:1.0
 
-	>=net-libs/telepathy-glib-0.17.5
+	>=net-libs/telepathy-glib-0.18
 	>=net-im/telepathy-logger-0.2.13
 	>=net-libs/telepathy-farstream-0.2.1
-	net-im/telepathy-connection-managers
 
 	dev-libs/libxml2:2
 	gnome-base/gsettings-desktop-schemas
 	media-libs/gstreamer:0.10
-	media-libs/gst-plugins-base:0.10
-	media-libs/gst-plugins-bad
 	media-sound/pulseaudio[glib]
 	net-libs/libsoup:2.4
 	x11-libs/libX11
-	x11-themes/gnome-icon-theme-symbolic
 
 	eds? ( >=gnome-extra/evolution-data-server-1.2 )
+	geocode? ( sci-geosciences/geocode-glib )
 	geoloc? ( >=app-misc/geoclue-0.12 )
 	gnome-online-accounts? ( >=net-libs/gnome-online-accounts-3.3.0 )
 	map? (
@@ -75,11 +70,21 @@ RDEPEND=">=dev-libs/glib-2.30:2
 		>=app-text/enchant-1.2
 		>=app-text/iso-codes-0.35 )
 	v4l? (
-		|| ( sys-fs/udev[gudev] sys-fs/udev[extras] )
 		media-plugins/gst-plugins-v4l2:0.10
-		>=media-video/cheese-2.91.91.1 )
+		>=media-video/cheese-3.4
+		sys-fs/udev[gudev] )
 "
-DEPEND="${RDEPEND}
+# FIXME: gst-plugins-bad is required for the valve plugin. This should move to good
+# eventually at which point the dep can be dropped
+RDEPEND="${COMMON_DEPEND}
+	media-libs/gst-plugins-base:0.10
+	media-libs/gst-plugins-bad
+	net-im/telepathy-connection-managers
+	x11-themes/gnome-icon-theme-symbolic
+	gnome? ( gnome-extra/gnome-contacts )
+	!legacy-call? ( !<net-voip/telepathy-gabble-0.16 )
+"
+DEPEND="${COMMON_DEPEND}
 	dev-libs/libxml2:2
 	dev-util/itstool
 
@@ -90,7 +95,7 @@ DEPEND="${RDEPEND}
 		>=dev-libs/check-0.9.4 )
 	dev-libs/libxslt
 "
-PDEPEND=">=net-im/telepathy-mission-control-5.7.6"
+PDEPEND=">=net-im/telepathy-mission-control-5.12"
 
 pkg_setup() {
 	DOCS="CONTRIBUTORS AUTHORS ChangeLog NEWS README"
@@ -103,6 +108,7 @@ pkg_setup() {
 		$(use_enable legacy-call empathy-av)
 		$(use_enable debug)
 		$(use_with eds)
+		$(use_enable geocode)
 		$(use_enable geoloc location)
 		$(use_enable gnome-online-accounts goa)
 		$(use_enable map)
