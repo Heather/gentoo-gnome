@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -35,7 +35,7 @@ RDEPEND="
 	>=x11-libs/libXrandr-1.3
 	x11-libs/libX11
 	>=gnome-base/gsettings-desktop-schemas-2.91.92
-	doc? ( !<gnome-base/gnome-desktop-2.32.1-r50:2[doc] )
+	doc? ( !<gnome-base/gnome-desktop-2.32.1-r1:2[doc] )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.7 )"
 DEPEND="${RDEPEND}
 	app-text/docbook-xml-dtd:4.1.2
