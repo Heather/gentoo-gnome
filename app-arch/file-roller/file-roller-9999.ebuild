@@ -1,6 +1,6 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-arch/file-roller/file-roller-2.32.1.ebuild,v 1.2 2010/12/07 19:37:09 eva Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="no"
@@ -20,7 +20,7 @@ IUSE="nautilus packagekit"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux"
+	KEYWORDS="~amd64 ~arm ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux"
 fi
 
 # gdk-pixbuf used extensively in the source
@@ -32,13 +32,13 @@ RDEPEND=">=dev-libs/glib-2.29.14:2
 	x11-libs/gdk-pixbuf:2
 	>=x11-libs/gtk+-3.0.2:3
 	x11-libs/pango
-	nautilus? ( >=gnome-base/nautilus-3.0.0 )
+	nautilus? ( >=gnome-base/nautilus-3 )
 	packagekit? ( app-admin/packagekit-base )
 "
 DEPEND="${RDEPEND}
-	sys-devel/gettext
-	>=dev-util/intltool-0.40.0
 	app-text/gnome-doc-utils
+	>=dev-util/intltool-0.40.0
+	sys-devel/gettext
 	virtual/pkgconfig"
 # eautoreconf needs:
 #	gnome-base/gnome-common
