@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -6,9 +6,9 @@ EAPI="4"
 GCONF_DEBUG="no"
 PYTHON_DEPEND="2:2.5"
 SUPPORT_PYTHON_ABIS="1"
-RESTRICT_PYTHON_ABIS="3.* *-jython"
+RESTRICT_PYTHON_ABIS="2.5 3.* *-jython"
 
-inherit autotools eutils gnome2 python
+inherit gnome2 python
 if [[ ${PV} = 9999 ]]; then
 	GNOME_LIVE_MODULE="pyatspi2"
 	inherit gnome2-live
@@ -23,7 +23,7 @@ SLOT="0"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64 ~arm ~hppa ~x86"
 fi
 IUSE="test"
 
@@ -50,16 +50,9 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# remove pygtk cruft; https://bugzilla.gnome.org/show_bug.cgi?id=660826
-	epatch "${FILESDIR}/${PN}-2.2.0-AM_CHECK_PYMOD-pygtk.patch"
-	[[ ${PV} = 9999 ]] || eautoreconf
-
 	gnome2_src_prepare
 
-	# disable pyc compiling
-	mv config/py-compile config/py-compile.orig
-	ln -s $(type -P true) config/py-compile
-
+	python_clean_py-compile_files
 	python_copy_sources
 }
 
