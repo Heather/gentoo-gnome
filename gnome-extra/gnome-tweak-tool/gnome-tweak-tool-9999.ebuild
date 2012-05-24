@@ -25,8 +25,8 @@ else
 fi
 
 COMMON_DEPEND="
-	>=gnome-base/gsettings-desktop-schemas-3.3.2
-	>=dev-python/pygobject-2.90.0:3
+	>=gnome-base/gsettings-desktop-schemas-3.4
+	>=dev-python/pygobject-3.2.1:3
 	gnome-base/gconf:2"
 # g-s-d, gnome-shell etc. needed at runtime for the gsettings schemas
 RDEPEND="${COMMON_DEPEND}
