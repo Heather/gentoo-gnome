@@ -39,7 +39,7 @@ DEPEND="${RDEPEND}
 		>=dev-libs/libxslt-1.0
 		>=dev-util/gdbus-codegen-${PV}
 		>=dev-util/gtk-doc-1.15
-		~app-text/docbook-xml-dtd-4.1.2 )
+		app-text/docbook-xml-dtd:4.1.2 )
 	systemtap? ( >=dev-util/systemtap-1.3 )
 	test? (
 		sys-devel/gdb
@@ -69,34 +69,14 @@ src_prepare() {
 	[[ ${PV} = 9999 ]] && gnome2-live_src_prepare
 	mv -vf "${WORKDIR}"/pkg-config-*/pkg.m4 "${WORKDIR}"/ || die
 
-	if use ia64 ; then
-		# Only apply for < 4.1
-		local major=$(gcc-major-version)
-		local minor=$(gcc-minor-version)
-		if (( major < 4 || ( major == 4 && minor == 0 ) )); then
-			epatch "${FILESDIR}/glib-2.10.3-ia64-atomic-ops.patch"
-		fi
-	fi
-
-	# Don't fail gio tests when ran without userpriv, upstream bug 552912
-	# This is only a temporary workaround, remove as soon as possible
-#	epatch "${FILESDIR}/${PN}-2.18.1-workaround-gio-test-failure-without-userpriv.patch"
-
 	# Fix gmodule issues on fbsd; bug #184301
 	epatch "${FILESDIR}"/${PN}-2.12.12-fbsd.patch
-
-	# Fix test failure during upgrades, upstream bug 621368
-	epatch "${FILESDIR}/${PN}-2.31-assert-test-failure.patch"
 
 	# Do not try to remove files on live filesystem, upstream bug #619274
 	sed 's:^\(.*"/desktop-app-info/delete".*\):/*\1*/:' \
 		-i "${S}"/gio/tests/desktop-app-info.c || die "sed failed"
 
-	# need to build tests if USE=doc for bug #387385
-	if ! use test && ! use doc; then
-		# don't waste time building tests
-		sed 's/^\(.*\SUBDIRS .*\=.*\)tests\(.*\)$/\1\2/' -i $(find . -name Makefile.am -o -name Makefile.in) || die
-	else
+	if use test; then
 		# Disable tests requiring dev-util/desktop-file-utils when not installed, bug #286629
 		if ! has_version dev-util/desktop-file-utils ; then
 			ewarn "Some tests will be skipped due dev-util/desktop-file-utils not being present on your system,"
@@ -170,6 +150,7 @@ src_configure() {
 		$(use_enable static-libs static) \
 		$(use_enable systemtap dtrace) \
 		$(use_enable systemtap systemtap) \
+		$(use_enable test modular-tests) \
 		--with-pcre=internal \
 		--with-threads=posix
 }
