@@ -117,11 +117,16 @@ x11-terms/gnome-terminal
 x11-wm/mutter
 
 # GNOME Disk Utility
+~sys-apps/gptfdisk-0.8.4
+=sys-apps/util-linux-2.21*
 sys-fs/udisks:2
 sys-apps/gnome-disk-utility
 
-# Libraries for Apple products
+# iPods and shizz
 app-pda/libplist
+
+# iOS devices
+~app-pda/usbmuxd-1.0.8
 app-pda/libimobiledevice
 
 # Gobject Introspection
@@ -202,6 +207,7 @@ www-client/epiphany
 www-client/epiphany-extensions
 
 # Empathy
+=sci-geosciences/geocode-glib-0.99*
 media-libs/libchamplain:0.8
 media-libs/libchamplain:0.10
 media-libs/libchamplain:0.12
