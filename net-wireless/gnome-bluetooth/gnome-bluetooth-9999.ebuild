@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit autotools gnome2 multilib
+inherit gnome2 multilib
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -35,8 +35,6 @@ RDEPEND="${COMMON_DEPEND}
 	app-mobilephone/obexd
 	sys-fs/udev
 	x11-themes/gnome-icon-theme-symbolic"
-# To break circular dependencies
-PDEPEND=">=gnome-base/gnome-control-center-2.91"
 DEPEND="${COMMON_DEPEND}
 	!net-wireless/bluez-gnome
 	app-text/docbook-xml-dtd:4.1.2
@@ -69,13 +67,6 @@ pkg_setup() {
 	DOCS="AUTHORS README NEWS ChangeLog"
 
 	enewgroup plugdev
-}
-
-src_prepare() {
-	# Fix make install, is in next release
-	epatch "${FILESDIR}/${P}-fix-makefile.patch"
-
-	eautoreconf
 }
 
 src_install() {
