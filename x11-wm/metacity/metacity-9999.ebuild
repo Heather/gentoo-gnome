@@ -1,6 +1,6 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-wm/metacity/metacity-2.34.1.ebuild,v 1.1 2011/07/24 13:37:23 eva Exp $
+# $Header: $
 
 EAPI="4"
 # debug only changes CFLAGS
@@ -8,13 +8,20 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
 inherit eutils gnome2
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="GNOME default window manager"
 HOMEPAGE="http://blogs.gnome.org/metacity/"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~x86-solaris"
+if [[ ${PV} = 9999 ]]; then
+	KEYWORDS=""
+else
+	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~x86-solaris"
+fi
 IUSE="test xinerama"
 
 # XXX: libgtop is automagic, hard-enabled instead
@@ -52,7 +59,6 @@ pkg_setup() {
 	DOCS="AUTHORS ChangeLog HACKING NEWS README *.txt doc/*.txt"
 	G2CONF="${G2CONF}
 		--disable-static
-		--disable-maintainer-mode
 		--enable-canberra
 		--enable-compositor
 		--enable-render
