@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-extra/gnome-games/gnome-games-3.2.1-r1.ebuild,v 1.3 2012/02/10 03:33:26 patrick Exp $
+# $Header: $
 
 EAPI="3"
 GNOME_TARBALL_SUFFIX="xz"
@@ -12,7 +12,10 @@ PYTHON_USE_WITH="xml"
 
 # make sure games is inherited first so that the gnome2
 # functions will be called if they are not overridden
-inherit autotools games eutils gnome2 python virtualx
+inherit games gnome2 python virtualx
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Collection of games for the GNOME desktop"
 HOMEPAGE="http://live.gnome.org/GnomeGames/"
@@ -20,7 +23,11 @@ HOMEPAGE="http://live.gnome.org/GnomeGames/"
 LICENSE="GPL-2 GPL-3 FDL-1.1"
 SLOT="0"
 # TODO: file KEYWORDREQ bug once it's determined that seed is usable
-KEYWORDS="~amd64 ~x86"
+if [[ ${PV} = 9999 ]]; then
+	KEYWORDS=""
+else
+	KEYWORDS="~amd64 ~x86"
+fi
 IUSE="artworkextra +aisleriot +clutter +glchess +introspection +sudoku test"
 
 COMMON_DEPEND="
@@ -28,43 +35,39 @@ COMMON_DEPEND="
 	>=dev-libs/glib-2.25.7
 	>=dev-libs/libxml2-2.4.0
 	>=gnome-base/librsvg-2.32
-	>=x11-libs/cairo-1.10.0
+	>=x11-libs/cairo-1.10
 	>=x11-libs/gtk+-3.3.11:3[introspection?]
 
 	>=media-libs/libcanberra-0.26[gtk3]
 
 	artworkextra? ( >=gnome-extra/gnome-games-extra-data-3.0.0 )
 	clutter? (
-		>=dev-libs/gobject-introspection-0.6.3
-		x11-libs/gtk+:3[introspection]
-		>=media-libs/clutter-gtk-0.91.6:1.0[introspection] )
+		media-libs/clutter:1.0
+		>=media-libs/clutter-gtk-0.91.6:1.0 )
 	introspection? (
-		>=dev-libs/gobject-introspection-0.6.3
+		>=dev-libs/gobject-introspection-0.9.10
 		media-libs/clutter:1.0[introspection] )
 	glchess? (
 		dev-db/sqlite:3
-		>=gnome-base/librsvg-2.32
 		virtual/opengl
 		x11-libs/libX11 )"
 RDEPEND="${COMMON_DEPEND}
 	sudoku? (
-		|| (
-			dev-python/pygobject:3[cairo]
-			>=dev-python/pygobject-2.28.3:2[cairo,introspection] )
 		dev-python/pycairo
+		dev-python/pygobject:3[cairo]
 		x11-libs/gdk-pixbuf:2[introspection]
 		x11-libs/pango[introspection]
 		>=x11-libs/gtk+-3.0.0:3[introspection] )
 
 	!<gnome-extra/gnome-games-extra-data-3.0.0"
 DEPEND="${COMMON_DEPEND}
+	>=app-text/gnome-doc-utils-0.10
 	>=dev-lang/vala-0.15.1:0.16
 	dev-libs/libxml2:2
-	dev-util/itstool
 	>=dev-util/intltool-0.40.4
+	dev-util/itstool
 	>=sys-devel/gettext-0.10.40
 	virtual/pkgconfig
-	>=gnome-base/gnome-common-2.12.0
 	test? ( >=dev-libs/check-0.9.4 )"
 
 # For compatibility with older versions of the gnome-games package
@@ -88,10 +91,7 @@ pkg_setup() {
 		--disable-schemas-compile
 		--disable-static
 		$(use_enable introspection)
-		VALAC=$(type -p valac-0.16)"
-
-	# Should be after $(use_enable introspection), but before --enable-omitgames
-	#use clutter && G2CONF="${G2CONF} --enable-introspection"
+		VALAC=$(type -P valac-0.16)"
 
 	G2CONF="${G2CONF}
 		--with-scores-group=${GAMES_GROUP}
@@ -117,13 +117,10 @@ pkg_setup() {
 }
 
 src_prepare() {
-	use sudoku && python_convert_shebangs -r 2 gnome-sudoku/src
-
-	# Without this, --enable-staging enables all those games unconditionally
-	#epatch "${FILESDIR}/${PN}-fix-staging-games.patch"
-
-	# disable pyc compiling
-	echo > py-compile
+	if use sudoku; then
+		python_convert_shebangs -r 2 gnome-sudoku/src
+		python_clean_py-compile_files
+	fi
 
 	gnome2_src_prepare
 }
