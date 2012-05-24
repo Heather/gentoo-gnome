@@ -19,7 +19,7 @@ IUSE="doc +introspection sendto test"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~alpha ~amd64 ~x86"
+	KEYWORDS="~amd64 ~x86"
 fi
 
 COMMON_DEPEND="
@@ -84,19 +84,18 @@ pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS README"
 }
 
-src_compile() {
-	# Clutter-related sandbox violations when USE="doc introspection" and
-	# FEATURES="-userpriv" (see bug #385917).
-	# Work around the issue with the same horrible hack as in bug #385433.
-	DISPLAY="999invalid"
-	gnome2_src_compile
-}
-
 src_configure() {
 	# Work around sandbox violations when FEATURES=-userpriv caused by
 	# gst-inspect-0.10 (bug #410061)
 	unset DISPLAY
 	gnome2_src_configure
+}
+
+src_compile() {
+	# Clutter-related sandbox violations when USE="doc introspection" and
+	# FEATURES="-userpriv" (see bug #385917).
+	unset DISPLAY
+	gnome2_src_compile
 }
 
 src_test() {
