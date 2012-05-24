@@ -1,6 +1,6 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-misc/vino/vino-2.32.1.ebuild,v 1.1 2010/12/31 18:17:32 pacho Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="yes"
@@ -59,6 +59,9 @@ DEPEND="${RDEPEND}
 		<gnome-base/gnome-keyring-2.29.4 )"
 # keyring is always required at build time per bug 322763
 
+# bug #394611; tight encoding requires zlib encoding
+REQUIRED_USE="jpeg? ( zlib )"
+
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-schemas-compile
@@ -75,4 +78,12 @@ pkg_setup() {
 		$(use_with telepathy)
 		$(use_with zlib)"
 	DOCS="AUTHORS ChangeLog* NEWS README"
+}
+
+src_prepare() {
+	# <glib-2.31 compatibility
+	if [[ ${PV} != 9999 ]]; then
+		rm -v server/vino-marshal.{c,h} || die
+	fi
+	gnome2_src_prepare
 }
