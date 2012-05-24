@@ -1,6 +1,6 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-misc/spice-gtk/spice-gtk-0.7.ebuild,v 1.2 2011/10/19 08:37:10 dev-zero Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="no"
@@ -25,14 +25,14 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 IUSE="doc gnome gstreamer gtk3 +introspection kde policykit +pulseaudio
-python sasl static-libs usbredir vala"
+python sasl smartcard static-libs usbredir vala"
 
 # TODO: check if sys-freebsd/freebsd-lib (from virtual/acl) provides acl/libacl.h
 RDEPEND="pulseaudio? ( !gstreamer? ( media-sound/pulseaudio ) )
 	gstreamer? (
 		media-libs/gstreamer:0.10
 		media-libs/gst-plugins-base:0.10 )
-	>=app-emulation/spice-protocol-0.9.1
+	>=app-emulation/spice-protocol-0.10.1
 	>=x11-libs/pixman-0.17.7
 	>=media-libs/celt-0.5.1.1:0.5.1
 	dev-libs/openssl
@@ -46,12 +46,14 @@ RDEPEND="pulseaudio? ( !gstreamer? ( media-sound/pulseaudio ) )
 	python? ( dev-python/pygtk:2 )
 	sasl? ( dev-libs/cyrus-sasl )
 	gnome? ( gnome-base/gconf )
+	smartcard? ( app-emulation/libcacard )
 	usbredir? (
 		policykit? (
 			sys-auth/polkit
-			sys-apps/acl )
-		>=dev-libs/libusb-1.0.9_rc1
-		>=sys-apps/usbredir-0.3.1
+			sys-apps/acl
+			>=sys-auth/polkit-0.101 )
+		virtual/libusb:1
+		>=sys-apps/usbredir-0.4.2
 		sys-fs/udev[gudev] )"
 DEPEND="${RDEPEND}
 	vala? ( dev-lang/vala:0.14 )
@@ -95,11 +97,11 @@ src_configure() {
 		--with-audio="${audio}" \
 		$(use_with python) \
 		$(use_with sasl) \
+		$(use_enable smartcard) \
 		$(use_enable usbredir) \
 		$(use_enable policykit polkit) \
 		$(use_enable vala) \
 		--with-gtk="${gtk}" \
-		--disable-smartcard \
 		--disable-werror
 }
 
@@ -112,7 +114,7 @@ src_install() {
 
 	dodoc AUTHORS NEWS README THANKS TODO
 
-	make_desktop_entry spicy Spicy "" net
+	make_desktop_entry spicy Spicy "utilities-terminal" "Network;RemoteAccess;"
 
 	if use gnome ; then
 		insinto /etc/gconf/schemas
