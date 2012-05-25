@@ -22,17 +22,19 @@ IUSE="debug doc fam kernel_linux selinux static-libs systemtap test utils xattr"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd ~x86-linux"
+	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~sparc-fbsd ~x86-fbsd ~x86-linux"
 fi
 
 RDEPEND="virtual/libiconv
 	virtual/libffi
 	sys-libs/zlib
+	|| (
+		>=dev-libs/elfutils-0.142
+		>=dev-libs/libelf-0.8.11 )
 	xattr? ( sys-apps/attr )
 	fam? ( virtual/fam )
 	utils? ( >=dev-util/gdbus-codegen-${PV} )"
 DEPEND="${RDEPEND}
-	dev-libs/elfutils
 	>=sys-devel/gettext-0.11
 	>=dev-util/gtk-doc-am-1.15
 	doc? (
@@ -52,11 +54,21 @@ PDEPEND="x11-misc/shared-mime-info
 # shared-mime-info needed for gio/xdgmime, bug #409481
 # Earlier versions of gvfs do not work with glib
 
+# For safety, generate sources using the gdbus-codegen from glib git tree
+if [[ ${PV} = 9999 ]]; then
+	DEPEND="${DEPEND}
+		=dev-lang/python-2*"
+fi
+
 pkg_setup() {
 	# Needed for gio/tests/gdbus-testserver.py
-	if use test ; then
+	if use test || [[ ${PV} = 9999 ]]; then
 		python_set_active_version 2
 		python_pkg_setup
+		if [[ ${PV} = 9999 ]]; then
+			# Make gdbus-codegen from ${S} work despite all our patches
+			MAKEOPTS="${MAKEOPTS} PYTHON=$(PYTHON -2 -a)"
+		fi
 	fi
 
 	if use kernel_linux ; then
@@ -194,6 +206,7 @@ src_test() {
 	export XDG_DATA_DIRS=/usr/local/share:/usr/share
 	export G_DBUS_COOKIE_SHA1_KEYRING_DIR="${T}/temp"
 	unset GSETTINGS_BACKEND # bug 352451
+	export LC_TIME=C # bug #411967
 
 	# Related test is a bit nitpicking
 	mkdir "$G_DBUS_COOKIE_SHA1_KEYRING_DIR"
