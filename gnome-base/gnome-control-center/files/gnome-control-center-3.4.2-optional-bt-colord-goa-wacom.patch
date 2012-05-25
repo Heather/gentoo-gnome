@@ -1,19 +1,41 @@
-From f9d277788e7ac4338955a272eee043f6774421d9 Mon Sep 17 00:00:00 2001
+From 93d009037aa3321e2eea86ef2e70cde959c5a250 Mon Sep 17 00:00:00 2001
 From: Alexandre Rostovtsev <tetromino@gentoo.org>
 Date: Sun, 13 May 2012 19:53:13 -0400
-Subject: [PATCH] Make bluetooth, colord, wacom optional
+Subject: [PATCH] Make bluetooth, colord, gnome-online-accounts, wacom
+ optional
 
 ---
- configure.ac       |   65 ++++++++++++++++++++++++++++++++++++++++++++-------
- panels/Makefile.am |   12 +++++++--
- 2 files changed, 65 insertions(+), 12 deletions(-)
+ configure.ac       |  101 ++++++++++++++++++++++++++++++++++++++++++++++------
+ panels/Makefile.am |   17 +++++++--
+ 2 files changed, 103 insertions(+), 15 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index 1046870..a40b792 100644
+index d496365..2d2d15e 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -109,7 +109,24 @@ PKG_CHECK_MODULES(NETWORK_PANEL, $COMMON_MODULES)
- PKG_CHECK_MODULES(ONLINE_ACCOUNTS_PANEL, $COMMON_MODULES goa-1.0 goa-backend-1.0)
+@@ -106,10 +106,44 @@ PKG_CHECK_MODULES(MEDIA_PANEL, $COMMON_MODULES)
+ PKG_CHECK_MODULES(MOUSE_PANEL, $COMMON_MODULES xi >= 1.2
+                   gnome-settings-daemon >= $GSD_REQUIRED_VERSION x11)
+ PKG_CHECK_MODULES(NETWORK_PANEL, $COMMON_MODULES)
+-PKG_CHECK_MODULES(ONLINE_ACCOUNTS_PANEL, $COMMON_MODULES goa-1.0 goa-backend-1.0)
++build_online_accounts=false
++AC_ARG_ENABLE(goa,
++  AC_HELP_STRING([--disable-goa],
++                 [disable online accounts management panel]),
++      [case "${enableval}" in
++              yes) WANT_ONLINE_ACCOUNTS=yes ;;
++              no) WANT_ONLINE_ACCOUNTS=no ;;
++              *) AC_MSG_ERROR(bad value ${enableval} for --disable-goa) ;;
++      esac],
++      [WANT_ONLINE_ACCOUNTS=yes]) dnl Default value
++
++if test x$WANT_ONLINE_ACCOUNTS = xyes; then
++      PKG_CHECK_MODULES(ONLINE_ACCOUNTS_PANEL, $COMMON_MODULES goa-1.0 goa-backend-1.0)
++      build_online_accounts=true
++fi
++AM_CONDITIONAL(BUILD_ONLINE_ACCOUNTS, test "x$build_online_accounts" = "xtrue")
++AC_SUBST(ONLINE_ACCOUNTS_PANEL_CFLAGS)
++AC_SUBST(ONLINE_ACCOUNTS_PANEL_LIBS)
  PKG_CHECK_MODULES(POWER_PANEL, $COMMON_MODULES upower-glib >= 0.9.1
                    gnome-settings-daemon >= $GSD_REQUIRED_VERSION)
 -PKG_CHECK_MODULES(COLOR_PANEL, $COMMON_MODULES colord >= 0.1.8)
@@ -23,8 +45,8 @@ index 1046870..a40b792 100644
 +                 [disable color management panel]),
 +      [case "${enableval}" in
 +              yes) WANT_COLOR=yes ;;
-+	      no) WANT_COLOR=no ;;
-+	      *) AC_MSG_ERROR(bad value ${enableval} for --disable-color) ;;
++              no) WANT_COLOR=no ;;
++              *) AC_MSG_ERROR(bad value ${enableval} for --disable-color) ;;
 +      esac],
 +      [WANT_COLOR=yes]) dnl Default value
 +
@@ -38,7 +60,7 @@ index 1046870..a40b792 100644
  PKG_CHECK_MODULES(PRINTERS_PANEL, $COMMON_MODULES
                    polkit-gobject-1 >= $POLKIT_REQUIRED_VERSION)
  PKG_CHECK_MODULES(REGION_PANEL, $COMMON_MODULES libgnomekbd >= 2.91.91
-@@ -127,10 +144,26 @@ PKG_CHECK_MODULES(USER_ACCOUNTS_PANEL, $COMMON_MODULES
+@@ -127,10 +161,26 @@ PKG_CHECK_MODULES(USER_ACCOUNTS_PANEL, $COMMON_MODULES
                    gnome-desktop-3.0
                    gdk-pixbuf-2.0 >= $GDKPIXBUF_REQUIRED_VERSION
                    $SYSTEMD)
@@ -53,8 +75,8 @@ index 1046870..a40b792 100644
 +                 [disable wacom management panel]),
 +      [case "${enableval}" in
 +              yes) WANT_WACOM=yes ;;
-+	      no) WANT_WACOM=no ;;
-+	      *) AC_MSG_ERROR(bad value ${enableval} for --disable-wacom) ;;
++              no) WANT_WACOM=no ;;
++              *) AC_MSG_ERROR(bad value ${enableval} for --disable-wacom) ;;
 +      esac],
 +      [WANT_WACOM=yes]) dnl Default value
 +
@@ -69,7 +91,7 @@ index 1046870..a40b792 100644
  
  GDESKTOP_PREFIX=`$PKG_CONFIG --variable prefix gsettings-desktop-schemas`
  AC_SUBST(GDESKTOP_PREFIX)
-@@ -146,10 +179,24 @@ if test "x$have_networkmanager" = xno ; then
+@@ -146,10 +196,24 @@ if test "x$have_networkmanager" = xno ; then
  fi
  AM_CONDITIONAL(BUILD_NETWORK, [test x$have_networkmanager = xyes])
  
@@ -83,8 +105,8 @@ index 1046870..a40b792 100644
 +                 [disable bluetooth management panel]),
 +      [case "${enableval}" in
 +              yes) WANT_BLUETOOTH=yes ;;
-+	      no) WANT_BLUETOOTH=no ;;
-+	      *) AC_MSG_ERROR(bad value ${enableval} for --disable-bluetooth) ;;
++              no) WANT_BLUETOOTH=no ;;
++              *) AC_MSG_ERROR(bad value ${enableval} for --disable-bluetooth) ;;
 +      esac],
 +      [WANT_BLUETOOTH=yes]) dnl Default value
 +
@@ -98,19 +120,61 @@ index 1046870..a40b792 100644
  
  # Check for CUPS 1.4 or newer
  AC_ARG_ENABLE([cups],
+@@ -423,11 +487,16 @@ if test "x$have_networkmanager" = "xyes"; then
+ else
+ 	AC_MSG_NOTICE([   Network panel disabled])
+ fi
+-if test "x$have_bluetooth" = "xyes"; then
++if test "x$build_bluetooth" = "xtrue"; then
+ 	AC_MSG_NOTICE([** gnome-bluetooth (Bluetooth panel)])
+ else
+ 	AC_MSG_NOTICE([   Bluetooth panel disabled])
+ fi
++if test "x$build_color" = "xtrue"; then
++	AC_MSG_NOTICE([** colord (Color panel)])
++else
++	AC_MSG_NOTICE([   Color panel disabled])
++fi
+ if test "x$enable_cups" = "xyes"; then
+ 	AC_MSG_NOTICE([** CUPS (Printers panel)])
+ else
+@@ -438,6 +507,11 @@ if test "x$have_cheese" = "xyes"; then
+ else
+ 	AC_MSG_NOTICE([   Users panel webcam support disabled])
+ fi
++if test "x$build_online_accounts" = "xtrue"; then
++	AC_MSG_NOTICE([** gnome-online-accounts (Online Accounts panel)])
++else
++	AC_MSG_NOTICE([   Online Accounts panel disabled])
++fi
+ if test "x$with_libsocialweb" = "xyes"; then
+ 	AC_MSG_NOTICE([** libsocialweb (Background panel Flickr support)])
+ else
+@@ -448,4 +522,9 @@ if test "x$with_systemd" = "xyes"; then
+ else
+ 	AC_MSG_NOTICE([   Using ConsoleKit for session tracking])
+ fi
++if test "x$build_wacom" = "xtrue"; then
++	AC_MSG_NOTICE([** libwacom (Wacom Graphics Tablet panel)])
++else
++	AC_MSG_NOTICE([   Wacom Graphics Tablet panel disabled])
++fi
+ AC_MSG_NOTICE([End options])
 diff --git a/panels/Makefile.am b/panels/Makefile.am
-index 172dd06..09e7b00 100644
+index 172dd06..134b0c8 100644
 --- a/panels/Makefile.am
 +++ b/panels/Makefile.am
-@@ -3,7 +3,6 @@ SUBDIRS= \
+@@ -3,18 +3,19 @@ SUBDIRS= \
  	background \
  	screen \
  	power \
 -	color \
  	display \
  	mouse \
- 	online-accounts \
-@@ -13,8 +12,11 @@ SUBDIRS= \
+-	online-accounts \
+ 	region \
+ 	info \
+ 	sound \
  	keyboard \
  	universal-access \
  	user-accounts \
@@ -124,10 +188,14 @@ index 172dd06..09e7b00 100644
  
  if BUILD_PRINTERS
  SUBDIRS += printers
-@@ -28,4 +30,8 @@ if BUILD_BLUETOOTH
+@@ -28,4 +29,12 @@ if BUILD_BLUETOOTH
  SUBDIRS += bluetooth
  endif
  
++if BUILD_ONLINE_ACCOUNTS
++SUBDIRS += online-accounts
++endif
++
 +if BUILD_WACOM
 +SUBDIRS += wacom
 +endif

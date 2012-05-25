@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-control-center/gnome-control-center-3.2.2-r1.ebuild,v 1.2 2012/02/16 07:26:52 tetromino Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="yes"
@@ -16,7 +16,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2"
 SLOT="2"
-IUSE="+bluetooth +cheese +colord +cups +networkmanager +socialweb systemd wacom"
+IUSE="+bluetooth +cheese +colord +cups +gnome-online-accounts +networkmanager +socialweb systemd wacom"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -44,7 +44,6 @@ COMMON_DEPEND="
 	gnome-base/gnome-menus:3
 	gnome-base/libgtop:2
 	media-libs/fontconfig
-	net-libs/gnome-online-accounts
 
 	>=media-libs/libcanberra-0.13[gtk3]
 	>=media-sound/pulseaudio-0.9.16[glib]
@@ -64,6 +63,7 @@ COMMON_DEPEND="
 		>=media-video/cheese-3.3.5 )
 	colord? ( >=x11-misc/colord-0.1.8 )
 	cups? ( >=net-print/cups-1.4[dbus] )
+	gnome-online-accounts? ( net-libs/gnome-online-accounts )
 	networkmanager? (
 		>=gnome-extra/nm-applet-0.9.1.90
 		>=net-misc/networkmanager-0.8.997 )
@@ -114,6 +114,7 @@ pkg_setup() {
 		$(use_with cheese)
 		$(use_enable colord color)
 		$(use_enable cups)
+		$(use_enable gnome-online-accounts goa)
 		$(use_with socialweb libsocialweb)
 		$(use_enable systemd)
 		$(use_enable wacom)"
@@ -121,8 +122,8 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# Make colord plugin optional; requires eautoreconf
-	epatch "${FILESDIR}/${PN}-3.4.1-optional-bluetooth-colord-wacom.patch"
+	# Make some panels optional; requires eautoreconf
+	epatch "${FILESDIR}/${PN}-3.4.2-optional-bt-colord-goa-wacom.patch"
 	[[ ${PV} != 9999 ]] && eautoreconf
 
 	gnome2_src_prepare
