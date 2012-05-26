@@ -50,6 +50,7 @@ RDEPEND=">=dev-libs/glib-2.30:2
 "
 DEPEND="${RDEPEND}
 	dev-lang/perl
+	dev-util/fix-la-relink-command
 	dev-util/gperf
 	>=dev-util/intltool-0.35.5
 	sys-devel/bison
@@ -116,8 +117,7 @@ src_install() {
 	# every .la file's relink_command field, forcing libtool to look there
 	# first during relinking. This will mangle the .la files installed by
 	# make install, but we don't care because we will be punting them anyway.
-	perl "${FILESDIR}/fix_relink_command.pl" . ||
-		die "fix_relink_command.pl failed"
+	fix-la-relink-command . || die "fix-la-relink-command failed"
 	gnome2_src_install
 
 	if use ldap; then
