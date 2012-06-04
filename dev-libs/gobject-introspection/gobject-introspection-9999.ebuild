@@ -6,6 +6,7 @@ EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2:2.7"
+PYTHON_USE_WITH="xml"
 
 inherit python gnome2
 if [[ ${PV} = 9999 ]]; then
@@ -20,7 +21,7 @@ SLOT="0"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
+	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 fi
 
 IUSE="doc doctool test"
@@ -29,6 +30,7 @@ RDEPEND=">=dev-libs/gobject-introspection-common-${PV}
 	>=dev-libs/glib-2.31.22:2
 	doctool? ( dev-python/mako )
 	virtual/libffi"
+# Wants real bison, not virtual/yacc
 DEPEND="${RDEPEND}
 	sys-devel/bison
 	sys-devel/flex
@@ -56,6 +58,9 @@ src_prepare() {
 	gnome2_src_prepare
 
 	python_clean_py-compile_files
+
+	# avoid GNU-isms
+	sed -i -e 's/\(if test .* \)==/\1=/' configure || die
 
 	gi_skip_tests=
 	if ! has_version "x11-libs/cairo[glib]"; then
