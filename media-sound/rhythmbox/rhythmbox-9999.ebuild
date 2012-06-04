@@ -1,6 +1,6 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/rhythmbox/rhythmbox-0.12.8-r1.ebuild,v 1.2 2010/07/06 15:46:43 ssuominen Exp $
+# $Header: $
 
 EAPI="4"
 GNOME2_LA_PUNT="yes"
@@ -19,12 +19,12 @@ HOMEPAGE="http://www.rhythmbox.org/"
 LICENSE="GPL-2"
 SLOT="0"
 IUSE="cdr clutter daap dbus doc gnome-keyring html ipod +lastfm libnotify lirc
-musicbrainz mtp nsplugin +python test +udev upnp webkit"
+musicbrainz mtp nsplugin +python test +udev upnp webkit zeitgeist"
 # vala
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64 ~ppc64 ~x86"
+	KEYWORDS="~amd64 ~x86"
 fi
 
 REQUIRED_USE="
@@ -35,8 +35,6 @@ REQUIRED_USE="
 	webkit? ( python )"
 
 # FIXME: double check what to do with fm-radio plugin
-# FIXME: Zeitgeist python plugin
-# NOTE: Rhythmbox uses both gdbus and dbus-python right now
 # NOTE: gst-python is still needed because gstreamer introspection is incomplete
 COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
 	dev-libs/libxml2:2
@@ -47,7 +45,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
 	>=dev-libs/totem-pl-parser-2.32.1
 	>=net-libs/libsoup-2.26:2.4
 	>=net-libs/libsoup-gnome-2.26:2.4
-	>=media-libs/gst-plugins-base-0.10.32:0.10
+	>=media-libs/gst-plugins-base-0.10.32:0.10[introspection]
 	>=media-libs/gstreamer-0.10.32:0.10[introspection]
 	>=sys-libs/tdb-1.2.6
 
@@ -73,6 +71,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
 		ipod? ( >=media-libs/libgpod-0.7.92[udev] )
 		mtp? ( >=media-libs/libmtp-0.3 )
 		|| ( >=sys-fs/udev-171[gudev] >=sys-fs/udev-145[extras] ) )
+	zeitgeist? ( gnome-extra/zeitgeist )
 "
 RDEPEND="${COMMON_DEPEND}
 	>=media-plugins/gst-plugins-soup-0.10
@@ -82,6 +81,7 @@ RDEPEND="${COMMON_DEPEND}
 		>=media-plugins/gst-plugins-cdio-0.10 )
 	>=media-plugins/gst-plugins-meta-0.10-r2:0.10
 	>=media-plugins/gst-plugins-taglib-0.10.6
+	x11-themes/gnome-icon-theme-symbolic
 	upnp? (
 		>=media-libs/grilo-0.1.17
 		>=media-plugins/grilo-plugins-0.1.17[upnp] )
@@ -92,7 +92,7 @@ RDEPEND="${COMMON_DEPEND}
 		x11-libs/gtk+:3[introspection]
 		x11-libs/pango[introspection]
 
-		dbus? ( dev-python/dbus-python )
+		dbus? ( sys-apps/dbus )
 		gnome-keyring? ( dev-python/gnome-keyring-python )
 		webkit? (
 			dev-python/mako
@@ -101,8 +101,8 @@ RDEPEND="${COMMON_DEPEND}
 # gtk-doc-am needed for eautoreconf
 #	dev-util/gtk-doc-am
 DEPEND="${COMMON_DEPEND}
-	>=dev-util/intltool-0.35
 	virtual/pkgconfig
+	>=dev-util/intltool-0.35
 	app-text/scrollkeeper
 	>=app-text/gnome-doc-utils-0.9.1
 	doc? ( >=dev-util/gtk-doc-1.4 )
@@ -152,8 +152,6 @@ pkg_setup() {
 
 src_prepare() {
 	gnome2_src_prepare
-
-	# Disable pyc compiling
 	echo > py-compile
 }
 
