@@ -1,12 +1,12 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-wireless/gnome-bluetooth/gnome-bluetooth-3.2.2.ebuild,v 1.2 2012/02/14 05:02:43 tetromino Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2 multilib
+inherit eutils gnome2 multilib
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
