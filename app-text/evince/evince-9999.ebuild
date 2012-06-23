@@ -16,7 +16,7 @@ HOMEPAGE="http://www.gnome.org/projects/evince/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="dbus debug djvu doc dvi gnome-keyring +introspection nautilus +ps t1lib tiff xps"
+IUSE="dbus debug djvu doc dvi gnome-keyring +introspection nautilus +postscript t1lib tiff xps"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -52,7 +52,7 @@ RDEPEND="
 	gnome-keyring? ( >=gnome-base/gnome-keyring-2.22.0 )
 	introspection? ( >=dev-libs/gobject-introspection-0.6 )
 	nautilus? ( >=gnome-base/nautilus-2.91.4[introspection?] )
-	ps? ( >=app-text/libspectre-0.2.0 )
+	postscript? ( >=app-text/libspectre-0.2.0 )
 	tiff? ( >=media-libs/tiff-3.6:0 )
 	xps? ( >=app-text/libgxps-0.2.1 )
 "
@@ -92,7 +92,7 @@ pkg_setup() {
 		$(use_with gnome-keyring keyring)
 		$(use_enable introspection)
 		$(use_enable nautilus)
-		$(use_enable ps)
+		$(use_enable postscript ps)
 		$(use_enable t1lib)
 		$(use_enable tiff)
 		$(use_enable xps)"
