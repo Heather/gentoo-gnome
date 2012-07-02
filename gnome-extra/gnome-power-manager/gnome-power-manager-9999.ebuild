@@ -1,6 +1,6 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-extra/gnome-power-manager/gnome-power-manager-2.32.0.ebuild,v 1.5 2010/12/12 16:53:55 armin76 Exp $
+# $Header:
 
 EAPI="4"
 GCONF_DEBUG="no"
@@ -25,24 +25,22 @@ IUSE="test"
 # FIXME: Interactive testsuite (upstream ? I'm so...pessimistic)
 RESTRICT="test"
 
-COMMON_DEPEND=">=dev-libs/glib-2.25.9
-	>=x11-libs/gtk+-2.91.7:3
+# Need gtk+-3.3.8 for bug #416039
+COMMON_DEPEND=">=dev-libs/glib-2.31.10
+	>=x11-libs/gtk+-3.3.8:3
 	>=x11-libs/cairo-1.0.0
 	>=sys-power/upower-0.9.1"
 RDEPEND="${COMMON_DEPEND}
-	>=sys-auth/consolekit-0.4[policykit]
-	sys-auth/polkit
-	gnome-extra/polkit-gnome"
+	x11-themes/gnome-icon-theme-symbolic"
 DEPEND="${COMMON_DEPEND}
-	x11-proto/randrproto
-
-	sys-devel/gettext
-	app-text/scrollkeeper
-	app-text/docbook-sgml-utils
 	app-text/docbook-sgml-dtd:4.1
-	>=dev-util/intltool-0.35
-	virtual/pkgconfig
+	app-text/docbook-sgml-utils
 	>=app-text/gnome-doc-utils-0.3.2
+	app-text/scrollkeeper
+	>=dev-util/intltool-0.35
+	sys-devel/gettext
+	x11-proto/randrproto
+	virtual/pkgconfig
 	test? ( sys-apps/dbus )"
 
 # docbook-sgml-utils and docbook-sgml-dtd-4.1 used for creating man pages
