@@ -1,33 +1,32 @@
-From b39aaca2ec6c551d7646bcb086afb8083492938b Mon Sep 17 00:00:00 2001
+From e09af88ff4b0eca56eda4b504e465430d3b6ec67 Mon Sep 17 00:00:00 2001
 From: Priit Laes <plaes@plaes.org>
-Date: Tue, 20 Dec 2011 15:42:44 +0200
-Subject: [PATCH] Split support for libsoup-gnome
+Date: Tue, 3 Jul 2012 13:59:03 +0300
+Subject: [PATCH] Split libsoup-gnome
 
-Original patch by Romain Perier.
 ---
  Makefile.am         |   12 ++++++++++--
- configure.ac        |   47 +++++++++++++++++++++++++++++------------------
+ configure.ac        |   35 +++++++++++++++++++++++------------
  libsoup/Makefile.am |   48 ++++++++++++++++++++++++++++++++++++++----------
- 3 files changed, 77 insertions(+), 30 deletions(-)
+ 3 files changed, 71 insertions(+), 24 deletions(-)
 
 diff --git a/Makefile.am b/Makefile.am
-index 8b86fb7..7f628f4 100644
+index 18bf80a..046f945 100644
 --- a/Makefile.am
 +++ b/Makefile.am
 @@ -1,7 +1,11 @@
  ## Process this file with automake to produce Makefile.in
  ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
  
--SUBDIRS = libsoup tests docs
+-SUBDIRS = libsoup po tests docs
 +SUBDIRS = libsoup
 +
 +if BUILD_LIBSOUP
-+SUBDIRS += tests docs
++SUBDIRS += po tests docs
 +endif
  
- EXTRA_DIST =			\
- 	libsoup-2.4.pc.in	\
-@@ -15,7 +19,11 @@ DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc --enable-introspection
+ EXTRA_DIST =				\
+ 	data/effective_tld_names.dat	\
+@@ -16,7 +20,11 @@ DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc --enable-introspection
  
  pkgconfigdir = $(libdir)/pkgconfig
  
@@ -41,69 +40,50 @@ index 8b86fb7..7f628f4 100644
  if BUILD_LIBSOUP_GNOME
  pkgconfig_DATA += libsoup-gnome-2.4.pc
 diff --git a/configure.ac b/configure.ac
-index eee8636..f9d6e47 100644
+index 59ee43c..132ca89 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -72,19 +72,33 @@ dnl ***********************
+@@ -71,20 +71,27 @@ LT_INIT([win32-dll])
+ dnl ***********************
  dnl *** Checks for glib ***
  dnl ***********************
- 
--GLIB_REQUIRED=2.31.7
--AM_PATH_GLIB_2_0($GLIB_REQUIRED,,,gobject gio)
--if test "$GLIB_LIBS" = ""; then
--   AC_MSG_ERROR(GLIB $GLIB_REQUIRED or later is required to build libsoup)
 +PKG_PROG_PKG_CONFIG
++enable_ssl=no
 +AC_ARG_WITH(libsoup-system,
 +   AS_HELP_STRING([--with-libsoup-system], [Use libsoup system library to build(default=no)]),
 +   [with_libsoup_system=$withval], [with_libsoup_system=no])
 +if test "$with_libsoup_system" = "no"; then
-+	GLIB_REQUIRED=2.31.7
-+	AM_PATH_GLIB_2_0($GLIB_REQUIRED,,,gobject gio)
++    GLIB_REQUIRED=2.33.1
++    AM_PATH_GLIB_2_0($GLIB_REQUIRED,,,gobject gio)
 +	if test "$GLIB_LIBS" = ""; then
-+	   AC_MSG_ERROR(GLIB $GLIB_REQUIRED or later is required to build libsoup)
++       AC_MSG_ERROR(GLIB $GLIB_REQUIRED or later is required to build libsoup)
 +	fi
-+	GLIB_CFLAGS="$GLIB_CFLAGS -DG_DISABLE_SINGLE_INCLUDES"
-+	GLIB_MAKEFILE='$(top_srcdir)/Makefile.glib'
-+	AC_SUBST(GLIB_MAKEFILE)
-+
-+	PKG_CHECK_MODULES(XML, libxml-2.0)
-+	AC_SUBST(XML_CFLAGS)
-+	AC_SUBST(XML_LIBS)
-+
-+	dnl *******************
-+	dnl *** Misc checks ***
-+	dnl *******************
-+	AC_CHECK_FUNCS(gmtime_r)
-+	AC_CHECK_FUNCS(mmap)
-+	AC_CHECK_FUNC(socket, , AC_CHECK_LIB(socket, socket))
- fi
--GLIB_CFLAGS="$GLIB_CFLAGS -DG_DISABLE_SINGLE_INCLUDES"
++    GLIB_CFLAGS="$GLIB_CFLAGS -DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_34"
++    GLIB_MAKEFILE='$(top_srcdir)/Makefile.glib'
++    AC_SUBST(GLIB_MAKEFILE)
+ 
+-GLIB_REQUIRED=2.33.1
+-AM_PATH_GLIB_2_0($GLIB_REQUIRED,,,gobject gio)
+-if test "$GLIB_LIBS" = ""; then
+-   AC_MSG_ERROR(GLIB $GLIB_REQUIRED or later is required to build libsoup)
+-fi
+-GLIB_CFLAGS="$GLIB_CFLAGS -DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_34"
 -
 -GLIB_MAKEFILE='$(top_srcdir)/Makefile.glib'
 -AC_SUBST(GLIB_MAKEFILE)
++	PKG_CHECK_MODULES(XML, libxml-2.0)
++	AC_SUBST(XML_CFLAGS)
++	AC_SUBST(XML_LIBS)
  
 -PKG_CHECK_MODULES(XML, libxml-2.0)
 -AC_SUBST(XML_CFLAGS)
 -AC_SUBST(XML_LIBS)
++fi
 +AM_CONDITIONAL(BUILD_LIBSOUP, test $with_libsoup_system = no)
  
  dnl ***********************
  dnl *** Check for Win32 ***
-@@ -103,13 +117,6 @@ esac
- AC_MSG_RESULT([$os_win32])
- AM_CONDITIONAL(OS_WIN32, [test $os_win32 = yes])
- 
--dnl *******************
--dnl *** Misc checks ***
--dnl *******************
--AC_CHECK_FUNCS(gmtime_r)
--AC_CHECK_FUNCS(mmap)
--AC_CHECK_FUNC(socket, , AC_CHECK_LIB(socket, socket))
--
- dnl *********************
- dnl *** GNOME support ***
- dnl *********************
-@@ -134,6 +141,10 @@ AM_CONDITIONAL(BUILD_LIBSOUP_GNOME, test $with_gnome != no)
+@@ -143,6 +150,10 @@ AM_CONDITIONAL(BUILD_LIBSOUP_GNOME, test $with_gnome != no)
  if test $with_gnome != no; then
  	AC_DEFINE(HAVE_GNOME, 1, [Defined if GNOME support is enabled])
  
@@ -115,10 +95,10 @@ index eee8636..f9d6e47 100644
  [Could not find sqlite3 devel files:
  
 diff --git a/libsoup/Makefile.am b/libsoup/Makefile.am
-index aa13eec..ef0c870 100644
+index c337b7f..4cf431d 100644
 --- a/libsoup/Makefile.am
 +++ b/libsoup/Makefile.am
-@@ -6,15 +6,18 @@ if OS_WIN32
+@@ -6,16 +6,19 @@ if OS_WIN32
  LIBWS2_32 = -lws2_32
  endif
  
@@ -130,6 +110,7 @@ index aa13eec..ef0c870 100644
 +if BUILD_LIBSOUP
 +INCLUDES += 				\
  	-DG_LOG_DOMAIN=\"libsoup\" 	\
+ 	-DLOCALEDIR=\"$(localedir)\"	\
  	-I$(top_srcdir)			\
  	$(SOUP_DEBUG_FLAGS)		\
  	$(SOUP_MAINTAINER_FLAGS)	\
@@ -141,7 +122,7 @@ index aa13eec..ef0c870 100644
  
  libsoupincludedir = $(includedir)/libsoup-2.4/libsoup
  
-@@ -67,7 +70,7 @@ libsoupinclude_HEADERS =	\
+@@ -69,7 +72,7 @@ libsoupinclude_HEADERS =	\
  	$(soup_headers)		\
  	soup-enum-types.h
  
@@ -150,15 +131,15 @@ index aa13eec..ef0c870 100644
  
  libsoup_2_4_la_LDFLAGS =	\
  	-version-info $(SOUP_CURRENT):$(SOUP_REVISION):$(SOUP_AGE) -no-undefined
-@@ -152,6 +155,7 @@ libsoup_2_4_la_SOURCES =		\
- 	soup-uri.c			\
- 	soup-value-utils.c		\
- 	soup-xmlrpc.c
+@@ -182,6 +185,7 @@ TLD_DATA_FILE=$(top_srcdir)/data/effective_tld_names.dat
+ 
+ tld_data.inc: $(TLD_DATA_FILE)
+ 	$(builddir)/tld-parser $(TLD_DATA_FILE) $(srcdir)/tld_data.inc
 +endif
  
  if BUILD_LIBSOUP_GNOME
  
-@@ -165,6 +169,10 @@ endif
+@@ -195,6 +199,10 @@ endif
  
  libsoupgnomeincludedir = $(includedir)/libsoup-gnome-2.4/libsoup
  
@@ -169,7 +150,7 @@ index aa13eec..ef0c870 100644
  libsoupgnomeinclude_HEADERS =	\
  	soup-cookie-jar-sqlite.h\
  	soup-gnome.h		\
-@@ -172,14 +180,24 @@ libsoupgnomeinclude_HEADERS =	\
+@@ -202,14 +210,24 @@ libsoupgnomeinclude_HEADERS =	\
  
  lib_LTLIBRARIES += libsoup-gnome-2.4.la
  
@@ -195,7 +176,7 @@ index aa13eec..ef0c870 100644
  libsoup_gnome_2_4_la_SOURCES =		\
  	soup-cookie-jar-sqlite.c	\
  	soup-gnome-features.c		\
-@@ -207,6 +225,8 @@ INTROSPECTION_COMPILER_ARGS = --includedir=.
+@@ -239,6 +257,8 @@ INTROSPECTION_COMPILER_ARGS = --includedir=.
  
  if HAVE_INTROSPECTION
  
@@ -204,7 +185,7 @@ index aa13eec..ef0c870 100644
  # Core library
  gi_soup_files = \
  	$(filter-out soup.h soup-enum-types.% soup-marshal.% soup-proxy-resolver.h,\
-@@ -228,20 +248,28 @@ Soup_2_4_gir_FILES = \
+@@ -260,20 +280,28 @@ Soup_2_4_gir_FILES = \
  
  INTROSPECTION_GIRS += Soup-2.4.gir
  
@@ -238,5 +219,5 @@ index aa13eec..ef0c870 100644
  SoupGNOME_2_4_gir_EXPORT_PACKAGES = libsoup-gnome-2.4
  
 -- 
-1.7.8.4
+1.7.8.6
 
