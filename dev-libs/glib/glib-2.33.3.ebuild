@@ -131,6 +131,11 @@ src_prepare() {
 	# gdbus-codegen is a separate package
 	epatch "${FILESDIR}/${PN}-2.31.x-external-gdbus-codegen.patch"
 
+	# https://bugzilla.gnome.org/show_bug.cgi?id=679306
+	epatch "${FILESDIR}/${PN}-2.33.x-testsuite-skip-thread4.patch"
+	# https://bugzilla.gnome.org/show_bug.cgi?id=679308
+	epatch "${FILESDIR}/${PN}-2.33.x-testsuite-skip-gdbus-auth-tests.patch"
+
 	# disable pyc compiling
 	use test && python_clean_py-compile_files
 
