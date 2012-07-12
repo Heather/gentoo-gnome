@@ -1,0 +1,43 @@
+[GTK] LLint build fails with -g -02
+https://bugs.webkit.org/show_bug.cgi?id=90098
+
+diff --git a/Source/JavaScriptCore/offlineasm/offsets.rb b/Source/JavaScriptCore/offlineasm/offsets.rb
+index 4f2734f..ecd1b53 100644
+--- a/Source/JavaScriptCore/offlineasm/offsets.rb
++++ b/Source/JavaScriptCore/offlineasm/offsets.rb
+@@ -60,7 +60,7 @@ end
+ 
+ #
+ # offsetsAndConfigurationIndex(ast, file) ->
+-#     [[offsets, index], ...]
++#     {[offsets, index], ...}
+ #
+ # Parses the offsets from a file and returns a list of offsets and the
+ # index of the configuration that is valid in this build target.
+@@ -68,7 +68,7 @@ end
+ 
+ def offsetsAndConfigurationIndex(file)
+     endiannessMarkerBytes = nil
+-    result = []
++    result = {}
+     
+     def readInt(endianness, bytes)
+         if endianness == :little
+@@ -154,13 +154,15 @@ def offsetsAndConfigurationIndex(file)
+                     | data |
+                     offsets << readInt(endianness, data)
+                 }
+-                result << [offsets, index]
++                #result << [offsets, index]
++                if not result.has_key?(offsets)
++                    result[offsets] = index
++                end
+             }
+         end
+     }
+     
+     raise MissingMagicValuesException unless result.length >= 1
+-    raise if result.map{|v| v[1]}.uniq.size < result.map{|v| v[1]}.size
+     
+     result
+ end
