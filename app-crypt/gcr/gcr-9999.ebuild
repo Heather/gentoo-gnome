@@ -36,8 +36,9 @@ RDEPEND="${COMMON_DEPEND}
 	!<gnome-base/gnome-keyring-3.3"
 # gcr was part of gnome-keyring until 3.3
 DEPEND="${COMMON_DEPEND}
-	sys-devel/gettext
+	dev-util/gdbus-codegen
 	>=dev-util/intltool-0.35
+	sys-devel/gettext
 	virtual/pkgconfig
 
 	dev-libs/gobject-introspection-common
