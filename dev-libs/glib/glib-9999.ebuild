@@ -22,7 +22,7 @@ IUSE="debug doc fam kernel_linux selinux static-libs systemtap test utils xattr"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~sparc-fbsd ~x86-fbsd ~x86-linux"
+	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~sparc-fbsd ~x86-fbsd ~amd64-linux ~x86-linux"
 fi
 
 RDEPEND="virtual/libiconv
@@ -130,6 +130,9 @@ src_prepare() {
 
 	# gdbus-codegen is a separate package
 	epatch "${FILESDIR}/${PN}-2.31.x-external-gdbus-codegen.patch"
+
+	# bashcomp goes in /usr/share/bash-completion
+	epatch "${FILESDIR}/${PN}-2.32.4-bashcomp.patch"
 
 	# disable pyc compiling
 	use test && python_clean_py-compile_files
