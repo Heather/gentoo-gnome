@@ -1,8 +1,11 @@
-From e09af88ff4b0eca56eda4b504e465430d3b6ec67 Mon Sep 17 00:00:00 2001
+From babf258fd91930cc9e1d200f0c6332526c4867a5 Mon Sep 17 00:00:00 2001
 From: Priit Laes <plaes@plaes.org>
-Date: Tue, 3 Jul 2012 13:59:03 +0300
-Subject: [PATCH] Split libsoup-gnome
+Date: Tue, 20 Dec 2011 15:42:44 +0200
+Subject: [PATCH] Split support for libsoup-gnome
 
+https://bugzilla.gnome.org/show_bug.cgi?id=595065
+
+Original patch by Romain Perier.
 ---
  Makefile.am         |   12 ++++++++++--
  configure.ac        |   35 +++++++++++++++++++++++------------
@@ -40,7 +43,7 @@ index 18bf80a..046f945 100644
  if BUILD_LIBSOUP_GNOME
  pkgconfig_DATA += libsoup-gnome-2.4.pc
 diff --git a/configure.ac b/configure.ac
-index 59ee43c..132ca89 100644
+index 1057f63..648afc7 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -71,20 +71,27 @@ LT_INIT([win32-dll])
@@ -95,10 +98,10 @@ index 59ee43c..132ca89 100644
  [Could not find sqlite3 devel files:
  
 diff --git a/libsoup/Makefile.am b/libsoup/Makefile.am
-index c337b7f..4cf431d 100644
+index fdba1ef..b44ec8b 100644
 --- a/libsoup/Makefile.am
 +++ b/libsoup/Makefile.am
-@@ -6,16 +6,19 @@ if OS_WIN32
+@@ -8,16 +8,19 @@ if OS_WIN32
  LIBWS2_32 = -lws2_32
  endif
  
@@ -122,7 +125,7 @@ index c337b7f..4cf431d 100644
  
  libsoupincludedir = $(includedir)/libsoup-2.4/libsoup
  
-@@ -69,7 +72,7 @@ libsoupinclude_HEADERS =	\
+@@ -71,7 +74,7 @@ libsoupinclude_HEADERS =	\
  	$(soup_headers)		\
  	soup-enum-types.h
  
@@ -131,15 +134,15 @@ index c337b7f..4cf431d 100644
  
  libsoup_2_4_la_LDFLAGS =	\
  	-version-info $(SOUP_CURRENT):$(SOUP_REVISION):$(SOUP_AGE) -no-undefined
-@@ -182,6 +185,7 @@ TLD_DATA_FILE=$(top_srcdir)/data/effective_tld_names.dat
- 
- tld_data.inc: $(TLD_DATA_FILE)
- 	$(builddir)/tld-parser $(TLD_DATA_FILE) $(srcdir)/tld_data.inc
+@@ -170,6 +173,7 @@ libsoup_2_4_la_SOURCES =		\
+ 	soup-uri.c			\
+ 	soup-value-utils.c		\
+ 	soup-xmlrpc.c
 +endif
  
- if BUILD_LIBSOUP_GNOME
- 
-@@ -195,6 +199,10 @@ endif
+ # TLD rules
+ EXTRA_DIST += tld-parser.py
+@@ -191,6 +195,10 @@ endif
  
  libsoupgnomeincludedir = $(includedir)/libsoup-gnome-2.4/libsoup
  
@@ -150,7 +153,7 @@ index c337b7f..4cf431d 100644
  libsoupgnomeinclude_HEADERS =	\
  	soup-cookie-jar-sqlite.h\
  	soup-gnome.h		\
-@@ -202,14 +210,24 @@ libsoupgnomeinclude_HEADERS =	\
+@@ -198,14 +206,24 @@ libsoupgnomeinclude_HEADERS =	\
  
  lib_LTLIBRARIES += libsoup-gnome-2.4.la
  
@@ -176,7 +179,7 @@ index c337b7f..4cf431d 100644
  libsoup_gnome_2_4_la_SOURCES =		\
  	soup-cookie-jar-sqlite.c	\
  	soup-gnome-features.c		\
-@@ -239,6 +257,8 @@ INTROSPECTION_COMPILER_ARGS = --includedir=.
+@@ -235,6 +253,8 @@ INTROSPECTION_COMPILER_ARGS = --includedir=.
  
  if HAVE_INTROSPECTION
  
@@ -185,7 +188,7 @@ index c337b7f..4cf431d 100644
  # Core library
  gi_soup_files = \
  	$(filter-out soup.h soup-enum-types.% soup-marshal.% soup-proxy-resolver.h,\
-@@ -260,20 +280,28 @@ Soup_2_4_gir_FILES = \
+@@ -256,20 +276,28 @@ Soup_2_4_gir_FILES = \
  
  INTROSPECTION_GIRS += Soup-2.4.gir
  

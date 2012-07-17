@@ -30,6 +30,7 @@ RDEPEND=">=dev-libs/glib-2.33.1:2
 	samba? ( net-fs/samba )"
 DEPEND="${RDEPEND}
 	virtual/pkgconfig
+	dev-lang/python
 	>=dev-util/intltool-0.35
 	>=dev-util/gtk-doc-am-1.10
 	doc? ( >=dev-util/gtk-doc-1.10 )"
