@@ -59,6 +59,7 @@
 =net-im/empathy-3.4*
 =net-libs/gnome-online-accounts-3.4*
 >=net-libs/telepathy-farstream-0.2
+=net-voip/telepathy-rakia-0.7*
 =net-wireless/gnome-bluetooth-3.4*
 =sys-apps/baobab-3.4*
 =x11-libs/libcryptui-3.4*
