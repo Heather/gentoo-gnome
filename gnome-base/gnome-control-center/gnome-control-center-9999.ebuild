@@ -77,7 +77,9 @@ RDEPEND="${COMMON_DEPEND}
 	sys-apps/accountsservice
 	x11-themes/gnome-icon-theme-symbolic
 	colord? ( >=gnome-extra/gnome-color-manager-3 )
-	cups? ( net-print/cups-pk-helper )
+	cups? (
+		>=app-admin/system-config-printer-gnome-1.3.5
+		net-print/cups-pk-helper )
 	!systemd? ( sys-auth/consolekit )
 	wacom? ( gnome-base/gnome-settings-daemon[wacom] )
 
@@ -124,6 +126,8 @@ pkg_setup() {
 src_prepare() {
 	# Make some panels optional; requires eautoreconf
 	epatch "${FILESDIR}/${PN}-3.4.2-optional-bt-colord-goa-wacom.patch"
+	# Fix some absolute paths to be appropriate for Gentoo
+	epatch "${FILESDIR}/${PN}-3.4.2-gentoo-paths.patch"
 	[[ ${PV} != 9999 ]] && eautoreconf
 
 	gnome2_src_prepare
