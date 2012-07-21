@@ -4,7 +4,7 @@
 
 EAPI="4"
 GNOME_ORG_MODULE="glib"
-PYTHON_COMPAT="python2_5 python2_6 python2_7" # python3_1 python3_2 in >=2.33.4
+PYTHON_COMPAT="python2_5 python2_6 python2_7 python3_1 python3_2"
 
 inherit eutils python-distutils-ng
 if [[ ${PV} = 9999 ]]; then
@@ -29,9 +29,9 @@ IUSE=""
 RDEPEND="python_targets_python2_5? ( dev-lang/python:2.5[xml] )
 	python_targets_python2_6? ( dev-lang/python:2.6[xml] )
 	python_targets_python2_7? ( dev-lang/python:2.7[xml] )
+	python_targets_python3_1? ( dev-lang/python:3.1[xml] )
+	python_targets_python3_2? ( dev-lang/python:3.2[xml] )
 "
-#	python_targets_python3_1? ( dev-lang/python:3.1[xml] )
-#	python_targets_python3_2? ( dev-lang/python:3.2[xml] )
 DEPEND=""
 
 # To prevent circular dependencies with glib[test]
