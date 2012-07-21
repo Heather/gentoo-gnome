@@ -152,7 +152,12 @@ src_install() {
 	python_convert_shebangs 2 "${ED}/usr/bin/gnome-shell-extension-tool"
 
 	# Required for gnome-shell on hardened/PaX, bug #398941
-	pax-mark mr "${ED}usr/bin/gnome-shell"
+	# Future-proof for >=spidermonkey-1.8.7 following polkit's example
+	if has_version '<dev-lang/spidermonkey-1.8.7'; then
+		pax-mark mr "${ED}usr/bin/gnome-shell"
+	elif has_version '>=dev-lang/spidermonkey-1.8.7[jit]'; then
+		pax-mark m "${ED}usr/bin/gnome-shell"
+	fi
 }
 
 pkg_postinst() {
@@ -178,7 +183,9 @@ pkg_postinst() {
 		ewarn "fallback mode, or switch to open-source drivers."
 	fi
 
-	if has_version "media-libs/mesa[video_cards_radeon]"; then
+	if has_version "media-libs/mesa[video_cards_radeon]" ||
+	   has_version "media-libs/mesa[video_cards_r300]" ||
+	   has_version "media-libs/mesa[video_cards_r600]"; then
 		elog "GNOME Shell is unstable under classic-mode r300/r600 mesa drivers."
 		elog "Make sure that gallium architecture for r300 and r600 drivers is"
 		elog "selected using 'eselect mesa'."
@@ -187,7 +194,9 @@ pkg_postinst() {
 		fi
 	fi
 
-	if has_version "media-libs/mesa[video_cards_intel]"; then
+	if has_version "media-libs/mesa[video_cards_intel]" ||
+	   has_version "media-libs/mesa[video_cards_i915]" ||
+	   has_version "media-libs/mesa[video_cards_i965]"; then
 		elog "GNOME Shell is unstable under gallium-mode i915/i965 mesa drivers."
 		elog "Make sure that classic architecture for i915 and i965 drivers is"
 		elog "selected using 'eselect mesa'."
