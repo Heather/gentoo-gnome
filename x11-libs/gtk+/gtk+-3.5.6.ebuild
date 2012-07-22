@@ -46,7 +46,7 @@ COMMON_DEPEND="X? (
 		x11-libs/libXdamage
 		xinerama? ( x11-libs/libXinerama )
 	)
-	accessibility? ( app-accessibility/at-spi2-atk )
+	accessibility? ( >=app-accessibility/at-spi2-atk-2.5.3 )
 	wayland? (
 		dev-libs/wayland
 		media-libs/mesa[egl,wayland]
