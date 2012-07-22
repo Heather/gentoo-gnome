@@ -80,6 +80,8 @@ src_prepare() {
 		epatch "${FILESDIR}/${PN}-2.34.2-fix-build-without-gnome-with-doc.patch"
 		[[ ${PV} != 9999 ]] && eautoreconf
 	fi
+	epatch "${FILESDIR}/chunked-loader-hang.patch"
+	epatch "${FILESDIR}/compressed-data-error.patch"
 
 	gnome2_src_prepare
 }
