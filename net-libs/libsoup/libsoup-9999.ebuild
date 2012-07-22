@@ -5,8 +5,9 @@
 EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
+PYTHON_DEPEND="2"
 
-inherit autotools eutils gnome2
+inherit autotools eutils gnome2 python
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -30,6 +31,7 @@ RDEPEND=">=dev-libs/glib-2.33.1:2
 	samba? ( net-fs/samba )"
 DEPEND="${RDEPEND}
 	virtual/pkgconfig
+	dev-lang/python
 	>=dev-util/intltool-0.35
 	>=dev-util/gtk-doc-am-1.10
 	doc? ( >=dev-util/gtk-doc-1.10 )"
@@ -50,6 +52,7 @@ pkg_setup() {
 		--with-apache-module-dir="${T}"
 		$(use_enable introspection)
 		$(use_with samba ntlm-auth ${EPREFIX}/usr/bin/ntlm_auth)"
+	python_set_active_version 2
 }
 
 src_configure() {

@@ -5,8 +5,9 @@
 EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
+PYTHON_DEPEND="2"
 
-inherit autotools eutils gnome2
+inherit autotools eutils gnome2 python
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -51,6 +52,7 @@ pkg_setup() {
 		--with-apache-module-dir="${T}"
 		$(use_enable introspection)
 		$(use_with samba ntlm-auth ${EPREFIX}/usr/bin/ntlm_auth)"
+	python_set_active_version 2
 }
 
 src_configure() {
