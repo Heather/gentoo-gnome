@@ -1,4 +1,4 @@
-From babf258fd91930cc9e1d200f0c6332526c4867a5 Mon Sep 17 00:00:00 2001
+From 75d7a77705cd567ea1d2d95b6f99f1e0cabdb8bb Mon Sep 17 00:00:00 2001
 From: Priit Laes <plaes@plaes.org>
 Date: Tue, 20 Dec 2011 15:42:44 +0200
 Subject: [PATCH] Split support for libsoup-gnome
@@ -7,10 +7,10 @@ https://bugzilla.gnome.org/show_bug.cgi?id=595065
 
 Original patch by Romain Perier.
 ---
- Makefile.am         |   12 ++++++++++--
- configure.ac        |   35 +++++++++++++++++++++++------------
- libsoup/Makefile.am |   48 ++++++++++++++++++++++++++++++++++++++----------
- 3 files changed, 71 insertions(+), 24 deletions(-)
+ Makefile.am         |   12 ++++++++-
+ configure.ac        |   35 ++++++++++++++++++---------
+ libsoup/Makefile.am |   63 +++++++++++++++++++++++++++++++++++++-------------
+ 3 files changed, 79 insertions(+), 31 deletions(-)
 
 diff --git a/Makefile.am b/Makefile.am
 index 18bf80a..046f945 100644
@@ -98,10 +98,18 @@ index 1057f63..648afc7 100644
  [Could not find sqlite3 devel files:
  
 diff --git a/libsoup/Makefile.am b/libsoup/Makefile.am
-index fdba1ef..b44ec8b 100644
+index fdba1ef..b8a9186 100644
 --- a/libsoup/Makefile.am
 +++ b/libsoup/Makefile.am
-@@ -8,16 +8,19 @@ if OS_WIN32
+@@ -1,23 +1,26 @@
+ ## Process this file with automake to produce Makefile.in
+ 
+ EXTRA_DIST =
+-
++BUILT_SOURCES =
+ include $(GLIB_MAKEFILE)
+ 
+ if OS_WIN32
  LIBWS2_32 = -lws2_32
  endif
  
@@ -134,15 +142,28 @@ index fdba1ef..b44ec8b 100644
  
  libsoup_2_4_la_LDFLAGS =	\
  	-version-info $(SOUP_CURRENT):$(SOUP_REVISION):$(SOUP_AGE) -no-undefined
-@@ -170,6 +173,7 @@ libsoup_2_4_la_SOURCES =		\
- 	soup-uri.c			\
+@@ -171,14 +174,17 @@ libsoup_2_4_la_SOURCES =		\
  	soup-value-utils.c		\
  	soup-xmlrpc.c
-+endif
  
- # TLD rules
- EXTRA_DIST += tld-parser.py
-@@ -191,6 +195,10 @@ endif
+-# TLD rules
+-EXTRA_DIST += tld-parser.py
+-
++BUILT_SOURCES = tld_data.inc
+ TLD_DATA_FILE=$(top_srcdir)/data/effective_tld_names.dat
+ 
+ tld_data.inc: tld-parser.py $(TLD_DATA_FILE)
+ 	$(srcdir)/tld-parser.py $(TLD_DATA_FILE) tld_data.inc
+ 
++# TLD rules
++EXTRA_DIST += tld-parser.py
++
++endif
++
+ if BUILD_LIBSOUP_GNOME
+ 
+ if OS_WIN32
+@@ -191,6 +197,10 @@ endif
  
  libsoupgnomeincludedir = $(includedir)/libsoup-gnome-2.4/libsoup
  
@@ -153,7 +174,7 @@ index fdba1ef..b44ec8b 100644
  libsoupgnomeinclude_HEADERS =	\
  	soup-cookie-jar-sqlite.h\
  	soup-gnome.h		\
-@@ -198,14 +206,24 @@ libsoupgnomeinclude_HEADERS =	\
+@@ -198,14 +208,24 @@ libsoupgnomeinclude_HEADERS =	\
  
  lib_LTLIBRARIES += libsoup-gnome-2.4.la
  
@@ -179,7 +200,19 @@ index fdba1ef..b44ec8b 100644
  libsoup_gnome_2_4_la_SOURCES =		\
  	soup-cookie-jar-sqlite.c	\
  	soup-gnome-features.c		\
-@@ -235,6 +253,8 @@ INTROSPECTION_COMPILER_ARGS = --includedir=.
+@@ -217,9 +237,8 @@ endif
+ 
+ GLIB_GENERATED = soup-marshal.c soup-marshal.h
+ GLIB_GENERATED += soup-enum-types.c soup-enum-types.h
+-BUILT_SOURCES = \
+-	$(GLIB_GENERATED)   \
+-	tld_data.inc
++BUILT_SOURCES += \
++	$(GLIB_GENERATED)
+ 
+ soup_marshal_sources = $(libsoup_2_4_la_SOURCES) $(libsoup_gnome_2_4_la_SOURCES)
+ soup_enum_types_sources = $(libsoupinclude_HEADERS) $(libsoupgnomeinclude_HEADERS)
+@@ -235,6 +254,8 @@ INTROSPECTION_COMPILER_ARGS = --includedir=.
  
  if HAVE_INTROSPECTION
  
@@ -188,7 +221,7 @@ index fdba1ef..b44ec8b 100644
  # Core library
  gi_soup_files = \
  	$(filter-out soup.h soup-enum-types.% soup-marshal.% soup-proxy-resolver.h,\
-@@ -256,20 +276,28 @@ Soup_2_4_gir_FILES = \
+@@ -256,20 +277,28 @@ Soup_2_4_gir_FILES = \
  
  INTROSPECTION_GIRS += Soup-2.4.gir
  
