@@ -117,7 +117,6 @@ x11-terms/gnome-terminal
 x11-wm/mutter
 
 # GNOME Disk Utility
-~sys-apps/gptfdisk-0.8.4
 =sys-apps/util-linux-2.21*
 sys-fs/udisks:2
 sys-apps/gnome-disk-utility
@@ -187,7 +186,6 @@ media-libs/clutter-gst:1.0
 # Colord
 gnome-extra/gnome-color-manager
 media-gfx/shared-color-profiles
-~media-libs/lcms-2.2:2
 media-libs/mash
 x11-misc/colord
 
@@ -235,7 +233,6 @@ net-wireless/wimax
 >=gnome-extra/nm-applet-0.8.990
 
 # Nautilus
-~media-libs/libexif-0.6.20
 gnome-base/nautilus
 gnome-extra/sushi
 gnome-extra/nautilus-tracker-tags
@@ -261,12 +258,8 @@ app-misc/gnote
 app-misc/tomboy
 
 # GNOME Shell
-=net-libs/xulrunner-2.0*
 dev-libs/gjs
 gnome-base/gnome-shell
-
-# Not needed by GNOME 3, but will cause conflicts due to xulrunner-2.0
-=www-client/firefox-4.0*
 
 # GNOME Fallback
 gnome-base/gnome-applets
@@ -291,7 +284,6 @@ media-video/cheese
 
 # Evince
 =app-text/libgxps-0.2.1
-~app-text/poppler-0.18.4
 app-text/evince
 
 # Vte
