@@ -36,14 +36,14 @@ REQUIRED_USE="
 
 # FIXME: double check what to do with fm-radio plugin
 # NOTE: gst-python is still needed because gstreamer introspection is incomplete
-COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
+COMMON_DEPEND=">=dev-libs/glib-2.32.0:2
 	dev-libs/json-glib
 	>=dev-libs/libxml2-2.7.8:2
-	>=x11-libs/gtk+-3.2:3[introspection]
+	>=x11-libs/gtk+-3.4:3[introspection]
 	>=x11-libs/gdk-pixbuf-2.18.0:2
 	>=dev-libs/gobject-introspection-0.10.0
 	>=dev-libs/libpeas-0.7.3[gtk,python?]
-	>=dev-libs/totem-pl-parser-2.32.1
+	>=dev-libs/totem-pl-parser-3.2.0
 	>=net-libs/libsoup-2.26:2.4
 	>=net-libs/libsoup-gnome-2.26:2.4
 	>=media-libs/gst-plugins-base-0.10.32:0.10[introspection]
@@ -51,8 +51,8 @@ COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
 	>=sys-libs/tdb-1.2.6
 
 	clutter? (
-		>=media-libs/clutter-1.2:1.0
-		>=media-libs/clutter-gst-1.0:1.0
+		>=media-libs/clutter-1.8:1.0
+		>=media-libs/clutter-gst-1.4:1.0
 		>=media-libs/clutter-gtk-1.0:1.0
 		>=x11-libs/mx-1.0.1:1.0 )
 	cdr? ( >=app-cdr/brasero-2.91.90 )
@@ -64,9 +64,9 @@ COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
 	libnotify? ( >=x11-libs/libnotify-0.7.0 )
 	lirc? ( app-misc/lirc )
 	musicbrainz? (
-		|| ( media-libs/musicbrainz:3 media-libs/musicbrains:4 )
+		|| ( >=media-libs/musicbrainz-3.0.2:3 >=media-libs/musicbrains-4.0.0:4 )
 		gnome-base/gconf:2 )
-	python? ( dev-python/pygobject:3 )
+	python? ( >=dev-python/pygobject-3.0:3 )
 	udev? (
 		ipod? ( >=media-libs/libgpod-0.7.92[udev] )
 		mtp? ( >=media-libs/libmtp-0.3 )
