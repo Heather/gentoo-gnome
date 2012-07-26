@@ -57,7 +57,7 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	dev-lang/perl
 	=dev-lang/python-2*
-	dev-lang/ruby
+	virtual/rubygems
 	sys-devel/bison
 	>=sys-devel/flex-2.5.33
 	sys-devel/gettext
