@@ -104,7 +104,6 @@ sys-libs/libosinfo
 x11-libs/gdk-pixbuf
 x11-libs/goocanvas:2.0
 x11-libs/goocanvas:0
-x11-libs/gtk+:2
 x11-libs/gtk+:3
 x11-libs/gtksourceview:3.0
 x11-libs/libnotify
@@ -117,6 +116,7 @@ x11-terms/gnome-terminal
 x11-wm/mutter
 
 # GNOME Disk Utility
+~sys-auth/polkit-0.107
 =sys-apps/util-linux-2.21*
 sys-fs/udisks:2
 sys-apps/gnome-disk-utility
