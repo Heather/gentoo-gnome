@@ -46,7 +46,6 @@ COMMON_DEPEND="X? (
 		x11-libs/libXdamage
 		xinerama? ( x11-libs/libXinerama )
 	)
-	accessibility? ( >=app-accessibility/at-spi2-atk-2.5.3 )
 	wayland? (
 		dev-libs/wayland
 		media-libs/mesa[egl,wayland]
@@ -55,7 +54,8 @@ COMMON_DEPEND="X? (
 	)
 	>=dev-libs/glib-2.33.1
 	>=x11-libs/pango-1.30[introspection?]
-	>=dev-libs/atk-2.2[introspection?]
+	>=app-accessibility/at-spi2-atk-2.5.3
+	>=dev-libs/atk-2.5.3[introspection?]
 	>=x11-libs/cairo-1.10.0[aqua?,glib,svg,X?]
 	>=x11-libs/gdk-pixbuf-2.26:2[introspection?,X?]
 	>=x11-libs/gtk+-2.24:2
@@ -108,9 +108,6 @@ src_prepare() {
 	# https://bugzilla.gnome.org/show_bug.cgi?id=65410
 	epatch "${FILESDIR}/${PN}-3.3.18-fallback-theme.patch"
 
-	# Apparently needed for new libxkbcommon headers; bug #408131
-	epatch "${FILESDIR}/${PN}-3.3.20-wayland-xkbcommon-headers.patch"
-
 	# Work around https://bugzilla.gnome.org/show_bug.cgi?id=663991
 	if [[ ${CHOST} == *-solaris* ]]; then
 		sed -i -e '/_XOPEN_SOURCE/s/500/600/' gtk/gtksearchenginesimple.c || die
@@ -161,7 +158,6 @@ src_configure() {
 		$(use_enable X xkb)
 		$(use_enable X xrandr)
 		$(use_enable xinerama)
-		$(use_with accessibility atk-bridge)
 		--disable-papi
 		--enable-gtk2-dependency"
 
