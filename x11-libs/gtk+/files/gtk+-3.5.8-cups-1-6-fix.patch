@@ -1,0 +1,24 @@
+From e8dcfad441aad7e03a8a459f3818018bd6ff63c7 Mon Sep 17 00:00:00 2001
+From: Rico Tzschichholz <ricotz@t-online.de>
+Date: Sun, 05 Aug 2012 07:56:58 +0000
+Subject: cups: Use IPP api when necessary with CUPS 1.6
+
+---
+diff --git a/modules/printbackends/cups/gtkprintbackendcups.c b/modules/printbackends/cups/gtkprintbackendcups.c
+index d9110be..c79fe9d 100644
+--- a/modules/printbackends/cups/gtkprintbackendcups.c
++++ b/modules/printbackends/cups/gtkprintbackendcups.c
+@@ -1835,9 +1835,9 @@ cups_printer_handle_attribute (GtkPrintBackendCups *cups_backend,
+ 	    info->auth_info_required[i] = g_strdup (ippGetString (attr, i, NULL));
+ 	}
+     }
+-  else if (strcmp (attr->name, "number-up-default") == 0)
++  else if (strcmp (ippGetName (attr), "number-up-default") == 0)
+     {
+-      info->default_number_up = attr->values[0].integer;
++      info->default_number_up = ippGetInteger (attr, 0);
+     }
+   else
+     {
+--
+cgit v0.9.0.2
