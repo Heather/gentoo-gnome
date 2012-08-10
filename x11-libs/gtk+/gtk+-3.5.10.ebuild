@@ -108,8 +108,6 @@ src_prepare() {
 	# https://bugzilla.gnome.org/show_bug.cgi?id=65410
 	epatch "${FILESDIR}/${PN}-3.3.18-fallback-theme.patch"
 
-	epatch "${FILESDIR}/${P}-cups-1-6-fix.patch"
-
 	# Work around https://bugzilla.gnome.org/show_bug.cgi?id=663991
 	if [[ ${CHOST} == *-solaris* ]]; then
 		sed -i -e '/_XOPEN_SOURCE/s/500/600/' gtk/gtksearchenginesimple.c || die
