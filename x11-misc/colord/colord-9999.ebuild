@@ -4,7 +4,7 @@
 
 EAPI="4"
 
-inherit autotools bash-completion-r1 eutils systemd base
+inherit autotools bash-completion-r1 eutils user systemd base toolchain-funcs
 if [[ ${PV} = 9999 ]]; then
 	GCONF_DEBUG="no"
 	inherit gnome2-live # need all the hacks from gnome2-live_src_prepare
@@ -23,11 +23,10 @@ SLOT="0"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64 ~arm ~hppa ~mips ~ppc ~ppc64 ~x86 ~x86-fbsd"
+	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~mips ~ppc ~ppc64 ~x86 ~x86-fbsd"
 fi
-IUSE="doc examples gtk +gusb +introspection scanner +udev vala"
+IUSE="doc examples +gusb +introspection scanner +udev vala"
 
-# FIXME: raise to libusb-1.0.9:1 when available
 COMMON_DEPEND="
 	dev-db/sqlite:3
 	>=dev-libs/glib-2.28.0:2
@@ -91,21 +90,23 @@ src_configure() {
 		--with-daemon-user=colord \
 		--localstatedir="${EPREFIX}"/var \
 		$(use_enable doc gtk-doc) \
-		$(use_enable gtk) \
 		$(use_enable gusb) \
 		$(use_enable gusb reverse) \
 		$(use_enable introspection) \
 		$(use_enable scanner sane) \
 		$(use_enable udev gudev) \
 		$(use_enable vala) \
-		$(systemd_with_unitdir) \
-		VAPIGEN=$(type -p vapigen-0.14)
+		"$(systemd_with_unitdir)" \
+		VAPIGEN=$(type -P vapigen-0.14)
 	# parallel make fails in doc/api
 	use doc && MAKEOPTS="${MAKEOPTS} -j1"
 }
 
 src_install() {
-	base_src_install
+	local udevdir=/lib/udev
+	use udev && udevdir="$($(tc-getPKG_CONFIG) --variable=udevdir udev)"
+
+	base_src_install udevrulesdir="${udevdir}"/rules.d
 
 	newbashcomp client/colormgr-completion.bash colormgr
 	rm -vr "${ED}etc/bash_completion.d"
@@ -120,5 +121,5 @@ src_install() {
 		doins examples/*.c
 	fi
 
-	find "${D}" -name "*.la" -delete || die
+	prune_libtool_files
 }
