@@ -1,0 +1,54 @@
+From 5e6aadd88030702c002d8f1c32806f2eccbefb60 Mon Sep 17 00:00:00 2001
+From: Matthew Barnes <mbarnes@redhat.com>
+Date: Fri, 10 Aug 2012 12:31:01 +0000
+Subject: e-book-backend-db-cache.h: Avoid DB typedef.
+
+Some distros use compiler settings that choke on duplicate typedefs.
+Gentoo seems to be one of them.
+
+Replace the DB typedef with a forward declaration of "struct __db"
+and fix up all the function arguments that take a DB pointer.
+---
+diff --git a/addressbook/libedata-book/e-book-backend-db-cache.h b/addressbook/libedata-book/e-book-backend-db-cache.h
+index b0742ca..4b17bbd 100644
+--- a/addressbook/libedata-book/e-book-backend-db-cache.h
++++ b/addressbook/libedata-book/e-book-backend-db-cache.h
+@@ -31,23 +31,23 @@
+ G_BEGIN_DECLS
+ 
+ /* Avoid including <db.h> in a public header file. */
+-typedef struct __db DB;
++struct __db;
+ 
+-EContact * e_book_backend_db_cache_get_contact (DB *db, const gchar *uid);
+-gchar *e_book_backend_db_cache_get_filename (DB *db);
+-void e_book_backend_db_cache_set_filename (DB *db, const gchar *filename);
+-gboolean e_book_backend_db_cache_add_contact (DB *db,
++EContact * e_book_backend_db_cache_get_contact (struct __db *db, const gchar *uid);
++gchar *e_book_backend_db_cache_get_filename (struct __db *db);
++void e_book_backend_db_cache_set_filename (struct __db *db, const gchar *filename);
++gboolean e_book_backend_db_cache_add_contact (struct __db *db,
+ 					   EContact *contact);
+-gboolean e_book_backend_db_cache_remove_contact (DB *db,
++gboolean e_book_backend_db_cache_remove_contact (struct __db *db,
+ 					      const gchar *uid);
+-gboolean e_book_backend_db_cache_check_contact (DB *db, const gchar *uid);
+-GList *   e_book_backend_db_cache_get_contacts (DB *db, const gchar *query);
++gboolean e_book_backend_db_cache_check_contact (struct __db *db, const gchar *uid);
++GList *   e_book_backend_db_cache_get_contacts (struct __db *db, const gchar *query);
+ gboolean e_book_backend_db_cache_exists (const gchar *uri);
+-void     e_book_backend_db_cache_set_populated (DB *db);
+-gboolean e_book_backend_db_cache_is_populated (DB *db);
+-GPtrArray * e_book_backend_db_cache_search (DB *db, const gchar *query);
+-void e_book_backend_db_cache_set_time (DB *db, const gchar *t);
+-gchar * e_book_backend_db_cache_get_time (DB *db);
++void     e_book_backend_db_cache_set_populated (struct __db *db);
++gboolean e_book_backend_db_cache_is_populated (struct __db *db);
++GPtrArray * e_book_backend_db_cache_search (struct __db *db, const gchar *query);
++void e_book_backend_db_cache_set_time (struct __db *db, const gchar *t);
++gchar * e_book_backend_db_cache_get_time (struct __db *db);
+ 
+ G_END_DECLS
+ 
+--
+cgit v0.9.0.2
