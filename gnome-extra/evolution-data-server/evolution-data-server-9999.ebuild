@@ -5,8 +5,9 @@
 EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
+PYTHON_DEPEND="2"
 
-inherit db-use eutils flag-o-matic gnome2 versionator virtualx
+inherit db-use eutils flag-o-matic gnome2 python versionator virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -86,10 +87,13 @@ pkg_setup() {
 		--enable-largefile
 		--enable-smime
 		--with-libdb=${EPREFIX}/usr"
+	python_set_active_version 2
 }
 
 src_prepare() {
 	gnome2_src_prepare
+
+	epatch "${FILESDIR}/${P}-gcc-compat.patch"
 
 	# /usr/include/db.h is always db-1 on FreeBSD
 	# so include the right dir in CPPFLAGS
