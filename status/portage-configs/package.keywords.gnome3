@@ -62,8 +62,10 @@ gnome-base/librsvg
 gnome-extra/at-spi
 gnome-extra/bug-buddy
 gnome-extra/evolution-data-server
+gnome-extra/evolution-ews
 gnome-extra/evolution-exchange
-gnome-extra/evolution-mapi
+gnome-extra/evolution-groupwise
+gnome-extra/evolution-kolab
 gnome-extra/gcalctool
 gnome-extra/gconf-editor
 gnome-extra/gnome-contacts
