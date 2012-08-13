@@ -49,7 +49,6 @@ RDEPEND=">=dev-libs/glib-2.32:2
 	weather? ( >=dev-libs/libgweather-3.5:2 )
 "
 DEPEND="${RDEPEND}
-	dev-lang/perl
 	dev-util/fix-la-relink-command
 	dev-util/gperf
 	>=dev-util/intltool-0.35.5
