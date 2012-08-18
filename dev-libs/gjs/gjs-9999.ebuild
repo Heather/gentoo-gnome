@@ -24,8 +24,8 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 
-RDEPEND=">=dev-libs/glib-2.31:2
-	>=dev-libs/gobject-introspection-1.31.22
+RDEPEND=">=dev-libs/glib-2.32:2
+	>=dev-libs/gobject-introspection-1.33.2
 
 	dev-libs/dbus-glib
 	sys-libs/readline
@@ -44,7 +44,9 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-systemtap
 		--disable-dtrace
-		--disable-coverage"
+		--disable-coverage
+		"
+	# TODO: figure out how to use the `--disable-test`
 
 	python_set_active_version 2
 	python_pkg_setup
