@@ -5,7 +5,7 @@
 EAPI="4"
 GCONF_DEBUG="no"
 
-inherit gnome2
+inherit autotools eutils gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -54,4 +54,12 @@ pkg_setup() {
 	# but configure checks for it anyway
 	G2CONF="${G2CONF} VALAC=$(type -P valac-0.18)
 		$(use_enable gstreamer gst)"
+}
+
+src_prepare() {
+	gnome2_src_prepare
+	# Automagic gstreamer
+	# https://bugzilla.gnome.org/show_bug.cgi?id=682146
+	epatch "${FILESDIR}/${P}-gst-flag.patch"
+	eautoreconf
 }
