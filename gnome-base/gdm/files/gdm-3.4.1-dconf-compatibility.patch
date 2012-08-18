@@ -1,0 +1,19 @@
+commit c0ad2d5b85b063bd7cb5dd2153f0755f4ebe3efb
+Author: Matthias Clasen <mclasen@redhat.com>
+Date:   Thu Jul 19 08:23:29 2012 -0400
+
+    Update the syntax of the dconf profile file
+    
+    We were using a deprecated syntax which stopped working in
+    dconf 0.13.4 - without warning :-(. See
+    http://live.gnome.org/dconf/SystemAdministrators
+
+diff --git a/data/dconf-profile b/data/dconf-profile
+index d5a90e5..68deb5a 100644
+--- a/data/dconf-profile
++++ b/data/dconf-profile
+@@ -1,2 +1,2 @@
+-user
+-gdm
++user-db:user
++system-db:gdm
