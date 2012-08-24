@@ -21,7 +21,7 @@ if [[ ${PV} = 9999 ]]; then
 else
 	KEYWORDS="~amd64 ~x86 ~x86-fbsd"
 fi
-IUSE="clutter crypt doc +gnome-online-accounts gstreamer kerberos ldap map ssl"
+IUSE="crypt doc +gnome-online-accounts gstreamer kerberos ldap map ssl"
 
 # We need a graphical pinentry frontend to be able to ask for the GPG
 # password from inside evolution, bug 160302
@@ -31,7 +31,7 @@ PINENTRY_DEPEND="|| ( app-crypt/pinentry[gtk] app-crypt/pinentry-qt app-crypt/pi
 # pst is not mature enough and changes API/ABI frequently
 COMMON_DEPEND=">=dev-libs/glib-2.32:2
 	>=x11-libs/cairo-1.9.15[glib]
-	>=x11-libs/gtk+-3.2.0:3
+	>=x11-libs/gtk+-3.4.0:3
 	>=gnome-base/gnome-desktop-2.91.3:3
 	>=gnome-base/gsettings-desktop-schemas-2.91.92
 	>=dev-libs/libgweather-3.5.0:2
@@ -51,7 +51,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.32:2
 	x11-libs/libSM
 	x11-libs/libICE
 
-	clutter? (
+	map? (
 		>=media-libs/clutter-1.0.0:1.0
 		>=media-libs/clutter-gtk-0.90:1.0
 		x11-libs/mx:1.0 )
@@ -72,11 +72,8 @@ COMMON_DEPEND=">=dev-libs/glib-2.32:2
 		>=dev-libs/nss-3.11 )"
 DEPEND="${COMMON_DEPEND}
 	app-text/docbook-xml-dtd:4.1.2
-	>=app-text/gnome-doc-utils-0.20.10
-	app-text/scrollkeeper
+	app-text/yelp-tools
 	>=dev-util/intltool-0.40.0
-	sys-devel/bison
-	>=sys-devel/gettext-0.17
 	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.14 )"
 # eautoreconf needs:
@@ -84,9 +81,6 @@ DEPEND="${COMMON_DEPEND}
 #	>=dev-util/gtk-doc-am-1.9
 RDEPEND="${COMMON_DEPEND}
 	!<gnome-extra/evolution-exchange-2.32"
-
-# contact maps require clutter
-REQUIRED_USE="map? ( clutter )"
 
 pkg_setup() {
 	ELTCONF="--reverse-deps"
@@ -105,7 +99,6 @@ pkg_setup() {
 		$(use_enable gnome-online-accounts goa)
 		$(use_enable gstreamer audio-inline)
 		$(use_enable map contact-maps)
-		$(use_with clutter)
 		$(use_with ldap openldap)
 		$(use_with kerberos krb5 ${EPREFIX}/usr)"
 
@@ -124,6 +117,7 @@ pkg_setup() {
 src_prepare() {
 	# Fix paths for Gentoo spamassassin executables
 	epatch "${FILESDIR}/${PN}-3.3.91-spamassassin-paths.patch"
+
 	sed -e "s:@EPREFIX@:${EPREFIX}:g" \
 		-i data/org.gnome.evolution.spamassassin.gschema.xml.in \
 		-i modules/spamassassin/evolution-spamassassin.c || die "sed failed"
