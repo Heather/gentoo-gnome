@@ -1,0 +1,30 @@
+From 2e70097a13289f6e665e7bbe327d12d5b0d3cddb Mon Sep 17 00:00:00 2001
+From: Alexander Larsson <alexl@redhat.com>
+Date: Fri, 24 Aug 2012 13:20:15 +0200
+Subject: [PATCH 1/2] Avoid double free of hash key
+
+When soup_message_headers_get_content_disposition re-inserts the
+new filename we need to g_strdup the key or otherwise it will
+be freed by the hashtable key destroy func.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=682569
+---
+ libsoup/soup-message-headers.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libsoup/soup-message-headers.c b/libsoup/soup-message-headers.c
+index b9bab23..1dd53dd 100644
+--- a/libsoup/soup-message-headers.c
++++ b/libsoup/soup-message-headers.c
+@@ -1303,7 +1303,7 @@ soup_message_headers_get_content_disposition (SoupMessageHeaders  *hdrs,
+ 		char *filename = strrchr (orig_value, '/');
+ 
+ 		if (filename)
+-			g_hash_table_insert (*params, orig_key, filename + 1);
++			g_hash_table_insert (*params, g_strdup (orig_key), filename + 1);
+ 	}
+ 	return TRUE;
+ }
+-- 
+1.7.12
+

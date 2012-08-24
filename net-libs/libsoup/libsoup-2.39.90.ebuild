@@ -80,7 +80,7 @@ src_prepare() {
 		epatch "${FILESDIR}/${PN}-2.34.2-fix-build-without-gnome-with-doc.patch"
 		[[ ${PV} != 9999 ]] && eautoreconf
 	fi
-	epatch "${FILESDIR}/${P}-fix-public-tlds.patch"
+	epatch "${FILESDIR}/${P}-avoid-double-free.patch"
 
 	gnome2_src_prepare
 }
