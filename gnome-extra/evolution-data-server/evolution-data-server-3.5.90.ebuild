@@ -92,8 +92,6 @@ pkg_setup() {
 src_prepare() {
 	gnome2_src_prepare
 
-	epatch "${FILESDIR}/${P}-gcc-compat.patch"
-
 	# /usr/include/db.h is always db-1 on FreeBSD
 	# so include the right dir in CPPFLAGS
 	append-cppflags "-I$(db_includedir)"
