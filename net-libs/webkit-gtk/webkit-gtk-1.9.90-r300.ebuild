@@ -50,8 +50,9 @@ RDEPEND="
 
 	spell? ( >=app-text/enchant-0.22 )
 
-	webgl? ( virtual/opengl )
-
+	webgl? (
+		virtual/opengl
+		x11-libs/libXcomposite )
 "
 # paxctl needed for bug #407085
 DEPEND="${RDEPEND}
@@ -65,6 +66,8 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig
 	dev-util/gtk-doc-am
 	app-accessibility/at-spi2-core
+
+	>=sys-devel/make-3.82-r4
 
 	doc? ( >=dev-util/gtk-doc-1.10 )
 	introspection? ( jit? ( sys-apps/paxctl ) )
@@ -189,7 +192,8 @@ src_compile() {
 	#emake all-programs-local
 	#use introspection && emake WebKit-3.0.gir
 	#emake all-data-local
-	emake -j1
+	#emake -j1
+	default
 }
 
 src_test() {
