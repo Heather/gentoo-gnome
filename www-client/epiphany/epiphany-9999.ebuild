@@ -15,41 +15,38 @@ HOMEPAGE="http://projects.gnome.org/epiphany/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="avahi doc +introspection +jit +nss test"
+IUSE="doc +introspection +jit +nss test"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 fi
 
-# XXX: Should we add seed support? Seed seems to be unmaintained now.
 RDEPEND="
+	>=app-crypt/gcr-3.5.5
+	>=app-text/iso-codes-0.35
 	>=dev-libs/glib-2.31.2:2
-	>=x11-libs/gtk+-3.5.2:3[introspection?]
 	>=dev-libs/libxml2-2.6.12:2
 	>=dev-libs/libxslt-1.1.7
-	>=app-text/iso-codes-0.35
-	>=net-libs/webkit-gtk-1.7.92:3[introspection?]
-	>=net-libs/libsoup-gnome-2.37.1:2.4
 	>=gnome-base/gnome-keyring-2.26.0
 	>=gnome-base/gsettings-desktop-schemas-0.0.1
+	>=net-dns/avahi-0.6.22
+	>=net-libs/webkit-gtk-1.9.90:3[introspection?]
+	>=net-libs/libsoup-gnome-2.39.6:2.4
+	>=x11-libs/gtk+-3.5.2:3[introspection?]
 	>=x11-libs/libnotify-0.5.1
 
 	dev-db/sqlite:3
-	x11-libs/libICE
-	x11-libs/libSM
 	x11-libs/libX11
 
 	x11-themes/gnome-icon-theme
 	x11-themes/gnome-icon-theme-symbolic
 
-	avahi? ( >=net-dns/avahi-0.6.22 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 	!jit? ( net-libs/webkit-gtk[-jit] )
 	nss? ( dev-libs/nss )"
 # paxctl needed for bug #407085
 DEPEND="${RDEPEND}
-	app-text/gnome-doc-utils
 	>=dev-util/intltool-0.50
 	sys-apps/paxctl
 	sys-devel/gettext
@@ -61,10 +58,8 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--enable-shared
 		--disable-schemas-compile
-		--disable-scrollkeeper
 		--disable-static
 		--with-distributor-name=Gentoo
-		$(use_enable avahi zeroconf)
 		$(use_enable introspection)
 		$(use_enable nss)
 		$(use_enable test tests)"
