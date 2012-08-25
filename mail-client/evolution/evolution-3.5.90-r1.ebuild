@@ -29,7 +29,6 @@ PINENTRY_DEPEND="|| ( app-crypt/pinentry[gtk] app-crypt/pinentry-qt app-crypt/pi
 
 # glade-3 support is for maintainers only per configure.ac
 # pst is not mature enough and changes API/ABI frequently
-# webkit-gtk-1.9.90 dep is due to ABI/API break
 COMMON_DEPEND=">=dev-libs/glib-2.32:2
 	>=x11-libs/cairo-1.9.15[glib]
 	>=x11-libs/gtk+-3.4.0:3
@@ -47,7 +46,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.32:2
 	>=x11-misc/shared-mime-info-0.22
 	>=x11-themes/gnome-icon-theme-2.30.2.1
 	>=dev-libs/libgdata-0.10
-	>=net-libs/webkit-gtk-1.9.90
+	>=net-libs/webkit-gtk-1.8.0
 
 	x11-libs/libSM
 	x11-libs/libICE
