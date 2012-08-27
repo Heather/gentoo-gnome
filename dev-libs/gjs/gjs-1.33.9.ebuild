@@ -45,9 +45,8 @@ pkg_setup() {
 		--disable-systemtap
 		--disable-dtrace
 		--disable-coverage
+		$(use_enable test tests)
 		"
-	# TODO: figure out how to use the `--disable-test`
-
 	python_set_active_version 2
 	python_pkg_setup
 }
