@@ -29,6 +29,7 @@ PINENTRY_DEPEND="|| ( app-crypt/pinentry[gtk] app-crypt/pinentry-qt app-crypt/pi
 
 # glade-3 support is for maintainers only per configure.ac
 # pst is not mature enough and changes API/ABI frequently
+# also supports gstreamer 1.0
 COMMON_DEPEND=">=dev-libs/glib-2.32:2
 	>=x11-libs/cairo-1.9.15[glib]
 	>=x11-libs/gtk+-3.4.0:3
@@ -117,8 +118,6 @@ pkg_setup() {
 src_prepare() {
 	# Fix paths for Gentoo spamassassin executables
 	epatch "${FILESDIR}/${PN}-3.3.91-spamassassin-paths.patch"
-
-	epatch "${FILESDIR}/${P}-webkit-api-abi-break.patch"
 
 	sed -e "s:@EPREFIX@:${EPREFIX}:g" \
 		-i data/org.gnome.evolution.spamassassin.gschema.xml.in \

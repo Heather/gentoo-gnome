@@ -29,6 +29,7 @@ PINENTRY_DEPEND="|| ( app-crypt/pinentry[gtk] app-crypt/pinentry-qt app-crypt/pi
 
 # glade-3 support is for maintainers only per configure.ac
 # pst is not mature enough and changes API/ABI frequently
+# also supports gstreamer 1.0
 COMMON_DEPEND=">=dev-libs/glib-2.32:2
 	>=x11-libs/cairo-1.9.15[glib]
 	>=x11-libs/gtk+-3.4.0:3
