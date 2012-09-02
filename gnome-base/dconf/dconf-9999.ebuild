@@ -28,18 +28,21 @@ RDEPEND=">=dev-libs/glib-2.33.3:2
 	X? ( >=dev-libs/libxml2-2.7.7:2
 		x11-libs/gtk+:3 )"
 DEPEND="${RDEPEND}
+	dev-libs/libxslt
+	sys-devel/gettext
 	>=dev-util/intltool-0.50
 	doc? ( >=dev-util/gtk-doc-1.15 )"
 
 if [[ ${PV} = 9999 ]]; then
 	DEPEND="${DEPEND}
 		dev-util/gtk-doc-am
-		dev-lang/vala:0.18"
+		>=dev-lang/vala-0.17.0:0.18"
 fi
 
 pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-schemas-compile
+		--disable-gcov
 		$(use_enable X editor)
 		VALAC=$(type -P valac-0.18)"
 }
