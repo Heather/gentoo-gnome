@@ -99,7 +99,6 @@ net-libs/libsoup-gnome
 net-libs/webkit-gtk
 net-misc/vinagre
 net-misc/vino
-net-print/cups
 net-wireless/gnome-bluetooth
 sys-apps/accountsservice
 sys-libs/libosinfo
@@ -128,7 +127,7 @@ app-pda/libplist
 
 # iOS devices
 ~app-pda/usbmuxd-1.0.8
-app-pda/libimobiledevice
+#app-pda/libimobiledevice
 
 # Gobject Introspection
 dev-libs/gobject-introspection-common
@@ -151,7 +150,7 @@ net-libs/glib-networking
 app-text/gnome-doc-utils
 app-text/yelp-tools
 dev-util/gdbus-codegen
-dev-util/gtk-builder-convert
+#dev-util/gtk-builder-convert
 dev-util/itstool
 dev-util/gtk-doc
 dev-util/gtk-doc-am
@@ -224,15 +223,15 @@ net-im/empathy
 
 # NM
 net-misc/mobile-broadband-provider-info
-net-wireless/wimax-tools
-net-wireless/wimax
->=net-misc/networkmanager-0.8.990
->=net-misc/networkmanager-vpnc-0.8.990
->=net-misc/networkmanager-pptp-0.8.990
->=net-misc/networkmanager-openvpn-0.8.990
->=net-misc/networkmanager-openswan-0.8.990
->=net-misc/modemmanager-0.4.996
->=gnome-extra/nm-applet-0.8.990
+#net-wireless/wimax-tools
+#net-wireless/wimax
+~net-misc/networkmanager-0.9.4.0
+#>=net-misc/networkmanager-vpnc-0.8.990
+#>=net-misc/networkmanager-pptp-0.8.990
+#>=net-misc/networkmanager-openvpn-0.8.990
+#>=net-misc/networkmanager-openswan-0.8.990
+#>=net-misc/modemmanager-0.4.996
+#>=gnome-extra/nm-applet-0.8.990
 
 # Nautilus
 gnome-base/nautilus
@@ -277,6 +276,8 @@ gnome-extra/gnome-games-extra-data
 
 # Polkit
 net-print/cups-pk-helper
+net-print/cups-filters
+net-print/cups
 
 # Cheese
 # Needs gst good, base from above
@@ -285,7 +286,8 @@ x11-libs/mx
 media-video/cheese
 
 # Evince
-=app-text/libgxps-0.2.1
+~app-text/libgxps-0.2.2
+~app-text/poppler-0.20.3
 app-text/evince
 
 # Vte
