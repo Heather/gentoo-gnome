@@ -79,3 +79,7 @@
 =net-im/pidgin-2.10.3-r100
 # Needs gst-plugins-flac-0.10.31 + commit 265a5bfa to write seekable flac files
 =media-sound/sound-juicer-3.4*
+
+# Needed by gvfs
+=media-libs/libgphoto2-2.5*
+=media-gfx/gphoto2-2.5*
