@@ -62,7 +62,6 @@ pkg_setup() {
 		$(use_with lcms cms)
 		$(use_with xmp)
 		$(use_with svg librsvg)
-		--disable-scrollkeeper
 		--disable-schemas-compile"
 	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
 	DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README THANKS TODO"
