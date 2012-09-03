@@ -50,7 +50,6 @@ pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS README"
 	G2CONF="${G2CONF}
 		--disable-schemas-compile
-		--disable-scrollkeeper
 		$(use_enable systemd)"
 	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
 }
