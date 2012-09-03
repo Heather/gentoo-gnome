@@ -35,7 +35,7 @@ COMMON_DEPEND="
 	>=dev-libs/gjs-1.33.2
 	>=dev-libs/gobject-introspection-0.10.1
 	>=x11-libs/gtk+-3.3.9:3[introspection]
-	>=media-libs/clutter-1.9.16:1.0[introspection]
+	>=media-libs/clutter-1.11.11:1.0[introspection]
 	>=dev-libs/json-glib-0.13.2
 	>=dev-libs/libcroco-0.6.2:0.6
 	>=gnome-base/gnome-desktop-3.5.1:3
@@ -49,7 +49,7 @@ COMMON_DEPEND="
 	>=net-libs/telepathy-glib-0.17.5[introspection]
 	>=sys-auth/polkit-0.100[introspection]
 	>=x11-libs/libXfixes-5.0
-	>=x11-wm/mutter-3.5.5[introspection]
+	>=x11-wm/mutter-3.5.90[introspection]
 	>=x11-libs/startup-notification-0.11
 
 	dev-libs/dbus-glib
