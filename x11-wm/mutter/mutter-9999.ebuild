@@ -50,7 +50,6 @@ COMMON_DEPEND=">=x11-libs/pango-1.2[X,introspection?]
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 "
 DEPEND="${COMMON_DEPEND}
-	>=app-text/gnome-doc-utils-0.8
 	>=dev-util/intltool-0.35
 	sys-devel/gettext
 	virtual/pkgconfig
