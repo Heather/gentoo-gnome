@@ -40,7 +40,6 @@ RDEPEND="
 	doc? ( !<gnome-base/gnome-desktop-2.32.1-r1:2[doc] )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.7 )"
 DEPEND="${RDEPEND}
-	app-text/yelp-tools
 	app-text/docbook-xml-dtd:4.1.2
 	>=dev-util/intltool-0.40.6
 	sys-devel/gettext
@@ -48,6 +47,11 @@ DEPEND="${RDEPEND}
 	>=x11-proto/randrproto-1.2
 	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.4 )"
+
+if [[ ${PV} = 9999 ]]; then
+	DEPEND="${DEPEND}
+		app-text/yelp-tools"
+fi
 
 # Includes X11/Xatom.h in libgnome-desktop/gnome-bg.c which comes from xproto
 # Includes X11/extensions/Xrandr.h that includes randr.h from randrproto (and
@@ -63,6 +67,7 @@ pkg_setup() {
 		--with-gnome-distributor=Gentoo
 		$(use_enable doc desktop-docs)
 		$(use_enable introspection)"
+	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
 }
 
 src_unpack() {
