@@ -25,7 +25,7 @@ else
 fi
 
 RDEPEND=">=dev-libs/glib-2.32:2
-	>=dev-libs/gobject-introspection-1.33.2
+	>=dev-libs/gobject-introspection-1.33.10
 
 	dev-libs/dbus-glib
 	sys-libs/readline
@@ -45,8 +45,7 @@ pkg_setup() {
 		--disable-systemtap
 		--disable-dtrace
 		--disable-coverage
-		$(use_enable test tests)
-		"
+		$(use_enable test tests)"
 	python_set_active_version 2
 	python_pkg_setup
 }
