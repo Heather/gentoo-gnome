@@ -21,18 +21,19 @@ SRC_URI="${SRC_URI//-gnome}"
 
 LICENSE="LGPL-2"
 SLOT="2.4"
+IUSE="debug doc +introspection"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-solaris"
 fi
-IUSE="debug doc +introspection"
 
 RDEPEND="~net-libs/libsoup-${PV}
 	|| ( gnome-base/libgnome-keyring <gnome-base/gnome-keyring-2.29.4 )
 	dev-db/sqlite:3
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )"
 DEPEND="${RDEPEND}
+	sys-devel/gettext
 	virtual/pkgconfig
 	>=dev-util/intltool-0.35
 	>=dev-util/gtk-doc-am-1.10

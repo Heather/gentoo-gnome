@@ -30,6 +30,7 @@ RDEPEND=">=dev-libs/glib-2.33.1:2
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 	samba? ( net-fs/samba )"
 DEPEND="${RDEPEND}
+	sys-devel/gettext
 	virtual/pkgconfig
 	dev-lang/python
 	>=dev-util/intltool-0.35
@@ -80,7 +81,6 @@ src_prepare() {
 		epatch "${FILESDIR}/${PN}-2.34.2-fix-build-without-gnome-with-doc.patch"
 		[[ ${PV} != 9999 ]] && eautoreconf
 	fi
-	epatch "${FILESDIR}/${P}-avoid-double-free.patch"
 
 	gnome2_src_prepare
 }
