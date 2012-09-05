@@ -26,9 +26,9 @@ IUSE="doc exif gnome +introspection packagekit +previewer sendto tracker xmp"
 
 # Require {glib,gdbus-codegen}-2.30.0 due to GDBus API changes between 2.29.92
 # and 2.30.0
-COMMON_DEPEND=">=dev-libs/glib-2.31.9:2
+COMMON_DEPEND=">=dev-libs/glib-2.33.11:2
 	>=x11-libs/pango-1.28.3
-	>=x11-libs/gtk+-3.5.5:3[introspection?]
+	>=x11-libs/gtk+-3.5.12:3[introspection?]
 	>=dev-libs/libxml2-2.7.8:2
 	>=gnome-base/gnome-desktop-3.0.0:3
 
@@ -41,7 +41,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.31.9:2
 
 	exif? ( >=media-libs/libexif-0.6.20 )
 	introspection? ( >=dev-libs/gobject-introspection-0.6.4 )
-	tracker? ( >=app-misc/tracker-0.12 )
+	tracker? ( >=app-misc/tracker-0.14 )
 	xmp? ( >=media-libs/exempi-2.1.0 )"
 DEPEND="${COMMON_DEPEND}
 	>=dev-lang/perl-5
@@ -67,6 +67,7 @@ PDEPEND="gnome? (
 
 pkg_setup() {
 	G2CONF="${G2CONF}
+		--disable-profiling
 		--disable-update-mimedb
 		$(use_enable exif libexif)
 		$(use_enable introspection)
@@ -82,7 +83,7 @@ src_prepare() {
 
 	# Restore the nautilus-2.x Delete shortcut (Ctrl+Delete will still work);
 	# bug #393663
-	epatch "${FILESDIR}/${PN}-3.2.1-delete.patch"
+	epatch "${FILESDIR}/${PN}-3.5.91-delete.patch"
 
 	# Remove crazy CFLAGS
 	sed 's:-DG.*DISABLE_DEPRECATED::g' -i configure.in configure \
