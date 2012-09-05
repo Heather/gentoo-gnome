@@ -34,7 +34,7 @@ RDEPEND="
 	>=dev-libs/glib-2.32:2
 	>=x11-libs/gtk+-3.4:3[aqua=,introspection?]
 	>=dev-libs/icu-3.8.1-r1
-	>=net-libs/libsoup-2.37.92:2.4[introspection?]
+	>=net-libs/libsoup-2.39.2:2.4[introspection?]
 	dev-db/sqlite:3
 	>=x11-libs/pango-1.21
 	x11-libs/libXrender
@@ -111,9 +111,6 @@ src_prepare() {
 	# like https://bugs.webkit.org/show_bug.cgi?id=35471 and bug #323669
 	gnome2_environment_reset
 
-	# https://bugs.webkit.org/show_bug.cgi?id=79498
-	#epatch "${FILESDIR}/${PN}-1.7.90-parallel-make-hack.patch"
-
 	# XXX: failing tests
 	# https://bugs.webkit.org/show_bug.cgi?id=50744
 	# testkeyevents is interactive
@@ -182,18 +179,6 @@ src_configure() {
 		# Aqua support in gtk3 is untested
 
 	econf ${myconf}
-}
-
-src_compile() {
-	# Horrible failure of a hack to work around parallel make problems,
-	# see https://bugs.webkit.org/show_bug.cgi?id=79498
-	#emake -j1 all-built-sources-local
-	#emake all-ltlibraries-local
-	#emake all-programs-local
-	#use introspection && emake WebKit-3.0.gir
-	#emake all-data-local
-	#emake -j1
-	default
 }
 
 src_test() {
