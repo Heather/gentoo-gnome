@@ -23,14 +23,12 @@ else
 fi
 IUSE=""
 
-# Optional app-office/unoconv support (OOo to pdf)
-# freetype needed for font loader
 # libX11 needed for sushi_create_foreign_window()
 COMMON_DEPEND=">=x11-libs/gdk-pixbuf-2.22.1[introspection]
 	>=dev-libs/gjs-0.7.7
 	>=dev-libs/glib-2.29.14:2
 	>=dev-libs/gobject-introspection-0.9.6
-	>=media-libs/clutter-1.10.0:1.0[introspection]
+	>=media-libs/clutter-1.11.4:1.0[introspection]
 	>=media-libs/clutter-gtk-1.0.1:1.0[introspection]
 	>=x11-libs/gtk+-3.0.0:3[introspection]
 
@@ -38,25 +36,26 @@ COMMON_DEPEND=">=x11-libs/gdk-pixbuf-2.22.1[introspection]
 	media-libs/freetype:2
 	media-libs/gstreamer:0.10[introspection]
 	media-libs/gst-plugins-base:0.10[introspection]
-	media-libs/clutter-gst:1.0[introspection]
-	media-libs/musicbrainz:4
+	media-libs/clutter-gst:2.0[introspection]
+	media-libs/musicbrainz:5
 	net-libs/webkit-gtk:3[introspection]
 	x11-libs/gtksourceview:3.0[introspection]
 	x11-libs/libX11
-"
+
+	office? ( app-office/unoconv )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
 	>=sys-devel/gettext-0.17
-	virtual/pkgconfig
-"
+	virtual/pkgconfig"
 RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/nautilus-3.1.90
-	x11-themes/gnome-icon-theme-symbolic
-"
+	x11-themes/gnome-icon-theme-symbolic"
 
 pkg_setup() {
 	G2CONF="${G2CONF}
 		UNOCONV=$(type -P false)
+		--disable-schemas-compile
 		--disable-static"
 	DOCS="AUTHORS NEWS README TODO"
+	use office && G2CONF+=" UNOCONV=$(type -P unoconv)"
 }
