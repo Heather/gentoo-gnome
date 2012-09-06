@@ -57,7 +57,7 @@ src_prepare() {
 
 	if [[ ${PV} != 9999 ]]; then
 		# Drop DEPRECATED flags
-		sed -e 's:-D[A-Z_]*DISABLE_DEPRECATED *\\:\\:g' \
+		LC_ALL=C sed -e 's:-D[A-Z_]*DISABLE_DEPRECATED *\\:\\:g' \
 			-e 's:-D[A-Z_]*DISABLE_DEPRECATED:$(NULL):g' \
 			-i Makefile.{decl,in} \
 			proxy/gnome/Makefile.in \
