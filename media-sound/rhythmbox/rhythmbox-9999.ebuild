@@ -19,7 +19,7 @@ HOMEPAGE="http://www.rhythmbox.org/"
 LICENSE="GPL-2"
 SLOT="0"
 IUSE="cdr clutter daap dbus doc gnome-keyring html ipod libnotify lirc
-musicbrainz mtp nsplugin +python test +udev upnp webkit zeitgeist"
+mtp nsplugin +python test +udev upnp webkit zeitgeist"
 # vala
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
@@ -63,9 +63,6 @@ COMMON_DEPEND=">=dev-libs/glib-2.32.0:2
 	html? ( >=net-libs/webkit-gtk-1.3.9:3 )
 	libnotify? ( >=x11-libs/libnotify-0.7.0 )
 	lirc? ( app-misc/lirc )
-	musicbrainz? (
-		|| ( >=media-libs/musicbrainz-3.0.2:3 >=media-libs/musicbrains-4.0.0:4 )
-		gnome-base/gconf:2 )
 	python? ( >=dev-python/pygobject-3.0:3 )
 	udev? (
 		ipod? ( >=media-libs/libgpod-0.7.92[udev] )
@@ -83,8 +80,8 @@ RDEPEND="${COMMON_DEPEND}
 	>=media-plugins/gst-plugins-taglib-0.10.6
 	x11-themes/gnome-icon-theme-symbolic
 	upnp? (
-		>=media-libs/grilo-0.1.17
-		>=media-plugins/grilo-plugins-0.1.17[upnp] )
+		>=media-libs/grilo-0.2
+		>=media-plugins/grilo-plugins-0.2[upnp] )
 	python? (
 		>=dev-python/gst-python-0.10.8
 
@@ -134,7 +131,6 @@ pkg_setup() {
 		$(use_enable daap)
 		$(use_enable libnotify)
 		$(use_enable lirc)
-		$(use_enable musicbrainz)
 		$(use_enable nsplugin browser-plugin)
 		$(use_enable python)
 		$(use_enable upnp grilo)
