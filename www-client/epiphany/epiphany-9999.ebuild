@@ -13,6 +13,7 @@ fi
 DESCRIPTION="GNOME webbrowser based on Webkit"
 HOMEPAGE="http://projects.gnome.org/epiphany/"
 
+# TODO: coverage
 LICENSE="GPL-2"
 SLOT="0"
 IUSE="doc +introspection +jit +nss test"
@@ -31,10 +32,11 @@ RDEPEND="
 	>=gnome-base/gnome-keyring-2.26.0
 	>=gnome-base/gsettings-desktop-schemas-0.0.1
 	>=net-dns/avahi-0.6.22
-	>=net-libs/webkit-gtk-1.9.90:3[introspection?]
+	>=net-libs/webkit-gtk-1.9.6:3[introspection?]
 	>=net-libs/libsoup-gnome-2.39.6:2.4
 	>=x11-libs/gtk+-3.5.2:3[introspection?]
 	>=x11-libs/libnotify-0.5.1
+	gnome-base/gnome-desktop:3
 
 	dev-db/sqlite:3
 	x11-libs/libX11
@@ -46,7 +48,9 @@ RDEPEND="
 	!jit? ( net-libs/webkit-gtk[-jit] )
 	nss? ( dev-libs/nss )"
 # paxctl needed for bug #407085
+# eautoreconf requires gnome-common-3.5.5
 DEPEND="${RDEPEND}
+	introspection? ( jit? ( >=gnome-base/gnome-common-3.5.5 ) )
 	>=dev-util/intltool-0.50
 	sys-apps/paxctl
 	sys-devel/gettext
