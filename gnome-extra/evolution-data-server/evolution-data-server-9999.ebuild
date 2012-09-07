@@ -57,7 +57,7 @@ DEPEND="${RDEPEND}
 	>=sys-devel/gettext-0.17
 	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.14 )
-	vala? ( >=dev-lang/vala-0.13.0:0.14[vapigen] )"
+	vala? ( dev-lang/vala:0.18[vapigen] )"
 # eautoreconf needs:
 #	>=gnome-base/gnome-common-2
 #	>=dev-util/gtk-doc-am-1.9
@@ -72,8 +72,8 @@ pkg_setup() {
 	# Uh, what to do about dbus-call-timeout ?
 	G2CONF="${G2CONF}
 		--disable-schemas-compile
-		VALAC=$(type -P valac-0.14)
-		VAPIGEN=$(type -P vapigen-0.14)
+		VALAC=$(type -P valac-0.18)
+		VAPIGEN=$(type -P vapigen-0.18)
 		$(use_with doc private-docs)
 		$(use_enable gnome-online-accounts goa)
 		$(use_enable introspection)
