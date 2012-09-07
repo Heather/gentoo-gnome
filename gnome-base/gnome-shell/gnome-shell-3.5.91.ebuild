@@ -49,7 +49,7 @@ COMMON_DEPEND="
 	>=net-libs/telepathy-glib-0.17.5[introspection]
 	>=sys-auth/polkit-0.100[introspection]
 	>=x11-libs/libXfixes-5.0
-	>=x11-wm/mutter-3.5.90[introspection]
+	>=x11-wm/mutter-3.5.91[introspection]
 	>=x11-libs/startup-notification-0.11
 
 	dev-libs/dbus-glib
