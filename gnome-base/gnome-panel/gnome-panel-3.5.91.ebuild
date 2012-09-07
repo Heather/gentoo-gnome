@@ -50,7 +50,6 @@ RDEPEND=">=dev-libs/glib-2.31.14:2
 	networkmanager? ( >=net-misc/networkmanager-0.6.7 )"
 DEPEND="${RDEPEND}
 	app-text/docbook-xml-dtd:4.1.2
-	>=app-text/gnome-doc-utils-0.3.2
 	>=dev-lang/perl-5
 	>=dev-util/intltool-0.40
 	virtual/pkgconfig
@@ -58,6 +57,11 @@ DEPEND="${RDEPEND}
 # eautoreconf needs
 #	gnome-base/gnome-common
 #	dev-util/gtk-doc-am
+
+if [[ ${PV} = 9999 ]]; then
+	DEPEND="${DEPEND}
+		app-text/yelp-tools"
+fi
 
 pkg_setup() {
 	# XXX: Make presence/telepathy-glib support optional?
@@ -73,6 +77,7 @@ pkg_setup() {
 		$(use_enable networkmanager network-manager)
 		$(use_enable introspection)
 		$(use_enable eds)"
+	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
 	DOCS="AUTHORS ChangeLog HACKING NEWS README"
 }
 
