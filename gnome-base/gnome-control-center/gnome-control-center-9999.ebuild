@@ -80,7 +80,9 @@ RDEPEND="${COMMON_DEPEND}
 	cups? (
 		>=app-admin/system-config-printer-gnome-1.3.5
 		net-print/cups-pk-helper )
-	!systemd? ( sys-auth/consolekit )
+	!systemd? (
+		app-admin/openrc-settingsd
+		sys-auth/consolekit )
 	wacom? ( gnome-base/gnome-settings-daemon[wacom] )
 
 	!<gnome-base/gdm-2.91.94
