@@ -73,7 +73,6 @@ COMMON_DEPEND=">=dev-libs/glib-2.32:2
 		>=dev-libs/nss-3.11 )"
 DEPEND="${COMMON_DEPEND}
 	app-text/docbook-xml-dtd:4.1.2
-	app-text/yelp-tools
 	>=dev-util/intltool-0.40.0
 	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.14 )"
@@ -82,6 +81,11 @@ DEPEND="${COMMON_DEPEND}
 #	>=dev-util/gtk-doc-am-1.9
 RDEPEND="${COMMON_DEPEND}
 	!<gnome-extra/evolution-exchange-2.32"
+
+if [[ ${PV} = 9999 ]]; then
+	DEPEND="${DEPEND}
+		app-text/yelp-tools"
+fi
 
 pkg_setup() {
 	ELTCONF="--reverse-deps"
@@ -113,6 +117,7 @@ pkg_setup() {
 			--without-nss-libs
 			--without-nss-includes"
 	fi
+	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
 }
 
 src_prepare() {
