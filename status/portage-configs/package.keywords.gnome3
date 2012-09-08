@@ -301,6 +301,10 @@ gnome-base/gnome-keyring
 
 # Vala
 =dev-libs/vala-common-0.17*
+dev-lang/vala:0.10
+dev-lang/vala:0.12
+dev-lang/vala:0.14
+dev-lang/vala:0.16
 dev-lang/vala:0.18
 
 # Vte
