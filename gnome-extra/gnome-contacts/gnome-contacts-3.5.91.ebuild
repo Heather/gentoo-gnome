@@ -15,24 +15,25 @@ HOMEPAGE="https://live.gnome.org/Design/Apps/Contacts"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="gstreamer"
+IUSE="v4l"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
 	KEYWORDS="~amd64 ~x86"
 fi
 
-RDEPEND=">=dev-libs/folks-0.7.2[eds]
+RDEPEND="
 	>=dev-libs/glib-2.31.10:2
 	>=x11-libs/gtk+-3.4:3
 	>=gnome-extra/evolution-data-server-3.5.3[gnome-online-accounts]
 	>=gnome-base/gnome-desktop-3.0:3
 	>=net-libs/telepathy-glib-0.17.5
+	>=dev-libs/folks-0.7.2[eds]
 
-	gstreamer? ( media-libs/gstreamer
-				 media-libs/gst-plugins-base 
-				 >=media-video/cheese-3.3.5
-				 )
+	v4l? (
+		media-libs/gstreamer
+		media-libs/gst-plugins-base 
+		>=media-video/cheese-3.3.5 )
 
 	dev-libs/libgee:0
 	net-libs/gnome-online-accounts
@@ -44,22 +45,19 @@ DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
 	>=sys-devel/gettext-0.17
 	virtual/pkgconfig"
-# Regenerating C from vala sources requires:
-#	>=dev-lang/vala-0.17.2:0.18
-#	net-libs/telepathy-glib[vala]
+
+if [[ ${PV} = 9999 ]]; then
+	DEPEND="${DEPEND}
+		>=dev-lang/vala-0.17.2:0.18
+		net-libs/telepathy-glib[vala]"
+fi
 
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS" # README is empty
 	# We do not need valac when building from pre-generated C sources,
 	# but configure checks for it anyway
-	G2CONF="${G2CONF} VALAC=$(type -P valac-0.18)
-		$(use_enable gstreamer gst)"
-}
-
-src_prepare() {
-	gnome2_src_prepare
-	# Automagic gstreamer
-	# https://bugzilla.gnome.org/show_bug.cgi?id=682146
-	epatch "${FILESDIR}/${P}-gst-flag.patch"
-	eautoreconf
+	G2CONF="${G2CONF}
+		VALAC=$(type -P valac-0.18)
+		$(use_with v4l cheese)"
+	# FIXME: Fails to compile with USE=-v4l
 }
