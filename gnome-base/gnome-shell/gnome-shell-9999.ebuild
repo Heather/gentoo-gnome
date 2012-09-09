@@ -17,14 +17,13 @@ HOMEPAGE="http://live.gnome.org/GnomeShell"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="+bluetooth +networkmanager systemd"
+IUSE="+bluetooth +i18n +networkmanager systemd"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
 	KEYWORDS="~amd64 ~x86"
 fi
 
-# latest g-c-c is needed due to https://bugs.gentoo.org/show_bug.cgi?id=360057
 # libXfixes-5.0 needed for pointer barriers
 # TODO: gstreamer support is currently automagical:
 # gstreamer? ( >=media-libs/gstreamer-0.11.92 )
@@ -38,7 +37,7 @@ COMMON_DEPEND="
 	>=media-libs/clutter-1.11.11:1.0[introspection]
 	>=dev-libs/json-glib-0.13.2
 	>=dev-libs/libcroco-0.6.2:0.6
-	>=gnome-base/gnome-desktop-3.5.1:3
+	>=gnome-base/gnome-desktop-3.5.1:3[introspection]
 	>=gnome-base/gsettings-desktop-schemas-3.5.4
 	>=gnome-base/gnome-keyring-3.3.90
 	>=gnome-base/gnome-menus-3.5.3:3[introspection]
@@ -64,27 +63,30 @@ COMMON_DEPEND="
 	x11-libs/pango[introspection]
 	x11-apps/mesa-progs
 
-	bluetooth? ( >=net-wireless/gnome-bluetooth-3.1.0[introspection] )
+	bluetooth? ( >=net-wireless/gnome-bluetooth-3.5[introspection] )
 	networkmanager? ( >=net-misc/networkmanager-0.8.999[introspection] )
 	systemd? ( >=sys-apps/systemd-31 )
 "
 # Runtime-only deps are probably incomplete and approximate.
+# Introspection deps generated using:
+#  grep -roe "imports.gi.*" gnome-shell-* | cut -f2 -d: | sort | uniq
 # Each block:
 # 1. Pull in polkit-0.101 for pretty authorization dialogs
-# 2. Introspection stuff + dconf needed via imports.gi.*
+# 2. Introspection stuff needed via imports.gi.*
 # 3. gnome-session is needed for gnome-session-quit
 # 4. Control shell settings
-# 5. accountsservice is needed for GdmUserManager (0.6.14 needed for fast
-#    user switching with gdm-3.1.x)
-# 6. caribou needed for on-screen keyboard
-# 7. xdg-utils needed for xdg-open, used by extension tool
-# 8. gnome-icon-theme-symbolic neeed for various icons
-# 9. mobile-broadband-provider-info, timezone-data for shell-mobile-providers.c
+# 5. xdg-utils needed for xdg-open, used by extension tool
+# 6. gnome-icon-theme-symbolic neeed for various icons
+# 7. IBus is needed for i18n integration
+# 8. mobile-broadband-provider-info, timezone-data for shell-mobile-providers.c
 RDEPEND="${COMMON_DEPEND}
 	>=sys-auth/polkit-0.101[introspection]
 
-	>=gnome-base/dconf-0.4.1
+	>=app-accessibility/caribou-0.3
+	>=gnome-base/gdm-3.5[introspection]
 	>=gnome-base/libgnomekbd-2.91.4[introspection]
+	media-libs/cogl[introspection]
+	>=sys-apps/accountsservice-0.6.14[introspection]
 	sys-power/upower[introspection]
 
 	>=gnome-base/gnome-session-2.91.91
@@ -92,14 +94,12 @@ RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/gnome-settings-daemon-2.91
 	>=gnome-base/gnome-control-center-2.91.92-r1[bluetooth(+)?]
 
-	>=sys-apps/accountsservice-0.6.14[introspection]
-
-	>=app-accessibility/caribou-0.3
 
 	x11-misc/xdg-utils
 
 	x11-themes/gnome-icon-theme-symbolic
 
+	i18n? ( >=app-i18n/ibus-1.4.99[dconf,gtk3,introspection] )
 	networkmanager? (
 		net-misc/mobile-broadband-provider-info
 		sys-libs/timezone-data )
