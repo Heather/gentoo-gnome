@@ -43,6 +43,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.33.3:2
 	>=media-libs/clutter-gtk-1.1.2:1.0
 	>=media-libs/clutter-gst-1.5.2:1.0
 
+	net-libs/farstream
 	>=net-libs/telepathy-farstream-0.2.1
 	>=net-libs/telepathy-glib-0.19.6
 	>=net-im/telepathy-logger-0.2.13
