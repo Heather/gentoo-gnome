@@ -60,6 +60,7 @@ pkg_setup() {
 
 src_prepare() {
 	# FIXME: failing tests
+	# https://bugzilla.gnome.org/show_bug.cgi?id=682651
 	if use test; then
 		sed -e 's:test-subject-public-key::' \
 			-e 's:test-system-prompt:$(NULL):' \
