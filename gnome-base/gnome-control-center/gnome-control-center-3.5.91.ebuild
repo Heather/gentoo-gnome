@@ -16,8 +16,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2"
 SLOT="2"
-# +kerberos because USE=-kerberos fails to compile; see pkg_setup()
-IUSE="+bluetooth +cheese +colord +cups +gnome-online-accounts +i18n +kerberos +networkmanager +socialweb systemd wacom"
+IUSE="+bluetooth +cheese +colord +cups +gnome-online-accounts +i18n kerberos +networkmanager +socialweb systemd wacom"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -141,6 +140,7 @@ src_prepare() {
 
 	# Make some panels optional; requires eautoreconf
 	epatch "${FILESDIR}/${PN}-3.5.91-optional-bt-colord-goa-wacom.patch"
+	epatch "${FILESDIR}/${PN}-3.5.91-optional-kerberos.patch"
 	# Fix some absolute paths to be appropriate for Gentoo
 	epatch "${FILESDIR}/${PN}-3.5.91-gentoo-paths.patch"
 	# This will be in the next release
