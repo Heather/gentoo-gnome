@@ -60,6 +60,8 @@ RDEPEND=">=dev-libs/glib-2.27.92:2
 	x11-libs/libX11
 	x11-libs/libXtst
 	>=x11-libs/libXxf86vm-1.0.1
+
+	gnome-base/gsettings-desktop-schemas
 	x11-themes/gnome-icon-theme-symbolic
 
 	flash? ( dev-libs/totem-pl-parser[quvi] )
