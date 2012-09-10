@@ -69,7 +69,6 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-deprecation-flags
 		--disable-static
-		--disable-scrollkeeper
 		--disable-schemas-install
 		--disable-schemas-compile
 		--with-in-process-applets=clock,notification-area,wncklet
