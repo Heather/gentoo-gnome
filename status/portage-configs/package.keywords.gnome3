@@ -22,7 +22,6 @@ dev-libs/atk
 dev-libs/gdl:1
 dev-libs/gdl:3
 dev-libs/glib
-dev-libs/libgdata
 dev-libs/libgweather
 dev-libs/libpeas
 dev-libs/libunique:3
@@ -58,7 +57,6 @@ gnome-extra/evolution-kolab
 gnome-extra/gcalctool
 gnome-extra/gconf-editor
 gnome-extra/gnome-contacts
-gnome-extra/gnome-documents
 gnome-extra/gnome-media
 gnome-extra/gnome-packagekit
 gnome-extra/gnome-power-manager
@@ -111,6 +109,11 @@ x11-wm/mutter
 sys-auth/nss-myhostname
 app-admin/openrc-settingsd
 gnome-base/gnome-control-center
+
+# GNOME Documents
+net-libs/libzapojit
+dev-libs/libgdata
+gnome-extra/gnome-documents
 
 # GNOME Disk Utility
 ~sys-auth/polkit-0.107
