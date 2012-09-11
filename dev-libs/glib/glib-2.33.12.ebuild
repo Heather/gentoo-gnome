@@ -79,7 +79,7 @@ pkg_setup() {
 
 src_prepare() {
 	[[ ${PV} = 9999 ]] && gnome2-live_src_prepare
-	mv -vf "${WORKDIR}"/pkg-config-*/pkg.m4 "${WORKDIR}"/ || die
+	mv -f "${WORKDIR}"/pkg-config-*/pkg.m4 "${WORKDIR}"/ || die
 
 	if use ia64 ; then
 		# Only apply for < 4.1
