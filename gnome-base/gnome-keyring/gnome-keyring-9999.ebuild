@@ -12,7 +12,7 @@ if [[ ${PV} = 9999 ]]; then
 fi
 
 DESCRIPTION="Password and keyring managing daemon"
-HOMEPAGE="http://www.gnome.org/"
+HOMEPAGE="http://live.gnome.org/GnomeKeyring"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
