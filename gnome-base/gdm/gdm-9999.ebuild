@@ -186,6 +186,7 @@ src_install() {
 
 	# Install a shell script that runs gdm-binary in the background
 	cp "${FILESDIR}/gdm.sh" "${ED}/usr/sbin/gdm"
+	chmod 755 "${ED}/usr/sbin/gdm"
 	# our x11's scripts point to /usr/bin/gdm
 	ln -sfn /usr/sbin/gdm "${ED}/usr/bin/gdm"
 
