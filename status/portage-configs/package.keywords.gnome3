@@ -43,7 +43,6 @@ gnome-base/gnome-desktop:3
 gnome-base/gnome-menus:0
 gnome-base/gnome-menus:3
 gnome-base/gnome-session
-gnome-base/gnome-settings-daemon
 gnome-base/gsettings-desktop-schemas
 gnome-base/libgnomekbd
 gnome-base/librsvg
@@ -140,6 +139,10 @@ gnome-extra/gnome-search-tool
 media-gfx/gnome-font-viewer
 media-gfx/gnome-screenshot
 sys-apps/baobab
+
+# GNOME Settings Daemon
+app-i18n/ibus
+gnome-base/gnome-settings-daemon
 
 # Glib Networking
 net-libs/gnutls
