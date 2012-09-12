@@ -150,9 +150,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# daemonize so that the boot process can continue, bug #236701
-	epatch "${FILESDIR}/${PN}-3.5.91-fix-daemonize-regression.patch"
-
 	# GDM grabs VT2 instead of VT7, bug 261339, bug 284053, bug 288852
 	# XXX: We can now pass a hard-coded initial value; temporary fix
 	#epatch "${FILESDIR}/${PN}-2.32.0-fix-vt-problems.patch"
@@ -187,11 +184,10 @@ src_install() {
 	# Install the systemd unit file
 	systemd_dounit "${FILESDIR}/3.4.1/gdm.service"
 
-	# gdm-binary should be gdm to work with our init (#5598)
-	rm -f "${ED}/usr/sbin/gdm"
-	ln -sfn /usr/sbin/gdm-binary "${ED}/usr/sbin/gdm"
+	# Install a shell script that runs gdm-binary in the background
+	cp "${FILESDIR}/gdm.sh" "${ED}/usr/sbin/gdm"
 	# our x11's scripts point to /usr/bin/gdm
-	ln -sfn /usr/sbin/gdm-binary "${ED}/usr/bin/gdm"
+	ln -sfn /usr/sbin/gdm "${ED}/usr/bin/gdm"
 
 	# log, etc.
 	keepdir /var/log/gdm
