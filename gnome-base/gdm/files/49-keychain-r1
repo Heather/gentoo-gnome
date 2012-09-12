@@ -2,7 +2,7 @@
 
 # source keychain variables
 
-keychain="`which keychain`"
+keychain="`which keychain 2>/dev/null`"
 if [ -n "$keychain" ] && [ -x "$keychain" ] && [ -f "$HOME/.bash_profile" ]
 then
 	. "${HOME}/.bash_profile"

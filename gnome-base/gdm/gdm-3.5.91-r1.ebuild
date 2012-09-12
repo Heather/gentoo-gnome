@@ -15,7 +15,7 @@ HOMEPAGE="https://live.gnome.org/GDM"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="accessibility +consolekit +fallback fprint +gnome-shell ipv6 gnome-keyring +introspection plymouth smartcard systemd tcpd test xinerama"
+IUSE="accessibility audit +consolekit +fallback fprint +gnome-shell gnome-keyring +introspection ipv6 ldap plymouth smartcard systemd tcpd test xinerama"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -38,7 +38,7 @@ COMMON_DEPEND="
 	>=sys-power/upower-0.9
 	>=sys-apps/accountsservice-0.6.12
 
-	gnome-base/dconf
+	>=gnome-base/dconf-0.11.6
 	>=gnome-base/gnome-settings-daemon-3.1.4
 	gnome-base/gsettings-desktop-schemas
 	sys-apps/dbus
@@ -59,6 +59,7 @@ COMMON_DEPEND="
 	consolekit? ( sys-auth/consolekit )
 
 	accessibility? ( x11-libs/libXevie )
+	audit? ( sys-process/audit )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-2.22[pam] )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.12 )
 	plymouth? ( sys-boot/plymouth )
@@ -123,6 +124,7 @@ pkg_setup() {
 		--with-at-spi-registryd-directory=${EPREFIX}/usr/libexec
 		--with-initial-vt=7
 		$(use_with accessibility xevie)
+		$(use_with audit libaudit)
 		$(use_enable ipv6)
 		$(use_with consolekit console-kit)
 		$(use_with plymouth)
@@ -183,7 +185,7 @@ src_install() {
 	gnome2_src_install
 
 	# Install the systemd unit file
-	systemd_dounit "${FILESDIR}/3.2.1.1/gdm.service"
+	systemd_dounit "${FILESDIR}/3.4.1/gdm.service"
 
 	# gdm-binary should be gdm to work with our init (#5598)
 	rm -f "${ED}/usr/sbin/gdm"
@@ -196,8 +198,8 @@ src_install() {
 
 	# add xinitrc.d scripts
 	exeinto /etc/X11/xinit/xinitrc.d
-	doexe "${FILESDIR}/49-keychain"
-	doexe "${FILESDIR}/50-ssh-agent"
+	newexe "${FILESDIR}/49-keychain-r1" 49-keychain
+	newexe "${FILESDIR}/50-ssh-agent-r1" 50-ssh-agent
 
 	# install XDG_DATA_DIRS gdm changes
 	echo 'XDG_DATA_DIRS="/usr/share/gdm"' > 99xdg-gdm
@@ -205,9 +207,11 @@ src_install() {
 
 	# install PAM files
 	mkdir "${T}/pam.d" || die "mkdir failed"
-	cp "${FILESDIR}/3.2.1.1"/gdm{,-autologin,-password,-fingerprint,-smartcard,-welcome} \
+	cp "${FILESDIR}/3.4.1"/gdm{,-autologin,-password,-fingerprint,-smartcard,-welcome} \
 		"${T}/pam.d" || die "cp failed"
 	use gnome-keyring && sed -i "s:#Keyring=::g" "${T}/pam.d"/*
+	use ldap && sed -i "s:#LDAP=::g" "${T}/pam.d"/*
+	use systemd && sed -i "s:#Systemd=::g" "${T}/pam.d"/*
 	dopamd "${T}/pam.d"/*
 }
 

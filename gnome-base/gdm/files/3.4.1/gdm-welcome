@@ -1,5 +1,7 @@
 #%PAM-1.0
 auth       required    pam_env.so
+# Allows greeter to list ldap users; bug #430740
+#LDAP=-auth      sufficient  pam_ldap.so try_first_pass ignore_authinfo_unavail
 auth       required    pam_permit.so
 account    required    pam_nologin.so
 account    include     system-services
