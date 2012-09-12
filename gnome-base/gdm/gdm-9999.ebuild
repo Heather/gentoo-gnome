@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gdm/gdm-3.4.1.ebuild,v 1.2 2012/06/07 22:18:53 zmedico Exp $
+# $Header: $
 
 EAPI="4"
 GNOME2_LA_PUNT="yes"
@@ -11,11 +11,11 @@ if [[ ${PV} = 9999 ]]; then
 fi
 
 DESCRIPTION="GNOME Display Manager"
-HOMEPAGE="http://www.gnome.org/projects/gdm/"
+HOMEPAGE="https://live.gnome.org/GDM"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="accessibility +consolekit +fallback fprint +gnome-shell ipv6 gnome-keyring +introspection plymouth smartcard systemd tcpd test xinerama +xklavier"
+IUSE="accessibility +consolekit +fallback fprint +gnome-shell ipv6 gnome-keyring +introspection plymouth smartcard systemd tcpd test xinerama"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -65,17 +65,6 @@ COMMON_DEPEND="
 	systemd? ( >=sys-apps/systemd-39 )
 	tcpd? ( >=sys-apps/tcp-wrappers-7.6 )
 	xinerama? ( x11-libs/libXinerama )"
-DEPEND="${COMMON_DEPEND}
-	test? ( >=dev-libs/check-0.9.4 )
-	xinerama? ( x11-proto/xineramaproto )
-	app-text/docbook-xml-dtd:4.1.2
-	>=sys-devel/gettext-0.17
-	x11-proto/inputproto
-	x11-proto/randrproto
-	>=dev-util/intltool-0.40.0
-	>=app-text/scrollkeeper-0.1.4
-	>=app-text/gnome-doc-utils-0.3.2
-	virtual/pkgconfig"
 # XXX: These deps are from session and desktop files in data/ directory
 # at-spi:1 is needed for at-spi-registryd (spawned by simple-chooser)
 # fprintd is used via dbus by gdm-fingerprint-extension
@@ -101,6 +90,20 @@ RDEPEND="${COMMON_DEPEND}
 		sys-auth/pam_pkcs11 )
 
 	!gnome-extra/fast-user-switch-applet"
+DEPEND="${COMMON_DEPEND}
+	test? ( >=dev-libs/check-0.9.4 )
+	xinerama? ( x11-proto/xineramaproto )
+	app-text/docbook-xml-dtd:4.1.2
+	>=sys-devel/gettext-0.17
+	x11-proto/inputproto
+	x11-proto/randrproto
+	>=dev-util/intltool-0.40.0
+	virtual/pkgconfig"
+
+if [[ ${PV} = 9999 ]]; then
+	DEPEND="${DEPEND}
+		app-text/yelp-tools"
+fi
 
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
@@ -111,7 +114,6 @@ pkg_setup() {
 	# --with-at-spi-registryd-directory= needs to be passed explicitly because
 	# of https://bugzilla.gnome.org/show_bug.cgi?id=607643#c4
 	G2CONF="${G2CONF}
-		--disable-schemas-install
 		--disable-static
 		--localstatedir=${EPREFIX}/var
 		--with-xdmcp=yes
@@ -122,12 +124,12 @@ pkg_setup() {
 		--with-initial-vt=7
 		$(use_with accessibility xevie)
 		$(use_enable ipv6)
-		$(use_enable xklavier libxklavier)
 		$(use_with consolekit console-kit)
-		$(use_with plymouth ply-boot-client)
+		$(use_with plymouth)
 		$(use_with systemd)
 		$(use_with tcpd tcp-wrappers)
 		$(use_with xinerama)"
+	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
 
 	enewgroup gdm
 	enewgroup video # Just in case it hasn't been created yet
@@ -150,6 +152,7 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-3.5.91-fix-daemonize-regression.patch"
 
 	# GDM grabs VT2 instead of VT7, bug 261339, bug 284053, bug 288852
+	# XXX: We can now pass a hard-coded initial value; temporary fix
 	#epatch "${FILESDIR}/${PN}-2.32.0-fix-vt-problems.patch"
 
 	# make custom session work, bug #216984
@@ -167,9 +170,11 @@ src_prepare() {
 			-i data/00-upstream-settings || die "sed failed"
 	fi
 
-	mkdir -p "${S}"/m4
-	intltoolize --force --copy --automake || die "intltoolize failed"
-	eautoreconf
+	if [[ ${PV} != 9999 ]]; then
+		mkdir -p "${S}"/m4
+		intltoolize --force --copy --automake || die "intltoolize failed"
+		eautoreconf
+	fi
 
 	gnome2_src_prepare
 }
@@ -232,7 +237,7 @@ pkg_postinst() {
 		elog "password on your keyring. Use app-crypt/seahorse for that."
 	fi
 
-	if [ -f "/etc/X11/gdm/gdm.conf" ]; then
+	if [[ -f "/etc/X11/gdm/gdm.conf" ]]; then
 		elog "You had /etc/X11/gdm/gdm.conf which is the old configuration"
 		elog "file.  It has been moved to /etc/X11/gdm/gdm-pre-gnome-2.16"
 		mv /etc/X11/gdm/gdm.conf /etc/X11/gdm/gdm-pre-gnome-2.16
