@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit eutils gnome2 multilib
+inherit eutils gnome2 multilib toolchain-funcs
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -72,7 +72,8 @@ pkg_setup() {
 src_install() {
 	gnome2_src_install
 
-	insinto /$(get_libdir)/udev/rules.d
+	local udevdir="$($(tc-getPKG_CONFIG) --variable=udevdir udev)"
+	insinto "${udevdir}"/rules.d
 	doins "${FILESDIR}"/80-rfkill.rules
 }
 
