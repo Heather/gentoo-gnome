@@ -137,6 +137,9 @@ src_prepare() {
 	# https://bugs.webkit.org/show_bug.cgi?id=90098
 	epatch "${FILESDIR}/${PN}-1.9.4-llint-build-failure.patch"
 
+	# bug #417523, https://bugs.webkit.org/show_bug.cgi?id=96602
+	epatch "${FILESDIR}/${PN}-1.9.91-libdl.patch"
+
 	# Respect CC, otherwise fails on prefix #395875
 	tc-export CC
 
