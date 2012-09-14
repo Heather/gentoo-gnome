@@ -204,8 +204,9 @@ src_install() {
 
 	# install PAM files
 	mkdir "${T}/pam.d" || die "mkdir failed"
-	cp "${FILESDIR}/3.4.1"/gdm{,-autologin,-password,-fingerprint,-smartcard,-welcome} \
+	cp "${FILESDIR}/3.4.1"/gdm{,-autologin,-password,-fingerprint,-smartcard} \
 		"${T}/pam.d" || die "cp failed"
+	cp "${FILESDIR}/3.4.1/gdm-welcome" "${T}/pam.d/gdm-launch-environment" || die "cp failed"
 	use gnome-keyring && sed -i "s:#Keyring=::g" "${T}/pam.d"/*
 	use ldap && sed -i "s:#LDAP=::g" "${T}/pam.d"/*
 	use systemd && sed -i "s:#Systemd=::g" "${T}/pam.d"/*
