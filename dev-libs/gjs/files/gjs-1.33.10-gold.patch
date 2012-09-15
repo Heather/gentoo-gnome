@@ -1,0 +1,31 @@
+From 27969620b7c357bbe7db76a0582638723e417ca7 Mon Sep 17 00:00:00 2001
+From: Alexandre Rostovtsev <tetromino@gentoo.org>
+Date: Sat, 15 Sep 2012 00:56:14 -0400
+Subject: [PATCH] build: Explicitly require libffi
+
+In >=gobject-introspection-1.33.2, libffi was moved from Requires to
+Requires.private. Since gjs directly uses ffi functions, a missing
+PKG_CHECK_MODULES for libffi results in build failure when using GNU
+gold as the linker.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=684064
+---
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index 5c13722..9564a33 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -121,7 +121,7 @@ CFLAGS="$save_CFLAGS"
+ GOBJECT_INTROSPECTION_REQUIRE([1.33.10])
+ 
+ common_packages="gmodule-2.0 gthread-2.0 gio-2.0 >= glib_required_version mozjs185"
+-gjs_packages="gobject-introspection-1.0 $common_packages"
++gjs_packages="gobject-introspection-1.0 libffi $common_packages"
+ gjs_cairo_gobject_packages="cairo-gobject $common_packages"
+ gjs_cairo_packages="cairo $common_packages"
+ gjs_dbus_packages="dbus-glib-1 $common_packages"
+-- 
+1.7.12
+
