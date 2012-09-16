@@ -4,8 +4,10 @@
 
 EAPI="4"
 PYTHON_DEPEND="2:2.5"
+VALA_MIN_API_VERSION="0.18"
+VALA_USE_DEPEND="vapigen"
 
-inherit eutils python virtualx
+inherit eutils python vala virtualx
 
 DESCRIPTION="GLib bindings for the Telepathy D-Bus protocol."
 HOMEPAGE="http://telepathy.freedesktop.org"
@@ -19,14 +21,15 @@ REQUIRED_USE="vala? ( introspection )"
 
 RDEPEND=">=dev-libs/glib-2.32.0:2
 	>=dev-libs/dbus-glib-0.90
-	introspection? ( >=dev-libs/gobject-introspection-1.30 )
-	vala? ( dev-lang/vala:0.18[vapigen] )"
+	introspection? ( >=dev-libs/gobject-introspection-1.30 )"
 DEPEND="${RDEPEND}
 	dev-libs/libxslt
-	virtual/pkgconfig"
+	virtual/pkgconfig
+	vala? ( $(vala_depend) )"
 
 src_prepare() {
 	python_convert_shebangs -r 2 examples tests tools
+	use vala && vala_src_prepare
 	default_src_prepare
 }
 
@@ -40,8 +43,6 @@ src_configure() {
 		$(use_enable debug debug-cache) \
 		$(use_enable introspection) \
 		$(use_enable vala vala-bindings) \
-		VALAC=$(type -p valac-0.18) \
-		VAPIGEN=$(type -p vapigen-0.18) \
 		${myconf}
 }
 
