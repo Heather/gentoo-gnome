@@ -65,7 +65,7 @@ RDEPEND=">=dev-libs/glib-2.27.92:2
 	x11-themes/gnome-icon-theme-symbolic
 
 	flash? ( dev-libs/totem-pl-parser[quvi] )
-	grilo? ( >=media-libs/grilo-0.1.16 )
+	grilo? ( >=media-libs/grilo-0.2.0:0.2 )
 	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
 	lirc? ( app-misc/lirc )
 	nautilus? ( >=gnome-base/nautilus-2.91.3 )

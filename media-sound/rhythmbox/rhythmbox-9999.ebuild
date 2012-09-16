@@ -80,8 +80,8 @@ RDEPEND="${COMMON_DEPEND}
 	>=media-plugins/gst-plugins-taglib-0.10.6
 	x11-themes/gnome-icon-theme-symbolic
 	upnp? (
-		>=media-libs/grilo-0.2
-		>=media-plugins/grilo-plugins-0.2[upnp] )
+		>=media-libs/grilo-0.2:0.2
+		>=media-plugins/grilo-plugins-0.2:0.2[upnp] )
 	python? (
 		>=dev-python/gst-python-0.10.8
 
