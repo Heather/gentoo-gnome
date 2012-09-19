@@ -21,7 +21,7 @@ Index: configure.ac
  
  if test "$with_acceleration_backend" = "opengl"; then
 -    OPENGL_LIBS="-lGL -ldl"
-+    OPENGL_LIBS="-lGL -$DLOPEN_LIBS"
++    OPENGL_LIBS="-lGL $DLOPEN_LIBS"
  fi
  AC_SUBST([OPENGL_LIBS])
  
