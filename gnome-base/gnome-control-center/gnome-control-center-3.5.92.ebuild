@@ -16,7 +16,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2"
 SLOT="2"
-IUSE="+bluetooth +cheese +colord +cups +gnome-online-accounts +i18n kerberos +networkmanager +socialweb systemd wacom"
+IUSE="+bluetooth +colord +cups +gnome-online-accounts +i18n kerberos +networkmanager +socialweb systemd v4l wacom"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -33,7 +33,7 @@ COMMON_DEPEND="
 	>=x11-libs/gtk+-3.5.13:3
 	>=gnome-base/gsettings-desktop-schemas-3.5.91
 	>=gnome-base/gnome-desktop-3.5.91:3
-	>=gnome-base/gnome-settings-daemon-3.5.2[colord?,policykit]
+	>=gnome-base/gnome-settings-daemon-3.5.90[colord?,policykit]
 	>=gnome-base/libgnomekbd-2.91.91
 
 	app-text/iso-codes
@@ -55,10 +55,10 @@ COMMON_DEPEND="
 	>=x11-libs/libXi-1.2
 
 	bluetooth? ( >=net-wireless/gnome-bluetooth-3.5.5 )
-	cheese? (
-		media-libs/gstreamer:0.10
+	v4l? (
+		media-libs/gstreamer:1.0
 		media-libs/clutter-gtk:1.0
-		>=media-video/cheese-3.3.5 )
+		>=media-video/cheese-3.5.91 )
 	colord? ( >=x11-misc/colord-0.1.8 )
 	cups? ( >=net-print/cups-1.4[dbus] )
 	gnome-online-accounts? ( >=net-libs/gnome-online-accounts-3.5.90 )
@@ -69,7 +69,7 @@ COMMON_DEPEND="
 		>=net-misc/networkmanager-0.8.997 )
 	socialweb? ( net-libs/libsocialweb )
 	systemd? ( >=sys-apps/systemd-31 )
-	wacom? ( >=dev-libs/libwacom-0.5
+	wacom? ( >=dev-libs/libwacom-0.6
 		>=x11-libs/libXi-1.2 )"
 # <gnome-color-manager-3.1.2 has file collisions with g-c-c-3.1.x
 RDEPEND="${COMMON_DEPEND}
@@ -134,17 +134,11 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# Temporary fix for https://bugzilla.gnome.org/show_bug.cgi?id=683696
-	sed -e "s/\(typedef.*UserResponseCallback.*\)/#ifndef URC\n#define URC\n\1\n\#endif/" \
-		-i "${S}"/panels/printers/pp-{ppd-selection,options,jobs}-dialog.h || die
-
 	# Make some panels optional; requires eautoreconf
 	epatch "${FILESDIR}/${PN}-3.5.91-optional-bt-colord-goa-wacom.patch"
 	epatch "${FILESDIR}/${PN}-3.5.91-optional-kerberos.patch"
 	# Fix some absolute paths to be appropriate for Gentoo
 	epatch "${FILESDIR}/${PN}-3.5.91-gentoo-paths.patch"
-	# This will be in the next release
-	epatch "${FILESDIR}/${P}-fix-printer-panel-build.patch"
 	[[ ${PV} != 9999 ]] && eautoreconf
 
 	gnome2_src_prepare
