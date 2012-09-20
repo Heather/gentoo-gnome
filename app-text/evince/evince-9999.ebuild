@@ -30,7 +30,7 @@ fi
 # libX11 used for totem-screensaver
 RDEPEND="
 	dev-libs/atk
-	>=dev-libs/glib-2.32.0:2
+	>=dev-libs/glib-2.33.0:2
 	>=dev-libs/libxml2-2.5:2
 	sys-libs/zlib
 	x11-libs/gdk-pixbuf:2
