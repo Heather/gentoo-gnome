@@ -7,7 +7,7 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2:2.5"
 
-inherit gnome2 python
+inherit gnome2 python virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -30,7 +30,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.33.3:2
 	>=x11-libs/gtk+-3.5.1:3
 	x11-libs/pango
 	>=dev-libs/dbus-glib-0.51
-	>=dev-libs/folks-0.7.1
+	>=dev-libs/folks-0.7.3
 	dev-libs/libgee:0
 	>=app-crypt/libsecret-0.5
 	>=media-libs/libcanberra-0.25[gtk3]
@@ -45,7 +45,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.33.3:2
 
 	net-libs/farstream
 	>=net-libs/telepathy-farstream-0.2.1
-	>=net-libs/telepathy-glib-0.19.6
+	>=net-libs/telepathy-glib-0.19.9
 	>=net-im/telepathy-logger-0.2.13
 
 	app-crypt/gcr
@@ -116,8 +116,7 @@ pkg_setup() {
 }
 
 src_test() {
-	unset DBUS_SESSION_BUS_ADDRESS
-	emake check
+	Xemake check
 }
 
 pkg_postinst() {
