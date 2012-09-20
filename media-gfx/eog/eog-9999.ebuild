@@ -41,7 +41,7 @@ RDEPEND=">=x11-libs/gtk+-3.3.6:3[introspection,X]
 	introspection? ( >=dev-libs/gobject-introspection-0.9.3 )
 	jpeg? ( virtual/jpeg:0 )
 	lcms? ( media-libs/lcms:2 )
-	svg? ( >=gnome-base/librsvg-2.26:2 )
+	svg? ( >=gnome-base/librsvg-2.36.2:2 )
 	xmp? ( media-libs/exempi:2 )"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
