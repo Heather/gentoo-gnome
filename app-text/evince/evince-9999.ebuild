@@ -56,7 +56,6 @@ RDEPEND="
 	tiff? ( >=media-libs/tiff-3.6:0 )
 	xps? ( >=app-text/libgxps-0.2.1 )"
 DEPEND="${RDEPEND}
-	app-text/scrollkeeper
 	app-text/docbook-xml-dtd:4.3
 	sys-devel/gettext
 	>=dev-util/intltool-0.35
@@ -76,11 +75,8 @@ ELTCONF="--portage"
 RESTRICT="test"
 
 pkg_setup() {
-	# Passing --disable-help would drop offline help, that would be inconsistent
-	# with helps of the most of Gnome apps that doesn't require network for that.
 	G2CONF="${G2CONF}
 		--disable-schemas-compile
-		--disable-scrollkeeper
 		--disable-static
 		--disable-tests
 		--enable-pdf
@@ -88,7 +84,6 @@ pkg_setup() {
 		--enable-thumbnailer
 		--with-smclient=xsmp
 		--with-platform=gnome
-		--enable-help
 		$(use_enable dbus)
 		$(use_enable djvu)
 		$(use_enable dvi)
