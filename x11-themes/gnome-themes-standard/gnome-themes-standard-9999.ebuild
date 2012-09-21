@@ -16,7 +16,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-IUSE=""
+IUSE="+gtk3"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -25,7 +25,7 @@ fi
 
 COMMON_DEPEND="gnome-base/librsvg:2
 	x11-libs/cairo
-	>=x11-libs/gtk+-3.3.14:3
+	gtk3? ( >=x11-libs/gtk+-3.5.17:3 )
 	>=x11-themes/gtk-engines-2.15.3:2"
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.40
@@ -45,6 +45,7 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-static
 		--disable-placeholders
+		$(use_enable gtk3 gtk3-engines)
 		GTK_UPDATE_ICON_CACHE=$(type -P true)"
 }
 

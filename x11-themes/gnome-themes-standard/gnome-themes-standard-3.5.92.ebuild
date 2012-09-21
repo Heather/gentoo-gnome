@@ -25,7 +25,7 @@ fi
 
 COMMON_DEPEND="gnome-base/librsvg:2
 	x11-libs/cairo
-	gtk3? ( >=x11-libs/gtk+-3.3.14:3 )
+	gtk3? ( >=x11-libs/gtk+-3.5.17:3 )
 	>=x11-themes/gtk-engines-2.15.3:2"
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.40
