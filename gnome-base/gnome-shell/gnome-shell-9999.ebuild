@@ -45,10 +45,10 @@ COMMON_DEPEND="
 	>=gnome-extra/evolution-data-server-3.5.3
 	>=media-libs/gst-plugins-base-0.10.16:0.10
 	>=net-im/telepathy-logger-0.2.4[introspection]
-	>=net-libs/telepathy-glib-0.17.5[introspection]
+	>=net-libs/telepathy-glib-0.19[introspection]
 	>=sys-auth/polkit-0.100[introspection]
 	>=x11-libs/libXfixes-5.0
-	>=x11-wm/mutter-3.5.91[introspection]
+	>=x11-wm/mutter-${PV}[introspection]
 	>=x11-libs/startup-notification-0.11
 
 	dev-libs/dbus-glib
@@ -135,7 +135,8 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-3.5.x-bluetooth-flag.patch"
 
 	# Make networkmanager optional, bug #398593
-	epatch "${FILESDIR}/${PN}-3.5.x-networkmanager-flag.patch"
+	# FIXME: fails to apply, massive source changes
+	#epatch "${FILESDIR}/${PN}-3.5.x-networkmanager-flag.patch"
 
 	[[ ${PV} != 9999 ]] && eautoreconf
 	gnome2_src_prepare
