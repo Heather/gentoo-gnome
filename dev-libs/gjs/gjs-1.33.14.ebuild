@@ -32,6 +32,7 @@ RDEPEND=">=dev-libs/glib-2.32:2
 	x11-libs/cairo
 	>=dev-lang/spidermonkey-1.8.5"
 DEPEND="${RDEPEND}
+	virtual/libffi
 	sys-devel/gettext
 	virtual/pkgconfig"
 
@@ -51,9 +52,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# https://bugzilla.gnome.org/show_bug.cgi?id=684064
-	epatch "${FILESDIR}/${PN}-1.33.10-gold.patch"
-	eautoreconf
 	gnome2_src_prepare
 	python_convert_shebangs 2 "${S}"/scripts/make-tests
 }

@@ -7,7 +7,7 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2"
 
-inherit gnome2 pax-utils python virtualx
+inherit autotools eutils gnome2 pax-utils python virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -25,13 +25,14 @@ else
 fi
 
 RDEPEND=">=dev-libs/glib-2.32:2
-	>=dev-libs/gobject-introspection-1.33.2
+	>=dev-libs/gobject-introspection-1.33.10
 
 	dev-libs/dbus-glib
 	sys-libs/readline
 	x11-libs/cairo
 	>=dev-lang/spidermonkey-1.8.5"
 DEPEND="${RDEPEND}
+	virtual/libffi
 	sys-devel/gettext
 	virtual/pkgconfig"
 
@@ -45,8 +46,7 @@ pkg_setup() {
 		--disable-systemtap
 		--disable-dtrace
 		--disable-coverage
-		$(use_enable test tests)
-		"
+		$(use_enable test tests)"
 	python_set_active_version 2
 	python_pkg_setup
 }
