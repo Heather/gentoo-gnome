@@ -3,10 +3,12 @@
 # $Header: $
 
 EAPI="4"
+VALA_USE_DEPEND="vapigen"
+VALA_MIN_API_VERSION="0.18"
 
 inherit gnome2 virtualx
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
+	inherit gnome2-live vala
 fi
 
 DESCRIPTION="libsecret is a library for storing and retrieving secrets such as passwords"
@@ -29,23 +31,38 @@ DEPEND="${RDEPEND}
 	dev-libs/libxslt
 	sys-devel/gettext
 	virtual/pkgconfig
+	dev-util/gdbus-codegen
 	>=dev-util/intltool-0.35.0
-	>=dev-lang/vala-0.17.2.12:0.18
 	doc? ( >=dev-util/gtk-doc-1.9 )"
+
+# Only needed while regenerating from *.vala *.vapi
+if [[ ${PV} = 9999 ]]; then
+	DEPEND+="
+		$(vala_depend)"
+fi
 
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS README"
-	# VALAC is used by tests
-	# VAPIGEN is used by libsecret
 	G2CONF="
-		--disable-maintainer-mode
 		--enable-manpages
 		--disable-strict
 		--disable-coverage
 		--disable-static
-		$(use_enable crypt gcrypt)
-		VALAC=$(type -P valac-0.18)
-		VAPIGEN=$(type -P vapigen-0.18)"
+		$(use_enable crypt gcrypt)"
+
+	# Only needed while regenerating from *.vala *.vapi
+	# VALAC is used by tests
+	# VAPIGEN is used by libsecret
+	if [[ ${PV} = 9999 ]]; then
+		local vala_version="$(vala_best_api_version)"
+		G2CONF="
+			VALAC=$(type -P valac-${vala_version})
+			VAPIGEN=$(type -P vapigen-${vala_version})"
+	fi
+}
+
+src_prepare() {
+	gnome2_src_prepare
 }
 
 src_test() {
