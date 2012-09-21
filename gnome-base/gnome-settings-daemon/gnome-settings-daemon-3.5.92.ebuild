@@ -58,7 +58,7 @@ COMMON_DEPEND="
 		>=dev-libs/nss-3.11.2 )
 	systemd? ( >=sys-apps/systemd-31 )
 	udev? ( sys-fs/udev[gudev] )
-	wacom? ( >=dev-libs/libwacom-0.5
+	wacom? ( >=dev-libs/libwacom-0.6
 		x11-drivers/xf86-input-wacom )"
 # Themes needed by g-s-d, gnome-shell, gtk+:3 apps to work properly
 # <gnome-color-manager-3.1.1 has file collisions with g-s-d-3.1.x
