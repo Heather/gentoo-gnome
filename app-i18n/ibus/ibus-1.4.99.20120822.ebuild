@@ -114,8 +114,8 @@ pkg_preinst() {
 
 pkg_postinst() {
 	use gconf && gnome2_gconf_install
-	use gtk && update_gtk_immodules
-	use gtk3 && update_gtk3_immodules
+	use gtk && gnome2_query_immmodules_gtk2
+	use gtk3 && gnome2_query_immmodules_gtk3
 	#use python-library && python_mod_optimize /usr/share/${PN}
 	gnome2_icon_cache_update
 
