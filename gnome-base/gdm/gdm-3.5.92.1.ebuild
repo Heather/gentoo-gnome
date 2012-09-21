@@ -109,6 +109,8 @@ fi
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
 
+	# SELinux support is automagic for some reason
+	#
 	# PAM is the only auth scheme supported
 	# even though configure lists shadow and crypt
 	# they don't have any corresponding code.
