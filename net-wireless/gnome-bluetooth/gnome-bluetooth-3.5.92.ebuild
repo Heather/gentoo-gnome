@@ -38,9 +38,7 @@ RDEPEND="${COMMON_DEPEND}
 DEPEND="${COMMON_DEPEND}
 	!net-wireless/bluez-gnome
 	app-text/docbook-xml-dtd:4.1.2
-	app-text/gnome-doc-utils
-	app-text/scrollkeeper
-	dev-libs/libxml2
+	dev-libs/libxml2:2
 	>=dev-util/intltool-0.40.0
 	dev-util/gdbus-codegen
 	>=sys-devel/gettext-0.17
@@ -53,6 +51,11 @@ DEPEND="${COMMON_DEPEND}
 #	gnome-base/gnome-common
 #	dev-util/gtk-doc-am
 
+if [[ ${PV} = 9999 ]]; then
+	DEPEND="${DEPEND}
+		app-text/yelp-tools"
+fi
+
 pkg_setup() {
 	# FIXME: Add geoclue support
 	G2CONF="${G2CONF}
@@ -64,6 +67,7 @@ pkg_setup() {
 		--disable-icon-update
 		--disable-schemas-compile
 		--disable-static"
+	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
 	DOCS="AUTHORS README NEWS ChangeLog"
 
 	enewgroup plugdev
