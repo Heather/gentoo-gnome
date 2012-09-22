@@ -48,6 +48,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.32:2
 	>=x11-themes/gnome-icon-theme-2.30.2.1
 	>=dev-libs/libgdata-0.10
 	>=net-libs/webkit-gtk-1.8.0
+	!=net-libs/webkit-gtk-1.9.90
 
 	x11-libs/libSM
 	x11-libs/libICE
