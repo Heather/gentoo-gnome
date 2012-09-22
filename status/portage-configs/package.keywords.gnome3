@@ -190,6 +190,7 @@ media-libs/clutter-gst:1.0
 gnome-extra/gnome-color-manager
 media-gfx/shared-color-profiles
 media-libs/mash
+x11-libs/colord-gtk
 x11-misc/colord
 
 # libcanberra
