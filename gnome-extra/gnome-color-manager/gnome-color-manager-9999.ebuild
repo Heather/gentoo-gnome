@@ -67,7 +67,6 @@ pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-static
 		--disable-schemas-compile
-		--disable-scrollkeeper
 		--enable-tests
 		$(use_enable clutter)
 		$(use_enable packagekit)
