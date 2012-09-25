@@ -17,7 +17,7 @@ fi
 DESCRIPTION="GDBus code and documentation generator"
 HOMEPAGE="http://www.gtk.org/"
 
-LICENSE="LGPL-2"
+LICENSE="LGPL-2+"
 SLOT="0"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
