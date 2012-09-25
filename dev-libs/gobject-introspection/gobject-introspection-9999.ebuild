@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/gobject-introspection/gobject-introspection-1.32.1.ebuild,v 1.5 2012/06/04 07:30:23 tetromino Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="no"
@@ -8,7 +8,7 @@ GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2:2.7"
 PYTHON_USE_WITH="xml"
 
-inherit gnome2 python
+inherit gnome2 python toolchain-funcs
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -16,7 +16,7 @@ fi
 DESCRIPTION="Introspection infrastructure for generating gobject library bindings for various languages"
 HOMEPAGE="http://live.gnome.org/GObjectIntrospection/"
 
-LICENSE="LGPL-2 GPL-2"
+LICENSE="LGPL-2+ GPL-2+"
 SLOT="0"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
@@ -27,7 +27,7 @@ fi
 IUSE="doc doctool test"
 
 RDEPEND=">=dev-libs/gobject-introspection-common-${PV}
-	>=dev-libs/glib-2.31.22:2
+	>=dev-libs/glib-2.34:2
 	doctool? ( dev-python/mako )
 	virtual/libffi"
 # Wants real bison, not virtual/yacc
@@ -40,6 +40,9 @@ DEPEND="${RDEPEND}
 PDEPEND="x11-libs/cairo[glib]"
 
 pkg_setup() {
+	# To prevent crosscompiling problems, bug #414105
+	CC=$(tc-getCC)
+
 	DOCS="AUTHORS CONTRIBUTORS ChangeLog NEWS README TODO"
 	G2CONF="${G2CONF}
 		--disable-static
@@ -66,10 +69,8 @@ src_prepare() {
 	if ! has_version "x11-libs/cairo[glib]"; then
 		# Bug #391213: enable cairo-gobject support even if it's not installed
 		# We only PDEPEND on cairo to avoid circular dependencies
-		export CAIRO_LIBS="-lcairo"
+		export CAIRO_LIBS="-lcairo -lcairo-gobject"
 		export CAIRO_CFLAGS="-I${EPREFIX}/usr/include/cairo"
-		export CAIRO_GOBJECT_LIBS="-lcairo-gobject"
-		export CAIRO_GOBJECT_CFLAGS="-I${EPREFIX}/usr/include/cairo"
 		if use test; then
 			G2CONF="${G2CONF} --disable-tests"
 			gi_skip_tests=yes
