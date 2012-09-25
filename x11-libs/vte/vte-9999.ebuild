@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/vte/vte-0.32.2.ebuild,v 1.2 2012/07/30 13:51:56 ottxor Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="yes"
@@ -12,15 +12,15 @@ if [[ ${PV} = 9999 ]]; then
 fi
 
 DESCRIPTION="GNOME terminal widget"
-HOMEPAGE="http://git.gnome.org/browse/vte"
+HOMEPAGE="https://live.gnome.org/VTE"
 
-LICENSE="LGPL-2"
+LICENSE="LGPL-2+"
 SLOT="2.90"
 IUSE="debug doc glade +introspection"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~x64-solaris ~x86-solaris ~alpha"
+	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~x64-solaris ~x86-solaris"
 fi
 
 PDEPEND="x11-libs/gnome-pty-helper"
@@ -36,8 +36,8 @@ RDEPEND=">=dev-libs/glib-2.31.13:2
 	introspection? ( >=dev-libs/gobject-introspection-0.9.0 )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
-	virtual/pkgconfig
 	sys-devel/gettext
+	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.13 )"
 
 pkg_setup() {
