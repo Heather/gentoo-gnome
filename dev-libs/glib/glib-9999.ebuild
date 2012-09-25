@@ -16,7 +16,7 @@ HOMEPAGE="http://www.gtk.org/"
 SRC_URI="${SRC_URI}
 	http://pkgconfig.freedesktop.org/releases/pkg-config-0.26.tar.gz" # pkg.m4 for eautoreconf
 
-LICENSE="LGPL-2"
+LICENSE="LGPL-2+"
 SLOT="2"
 IUSE="debug doc fam kernel_linux selinux static-libs systemtap test utils xattr"
 if [[ ${PV} = 9999 ]]; then
@@ -35,13 +35,13 @@ RDEPEND="virtual/libiconv
 	fam? ( virtual/fam )
 	utils? ( >=dev-util/gdbus-codegen-${PV} )"
 DEPEND="${RDEPEND}
+	app-text/docbook-xml-dtd:4.1.2
+	>=dev-libs/libxslt-1.0
 	>=sys-devel/gettext-0.11
 	>=dev-util/gtk-doc-am-1.15
 	doc? (
-		>=dev-libs/libxslt-1.0
 		>=dev-util/gdbus-codegen-${PV}
-		>=dev-util/gtk-doc-1.15
-		app-text/docbook-xml-dtd:4.1.2 )
+		>=dev-util/gtk-doc-1.15 )
 	systemtap? ( >=dev-util/systemtap-1.3 )
 	test? (
 		sys-devel/gdb
@@ -81,23 +81,10 @@ src_prepare() {
 	[[ ${PV} = 9999 ]] && gnome2-live_src_prepare
 	mv -f "${WORKDIR}"/pkg-config-*/pkg.m4 "${WORKDIR}"/ || die
 
-	if use ia64 ; then
-		# Only apply for < 4.1
-		local major=$(gcc-major-version)
-		local minor=$(gcc-minor-version)
-		if (( major < 4 || ( major == 4 && minor == 0 ) )); then
-			epatch "${FILESDIR}/glib-2.10.3-ia64-atomic-ops.patch"
-		fi
-	fi
-
 	# Fix gmodule issues on fbsd; bug #184301
 	epatch "${FILESDIR}"/${PN}-2.12.12-fbsd.patch
 
-	# need to build tests if USE=doc for bug #387385
-	if ! use test && ! use doc; then
-		# don't waste time building tests
-		sed 's/^\(.*\SUBDIRS .*\=.*\)tests\(.*\)$/\1\2/' -i $(find . -name Makefile.am -o -name Makefile.in) || die
-	else
+	if use test; then
 		# Do not try to remove files on live filesystem, upstream bug #619274
 		sed 's:^\(.*"/desktop-app-info/delete".*\):/*\1*/:' \
 			-i "${S}"/gio/tests/desktop-app-info.c || die "sed failed"
@@ -168,17 +155,21 @@ src_configure() {
 	# -- compnerd (3/27/06)
 	use debug && myconf="--enable-debug"
 
+	# need to build tests if USE=doc for bug #387385
+	if use doc || use test; then
+		myconf="${myconf} --enable-modular-tests"
+	fi
+
 	# Always use internal libpcre, bug #254659
 	econf ${myconf} \
 		$(use_enable xattr) \
-		$(use_enable doc man) \
 		$(use_enable doc gtk-doc) \
 		$(use_enable fam) \
 		$(use_enable selinux) \
 		$(use_enable static-libs static) \
 		$(use_enable systemtap dtrace) \
 		$(use_enable systemtap systemtap) \
-		$(use_enable test modular-tests) \
+		--enable-man \
 		--with-pcre=internal \
 		--with-threads=posix
 }
