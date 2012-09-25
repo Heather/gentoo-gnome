@@ -1,13 +1,13 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/gjs/gjs-1.29.0.ebuild,v 1.1 2011/06/14 13:19:59 nirbheek Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2"
 
-inherit autotools eutils gnome2 pax-utils python virtualx
+inherit gnome2 pax-utils python virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -15,7 +15,7 @@ fi
 DESCRIPTION="Javascript bindings for GNOME"
 HOMEPAGE="http://live.gnome.org/Gjs"
 
-LICENSE="MIT MPL-1.1 LGPL-2 GPL-2"
+LICENSE="MIT || ( MPL-1.1 LGPL-2+ GPL-2+ )"
 SLOT="0"
 IUSE="examples test"
 if [[ ${PV} = 9999 ]]; then
@@ -30,9 +30,9 @@ RDEPEND=">=dev-libs/glib-2.32:2
 	dev-libs/dbus-glib
 	sys-libs/readline
 	x11-libs/cairo
-	>=dev-lang/spidermonkey-1.8.5"
+	>=dev-lang/spidermonkey-1.8.5
+	virtual/libffi"
 DEPEND="${RDEPEND}
-	virtual/libffi
 	sys-devel/gettext
 	virtual/pkgconfig"
 
