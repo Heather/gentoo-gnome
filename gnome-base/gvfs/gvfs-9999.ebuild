@@ -14,7 +14,7 @@ fi
 DESCRIPTION="GNOME Virtual Filesystem Layer"
 HOMEPAGE="http://www.gnome.org"
 
-LICENSE="LGPL-2"
+LICENSE="LGPL-2+"
 SLOT="0"
 
 if [[ ${PV} = 9999 ]]; then
@@ -28,8 +28,8 @@ fi
 SRC_URI="${SRC_URI}
 	http://dev.gentoo.org/~tetromino/distfiles/aclocal/libgcrypt.m4.bz2"
 
-IUSE="afp archive avahi bluetooth bluray cdda doc fuse gdu gnome-keyring gphoto2
-+gtk +http ios samba +udev udisks"
+IUSE="afp archive avahi bluetooth bluray cdda doc fuse gdu gnome-keyring gphoto2 gtk +http ios samba systemd +udev udisks"
+REQUIRED_USE="systemd? ( udisks )"
 
 # Can use libgphoto-2.5.0 as well. Automagic detection.
 RDEPEND=">=dev-libs/glib-2.33.12:2
@@ -51,22 +51,23 @@ RDEPEND=">=dev-libs/glib-2.33.12:2
 		=sys-apps/gnome-disk-utility-3.0.2-r300
 		=sys-apps/gnome-disk-utility-3.0.2-r200 ) )
 	gnome-keyring? ( app-crypt/libsecret )
-	gphoto2? ( >=media-libs/libgphoto2-2.4.0 )
+	gphoto2? ( >=media-libs/libgphoto2-2.4.7 )
 	gtk? ( >=x11-libs/gtk+-3.0:3 )
+	http? ( >=net-libs/libsoup-gnome-2.26.0 )
 	ios? (
 		>=app-pda/libimobiledevice-1.1.0
 		>=app-pda/libplist-1 )
+	samba? ( >=net-fs/samba-3.4.6[smbclient] )
+	systemd? ( sys-apps/systemd )
 	udev? (
 		cdda? ( >=dev-libs/libcdio-0.78.2[-minimal] )
 		|| ( >=sys-fs/udev-171[gudev] >=sys-fs/udev-164-r2[extras] ) )
-	udisks? ( >=sys-fs/udisks-1.97:2 )
-	http? ( >=net-libs/libsoup-gnome-2.26.0 )
-	samba? ( >=net-fs/samba-3.4.6[smbclient] )"
+	udisks? ( >=sys-fs/udisks-1.97:2[systemd?] )"
 DEPEND="${RDEPEND}
+	dev-libs/libxslt
 	>=dev-util/intltool-0.40
 	virtual/pkgconfig
 	dev-util/gtk-doc-am
-	dev-libs/libxslt
 	doc? ( >=dev-util/gtk-doc-1 )"
 
 REQUIRED_USE="cdda? ( udev )"
@@ -77,7 +78,6 @@ pkg_setup() {
 		--disable-bash-completion
 		--disable-hal
 		--disable-schemas-compile
-		--disable-libsystemd-login
 		--with-dbus-service-dir="${EPREFIX}"/usr/share/dbus-1/services
 		--enable-documentation
 		$(use_enable afp)
@@ -89,12 +89,14 @@ pkg_setup() {
 		$(use_enable fuse)
 		$(use_enable gdu)
 		$(use_enable gphoto2)
+		$(use_enable gtk)
 		$(use_enable ios afc)
 		$(use_enable udev)
 		$(use_enable udev gudev)
 		$(use_enable http)
 		$(use_enable gnome-keyring keyring)
 		$(use_enable samba)
+		$(use_enable systemd libsystemd-login)
 		$(use_enable udisks udisks2)"
 }
 
