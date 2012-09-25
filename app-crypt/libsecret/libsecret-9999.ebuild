@@ -11,10 +11,10 @@ if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live vala
 fi
 
-DESCRIPTION="libsecret is a library for storing and retrieving secrets such as passwords"
+DESCRIPTION="GObject library for accessing the freedesktop.org Secret Service API"
 HOMEPAGE="https://live.gnome.org/Libsecret"
 
-LICENSE="LGPL-2.1 Apache-2.0"
+LICENSE="LGPL-2.1+ Apache-2.0" # Apache-2.0 license is used for tests only
 SLOT="0"
 IUSE="+crypt debug doc +introspection"
 if [[ ${PV} = 9999 ]]; then
@@ -23,22 +23,25 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 
-RDEPEND="
+COMMON_DEPEND="
 	>=dev-libs/glib-2.31.0:2
 	crypt? ( >=dev-libs/libgcrypt-1.2.2 )
 	introspection? ( >=dev-libs/gobject-introspection-1.29 )"
-DEPEND="${RDEPEND}
+RDEPEND="${COMMON_DEPEND}
+	>=gnome-base/gnome-keyring-3"
+# Add ksecrets to RDEPEND when it's added to portage
+DEPEND="${COMMON_DEPEND}
 	dev-libs/libxslt
 	sys-devel/gettext
-	virtual/pkgconfig
 	dev-util/gdbus-codegen
 	>=dev-util/intltool-0.35.0
-	doc? ( >=dev-util/gtk-doc-1.9 )"
+	virtual/pkgconfig"
 
 # Only needed while regenerating from *.vala *.vapi
 if [[ ${PV} = 9999 ]]; then
 	DEPEND+="
-		$(vala_depend)"
+		$(vala_depend)
+		doc? ( >=dev-util/gtk-doc-1.9 )"
 fi
 
 pkg_setup() {
