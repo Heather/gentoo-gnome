@@ -4,9 +4,9 @@
 
 EAPI="4"
 GCONF_DEBUG="no"
-PYTHON_DEPEND="2:2.5"
+PYTHON_DEPEND="2:2.5 3"
 SUPPORT_PYTHON_ABIS="1"
-RESTRICT_PYTHON_ABIS="2.5 3.* *-jython"
+RESTRICT_PYTHON_ABIS="2.5 *-jython *-pypy-*"
 
 inherit gnome2 python
 if [[ ${PV} = 9999 ]]; then

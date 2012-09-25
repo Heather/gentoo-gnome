@@ -14,7 +14,7 @@ fi
 DESCRIPTION="Adwaita theme for GNOME Shell"
 HOMEPAGE="http://www.gnome.org/"
 
-LICENSE="LGPL-2.1"
+LICENSE="LGPL-2.1+"
 SLOT="0"
 IUSE="+gtk3"
 if [[ ${PV} = 9999 ]]; then

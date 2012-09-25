@@ -14,7 +14,7 @@ fi
 DESCRIPTION="Gtk module for bridging AT-SPI to Atk"
 HOMEPAGE="http://live.gnome.org/Accessibility"
 
-LICENSE="LGPL-2"
+LICENSE="LGPL-2+"
 SLOT="2"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
@@ -24,17 +24,15 @@ fi
 IUSE=""
 
 COMMON_DEPEND="
-	>=app-accessibility/at-spi2-core-2.4
+	>=app-accessibility/at-spi2-core-2.6
 	>=dev-libs/atk-2.1.0
 	dev-libs/glib:2
 	>=sys-apps/dbus-1
-	x11-libs/libX11
 "
 RDEPEND="${COMMON_DEPEND}
 	!<gnome-extra/at-spi-1.32.0-r1
 "
 DEPEND="${COMMON_DEPEND}
-	>=dev-util/intltool-0.40
 	virtual/pkgconfig
 "
 
