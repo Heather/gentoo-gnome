@@ -70,8 +70,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}/${PN}-64bit-troubles.patch"
-
 	# Build-time segfaults under PaX with USE=introspection when building
 	# against webkit-gtk[introspection,jit]
 	if use introspection && use jit; then
