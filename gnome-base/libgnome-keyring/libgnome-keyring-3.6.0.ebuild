@@ -5,8 +5,9 @@
 EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
+VALA_MIN_API_VERSION="0.16"
 
-inherit gnome2 python
+inherit gnome2 python vala
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -21,7 +22,7 @@ if [[ ${PV} = 9999 ]]; then
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~x86-linux ~sparc-solaris"
 fi
-IUSE="debug doc +introspection test"
+IUSE="debug doc +introspection test vala"
 
 RDEPEND=">=sys-apps/dbus-1.0
 	>=gnome-base/gnome-keyring-3.1.92
@@ -31,12 +32,11 @@ DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
 	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.9 )
-	test? ( =dev-lang/python-2* )"
+	test? ( =dev-lang/python-2* )
+	vala? ( $(vala_depend) )"
 
 pkg_setup() {
-	# Disable vala till vala.eclass makes it into portage
-	# Uses VAPIGEN_CHECK
-	G2CONF="--disable-vala"
+	G2CONF="$(use_enable vala)"
 	DOCS="AUTHORS ChangeLog NEWS README"
 
 	if use test; then
@@ -46,6 +46,7 @@ pkg_setup() {
 }
 
 src_prepare() {
+	use vala && vala_src_prepare
 	gnome2_src_prepare
 
 	# FIXME: Remove silly CFLAGS
