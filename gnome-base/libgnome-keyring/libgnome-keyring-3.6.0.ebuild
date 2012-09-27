@@ -6,6 +6,7 @@ EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 VALA_MIN_API_VERSION="0.16"
+VALA_USE_DEPEND="vapigen"
 
 inherit gnome2 python vala
 if [[ ${PV} = 9999 ]]; then
