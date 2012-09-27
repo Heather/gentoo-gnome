@@ -29,7 +29,6 @@ fi
 # NOTE: x11-base/xorg-server dep is for X_SERVER_PATH etc, bug #295686
 # nspr used by smartcard extension
 # dconf, dbus and g-s-d are needed at install time for dconf update
-# selinux support is now automagic. Not sure if that really matters.
 # libdaemon needed for our fix-daemonize-regression.patch
 COMMON_DEPEND="
 	>=dev-libs/glib-2.33.2:2
