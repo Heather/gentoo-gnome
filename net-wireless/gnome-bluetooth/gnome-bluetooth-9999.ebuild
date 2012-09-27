@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit eutils gnome2 multilib toolchain-funcs
+inherit eutils gnome2 multilib toolchain-funcs user
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -14,13 +14,13 @@ fi
 DESCRIPTION="Fork of bluez-gnome focused on integration with GNOME"
 HOMEPAGE="http://live.gnome.org/GnomeBluetooth"
 
-LICENSE="GPL-2 LGPL-2.1"
+LICENSE="GPL-2+ LGPL-2.1+ FDL-1.1+"
 SLOT="2"
 IUSE="doc +introspection sendto"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64 ~ppc ~ppc64 ~x86"
 fi
 
 COMMON_DEPEND=">=dev-libs/glib-2.29.90:2
@@ -71,6 +71,14 @@ pkg_setup() {
 	DOCS="AUTHORS README NEWS ChangeLog"
 
 	enewgroup plugdev
+}
+
+src_prepare() {
+	# Regenerate gdbus-codegen files to allow using any glib version; bug #436236
+	if [[ ${PV} != 9999 ]]; then
+		rm -v lib/bluetooth-client-glue.{c,h} || die
+	fi
+	gnome2_src_prepare
 }
 
 src_install() {
