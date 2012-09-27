@@ -13,13 +13,13 @@ fi
 DESCRIPTION="Collection of GSettings schemas for GNOME desktop"
 HOMEPAGE="http://www.gnome.org/"
 
-LICENSE="GPL-2"
+LICENSE="LGPL-2.1+"
 SLOT="0"
 IUSE="+introspection"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~sparc-solaris ~x86-solaris"
+	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~sparc-solaris ~x86-solaris"
 fi
 
 RDEPEND=">=dev-libs/glib-2.31:2
