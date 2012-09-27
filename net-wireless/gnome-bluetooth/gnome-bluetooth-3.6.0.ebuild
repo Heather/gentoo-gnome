@@ -74,6 +74,9 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# https://bugzilla.gnome.org/show_bug.cgi?id=685002
+	epatch "${FILESDIR}/${PN}-3.6.0-desktop-files.patch"
+
 	# Regenerate gdbus-codegen files to allow using any glib version; bug #436236
 	if [[ ${PV} != 9999 ]]; then
 		rm -v lib/bluetooth-client-glue.{c,h} || die
