@@ -14,7 +14,7 @@ fi
 DESCRIPTION="Password and keyring managing daemon"
 HOMEPAGE="http://live.gnome.org/GnomeKeyring"
 
-LICENSE="GPL-2 LGPL-2"
+LICENSE="GPL-2+ LGPL-2+"
 SLOT="0"
 IUSE="+caps debug doc pam selinux"
 if [[ ${PV} = 9999 ]]; then
