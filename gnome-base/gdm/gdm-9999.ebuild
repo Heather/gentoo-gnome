@@ -17,7 +17,7 @@ HOMEPAGE="https://live.gnome.org/GDM"
 SRC_URI="${SRC_URI}
 	http://dev.gentoo.org/~tetromino/distfiles/${PN}/${G_P}.tar.xz"
 
-LICENSE="GPL-2"
+LICENSE="GPL-2+"
 SLOT="0"
 IUSE="accessibility audit +consolekit +fallback fprint +gnome-shell +introspection ipv6 ldap plymouth selinux smartcard systemd tcpd test xinerama"
 if [[ ${PV} = 9999 ]]; then
