@@ -10,12 +10,16 @@ if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
 
+G_PV="2012.09.25"
+G_P="gdm-gentoo-${G_PV}"
 DESCRIPTION="GNOME Display Manager"
 HOMEPAGE="https://live.gnome.org/GDM"
+SRC_URI="${SRC_URI}
+	http://dev.gentoo.org/~tetromino/distfiles/${PN}/${G_P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="accessibility audit +consolekit +fallback fprint +gnome-shell gnome-keyring +introspection ipv6 ldap plymouth smartcard systemd tcpd test xinerama"
+IUSE="accessibility audit +consolekit +fallback fprint +gnome-shell +introspection ipv6 ldap plymouth selinux smartcard systemd tcpd test xinerama"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -26,6 +30,7 @@ fi
 # nspr used by smartcard extension
 # dconf, dbus and g-s-d are needed at install time for dconf update
 # selinux support is now automagic. Not sure if that really matters.
+# libdaemon needed for our fix-daemonize-regression.patch
 COMMON_DEPEND="
 	>=dev-libs/glib-2.33.2:2
 	>=x11-libs/gtk+-2.91.1:3
@@ -56,21 +61,25 @@ COMMON_DEPEND="
 	x11-apps/sessreg
 
 	virtual/pam
-	consolekit? ( sys-auth/consolekit )
+	sys-auth/pambase[consolekit?,systemd?]
+
+	dev-libs/libdaemon
 
 	accessibility? ( x11-libs/libXevie )
 	audit? ( sys-process/audit )
-	gnome-keyring? ( >=gnome-base/gnome-keyring-2.22[pam] )
+	consolekit? ( sys-auth/consolekit[pam] )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.12 )
 	plymouth? ( sys-boot/plymouth )
-	systemd? ( >=sys-apps/systemd-39 )
+	selinux? ( sys-libs/libselinux )
+	systemd? ( >=sys-apps/systemd-39[pam] )
 	tcpd? ( >=sys-apps/tcp-wrappers-7.6 )
 	xinerama? ( x11-libs/libXinerama )"
 # XXX: These deps are from session and desktop files in data/ directory
 # at-spi:1 is needed for at-spi-registryd (spawned by simple-chooser)
 # fprintd is used via dbus by gdm-fingerprint-extension
+# gnome-session-3.6 needed to avoid freezing with orca
 RDEPEND="${COMMON_DEPEND}
-	>=gnome-base/gnome-session-2.91.92
+	>=gnome-base/gnome-session-3.6
 	x11-apps/xhost
 	x11-themes/gnome-icon-theme-symbolic
 
@@ -109,8 +118,6 @@ fi
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
 
-	# SELinux support is automagic for some reason
-	#
 	# PAM is the only auth scheme supported
 	# even though configure lists shadow and crypt
 	# they don't have any corresponding code.
@@ -130,6 +137,7 @@ pkg_setup() {
 		$(use_enable ipv6)
 		$(use_with consolekit console-kit)
 		$(use_with plymouth)
+		$(use_with selinux)
 		$(use_with systemd)
 		$(use_with tcpd tcp-wrappers)
 		$(use_with xinerama)"
@@ -156,11 +164,17 @@ src_prepare() {
 	# XXX: We can now pass a hard-coded initial value; temporary fix
 	#epatch "${FILESDIR}/${PN}-2.32.0-fix-vt-problems.patch"
 
+	# daemonize so that the boot process can continue, bug #236701
+	epatch "${FILESDIR}/${PN}-3.6.0-fix-daemonize-regression.patch"
+
 	# make custom session work, bug #216984
 	epatch "${FILESDIR}/${PN}-3.2.1.1-custom-session.patch"
 
 	# ssh-agent handling must be done at xinitrc.d, bug #220603
 	epatch "${FILESDIR}/${PN}-2.32.0-xinitrc-ssh-agent.patch"
+
+	# automagic selinux :/
+	epatch "${FILESDIR}/${PN}-3.6.0-selinux-automagic.patch"
 
 	# don't load accessibility support at runtime when USE=-accessibility
 	use accessibility || epatch "${FILESDIR}/${PN}-3.3.92.1-disable-accessibility.patch"
@@ -183,36 +197,21 @@ src_prepare() {
 src_install() {
 	gnome2_src_install
 
-	# Install the systemd unit file
-	systemd_dounit "${FILESDIR}/3.4.1/gdm.service"
-
-	# Install a shell script that runs gdm-binary in the background
-	cp "${FILESDIR}/gdm.sh" "${ED}/usr/sbin/gdm"
-	chmod 755 "${ED}/usr/sbin/gdm"
 	# our x11's scripts point to /usr/bin/gdm
-	ln -sfn /usr/sbin/gdm "${ED}/usr/bin/gdm"
+	dosym /usr/sbin/gdm-binary /usr/bin/gdm
 
 	# log, etc.
 	keepdir /var/log/gdm
-
-	# add xinitrc.d scripts
-	exeinto /etc/X11/xinit/xinitrc.d
-	newexe "${FILESDIR}/49-keychain-r1" 49-keychain
-	newexe "${FILESDIR}/50-ssh-agent-r1" 50-ssh-agent
 
 	# install XDG_DATA_DIRS gdm changes
 	echo 'XDG_DATA_DIRS="/usr/share/gdm"' > 99xdg-gdm
 	doenvd 99xdg-gdm
 
-	# install PAM files
-	mkdir "${T}/pam.d" || die "mkdir failed"
-	cp "${FILESDIR}/3.4.1"/gdm{,-autologin,-password,-fingerprint,-smartcard} \
-		"${T}/pam.d" || die "cp failed"
-	cp "${FILESDIR}/3.4.1/gdm-welcome" "${T}/pam.d/gdm-launch-environment" || die "cp failed"
-	use gnome-keyring && sed -i "s:#Keyring=::g" "${T}/pam.d"/*
-	use ldap && sed -i "s:#LDAP=::g" "${T}/pam.d"/*
-	use systemd && sed -i "s:#Systemd=::g" "${T}/pam.d"/*
-	dopamd "${T}/pam.d"/*
+	cd "${WORKDIR}/${G_P}"
+	local LDAP
+	use ldap && LDAP=yes
+	emake GDM_WELCOME="gdm-launch-environment" LDAP=${LDAP} EPREFIX="${EPREFIX}" \
+		SYSTEMD_UNITDIR="$(systemd_get_unitdir)" DESTDIR="${D}" install
 }
 
 pkg_postinst() {
@@ -236,9 +235,12 @@ pkg_postinst() {
 	elog "the pam_env man page for more information."
 	elog
 
-	if use gnome-keyring; then
-		elog "For autologin to unlock your keyring, you need to set an empty"
-		elog "password on your keyring. Use app-crypt/seahorse for that."
+	if has_version sys-auth/pambase[gnome-keyring]; then
+		elog "For passwordless login to unlock your keyring, you need to set an"
+		elog "empty password on your keyring. Use app-crypt/seahorse for that."
+	else
+		elog "To unlock your keyring on login, install sys-auth/pambase"
+		elog "with USE=gnome-keyring"
 	fi
 
 	if [[ -f "/etc/X11/gdm/gdm.conf" ]]; then
