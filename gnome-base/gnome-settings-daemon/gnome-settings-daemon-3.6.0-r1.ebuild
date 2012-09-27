@@ -114,6 +114,9 @@ src_prepare() {
 	# Make colord and wacom optional; requires eautoreconf
 	epatch "${FILESDIR}/${PN}-3.5.91-optional-color-wacom.patch"
 
+	# Fixes crash; in next release
+	epatch "${FILESDIR}/${P}-crashfix.patch"
+
 	[[ ${PV} != 9999 ]] && eautoreconf
 
 	gnome2_src_prepare
