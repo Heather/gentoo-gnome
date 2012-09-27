@@ -6,7 +6,7 @@ EAPI="4"
 CLUTTER_LA_PUNT="yes"
 
 # Inherit gnome2 after clutter to download sources from gnome.org
-inherit clutter gnome2 multilib virtualx
+inherit eutils clutter gnome2 multilib virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -14,7 +14,7 @@ fi
 DESCRIPTION="A library for using 3D graphics hardware to draw pretty pictures"
 HOMEPAGE="http://www.clutter-project.org/"
 
-LICENSE="LGPL-2.1"
+LICENSE="LGPL-2.1+ FDL-1.1+"
 SLOT="1.0"
 IUSE="doc examples +introspection +opengl gles2 +pango"
 if [[ ${PV} = 9999 ]]; then
@@ -71,6 +71,12 @@ pkg_setup() {
 		$(use_enable introspection)
 		$(use_enable pango cogl-pango)"
 	use gles2 && G2CONF="${G2CONF} --with-default-driver=gles2"
+}
+
+src_prepare() {
+	# https://bugzilla.gnome.org/show_bug.cgi?id=684731
+	epatch "${FILESDIR}/${PN}-1.12.0-fix-experimental-doc-build.patch"
+	gnome2_src_prepare
 }
 
 src_test() {

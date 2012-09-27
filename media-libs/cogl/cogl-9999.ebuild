@@ -14,7 +14,7 @@ fi
 DESCRIPTION="A library for using 3D graphics hardware to draw pretty pictures"
 HOMEPAGE="http://www.clutter-project.org/"
 
-LICENSE="LGPL-2.1"
+LICENSE="LGPL-2.1+ FDL-1.1+"
 SLOT="1.0"
 IUSE="doc examples +introspection +opengl gles2 +pango"
 if [[ ${PV} = 9999 ]]; then
