@@ -1,0 +1,29 @@
+From dcfe290500e0d68a71f09e576e28c09f7572cef6 Mon Sep 17 00:00:00 2001
+From: Bastien Nocera <hadess@hadess.net>
+Date: Fri, 21 Sep 2012 11:46:34 +0000
+Subject: housekeeping: Don't crash on exit
+
+If a notification popup was shown, and then dismissed, notification
+wouldn't have been reset, and we would crash on exit trying to
+dismiss it.
+
+https://bugzilla.redhat.com/show_bug.cgi?id=859383
+https://bugzilla.gnome.org/show_bug.cgi?id=684548
+
+Also includes 63b8c025d446b1a8d7c5fdee92d624dd604f3a24 (typo fix)
+
+---
+diff --git a/plugins/housekeeping/gsd-disk-space.c b/plugins/housekeeping/gsd-disk-space.c
+index 4c6b3c5..51e4a8e 100644
+--- a/plugins/housekeeping/gsd-disk-space.c
++++ b/plugins/housekeeping/gsd-disk-space.c
+@@ -294,6 +294,7 @@ static void
+ on_notification_closed (NotifyNotification *notification)
+ {
+         g_object_unref (notification);
++        notification = NULL;
+ }
+ 
+ static gboolean
+--
+cgit v0.9.0.2
