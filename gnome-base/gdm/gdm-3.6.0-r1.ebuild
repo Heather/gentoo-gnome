@@ -202,6 +202,10 @@ src_install() {
 	# log, etc.
 	keepdir /var/log/gdm
 
+	# gdm user's home directory
+	keepdir /var/lib/gdm
+	fowners gdm:gdm /var/lib/gdm
+
 	# install XDG_DATA_DIRS gdm changes
 	echo 'XDG_DATA_DIRS="/usr/share/gdm"' > 99xdg-gdm
 	doenvd 99xdg-gdm
@@ -214,9 +218,20 @@ src_install() {
 }
 
 pkg_postinst() {
+	local d ret
+
 	gnome2_pkg_postinst
 
 	dbus-launch dconf update || die "'dconf update' failed"
+
+	# bug #436456; gdm crashes if /var/lib/gdm subdirs are not owned by gdm:gdm
+	ret=0
+	ebegin "Fixing ${EROOT}var/lib/gdm ownership"
+	chown gdm:gdm "${EROOT}var/lib/gdm" || ret=1
+	for d in "${EROOT}var/lib/gdm/"{.cache,.config,.local}; do
+		[[ ! -e "${d}" ]] || chown -R gdm:gdm "${d}" || ret=1
+	done
+	eend ${ret}
 
 	ewarn
 	ewarn "This is an EXPERIMENTAL release, please bear with its bugs and"
