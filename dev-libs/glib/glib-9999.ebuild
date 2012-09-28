@@ -158,6 +158,8 @@ src_configure() {
 	# need to build tests if USE=doc for bug #387385
 	if use doc || use test; then
 		myconf="${myconf} --enable-modular-tests"
+	else
+		myconf="${myconf} --disable-modular-tests"
 	fi
 
 	# Always use internal libpcre, bug #254659
