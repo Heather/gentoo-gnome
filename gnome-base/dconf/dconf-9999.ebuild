@@ -1,11 +1,11 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/dconf/dconf-0.10.0.ebuild,v 1.6 2012/01/18 20:33:49 maekke Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="no"
 
-inherit gnome2 bash-completion-r1
+inherit gnome2 bash-completion-r1 virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -13,10 +13,10 @@ fi
 DESCRIPTION="Simple low-level configuration system"
 HOMEPAGE="http://live.gnome.org/dconf"
 
-LICENSE="LGPL-2.1"
+LICENSE="LGPL-2.1+"
 SLOT="0"
 # TODO: coverage ?
-IUSE="doc +X"
+IUSE="doc test +X"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -31,6 +31,7 @@ DEPEND="${RDEPEND}
 	dev-libs/libxslt
 	sys-devel/gettext
 	>=dev-util/intltool-0.50
+	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.15 )"
 
 if [[ ${PV} = 9999 ]]; then
@@ -44,7 +45,11 @@ pkg_setup() {
 		--disable-schemas-compile
 		--disable-gcov
 		$(use_enable X editor)
-		VALAC=$(type -P valac-0.18)"
+		VALAC=$(type -P valac-0.18)" # harmless even if valac-0.18 not found
+}
+
+src_test() {
+	Xemake check
 }
 
 src_install() {
@@ -59,7 +64,7 @@ src_install() {
 
 	# Install bash-completion file properly to the system
 	rm -rv "${ED}usr/share/bash-completion" || die
-	newbashcomp "${S}/bin/completion/dconf" ${PN}
+	dobashcomp "${S}/bin/completion/dconf"
 }
 
 pkg_postinst() {
