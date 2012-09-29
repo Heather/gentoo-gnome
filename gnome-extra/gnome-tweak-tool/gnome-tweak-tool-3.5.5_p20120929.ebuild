@@ -12,10 +12,12 @@ if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
 
+SRC_URI="http://dev.gentoo.org/~tetromino/distfiles/${PN}/${P}.tar.xz"
+
 DESCRIPTION="Tool to customize GNOME 3 options"
 HOMEPAGE="http://live.gnome.org/GnomeTweakTool"
 
-LICENSE="GPL-2"
+LICENSE="GPL-2+"
 SLOT="0"
 IUSE=""
 if [[ ${PV} = 9999 ]]; then
@@ -41,6 +43,8 @@ DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.40.0
 	>=sys-devel/gettext-0.17
 	virtual/pkgconfig"
+
+S="${WORKDIR}/${PN}-3.5.5"
 
 pkg_setup() {
 	DOCS="AUTHORS NEWS README"
