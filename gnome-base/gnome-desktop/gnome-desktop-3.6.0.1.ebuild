@@ -14,7 +14,7 @@ fi
 DESCRIPTION="Libraries for the gnome desktop that are not part of the UI"
 HOMEPAGE="http://www.gnome.org/"
 
-LICENSE="GPL-2 FDL-1.1 LGPL-2"
+LICENSE="GPL-2+ FDL-1.1+ LGPL-2+"
 SLOT="3"
 IUSE="doc +introspection"
 if [[ ${PV} = 9999 ]]; then
