@@ -14,7 +14,7 @@ fi
 DESCRIPTION="GNOME Desktop Configuration Tool"
 HOMEPAGE="http://www.gnome.org/"
 
-LICENSE="GPL-2"
+LICENSE="GPL-2+"
 SLOT="2"
 IUSE="+bluetooth +colord +cups +gnome-online-accounts +i18n kerberos +networkmanager +socialweb systemd v4l wacom"
 if [[ ${PV} = 9999 ]]; then
@@ -33,7 +33,7 @@ COMMON_DEPEND="
 	>=x11-libs/gtk+-3.5.13:3
 	>=gnome-base/gsettings-desktop-schemas-3.5.91
 	>=gnome-base/gnome-desktop-3.5.91:3
-	>=gnome-base/gnome-settings-daemon-3.5.90[colord?,policykit]
+	>=gnome-base/gnome-settings-daemon-3.6.0[colord?,policykit]
 	>=gnome-base/libgnomekbd-2.91.91
 
 	app-text/iso-codes
@@ -55,10 +55,6 @@ COMMON_DEPEND="
 	>=x11-libs/libXi-1.2
 
 	bluetooth? ( >=net-wireless/gnome-bluetooth-3.5.5 )
-	v4l? (
-		media-libs/gstreamer:1.0
-		media-libs/clutter-gtk:1.0
-		>=media-video/cheese-3.5.91 )
 	colord? ( >=x11-misc/colord-0.1.8 )
 	cups? ( >=net-print/cups-1.4[dbus] )
 	gnome-online-accounts? ( >=net-libs/gnome-online-accounts-3.5.90 )
@@ -69,11 +65,14 @@ COMMON_DEPEND="
 		>=net-misc/networkmanager-0.8.997 )
 	socialweb? ( net-libs/libsocialweb )
 	systemd? ( >=sys-apps/systemd-31 )
+	v4l? (
+		media-libs/gstreamer:1.0
+		media-libs/clutter-gtk:1.0
+		>=media-video/cheese-3.5.91 )
 	wacom? ( >=dev-libs/libwacom-0.6
 		>=x11-libs/libXi-1.2 )"
 # <gnome-color-manager-3.1.2 has file collisions with g-c-c-3.1.x
 RDEPEND="${COMMON_DEPEND}
-	app-admin/apg
 	sys-apps/accountsservice
 	x11-themes/gnome-icon-theme-symbolic
 	colord? ( >=gnome-extra/gnome-color-manager-3 )
@@ -97,10 +96,11 @@ DEPEND="${COMMON_DEPEND}
 	x11-proto/xf86miscproto
 	x11-proto/kbproto
 
-	>=sys-devel/gettext-0.17
-	>=dev-util/intltool-0.40.1
-	virtual/pkgconfig
 	dev-libs/libxml2:2
+	dev-libs/libxslt
+	>=dev-util/intltool-0.40.1
+	>=sys-devel/gettext-0.17
+	virtual/pkgconfig
 
 	cups? ( sys-apps/sed )
 
