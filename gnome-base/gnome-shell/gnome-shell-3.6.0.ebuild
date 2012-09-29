@@ -15,7 +15,7 @@ fi
 DESCRIPTION="Provides core UI functions for the GNOME 3 desktop"
 HOMEPAGE="http://live.gnome.org/GnomeShell"
 
-LICENSE="GPL-2"
+LICENSE="GPL-2+ LGPL-2+"
 SLOT="0"
 IUSE="+bluetooth +i18n +networkmanager systemd"
 if [[ ${PV} = 9999 ]]; then
