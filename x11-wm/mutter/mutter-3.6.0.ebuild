@@ -13,7 +13,7 @@ fi
 DESCRIPTION="GNOME 3 compositing window manager based on Clutter"
 HOMEPAGE="http://git.gnome.org/browse/mutter/"
 
-LICENSE="GPL-2"
+LICENSE="GPL-2+"
 SLOT="0"
 IUSE="+introspection test"
 if [[ ${PV} = 9999 ]]; then
