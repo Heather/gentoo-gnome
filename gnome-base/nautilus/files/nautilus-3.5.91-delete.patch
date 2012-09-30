@@ -1,20 +1,23 @@
+From 92af7beb790ad9181e5a6a89ac52f177354536f2 Mon Sep 17 00:00:00 2001
+From: Alexandre Rostovtsev <tetromino@gentoo.org>
+Date: Thu, 8 Dec 2011 18:39:28 -0500
+Subject: [PATCH] Delete key should delete files
+
 Make the Delete key delete files like in nautilus-2.x and every other
 file manager on the planet. Note: the nautilus-3 Ctrl+Delete shortcut
 will also continue to work.
 
 https://bugzilla.gnome.org/show_bug.cgi?id=647048
 https://bugs.gentoo.org/show_bug.cgi?id=393663
-
-Original Author: Alexandre Rostovtsev <tetromino@gentoo.org>
 ---
- src/nautilus-view.c |    6 +++++-
- 1 files changed, 5 insertions(+), 1 deletions(-)
+ src/nautilus-view.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/src/nautilus-view.c b/src/nautilus-view.c
-index dca1413..f3928db 100644
+index f51d916..0a50994 100644
 --- a/src/nautilus-view.c
 +++ b/src/nautilus-view.c
-@@ -7238,7 +7238,7 @@
+@@ -7237,7 +7237,7 @@ static const GtkActionEntry directory_view_entries[] = {
    /* tooltip */                  NULL,
  				 G_CALLBACK (action_rename_select_all_callback) },
    /* name, stock id */         { NAUTILUS_ACTION_TRASH, NULL,
@@ -23,7 +26,7 @@ index dca1413..f3928db 100644
    /* tooltip */                  N_("Move each selected item to the Trash"),
  				 G_CALLBACK (action_trash_callback) },
    /* name, stock id */         { NAUTILUS_ACTION_DELETE, NULL,
-@@ -9687,8 +9687,12 @@ nautilus_view_class_init (NautilusViewClass *klass)
+@@ -9895,8 +9895,12 @@ nautilus_view_class_init (NautilusViewClass *klass)
  	binding_set = gtk_binding_set_by_class (klass);
  	gtk_binding_entry_add_signal (binding_set, GDK_KEY_Delete, GDK_CONTROL_MASK,
  				      "trash", 0);
@@ -37,5 +40,5 @@ index dca1413..f3928db 100644
  				      "delete", 0);
  }
 -- 
-1.7.8
+1.7.12
 
