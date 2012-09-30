@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
+inherit autotools eutils gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -14,14 +14,14 @@ fi
 DESCRIPTION="An integrated VNC server for GNOME"
 HOMEPAGE="http://www.gnome.org/"
 
-LICENSE="GPL-2"
+LICENSE="GPL-2+"
 SLOT="0"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 fi
-IUSE="avahi crypt ipv6 jpeg libnotify networkmanager +secret ssl +telepathy +zlib"
+IUSE="avahi crypt gnome-keyring ipv6 jpeg libnotify networkmanager ssl +telepathy +zlib"
 
 # cairo used in vino-fb
 # libSM and libICE used in eggsmclient-xsmp
@@ -69,10 +69,9 @@ pkg_setup() {
 		$(use_with crypt gcrypt)
 		$(use_enable ipv6)
 		$(use_with jpeg)
-		$(use_with gnome-keyring)
+		$(use_with gnome-keyring secret)
 		$(use_with libnotify)
 		$(use_with networkmanager network-manager)
-		$(use_with secret)
 		$(use_with ssl gnutls)
 		$(use_with telepathy)
 		$(use_with zlib)"
@@ -80,9 +79,13 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# https://bugzilla.gnome.org/show_bug.cgi?id=685171
+	epatch "${FILESDIR}/${P}-secret-deps.patch"
+
 	# <glib-2.31 compatibility
 	if [[ ${PV} != 9999 ]]; then
 		rm -v server/vino-marshal.{c,h} || die
 	fi
+	eautoreconf
 	gnome2_src_prepare
 }
