@@ -14,7 +14,7 @@ fi
 DESCRIPTION="Libraries for cryptographic UIs and accessing PKCS#11 modules"
 HOMEPAGE="http://www.gnome.org/"
 
-LICENSE="GPL-2 LGPL-2"
+LICENSE="GPL-2+ LGPL-2+"
 SLOT="0"
 IUSE="debug doc +introspection"
 if [[ ${PV} = 9999 ]]; then
