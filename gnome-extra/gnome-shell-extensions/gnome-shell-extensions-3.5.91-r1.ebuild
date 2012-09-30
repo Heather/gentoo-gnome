@@ -57,6 +57,13 @@ pkg_setup() {
 		--disable-schemas-compile"
 }
 
+src_prepare() {
+	# Mark as compatible with gnome-shell-3.6; avoid eautoreconf
+	sed -e 's:SHELL_VERSION="$PACKAGE_VERSION":SHELL_VERSION="3.6":' \
+		-i configure || die
+	gnome2_src_prepare
+}
+
 src_install() {
 	gnome2_src_install
 
