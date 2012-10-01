@@ -23,7 +23,11 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 VALA_DEPEND="$(vala_depend)
-	net-libs/telepathy-glib[vala]"
+	dev-libs/folks[vala]
+	gnome-base/gnome-desktop[introspection]
+	gnome-extra/evolution-data-server[vala]
+	net-libs/telepathy-glib[vala]
+	x11-libs/libnotify[introspection]"
 # Configure is wrong; it needs cheese-3.5.91, not 3.3.91
 RDEPEND="
 	>=dev-libs/glib-2.31.10:2
@@ -55,10 +59,7 @@ fi
 
 pkg_setup() {
 	DOCS="AUTHORS ChangeLog NEWS" # README is empty
-	# We do not need valac when building from pre-generated C sources,
-	# but configure checks for it anyway
 	G2CONF="${G2CONF}
-		VALAC=$(type -P valac-$(vala_best_api_version))
 		$(use_with v4l cheese)"
 	# FIXME: Fails to compile with USE=-v4l
 }
@@ -68,6 +69,8 @@ src_prepare() {
 	if ! use v4l; then
 		touch src/*.vala
 	fi
-	# We don't want vala_src_prepare
+	if [[ ${PV} = 9999 ]] || ! use v4l; then
+		vala_src_prepare
+	fi
 	gnome2_src_prepare
 }
