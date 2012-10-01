@@ -33,9 +33,9 @@ COMMON_DEPEND="
 # g-s-d, gnome-desktop, gnome-shell etc. needed at runtime for the gsettings schemas
 RDEPEND="${COMMON_DEPEND}
 	gnome-base/gconf:2[introspection]
+	>=gnome-base/gnome-desktop-3.6.0.1:3[introspection]
 	x11-libs/gtk+:3[introspection]
 
-	>=gnome-base/gnome-desktop-3.6.0
 	>=gnome-base/gnome-settings-daemon-3
 	gnome-base/gnome-shell
 	>=gnome-base/nautilus-3
