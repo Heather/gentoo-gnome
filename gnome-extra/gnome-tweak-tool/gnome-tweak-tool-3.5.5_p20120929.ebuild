@@ -30,11 +30,12 @@ COMMON_DEPEND="
 	>=gnome-base/gsettings-desktop-schemas-3.4
 	>=dev-python/pygobject-3.2.1:3
 	gnome-base/gconf:2"
-# g-s-d, gnome-shell etc. needed at runtime for the gsettings schemas
+# g-s-d, gnome-desktop, gnome-shell etc. needed at runtime for the gsettings schemas
 RDEPEND="${COMMON_DEPEND}
 	gnome-base/gconf:2[introspection]
 	x11-libs/gtk+:3[introspection]
 
+	>=gnome-base/gnome-desktop-3.6.0
 	>=gnome-base/gnome-settings-daemon-3
 	gnome-base/gnome-shell
 	>=gnome-base/nautilus-3
