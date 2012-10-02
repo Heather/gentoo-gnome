@@ -135,8 +135,7 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-3.5.x-bluetooth-flag.patch"
 
 	# Make networkmanager optional, bug #398593
-	# FIXME: fails to apply, massive source changes
-	#epatch "${FILESDIR}/${PN}-3.5.x-networkmanager-flag.patch"
+	epatch "${FILESDIR}/${PN}-3.6.0-networkmanager-flag.patch"
 
 	[[ ${PV} != 9999 ]] && eautoreconf
 	gnome2_src_prepare

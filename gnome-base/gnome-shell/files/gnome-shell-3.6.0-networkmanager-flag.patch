@@ -1,7 +1,7 @@
-From 98c765809541b373e487eb4b449362a35d7bcb6c Mon Sep 17 00:00:00 2001
+From da0912a522f80a72db5b73504dc82941067880b2 Mon Sep 17 00:00:00 2001
 From: Michael Biebl <biebl@debian.org>
 Date: Thu, 22 Dec 2011 22:04:12 +0100
-Subject: [PATCH 2/2] Make NM optional
+Subject: [PATCH] Make NM optional
 
 [ Alexandre Rostovtsev <tetromino@gentoo.org> :
   * use config.js (and AC_SUBST HAVE_NETWORKMANAGER appropriately);
@@ -13,15 +13,16 @@ Subject: [PATCH 2/2] Make NM optional
     BIKESHED SHOULD BE BLUE, also because the upstream package name is
     NetworkManager, not Network_Manager. ]
 ---
- configure.ac         |   47 ++++++++++++++++++++++++++++++++++++++++++++++-
- js/Makefile.am       |    1 +
- js/misc/config.js.in |    2 ++
- js/ui/main.js        |    7 +++++--
- src/Makefile.am      |   18 +++++++++++++-----
- 5 files changed, 67 insertions(+), 8 deletions(-)
+ configure.ac         | 47 ++++++++++++++++++++++++++++++++++++++++++++++-
+ js/Makefile.am       |  1 +
+ js/misc/config.js.in |  2 ++
+ js/ui/panel.js       | 12 +++++++-----
+ js/ui/sessionMode.js |  7 ++++++-
+ src/Makefile.am      | 17 ++++++++++++-----
+ 6 files changed, 74 insertions(+), 12 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index f3dbdcc..566a78c 100644
+index e6ac88c..3ff8777 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -96,10 +96,43 @@ PKG_CHECK_MODULES(GNOME_SHELL, gio-unix-2.0 >= $GIO_MIN_VERSION
@@ -69,7 +70,7 @@ index f3dbdcc..566a78c 100644
  PKG_CHECK_MODULES(SHELL_PERF_HELPER, gtk+-3.0 gio-2.0)
  
  PKG_CHECK_MODULES(SHELL_HOTPLUG_SNIFFER, gio-2.0 gdk-pixbuf-2.0)
-@@ -262,3 +295,15 @@ AC_CONFIG_FILES([
+@@ -260,3 +293,15 @@ AC_CONFIG_FILES([
    man/Makefile
  ])
  AC_OUTPUT
@@ -86,10 +87,10 @@ index f3dbdcc..566a78c 100644
 +	Support for GStreamer recording:        $build_recorder
 +"
 diff --git a/js/Makefile.am b/js/Makefile.am
-index 37c4a92..a1b1408 100644
+index a3e4917..4b00193 100644
 --- a/js/Makefile.am
 +++ b/js/Makefile.am
-@@ -7,6 +7,7 @@ misc/config.js: misc/config.js.in Makefile
+@@ -8,6 +8,7 @@ misc/config.js: misc/config.js.in Makefile
  	sed -e "s|[@]PACKAGE_NAME@|$(PACKAGE_NAME)|g" \
  	    -e "s|[@]PACKAGE_VERSION@|$(PACKAGE_VERSION)|g" \
  	    -e "s|[@]HAVE_BLUETOOTH@|$(HAVE_BLUETOOTH)|g" \
@@ -110,40 +111,56 @@ index 9769104..9c4795d 100644
  /* gettext package */
  const GETTEXT_PACKAGE = '@GETTEXT_PACKAGE@';
  /* locale dir */
-diff --git a/js/ui/main.js b/js/ui/main.js
-index adfaae2..182623c 100644
---- a/js/ui/main.js
-+++ b/js/ui/main.js
-@@ -12,6 +12,7 @@ const St = imports.gi.St;
+diff --git a/js/ui/panel.js b/js/ui/panel.js
+index bcbaafb..40c6ff9 100644
+--- a/js/ui/panel.js
++++ b/js/ui/panel.js
+@@ -910,11 +910,13 @@ if (Config.HAVE_BLUETOOTH)
+     PANEL_ITEM_IMPLEMENTATIONS['bluetooth'] =
+         imports.ui.status.bluetooth.Indicator;
  
- const AutomountManager = imports.ui.automountManager;
- const AutorunManager = imports.ui.autorunManager;
-+const Config = imports.misc.config;
- const CtrlAltTab = imports.ui.ctrlAltTab;
- const EndSessionDialog = imports.ui.endSessionDialog;
- const PolkitAuthenticationAgent = imports.ui.polkitAuthenticationAgent;
-@@ -27,7 +28,7 @@ const PlaceDisplay = imports.ui.placeDisplay;
- const RunDialog = imports.ui.runDialog;
- const Layout = imports.ui.layout;
- const LookingGlass = imports.ui.lookingGlass;
--const NetworkAgent = imports.ui.networkAgent;
-+const NetworkAgent = Config.HAVE_NETWORKMANAGER ? imports.ui.networkAgent : null;
- const NotificationDaemon = imports.ui.notificationDaemon;
- const WindowAttentionHandler = imports.ui.windowAttentionHandler;
- const ScreenShield = imports.ui.screenShield;
-@@ -88,7 +89,9 @@ function createUserSession() {
-     telepathyClient = new TelepathyClient.Client();
-     automountManager = new AutomountManager.AutomountManager();
-     autorunManager = new AutorunManager.AutorunManager();
--    networkAgent = new NetworkAgent.NetworkAgent();
-+    if (Config.HAVE_NETWORKMANAGER) {
-+        networkAgent = new NetworkAgent.NetworkAgent();
+-try {
+-    PANEL_ITEM_IMPLEMENTATIONS['network'] =
+-        imports.ui.status.network.NMApplet;
+-} catch(e) {
+-    log('NMApplet is not supported. It is possible that your NetworkManager version is too old');
++if (Config.HAVE_NETWORKMANAGER) {
++    try {
++        PANEL_ITEM_IMPLEMENTATIONS['network'] =
++            imports.ui.status.network.NMApplet;
++    } catch(e) {
++        log('NMApplet is not supported. It is possible that your NetworkManager version is too old');
 +    }
- 
-     _initRecorder();
  }
+ 
+ const Panel = new Lang.Class({
+diff --git a/js/ui/sessionMode.js b/js/ui/sessionMode.js
+index 808109a..7ee6b1e 100644
+--- a/js/ui/sessionMode.js
++++ b/js/ui/sessionMode.js
+@@ -6,6 +6,8 @@ const Signals = imports.signals;
+ const Main = imports.ui.main;
+ const Params = imports.misc.params;
+ 
++const Config = imports.misc.config;
++
+ const DEFAULT_MODE = 'restrictive';
+ 
+ const _modes = {
+@@ -91,7 +93,10 @@ const _modes = {
+         isLocked: false,
+         isPrimary: true,
+         unlockDialog: imports.ui.unlockDialog.UnlockDialog,
+-        components: ['networkAgent', 'polkitAgent', 'telepathyClient',
++        components: Config.HAVE_NETWORKMANAGER ?
++                    ['networkAgent', 'polkitAgent', 'telepathyClient',
++                     'keyring', 'recorder', 'autorunManager', 'automountManager'] :
++                    ['polkitAgent', 'telepathyClient',
+                      'keyring', 'recorder', 'autorunManager', 'automountManager'],
+         panel: {
+             left: ['activities', 'appMenu'],
 diff --git a/src/Makefile.am b/src/Makefile.am
-index a390691..a6279ae 100644
+index a390691..552b640 100644
 --- a/src/Makefile.am
 +++ b/src/Makefile.am
 @@ -115,9 +115,7 @@ shell_public_headers_h =		\
@@ -156,17 +173,17 @@ index a390691..a6279ae 100644
  	shell-perf-log.h		\
  	shell-screenshot.h		\
  	shell-screen-grabber.h		\
-@@ -139,6 +137,10 @@ shell_private_sources = \
- 	gactionobserver.h		\
- 	gactionobserver.c
+@@ -131,6 +129,10 @@ shell_public_headers_h =		\
+ 	shell-wm.h			\
+ 	shell-xfixes-cursor.h
  
 +if HAVE_NETWORKMANAGER
 +shell_public_headers_h += shell-mobile-providers.h shell-network-agent.h
 +endif
 +
- libgnome_shell_la_SOURCES =		\
- 	$(shell_built_sources)		\
- 	$(shell_public_headers_h)	\
+ shell_private_sources = \
+ 	gactionmuxer.h			\
+ 	gactionmuxer.c			\
 @@ -162,9 +164,7 @@ libgnome_shell_la_SOURCES =		\
  	shell-invert-lightness-effect.c	\
  	shell-keyring-prompt.h		\
@@ -177,11 +194,10 @@ index a390691..a6279ae 100644
  	shell-perf-log.c		\
  	shell-polkit-authentication-agent.h	\
  	shell-polkit-authentication-agent.c	\
-@@ -183,6 +183,11 @@ libgnome_shell_la_SOURCES =		\
+@@ -183,6 +183,10 @@ libgnome_shell_la_SOURCES =		\
  	shell-xfixes-cursor.c		\
  	$(NULL)
  
-+
 +if HAVE_NETWORKMANAGER
 +libgnome_shell_la_SOURCES += shell-mobile-providers.c shell-network-agent.c
 +endif
@@ -189,7 +205,7 @@ index a390691..a6279ae 100644
  libgnome_shell_la_gir_sources = \
  	$(filter-out %-private.h $(shell_private_sources), $(shell_public_headers_h) $(libgnome_shell_la_SOURCES))
  
-@@ -296,7 +301,10 @@ libgnome_shell_la_LIBADD =		\
+@@ -296,7 +300,10 @@ libgnome_shell_la_LIBADD =		\
  libgnome_shell_la_CPPFLAGS = $(gnome_shell_cflags)
  
  Shell-0.1.gir: libgnome-shell.la St-1.0.gir
@@ -202,5 +218,5 @@ index a390691..a6279ae 100644
  Shell_0_1_gir_LIBS = libgnome-shell.la
  Shell_0_1_gir_FILES = $(libgnome_shell_la_gir_sources)
 -- 
-1.7.8.6
+1.7.12
 
