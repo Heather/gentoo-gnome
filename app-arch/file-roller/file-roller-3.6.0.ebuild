@@ -55,7 +55,6 @@ pkg_setup() {
 	# --disable-debug because enabling it adds -O0 to CFLAGS
 	G2CONF="${G2CONF}
 		--disable-dependency-tracking
-		--disable-scrollkeeper
 		--disable-run-in-place
 		--disable-static
 		--disable-schemas-compile
