@@ -76,7 +76,7 @@ COMMON_DEPEND="
 # 3. gnome-session is needed for gnome-session-quit
 # 4. Control shell settings
 # 5. xdg-utils needed for xdg-open, used by extension tool
-# 6. gnome-icon-theme-symbolic neeed for various icons
+# 6. gnome-icon-theme-symbolic and dejavu font neeed for various icons & arrows
 # 7. IBus is needed for i18n integration
 # 8. mobile-broadband-provider-info, timezone-data for shell-mobile-providers.c
 RDEPEND="${COMMON_DEPEND}
@@ -94,9 +94,9 @@ RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/gnome-settings-daemon-2.91
 	>=gnome-base/gnome-control-center-2.91.92-r1[bluetooth(+)?]
 
-
 	x11-misc/xdg-utils
 
+	media-fonts/dejavu
 	x11-themes/gnome-icon-theme-symbolic
 
 	i18n? ( >=app-i18n/ibus-1.4.99[dconf,gtk3,introspection] )
