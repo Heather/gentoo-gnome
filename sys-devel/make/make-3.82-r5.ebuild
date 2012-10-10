@@ -25,9 +25,16 @@ src_prepare() {
 	epatch "${FILESDIR}"/${P}-glob-speedup.patch #382845
 	epatch "${FILESDIR}"/${P}-copy-on-expand.patch
 	epatch "${FILESDIR}"/${P}-oneshell.patch
-	epatch "${FILESDIR}"/${P}-parallel-build.patch
 	epatch "${FILESDIR}"/${P}-parallel-remake.patch
-	epatch "${FILESDIR}"/${P}-long-cmdline.patch #300867 #301116
+	epatch "${FILESDIR}"/${P}-intermediate-parallel.patch #431250
+	epatch "${FILESDIR}"/${P}-construct-command-line.patch
+	epatch "${FILESDIR}"/${P}-long-command-line.patch
+
+	# Custom patches from our overlay
+	epatch "${FILESDIR}"/${P}-long-cmdline-webkit.patch #300867 #301116
+
+	# Applied partially
+	# epatch "${FILESDIR}"/${P}-parallel-build.patch.old
 }
 
 src_configure() {
