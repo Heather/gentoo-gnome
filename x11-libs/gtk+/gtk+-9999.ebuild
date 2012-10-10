@@ -19,12 +19,13 @@ SLOT="3"
 #  * http://mail.gnome.org/archives/gtk-devel-list/2010-November/msg00099.html
 # I tried this and got it all compiling, but the end result is unusable as it
 # horribly mixes up the backends -- grobian
-IUSE="aqua colord cups debug doc egl examples +introspection packagekit test vim-syntax wayland X xinerama"
+IUSE="aqua colord cups debug egl examples +introspection packagekit test vim-syntax wayland X xinerama"
 REQUIRED_USE="
 	|| ( aqua wayland X )
 	xinerama? ( X )"
 
 if [[ ${PV} = 9999 ]]; then
+	IUSE="${IUSE} doc"
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
@@ -77,10 +78,11 @@ DEPEND="${COMMON_DEPEND}
 		xinerama? ( x11-proto/xineramaproto )
 	)
 	>=dev-util/gtk-doc-am-1.11
-	doc? ( >=dev-util/gtk-doc-1.11 )
 	test? (
 		media-fonts/font-misc-misc
 		media-fonts/font-cursor-misc )"
+[[ ${PV} = 9999 ]] && DEPEND="${DEPEND}
+	doc? ( >=dev-util/gtk-doc-1.11 )"
 # gtk+-3.2.2 breaks Alt key handling in <=x11-libs/vte-0.30.1:2.90
 # gtk+-3.3.18 breaks scrolling in <=x11-libs/vte-0.31.0:2.90
 # >=xorg-server-1.11.4 needed for
@@ -142,7 +144,6 @@ src_configure() {
 	local myconf="$(use_enable aqua quartz-backend)
 		$(use_enable colord)
 		$(use_enable cups cups auto)
-		$(use_enable doc gtk-doc)
 		$(use_enable introspection)
 		$(use_enable packagekit)
 		$(use_enable wayland wayland-backend)
@@ -156,6 +157,8 @@ src_configure() {
 		--disable-papi
 		--enable-man
 		--enable-gtk2-dependency"
+
+	[[ ${PV} = 9999 ]] && myconf="${myconf} $(use_enable doc gtk-doc)"
 
 	use wayland && myconf="${myconf} $(use_enable egl wayland-cairo-gl)"
 
