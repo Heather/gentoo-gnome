@@ -7,7 +7,7 @@ EAPI="4"
 # Don't define PYTHON_DEPEND: python only needed at build time
 inherit autotools flag-o-matic gnome2-utils pax-utils python virtualx
 
-MY_P="webkit-${PV}"
+MY_P="webkitgtk-${PV}"
 DESCRIPTION="Open source web browser engine"
 HOMEPAGE="http://www.webkitgtk.org/"
 SRC_URI="http://www.webkitgtk.org/releases/${MY_P}.tar.xz"
@@ -132,10 +132,6 @@ src_prepare() {
 
 	# occasional test failure due to additional Xvfb process spawned
 	# TODO epatch "${FILESDIR}/${PN}-1.8.1-tests-xvfb.patch"
-
-    # Build failure with "-g -O2"
-	# https://bugs.webkit.org/show_bug.cgi?id=90098
-	epatch "${FILESDIR}/${PN}-1.9.4-llint-build-failure.patch"
 
 	# bug #417523, https://bugs.webkit.org/show_bug.cgi?id=96602
 	epatch "${FILESDIR}/${PN}-1.9.91-libdl.patch"
