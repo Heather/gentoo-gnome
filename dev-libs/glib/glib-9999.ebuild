@@ -18,8 +18,9 @@ SRC_URI="${SRC_URI}
 
 LICENSE="LGPL-2+"
 SLOT="2"
-IUSE="debug doc fam kernel_linux selinux static-libs systemtap test utils xattr"
+IUSE="debug fam kernel_linux selinux static-libs systemtap test utils xattr"
 if [[ ${PV} = 9999 ]]; then
+	IUSE="${IUSE} doc"
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~sparc-fbsd ~x86-fbsd ~amd64-linux ~x86-linux"
@@ -39,9 +40,6 @@ DEPEND="${RDEPEND}
 	>=dev-libs/libxslt-1.0
 	>=sys-devel/gettext-0.11
 	>=dev-util/gtk-doc-am-1.15
-	doc? (
-		>=dev-util/gdbus-codegen-${PV}
-		>=dev-util/gtk-doc-1.15 )
 	systemtap? ( >=dev-util/systemtap-1.3 )
 	test? (
 		sys-devel/gdb
@@ -57,6 +55,9 @@ PDEPEND="x11-misc/shared-mime-info
 # For safety, generate sources using the gdbus-codegen from glib git tree
 if [[ ${PV} = 9999 ]]; then
 	DEPEND="${DEPEND}
+		doc? (
+			>=dev-util/gdbus-codegen-${PV}
+			>=dev-util/gtk-doc-1.15 )
 		=dev-lang/python-2*"
 fi
 
@@ -156,16 +157,17 @@ src_configure() {
 	use debug && myconf="--enable-debug"
 
 	# need to build tests if USE=doc for bug #387385
-	if use doc || use test; then
+	if use test || [[ ${PV} = 9999 ]] && use doc; then
 		myconf="${myconf} --enable-modular-tests"
 	else
 		myconf="${myconf} --disable-modular-tests"
 	fi
 
+	[[ ${PV} = 9999 ]] && myconf="${myconf} $(use_enable doc gtk-doc)"
+
 	# Always use internal libpcre, bug #254659
 	econf ${myconf} \
 		$(use_enable xattr) \
-		$(use_enable doc gtk-doc) \
 		$(use_enable fam) \
 		$(use_enable selinux) \
 		$(use_enable static-libs static) \
