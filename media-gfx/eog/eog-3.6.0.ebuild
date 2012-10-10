@@ -14,10 +14,11 @@ fi
 DESCRIPTION="The Eye of GNOME image viewer"
 HOMEPAGE="http://www.gnome.org/projects/eog/"
 
-LICENSE="GPL-2"
+LICENSE="GPL-2+"
 SLOT="1"
-IUSE="doc +exif +introspection +jpeg lcms +svg tiff xmp"
+IUSE="+exif +introspection +jpeg lcms +svg tiff xmp"
 if [[ ${PV} = 9999 ]]; then
+	IUSE="${IUSE} doc"
 	KEYWORDS=""
 else
 	KEYWORDS="~amd64 ~x86 ~x86-fbsd"
@@ -44,14 +45,15 @@ RDEPEND=">=x11-libs/gtk+-3.3.6:3[introspection,X]
 	svg? ( >=gnome-base/librsvg-2.36.2:2 )
 	xmp? ( media-libs/exempi:2 )"
 DEPEND="${RDEPEND}
-	sys-devel/gettext
+	dev-util/gtk-doc-am
 	>=dev-util/intltool-0.40
-	virtual/pkgconfig
-	doc? ( >=dev-util/gtk-doc-1.10 )"
+	sys-devel/gettext
+	virtual/pkgconfig"
 
 if [[ ${PV} = 9999 ]]; then
 	DEPEND="${DEPEND}
-		app-text/yelp-tools"
+		app-text/yelp-tools
+		doc? ( >=dev-util/gtk-doc-1.10 )"
 fi
 
 pkg_setup() {
