@@ -72,6 +72,9 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# We run "dconf update" in pkg_postinst/postrm to avoid sandbox violations
+	sed -e 's/dconf update/$(NULL)/' \
+		-i data/dconf/Makefile.{am,in} || die
 	use python && python_clean_py-compile_files
 	use vala && vala_src_prepare
 }
@@ -123,6 +126,11 @@ pkg_preinst() {
 }
 
 pkg_postinst() {
+	if use dconf; then
+		ebegin "Updating dconf system databases"
+		dconf update
+		eend $?
+	fi
 	use gconf && gnome2_gconf_install
 	use gtk && gnome2_query_immodules_gtk2
 	use gtk3 && gnome2_query_immodules_gtk3
@@ -149,6 +157,11 @@ pkg_postinst() {
 }
 
 pkg_postrm() {
+	if use dconf; then
+		ebegin "Updating dconf system databases"
+		dconf update
+		eend $?
+	fi
 	use gtk && gnome2_query_immodules_gtk2
 	use gtk3 && gnome2_query_immodules_gtk3
 	use deprecated && python_mod_cleanup ${PN}
