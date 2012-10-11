@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
+inherit eutils gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -67,4 +67,10 @@ pkg_setup() {
 		--disable-schemas-compile"
 	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
 	DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README THANKS TODO"
+}
+
+src_prepare() {
+	# https://bugzilla.gnome.org/show_bug.cgi?id=685923
+	epatch "${FILESDIR}/${PN}-3.6.0-eog.desktop.patch"
+	gnome2_src_prepare
 }
