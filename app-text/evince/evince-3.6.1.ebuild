@@ -104,7 +104,7 @@ src_prepare() {
 	epatch "${FILESDIR}"/${PN}-0.7.1-display-menu.patch
 
 	# Fix .desktop file categories, in 3.7
-	epatch "${FILESDIR}/${P}-evince.desktop.patch"
+	epatch "${FILESDIR}/${PN}-3.6.0-evince.desktop.patch"
 
 	gnome2_src_prepare
 	# Do not depend on gnome-icon-theme, bug #326855, #391859
