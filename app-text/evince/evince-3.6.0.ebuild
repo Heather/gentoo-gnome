@@ -14,10 +14,11 @@ fi
 DESCRIPTION="Simple document viewer for GNOME"
 HOMEPAGE="http://www.gnome.org/projects/evince/"
 
-LICENSE="GPL-2"
+LICENSE="GPL-2+"
 SLOT="0"
-IUSE="dbus debug djvu doc dvi gnome-keyring +introspection nautilus +postscript t1lib tiff xps"
+IUSE="dbus debug djvu dvi gnome-keyring +introspection nautilus +postscript t1lib tiff xps"
 if [[ ${PV} = 9999 ]]; then
+	IUSE="${IUSE} doc"
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~x64-solaris"
@@ -60,12 +61,12 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/intltool-0.35
 	>=dev-util/gtk-doc-am-1.13
-	virtual/pkgconfig
-	doc? ( >=dev-util/gtk-doc-1.13 )"
+	virtual/pkgconfig"
 
 if [[ ${PV} = 9999 ]]; then
 	DEPEND="${DEPEND}
-		app-text/yelp-tools"
+		app-text/yelp-tools
+		doc? ( >=dev-util/gtk-doc-1.13 )"
 fi
 
 ELTCONF="--portage"
@@ -101,6 +102,9 @@ pkg_setup() {
 src_prepare() {
 	# Fix .desktop file so menu item shows up
 	epatch "${FILESDIR}"/${PN}-0.7.1-display-menu.patch
+
+	# Fix .desktop file categories, in 3.7
+	epatch "${FILESDIR}/${P}-evince.desktop.patch"
 
 	gnome2_src_prepare
 	# Do not depend on gnome-icon-theme, bug #326855, #391859
