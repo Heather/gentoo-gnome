@@ -14,10 +14,11 @@ fi
 DESCRIPTION="The GNOME panel"
 HOMEPAGE="http://www.gnome.org/"
 
-LICENSE="GPL-2 FDL-1.1 LGPL-2"
+LICENSE="GPL-2+ FDL-1.1+ LGPL-2+"
 SLOT="0"
-IUSE="doc eds +introspection networkmanager"
+IUSE="eds +introspection networkmanager"
 if [[ ${PV} = 9999 ]]; then
+	IUSE="${IUSE} doc"
 	KEYWORDS=""
 else
 	# Odd behaviour w.r.t. panels: https://bugzilla.gnome.org/show_bug.cgi?id=631553
@@ -51,16 +52,16 @@ RDEPEND=">=dev-libs/glib-2.31.14:2
 DEPEND="${RDEPEND}
 	app-text/docbook-xml-dtd:4.1.2
 	>=dev-lang/perl-5
+	dev-util/gtk-doc-am
 	>=dev-util/intltool-0.40
-	virtual/pkgconfig
-	doc? ( >=dev-util/gtk-doc-1 )"
+	virtual/pkgconfig"
 # eautoreconf needs
 #	gnome-base/gnome-common
-#	dev-util/gtk-doc-am
 
 if [[ ${PV} = 9999 ]]; then
 	DEPEND="${DEPEND}
-		app-text/yelp-tools"
+		app-text/yelp-tools
+		doc? ( >=dev-util/gtk-doc-1 )"
 fi
 
 pkg_setup() {
