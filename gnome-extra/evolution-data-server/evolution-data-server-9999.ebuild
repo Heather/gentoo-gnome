@@ -1,6 +1,6 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-extra/evolution-data-server/evolution-data-server-2.32.1-r1.ebuild,v 1.4 2011/01/15 19:55:02 nirbheek Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="no"
@@ -9,13 +9,13 @@ PYTHON_DEPEND="2"
 VALA_MIN_API_VERSION="0.18"
 VALA_USE_DEPEND="vapigen"
 
-inherit db-use eutils flag-o-matic gnome2 python versionator vala virtualx
+inherit db-use eutils flag-o-matic gnome2 python vala versionator virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
 
 DESCRIPTION="Evolution groupware backend"
-HOMEPAGE="http://www.gnome.org/projects/evolution/"
+HOMEPAGE="http://projects.gnome.org/evolution/"
 
 # Note: explicitly "|| ( LGPL-2 LGPL-3 )", not "LGPL-2+".
 LICENSE="|| ( LGPL-2 LGPL-3 ) BSD DB"
@@ -28,7 +28,7 @@ if [[ ${PV} = 9999 ]]; then
 	REQUIRED_USE="${REQUIRED_USE} api-doc-extras? ( doc )"
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64 ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-solaris"
+	KEYWORDS="~amd64 ~ppc ~ppc64 ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-solaris"
 fi
 
 RDEPEND=">=dev-libs/glib-2.32:2
