@@ -101,8 +101,8 @@ src_prepare() {
 		fi
 
 		# Disable tests requiring dbus-python and pygobject; bugs #349236, #377549, #384853
-		if ! has_version dev-python/dbus-python || ! has_version 'dev-python/pygobject:2' ; then
-			ewarn "Some tests will be skipped due to dev-python/dbus-python or dev-python/pygobject:2"
+		if ! has_version dev-python/dbus-python || ! has_version 'dev-python/pygobject:3' ; then
+			ewarn "Some tests will be skipped due to dev-python/dbus-python or dev-python/pygobject:3"
 			ewarn "not being present on your system, think on installing them to get these tests run."
 			sed -i -e "/connection\/filter/d" gio/tests/gdbus-connection.c || die
 			sed -i -e "/connection\/large_message/d" gio/tests/gdbus-connection-slow.c || die
@@ -156,11 +156,15 @@ src_configure() {
 	# -- compnerd (3/27/06)
 	use debug && myconf="--enable-debug"
 
-	# need to build tests if USE=doc for bug #387385
-	if use test || [[ ${PV} = 9999 ]] && use doc; then
+	if use test; then
 		myconf="${myconf} --enable-modular-tests"
 	else
-		myconf="${myconf} --disable-modular-tests"
+		if [[ ${PV} = 9999 ]] && use doc; then
+			# need to build tests if USE=doc for bug #387385
+			myconf="${myconf} --enable-modular-tests"
+		else
+			myconf="${myconf} --disable-modular-tests"
+		fi
 	fi
 
 	[[ ${PV} = 9999 ]] && myconf="${myconf} $(use_enable doc gtk-doc)"
