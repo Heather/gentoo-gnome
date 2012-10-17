@@ -6,6 +6,8 @@ EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2"
+VALA_MIN_API_VERSION="0.18"
+VALA_USE_DEPEND="vapigen"
 
 inherit db-use eutils flag-o-matic gnome2 python versionator vala virtualx
 if [[ ${PV} = 9999 ]]; then
