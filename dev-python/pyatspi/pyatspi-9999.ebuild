@@ -18,14 +18,17 @@ DESCRIPTION="Python binding to at-spi library"
 HOMEPAGE="http://live.gnome.org/Accessibility"
 
 # Note: only some of the tests are GPL-licensed, everything else is LGPL
-LICENSE="LGPL-2 GPL-2"
+LICENSE="LGPL-2 GPL-2+"
 SLOT="0"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
 	KEYWORDS="~amd64 ~arm ~hppa ~x86"
 fi
-IUSE="test"
+IUSE="" # test
+
+# test suite is obsolete (at-spi-1.x era) and unpassable
+RESTRICT="test"
 
 COMMON_DEPEND="dev-python/dbus-python
 	>=dev-python/pygobject-2.90.1:3
@@ -36,16 +39,10 @@ RDEPEND="${COMMON_DEPEND}
 	!<gnome-extra/at-spi-1.32.0-r1
 "
 DEPEND="${COMMON_DEPEND}
-	virtual/pkgconfig
-	test? (
-		>=dev-libs/atk-2.1.0
-		>=dev-libs/dbus-glib-0.7
-		dev-libs/glib:2
-		dev-libs/libxml2:2
-		>=x11-libs/gtk+-2.10:2 )"
+	virtual/pkgconfig"
 
 pkg_setup() {
-	G2CONF="${G2CONF} $(use_enable test tests)"
+	G2CONF="${G2CONF} --disable-tests"
 	python_pkg_setup
 }
 
@@ -62,10 +59,6 @@ src_configure() {
 
 src_compile() {
 	python_execute_function -s gnome2_src_compile
-}
-
-src_test() {
-	python_execute_function -s -d
 }
 
 src_install() {
