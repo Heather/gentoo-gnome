@@ -14,14 +14,16 @@ fi
 DESCRIPTION="Integrated mail, addressbook and calendaring functionality"
 HOMEPAGE="http://www.gnome.org/projects/evolution/"
 
-LICENSE="GPL-2 LGPL-2 OPENLDAP"
+# Note: explicitly "|| ( LGPL-2 LGPL-3 )", not "LGPL-2+".
+LICENSE="|| ( LGPL-2 LGPL-3 ) CCPL-Attribution-ShareAlike-3.0 FDL-1.3+ OPENLDAP"
 SLOT="2.0"
+IUSE="crypt +gnome-online-accounts gstreamer kerberos ldap map ssl"
 if [[ ${PV} = 9999 ]]; then
+	IUSE="${IUSE} doc"
 	KEYWORDS=""
 else
 	KEYWORDS="~amd64 ~x86 ~x86-fbsd"
 fi
-IUSE="crypt doc +gnome-online-accounts gstreamer kerberos ldap map ssl"
 
 # We need a graphical pinentry frontend to be able to ask for the GPG
 # password from inside evolution, bug 160302
@@ -74,18 +76,19 @@ COMMON_DEPEND=">=dev-libs/glib-2.32:2
 		>=dev-libs/nss-3.11 )"
 DEPEND="${COMMON_DEPEND}
 	app-text/docbook-xml-dtd:4.1.2
+	dev-util/gtk-doc-am
 	>=dev-util/intltool-0.40.0
-	virtual/pkgconfig
-	doc? ( >=dev-util/gtk-doc-1.14 )"
+	virtual/pkgconfig"
 # eautoreconf needs:
 #	>=gnome-base/gnome-common-2.12
-#	>=dev-util/gtk-doc-am-1.9
 RDEPEND="${COMMON_DEPEND}
+	app-text/highlight
 	!<gnome-extra/evolution-exchange-2.32"
 
 if [[ ${PV} = 9999 ]]; then
 	DEPEND="${DEPEND}
-		app-text/yelp-tools"
+		app-text/yelp-tools
+		doc? ( >=dev-util/gtk-doc-1.14 )"
 fi
 
 pkg_setup() {
