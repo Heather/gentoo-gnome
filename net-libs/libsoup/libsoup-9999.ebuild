@@ -45,24 +45,17 @@ DEPEND="${RDEPEND}
 #		net-libs/glib-networking[ssl])"
 
 pkg_setup() {
-	# Set invalid apache module dir until apache tests are ready, bug #326957
+	# Disable apache tests until they are usable on Gentoo, bug #326957
 	DOCS="AUTHORS NEWS README"
 	G2CONF="${G2CONF}
 		--disable-static
 		--disable-tls-check
 		--without-gnome
-		--with-apache-module-dir="${T}"
+		--without-apache-httpd
 		$(use_enable introspection)
 		$(use_with samba ntlm-auth ${EPREFIX}/usr/bin/ntlm_auth)"
 	python_set_active_version 2
 	python_pkg_setup
-}
-
-src_configure() {
-	# FIXME: we need addpredict to workaround bug #324779 until
-	# root cause (bug #249496) is solved
-	addpredict /usr/share/snmp/mibs/.index
-	gnome2_src_configure
 }
 
 src_prepare() {
@@ -82,4 +75,11 @@ src_prepare() {
 	fi
 
 	gnome2_src_prepare
+}
+
+src_configure() {
+	# FIXME: we need addpredict to workaround bug #324779 until
+	# root cause (bug #249496) is solved
+	addpredict /usr/share/snmp/mibs/.index
+	gnome2_src_configure
 }
