@@ -56,7 +56,8 @@ DEPEND="${COMMON_DEPEND}
 	test? ( app-text/docbook-xml-dtd:4.5 )
 	x11-proto/xextproto
 	x11-proto/xineramaproto
-	x11-proto/xproto"
+	x11-proto/xproto
+	>=x11-libs/pango-1.2.0 "
 RDEPEND="${COMMON_DEPEND}
 	!x11-misc/expocity"
 
