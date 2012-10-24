@@ -12,7 +12,7 @@ if [[ ${PV} = 9999 ]]; then
 fi
 
 DESCRIPTION="Password and keyring managing daemon"
-HOMEPAGE="http://live.gnome.org/GnomeKeyring"
+HOMEPAGE="https://live.gnome.org/GnomeKeyring"
 
 LICENSE="GPL-2+ LGPL-2+"
 SLOT="0"
@@ -33,13 +33,12 @@ RDEPEND=">=app-crypt/gcr-3.5.3
 	pam? ( virtual/pam )"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
-	>=dev-util/gtk-doc-am-1.9
 	>=dev-util/intltool-0.35
-	virtual/pkgconfig
-	doc? ( >=dev-util/gtk-doc-1.9 )"
+	virtual/pkgconfig"
 PDEPEND=">=gnome-base/libgnome-keyring-3.1.92"
 # eautoreconf needs:
 #	>=dev-util/gtk-doc-am-1.9
+# gtk-doc-am is not needed otherwise (no gtk-docs are installed)
 
 # FIXME: tests are very flaky and write to /tmp (instead of TMPDIR)
 RESTRICT="test"
