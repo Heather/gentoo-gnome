@@ -41,10 +41,9 @@ COMMON_DEPEND="
 	ldap? ( net-nds/openldap )
 "
 DEPEND="${COMMON_DEPEND}
-	sys-devel/gettext
-	>=app-text/gnome-doc-utils-0.3.2
-	>=app-text/scrollkeeper-0.3
+	app-text/yelp-tools
 	>=dev-util/intltool-0.35
+	sys-devel/gettext
 	virtual/pkgconfig
 "
 # Need seahorse-plugins git snapshot
@@ -58,7 +57,6 @@ pkg_setup() {
 		--enable-ssh
 		--enable-pkcs11
 		--disable-static
-		--disable-scrollkeeper
 		--enable-hkp
 		$(use_enable avahi sharing)
 		$(use_enable debug)
