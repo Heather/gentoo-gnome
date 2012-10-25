@@ -114,7 +114,6 @@ pkg_setup() {
 		--disable-static
 		--enable-documentation
 		$(use_enable bluetooth)
-		$(use_with cheese)
 		$(use_enable colord color)
 		$(use_enable cups)
 		$(use_enable gnome-online-accounts goa)
