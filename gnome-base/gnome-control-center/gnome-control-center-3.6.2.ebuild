@@ -120,12 +120,9 @@ pkg_setup() {
 		$(use_enable i18n ibus)
 		$(use_with socialweb libsocialweb)
 		$(use_enable systemd)
+		$(use_with v4l cheese)
 		$(use_enable wacom)"
-	# Kerberos also has a dependency on realmd
-	# https://bugzilla.gnome.org/show_bug.cgi?id=677548
-	# 
-	# FIXME: Kerberos is a hard-dependency right now, and it's not
-	# straightforward to make it optional.
+	# XXX: $(use_with kerberos) # for 3.7.x
 	if ! use kerberos; then
 		G2CONF+=" KRB5_CONFIG=$(type -P true)"
 	fi
@@ -135,6 +132,7 @@ pkg_setup() {
 src_prepare() {
 	# Make some panels optional; requires eautoreconf
 	epatch "${FILESDIR}/${PN}-3.5.91-optional-bt-colord-goa-wacom.patch"
+	# https://bugzilla.gnome.org/show_bug.cgi?id=686840
 	epatch "${FILESDIR}/${PN}-3.5.91-optional-kerberos.patch"
 	# Fix some absolute paths to be appropriate for Gentoo
 	epatch "${FILESDIR}/${PN}-3.5.91-gentoo-paths.patch"

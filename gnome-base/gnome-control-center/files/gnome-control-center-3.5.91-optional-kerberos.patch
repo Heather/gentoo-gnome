@@ -3,6 +3,7 @@ From: Priit Laes <plaes@plaes.org>
 Date: Mon, 10 Sep 2012 18:49:43 +0300
 Subject: [PATCH] Crappy patch to allow disabling kerberos requirement
 
+https://bugzilla.gnome.org/show_bug.cgi?id=686840
 ---
  configure.ac                             | 22 ++++++++++++++--------
  panels/user-accounts/um-account-dialog.c | 30 ++++++++++++++++++++++++++----
