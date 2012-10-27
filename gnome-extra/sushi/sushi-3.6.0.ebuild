@@ -6,21 +6,14 @@ EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
+inherit autotools eutils gnome2
 
 DESCRIPTION="A quick previewer for Nautilus, the GNOME file manager"
 HOMEPAGE="http://git.gnome.org/browse/sushi"
 
 LICENSE="GPL-3"
 SLOT="0"
-if [[ ${PV} = 9999 ]]; then
-	KEYWORDS=""
-else
-	KEYWORDS="~amd64 ~x86"
-fi
+KEYWORDS="~amd64 ~x86"
 IUSE="office"
 
 # Optional app-office/unoconv support (OOo to pdf)
@@ -66,5 +59,8 @@ src_prepare() {
 	fi
 
 	DOCS="AUTHORS NEWS README TODO"
+
+	epatch "${FILESDIR}"/${P}-gold.patch
+	eautoreconf
 	gnome2_src_prepare
 }
