@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
+inherit eutils gnome2 multilib
 if [[ ${PV} = 9999 ]]; then
 	inherit git-2 gnome2-live
 fi
@@ -90,4 +90,14 @@ src_unpack() {
 		ln -sf "${WORKDIR}/hwdata/pnp.ids" "${S}/libgnome-desktop/" ||
 			die "ln -sf failed"
 	fi
+}
+
+pkg_preinst() {
+	gnome2_pkg_preinst
+	preserve_old_lib /usr/$(get_libdir)/libgnome-desktop-3.so.2
+}
+
+pkg_postinst() {
+	gnome2_pkg_preinst
+	preserve_old_lib_notify /usr/$(get_libdir)/libgnome-desktop-3.so.2
 }
