@@ -57,14 +57,12 @@ if [[ ${PV} = 9999 ]]; then
 		${VALA_DEPEND}"
 fi
 
-pkg_setup() {
+src_prepare() {
 	DOCS="AUTHORS ChangeLog NEWS" # README is empty
 	G2CONF="${G2CONF}
 		$(use_with v4l cheese)"
 	# FIXME: Fails to compile with USE=-v4l
-}
 
-src_prepare() {
 	# Regenerate the pre-generated C sources
 	if ! use v4l; then
 		touch src/*.vala
