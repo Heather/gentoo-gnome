@@ -30,7 +30,7 @@ COMMON_DEPEND="
 	dev-libs/gjs
 	>=dev-libs/glib-2.31.6:2
 	>=dev-libs/gobject-introspection-1.31.6
-	>=dev-libs/libgdata-0.13.1[introspection]
+	>=dev-libs/libgdata-0.13.1[gnome,introspection]
 	gnome-base/gnome-desktop:3
 	>=media-libs/clutter-1.10:1.0
 	>=media-libs/clutter-gtk-1.3.2:1.0[introspection]
@@ -49,7 +49,8 @@ DEPEND="${COMMON_DEPEND}
 	>=sys-devel/gettext-0.17
 	virtual/pkgconfig"
 
-pkg_setup() {
+src_configure() {
 	DOCS="AUTHORS NEWS README TODO"
 	G2CONF="${G2CONF} --disable-schemas-compile"
+	gnome2_src_configure
 }
