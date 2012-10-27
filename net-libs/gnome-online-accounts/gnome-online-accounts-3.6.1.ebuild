@@ -15,8 +15,9 @@ HOMEPAGE="https://live.gnome.org/GnomeOnlineAccounts"
 
 LICENSE="LGPL-2"
 SLOT="0"
-IUSE="doc gnome +introspection kerberos"
+IUSE="gnome +introspection kerberos"
 if [[ ${PV} = 9999 ]]; then
+	IUSE="${IUSE} doc"
 	KEYWORDS=""
 else
 	KEYWORDS="~amd64 ~x86"
@@ -45,14 +46,19 @@ RDEPEND="
 PDEPEND="gnome? ( >=gnome-base/gnome-control-center-3.2[gnome-online-accounts(+)] )"
 DEPEND="${RDEPEND}
 	dev-libs/libxslt
+	>=dev-util/gtk-doc-am-1.3
 	>=dev-util/gdbus-codegen-2.30.0
 	dev-util/intltool
 	sys-devel/gettext
 	virtual/pkgconfig
+"
 
-	doc? ( >=dev-util/gtk-doc-1.3 )"
+if [[ ${PV} = 9999 ]]; then
+	DEPEND="${DEPEND}
+		doc? ( >=dev-util/gtk-doc-1.3 )"
+fi
 
-pkg_setup() {
+src_configure() {
 	# TODO: Give users a way to set the G/Y!/FB/Twitter/Windows Live secrets
 	G2CONF="${G2CONF}
 		--disable-static
@@ -62,4 +68,5 @@ pkg_setup() {
 		--enable-windows-live
 		$(use_enable kerberos)"
 	DOCS="NEWS" # README is empty
+	gnome2_src_configure
 }
