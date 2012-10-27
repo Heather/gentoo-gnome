@@ -17,23 +17,19 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-
 IUSE="doc debug examples test"
 
 RDEPEND=">=dev-libs/libsigc++-2.2.10:2
-	>=dev-libs/glib-2.33.12:2"
+	>=dev-libs/glib-2.34:2"
 DEPEND="${RDEPEND}
 	virtual/pkgconfig
 	doc? ( app-doc/doxygen )"
 # dev-cpp/mm-common needed for eautoreconf
 
-pkg_setup() {
+src_prepare() {
 	DOCS="AUTHORS ChangeLog NEWS README"
 	G2CONF="${G2CONF}
 		$(use_enable debug debug-refcounting)
 		$(use_enable doc documentation)
 		--disable-schemas-compile
 		--enable-deprecated-api"
-}
-
-src_prepare() {
-	gnome2_src_prepare
 
 	if ! use test; then
 		# don't waste time building tests
@@ -46,6 +42,8 @@ src_prepare() {
 		sed 's/^\(SUBDIRS =.*\)examples\(.*\)$/\1\2/' \
 			-i Makefile.am Makefile.in || die "sed 2 failed"
 	fi
+
+	gnome2_src_prepare
 }
 
 src_test() {
