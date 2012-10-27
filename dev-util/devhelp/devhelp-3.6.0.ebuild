@@ -29,16 +29,17 @@ DEPEND="${COMMON_DEPEND}
 	virtual/pkgconfig"
 
 pkg_setup() {
-	DOCS="AUTHORS NEWS README"
-	# ICC is crazy, silence warnings (bug #154010)
-	if [[ $(tc-getCC) == "icc" ]] ; then
-		G2CONF="${G2CONF} --with-compile-warnings=no"
-	fi
 	python_set_active_version 2
 	python_pkg_setup
 }
 
 src_prepare() {
+	DOCS="AUTHORS NEWS README"
+	# ICC is crazy, silence warnings (bug #154010)
+	if [[ $(tc-getCC) == "icc" ]] ; then
+		G2CONF="${G2CONF} --with-compile-warnings=no"
+	fi
+
 	gnome2_src_prepare
 	python_clean_py-compile_files
 }
