@@ -40,10 +40,11 @@ DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.40
 	virtual/pkgconfig"
 
-pkg_setup() {
+src_configure() {
 	DOCS="NEWS"
 	G2CONF="${G2CONF}
 		--disable-schemas-compile"
+	gnome2_src_configure
 }
 
 pkg_postinst() {
