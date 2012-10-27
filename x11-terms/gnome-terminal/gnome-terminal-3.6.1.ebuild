@@ -34,14 +34,12 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext
 	virtual/pkgconfig"
 
-pkg_setup() {
+src_prepare() {
 	DOCS="AUTHORS ChangeLog HACKING NEWS README"
 	# FIXME: leave smclient configure unset until it accepts values from the
 	# switch and not from GDK_TARGET, bug #363033
 	G2CONF="${G2CONF} --with-gtk=3.0"
-}
 
-src_prepare() {
 	# Use login shell by default (#12900)
 	epatch "${FILESDIR}"/${PN}-2.22.0-default_shell.patch
 
