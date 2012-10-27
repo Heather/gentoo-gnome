@@ -18,7 +18,7 @@ IUSE="aqua doc examples test wayland +X"
 REQUIRED_USE="|| ( aqua wayland X )"
 
 RDEPEND="
-	>=dev-cpp/glibmm-2.33.1:2
+	>=dev-cpp/glibmm-2.34:2
 	>=x11-libs/gtk+-3.5.12:3[aqua?,wayland?,X?]
 	>=x11-libs/gdk-pixbuf-2.22.1:2
 	>=dev-cpp/atkmm-2.22.2
@@ -31,11 +31,10 @@ DEPEND="${RDEPEND}
 		media-gfx/graphviz
 		dev-libs/libxslt
 		app-doc/doxygen )"
-
 #	dev-cpp/mm-common"
 # eautoreconf needs mm-common
 
-pkg_setup() {
+src_prepare() {
 	DOCS="AUTHORS ChangeLog PORTING NEWS README"
 	targets=
 	G2CONF="${G2CONF}
@@ -44,9 +43,7 @@ pkg_setup() {
 		$(use_enable aqua quartz-backend)
 		$(use_enable wayland wayland-backend)
 		$(use_enable X x11-backend)"
-}
 
-src_prepare() {
 	if ! use test; then
 		# don't waste time building tests
 		sed 's/^\(SUBDIRS =.*\)tests\(.*\)$/\1\2/' -i Makefile.am Makefile.in \
