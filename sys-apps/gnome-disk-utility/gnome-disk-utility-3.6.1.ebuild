@@ -37,9 +37,11 @@ DEPEND="${COMMON_DEPEND}
 	dev-libs/libxslt
 	virtual/pkgconfig"
 
-pkg_setup() {
+src_configure() {
+	DOCS="AUTHORS NEWS"
 	G2CONF="${G2CONF}
 		--disable-libsystemd-login
 		--disable-maintainer-mode
 		--disable-schemas-compile"
+	gnome2_src_configure
 }
