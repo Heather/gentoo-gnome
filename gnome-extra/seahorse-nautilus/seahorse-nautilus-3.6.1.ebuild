@@ -7,20 +7,13 @@ GCONF_DEBUG="no" # --disable-debug disables all assertions
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
 
 DESCRIPTION="Nautilus extension for encrypting and decrypting files with GnuPG"
 HOMEPAGE="http://www.gnome.org/projects/seahorse/"
 
 LICENSE="GPL-2"
 SLOT="0"
-if [[ ${PV} = 9999 ]]; then
-	KEYWORDS=""
-else
-	KEYWORDS="~amd64 ~x86"
-fi
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 COMMON_DEPEND=">=app-crypt/gpgme-1.0.0
