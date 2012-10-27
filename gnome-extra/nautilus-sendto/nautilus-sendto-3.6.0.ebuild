@@ -14,7 +14,7 @@ HOMEPAGE="http://www.gnome.org"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="cdr doc gajim +mail pidgin upnp"
+IUSE="cdr gajim +mail pidgin upnp"
 
 COMMON_DEPEND=">=x11-libs/gtk+-2.90.3:3[X(+)]
 	>=dev-libs/glib-2.25.9:2
@@ -30,14 +30,14 @@ COMMON_DEPEND=">=x11-libs/gtk+-2.90.3:3[X(+)]
 RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/nautilus-2.91.1[sendto]"
 DEPEND="${COMMON_DEPEND}
+	>=dev-util/gtk-doc-am-1.9
 	>=gnome-base/nautilus-2.91.1
 	>=dev-util/intltool-0.35
 	sys-devel/gettext
 	virtual/pkgconfig
-	doc? ( >=dev-util/gtk-doc-1.9 )"
+"
 # Needed for eautoreconf
 #	>=gnome-base/gnome-common-0.12
-#	dev-util/gtk-doc-am
 
 _use_plugin() {
 	if use ${1}; then
@@ -45,7 +45,7 @@ _use_plugin() {
 	fi
 }
 
-pkg_setup() {
+src_configure() {
 	DOCS="AUTHORS ChangeLog NEWS README"
 	G2CONF="${G2CONF}
 		--with-plugins=removable-devices,"
@@ -54,6 +54,7 @@ pkg_setup() {
 	_use_plugin pidgin
 	_use_plugin gajim
 	_use_plugin upnp
+	gnome2_src_configure
 }
 
 src_install() {
