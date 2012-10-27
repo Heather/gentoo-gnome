@@ -67,7 +67,8 @@ PDEPEND="gnome? (
 	tracker? ( >=gnome-extra/nautilus-tracker-tags-0.12 )
 	previewer? ( >=gnome-extra/sushi-0.1.9 )
 	sendto? ( >=gnome-extra/nautilus-sendto-3.0.1 )
-	>=gnome-base/gvfs-0.1.2"
+	>=gnome-base/gvfs-1.14[gtk]"
+# Need gvfs[gtk] for recent:/// support
 
 pkg_setup() {
 	G2CONF="${G2CONF}
