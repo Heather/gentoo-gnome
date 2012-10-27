@@ -92,6 +92,12 @@ DEPEND="${COMMON_DEPEND}
 PDEPEND=">=net-im/telepathy-mission-control-5.12"
 
 pkg_setup() {
+	# Build time python tools need python2
+	python_set_active_version 2
+	python_pkg_setup
+}
+
+src_configure() {
 	DOCS="CONTRIBUTORS AUTHORS ChangeLog NEWS README"
 	G2CONF="${G2CONF}
 		--disable-ubuntu-online-accounts
@@ -109,10 +115,7 @@ pkg_setup() {
 		$(use_enable spell)
 		$(use_with v4l cheese)
 		$(use_enable v4l gudev)"
-
-	# Build time python tools need python2
-	python_set_active_version 2
-	python_pkg_setup
+	gnome2_src_configure
 }
 
 src_test() {
