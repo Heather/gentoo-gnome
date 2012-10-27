@@ -16,13 +16,14 @@ HOMEPAGE="http://live.gnome.org/Nautilus"
 
 LICENSE="GPL-2+ LGPL-2+ FDL-1.1"
 SLOT="0"
+# profiling?
+IUSE="exif gnome +introspection packagekit +previewer sendto tracker xmp"
 if [[ ${PV} = 9999 ]]; then
+	IUSE="${IUSE} doc"
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux"
 fi
-# profiling?
-IUSE="doc exif gnome +introspection packagekit +previewer sendto tracker xmp"
 
 # FIXME: tests fails under Xvfb, but pass when building manually
 # "FAIL: check failed in nautilus-file.c, line 8307"
@@ -50,11 +51,11 @@ COMMON_DEPEND=">=dev-libs/glib-2.33.13:2
 DEPEND="${COMMON_DEPEND}
 	>=dev-lang/perl-5
 	>=dev-util/gdbus-codegen-2.33
+	>=dev-util/gtk-doc-am-1.4
 	>=dev-util/intltool-0.40.1
 	sys-devel/gettext
 	virtual/pkgconfig
-	x11-proto/xproto
-	doc? ( >=dev-util/gtk-doc-1.4 )"
+	x11-proto/xproto"
 RDEPEND="${COMMON_DEPEND}
 	packagekit? ( app-admin/packagekit-base )
 	sendto? ( !<gnome-extra/nautilus-sendto-3.0.1 )"
@@ -70,7 +71,12 @@ PDEPEND="gnome? (
 	>=gnome-base/gvfs-1.14[gtk]"
 # Need gvfs[gtk] for recent:/// support
 
-pkg_setup() {
+if [[ ${PV} = 9999 ]]; then
+	DEPEND="${DEPEND}
+		doc? ( >=dev-util/gtk-doc-1.4 )"
+fi
+
+src_prepare() {
 	G2CONF="${G2CONF}
 		--disable-profiling
 		--disable-update-mimedb
@@ -81,10 +87,6 @@ pkg_setup() {
 		$(use_enable tracker)
 		$(use_enable xmp)"
 	DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS README THANKS"
-}
-
-src_prepare() {
-	gnome2_src_prepare
 
 	# Restore the nautilus-2.x Delete shortcut (Ctrl+Delete will still work);
 	# bug #393663
@@ -93,6 +95,8 @@ src_prepare() {
 	# Remove crazy CFLAGS
 	sed 's:-DG.*DISABLE_DEPRECATED::g' -i configure.in configure \
 		|| die "sed 1 failed"
+
+	gnome2_src_prepare
 }
 
 src_test() {
