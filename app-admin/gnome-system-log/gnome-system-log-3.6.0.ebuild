@@ -41,10 +41,11 @@ if [[ ${PV} = 9999 ]]; then
 		app-text/yelp-tools"
 fi
 
-pkg_setup() {
+src_configure() {
 	DOCS="NEWS TODO"
 	G2CONF="${G2CONF}
 		--disable-schemas-compile
 		--enable-zlib"
 	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
+	gnome2_src_configure
 }
