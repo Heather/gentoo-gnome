@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -16,7 +16,7 @@ case "${EAPI:-0}" in
 	0|1)
 		EXPORT_FUNCTIONS src_unpack src_compile src_install pkg_preinst pkg_postinst pkg_postrm
 		;;
-	2|3|4)
+	2|3|4|5)
 		EXPORT_FUNCTIONS src_unpack src_prepare src_configure src_compile src_install pkg_preinst pkg_postinst pkg_postrm
 		;;
 	*) die "EAPI=${EAPI} is not supported" ;;
@@ -122,6 +122,9 @@ gnome2_src_prepare() {
 	# Prevent scrollkeeper access violations
 	gnome2_omf_fix
 
+	# Disable all deprecation warnings
+	gnome2_disable_deprecation_warning
+
 	# Run libtoolize
 	if has ${EAPI:-0} 0 1 2 3; then
 		elibtoolize ${ELTCONF}
@@ -145,7 +148,7 @@ gnome2_src_configure() {
 
 	# Prevent a QA warning
 	if has doc ${IUSE} ; then
-		G2CONF="${G2CONF} $(use_enable doc gtk-doc)"
+		grep -q "enable-gtk-doc" configure && G2CONF="${G2CONF} $(use_enable doc gtk-doc)"
 	fi
 
 	# Pass --disable-maintainer-mode when needed
