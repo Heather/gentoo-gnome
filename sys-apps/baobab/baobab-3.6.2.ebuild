@@ -44,9 +44,13 @@ if [[ ${PV} = 9999 ]]; then
 		>=dev-lang/vala-0.17.4:0.18"
 fi
 
-pkg_setup() {
+src_configure() {
 	DOCS="AUTHORS ChangeLog NEWS README"
 	G2CONF="${G2CONF}
 		--disable-schemas-compile"
-	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
+	if [[ ${PV} != 9999 ]]; then
+		G2CONF="${G2CONF} ITSTOOL=$(type -P true)
+			VAPIGEN=$(type -P true)"
+	fi
+	gnome2_src_configure
 }
