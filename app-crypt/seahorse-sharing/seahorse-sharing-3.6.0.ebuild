@@ -5,20 +5,13 @@
 EAPI="4"
 
 inherit gnome2
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
 
 DESCRIPTION="Daemon for PGP public key sharing using DNS-SD and HKP"
 HOMEPAGE="http://projects.gnome.org/seahorse/"
 
 LICENSE="GPL-2"
 SLOT="0"
-if [[ ${PV} = 9999 ]]; then
-	KEYWORDS=""
-else
-	KEYWORDS="~amd64 ~x86"
-fi
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 COMMON_DEPEND="dev-libs/glib:2
