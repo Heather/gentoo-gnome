@@ -71,6 +71,11 @@ if [[ ${PV} = 9999 ]]; then
 fi
 
 pkg_setup() {
+	python_set_active_version 2
+	python_pkg_setup
+}
+
+src_prepare() {
 	DOCS="AUTHORS BUGS ChangeLog MAINTAINERS NEWS README"
 	G2CONF="${G2CONF}
 		--disable-deprecations
@@ -83,11 +88,6 @@ pkg_setup() {
 		$(use_enable zeitgeist)"
 	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
 
-	python_set_active_version 2
-	python_pkg_setup
-}
-
-src_prepare() {
 	gnome2_src_prepare
 
 	use python && python_clean_py-compile_files
