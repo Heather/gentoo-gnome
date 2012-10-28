@@ -21,7 +21,7 @@ if [[ ${PV} = 9999 ]]; then
 else
 	KEYWORDS="~amd64 ~x86"
 fi
-IUSE="avahi +ssh spice +telepathy"
+IUSE="avahi rdp +ssh spice +telepathy"
 
 # cairo used in vinagre-tab
 # gdk-pixbuf used all over the place
@@ -35,6 +35,7 @@ RDEPEND=">=dev-libs/glib-2.28.0:2
 	x11-themes/gnome-icon-theme
 
 	avahi? ( >=net-dns/avahi-0.6.26[dbus,gtk3] )
+	rdp? ( net-misc/rdesktop )
 	ssh? ( >=x11-libs/vte-0.20:2.90 )
 	spice? ( >=net-misc/spice-gtk-0.5[gtk3] )
 	telepathy? (
@@ -43,10 +44,10 @@ RDEPEND=">=dev-libs/glib-2.28.0:2
 "
 DEPEND="${RDEPEND}
 	>=dev-lang/perl-5
-	sys-apps/sed
 	>=dev-util/intltool-0.50
 	>=sys-devel/gettext-0.17
-	virtual/pkgconfig"
+	virtual/pkgconfig
+"
 
 if [[ ${PV} = 9999 ]]; then
 	DEPEND+="
@@ -55,16 +56,17 @@ if [[ ${PV} = 9999 ]]; then
 		gnome-base/gnome-common"
 fi
 
-pkg_setup() {
+src_configure() {
 	DOCS="AUTHORS ChangeLog ChangeLog.pre-git NEWS README"
 	G2CONF="${G2CONF}
 		VALAC=$(type -P valac-0.18)
 		--disable-schemas-compile
-		--enable-rdp
 		$(use_with avahi)
+		$(use_enable rdp)
 		$(use_enable ssh)
 		$(use_enable spice)
 		$(use_with telepathy)"
+	gnome2_src_configure
 }
 
 src_install() {
