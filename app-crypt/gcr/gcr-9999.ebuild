@@ -16,14 +16,16 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2+ LGPL-2+"
 SLOT="0"
-IUSE="debug doc +introspection"
+IUSE="debug +introspection"
 if [[ ${PV} = 9999 ]]; then
+	IUSE="${IUSE} doc"
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~x86-linux ~sparc-solaris ~x86-solaris"
 fi
 
-COMMON_DEPEND=">=app-crypt/gnupg-2
+COMMON_DEPEND="
+	>=app-crypt/gnupg-2
 	>=app-crypt/p11-kit-0.6
 	>=dev-libs/glib-2.32:2
 	>=dev-libs/libgcrypt-1.2.2
@@ -33,40 +35,41 @@ COMMON_DEPEND=">=app-crypt/gnupg-2
 	introspection? ( >=dev-libs/gobject-introspection-1.29 )
 "
 RDEPEND="${COMMON_DEPEND}
-	!<gnome-base/gnome-keyring-3.3"
+	!<gnome-base/gnome-keyring-3.3
+"
 # gcr was part of gnome-keyring until 3.3
 DEPEND="${COMMON_DEPEND}
+	dev-libs/gobject-introspection-common
 	dev-util/gdbus-codegen
+	>=dev-util/gtk-doc-am-1.9
 	>=dev-util/intltool-0.35
 	sys-devel/gettext
 	virtual/pkgconfig
-
-	dev-libs/gobject-introspection-common
-	>=dev-util/gtk-doc-am-1.9
-
-	doc? ( >=dev-util/gtk-doc-1.9 )"
+"
 # eautoreconf needs:
 #	dev-libs/gobject-introspection-common
-#	>=dev-util/gtk-doc-am-1.9
 
-pkg_setup() {
-	DOCS="AUTHORS ChangeLog HACKING NEWS README"
-	G2CONF="${G2CONF}
-		$(use_enable debug)
-		$(use_enable introspection)
-		--disable-update-icon-cache
-		--disable-update-mime"
-}
+if [[ ${PV} = 9999 ]]; then
+	DEPEND="${DEPEND}
+		doc? ( >=dev-util/gtk-doc-1.9 )"
+fi
 
 src_prepare() {
-	# FIXME: failing tests
-	# https://bugzilla.gnome.org/show_bug.cgi?id=682651
-	if use test; then
-		sed -e 's:test-subject-public-key::' \
-			-e 's:test-system-prompt:$(NULL):' \
-			-i gcr/tests/Makefile.am || die "sed failed"
-		[[ ${PV} = 9999 ]] || eautoreconf
+	DOCS="AUTHORS ChangeLog HACKING NEWS README"
+	G2CONF="${G2CONF}
+		$(use_enable introspection)
+		--enable-debug=default
+		--disable-update-icon-cache
+		--disable-update-mime"
+
+	if use debug; then
+		G2CONF="${G2CONF} --enable-debug=yes"
 	fi
+
+	# Disable stupid flag changes
+	sed -e 's/CFLAGS="$CFLAGS -g"//' \
+		-e 's/CFLAGS="$CFLAGS -O0"//' \
+		-i configure.ac configure || die
 
 	gnome2_src_prepare
 }
