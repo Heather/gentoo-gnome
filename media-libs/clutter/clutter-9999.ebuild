@@ -4,7 +4,6 @@
 
 EAPI="4"
 CLUTTER_LA_PUNT="yes"
-WANT_AUTOMAKE="1.11"
 
 # Inherit gnome2 after clutter to download sources from gnome.org
 # since clutter-project.org doesn't provide .xz tarballs
@@ -59,13 +58,14 @@ DEPEND="${RDEPEND}
 	test? ( x11-libs/gdk-pixbuf )"
 
 # Tests fail with both swrast and llvmpipe
-# They pass under r600g, so the bug is in mesa
+# They pass under r600g or i965, so the bug is in mesa
 RESTRICT="test"
 
-pkg_setup() {
+src_prepare() {
 	DOCS="README NEWS ChangeLog*"
 
 	# XXX: Conformance test suite (and clutter itself) does not work under Xvfb
+	# (GLX error blabla)
 	# XXX: Profiling, coverage disabled for now
 	# XXX: What about cex100/egl/osx/wayland/win32 backends?
 	# XXX: evdev/tslib input seem to be experimental?
@@ -89,23 +89,25 @@ pkg_setup() {
 		$(use_enable doc docs)
 		$(use_enable test conformance)
 		$(use_enable test gdk-pixbuf)"
-}
-
-src_prepare() {
-	gnome2_src_prepare
 
 	# We only need conformance tests, the rest are useless for us
 	sed -e 's/^\(SUBDIRS =\).*/\1/g' \
 		-i tests/Makefile.am || die "am tests sed failed"
 	sed -e 's/^\(SUBDIRS =\)[^\]*/\1/g' \
 		-i tests/Makefile.in || die "in tests sed failed"
+
+	gnome2_src_prepare
+}
+
+src_compile() {
+	default
+	if use test; then
+		emake -C tests/conform
+	fi
 }
 
 src_test() {
-	# Run only the conformance tests
-	# The perf tests are useless because we run under sw rendering
-	cd tests/
-	Xemake test conform
+	Xemake check
 }
 
 src_install() {
