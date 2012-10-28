@@ -5,7 +5,7 @@
 EAPI="4"
 
 # Don't define PYTHON_DEPEND: python only needed at build time
-inherit autotools flag-o-matic gnome2-utils pax-utils python virtualx
+inherit autotools check-reqs flag-o-matic gnome2-utils pax-utils python virtualx
 
 MY_P="webkitgtk-${PV}"
 DESCRIPTION="Open source web browser engine"
@@ -61,7 +61,8 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	dev-lang/perl
 	=dev-lang/python-2*
-	virtual/rubygems[ruby_targets_ruby18]
+	|| ( virtual/rubygems[ruby_targets_ruby19]
+	     virtual/rubygems[ruby_targets_ruby18] )
 	sys-devel/bison
 	>=sys-devel/flex-2.5.33
 	sys-devel/gettext
@@ -82,13 +83,25 @@ DEPEND="${RDEPEND}
 
 S="${WORKDIR}/${MY_P}"
 
+CHECKREQS_DISK_BUILD="6G"
+
+pkg_pretend() {
+	if is-flagq "-g*" ; then
+		check-reqs_pkg_pretend
+	fi
+}
+
 pkg_setup() {
+	# Check whether any of the debugging flags is enabled
+	if is-flagq "-g*" ; then
+		check-reqs_pkg_setup
+		einfo "You have at least 6GB of temporary build space available, but "
+		einfo "it may still not be enough, as the total space requirements "
+		einfo "depends on the debugging flags (-ggdb vs -g1) and enabled features."
+	fi
 	# Needed for CodeGeneratorInspector.py
 	python_set_active_version 2
 	python_pkg_setup
-	if is-flagq "-g*" ; then
-		einfo "You need ~23GB of free space to build this package with debugging CFLAGS."
-	fi
 }
 
 src_prepare() {
