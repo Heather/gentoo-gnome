@@ -38,13 +38,13 @@ COMMON_DEPEND=">=dev-libs/glib-2.32:2
 	telepathy? (
 		>=dev-libs/libzeitgeist-0.3.14
 		>=net-libs/telepathy-glib-0.19.0 )
-	tracker? ( >=app-misc/tracker-0.14 )"
-
+	tracker? ( >=app-misc/tracker-0.14 )
+"
 # telepathy-mission-control needed at runtime; it is used by the telepathy
 # backend via telepathy-glib's AccountManager binding.
 RDEPEND="${COMMON_DEPEND}
-	net-im/telepathy-mission-control"
-
+	net-im/telepathy-mission-control
+"
 # folks socialweb backend requires that libsocialweb be built with USE=vala,
 # even when building folks with --disable-vala.
 DEPEND="${COMMON_DEPEND}
@@ -58,12 +58,12 @@ DEPEND="${COMMON_DEPEND}
 	vala? (
 		$(vala_depend)
 		>=net-libs/telepathy-glib-0.13.1[vala]
-		eds? ( >=gnome-extra/evolution-data-server-3.5.4[vala] ) )"
-
+		eds? ( >=gnome-extra/evolution-data-server-3.5.4[vala] ) )
+"
 # the inspect tool requires --enable-vala
 REQUIRED_USE="utils? ( vala )"
 
-pkg_setup() {
+src_prepare() {
 	local vala_version=$(vala_best_api_version)
 	DOCS="AUTHORS ChangeLog NEWS README"
 	# Rebuilding docs needs valadoc, which has no release
@@ -80,9 +80,7 @@ pkg_setup() {
 		--disable-fatal-warnings
 		VALAC=$(type -p valac-${vala_version})
 		VAPIGEN=$(type -p vapigen-${vala_version})"
-}
 
-src_prepare() {
 	# We don't need vala_src_prepare
 	gnome2_src_prepare
 }
@@ -91,5 +89,5 @@ src_test() {
 	# FIXME: eds tests often fails for no good reason
 	#sed -e 's/check: .*/check: /' \
 	#	-i tests/eds/Makefile || die "sed failed"
-	Xemake check
+	dbus-launch Xemake check
 }
