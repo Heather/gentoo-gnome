@@ -4,17 +4,14 @@
 
 EAPI=4
 
-inherit eutils multilib pax-utils versionator
-
-# Create a major/minor combo for our SLOT and executables suffix
-PV_MAJ_MIN=$(get_version_component_range '1-2')
+inherit eutils multilib pax-utils
 
 DESCRIPTION="Streaming media framework"
 HOMEPAGE="http://gstreamer.freedesktop.org/"
 SRC_URI="http://${PN}.freedesktop.org/src/${PN}/${P}.tar.xz"
 
 LICENSE="LGPL-2+"
-SLOT=${PV_MAJ_MIN}
+SLOT="1.0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
 IUSE="+introspection nls +orc test"
 
@@ -67,6 +64,6 @@ src_install() {
 	prune_libtool_files --modules
 
 	# Needed for orc-using gst plugins on hardened/PaX systems, bug #421579
-	use orc && pax-mark -m "${ED}usr/bin/gst-launch-1.0" \
-		"${ED}usr/libexec/gstreamer-1.0/gst-plugin-scanner"
+	use orc && pax-mark -m "${ED}usr/bin/gst-launch-${SLOT}" \
+		"${ED}usr/libexec/gstreamer-${SLOT}/gst-plugin-scanner"
 }
