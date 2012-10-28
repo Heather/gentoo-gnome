@@ -71,7 +71,8 @@ DEPEND="${COMMON_DEPEND}
 # gnome-common needed for eautoreconf
 # gnome-base/gdm does not provide gnome.desktop anymore
 
-pkg_setup() {
+src_configure() {
+	DOCS="AUTHORS ChangeLog NEWS README"
 	G2CONF="${G2CONF}
 		--disable-deprecation-flags
 		--disable-schemas-compile
@@ -80,7 +81,7 @@ pkg_setup() {
 		$(use_enable gconf)
 		$(use_enable ipv6)
 		$(use_enable systemd)"
-	DOCS="AUTHORS ChangeLog NEWS README"
+	gnome2_src_configure
 }
 
 src_install() {
