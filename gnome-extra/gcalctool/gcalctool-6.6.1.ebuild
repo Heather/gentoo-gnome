@@ -28,7 +28,6 @@ COMMON_DEPEND=">=x11-libs/gtk+-3:3
 RDEPEND="${COMMON_DEPEND}
 	!<gnome-extra/gnome-utils-2.3"
 DEPEND="${COMMON_DEPEND}
-	app-text/scrollkeeper
 	>=dev-util/intltool-0.35
 	sys-devel/gettext
 	virtual/pkgconfig"
@@ -38,9 +37,10 @@ if [[ ${PV} = 9999 ]]; then
 		app-text/yelp-tools"
 fi
 
-pkg_setup() {
+src_configure() {
+	DOCS="AUTHORS ChangeLog* NEWS README"
 	G2CONF="${G2CONF}
 		--disable-schemas-compile"
 	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
-	DOCS="AUTHORS ChangeLog* NEWS README"
+	gnome2_src_configure
 }
