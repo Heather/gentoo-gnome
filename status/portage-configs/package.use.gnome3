@@ -1,3 +1,10 @@
 net-libs/gtk-vnc gtk3
 net-libs/farsight2 python
 net-libs/libproxy python
+
+# required by folks via empathy
+gnome-extra/evolution-data-server vala
+# required by nautilus
+gnome-base/gvfs gtk
+# required by gnome-contacts
+dev-libs/folks vala
