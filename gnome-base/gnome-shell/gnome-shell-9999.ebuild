@@ -116,6 +116,11 @@ DEPEND="${COMMON_DEPEND}
 # https://bugs.gentoo.org/show_bug.cgi?id=360413
 
 pkg_setup() {
+	python_set_active_version 2
+	python_pkg_setup
+}
+
+src_prepare() {
 	DOCS="AUTHORS NEWS README"
 	# Don't error out on warnings
 	G2CONF="${G2CONF}
@@ -126,11 +131,7 @@ pkg_setup() {
 		$(use_enable networkmanager)
 		$(use_with systemd)
 		BROWSER_PLUGIN_DIR=${EPREFIX}/usr/$(get_libdir)/nsbrowser/plugins"
-	python_set_active_version 2
-	python_pkg_setup
-}
 
-src_prepare() {
 	# Fix automagic gnome-bluetooth dep, bug #398145
 	epatch "${FILESDIR}/${PN}-3.5.x-bluetooth-flag.patch"
 
@@ -139,11 +140,6 @@ src_prepare() {
 
 	[[ ${PV} != 9999 ]] && eautoreconf
 	gnome2_src_prepare
-
-	# Drop G_DISABLE_DEPRECATED for sanity on glib upgrades; bug #384765
-	# Note: sed Makefile.in because it is generated from several Makefile.ams
-	sed -e 's/-DG_DISABLE_DEPRECATED//g' \
-		-i src/Makefile.in browser-plugin/Makefile.in || die "sed failed"
 }
 
 src_install() {
