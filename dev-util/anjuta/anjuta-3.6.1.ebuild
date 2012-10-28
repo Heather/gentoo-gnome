@@ -21,10 +21,6 @@ SLOT="0"
 KEYWORDS="~amd64 ~ppc ~sparc ~x86 ~x86-fbsd"
 IUSE="debug devhelp doc glade +introspection packagekit subversion test vala"
 
-# FIXME: tests are fragile and may require a specific set of USE flags
-# FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=684761
-RESTRICT="test"
-
 # FIXME: documentation fails to build when USE=test. But why?
 REQUIRED_USE="test? ( !doc )"
 
@@ -52,30 +48,36 @@ COMMON_DEPEND=">=dev-libs/glib-2.32:2
 		>=net-libs/neon-0.28.2
 		>=dev-libs/apr-1
 		>=dev-libs/apr-util-1 )
-	vala? ( $(vala_depend) )"
+	vala? ( $(vala_depend) )
+"
 RDEPEND="${COMMON_DEPEND}
-	packagekit? ( app-admin/packagekit-base )"
+	packagekit? ( app-admin/packagekit-base )
+"
 DEPEND="${COMMON_DEPEND}
-	>=app-text/gnome-doc-utils-0.18
-	>=app-text/scrollkeeper-0.3.14-r2
+	app-text/yelp-tools
 	>=dev-lang/perl-5
+	>=dev-util/gtk-doc-am-1.4
 	>=dev-util/intltool-0.40.1
 	sys-devel/bison
 	sys-devel/flex
 	>=sys-devel/gettext-0.17
 	virtual/pkgconfig
 	!!dev-libs/gnome-build
-	doc? ( >=dev-util/gtk-doc-1.4 )
 	test? (
 		app-text/docbook-xml-dtd:4.1.2
 		app-text/docbook-xml-dtd:4.5 )
 
 	dev-libs/gobject-introspection-common
-	dev-util/gtk-doc-am
-	gnome-base/gnome-common"
+	gnome-base/gnome-common
+"
 # eautoreconf requires: gtk-doc-am, gnome-common, gobject-introspection-common
 
 pkg_setup() {
+	python_set_active_version 2
+	python_pkg_setup
+}
+
+src_prepare() {
 	# COPYING is used in Anjuta's help/about entry
 	DOCS="AUTHORS ChangeLog COPYING FUTURE MAINTAINERS NEWS README ROADMAP THANKS TODO"
 
@@ -94,17 +96,12 @@ pkg_setup() {
 	# Conflicts with -pg in a plugin, bug #266777
 	filter-flags -fomit-frame-pointer
 
-	python_set_active_version 2
-	python_pkg_setup
-}
-
-src_prepare() {
 	# python2.7-configure in Fedora vs. python-configure in Gentoo
 	sed -e 's:$PYTHON-config:$PYTHON$PYTHON_VERSION-config:g' \
 		-i plugins/am-project/tests/anjuta.lst || die "sed failed"
 
 	# https://bugzilla.gnome.org/show_bug.cgi?id=684758
-	epatch "${FILESDIR}/${P}-cxx-check.patch"
+	epatch "${FILESDIR}/${PN}-3.5.91-cxx-check.patch"
 	eautoreconf
 
 	use vala && vala_src_prepare
