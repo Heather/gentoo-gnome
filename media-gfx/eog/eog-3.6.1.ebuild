@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit eutils gnome2
+inherit gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -24,6 +24,8 @@ else
 	KEYWORDS="~amd64 ~x86 ~x86-fbsd"
 fi
 
+REQUIRED_USE="exif? ( jpeg )"
+
 RDEPEND=">=x11-libs/gtk+-3.3.6:3[introspection,X]
 	>=dev-libs/glib-2.31.0:2
 	>=dev-libs/libxml2-2:2
@@ -36,9 +38,7 @@ RDEPEND=">=x11-libs/gtk+-3.3.6:3[introspection,X]
 	x11-libs/gdk-pixbuf:2[jpeg?,tiff?]
 	x11-libs/libX11
 
-	exif? (
-		>=media-libs/libexif-0.6.14
-		virtual/jpeg:0 )
+	exif? ( >=media-libs/libexif-0.6.14 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.3 )
 	jpeg? ( virtual/jpeg:0 )
 	lcms? ( media-libs/lcms:2 )
@@ -56,7 +56,7 @@ if [[ ${PV} = 9999 ]]; then
 		doc? ( >=dev-util/gtk-doc-1.10 )"
 fi
 
-pkg_setup() {
+src_configure() {
 	G2CONF="${G2CONF}
 		$(use_enable introspection)
 		$(use_with jpeg libjpeg)
@@ -67,10 +67,5 @@ pkg_setup() {
 		--disable-schemas-compile"
 	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
 	DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README THANKS TODO"
-}
-
-src_prepare() {
-	# https://bugzilla.gnome.org/show_bug.cgi?id=685923
-	epatch "${FILESDIR}/${PN}-3.6.0-eog.desktop.patch"
-	gnome2_src_prepare
+	gnome2_src_configure
 }
