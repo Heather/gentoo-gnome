@@ -7,8 +7,9 @@
 #
 
 # Alexandre Rostovtrev <tetromino@gentoo.org> (28 Oct 2011)
-# Mask this until we have gst-plugins-{good,bad}:1.0 and clutter-gst:2.0
+# Mask this until we have gst-plugins-{good,bad}:1.0
 # in place
+>=media-libs/clutter-gst-1.9
 =gnome-extra/sushi-3.6*
 
 # Nirbheek Chauhan <nirbheek@gentoo.org> (11 Jan 2011)
