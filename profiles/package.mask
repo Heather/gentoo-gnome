@@ -6,6 +6,11 @@
 # NOTE: Please add your entry at the top!
 #
 
+# Alexandre Rostovtrev <tetromino@gentoo.org> (28 Oct 2011)
+# Mask this until we have gst-plugins-{good,bad}:1.0 and clutter-gst:2.0
+# in place
+=gnome-extra/sushi-3.6*
+
 # Nirbheek Chauhan <nirbheek@gentoo.org> (11 Jan 2011)
 # Don't use this, use >=gnome-media-2.32.0-r300 instead
 # we can't use this until everything that uses libgnome-media-profiles.so is
