@@ -188,9 +188,14 @@ src_configure() {
 		--with-gtk=3.0
 		--enable-dependency-tracking
 		--with-gstreamer=0.10
-		RUBY=$(type -P ruby18)
 		$(use aqua && echo "--with-font-backend=pango --with-target=quartz")"
 		# Aqua support in gtk3 is untested
+
+	if has_version "virtual/rubygems[ruby_targets_ruby19]"; then
+		myconf="${myconf} RUBY=$(type -P ruby19)"
+	else
+		myconf="${myconf} RUBY=$(type -P ruby18)"
+	fi
 
 	econf ${myconf}
 }
