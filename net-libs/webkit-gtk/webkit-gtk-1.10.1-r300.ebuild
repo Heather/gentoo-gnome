@@ -174,10 +174,18 @@ src_configure() {
 		$(use_enable webgl)
 		--with-gtk=3.0
 		--enable-dependency-tracking
+		--with-gstreamer=0.10
+		RUBY=$(type -P ruby18)
 		$(use aqua && echo "--with-font-backend=pango --with-target=quartz")"
 		# Aqua support in gtk3 is untested
 
 	econf ${myconf}
+}
+
+src_compile() {
+	# Avoid parallel make failure with -j9
+	emake DerivedSources/WebCore/JSNode.h
+	default
 }
 
 src_test() {
