@@ -15,22 +15,22 @@ HOMEPAGE="http://www.gnome.org/projects/gnome-power-manager/"
 
 LICENSE="GPL-2"
 SLOT="0"
+IUSE="test"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 fi
-IUSE="test"
 
-# FIXME: Interactive testsuite (upstream ? I'm so...pessimistic)
-RESTRICT="test"
-
-COMMON_DEPEND=">=dev-libs/glib-2.31.10
+COMMON_DEPEND="
+	>=dev-libs/glib-2.31.10
 	>=x11-libs/gtk+-3.3.8:3
 	>=x11-libs/cairo-1.0.0
-	>=sys-power/upower-0.9.1"
+	>=sys-power/upower-0.9.1
+"
 RDEPEND="${COMMON_DEPEND}
-	x11-themes/gnome-icon-theme-symbolic"
+	x11-themes/gnome-icon-theme-symbolic
+"
 DEPEND="${COMMON_DEPEND}
 	app-text/docbook-sgml-dtd:4.1
 	app-text/docbook-sgml-utils
@@ -40,21 +40,20 @@ DEPEND="${COMMON_DEPEND}
 	sys-devel/gettext
 	x11-proto/randrproto
 	virtual/pkgconfig
-	test? ( sys-apps/dbus )"
+	test? ( sys-apps/dbus )
+"
 
 # docbook-sgml-utils and docbook-sgml-dtd-4.1 used for creating man pages
 # (files under ${S}/man).
 # docbook-xml-dtd-4.4 and -4.1.2 are used by the xml files under ${S}/docs.
 
-pkg_setup() {
+src_prepare() {
+	DOCS="AUTHORS ChangeLog NEWS README"
 	G2CONF="${G2CONF}
 		$(use_enable test tests)
 		--enable-compile-warnings=minimum
 		--disable-schemas-compile"
-	DOCS="AUTHORS ChangeLog NEWS README"
-}
 
-src_prepare() {
 	gnome2_src_prepare
 
 	# Drop debugger CFLAGS from configure
