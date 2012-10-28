@@ -37,20 +37,20 @@ RDEPEND="
 	systemd? ( >=sys-apps/systemd-31 )
 "
 DEPEND="${RDEPEND}
-	virtual/pkgconfig
 	>=dev-util/intltool-0.35
 	sys-devel/gettext
-	doc? (
-		app-text/xmlto
-		app-text/docbook-xml-dtd:4.1.2
-		app-text/docbook-xml-dtd:4.4 )
+	virtual/pkgconfig
 	x11-proto/xextproto
 	x11-proto/randrproto
 	x11-proto/scrnsaverproto
 	x11-proto/xf86miscproto
+	doc? (
+		app-text/xmlto
+		app-text/docbook-xml-dtd:4.1.2
+		app-text/docbook-xml-dtd:4.4 )
 "
 
-pkg_setup() {
+src_prepare() {
 	DOCS="AUTHORS ChangeLog HACKING NEWS README"
 	G2CONF="${G2CONF}
 		$(use_enable doc docbook-docs)
@@ -66,9 +66,7 @@ pkg_setup() {
 	# consolekit's messages over dbus.
 	# xscreensaver and custom screensaver capability removed
 	# poke and inhibit commands were also removed, bug 579430
-}
 
-src_prepare() {
 	epatch_user
 	# Regenerate marshaling code for <glib-2.31 compat
 	rm -v src/gs-marshal.{c,h} || die

@@ -15,7 +15,7 @@ HOMEPAGE="http://live.gnome.org/GnomeScreensaver"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="debug doc pam"
+IUSE="debug doc pam systemd"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -38,33 +38,41 @@ RDEPEND="
 	x11-libs/libXScrnSaver
 	x11-libs/libXxf86misc
 	x11-libs/libXxf86vm
+	x11-themes/gnome-icon-theme-symbolic
 
 	pam? ( virtual/pam )
+	systemd? ( >=sys-apps/systemd-31 )
 "
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
 	sys-devel/gettext
 	virtual/pkgconfig
-	doc? (
-		app-text/xmlto
-		~app-text/docbook-xml-dtd-4.1.2
-		~app-text/docbook-xml-dtd-4.4 )
 	x11-proto/xextproto
 	x11-proto/randrproto
 	x11-proto/scrnsaverproto
 	x11-proto/xf86miscproto
+	doc? (
+		app-text/xmlto
+		app-text/docbook-xml-dtd:4.1.2
+		app-text/docbook-xml-dtd:4.4 )
 "
 
-pkg_setup() {
+src_prepare() {
 	DOCS="AUTHORS ChangeLog HACKING NEWS README"
 	G2CONF="${G2CONF}
 		$(use_enable doc docbook-docs)
 		$(use_enable pam locking)
+		$(use_with systemd)
 		--with-mit-ext
 		--with-pam-prefix=/etc
 		--with-xf86gamma-ext
 		--with-kbd-layout-indicator
 		--disable-schemas-compile"
+	# Do not use --without-console-kit, it would provide no benefit: there is
+	# no build-time or run-time check for consolekit, $PN merely listens to
+	# consolekit's messages over dbus.
 	# xscreensaver and custom screensaver capability removed
 	# poke and inhibit commands were also removed, bug 579430
+
+	gnome2_src_prepare
 }
