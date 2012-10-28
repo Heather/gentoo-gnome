@@ -61,7 +61,7 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	dev-lang/perl
 	=dev-lang/python-2*
-	virtual/rubygems
+	virtual/rubygems[ruby_targets_ruby18]
 	sys-devel/bison
 	>=sys-devel/flex-2.5.33
 	sys-devel/gettext
