@@ -62,7 +62,7 @@ fi
 # FIXME: run test-suite with files on live file-system
 RESTRICT="test"
 
-pkg_setup() {
+src_configure() {
 	# Always enable tests since they are check_PROGRAMS anyway
 	G2CONF="${G2CONF}
 		--disable-static
@@ -72,6 +72,7 @@ pkg_setup() {
 		$(use_enable packagekit)
 		$(use_enable raw exiv)"
 	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
+	gnome2_src_configure
 }
 
 pkg_postinst() {
