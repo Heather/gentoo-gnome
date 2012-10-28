@@ -3,6 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/media-video/cheese/cheese-3.4.2.ebuild,v 1.1 2012/05/24 08:04:54 tetromino Exp $
 
 EAPI="4"
+GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2 virtualx
@@ -15,82 +16,72 @@ HOMEPAGE="http://www.gnome.org/projects/cheese/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="doc +introspection sendto test"
+IUSE="+introspection sendto test"
 if [[ ${PV} = 9999 ]]; then
+	IUSE="${IUSE} doc"
 	KEYWORDS=""
 else
 	KEYWORDS="~amd64 ~x86"
 fi
 
 COMMON_DEPEND="
-	>=dev-libs/glib-2.28.0:2
+	>=dev-libs/glib-2.28:2
 	>=dev-libs/libgee-0.6.3:0
-	>=x11-libs/gtk+-2.99.4:3[introspection?]
+	>=x11-libs/gtk+-3.4.4:3[introspection?]
 	>=x11-libs/cairo-1.10
 	>=x11-libs/pango-1.28.0
 	>=sys-fs/udev-171[gudev]
 	>=gnome-base/gnome-desktop-2.91.6:3
 	>=gnome-base/librsvg-2.32.0:2
 	>=media-libs/libcanberra-0.26[gtk3]
-	>=media-libs/clutter-1.6.1:1.0[introspection?]
+	>=media-libs/clutter-1.10:1.0[introspection?]
 	>=media-libs/clutter-gtk-0.91.8:1.0
-	>=media-libs/clutter-gst-1.0.0:1.0
+	>=media-libs/clutter-gst-1.9:2.0
 
 	media-video/gnome-video-effects
 	x11-libs/gdk-pixbuf:2[jpeg,introspection?]
-	x11-libs/mx
 	x11-libs/libX11
 	x11-libs/libXtst
 
-	>=media-libs/gstreamer-0.10.32:0.10[introspection?]
-	>=media-libs/gst-plugins-base-0.10.32:0.10[introspection?]
+	media-libs/gstreamer:1.0[introspection?]
+	media-libs/gst-plugins-base:1.0[introspection?,ogg,pango,theora,vorbis,X]
 
 	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )"
 RDEPEND="${COMMON_DEPEND}
-	>=media-libs/gst-plugins-bad-0.10.19
-	>=media-libs/gst-plugins-good-0.10.16:0.10
-	>=media-plugins/gst-plugins-ogg-0.10.20:0.10
-	>=media-plugins/gst-plugins-pango-0.10.20:0.10
-	>=media-plugins/gst-plugins-theora-0.10.20:0.10
-	>=media-plugins/gst-plugins-vorbis-0.10.20:0.10
+	media-libs/gst-plugins-bad:1.0
+	media-libs/gst-plugins-good:1.0
 
-	media-plugins/gst-plugins-jpeg:0.10
-	media-plugins/gst-plugins-v4l2:0.10
-	media-plugins/gst-plugins-vp8:0.10
-
-	|| ( media-plugins/gst-plugins-x:0.10
-		media-plugins/gst-plugins-xvideo:0.10 )
+	media-plugins/gst-plugins-jpeg:1.0
+	media-plugins/gst-plugins-v4l2:1.0
+	media-plugins/gst-plugins-vp8:1.0
 
 	sendto? ( >=gnome-extra/nautilus-sendto-2.91 )"
 DEPEND="${COMMON_DEPEND}
-	virtual/pkgconfig
-	>=dev-util/intltool-0.40
-
 	app-text/docbook-xml-dtd:4.3
 	dev-libs/libxml2:2
+	>=dev-util/gtk-doc-1.14
+	>=dev-util/intltool-0.50
 	dev-util/itstool
+	virtual/pkgconfig
 	x11-proto/xf86vidmodeproto
-
-	doc? ( >=dev-util/gtk-doc-1.14 )
 	test? ( dev-libs/glib:2[utils] )"
 
 if [[ ${PV} = 9999 ]]; then
-	DEPEND+=" dev-lang/vala:0.18"
+	DEPEND="${DEPEND}
+		dev-lang/vala:0.18
+		doc? ( >=dev-util/gtk-doc-1.14 )"
 fi
 
-pkg_setup() {
+src_configure() {
+	DOCS="AUTHORS ChangeLog NEWS README"
 	G2CONF="${G2CONF}
-		VALAC=$(type -p valac-0.18)
+		GST_INSPECT=$(type -P true)
+		VALAC=$(type -P valac-0.18)
 		$(use_enable introspection)
 		--disable-lcov
 		--disable-static"
-	DOCS="AUTHORS ChangeLog NEWS README"
-}
+	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
 
-src_configure() {
-	# Work around sandbox violations when FEATURES=-userpriv caused by
-	# gst-inspect-0.10 (bug #410061)
-	unset DISPLAY
 	gnome2_src_configure
 }
 
