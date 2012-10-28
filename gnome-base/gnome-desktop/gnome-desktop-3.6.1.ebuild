@@ -57,19 +57,6 @@ fi
 # Includes X11/extensions/Xrandr.h that includes randr.h from randrproto (and
 # eventually libXrandr shouldn't RDEPEND on randrproto)
 
-pkg_setup() {
-	DOCS="AUTHORS ChangeLog HACKING NEWS README"
-	# Note: do *not* use "--with-pnp-ids-path" argument. Otherwise, the pnp.ids
-	# file (needed by other packages such as >=gnome-settings-daemon-3.1.2)
-	# will not get installed in ${pnpdatadir} (/usr/share/libgnome-desktop-3.0).
-	G2CONF="${G2CONF}
-		--disable-static
-		--with-gnome-distributor=Gentoo
-		$(use_enable doc desktop-docs)
-		$(use_enable introspection)"
-	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
-}
-
 src_unpack() {
 	gnome2_src_unpack
 
@@ -90,6 +77,24 @@ src_unpack() {
 		ln -sf "${WORKDIR}/hwdata/pnp.ids" "${S}/libgnome-desktop/" ||
 			die "ln -sf failed"
 	fi
+}
+
+src_prepare() {
+	DOCS="AUTHORS ChangeLog HACKING NEWS README"
+	# Note: do *not* use "--with-pnp-ids-path" argument. Otherwise, the pnp.ids
+	# file (needed by other packages such as >=gnome-settings-daemon-3.1.2)
+	# will not get installed in ${pnpdatadir} (/usr/share/libgnome-desktop-3.0).
+	G2CONF="${G2CONF}
+		--disable-static
+		--with-gnome-distributor=Gentoo
+		$(use_enable doc desktop-docs)
+		$(use_enable introspection)"
+	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
+
+	# FIXME: the tarball provides an empty file
+	cp "${FILESDIR}"/pnp.ids.r1 "${S}"/libgnome-desktop/pnp.ids || die
+
+	gnome2_src_prepare
 }
 
 pkg_preinst() {
