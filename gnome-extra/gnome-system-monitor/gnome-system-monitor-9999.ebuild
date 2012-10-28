@@ -46,11 +46,11 @@ if [[ ${PV} = 9999 ]]; then
 		app-text/yelp-tools"
 fi
 
-pkg_setup() {
+src_configure() {
 	DOCS="AUTHORS ChangeLog NEWS README"
 	G2CONF="${G2CONF}
 		--disable-schemas-compile
-		--disable-scrollkeeper
 		$(use_enable systemd)"
 	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
+	gnome2_src_configure
 }
