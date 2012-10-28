@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit autotools eutils gnome2
+inherit gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -60,7 +60,8 @@ DEPEND="${RDEPEND}
 # bug #394611; tight encoding requires zlib encoding
 REQUIRED_USE="jpeg? ( zlib )"
 
-pkg_setup() {
+src_prepare() {
+	DOCS="AUTHORS ChangeLog* NEWS README"
 	G2CONF="${G2CONF}
 		--disable-schemas-compile
 		--enable-http-server
@@ -75,17 +76,10 @@ pkg_setup() {
 		$(use_with ssl gnutls)
 		$(use_with telepathy)
 		$(use_with zlib)"
-	DOCS="AUTHORS ChangeLog* NEWS README"
-}
-
-src_prepare() {
-	# https://bugzilla.gnome.org/show_bug.cgi?id=685171
-	epatch "${FILESDIR}/${P}-secret-deps.patch"
 
 	# <glib-2.31 compatibility
 	if [[ ${PV} != 9999 ]]; then
 		rm -v server/vino-marshal.{c,h} || die
 	fi
-	eautoreconf
 	gnome2_src_prepare
 }

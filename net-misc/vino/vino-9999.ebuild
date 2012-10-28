@@ -60,7 +60,8 @@ DEPEND="${RDEPEND}
 # bug #394611; tight encoding requires zlib encoding
 REQUIRED_USE="jpeg? ( zlib )"
 
-pkg_setup() {
+src_prepare() {
+	DOCS="AUTHORS ChangeLog* NEWS README"
 	G2CONF="${G2CONF}
 		--disable-schemas-compile
 		--enable-http-server
@@ -75,10 +76,7 @@ pkg_setup() {
 		$(use_with ssl gnutls)
 		$(use_with telepathy)
 		$(use_with zlib)"
-	DOCS="AUTHORS ChangeLog* NEWS README"
-}
 
-src_prepare() {
 	# <glib-2.31 compatibility
 	if [[ ${PV} != 9999 ]]; then
 		rm -v server/vino-marshal.{c,h} || die
