@@ -6,11 +6,6 @@
 # NOTE: Please add your entry at the top!
 #
 
-# Gilles Dartiguelongue <eva@gentoo.org> (29 Oct 2012)
-# Broken build
->=media-libs/harfbuzz-0.9
->=x11-libs/pango-1.32.1
-
 # Alexandre Rostovtrev <tetromino@gentoo.org> (28 Oct 2012)
 # Mask this until we have gst-plugins-{good,bad}:1.0
 # in place
