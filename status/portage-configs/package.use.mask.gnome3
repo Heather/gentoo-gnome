@@ -5,3 +5,6 @@ app-misc/tracker eds
 # Mask until we get gstreamer-1.0
 gnome-base/gnome-control-center v4l
 gnome-extra/gnome-contacts v4l
+
+# Mask until build with icu-50 is fixed
+media-libs/harfbuzz icu

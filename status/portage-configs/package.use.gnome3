@@ -8,3 +8,6 @@ gnome-extra/evolution-data-server vala
 gnome-base/gvfs gtk
 # required by gnome-contacts
 dev-libs/folks vala
+
+# broken with icu-50
+media-libs/harfbuzz -icu
