@@ -1,0 +1,32 @@
+From 2005d1c41f82f4a9508ef6218da94bb208a4e57d Mon Sep 17 00:00:00 2001
+From: Gilles Dartiguelongue <eva@gentoo.org>
+Date: Mon, 29 Oct 2012 22:04:30 +0100
+Subject: [PATCH 2/4] Add build configuration summary
+
+---
+ configure.ac | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/configure.ac b/configure.ac
+index 93b659b..ae462ad 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -263,3 +263,15 @@ test/shaping/Makefile
+ ])
+ 
+ AC_OUTPUT
++
++AC_MSG_NOTICE([
++
++Build configuration:
++	glib:         ${have_glib}
++	cairo:        ${have_cairo}
++	icu:          ${HAVE_ICU}
++	graphite:     ${have_graphite}
++	freetype:     ${have_freetype}
++	Core text:    ${have_coretext}
++
++])
+-- 
+1.7.12.4
+

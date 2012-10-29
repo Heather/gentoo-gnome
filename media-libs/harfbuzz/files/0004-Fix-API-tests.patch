@@ -1,0 +1,39 @@
+From c1bf3c22a0fccabd1646c7ed556880511e3fec8e Mon Sep 17 00:00:00 2001
+From: Gilles Dartiguelongue <eva@gentoo.org>
+Date: Mon, 29 Oct 2012 22:32:11 +0100
+Subject: [PATCH 4/4] Fix API tests
+
+---
+ src/check-exported-symbols.sh | 2 +-
+ src/check-internal-symbols.sh | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/check-exported-symbols.sh b/src/check-exported-symbols.sh
+index a7d6f9b..a8625ed 100755
+--- a/src/check-exported-symbols.sh
++++ b/src/check-exported-symbols.sh
+@@ -24,7 +24,7 @@ for def in $defs; do
+ 		echo "Checking that $so has the same symbol list as $def"
+ 		{
+ 			echo EXPORTS
+-			nm "$so" | grep ' [BCDGINRSTVW] ' | grep -v ' T _fini\>\| T _init\>' | cut -d' ' -f3
++			nm "$so" | grep ' [BCDGINRSTVW] ' | grep -v -E '( T _(fini|init)| D _edata| B _(end|_bss_start))' | cut -d' ' -f3
+ 			stat=1
+ 			# cheat: copy the last line from the def file!
+ 			tail -n1 "$def"
+diff --git a/src/check-internal-symbols.sh b/src/check-internal-symbols.sh
+index f48d144..9dfe7c9 100755
+--- a/src/check-internal-symbols.sh
++++ b/src/check-internal-symbols.sh
+@@ -19,7 +19,7 @@ for suffix in .so; do
+ 	so=`echo .libs/libharfbuzz$suffix`
+ 	if test -f "$so"; then
+ 		echo "Checking that we are not exposing internal symbols"
+-		if nm "$so" | grep ' [BCDGINRSTVW] ' | grep -v ' T _fini\>\| T _init\>\| T hb_'; then
++		if nm "$so" | grep ' [BCDGINRSTVW] ' | grep -v -E '( T _(fini|init)| D _edata| B _(end|_bss_start)| T hb_)'; then
+ 			echo "Ouch, internal symbols exposed"
+ 			stat=1
+ 		fi
+-- 
+1.7.12.4
+
