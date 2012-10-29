@@ -56,19 +56,25 @@ src_prepare() {
 	gnome2_src_prepare
 }
 
-pkg_postinst() {
-	einfo "Generating modules listing..."
+src_install() {
+	gnome2_src_install
 
+	local PANGO_CONFDIR="${EROOT}/etc/pango/${CHOST}"
+	dodir "${PANGO_CONFDIR}"
+	keepdir "${PANGO_CONFDIR}"
+}
+
+pkg_postinst() {
+	gnome2_pkg_postinst
+
+	einfo "Generating modules listing..."
 	local PANGO_CONFDIR="${EROOT}/etc/pango/${CHOST}"
 	local pango_conf="${PANGO_CONFDIR}/pango.modules"
 	local tmp_file=$(mktemp -t tmp_pango_ebuild.XXXXXXXXXX)
 
-	dodir "${PANGO_CONFDIR}"
-	keepdir "${PANGO_CONFDIR}"
-
 	# be atomic!
 	if pango-querymodules --system \
-		"${EROOT}"usr/$(get_libdir)/pango/1.6.0/modules/*$(get_modname) \
+		"${EROOT}"usr/$(get_libdir)/pango/1.8.0/modules/*$(get_modname) \
 			> "${tmp_file}"; then
 		cat "${tmp_file}" > "${pango_conf}" || {
 			rm "${tmp_file}"; die; }
