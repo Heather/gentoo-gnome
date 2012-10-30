@@ -115,6 +115,23 @@ if [[ ${PV} = 9999 ]]; then
 fi
 
 pkg_setup() {
+	enewgroup gdm
+	enewgroup video # Just in case it hasn't been created yet
+	enewuser gdm -1 -1 /var/lib/gdm gdm,video
+
+	# For compatibility with certain versions of nvidia-drivers, etc., need to
+	# ensure that gdm user is in the video group
+	if ! egetent group video | grep -q gdm; then
+		# FIXME XXX: is this at all portable, ldap-safe, etc.?
+		# XXX: egetent does not have a 1-argument form, so we can't use it to
+		# get the list of gdm's groups
+		local g=$(groups gdm)
+		elog "Adding user gdm to video group"
+		usermod -G video,${g// /,} gdm || die "Adding user gdm to video group failed"
+	fi
+}
+
+src_prepare() {
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
 
 	# PAM is the only auth scheme supported
@@ -142,23 +159,6 @@ pkg_setup() {
 		$(use_with xinerama)"
 	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
 
-	enewgroup gdm
-	enewgroup video # Just in case it hasn't been created yet
-	enewuser gdm -1 -1 /var/lib/gdm gdm,video
-
-	# For compatibility with certain versions of nvidia-drivers, etc., need to
-	# ensure that gdm user is in the video group
-	if ! egetent group video | grep -q gdm; then
-		# FIXME XXX: is this at all portable, ldap-safe, etc.?
-		# XXX: egetent does not have a 1-argument form, so we can't use it to
-		# get the list of gdm's groups
-		local g=$(groups gdm)
-		elog "Adding user gdm to video group"
-		usermod -G video,${g// /,} gdm || die "Adding user gdm to video group failed"
-	fi
-}
-
-src_prepare() {
 	# GDM grabs VT2 instead of VT7, bug 261339, bug 284053, bug 288852
 	# XXX: We can now pass a hard-coded initial value; temporary fix
 	#epatch "${FILESDIR}/${PN}-2.32.0-fix-vt-problems.patch"
@@ -186,7 +186,6 @@ src_prepare() {
 
 	if [[ ${PV} != 9999 ]]; then
 		mkdir -p "${S}"/m4
-		intltoolize --force --copy --automake || die "intltoolize failed"
 		eautoreconf
 	fi
 
@@ -232,11 +231,6 @@ pkg_postinst() {
 		[[ ! -e "${d}" ]] || chown -R gdm:gdm "${d}" || ret=1
 	done
 	eend ${ret}
-
-	ewarn
-	ewarn "This is an EXPERIMENTAL release, please bear with its bugs and"
-	ewarn "visit us on #gentoo-desktop if you have problems."
-	ewarn
 
 	elog "To make GDM start at boot, edit /etc/conf.d/xdm"
 	elog "and then execute 'rc-update add xdm default'."
