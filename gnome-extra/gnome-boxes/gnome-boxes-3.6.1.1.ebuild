@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -22,34 +22,40 @@ else
 	KEYWORDS="~amd64" # qemu-kvm[spice] is 64bit-only
 fi
 
-# CHECK: We're hard-depending on qemu-kvm[spice]. Does app-emulation/qemu
-# support spice or not?
 # NOTE: sys-fs/* stuff is called via exec()
 RDEPEND="
 	>=dev-libs/libxml2-2.7.8:2
 	>=sys-fs/udev-165[gudev]
 	>=dev-libs/glib-2.29.90:2
 	>=dev-libs/gobject-introspection-0.9.6
-	>=sys-libs/libosinfo-0.1.1
-	app-emulation/qemu-kvm[spice]
+	>=sys-libs/libosinfo-0.2
+	app-emulation/qemu[spice]
 	>=app-emulation/libvirt-0.9.3[libvirtd,qemu]
-	>=app-emulation/libvirt-glib-0.0.7
-	>=x11-libs/gtk+-3.3.5:3
+	>=app-emulation/libvirt-glib-0.1.2
+	>=x11-libs/gtk+-3.5.5:3
 	>=net-libs/gtk-vnc-0.4.4[gtk3]
-	>=net-misc/spice-gtk-0.9[gtk3]
+	>=net-misc/spice-gtk-0.12.101[gtk3]
 	>=app-misc/tracker-0.14[iso]
+
+	>=media-libs/clutter-gtk-1.3.2:1.0
+	>=media-libs/clutter-1.11.14:1.0
+	>=sys-apps/util-linux-2.20
+	>=net-libs/libsoup-2.38:2.4
 
 	sys-fs/fuse
 	sys-fs/fuseiso
-	sys-fs/mtools"
+	sys-fs/mtools
+	!bindist? ( gnome-extra/gnome-boxes-nonfree )
+"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
 	>=sys-devel/gettext-0.17
-	virtual/pkgconfig"
+	virtual/pkgconfig
+"
 
 if [[ ${PV} = 9999 ]]; then
 	DEPEND="${DEPEND}
-		>=dev-lang/vala-0.14.0:0.14
+		>=dev-lang/vala-0.17.2:0.18[vapigen]
 		sys-libs/libosinfo[introspection,vala]
 		app-emulation/libvirt-glib[introspection,vala]
 		net-libs/gtk-vnc[introspection,vala]
@@ -65,12 +71,15 @@ pkg_pretend() {
 	fi
 }
 
-pkg_setup() {
+src_configure() {
 	DOCS="AUTHORS README NEWS THANKS TODO"
-	G2CONF="--disable-schemas-compile
+	G2CONF="${G2CONF}
+		--disable-schemas-compile
 		--disable-strict-cc
-		$(use_enable !bindist logos)
-		VALAC=$(type -P valac-0.14)"
+		VALAC=$(type -P valac-0.18)
+		VAPIGEN=$(type -P vapigen-0.18)
+	"
+	gnome2_src_configure
 }
 
 pkg_postinst() {
