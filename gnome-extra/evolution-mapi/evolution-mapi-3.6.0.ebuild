@@ -16,7 +16,7 @@ HOMEPAGE="http://projects.gnome.org/evolution/"
 LICENSE="GPL-2"
 
 SLOT="1.0"
-IUSE="doc"
+IUSE=""
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -27,24 +27,25 @@ fi
 RDEPEND="
 	>=mail-client/evolution-${PV}:2.0
 	>=gnome-extra/evolution-data-server-${PV}
-	>=dev-libs/glib-2.16.1:2
+	>=dev-libs/glib-2.32:2
 	>=x11-libs/gtk+-2.99.2:3
-	>=gnome-base/gconf-2
-	>=net-libs/libmapi-0.9"
+	>=net-libs/libmapi-1
+"
 DEPEND="${RDEPEND}
+	>=dev-util/gtk-doc-am-1.9
 	>=dev-util/intltool-0.35.5
 	sys-devel/gettext
 	virtual/pkgconfig
-	doc? ( >=dev-util/gtk-doc-1.9 )"
-
-G2CONF="${G2CONF}
-	--disable-static"
-DOCS="AUTHORS ChangeLog NEWS README"
+"
 
 src_prepare() {
-	gnome2_src_prepare
+	DOCS="AUTHORS ChangeLog NEWS README"
+	G2CONF="${G2CONF}
+		--disable-static"
 
 	# FIXME: Fix compilation flags crazyness
 	sed 's/^\(AM_CPPFLAGS="\)$WARNING_FLAGS/\1/' \
 		-i configure.ac configure || die "sed 1 failed"
+
+	gnome2_src_prepare
 }
