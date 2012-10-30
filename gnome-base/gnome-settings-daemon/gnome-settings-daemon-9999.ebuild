@@ -58,8 +58,10 @@ COMMON_DEPEND="
 		>=dev-libs/nss-3.11.2 )
 	systemd? ( >=sys-apps/systemd-31 )
 	udev? ( sys-fs/udev[gudev] )
-	wacom? ( >=dev-libs/libwacom-0.6
-		x11-drivers/xf86-input-wacom )"
+	wacom? (
+		>=dev-libs/libwacom-0.6
+		x11-drivers/xf86-input-wacom )
+"
 # Themes needed by g-s-d, gnome-shell, gtk+:3 apps to work properly
 # <gnome-color-manager-3.1.1 has file collisions with g-s-d-3.1.x
 # <gnome-power-manager-3.1.3 has file collisions with g-s-d-3.1.x
@@ -72,7 +74,8 @@ RDEPEND="${COMMON_DEPEND}
 	!<gnome-extra/gnome-color-manager-3.1.1
 	!<gnome-extra/gnome-power-manager-3.1.3
 
-	!systemd? ( sys-auth/consolekit )"
+	!systemd? ( sys-auth/consolekit )
+"
 # xproto-7.0.15 needed for power plugin
 DEPEND="${COMMON_DEPEND}
 	cups? ( sys-apps/sed )
@@ -82,9 +85,10 @@ DEPEND="${COMMON_DEPEND}
 	virtual/pkgconfig
 	x11-proto/inputproto
 	x11-proto/xf86miscproto
-	>=x11-proto/xproto-7.0.15"
+	>=x11-proto/xproto-7.0.15
+"
 
-pkg_setup() {
+src_prepare() {
 	# README is empty
 	DOCS="AUTHORS NEWS ChangeLog MAINTAINERS"
 	G2CONF="${G2CONF}
@@ -101,9 +105,7 @@ pkg_setup() {
 		$(use_enable systemd)
 		$(use_enable udev gudev)
 		$(use_enable wacom)"
-}
 
-src_prepare() {
 	# https://bugzilla.gnome.org/show_bug.cgi?id=621836
 	# Apparently this change severely affects touchpad usability for some
 	# people, so revert it if USE=short-touchpad-timeout.
@@ -121,11 +123,4 @@ src_prepare() {
 
 src_test() {
 	Xemake check
-}
-
-src_install() {
-	gnome2_src_install
-
-	echo 'GSETTINGS_BACKEND="dconf"' >> 51gsettings-dconf
-	doenvd 51gsettings-dconf
 }
