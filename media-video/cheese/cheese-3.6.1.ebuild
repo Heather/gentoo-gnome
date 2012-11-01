@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2 virtualx
+inherit eutils gnome2 multilib virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -94,4 +94,16 @@ src_compile() {
 
 src_test() {
 	Xemake check
+}
+
+pkg_preinst() {
+	gnome2_pkg_preinst
+	preserve_old_lib /usr/$(get_libdir)/libcheese.so.3 \
+		/usr/$(get_libdir)/libcheese-gtk.so.21
+}
+
+pkg_postinst() {
+	gnome2_pkg_postinst
+	preserve_old_lib_notify /usr/$(get_libdir)/libcheese.so.3 \
+		/usr/$(get_libdir)/libcheese-gtk.so.21
 }
