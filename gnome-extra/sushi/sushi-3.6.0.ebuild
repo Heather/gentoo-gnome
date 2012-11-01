@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit autotools eutils gnome2
+inherit gnome2
 
 DESCRIPTION="A quick previewer for Nautilus, the GNOME file manager"
 HOMEPAGE="http://git.gnome.org/browse/sushi"
@@ -50,6 +50,7 @@ RDEPEND="${COMMON_DEPEND}
 "
 
 src_prepare() {
+	DOCS="AUTHORS NEWS README TODO"
 	G2CONF="${G2CONF}
 		UNOCONV=$(type -P false)
 		--disable-schemas-compile
@@ -58,9 +59,5 @@ src_prepare() {
 		G2CONF="${G2CONF} UNOCONV=$(type -P unoconv)"
 	fi
 
-	DOCS="AUTHORS NEWS README TODO"
-
-	epatch "${FILESDIR}"/${P}-gold.patch
-	eautoreconf
 	gnome2_src_prepare
 }

@@ -57,6 +57,7 @@ RDEPEND="${COMMON_DEPEND}
 "
 
 src_prepare() {
+	DOCS="AUTHORS NEWS README TODO"
 	G2CONF="${G2CONF}
 		UNOCONV=$(type -P false)
 		--disable-schemas-compile
@@ -65,6 +66,5 @@ src_prepare() {
 		G2CONF="${G2CONF} UNOCONV=$(type -P unoconv)"
 	fi
 
-	DOCS="AUTHORS NEWS README TODO"
 	gnome2_src_prepare
 }
