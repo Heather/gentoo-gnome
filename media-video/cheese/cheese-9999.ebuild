@@ -53,7 +53,7 @@ RDEPEND="${COMMON_DEPEND}
 
 	media-plugins/gst-plugins-jpeg:1.0
 	media-plugins/gst-plugins-v4l2:1.0
-	media-plugins/gst-plugins-vp8:1.0
+	media-plugins/gst-plugins-vpx:1.0
 
 	sendto? ( >=gnome-extra/nautilus-sendto-2.91 )"
 DEPEND="${COMMON_DEPEND}
