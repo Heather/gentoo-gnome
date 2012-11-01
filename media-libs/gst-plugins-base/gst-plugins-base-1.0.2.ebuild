@@ -2,18 +2,14 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/gst-plugins-base/gst-plugins-base-0.10.36.ebuild,v 1.2 2012/10/23 08:10:00 tetromino Exp $
 
-EAPI="4"
-GCONF_DEBUG="no"
-GNOME2_LA_PUNT="yes"
+EAPI="5"
 
-inherit gnome2
+inherit gst-plugins-base gst-plugins10
 
 DESCRIPTION="Basepack of plugins for gstreamer"
 HOMEPAGE="http://gstreamer.freedesktop.org/"
-SRC_URI="http://gstreamer.freedesktop.org/src/${PN}/${P}.tar.xz"
 
 LICENSE="GPL-2+ LGPL-2+"
-SLOT="1.0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
 IUSE="alsa +introspection nls +ogg +orc +pango theora +vorbis X"
 REQUIRED_USE="theora? ( ogg ) vorbis? ( ogg )"
@@ -36,7 +32,6 @@ RDEPEND=">=dev-libs/glib-2.32:2
 		x11-libs/libXv )"
 
 DEPEND="${RDEPEND}
-	app-arch/xz-utils
 	>=dev-util/gtk-doc-am-1.12
 	virtual/pkgconfig
 	nls? ( >=sys-devel/gettext-0.11.5 )
@@ -60,31 +55,36 @@ src_prepare() {
 			gst/audioconvert/Makefile \
 			gst/volume/Makefile || die
 	fi
-
-	gnome2_src_prepare
 }
 
 src_configure() {
-	econf \
+	GST_PLUGINS_BUILD=""
+	GST_PLUGINS_BUILD_DIR=""
+
+	gst-plugins10_src_configure \
 		$(use_enable introspection) \
 		$(use_enable nls) \
 		$(use_enable orc) \
 		$(use_enable alsa) \
-		--disable-cdparanoia \
-		--disable-libvisual \
 		$(use_enable ogg) \
 		$(use_enable pango) \
 		$(use_enable theora) \
 		$(use_enable vorbis) \
-		--disable-ivorbis \
 		$(use_enable X x) \
 		$(use_enable X xshm) \
 		$(use_enable X xvideo) \
-		--disable-static \
 		--disable-examples \
 		--disable-freetypetest \
 		--disable-debug \
-		--with-package-name="Gentoo GStreamer Ebuild" \
-		--with-package-origin="http://www.gentoo.org"
+		--disable-static
 	# cdparanoia and libvisual are split out, per leio's request
+}
+
+src_compile() {
+	default
+}
+
+src_install() {
+	default
+	prune_libtool_files --modules
 }
