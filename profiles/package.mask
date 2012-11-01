@@ -5,16 +5,3 @@
 #
 # NOTE: Please add your entry at the top!
 #
-
-# Alexandre Rostovtrev <tetromino@gentoo.org> (28 Oct 2012)
-# Mask this until we have gst-plugins-{good,bad}:1.0
-# in place
->=media-libs/clutter-gst-1.9
-=gnome-extra/sushi-3.6*
-=media-video/cheese-3.6*
-
-# Nirbheek Chauhan <nirbheek@gentoo.org> (11 Jan 2011)
-# Don't use this, use >=gnome-media-2.32.0-r300 instead
-# we can't use this until everything that uses libgnome-media-profiles.so is
-# ported to gtk+:3 (this includes rhythmbox, at least)
->=gnome-base/gnome-media-2.91
