@@ -9,6 +9,7 @@ GNOME2_LA_PUNT="yes" # plugins are dlopened
 PYTHON_DEPEND="python? 2:2.5"
 PYTHON_USE_WITH="threads"
 PYTHON_USE_WITH_OPT="python"
+VALA_MIN_API_VERSION="0.14"
 
 inherit gnome2 multilib python
 if [[ ${PV} = 9999 ]]; then
@@ -49,7 +50,7 @@ RDEPEND="
 	x11-libs/mx:1.0
 
 	media-libs/gstreamer:1.0
-	media-libs/gst-plugins-base:1.0[X,introspection,pango]
+	media-libs/gst-plugins-base:1.0[X,introspection?,pango]
 	media-libs/gst-plugins-bad:1.0
 	media-libs/gst-plugins-good:1.0
 	media-plugins/gst-plugins-taglib:1.0
@@ -88,9 +89,10 @@ DEPEND="${RDEPEND}
 	x11-proto/xextproto
 	x11-proto/xproto
 	virtual/pkgconfig
-	doc? ( >=dev-util/gtk-doc-1.14 )
 	test? ( python? ( dev-python/pylint ) )
 "
+# Only needed when regenerating C sources from Vala files
+#	vala? ( $(vala_depend) )"
 # docbook-xml-dtd is needed for user doc
 
 # see bug #359379
@@ -107,14 +109,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# AC_CONFIG_AUX_DIR_DEFAULT doesn't exist, and eautoreconf/aclocal fails
-	mkdir -p m4
-
-	#if [[ ${PV} != 9999 ]]; then
-	#	intltoolize --force --copy --automake || die "intltoolize failed"
-	#	eautoreconf
-	#fi
-
 	use python && python_clean_py-compile_files
 	# Only needed when regenerating C sources from Vala files
 	#use vala && vala_src_prepare
@@ -136,7 +130,7 @@ src_configure() {
 		$(use_enable nsplugin browser-plugins)
 		$(use_enable python)
 		$(use_enable vala)
-		VALAC=$(type -P valac-0.14)
+		VALAC=$(type -P true)
 		BROWSER_PLUGIN_DIR=/usr/$(get_libdir)/nsbrowser/plugins"
 		# Only needed when regenerating C sources from Vala files
 		#VALAC=$(type -P valac-$(vala_best_api_version))
