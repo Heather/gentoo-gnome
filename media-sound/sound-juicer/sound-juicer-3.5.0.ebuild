@@ -35,14 +35,14 @@ COMMON_DEPEND="
 	>=media-libs/musicbrainz-5.0.1:5
 
 	media-libs/gstreamer:1.0
-	media-libs/gst-plugins-base:1.0[flac?,vorbis?]
+	media-libs/gst-plugins-base:1.0[vorbis?]
+	flac? ( media-plugins/gst-plugins-flac:1.0 )
 "
 RDEPEND="${COMMON_DEPEND}
 	gnome-base/gvfs[cdda,udev]
 	|| (
 		media-plugins/gst-plugins-cdparanoia:1.0
-		media-plugins/gst-plugins-cdio:1.0 )
-	>=media-plugins/gst-plugins-meta-0.10-r2:0.10"
+		media-plugins/gst-plugins-cdio:1.0 )"
 
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.40
