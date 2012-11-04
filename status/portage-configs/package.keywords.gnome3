@@ -98,6 +98,7 @@ x11-libs/libnotify
 x11-libs/libwnck
 x11-libs/libxklavier
 x11-libs/pango
+x11-libs/pangox-compat
 x11-misc/notification-daemon
 x11-plugins/pidgin-libnotify
 x11-terms/gnome-terminal
