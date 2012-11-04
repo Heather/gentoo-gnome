@@ -13,7 +13,7 @@ HOMEPAGE="http://www.webkitgtk.org/"
 SRC_URI="http://www.webkitgtk.org/releases/${MY_P}.tar.xz"
 #SRC_URI="mirror://gentoo/${P}.tar.xz"
 
-LICENSE="LGPL-2 LGPL-2.1 BSD"
+LICENSE="LGPL-2+ BSD"
 SLOT="3"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-macos"
 # geoclue
@@ -148,6 +148,9 @@ src_prepare() {
 
 	# bug #417523, https://bugs.webkit.org/show_bug.cgi?id=96602
 	epatch "${FILESDIR}/${PN}-1.9.91-libdl.patch"
+
+	# uclibc fix, bug #441674
+	epatch "${FILESDIR}/${PN}-1.10.1-disable-backtrace-uclibc.patch"
 
 	# Respect CC, otherwise fails on prefix #395875
 	tc-export CC
