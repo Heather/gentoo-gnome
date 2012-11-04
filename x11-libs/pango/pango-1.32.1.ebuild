@@ -22,7 +22,7 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
 fi
 
-IUSE="X +introspection"
+IUSE="X deprecated +introspection"
 
 RDEPEND="
 	>=media-libs/harfbuzz-0.9.3
@@ -40,6 +40,7 @@ DEPEND="${RDEPEND}
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 	X? ( x11-proto/xproto )
 	!<=sys-devel/autoconf-2.63:2.5"
+PDEPEND="deprecated? ( x11-libs/pangox-compat )"
 
 src_prepare() {
 	tc-export CXX
