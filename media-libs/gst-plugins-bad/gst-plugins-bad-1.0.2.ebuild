@@ -17,7 +17,8 @@ RDEPEND="
 	>=dev-libs/glib-2.32:2
 	orc? ( >=dev-lang/orc-0.4.16 )
 "
-DEPEND="${RDEPEND}"
+DEPEND="${RDEPEND}
+	=media-libs/gst-plugins-base-${PV}"
 
 DOCS="AUTHORS ChangeLog NEWS README RELEASE"
 
