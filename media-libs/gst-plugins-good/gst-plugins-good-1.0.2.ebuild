@@ -22,7 +22,7 @@ RDEPEND="
 	orc? ( >=dev-lang/orc-0.4.16 )
 "
 DEPEND="${RDEPEND}
-	=media-libs/gst-plugins-base-${PV}
+	=media-libs/gst-plugins-base-${PV}:${SLOT}
 	>=dev-util/gtk-doc-am-1.12
 "
 
