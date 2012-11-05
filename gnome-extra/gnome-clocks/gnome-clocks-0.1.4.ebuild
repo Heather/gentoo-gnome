@@ -3,14 +3,14 @@
 # $Header: $
 
 EAPI="4"
-PYTHON_COMPAT=( python2_5 python2_6 python2_7 )
+PYTHON_COMPAT=( python2_{5,6,7} )
 
 inherit gnome2 distutils-r1
 
 DESCRIPTION="Clocks applications for GNOME"
 HOMEPAGE="http://live.gnome.org/GnomeClocks"
 
-LICENSE="GPL2"
+LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
