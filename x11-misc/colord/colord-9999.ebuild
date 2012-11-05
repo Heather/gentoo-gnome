@@ -3,8 +3,10 @@
 # $Header: $
 
 EAPI="4"
+VALA_MIN_API_VERSION="0.18"
+VALA_USE_DEPEND="vapigen"
 
-inherit autotools bash-completion-r1 eutils user systemd base toolchain-funcs
+inherit autotools bash-completion-r1 eutils user systemd base toolchain-funcs vala
 if [[ ${PV} = 9999 ]]; then
 	GCONF_DEBUG="no"
 	inherit gnome2-live # need all the hacks from gnome2-live_src_prepare
@@ -23,40 +25,37 @@ SLOT="0"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~mips ~ppc ~ppc64 ~x86 ~x86-fbsd"
+	KEYWORDS="~alpha ~amd64 ~arm ~mips ~ppc ~ppc64 ~x86 ~x86-fbsd"
 fi
 IUSE="doc examples +gusb +introspection scanner +udev vala"
+REQUIRED_USE="vala? ( introspection )"
 
 COMMON_DEPEND="
 	dev-db/sqlite:3
 	>=dev-libs/glib-2.28.0:2
 	>=media-libs/lcms-2.2:2
 	>=sys-auth/polkit-0.103
-	gtk? (
-		x11-libs/gdk-pixbuf:2[introspection?]
-		x11-libs/gtk+:3[introspection?] )
 	gusb? ( >=dev-libs/libgusb-0.1.1 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.8 )
 	scanner? ( media-gfx/sane-backends )
-	udev? ( sys-fs/udev[gudev] )
+	udev? ( || ( sys-fs/udev[gudev] sys-fs/udev[extras] ) )
 "
 RDEPEND="${COMMON_DEPEND}
 	media-gfx/shared-color-profiles"
 DEPEND="${COMMON_DEPEND}
 	dev-libs/libxslt
+	>=dev-util/gtk-doc-am-1.9
 	>=dev-util/intltool-0.35
 	>=sys-devel/gettext-0.17
 	virtual/pkgconfig
-	doc? (
-		app-text/docbook-xml-dtd:4.1.2
-		>=dev-util/gtk-doc-1.9
-	)
-	vala? ( dev-lang/vala:0.14[vapigen] )
+	doc? ( app-text/docbook-xml-dtd:4.1.2 )
+	vala? ( $(vala_depend) )
 "
 if [[ ${PV} =~ 9999 ]]; then
 	# Needed for generating man pages, not needed for tarballs
 	DEPEND="${DEPEND}
-		app-text/docbook-sgml-utils"
+		app-text/docbook-sgml-utils
+		doc? ( >=dev-util/gtk-doc-1.9 )"
 fi
 
 # FIXME: needs pre-installed dbus service files
@@ -70,14 +69,14 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# https://bugs.freedesktop.org/show_bug.cgi?id=55464
 	epatch "${FILESDIR}/${PN}-0.1.11-fix-automagic-vala.patch"
+
+	# https://bugs.freedesktop.org/show_bug.cgi?id=55465
 	epatch "${FILESDIR}/${PN}-0.1.15-fix-automagic-libgusb.patch"
 
-	if [[ ${PV} = 9999 ]]; then
-		gnome2_src_prepare
-	else
-		eautoreconf
-	fi
+	eautoreconf
+	use vala && vala_src_prepare
 }
 
 src_configure() {
@@ -96,8 +95,8 @@ src_configure() {
 		$(use_enable scanner sane) \
 		$(use_enable udev gudev) \
 		$(use_enable vala) \
-		"$(systemd_with_unitdir)" \
-		VAPIGEN=$(type -P vapigen-0.14)
+		"$(systemd_with_unitdir)"
+
 	# parallel make fails in doc/api
 	use doc && MAKEOPTS="${MAKEOPTS} -j1"
 }
@@ -121,5 +120,5 @@ src_install() {
 		doins examples/*.c
 	fi
 
-	prune_libtool_files
+	prune_libtool_files --all
 }
