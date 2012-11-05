@@ -6,9 +6,9 @@ EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit autotools eutils gnome2 python
+inherit gnome2 python
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
+	inherit eutils gnome2-live
 fi
 
 DESCRIPTION="An HTTP library implementation in C"
@@ -45,6 +45,11 @@ DEPEND="${RDEPEND}
 #		net-libs/glib-networking[ssl])"
 
 pkg_setup() {
+	python_set_active_version 2
+	python_pkg_setup
+}
+
+src_prepare() {
 	# Disable apache tests until they are usable on Gentoo, bug #326957
 	DOCS="AUTHORS NEWS README"
 	G2CONF="${G2CONF}
@@ -54,11 +59,7 @@ pkg_setup() {
 		--without-apache-httpd
 		$(use_enable introspection)
 		$(use_with samba ntlm-auth ${EPREFIX}/usr/bin/ntlm_auth)"
-	python_set_active_version 2
-	python_pkg_setup
-}
 
-src_prepare() {
 	if [[ ${PV} = 9999 ]]; then
 		# prevent SOUP_MAINTAINER_FLAGS from getting set
 		mv .git .git-bck || die
