@@ -13,12 +13,6 @@ Subject: [PATCH] Prevent file collision with gda-control-center-4.0's icons
  ... hicolor_apps_48x48_gda-control-center-5.0.png} |  Bin 3144 -> 3144 bytes
  control-center/gda-control-center-5.0.desktop.in   |    2 +-
  8 files changed, 7 insertions(+), 7 deletions(-)
- rename control-center/data/{hicolor_apps_16x16_gda-control-center.png => hicolor_apps_16x16_gda-control-center-5.0.png} (100%)
- rename control-center/data/{hicolor_apps_22x22_gda-control-center.png => hicolor_apps_22x22_gda-control-center-5.0.png} (100%)
- rename control-center/data/{hicolor_apps_24x24_gda-control-center.png => hicolor_apps_24x24_gda-control-center-5.0.png} (100%)
- rename control-center/data/{hicolor_apps_256x256_gda-control-center.png => hicolor_apps_256x256_gda-control-center-5.0.png} (100%)
- rename control-center/data/{hicolor_apps_32x32_gda-control-center.png => hicolor_apps_32x32_gda-control-center-5.0.png} (100%)
- rename control-center/data/{hicolor_apps_48x48_gda-control-center.png => hicolor_apps_48x48_gda-control-center-5.0.png} (100%)
 
 diff --git a/control-center/data/Makefile.am b/control-center/data/Makefile.am
 index 03fa362..862ec88 100644
@@ -43,30 +37,6 @@ index 03fa362..862ec88 100644
  	$(NULL)
  
  private_icons = \
-diff --git a/control-center/data/hicolor_apps_16x16_gda-control-center.png b/control-center/data/hicolor_apps_16x16_gda-control-center-5.0.png
-similarity index 100%
-rename from control-center/data/hicolor_apps_16x16_gda-control-center.png
-rename to control-center/data/hicolor_apps_16x16_gda-control-center-5.0.png
-diff --git a/control-center/data/hicolor_apps_22x22_gda-control-center.png b/control-center/data/hicolor_apps_22x22_gda-control-center-5.0.png
-similarity index 100%
-rename from control-center/data/hicolor_apps_22x22_gda-control-center.png
-rename to control-center/data/hicolor_apps_22x22_gda-control-center-5.0.png
-diff --git a/control-center/data/hicolor_apps_24x24_gda-control-center.png b/control-center/data/hicolor_apps_24x24_gda-control-center-5.0.png
-similarity index 100%
-rename from control-center/data/hicolor_apps_24x24_gda-control-center.png
-rename to control-center/data/hicolor_apps_24x24_gda-control-center-5.0.png
-diff --git a/control-center/data/hicolor_apps_256x256_gda-control-center.png b/control-center/data/hicolor_apps_256x256_gda-control-center-5.0.png
-similarity index 100%
-rename from control-center/data/hicolor_apps_256x256_gda-control-center.png
-rename to control-center/data/hicolor_apps_256x256_gda-control-center-5.0.png
-diff --git a/control-center/data/hicolor_apps_32x32_gda-control-center.png b/control-center/data/hicolor_apps_32x32_gda-control-center-5.0.png
-similarity index 100%
-rename from control-center/data/hicolor_apps_32x32_gda-control-center.png
-rename to control-center/data/hicolor_apps_32x32_gda-control-center-5.0.png
-diff --git a/control-center/data/hicolor_apps_48x48_gda-control-center.png b/control-center/data/hicolor_apps_48x48_gda-control-center-5.0.png
-similarity index 100%
-rename from control-center/data/hicolor_apps_48x48_gda-control-center.png
-rename to control-center/data/hicolor_apps_48x48_gda-control-center-5.0.png
 diff --git a/control-center/gda-control-center-5.0.desktop.in b/control-center/gda-control-center-5.0.desktop.in
 index 6fd5b58..429787d 100644
 --- a/control-center/gda-control-center-5.0.desktop.in

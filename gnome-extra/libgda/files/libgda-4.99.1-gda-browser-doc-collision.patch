@@ -9,9 +9,6 @@ Subject: [PATCH] Prevent file collision with gda-browser-4.0's gtk-doc files
  ...r-sections.txt => gda-browser-5.0-sections.txt} |    0
  .../{gda-browser.types => gda-browser-5.0.types}   |    0
  4 files changed, 1 insertions(+), 1 deletions(-)
- rename tools/browser/doc/{gda-browser-docs.sgml => gda-browser-5.0-docs.sgml} (100%)
- rename tools/browser/doc/{gda-browser-sections.txt => gda-browser-5.0-sections.txt} (100%)
- rename tools/browser/doc/{gda-browser.types => gda-browser-5.0.types} (100%)
 
 diff --git a/tools/browser/doc/Makefile.am b/tools/browser/doc/Makefile.am
 index 971fa79..cf6637a 100644
@@ -26,18 +23,6 @@ index 971fa79..cf6637a 100644
  
  # The top-level SGML file.
  DOC_MAIN_SGML_FILE=$(DOC_MODULE)-docs.sgml
-diff --git a/tools/browser/doc/gda-browser-docs.sgml b/tools/browser/doc/gda-browser-5.0-docs.sgml
-similarity index 100%
-rename from tools/browser/doc/gda-browser-docs.sgml
-rename to tools/browser/doc/gda-browser-5.0-docs.sgml
-diff --git a/tools/browser/doc/gda-browser-sections.txt b/tools/browser/doc/gda-browser-5.0-sections.txt
-similarity index 100%
-rename from tools/browser/doc/gda-browser-sections.txt
-rename to tools/browser/doc/gda-browser-5.0-sections.txt
-diff --git a/tools/browser/doc/gda-browser.types b/tools/browser/doc/gda-browser-5.0.types
-similarity index 100%
-rename from tools/browser/doc/gda-browser.types
-rename to tools/browser/doc/gda-browser-5.0.types
 -- 
 1.7.5.3
 

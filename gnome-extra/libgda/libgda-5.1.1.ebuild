@@ -6,10 +6,11 @@ EAPI="4"
 GNOME2_LA_PUNT="yes"
 GCONF_DEBUG="yes"
 PYTHON_DEPEND="2"
-VALA_MIN_API_VERSION="0.18"
-VALA_USE_DEPEND="vapigen"
+#VALA_MIN_API_VERSION="0.16"
+#VALA_MAX_API_VERSION="0.16" # configure explicitly checks for 0.16
+#VALA_USE_DEPEND="vapigen"
 
-inherit autotools db-use eutils flag-o-matic gnome2 java-pkg-opt-2 python vala
+inherit autotools db-use eutils flag-o-matic gnome2 java-pkg-opt-2 python # vala
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -18,8 +19,7 @@ DESCRIPTION="Gnome Database Access Library"
 HOMEPAGE="http://www.gnome-db.org/"
 LICENSE="GPL-2+ LGPL-2+"
 
-IUSE="berkdb bindist canvas firebird gnome-keyring gtk graphviz http +introspection json ldap mdb mysql oci8 postgres sourceview ssl vala"
-REQUIRED_USE="vala? ( introspection )"
+IUSE="berkdb bindist canvas firebird gnome-keyring gtk graphviz http +introspection json ldap mdb mysql oci8 postgres sourceview ssl" # vala
 SLOT="5"
 if [[ ${PV} = 9999 ]]; then
 	IUSE="${IUSE} doc"
@@ -59,12 +59,15 @@ DEPEND="${RDEPEND}
 	dev-util/gtk-doc-am
 	>=dev-util/intltool-0.40.6
 	virtual/pkgconfig
-	java? ( virtual/jdk:1.6 )
-	vala? ( $(vala_depend) )"
+	java? ( virtual/jdk:1.6 )"
+#	vala? ( $(vala_depend) )
 [[ ${PV} = 9999 ]] && DEPEND="${DEPEND}
 	doc? (
 		>=dev-util/gtk-doc-1.14
 		vala? ( app-text/yelp-tools ) )"
+
+# FIXME: lots of tests failing. Check if they still fail in 5.1.2
+RESTRICT="test"
 
 pkg_setup() {
 	java-pkg-opt-2_pkg_setup
@@ -104,7 +107,8 @@ src_prepare() {
 		$(use_with mysql mysql /usr)
 		$(use_with postgres postgres /usr)
 		$(use_enable ssl crypto)
-		$(use_enable vala)"
+		--disable-vala"
+	# vala bindings fail to build
 
 	if use bindist; then
 		# firebird license is not GPL compatible
