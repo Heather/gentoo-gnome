@@ -11,7 +11,7 @@ PYTHON_USE_WITH="threads"
 PYTHON_USE_WITH_OPT="python"
 VALA_MIN_API_VERSION="0.14"
 
-inherit gnome2 multilib python
+inherit eutils gnome2 multilib python
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -19,7 +19,7 @@ fi
 DESCRIPTION="Media player for GNOME"
 HOMEPAGE="http://projects.gnome.org/totem/"
 
-LICENSE="GPL-2 LGPL-2"
+LICENSE="GPL-2+ LGPL-2+"
 SLOT="0"
 IUSE="doc flash grilo +introspection lirc nautilus nsplugin +python test vala zeitgeist"
 if [[ ${PV} = 9999 ]]; then
@@ -109,6 +109,9 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# in 3.6.3
+	epatch "${FILESDIR}/${P}-scaletempo.patch"
+
 	use python && python_clean_py-compile_files
 	# Only needed when regenerating C sources from Vala files
 	#use vala && vala_src_prepare
