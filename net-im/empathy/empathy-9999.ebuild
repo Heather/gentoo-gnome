@@ -75,7 +75,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.33.3:2
 # empathy-3.4 is incompatible with telepathy-rakia-0.6, bug #403861
 RDEPEND="${COMMON_DEPEND}
 	media-libs/gst-plugins-base:0.10
-	media-libs/gst-plugins-bad
+	media-libs/gst-plugins-bad:0.10
 	net-im/telepathy-connection-managers
 	!<net-voip/telepathy-rakia-0.7
 	x11-themes/gnome-icon-theme-symbolic
