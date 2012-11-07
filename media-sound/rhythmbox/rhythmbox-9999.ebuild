@@ -71,19 +71,19 @@ COMMON_DEPEND=">=dev-libs/glib-2.32.0:2
 	zeitgeist? ( gnome-extra/zeitgeist )
 "
 RDEPEND="${COMMON_DEPEND}
-	>=media-plugins/gst-plugins-soup-0.10
-	>=media-plugins/gst-plugins-libmms-0.10
+	>=media-plugins/gst-plugins-soup-0.10:0.10
+	>=media-plugins/gst-plugins-libmms-0.10:0.10
 	|| (
-		>=media-plugins/gst-plugins-cdparanoia-0.10
-		>=media-plugins/gst-plugins-cdio-0.10 )
+		>=media-plugins/gst-plugins-cdparanoia-0.10:0.10
+		>=media-plugins/gst-plugins-cdio-0.10:0.10 )
 	>=media-plugins/gst-plugins-meta-0.10-r2:0.10
-	>=media-plugins/gst-plugins-taglib-0.10.6
+	>=media-plugins/gst-plugins-taglib-0.10.6:0.10
 	x11-themes/gnome-icon-theme-symbolic
 	upnp? (
 		>=media-libs/grilo-0.2:0.2
 		>=media-plugins/grilo-plugins-0.2:0.2[upnp] )
 	python? (
-		>=dev-python/gst-python-0.10.8
+		>=dev-python/gst-python-0.10.8:0.10
 
 		x11-libs/gdk-pixbuf:2[introspection]
 		x11-libs/gtk+:3[introspection]
@@ -165,7 +165,7 @@ pkg_postinst() {
 
 	ewarn
 	ewarn "If ${PN} doesn't play some music format, please check your"
-	ewarn "USE flags on media-plugins/gst-plugins-meta"
+	ewarn "USE flags on media-plugins/gst-plugins-meta:0.10"
 	ewarn
 }
 
