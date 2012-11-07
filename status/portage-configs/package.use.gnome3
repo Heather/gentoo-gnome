@@ -11,3 +11,6 @@ dev-libs/folks vala
 
 # broken with icu-50
 media-libs/harfbuzz -icu
+
+# required by cheese
+media-libs/gst-plugins-base:1.0 theora
