@@ -9,11 +9,11 @@ GNOME2_LA_PUNT="yes" # plugins are dlopened
 PYTHON_DEPEND="python? 2:2.5"
 PYTHON_USE_WITH="threads"
 PYTHON_USE_WITH_OPT="python"
-VALA_MIN_API_VERSION="0.14"
 
-inherit eutils gnome2 multilib python
+inherit gnome2 multilib python
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
+	VALA_MIN_API_VERSION="0.14"
+	inherit gnome2-live vala
 fi
 
 DESCRIPTION="Media player for GNOME"
@@ -21,8 +21,15 @@ HOMEPAGE="http://projects.gnome.org/totem/"
 
 LICENSE="GPL-2+ LGPL-2+"
 SLOT="0"
-IUSE="doc flash grilo +introspection lirc nautilus nsplugin +python test vala zeitgeist"
+IUSE="doc flash grilo +introspection lirc nautilus nsplugin +python test zeitgeist"
+# see bug #359379
+REQUIRED_USE="flash? ( nsplugin )
+	python? ( introspection )
+	zeitgeist? ( introspection )"
+
 if [[ ${PV} = 9999 ]]; then
+	IUSE+=" vala"
+	REQUIRED_USE+=" zeitgeist? ( vala )"
 	KEYWORDS=""
 else
 	KEYWORDS="~amd64 ~x86 ~x86-fbsd"
@@ -91,14 +98,9 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig
 	test? ( python? ( dev-python/pylint ) )
 "
+# docbook-xml-dtd is needed for user do
 # Only needed when regenerating C sources from Vala files
-#	vala? ( $(vala_depend) )"
-# docbook-xml-dtd is needed for user doc
-
-# see bug #359379
-REQUIRED_USE="flash? ( nsplugin )
-	python? ( introspection )
-	zeitgeist? ( introspection vala )"
+[[ ${PV} = 9999 ]] && DEPEND+=" vala? ( $(vala_depend) )"
 
 # XXX: pylint checks fail because of bad code
 RESTRICT="test"
@@ -109,12 +111,11 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# in 3.6.3
-	epatch "${FILESDIR}/${P}-scaletempo.patch"
-
 	use python && python_clean_py-compile_files
-	# Only needed when regenerating C sources from Vala files
-	#use vala && vala_src_prepare
+	if [[ ${PV} = 9999 ]]; then
+		# Only needed when regenerating C sources from Vala files
+		use vala && vala_src_prepare
+	fi
 	gnome2_src_prepare
 }
 
@@ -132,11 +133,7 @@ src_configure() {
 		$(use_enable nautilus)
 		$(use_enable nsplugin browser-plugins)
 		$(use_enable python)
-		$(use_enable vala)
-		VALAC=$(type -P true)
 		BROWSER_PLUGIN_DIR=/usr/$(get_libdir)/nsbrowser/plugins"
-		# Only needed when regenerating C sources from Vala files
-		#VALAC=$(type -P valac-$(vala_best_api_version))
 
 	if ! use test; then
 		# pylint is checked unconditionally, but is only used for make check
@@ -154,7 +151,14 @@ src_configure() {
 	use lirc && plugins+=",lirc"
 	use nautilus && plugins+=",save-file"
 	use python && plugins+=",dbusservice,pythonconsole,opensubtitles"
-	use vala && plugins+=",rotation"
+	if [[ ${PV} = 9999 ]]; then
+		# Only needed when regenerating C sources from Vala files
+		G2CONF="${G2CONF} $(use_enable vala)"
+		use vala && plugins+=",rotation"
+	else
+		G2CONF="${G2CONF} --enable-vala VALAC=$(type -P true)"
+		plugins+=",rotation"
+	fi
 	use zeitgeist && plugins+=",zeitgeist-dp"
 
 	G2CONF="${G2CONF} --with-plugins=${plugins}"
