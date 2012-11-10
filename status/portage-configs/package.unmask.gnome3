@@ -18,6 +18,7 @@
 =gnome-base/dconf-0.14*
 =gnome-base/gvfs-1.14*
 =net-libs/glib-networking-2.34*
+>=x11-libs/gdk-pixbuf-2.26.5
 =x11-libs/gtk+-3.6*:3
 =x11-themes/gnome-themes-standard-3.6*
 
