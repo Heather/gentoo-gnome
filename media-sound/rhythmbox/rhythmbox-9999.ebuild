@@ -99,8 +99,8 @@ RDEPEND="${COMMON_DEPEND}
 #	dev-util/gtk-doc-am
 DEPEND="${COMMON_DEPEND}
 	virtual/pkgconfig
+	app-text/yelp-tools
 	>=dev-util/intltool-0.35
-	app-text/scrollkeeper
 	>=app-text/gnome-doc-utils-0.9.1
 	doc? ( >=dev-util/gtk-doc-1.4 )
 	test? ( dev-libs/check )"
