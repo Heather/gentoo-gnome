@@ -122,7 +122,6 @@ pkg_setup() {
 		VALAC=$(type -P valac-0.14)
 		--enable-mmkeys
 		--disable-more-warnings
-		--disable-scrollkeeper
 		--disable-schemas-compile
 		--disable-static
 		--disable-vala
