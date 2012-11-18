@@ -16,9 +16,9 @@
 
 GST_ORG_MODULE="gst-plugins-good"
 
-inherit eutils gst-plugins10 versionator
+inherit eutils gst-plugins10
 
-case ${EAPI:-0} in
+case "${EAPI:-0}" in
 	1|2|3|4|5)
 		;;
 	0)
@@ -30,7 +30,7 @@ case ${EAPI:-0} in
 esac
 
 
-if [ "${PN}" != "${GST_ORG_MODULE}" ]; then
+if [[ ${PN} != ${GST_ORG_MODULE} ]]; then
 # -good-0.10.24 uses orc optionally instead of liboil unconditionally.
 # While <0.10.24 configure always checks for liboil, it is linked to only by
 # non-split plugins in gst/, so we only builddep for all old packages, and have

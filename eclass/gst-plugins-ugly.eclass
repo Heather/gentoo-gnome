@@ -16,7 +16,7 @@
 
 GST_ORG_MODULE="gst-plugins-ugly"
 
-inherit eutils gst-plugins10 versionator
+inherit gst-plugins10
 
 case "${EAPI:-0}" in
 	1|2|3|4|5)

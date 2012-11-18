@@ -16,7 +16,7 @@
 
 GST_ORG_MODULE="gst-plugins-bad"
 
-inherit eutils gst-plugins10 multilib versionator
+inherit eutils gst-plugins10
 
 case "${EAPI:-0}" in
 	1|2|3|4|5)
@@ -40,18 +40,4 @@ if [[ ${PN} != ${GST_ORG_MODULE} ]]; then
 		DEPEND="${DEPEND} >=dev-libs/liboil-0.3.8"
 	fi
 fi
-
-# @FUNCTION: gst-plugins-bad_src_prepare
-# @DESCRIPTION:
-# Makes sure build will use system librairies.
-#gst-plugins-bad_src_prepare() {
-#	# Link with the syswide installed gst-libs if needed
-#	gst-plugins10_find_plugin_dir
-#	gst-plugins10_system_link (
-#		'interfaces/libgstphotography'
-#		'signalprocessor/libgstsignalprocessor'
-#		'video/libgstbasevideo'
-#		'basecamerabinsrc/libgstbasecamerabinsrc'
-#	)
-#}
 

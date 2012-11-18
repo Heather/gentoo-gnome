@@ -179,7 +179,7 @@ gst-plugins10_system_link() {
 		lib=$(basename $directory)
 		sed -e "s:\$(top_builddir)gst-libs/gst/${directory}:${ROOT}/usr/$(get_libdir)/${lib}:" \
 			-i Makefile.am Makefile.in
-  done
+	done
 }
 
 # @FUNCTION: gst-plugins10_remove_unversioned_binaries
