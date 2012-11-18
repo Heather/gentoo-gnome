@@ -26,7 +26,7 @@
 # XXX: what was GST_ORC intended for. Isn't it better to leave it to the
 #      ebuild reponsability ?
 
-inherit eutils multilib versionator
+inherit eutils multilib toolchain-funcs versionator
 
 GST_EXPF=""
 case "${EAPI:-0}" in
@@ -170,15 +170,26 @@ gst-plugins10_find_plugin_dir() {
 }
 
 # @FUNCTION: gst-plugins10_system_link
+# @USAGE: gst-plugins10_system_link gst-libs/gst/audio:gstreamer-audio [...]
 # @DESCRIPTION:
 # Walks through makefiles in order to make sure build will link against system
 # librairies.
+# Takes a list of path fragments and corresponding pkgconfig libraries
+# separated by colon (:). Will replace the path fragment by the output of
+# pkgconfig.
 gst-plugins10_system_link() {
-	local directory lib
-	for directory in $@ ; do
-		lib=$(basename $directory)
-		sed -e "s:\$(top_builddir)gst-libs/gst/${directory}:${ROOT}/usr/$(get_libdir)/${lib}:" \
-			-i Makefile.am Makefile.in
+	local directory libs pkgconfig pc tuple
+	pkgconfig=$(tc-getPKG_CONFIG)
+
+	gst-plugins10_find_plugin_dir
+
+	for tuple in $@ ; do
+		directory="$(echo ${tuple} | cut -f1 -d':')"
+		pc="$(echo ${tuple} | cut -f2 -d':')-${SLOT}"
+		libs="$(${pkgconfig} --libs-only-l ${pc})"
+
+		sed -e "s:\$(top_builddir)/${directory}/.*\.la:${libs}:" \
+			-i Makefile.am Makefile.in || die
 	done
 }
 
