@@ -91,6 +91,7 @@ src_prepare() {
 	# * disable tests that fails every time packagekit developers make a
 	#   tiny change to headers
 	sed -e '/gpk_enum_test (test)/d' \
+		-e '/gpk_error_test (test)/d' \
 		-e '/gpk_modal_dialog_test (test)/d' \
 		-e '/gpk_task_test (test)/d' \
 		-i src/gpk-self-test.c || die
