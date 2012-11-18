@@ -4,7 +4,7 @@
 
 EAPI="5"
 
-inherit gst-plugins-base gst-plugins10 toolchain-funcs
+inherit gst-plugins-base gst-plugins10
 
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 IUSE=""
@@ -13,10 +13,5 @@ RDEPEND=">=media-sound/cdparanoia-3.10.2-r3"
 DEPEND="${RDEPEND}"
 
 src_prepare() {
-	local libs
-	libs="$($(tc-getPKG_CONFIG) --libs-only-l gstreamer-audio-${SLOT})"
-
-	gst-plugins10_find_plugin_dir
-	sed -e "s:\$(top_builddir)/gst-libs/gst/audio/.*\.la:$libs:" \
-		-i Makefile.am Makefile.in || die
+	gst-plugins10_system_link gst-libs/gst/audio:gstreamer-audio
 }
