@@ -6,7 +6,7 @@ EAPI="4"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit eutils gnome2 multilib toolchain-funcs user
+inherit eutils gnome2 multilib udev user
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -57,6 +57,11 @@ if [[ ${PV} = 9999 ]]; then
 fi
 
 pkg_setup() {
+	enewgroup plugdev
+}
+
+src_prepare() {
+	DOCS="AUTHORS README NEWS ChangeLog"
 	# FIXME: Add geoclue support
 	G2CONF="${G2CONF}
 		$(use_enable introspection)
@@ -68,25 +73,18 @@ pkg_setup() {
 		--disable-schemas-compile
 		--disable-static"
 	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
-	DOCS="AUTHORS README NEWS ChangeLog"
 
-	enewgroup plugdev
-}
-
-src_prepare() {
 	# Regenerate gdbus-codegen files to allow using any glib version; bug #436236
 	if [[ ${PV} != 9999 ]]; then
 		rm -v lib/bluetooth-client-glue.{c,h} || die
 	fi
+
 	gnome2_src_prepare
 }
 
 src_install() {
 	gnome2_src_install
-
-	local udevdir="$($(tc-getPKG_CONFIG) --variable=udevdir udev)"
-	insinto "${udevdir}"/rules.d
-	doins "${FILESDIR}"/80-rfkill.rules
+	udev_dorules "${FILESDIR}"/80-rfkill.rules
 }
 
 pkg_postinst() {
