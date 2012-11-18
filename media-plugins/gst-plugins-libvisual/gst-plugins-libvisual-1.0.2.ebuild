@@ -4,7 +4,7 @@
 
 EAPI="5"
 
-inherit gst-plugins-base gst-plugins10 toolchain-funcs
+inherit gst-plugins-base gst-plugins10
 
 KEYWORDS="~amd64 ~hppa ~ppc ~ppc64 ~x86 ~amd64-fbsd"
 IUSE=""
@@ -14,12 +14,7 @@ RDEPEND=">=media-libs/libvisual-0.4
 DEPEND="${RDEPEND}"
 
 src_prepare() {
-	local alibs vlibs
-	alibs="$($(tc-getPKG_CONFIG) --libs-only-l gstreamer-audio-${SLOT})"
-	vlibs="$($(tc-getPKG_CONFIG) --libs-only-l gstreamer-video-${SLOT})"
-
-	gst-plugins10_find_plugin_dir
-	sed -e "s:\$(top_builddir)/gst-libs/gst/audio/.*\.la:${alibs}:" \
-		-e "s:\$(top_builddir)/gst-libs/gst/video/.*\.la:${vlibs}:" \
-		-i Makefile.am Makefile.in || die
+	gst-plugins10_system_link \
+		gst-libs/gst/audio:gstreamer-audio \
+		gst-libs/gst/video:gstreamer-video
 }
