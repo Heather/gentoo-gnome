@@ -10,7 +10,7 @@
 # Exports portage base functions used by ebuilds written for packages using the
 # GNOME framework. For additional functions, see gnome2-utils.eclass.
 
-inherit fdo-mime libtool gnome.org gnome2-utils
+inherit eutils fdo-mime libtool gnome.org gnome2-utils
 
 case "${EAPI:-0}" in
 	0|1)
@@ -47,9 +47,13 @@ G2CONF=${G2CONF:-""}
 
 # @ECLASS-VARIABLE: GNOME2_LA_PUNT
 # @DESCRIPTION:
-# Should we delete all the .la files?
+# Should we delete ALL the .la files?
 # NOT to be used without due consideration.
-GNOME2_LA_PUNT=${GNOME2_LA_PUNT:-"no"}
+if has ${EAPI:-0} 0 1 2 3 4; then
+	GNOME2_LA_PUNT=${GNOME2_LA_PUNT:-"no"}
+else
+	GNOME2_LA_PUNT=${GNOME2_LA_PUNT:-""}
+fi
 
 # @ECLASS-VARIABLE: ELTCONF
 # @DEFAULT-UNSET
@@ -161,6 +165,18 @@ gnome2_src_configure() {
 		G2CONF="${G2CONF} --disable-scrollkeeper"
 	fi
 
+	# Pass --disable-silent-rules when possible (not needed for eapi5), bug #429308
+	if has ${EAPI:-0} 0 1 2 3 4; then
+		if grep -q "disable-silent-rules" configure; then
+			G2CONF="${G2CONF} --disable-silent-rules"
+		fi
+	fi
+
+	# Pass --disable-schemas-install when possible
+	if grep -q "disable-schemas-install" configure; then
+		G2CONF="${G2CONF} --disable-schemas-install"
+	fi
+
 	# Avoid sandbox violations caused by gnome-vfs (bug #128289 and #345659)
 	addwrite "$(unset HOME; echo ~)/.gnome2"
 
@@ -216,12 +232,20 @@ gnome2_src_install() {
 	rm -fr "${ED}/usr/share/applications/mimeinfo.cache"
 
 	# Delete all .la files
-	if [[ "${GNOME2_LA_PUNT}" != "no" ]]; then
-		ebegin "Removing .la files"
-		if ! { has static-libs ${IUSE//+} && use static-libs; }; then
-			find "${D}" -name '*.la' -exec rm -f {} + || die "la file removal failed"
+	if has ${EAPI:-0} 0 1 2 3 4; then
+		if [[ "${GNOME2_LA_PUNT}" != "no" ]]; then
+			ebegin "Removing .la files"
+			if ! { has static-libs ${IUSE//+} && use static-libs; }; then
+				find "${D}" -name '*.la' -exec rm -f {} + || die "la file removal failed"
+			fi
+			eend
 		fi
-		eend
+	else
+		case "${GNOME2_LA_PUNT}" in
+			yes)    prune_libtool_files --modules;;
+			no)     ;;
+			*)      prune_libtool_files;;
+		esac
 	fi
 }
 
