@@ -226,7 +226,7 @@ gst-plugins10_src_configure() {
 	if grep -q "ORC_CHECK" configure.* ; then
 		if [[ ${GST_ORC} = "yes" ]]; then
 			gst_conf="${gst_conf} $(use_enable orc)"
-    else
+		else
 			gst_conf="${gst_conf} --disable-orc"
 		fi
 	else
