@@ -29,7 +29,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.32:2
 	>=x11-libs/gtk+-3.4:3
 	>=x11-libs/vte-0.27.6:2.90
 	>=dev-libs/libxml2-2.4.23
-	>=dev-libs/gdl-3.5.4:3
+	>=dev-libs/gdl-3.5.5:3
 	>=x11-libs/gtksourceview-3:3.0
 
 	sys-devel/autogen
