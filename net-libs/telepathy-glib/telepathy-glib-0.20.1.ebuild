@@ -7,7 +7,7 @@ PYTHON_DEPEND="2:2.5"
 VALA_MIN_API_VERSION="0.18"
 VALA_USE_DEPEND="vapigen"
 
-inherit eutils python vala virtualx
+inherit eutils gnome2-utils python vala virtualx
 
 DESCRIPTION="GLib bindings for the Telepathy D-Bus protocol."
 HOMEPAGE="http://telepathy.freedesktop.org"
@@ -19,16 +19,18 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-linu
 IUSE="debug +introspection +vala"
 REQUIRED_USE="vala? ( introspection )"
 
-RDEPEND=">=dev-libs/glib-2.32.0:2
+RDEPEND="
+	>=dev-libs/glib-2.32.0:2
 	>=dev-libs/dbus-glib-0.90
 	introspection? ( >=dev-libs/gobject-introspection-1.30 )"
 DEPEND="${RDEPEND}
 	dev-libs/libxslt
 	virtual/pkgconfig
-	vala? ( $(vala_depend) )"
+	vala? ( $(vala_depend) )
+"
 
 src_prepare() {
-	python_convert_shebangs -r 2 examples tests tools
+	python_convert_shebangs -q -r 2 examples tests tools
 	use vala && vala_src_prepare
 	default_src_prepare
 }
@@ -47,7 +49,8 @@ src_configure() {
 }
 
 src_test() {
-	unset DBUS_SESSION_BUS_ADDRESS
+	gnome2_environment_reset
+	unset DBUS_SESSION_BUS_ADDRESS 
 	# Needs dbus for tests (auto-launched)
 	Xemake -j1 check
 }
@@ -55,6 +58,5 @@ src_test() {
 src_install() {
 	emake install DESTDIR="${D}"
 	dodoc AUTHORS ChangeLog NEWS README
-
-	find "${D}" -name '*.la' -exec rm -f '{}' +
+	prune_libtool_files
 }
