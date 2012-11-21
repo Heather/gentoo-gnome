@@ -23,8 +23,6 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~x86-solaris"
 fi
 
-# TODO: Add RDEPEND on pciutils (requires support for reading gzipped pnp.ids)
-# Latest schemas needed due to commit 7f3e3d52
 # cairo[X] needed for gnome-bg
 RDEPEND="
 	>=dev-libs/glib-2.33.3:2
@@ -38,18 +36,21 @@ RDEPEND="
 	x11-misc/xkeyboard-config
 	>=gnome-base/gsettings-desktop-schemas-2.91.92
 	doc? ( !<gnome-base/gnome-desktop-2.32.1-r1:2[doc] )
-	introspection? ( >=dev-libs/gobject-introspection-0.9.7 )"
+	introspection? ( >=dev-libs/gobject-introspection-0.9.7 )
+"
 DEPEND="${RDEPEND}
 	app-text/docbook-xml-dtd:4.1.2
+	>=dev-util/gtk-doc-am-1.4
 	>=dev-util/intltool-0.40.6
 	sys-devel/gettext
 	x11-proto/xproto
 	>=x11-proto/randrproto-1.2
 	virtual/pkgconfig
-	doc? ( >=dev-util/gtk-doc-1.4 )"
+"
 
 if [[ ${PV} = 9999 ]]; then
 	DEPEND="${DEPEND}
+		doc? ( >=dev-util/gtk-doc-1.4 )
 		app-text/yelp-tools"
 fi
 
@@ -90,9 +91,6 @@ src_prepare() {
 		$(use_enable doc desktop-docs)
 		$(use_enable introspection)"
 	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
-
-	# FIXME: the tarball provides an empty file
-	cp "${FILESDIR}"/pnp.ids.r1 "${S}"/libgnome-desktop/pnp.ids || die
 
 	gnome2_src_prepare
 }
