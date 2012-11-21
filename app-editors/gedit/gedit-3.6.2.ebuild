@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-editors/gedit/gedit-3.4.2.ebuild,v 1.1 2012/05/25 02:08:16 tetromino Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="no"
@@ -17,8 +17,9 @@ HOMEPAGE="http://live.gnome.org/Gedit"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="doc +introspection +python spell zeitgeist"
+IUSE="+introspection +python spell zeitgeist"
 if [[ ${PV} = 9999 ]]; then
+	IUSE="${IUSE} doc"
 	KEYWORDS=""
 else
 	KEYWORDS="~amd64 ~mips ~sh ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~ia64-linux ~x86-linux"
@@ -45,10 +46,10 @@ COMMON_DEPEND="
 	introspection? ( >=dev-libs/gobject-introspection-0.9.3 )
 	python? (
 		>=dev-libs/gobject-introspection-0.9.3
-		>=x11-libs/gtk+-3.0:3[introspection]
-		>=x11-libs/gtksourceview-2.91.9:3.0[introspection]
+		>=x11-libs/gtk+-3:3[introspection]
+		>=x11-libs/gtksourceview-3.6:3.0[introspection]
 		dev-python/pycairo
-		>=dev-python/pygobject-3.0.0:3[cairo] )
+		>=dev-python/pygobject-3:3[cairo] )
 	spell? (
 		>=app-text/enchant-1.2
 		>=app-text/iso-codes-0.35 )
@@ -59,14 +60,16 @@ DEPEND="${COMMON_DEPEND}
 	app-text/docbook-xml-dtd:4.1.2
 	>=app-text/scrollkeeper-0.3.11
 	dev-libs/libxml2:2
+	>=dev-util/gtk-doc-am-1
 	>=dev-util/intltool-0.40
 	>=sys-devel/gettext-0.17
 	virtual/pkgconfig
-	doc? ( >=dev-util/gtk-doc-1 )"
+"
 # yelp-tools, gnome-common and gtk-doc-am needed to eautoreconf
 
 if [[ ${PV} = 9999 ]]; then
 	DEPEND="${DEPEND}
+		doc? ( >=dev-util/gtk-doc-1 )
 		app-text/yelp-tools"
 fi
 
