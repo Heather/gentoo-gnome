@@ -33,7 +33,7 @@ RDEPEND="
 	>=dev-libs/glib-2.25.11:2
 	>=dev-libs/libxml2-2.6.5:2
 	>=dev-libs/libxslt-1.1.4
-	>=gnome-extra/yelp-xsl-${PV}
+	>=gnome-extra/yelp-xsl-3.6.1
 	>=net-libs/webkit-gtk-1.3.2:3
 	>=x11-libs/gtk+-2.91.8:3
 	x11-themes/gnome-icon-theme-symbolic"
