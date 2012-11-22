@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-util/gnome-devel-docs/gnome-devel-docs-3.4.1.ebuild,v 1.1 2012/05/14 06:05:32 tetromino Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="no"
@@ -23,8 +23,7 @@ DEPEND="app-text/gnome-doc-utils
 	sys-devel/gettext
 	virtual/pkgconfig"
 
-G2CONF="${G2CONF} --disable-scrollkeeper"
 DOCS="AUTHORS ChangeLog NEWS README"
+
 # This ebuild does not install any binaries
-# FIXME: Docs don't validate
-RESTRICT="test binchecks strip"
+RESTRICT="binchecks strip"
