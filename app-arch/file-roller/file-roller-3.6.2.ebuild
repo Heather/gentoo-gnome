@@ -57,7 +57,6 @@ src_prepare() {
 		--disable-dependency-tracking
 		--disable-run-in-place
 		--disable-static
-		--disable-schemas-compile
 		--disable-debug
 		--enable-magic
 		--enable-libarchive

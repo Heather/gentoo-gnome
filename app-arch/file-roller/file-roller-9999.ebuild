@@ -14,7 +14,7 @@ fi
 DESCRIPTION="Archive manager for GNOME"
 HOMEPAGE="http://fileroller.sourceforge.net/"
 
-LICENSE="GPL-2"
+LICENSE="GPL-2+"
 SLOT="0"
 IUSE="nautilus packagekit"
 if [[ ${PV} = 9999 ]]; then
@@ -51,14 +51,12 @@ if [[ ${PV} = 9999 ]]; then
 		app-text/yelp-tools"
 fi
 
-pkg_setup() {
+src_prepare() {
 	# --disable-debug because enabling it adds -O0 to CFLAGS
 	G2CONF="${G2CONF}
 		--disable-dependency-tracking
-		--disable-scrollkeeper
 		--disable-run-in-place
 		--disable-static
-		--disable-schemas-compile
 		--disable-debug
 		--enable-magic
 		--enable-libarchive
@@ -67,9 +65,7 @@ pkg_setup() {
 		$(use_enable packagekit)"
 	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
 	DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README TODO"
-}
 
-src_prepare() {
 	gnome2_src_prepare
 
 	# Use absolute path to GNU tar since star doesn't have the same
@@ -77,7 +73,7 @@ src_prepare() {
 	epatch "${FILESDIR}"/${PN}-2.10.3-use_bin_tar.patch
 
 	# File providing Gentoo package names for various archivers
-	cp -f "${FILESDIR}/3.1.2-packages.match" data/packages.match || die
+	cp -f "${FILESDIR}/3.6.0-packages.match" data/packages.match || die
 }
 
 pkg_postinst() {
