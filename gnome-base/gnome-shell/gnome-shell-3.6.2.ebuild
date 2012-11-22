@@ -108,6 +108,7 @@ RDEPEND="${COMMON_DEPEND}
 "
 DEPEND="${COMMON_DEPEND}
 	>=sys-devel/gettext-0.17
+	dev-libs/libxslt
 	>=dev-util/intltool-0.40
 	gnome-base/gnome-common
 	virtual/pkgconfig
@@ -124,8 +125,8 @@ src_prepare() {
 	DOCS="AUTHORS NEWS README"
 	# Don't error out on warnings
 	G2CONF="${G2CONF}
+		--enable-man
 		--enable-compile-warnings=maximum
-		--disable-schemas-compile
 		--disable-jhbuild-wrapper-script
 		$(use_with bluetooth)
 		$(use_enable networkmanager)
@@ -159,7 +160,7 @@ pkg_postinst() {
 	gnome2_pkg_postinst
 
 	if ! has_version 'media-libs/gst-plugins-good:1.0' || \
-	   ! has_version 'media-plugins/gst-plugins-vp8:1.0'; then
+	   ! has_version 'media-plugins/gst-plugins-vpx:1.0'; then
 		ewarn "To make use of GNOME Shell's built-in screen recording utility,"
 		ewarn "you need to either install media-libs/gst-plugins-good:1.0"
 		ewarn "and media-plugins/gst-plugins-vp8:1.0, or use dconf-editor to change"
