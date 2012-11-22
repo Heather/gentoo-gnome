@@ -64,14 +64,13 @@ if [[ ${PV} = 9999 ]]; then
 		doc? ( >=dev-util/gtk-doc-1 )"
 fi
 
-pkg_setup() {
+src_configure() {
 	# XXX: Make presence/telepathy-glib support optional?
 	#      We can do that if we intend to support fallback-only as a setup
 	G2CONF="${G2CONF}
 		--disable-deprecation-flags
 		--disable-static
 		--disable-schemas-install
-		--disable-schemas-compile
 		--with-in-process-applets=clock,notification-area,wncklet
 		--enable-telepathy-glib
 		$(use_enable networkmanager network-manager)
@@ -79,6 +78,7 @@ pkg_setup() {
 		$(use_enable eds)"
 	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
 	DOCS="AUTHORS ChangeLog HACKING NEWS README"
+	gnome2_src_configure
 }
 
 pkg_postinst() {
