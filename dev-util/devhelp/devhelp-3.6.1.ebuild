@@ -7,12 +7,12 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2"
 
-inherit eutils gnome2 python toolchain-funcs
+inherit autotools eutils gnome2 python toolchain-funcs
 
 DESCRIPTION="An API documentation browser for GNOME"
 HOMEPAGE="http://live.gnome.org/devhelp"
 
-LICENSE="GPL-2"
+LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~sparc ~x86 ~amd64-fbsd ~x86-fbsd"
 IUSE=""
@@ -39,6 +39,10 @@ src_prepare() {
 	if [[ $(tc-getCC) == "icc" ]] ; then
 		G2CONF="${G2CONF} --with-compile-warnings=no"
 	fi
+
+	# https://bugzilla.gnome.org/show_bug.cgi?id=688919
+	epatch "${FILESDIR}/${PN}-3.6.1-libm.patch"
+	eautoreconf
 
 	gnome2_src_prepare
 	python_clean_py-compile_files
