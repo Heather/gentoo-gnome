@@ -11,9 +11,6 @@ PYTHON_USE_WITH="xml"
 # Make sure games is inherited first so that the gnome2
 # functions will be called if they are not overridden
 inherit games gnome2 python virtualx
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
 
 DESCRIPTION="Collection of games for the GNOME desktop"
 HOMEPAGE="http://live.gnome.org/GnomeGames/"
@@ -21,11 +18,12 @@ HOMEPAGE="http://live.gnome.org/GnomeGames/"
 LICENSE="GPL-2 GPL-3 FDL-1.1"
 SLOT="0"
 # TODO: file KEYWORDREQ bug once it's determined that seed is usable
-if [[ ${PV} = 9999 ]]; then
-	KEYWORDS=""
-else
-	KEYWORDS="~amd64 ~x86"
-fi
+KEYWORDS="~amd64 ~mips ~x86"
+
+# FIXME: we should decide whether to have USE flag for games of features
+# IUSE="artworkextra clutter opengl python test"
+# vs
+# IUSE="artworkextra aisleriot glchess quadrapassel swell-foop lightsoff gnibbles sudoku"
 IUSE="artworkextra +aisleriot +clutter +glchess +sudoku test"
 
 COMMON_DEPEND="
@@ -64,11 +62,6 @@ DEPEND="${COMMON_DEPEND}
 	>=sys-devel/gettext-0.10.40
 	virtual/pkgconfig
 "
-
-if [[ ${PV} = 9999 ]]; then
-	DEPEND="${COMMON_DEPEND}
-		>=dev-lang/vala-0.15.1:0.16"
-fi
 
 # For compatibility with older versions of the gnome-games package
 PDEPEND="aisleriot? ( games-board/aisleriot )"
