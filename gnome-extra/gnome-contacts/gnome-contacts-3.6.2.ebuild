@@ -35,7 +35,7 @@ RDEPEND="
 	>=gnome-extra/evolution-data-server-3.5.3[gnome-online-accounts]
 	>=gnome-base/gnome-desktop-3.0:3
 	>=net-libs/telepathy-glib-0.17.5
-	>=dev-libs/folks-0.7.2[eds]
+	>=dev-libs/folks-0.7.3[eds,telepathy]
 
 	v4l? ( >=media-video/cheese-3.5.91 )
 
