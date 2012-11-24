@@ -69,6 +69,9 @@ src_prepare() {
 	# Don't show KDE standalone settings desktop files in GNOME others menu
 	epatch "${FILESDIR}/${PN}-3.0.0-ignore_kde_standalone.patch"
 
+	# https://bugzilla.gnome.org/show_bug.cgi?id=688972
+	epatch "${FILESDIR}/${PN}-3.6.1-applications-merged.patch"
+
 	if use python; then
 		python_clean_py-compile_files
 		python_copy_sources
