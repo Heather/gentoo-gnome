@@ -3,7 +3,7 @@
 # $Header: $
 
 EAPI="4"
-GCONF_DEBUG="no"
+GCONF_DEBUG="yes" # Not gnome macro but similar
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2 pam versionator virtualx
@@ -23,30 +23,51 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~x86-linux ~sparc-solaris ~x86-solaris"
 fi
 
-RDEPEND=">=app-crypt/gcr-3.5.3
+RDEPEND="
+	>=app-crypt/gcr-3.5.3
 	>=dev-libs/glib-2.32.0:2
 	>=x11-libs/gtk+-3.0:3
 	app-misc/ca-certificates
 	>=dev-libs/libgcrypt-1.2.2
 	>=sys-apps/dbus-1.0
 	caps? ( sys-libs/libcap-ng )
-	pam? ( virtual/pam )"
+	pam? ( virtual/pam )
+"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/intltool-0.35
-	virtual/pkgconfig"
+	virtual/pkgconfig
+"
 PDEPEND=">=gnome-base/libgnome-keyring-3.1.92"
 # eautoreconf needs:
 #	>=dev-util/gtk-doc-am-1.9
 # gtk-doc-am is not needed otherwise (no gtk-docs are installed)
 
-# FIXME: tests are very flaky and write to /tmp (instead of TMPDIR)
-RESTRICT="test"
+src_prepare() {
+	# Disable stupid CFLAGS
+	sed -e 's/CFLAGS="$CFLAGS -g"//' \
+		-e 's/CFLAGS="$CFLAGS -O0"//' \
+		-i configure.ac configure || die
 
-pkg_setup() {
+	# FIXME: some tests write to /tmp (instead of TMPDIR)
+	# Disable failing tests
+	sed -e '/g_test_add.*test_remove_file_abort/d' \
+	    -e '/g_test_add.*test_write_file/d' \
+	    -e '/g_test_add.*write_large_file/,+2 c\ {}; \ ' \
+	    -e '/g_test_add.*test_write_file_abort_.*/d' \
+	    -e '/g_test_add.*test_unique_file_conflict.*/d' \
+		-i pkcs11/gkm/tests/test-transaction.c || die
+	sed -e '/g_test_add.*test_create_assertion_complete_on_token/d' \
+		-i pkcs11/xdg-store/tests/test-xdg-trust.c || die
+	sed -e '/g_test_add.*gnome2-store.import.pkcs12/,+1 d' \
+		-i pkcs11/gnome2-store/tests/test-import.c || die
+
+	gnome2_src_prepare
+}
+
+src_configure() {
 	DOCS="AUTHORS ChangeLog NEWS README"
 	G2CONF="${G2CONF}
-		$(use_enable debug)
 		$(use_with caps libcap-ng)
 		$(use_enable pam)
 		$(use_with pam pam-dir $(getpam_mod_dir))
@@ -55,6 +76,7 @@ pkg_setup() {
 		--with-ca-certificates=${EPREFIX}/etc/ssl/certs/ca-certificates.crt
 		--enable-ssh-agent
 		--enable-gpg-agent"
+	gnome2_src_configure
 }
 
 src_test() {
