@@ -5,7 +5,7 @@
 EAPI="4"
 GCONF_DEBUG="no"
 
-inherit eutils gnome2
+inherit gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -40,15 +40,20 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext
 	virtual/pkgconfig"
 
-pkg_setup() {
+src_prepare() {
 	DOCS="AUTHORS ChangeLog HACKING NEWS README"
 	G2CONF="${G2CONF}
 		$(use_with nautilus nautilus-extension)"
-}
-
-src_prepare() {
-	# Use login shell by default (#12900)
-	epatch "${FILESDIR}"/${PN}-3.7.0-default_shell.patch
 
 	gnome2_src_prepare
+}
+
+pkg_postinst() {
+	gnome2_pkg_postinst
+	if [[ ${REPLACING_VERSIONS} < 3.6.1-r1 && ${REPLACING_VERSIONS} != 2.32.1-r1 &&
+	      ${REPLACING_VERSIONS} != 3.4.1.1-r1 ]]; then
+		elog "Gnome Terminal no longer uses login shell by default, switching"
+		elog "to upstream default. Because of this, if you have some command you"
+		elog "want to be run, be sure to have it placed in your ~/.bashrc file."
+	fi
 }

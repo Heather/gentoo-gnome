@@ -5,10 +5,7 @@
 EAPI="4"
 GCONF_DEBUG="no"
 
-inherit eutils gnome2
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
+inherit gnome2
 
 DESCRIPTION="The Gnome Terminal"
 HOMEPAGE="http://www.gnome.org/"
@@ -40,8 +37,15 @@ src_prepare() {
 	# switch and not from GDK_TARGET, bug #363033
 	G2CONF="${G2CONF} --with-gtk=3.0"
 
-	# Use login shell by default (#12900)
-	epatch "${FILESDIR}"/${PN}-2.22.0-default_shell.patch
-
 	gnome2_src_prepare
+}
+
+pkg_postinst() {
+	gnome2_pkg_postinst
+	if [[ ${REPLACING_VERSIONS} < 3.6.1-r1 && ${REPLACING_VERSIONS} != 2.32.1-r1 &&
+	      ${REPLACING_VERSIONS} != 3.4.1.1-r1 ]]; then
+		elog "Gnome Terminal no longer uses login shell by default, switching"
+		elog "to upstream default. Because of this, if you have some command you"
+		elog "want to be run, be sure to have it placed in your ~/.bashrc file."
+	fi
 }
