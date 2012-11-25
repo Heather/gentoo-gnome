@@ -1,6 +1,6 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-extra/evolution-exchange/evolution-exchange-2.32.2.ebuild,v 1.1 2011/02/07 11:40:13 pacho Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="no"
@@ -18,6 +18,7 @@ LICENSE="GPL-2"
 SLOT="1.0"
 IUSE=""
 if [[ ${PV} = 9999 ]]; then
+	IUSE="${IUSE} doc"
 	KEYWORDS=""
 else
 	# XXX: re-enable keywords when libmapi can be emerged without black magick
@@ -37,6 +38,11 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext
 	virtual/pkgconfig
 "
+
+if [[ ${PV} = 9999 ]]; then
+	DEPEND="${DEPEND}
+		doc? ( >=dev-util/gtk-doc-1.9 )"
+fi
 
 src_prepare() {
 	DOCS="AUTHORS ChangeLog NEWS README"
