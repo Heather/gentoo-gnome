@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/gst-plugins-base/gst-plugins-base-0.10.36.ebuild,v 1.2 2012/10/23 08:10:00 tetromino Exp $
+# $Header: $
 
 EAPI="5"
 
@@ -34,7 +34,7 @@ RDEPEND=">=dev-libs/glib-2.32:2
 DEPEND="${RDEPEND}
 	>=dev-util/gtk-doc-am-1.12
 	virtual/pkgconfig
-	nls? ( >=sys-devel/gettext-0.11.5 )
+	nls? ( >=sys-devel/gettext-0.17 )
 	X? (
 		x11-proto/videoproto
 		x11-proto/xextproto
