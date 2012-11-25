@@ -12,7 +12,7 @@ HOMEPAGE="http://gstreamer.freedesktop.org/modules/gst-libav.html"
 SRC_URI="http://gstreamer.freedesktop.org/src/${MY_PN}/${MY_PN}-${PV}.tar.${GST_TARBALL_SUFFIX}"
 
 LICENSE="GPL-2"
-KEYWORDS="~alpha amd64 arm ~hppa ~ia64 ~mips ppc ppc64 ~sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="+orc"
 
 RDEPEND="
@@ -47,6 +47,7 @@ src_compile() {
 
 src_install() {
 	default
+	prune_libtool_files --modules
 }
 
 pkg_postinst() {
