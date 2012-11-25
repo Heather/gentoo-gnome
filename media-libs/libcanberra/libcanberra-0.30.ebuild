@@ -41,6 +41,7 @@ REQUIRED_USE="udev? ( alsa )"
 
 src_configure() {
 	econf \
+		--docdir="${EPREFIX}"/usr/share/doc/${PF} \
 		$(use_enable alsa) \
 		$(use_enable oss) \
 		$(use_enable pulseaudio pulse) \
