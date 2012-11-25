@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-cpp/glibmm/glibmm-2.32.1.ebuild,v 1.1 2012/07/16 08:03:06 tetromino Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="no"
@@ -28,7 +28,6 @@ src_prepare() {
 	G2CONF="${G2CONF}
 		$(use_enable debug debug-refcounting)
 		$(use_enable doc documentation)
-		--disable-schemas-compile
 		--enable-deprecated-api"
 
 	if ! use test; then
