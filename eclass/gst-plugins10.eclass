@@ -129,7 +129,7 @@ fi
 # added to remove circular deps
 # 6/2/2006 - zaheerm
 if [[ ${PN} != ${GST_ORG_MODULE} ]]; then
-	RDEPEND="${RDEPEND} media-libs/${GST_ORG_MODULE}:${SLOT}"
+	RDEPEND="${RDEPEND} >=media-libs/${GST_ORG_MODULE}-${PV}:${SLOT}"
 fi
 
 DEPEND="${RDEPEND} ${DEPEND}
