@@ -21,7 +21,7 @@ if [[ ${PV} = 9999 ]]; then
 else
 	KEYWORDS="~amd64"
 fi
-IUSE="kerberos" # doc
+IUSE="kerberos"
 
 RDEPEND="
 	dev-db/sqlite:3
@@ -35,13 +35,13 @@ RDEPEND="
 	kerberos? ( virtual/krb5 )
 "
 DEPEND="${RDEPEND}
+	>=dev-util/gtk-doc-am-1.9
 	>=dev-util/intltool-0.35.5
 	virtual/pkgconfig
 "
-# For now, this package has no gtk-doc documentation to build
-#	doc? ( >=dev-util/gtk-doc-1.9 )
 
-RESTRICT="test" # tests require connecting to an Exchange server
+# Requires connection to an Exchange server
+RESTRICT="test"
 
 src_configure() {
 	DOCS="ChangeLog NEWS README" # AUTHORS is empty
