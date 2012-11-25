@@ -3,6 +3,7 @@
 # $Header: $
 
 EAPI="4"
+GCONF_DEUBG="yes" # disable asserts
 
 inherit gnome2
 if [[ ${PV} = 9999 ]]; then
@@ -43,14 +44,21 @@ src_prepare() {
 	# Do not pass --enable-tests to configure - package has no tests
 
 	gnome2_src_prepare
-	# Avoid eautoreconf
-	sed -e 's:$CFLAGS -g -O0:$CFLAGS:' -i configure || die "sed failed"
+
+	# Drop stupid CFLAGS
+	sed -e 's:$CFLAGS -g -O0:$CFLAGS:' \
+		-i configure || die "sed failed"
 }
 
 pkg_postinst() {
-	elog "To use ${PN}, the Avahi daemon must be running. On an OpenRC"
-	elog "system, you can start the Avahi daemon by"
-	elog "# /etc/init.d/avahi-daemon start"
-	elog "To start Avahi automatically, add it to the default runlevel:"
-	elog "# rc-update add avahi-daemon default"
+	gnome2_pkg_postinst
+
+	if ! has_version net-dns/avahi && \
+		! rc-config list default | grep -q "avahi-daemon" ; then
+		elog "To use ${PN}, the Avahi daemon must be running. On an OpenRC"
+		elog "system, you can start the Avahi daemon by"
+		elog "# /etc/init.d/avahi-daemon start"
+		elog "To start Avahi automatically, add it to the default runlevel:"
+		elog "# rc-update add avahi-daemon default"
+	fi
 }
