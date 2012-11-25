@@ -44,7 +44,6 @@ src_configure() {
 	# Disable debug, as it only affects -g passing (debugging symbols), this must done through make.conf in gentoo
 	econf \
 		--disable-static \
-		--disable-dependency-tracking \
 		$(use_enable nls) \
 		--disable-valgrind \
 		--disable-examples \
