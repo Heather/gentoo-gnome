@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/gst-plugins-bad/gst-plugins-bad-0.10.22.ebuild,v 1.10 2012/09/07 13:42:19 leio Exp $
+# $Header: $
 
 EAPI="5"
 
