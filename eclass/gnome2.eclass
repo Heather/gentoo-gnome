@@ -150,9 +150,18 @@ gnome2_src_configure() {
 		fi
 	fi
 
-	# Prevent a QA warning
-	if has doc ${IUSE} ; then
-		grep -q "enable-gtk-doc" configure && G2CONF="${G2CONF} $(use_enable doc gtk-doc)"
+	# 2012-11-25
+	# Starting with EAPI=5, we consider packages installing gtk-doc to be
+	# handled by adding DEPEND="dev-util/gtk-doc-am" which provides tools to
+	# relink URLs in documentation to already installed documentation.
+	# This decision also greatly helps with constantly broken doc generation.
+	# Preserve old behavior for older EAPI.
+	if grep -q "enable-gtk-doc" configure ; then
+		if has ${EAPI-0} 0 1 2 3 4 && has doc ${IUSE} ; then
+			G2CONF="${G2CONF} $(use_enable doc gtk-doc)"
+		else
+			G2CONF="${G2CONF} --disable-gtk-doc"
+		fi
 	fi
 
 	# Pass --disable-maintainer-mode when needed
