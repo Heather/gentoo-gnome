@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-util/glade/glade-3.12.2.ebuild,v 1.1 2012/09/22 10:06:06 pacho Exp $
+# $Header: $
 
 EAPI="4"
 GCONF_DEBUG="yes"
@@ -39,18 +39,21 @@ DEPEND="${RDEPEND}
 #	gnome-base/gnome-common
 
 src_prepare() {
+	# To avoid file collison with other slots, rename help module.
+	# Prevent the UI from loading glade:3's gladeui devhelp documentation.
+	epatch "${FILESDIR}/${PN}-3.14.1-doc-version.patch"
+
+	gnome2_src_prepare
+}
+
+src_configure() {
 	DOCS="AUTHORS ChangeLog NEWS README TODO"
 	G2CONF="${G2CONF}
 		--disable-static
 		--enable-libtool-lock
 		$(use_enable introspection)
 		$(use_enable python)"
-
-	# To avoid file collison with other slots, rename help module.
-	# Prevent the UI from loading glade:3's gladeui devhelp documentation.
-	epatch "${FILESDIR}/${PN}-3.14.1-doc-version.patch"
-
-	gnome2_src_prepare
+	gnome2_src_configure
 }
 
 src_install() {
@@ -61,4 +64,12 @@ src_install() {
 	sed -e 's:name="gladeui":name="gladeui-2":' \
 		-i doc/html/gladeui.devhelp2 || die "sed of gladeui.devhelp2 failed"
 	gnome2_src_install
+}
+
+pkg_postinst() {
+	gnome2_pkg_postinst
+	if ! has_version dev-util/devhelp ; then
+		elog "You may want to install dev-util/devhelp for integration API"
+		elog "documentation support."
+	fi
 }
