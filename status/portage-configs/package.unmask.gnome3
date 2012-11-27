@@ -21,7 +21,6 @@
 >=x11-libs/gdk-pixbuf-2.26.5
 =x11-libs/gtk+-3.6*:3
 =x11-themes/gnome-themes-standard-3.6*
-
-# Can be used by gvfs
-=media-libs/libgphoto2-2.5*
-=media-gfx/gphoto2-2.5*
+# Other stuff
+=dev-libs/libxml2-2.9*
+>=dev-util/d-feet-0.3
