@@ -15,14 +15,16 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd6
 IUSE="+orc"
 
 RDEPEND="
-	>=dev-libs/glib-2.32:2
-	>=media-libs/gstreamer-1:${SLOT}
-	>=media-libs/gst-plugins-base-1:${SLOT}
-	orc? ( >=dev-lang/orc-0.4.16 )
+	>=dev-libs/glib-2.24:2
+	>=media-libs/gstreamer-0.10.36:${SLOT}
+	>=media-libs/gst-plugins-base-0.10.36:${SLOT}
+	orc? ( >=dev-lang/orc-0.4.11 )
 "
 DEPEND="${RDEPEND}
-	>=dev-util/gtk-doc-am-1.12
+	>=dev-util/gtk-doc-am-1.3
 "
+RDEPEND="${RDEPEND}
+	!<media-libs/gst-plugins-bad-0.10.13"
 
 GST_PLUGINS_BUILD=""
 
