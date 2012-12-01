@@ -12,5 +12,5 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~amd64-fb
 IUSE=""
 
 # FIXME: automagic dependency on libsoup-gnome
-RDEPEND=">=net-libs/libsoup-2.26.1"
+RDEPEND=">=net-libs/libsoup-2.26"
 DEPEND="${RDEPEND}"
