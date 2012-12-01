@@ -14,12 +14,14 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-fbsd ~x8
 IUSE="+orc"
 
 RDEPEND="
-	>=dev-libs/glib-2.32:2
-	>=media-libs/gst-plugins-base-1:${SLOT}
-	>=media-libs/gstreamer-1:${SLOT}
-	orc? ( >=dev-lang/orc-0.4.16 )
+	>=dev-libs/glib-2.24:2
+	>=media-libs/gst-plugins-base-0.10.36:${SLOT}
+	>=media-libs/gstreamer-0.10.36:${SLOT}
+	orc? ( >=dev-lang/orc-0.4.11 )
 "
 DEPEND="${RDEPEND}"
+RDEPEND="${RDEPEND}
+	!<media-plugins/gst-plugins-farsight-0.12.11:${SLOT}"
 
 # Avoid --enable-bad passing by the eclass blindly
 GST_PLUGINS_BUILD=""
