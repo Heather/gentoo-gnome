@@ -202,11 +202,11 @@ gst-plugins10_src_configure() {
 	gst-plugins10_get_plugins
 
 	for plugin in ${GST_PLUGINS_LIST} ; do
-		gst_conf="${gst_conf} --disable-${plugin}"
-	done
-
-	for plugin in ${GST_PLUGINS_BUILD} ; do
-		gst_conf="${gst_conf} --enable-${plugin}"
+		if has ${plugin} ${GST_PLUGINS_BUILD} ; then
+			gst_conf="${gst_conf} --enable-${plugin}"
+		else
+			gst_conf="${gst_conf} --disable-${plugin}"
+		fi
 	done
 
 	if grep -q "ORC_CHECK" configure.* ; then
