@@ -23,9 +23,6 @@
 # developers responsible for gstreamer <gstreamer@gentoo.org> or the application
 # developer.
 
-# XXX: what was GST_ORC intended for. Isn't it better to leave it to the
-#      ebuild reponsability ?
-
 inherit eutils multilib toolchain-funcs versionator
 
 GST_EXPF=""
@@ -51,11 +48,6 @@ if has "${EAPI:-0}" 0 1 2 3; then
 else
 	: ${GST_LA_PUNT:="yes"}
 fi
-
-# @ECLASS-VARIABLE: GST_ORC
-# @DESCRIPTION:
-# Ebuild supports dev-lang/orc.
-: ${GST_ORC:="no"}
 
 # @ECLASS-VARIABLE: GST_PLUGINS_BUILD
 # @DESCRIPTION:
@@ -118,13 +110,9 @@ RDEPEND="${RDEPEND}
 	media-libs/gstreamer:${SLOT}
 "
 
-if [[ ${GST_ORC} = "yes" ]]; then
-  IUSE="+orc"
-	RDEPEND="${RDEPEND} orc? ( >=dev-lang/orc-0.4.6 )"
 #else
 # XXX: verify with old ebuilds.
 # DEPEND="${DEPEND} dev-libs/liboil"
-fi
 
 # added to remove circular deps
 # 6/2/2006 - zaheerm
@@ -224,15 +212,10 @@ gst-plugins10_src_configure() {
 	done
 
 	if grep -q "ORC_CHECK" configure.* ; then
-		if [[ ${GST_ORC} = "yes" ]]; then
+		if in_iuse orc ; then
 			gst_conf="${gst_conf} $(use_enable orc)"
 		else
 			gst_conf="${gst_conf} --disable-orc"
-		fi
-	else
-		if [[ ${GST_ORC} = "yes" ]]; then
-			eqawarn "This ebuild declares supporting USE=orc but does not."
-			eqawarn "Please report this as a bug at http://bugs.gentoo.org/"
 		fi
 	fi
 
