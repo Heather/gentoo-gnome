@@ -199,6 +199,14 @@ gst-plugins10_remove_unversioned_binaries() {
 gst-plugins10_src_configure() {
 	local plugin gst_conf
 
+	if has ${EAPI:-0} 0 1 2 3 ; then
+		gst_conf="${gst_conf} --disable-dependency-tracking"
+	fi
+
+	if has ${EAPI:-0} 0 1 2 3 4 ; then
+		gst_conf="${gst_conf} --disable-silent-rules"
+	fi
+
 	gst-plugins10_get_plugins
 
 	for plugin in ${GST_PLUGINS_LIST} ; do
