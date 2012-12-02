@@ -31,7 +31,7 @@ case "${EAPI:-0}" in
 		GST_EXPF="${GST_EXPF} src_configure src_compile src_install"
 		;;
 	0)
-		die "EAPI=\"${EAPI}\" is not supported anymore"
+		die "EAPI=\"${EAPI:-0}\" is not supported anymore"
 		;;
 	*)
 		die "EAPI=\"${EAPI}\" is not supported yet"
@@ -100,34 +100,32 @@ SRC_URI="http://gstreamer.freedesktop.org/src/${GST_ORG_MODULE}/${GST_ORG_MODULE
 LICENSE="GPL-2"
 SLOT="${GST_ORG_PVP}"
 
-if [[ ${PN} != ${GST_ORG_MODULE} ]]; then
-	# Do not run test phase for invididual plugin ebuilds.
-	RESTRICT="test"
-fi
+S="${WORKDIR}/${GST_ORG_MODULE}-${PV}"
 
-RDEPEND="${RDEPEND}
+RDEPEND="
 	>=dev-libs/glib-2.6:2
 	media-libs/gstreamer:${SLOT}
 "
-
-#else
-# XXX: verify with old ebuilds.
-# DEPEND="${DEPEND} dev-libs/liboil"
-
-# added to remove circular deps
-# 6/2/2006 - zaheerm
-if [[ ${PN} != ${GST_ORG_MODULE} ]]; then
-	RDEPEND="${RDEPEND} >=media-libs/${GST_ORG_MODULE}-${PV}:${SLOT}"
-fi
-
-DEPEND="${RDEPEND} ${DEPEND}
+DEPEND="
 	>=sys-apps/sed-4
-	>=sys-devel/gettext-0.17
 	virtual/pkgconfig
 "
 
-S="${WORKDIR}/${GST_ORG_MODULE}-${PV}"
+if [[ ${PN} != ${GST_ORG_MODULE} ]]; then
+	# Do not run test phase for invididual plugin ebuilds.
+	RESTRICT="test"
+	RDEPEND="${RDEPEND} >=media-libs/${GST_ORG_MODULE}-${PV}:${SLOT}"
+else
+	IUSE="nls"
+	DEPEND="${DEPEND} nls? ( >=sys-devel/gettext-0.17 )"
+fi
 
+#if [[ ${SLOT} == "0.10" ]]; then
+# XXX: verify with old ebuilds.
+# DEPEND="${DEPEND} dev-libs/liboil"
+#fi
+
+DEPEND="${DEPEND} ${RDEPEND}"
 
 # @FUNCTION: gst-plugins10_get_plugins
 # @INTERNAL
@@ -225,6 +223,10 @@ gst-plugins10_src_configure() {
 
 	if grep -q "disable-schemas-compile" configure ; then
 		gst_conf="${gst_conf} --disable-schemas-compile"
+	fi
+
+	if [[ ${PN} == ${GST_ORG_MODULE} ]]; then
+		gst_conf="${gst_conf} $(use_enable nls)"
 	fi
 
 	einfo "Configuring to build ${GST_PLUGINS_BUILD} plugin(s) ..."
