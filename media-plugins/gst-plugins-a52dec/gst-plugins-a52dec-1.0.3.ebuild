@@ -4,13 +4,13 @@
 
 EAPI="5"
 
-# Used for runtime detection of MMX/3dNow/MMXEXT and telling liba52dec
-GST_ORC="yes"
-
 inherit gst-plugins-ugly
 
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd"
-IUSE=""
+IUSE="+orc"
 
-RDEPEND=">=media-libs/a52dec-0.7.3"
+RDEPEND="
+	>=media-libs/a52dec-0.7.3
+	orc? ( >=dev-lang/orc-0.4.16 )
+"
 DEPEND="${RDEPEND}"
