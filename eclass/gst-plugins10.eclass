@@ -27,8 +27,11 @@ inherit eutils multilib toolchain-funcs versionator
 
 GST_EXPF=""
 case "${EAPI:-0}" in
-	1|2|3|4|5)
-		GST_EXPF="${GST_EXPF} src_configure src_compile src_install"
+	2|3|4|5)
+		GST_EXPF="src_configure src_compile src_install"
+		;;
+	1)
+		GST_EXPF="src_compile src_install"
 		;;
 	0)
 		die "EAPI=\"${EAPI:-0}\" is not supported anymore"
@@ -246,6 +249,8 @@ gst-plugins10_src_configure() {
 
 # @FUNCTION: gst-plugins10_src_compile
 gst-plugins10_src_compile() {
+	has ${EAPI:-0} 0 1 && gst-plugins10_src_configure "$@"
+
 	gst-plugins10_find_plugin_dir
 
 	if has "${EAPI:-0}" 0 1 2 3 ; then
