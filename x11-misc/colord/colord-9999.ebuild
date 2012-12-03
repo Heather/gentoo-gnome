@@ -38,7 +38,7 @@ COMMON_DEPEND="
 	gusb? ( >=dev-libs/libgusb-0.1.1 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.8 )
 	scanner? ( media-gfx/sane-backends )
-	udev? ( || ( sys-fs/udev[gudev] sys-fs/udev[extras] ) )
+	udev? ( virtual/udev[gudev] )
 "
 RDEPEND="${COMMON_DEPEND}
 	media-gfx/shared-color-profiles"

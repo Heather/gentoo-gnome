@@ -54,7 +54,7 @@ RDEPEND="pulseaudio? ( !gstreamer? ( media-sound/pulseaudio ) )
 			>=sys-auth/polkit-0.101 )
 		virtual/libusb:1
 		>=sys-apps/usbredir-0.4.2
-		sys-fs/udev[gudev] )"
+		virtal/udev[gudev] )"
 DEPEND="${RDEPEND}
 	vala? ( dev-lang/vala:0.14 )
 	dev-lang/python

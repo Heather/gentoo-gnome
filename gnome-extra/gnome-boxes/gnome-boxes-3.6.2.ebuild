@@ -25,7 +25,7 @@ fi
 # NOTE: sys-fs/* stuff is called via exec()
 RDEPEND="
 	>=dev-libs/libxml2-2.7.8:2
-	>=sys-fs/udev-165[gudev]
+	>=virtual/udev-165[gudev]
 	>=dev-libs/glib-2.29.90:2
 	>=dev-libs/gobject-introspection-0.9.6
 	>=sys-libs/libosinfo-0.2.1

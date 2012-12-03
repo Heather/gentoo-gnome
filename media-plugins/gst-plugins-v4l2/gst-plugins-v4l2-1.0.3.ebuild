@@ -13,7 +13,7 @@ IUSE="udev"
 RDEPEND="
 	media-libs/libv4l
 	media-libs/gst-plugins-base:1.0[X]
-	udev? ( >=sys-fs/udev-143[gudev] )
+	udev? ( >=virtual/udev-143[gudev] )
 "
 DEPEND="${RDEPEND}
 	virtual/os-headers"

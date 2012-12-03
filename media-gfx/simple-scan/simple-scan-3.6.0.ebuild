@@ -19,9 +19,9 @@ IUSE=""
 COMMON_DEPEND="
 	>=dev-libs/glib-2.28:2
 	>=media-gfx/sane-backends-1.0.20
-	virtual/jpeg
-	|| ( >=sys-fs/udev-171[gudev] >=sys-fs/udev-145[extras] )
 	>=sys-libs/zlib-1.2.3.1
+	virtual/jpeg
+	virtual/udev[gudev]
 	x11-libs/cairo
 	>=x11-libs/gtk+-3:3
 	x11-misc/colord[scanner]

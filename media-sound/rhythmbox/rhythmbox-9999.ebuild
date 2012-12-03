@@ -65,9 +65,9 @@ COMMON_DEPEND=">=dev-libs/glib-2.32.0:2
 	lirc? ( app-misc/lirc )
 	python? ( >=dev-python/pygobject-3.0:3 )
 	udev? (
+		virtual/udev[gudev]
 		ipod? ( >=media-libs/libgpod-0.7.92[udev] )
-		mtp? ( >=media-libs/libmtp-0.3 )
-		|| ( >=sys-fs/udev-171[gudev] >=sys-fs/udev-145[extras] ) )
+		mtp? ( >=media-libs/libmtp-0.3 ) )
 	zeitgeist? ( gnome-extra/zeitgeist )
 "
 RDEPEND="${COMMON_DEPEND}

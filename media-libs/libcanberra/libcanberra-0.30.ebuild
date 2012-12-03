@@ -19,7 +19,7 @@ COMMON_DEPEND="media-libs/libvorbis
 	>=sys-devel/libtool-2.2.6b
 	alsa? (
 		media-libs/alsa-lib
-		udev? ( >=sys-fs/udev-160 ) )
+		udev? ( >=virtual/udev-160 ) )
 	gstreamer? ( media-libs/gstreamer:1.0 )
 	gtk? (
 		>=dev-libs/glib-2.32:2

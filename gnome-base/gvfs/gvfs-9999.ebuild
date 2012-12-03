@@ -60,8 +60,8 @@ RDEPEND=">=dev-libs/glib-2.33.12:2
 	samba? ( >=net-fs/samba-3.4.6[smbclient] )
 	systemd? ( sys-apps/systemd )
 	udev? (
-		cdda? ( >=dev-libs/libcdio-0.78.2[-minimal] )
-		|| ( >=sys-fs/udev-171[gudev] >=sys-fs/udev-164-r2[extras] ) )
+		virtual/udev[gudev]
+		cdda? ( >=dev-libs/libcdio-0.78.2[-minimal] ) )
 	udisks? ( >=sys-fs/udisks-1.97:2[systemd?] )"
 DEPEND="${RDEPEND}
 	dev-libs/libxslt

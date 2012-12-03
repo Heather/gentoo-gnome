@@ -30,7 +30,6 @@ COMMON_DEPEND="
 	>=x11-libs/gtk+-3.4.4:3[introspection?]
 	>=x11-libs/cairo-1.10
 	>=x11-libs/pango-1.28.0
-	>=sys-fs/udev-171[gudev]
 	>=gnome-base/gnome-desktop-2.91.6:3
 	>=gnome-base/librsvg-2.32.0:2
 	>=media-libs/libcanberra-0.26[gtk3]
@@ -46,6 +45,7 @@ COMMON_DEPEND="
 	media-libs/gstreamer:1.0[introspection?]
 	media-libs/gst-plugins-base:1.0[introspection?,ogg,pango,theora,vorbis,X]
 
+	>=virtual/udev-171[gudev]
 	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )"
 RDEPEND="${COMMON_DEPEND}
 	media-libs/gst-plugins-bad:1.0

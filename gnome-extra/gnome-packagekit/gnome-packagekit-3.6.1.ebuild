@@ -37,7 +37,7 @@ RDEPEND="
 
 	systemd? ( >=sys-apps/systemd-42 )
 	!systemd? ( sys-auth/consolekit )
-	udev? ( >=sys-fs/udev-171[gudev] )
+	udev? ( >=virtual/udev-171[gudev] )
 "
 DEPEND="${RDEPEND}
 	app-text/docbook-sgml-utils

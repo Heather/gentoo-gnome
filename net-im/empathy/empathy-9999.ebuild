@@ -69,7 +69,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.33.3:2
 	v4l? (
 		media-plugins/gst-plugins-v4l2:0.10
 		>=media-video/cheese-3.4
-		sys-fs/udev[gudev] )"
+		virtual/udev[gudev] )"
 # FIXME: gst-plugins-bad is required for the valve plugin. This should move to good
 # eventually at which point the dep can be dropped
 # empathy-3.4 is incompatible with telepathy-rakia-0.6, bug #403861
