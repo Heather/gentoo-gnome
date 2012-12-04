@@ -22,5 +22,6 @@
 =x11-libs/gtk+-3.6*:3
 =x11-themes/gnome-themes-standard-3.6*
 # Other stuff
+>=dev-cpp/gstreamermm-0.10.11
 =dev-libs/libxml2-2.9*
 >=dev-util/d-feet-0.3
