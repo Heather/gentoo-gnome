@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/clutter-gst/clutter-gst-1.6.0.ebuild,v 1.4 2012/10/25 20:26:29 eva Exp $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="yes"
 CLUTTER_LA_PUNT="yes"
 
@@ -20,8 +20,8 @@ IUSE="examples +introspection"
 # FIXME: Support for gstreamer-basevideo-0.10 (HW decoder support) is automagic
 RDEPEND="
 	>=dev-libs/glib-2.20:2
-	>=media-libs/clutter-1.6.0:1.0[introspection?]
-	>=media-libs/cogl-1.8:1.0[introspection?]
+	>=media-libs/clutter-1.6.0:1.0=[introspection?]
+	>=media-libs/cogl-1.8:1.0=[introspection?]
 	media-libs/gstreamer:1.0[introspection?]
 	media-libs/gst-plugins-bad:1.0
 	media-libs/gst-plugins-base:1.0[introspection?]

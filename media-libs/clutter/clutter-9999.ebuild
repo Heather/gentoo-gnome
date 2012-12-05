@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/clutter/clutter-1.10.8.ebuild,v 1.2 2012/07/14 13:19:30 blueness Exp $
 
-EAPI="4"
+EAPI="5"
 CLUTTER_LA_PUNT="yes"
 
 # Inherit gnome2 after clutter to download sources from gnome.org
@@ -30,7 +30,7 @@ RDEPEND="
 	>=dev-libs/glib-2.31.19:2
 	>=dev-libs/atk-2.5.3[introspection?]
 	>=dev-libs/json-glib-0.12[introspection?]
-	>=media-libs/cogl-1.9.6:1.0[introspection?,pango]
+	>=media-libs/cogl-1.9.6:1.0=[introspection?,pango]
 	media-libs/fontconfig
 	>=x11-libs/cairo-1.10[glib]
 	>=x11-libs/pango-1.30[introspection?]

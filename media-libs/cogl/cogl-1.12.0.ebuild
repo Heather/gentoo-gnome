@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 CLUTTER_LA_PUNT="yes"
 
 # Inherit gnome2 after clutter to download sources from gnome.org
@@ -15,7 +15,7 @@ DESCRIPTION="A library for using 3D graphics hardware to draw pretty pictures"
 HOMEPAGE="http://www.clutter-project.org/"
 
 LICENSE="LGPL-2.1+ FDL-1.1+"
-SLOT="1.0"
+SLOT="1.0/11"
 IUSE="doc examples +introspection +opengl gles2 +pango"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
@@ -51,10 +51,10 @@ DEPEND="${COMMON_DEPEND}
 		media-libs/mesa[classic] )"
 # Need classic mesa swrast for tests, llvmpipe causes a test failure
 
-pkg_setup() {
+src_prepare() {
 	DOCS="NEWS README"
 	EXAMPLES="examples/{*.c,*.jpg}"
-	# XXX: think about kms-egl, gles, quartz, sdl, wayland
+	# XXX: think about kms-egl, quartz, sdl, wayland
 	G2CONF="${G2CONF}
 		--disable-examples-install
 		--disable-profile
@@ -69,11 +69,10 @@ pkg_setup() {
 		--enable-glib
 		--enable-deprecated
 		$(use_enable introspection)
-		$(use_enable pango cogl-pango)"
+		$(use_enable pango cogl-pango)
+		$(use_enable doc gtk-doc)"
 	use gles2 && G2CONF="${G2CONF} --with-default-driver=gles2"
-}
 
-src_prepare() {
 	# https://bugzilla.gnome.org/show_bug.cgi?id=684731
 	epatch "${FILESDIR}/${PN}-1.12.0-fix-experimental-doc-build.patch"
 	gnome2_src_prepare
