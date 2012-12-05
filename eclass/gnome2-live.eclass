@@ -19,7 +19,7 @@ inherit autotools gnome2 gnome2-utils libtool git-2
 # Stolen from git.eclass
 EXPORTED_FUNCTIONS="src_unpack pkg_postinst"
 case "${EAPI:-0}" in
-    2|3|4) EXPORTED_FUNCTIONS="${EXPORTED_FUNCTIONS} src_prepare" ;;
+    2|3|4|5) EXPORTED_FUNCTIONS="${EXPORTED_FUNCTIONS} src_prepare" ;;
     0|1) ;;
     *) die "Unknown EAPI, Bug eclass maintainers." ;;
 esac
