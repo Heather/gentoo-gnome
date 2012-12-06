@@ -21,7 +21,7 @@ COMMON_DEPEND="
 	>=dev-libs/glib-2.32:2
 	>=x11-libs/gtk+-3.4.2:3
 	>=x11-libs/gtksourceview-3.0.0:3.0
-	>=dev-libs/gdl-2.91.91:3=
+	>=dev-libs/gdl-3.6:3=
 	>=dev-libs/libxml2-2.4.12:2
 	>=dev-libs/json-glib-0.12.0
 	>=dev-libs/libpeas-1.2[gtk]
