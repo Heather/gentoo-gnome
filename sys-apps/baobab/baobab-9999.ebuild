@@ -2,19 +2,21 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2
 if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
+	VALA_MIN_API_VERSION="0.18"
+	VALA_USE_DEPEND="vapigen"
+	inherit gnome2-live vala
 fi
 
 DESCRIPTION="Disk usage browser for GNOME 3"
 HOMEPAGE="https://live.gnome.org/GnomeUtils"
 
-LICENSE="GPL-2 FDL-1.1"
+LICENSE="GPL-2+ FDL-1.1+"
 SLOT="0"
 IUSE=""
 if [[ ${PV} = 9999 ]]; then
@@ -24,7 +26,7 @@ else
 fi
 
 COMMON_DEPEND=">=dev-libs/glib-2.30.0:2
-	gnome-base/libgtop:2
+	gnome-base/libgtop:2=
 	x11-libs/cairo
 	x11-libs/gdk-pixbuf
 	>=x11-libs/gtk+-3.5.9:3
@@ -41,12 +43,20 @@ DEPEND="${COMMON_DEPEND}
 if [[ ${PV} = 9999 ]]; then
 	DEPEND="${DEPEND}
 		app-text/yelp-tools
-		>=dev-lang/vala-0.17.4:0.18"
+		$(vala_depend)"
 fi
 
-pkg_setup() {
-	DOCS="AUTHORS ChangeLog NEWS README"
+src_prepare() {
 	G2CONF="${G2CONF}
 		--disable-schemas-compile"
-	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
+	if [[ ${PV} = 9999 ]]; then
+		vala_src_prepare
+	else
+		G2CONF="${G2CONF}
+			ITSTOOL=$(type -P true)
+			XMLLINT=$(type -P true)
+			VALAC=$(type -P true)
+			VAPIGEN=$(type -P true)"
+	fi
+	gnome2_src_prepare
 }
