@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
@@ -15,7 +15,7 @@ DESCRIPTION="Libraries for the gnome desktop that are not part of the UI"
 HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2+ FDL-1.1+ LGPL-2+"
-SLOT="3"
+SLOT="3/4" # subslot = libgnome-desktop-3 soname version
 IUSE="doc +introspection"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
