@@ -136,6 +136,8 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-3.5.91-optional-kerberos.patch"
 	# Fix some absolute paths to be appropriate for Gentoo
 	epatch "${FILESDIR}/${PN}-3.5.91-gentoo-paths.patch"
+	# Needed for g-c-c 3.6.3 and PulseAudio >2.1. Remove in 3.6.4.
+	epatch "${FILESDIR}/${P}-pulseaudio-3-fix.patch"
 	[[ ${PV} != 9999 ]] && eautoreconf
 
 	gnome2_src_prepare
