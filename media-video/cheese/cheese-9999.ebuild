@@ -2,11 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/cheese/cheese-3.4.2.ebuild,v 1.1 2012/05/24 08:04:54 tetromino Exp $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2 virtualx
+inherit eutils gnome2 multilib virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -14,8 +14,8 @@ fi
 DESCRIPTION="A cheesy program to take pictures and videos from your webcam"
 HOMEPAGE="http://www.gnome.org/projects/cheese/"
 
-LICENSE="GPL-2"
-SLOT="0"
+LICENSE="GPL-2+"
+SLOT="0/7" # subslot = libcheese soname version
 IUSE="+introspection sendto test"
 if [[ ${PV} = 9999 ]]; then
 	IUSE="${IUSE} doc"
@@ -30,12 +30,13 @@ COMMON_DEPEND="
 	>=x11-libs/gtk+-3.4.4:3[introspection?]
 	>=x11-libs/cairo-1.10
 	>=x11-libs/pango-1.28.0
-	>=gnome-base/gnome-desktop-2.91.6:3
+	>=gnome-base/gnome-desktop-2.91.6:3=
 	>=gnome-base/librsvg-2.32.0:2
 	>=media-libs/libcanberra-0.26[gtk3]
 	>=media-libs/clutter-1.10:1.0[introspection?]
 	>=media-libs/clutter-gtk-0.91.8:1.0
 	>=media-libs/clutter-gst-1.9:2.0
+	media-libs/cogl:0.10=[introspection?]
 
 	media-video/gnome-video-effects
 	x11-libs/gdk-pixbuf:2[jpeg,introspection?]
@@ -94,4 +95,16 @@ src_compile() {
 
 src_test() {
 	Xemake check
+}
+
+pkg_preinst() {
+	gnome2_pkg_preinst
+	preserve_old_lib /usr/$(get_libdir)/libcheese.so.3 \
+		/usr/$(get_libdir)/libcheese-gtk.so.21
+}
+
+pkg_postinst() {
+	gnome2_pkg_postinst
+	preserve_old_lib_notify /usr/$(get_libdir)/libcheese.so.3 \
+		/usr/$(get_libdir)/libcheese-gtk.so.21
 }
