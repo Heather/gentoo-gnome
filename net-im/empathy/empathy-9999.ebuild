@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_DEPEND="2:2.5"
@@ -30,11 +30,11 @@ COMMON_DEPEND=">=dev-libs/glib-2.33.3:2
 	>=x11-libs/gtk+-3.5.1:3
 	x11-libs/pango
 	>=dev-libs/dbus-glib-0.51
-	>=dev-libs/folks-0.7.3
-	dev-libs/libgee:0
+	>=dev-libs/folks-0.7.3:=
+	dev-libs/libgee:0=
 	>=app-crypt/libsecret-0.5
 	>=media-libs/libcanberra-0.25[gtk3]
-	>=net-libs/gnutls-2.8.5
+	>=net-libs/gnutls-2.8.5:=
 	>=net-libs/webkit-gtk-1.3.13:3
 	>=x11-libs/libnotify-0.7
 
@@ -42,6 +42,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.33.3:2
 	>=media-libs/clutter-1.10.0:1.0
 	>=media-libs/clutter-gtk-1.1.2:1.0
 	>=media-libs/clutter-gst-1.5.2:1.0
+	media-libs/cogl:1.0=
 
 	net-libs/farstream
 	>=net-libs/telepathy-farstream-0.2.1
@@ -68,8 +69,9 @@ COMMON_DEPEND=">=dev-libs/glib-2.33.3:2
 		>=app-text/iso-codes-0.35 )
 	v4l? (
 		media-plugins/gst-plugins-v4l2:0.10
-		>=media-video/cheese-3.4
 		virtual/udev[gudev] )"
+#		>=media-video/cheese-3.4
+
 # FIXME: gst-plugins-bad is required for the valve plugin. This should move to good
 # eventually at which point the dep can be dropped
 # empathy-3.4 is incompatible with telepathy-rakia-0.6, bug #403861
@@ -113,8 +115,10 @@ src_configure() {
 		$(use_enable map)
 		$(use_enable sendto nautilus-sendto)
 		$(use_enable spell)
-		$(use_with v4l cheese)
+		--without-cheese
 		$(use_enable v4l gudev)"
+#		$(use_with v4l cheese)
+#		cheese-3.6 is gst-1.0-only; readd it when we have "--enable-gst-1.0"
 	gnome2_src_configure
 }
 
