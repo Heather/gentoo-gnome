@@ -119,6 +119,7 @@ src_configure() {
 		$(use_enable v4l gudev)"
 #		$(use_with v4l cheese)
 #		cheese-3.6 is gst-1.0-only; readd it when we have "--enable-gst-1.0"
+	[[ ${PV} = 9999 ]] || G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
 	gnome2_src_configure
 }
 
