@@ -8,7 +8,7 @@
 =app-accessibility/at-spi2-atk-2.6*:2
 =app-accessibility/at-spi2-core-2.6*:2
 =dev-cpp/glibmm-2.34*:2
-=dev-cpp/gtkmm-2.36*:3
+=dev-cpp/gtkmm-3.6*:3
 =dev-libs/atk-2.6*
 =dev-libs/gjs-1.34*
 =dev-libs/glib-2.34*:2
