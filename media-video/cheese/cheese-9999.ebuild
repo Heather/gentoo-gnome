@@ -36,7 +36,7 @@ COMMON_DEPEND="
 	>=media-libs/clutter-1.10:1.0[introspection?]
 	>=media-libs/clutter-gtk-0.91.8:1.0
 	>=media-libs/clutter-gst-1.9:2.0
-	media-libs/cogl:0.10=[introspection?]
+	media-libs/cogl:1.0=[introspection?]
 
 	media-video/gnome-video-effects
 	x11-libs/gdk-pixbuf:2[jpeg,introspection?]
