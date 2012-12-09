@@ -22,6 +22,8 @@ if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux"
+	# 3.6 is tagged in upstream git, but the tarballs have not been uploaded :/
+	SRC_URI="http://dev.gentoo.org/~tetromino/distfiles/${PN}/${P}-unofficial.tar.xz"
 fi
 
 # null applet still needs bonobo support for gnome-panel?
