@@ -31,9 +31,7 @@ RDEPEND=">=app-editors/gedit-3.2.1[python?]
 		>=app-editors/gedit-3[introspection]
 		dev-python/dbus-python
 		dev-python/pycairo
-		|| (
-			dev-python/pygobject:2[cairo,introspection]
-			dev-python/pygobject:3[cairo] )
+		dev-python/pygobject:3[cairo]
 		>=x11-libs/gtk+-3.4:3[introspection]
 		>=x11-libs/gtksourceview-3:3.0[introspection]
 		x11-libs/pango[introspection]
