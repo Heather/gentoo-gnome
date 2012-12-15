@@ -14,7 +14,7 @@ HOMEPAGE="http://www.gnome.org"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="cdr gajim +mail pidgin upnp"
+IUSE="cdr gajim +mail pidgin upnp-av"
 
 COMMON_DEPEND=">=x11-libs/gtk+-2.90.3:3[X(+)]
 	>=dev-libs/glib-2.25.9:2
@@ -26,7 +26,7 @@ COMMON_DEPEND=">=x11-libs/gtk+-2.90.3:3[X(+)]
 	pidgin? (
 		>=net-im/pidgin-2.0.0
 		>=dev-libs/dbus-glib-0.60 )
-	upnp? ( >=net-libs/gupnp-0.13.0 )"
+	upnp-av? ( >=net-libs/gupnp-0.13.0 )"
 RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/nautilus-2.91.1[sendto]"
 DEPEND="${COMMON_DEPEND}
@@ -53,7 +53,7 @@ src_configure() {
 	_use_plugin mail evolution
 	_use_plugin pidgin
 	_use_plugin gajim
-	_use_plugin upnp
+	_use_plugin upnp-av upnp
 	gnome2_src_configure
 }
 
