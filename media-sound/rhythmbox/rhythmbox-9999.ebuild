@@ -80,7 +80,7 @@ RDEPEND="${COMMON_DEPEND}
 	x11-themes/gnome-icon-theme-symbolic
 	upnp-av? (
 		>=media-libs/grilo-0.2:0.2
-		>=media-plugins/grilo-plugins-0.2:0.2[upnp] )
+		>=media-plugins/grilo-plugins-0.2:0.2[upnp-av] )
 	python? (
 		>=dev-python/gst-python-0.10.8:0.10
 
