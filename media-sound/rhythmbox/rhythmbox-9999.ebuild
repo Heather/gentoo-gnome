@@ -18,8 +18,7 @@ HOMEPAGE="http://www.rhythmbox.org/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="cdr clutter daap dbus doc gnome-keyring html ipod libnotify lirc
-mtp nsplugin +python test +udev upnp webkit zeitgeist"
+IUSE="cdr clutter daap dbus doc gnome-keyring html ipod libnotify lirc mtp nsplugin +python test +udev upnp-av webkit zeitgeist"
 # vala
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
@@ -79,7 +78,7 @@ RDEPEND="${COMMON_DEPEND}
 	>=media-plugins/gst-plugins-meta-0.10-r2:0.10
 	>=media-plugins/gst-plugins-taglib-0.10.6:0.10
 	x11-themes/gnome-icon-theme-symbolic
-	upnp? (
+	upnp-av? (
 		>=media-libs/grilo-0.2:0.2
 		>=media-plugins/grilo-plugins-0.2:0.2[upnp] )
 	python? (
@@ -132,7 +131,7 @@ pkg_setup() {
 		$(use_enable lirc)
 		$(use_enable nsplugin browser-plugin)
 		$(use_enable python)
-		$(use_enable upnp grilo)
+		$(use_enable upnp-av grilo)
 		$(use_with cdr brasero)
 		$(use_with daap mdns avahi)
 		$(use_with gnome-keyring)
