@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
@@ -14,8 +14,8 @@ fi
 DESCRIPTION="GLib-based library for accessing online service APIs using the GData protocol"
 HOMEPAGE="http://live.gnome.org/libgdata"
 
-LICENSE="LGPL-2.1"
-SLOT="0"
+LICENSE="LGPL-2.1+"
+SLOT="0/13" # subslot = libgdata soname version
 IUSE="gnome +introspection static-libs"
 if [[ ${PV} = 9999 ]]; then
 	IUSE="${IUSE} doc"
@@ -33,7 +33,7 @@ RDEPEND="
 	>=net-libs/libsoup-2.37.91:2.4[introspection?]
 	>=x11-libs/gdk-pixbuf-2.14:2
 	gnome? (
-		app-crypt/gcr
+		app-crypt/gcr:=
 		>=net-libs/gnome-online-accounts-3.2
 		>=net-libs/libsoup-gnome-2.37.91:2.4[introspection?] )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.7 )
@@ -55,9 +55,6 @@ src_prepare() {
 		$(use_enable static-libs static)
 		$(use_enable gnome)
 		$(use_enable introspection)"
-
-	# Regenerate marshalers for <glib-2.31 compat
-	rm -v gdata/gdata-marshal.{c,h} || die
 
 	gnome2_src_prepare
 
