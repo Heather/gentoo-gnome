@@ -2,10 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
+inherit eutils gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -25,7 +25,7 @@ fi
 COMMON_DEPEND=">=x11-libs/pango-1.2[X,introspection?]
 	>=x11-libs/cairo-1.10[X]
 	x11-libs/gdk-pixbuf:2[introspection?]
-	>=x11-libs/gtk+-3.3.7:3[introspection?]
+	>=x11-libs/gtk+-3.3.7:3[X,introspection?]
 	>=dev-libs/glib-2.25.11:2
 	>=media-libs/clutter-1.9.10:1.0[introspection?]
 	>=media-libs/cogl-1.9.6:1.0[introspection?]
@@ -53,10 +53,11 @@ DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.35
 	sys-devel/gettext
 	virtual/pkgconfig
-	test? ( app-text/docbook-xml-dtd:4.5 )
 	x11-proto/xextproto
 	x11-proto/xineramaproto
-	x11-proto/xproto"
+	x11-proto/xproto
+	test? ( app-text/docbook-xml-dtd:4.5 )
+"
 RDEPEND="${COMMON_DEPEND}
 	!x11-misc/expocity"
 
