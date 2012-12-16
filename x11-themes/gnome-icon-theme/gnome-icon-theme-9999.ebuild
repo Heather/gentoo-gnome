@@ -1,11 +1,11 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-themes/gnome-icon-theme/gnome-icon-theme-3.4.0.ebuild,v 1.2 2012/05/15 23:38:12 aballier Exp $
+# $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 
-inherit gnome2 eutils autotools
+inherit autotools eutils gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -45,8 +45,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	gnome2_src_prepare
-
 	if use branding; then
 		for i in 16 22 24 32 48; do
 			cp "${WORKDIR}"/tango-gentoo-v1.1/${i}x${i}/gentoo.png \
@@ -57,6 +55,7 @@ src_prepare() {
 
 	# Revert upstream commit that is wrongly updating icon cache, upstream bug #642449
 	EPATCH_OPTS="-R" epatch "${FILESDIR}/${PN}-2.91.7-update-cache.patch"
-	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
+
+	gnome2_src_prepare
 }
