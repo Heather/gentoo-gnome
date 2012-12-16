@@ -1,8 +1,8 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-themes/gnome-icon-theme-symbolic/gnome-icon-theme-symbolic-3.2.2.ebuild,v 1.4 2012/03/16 06:41:45 jdhore Exp $
+# $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 
 inherit gnome2
