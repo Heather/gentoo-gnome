@@ -20,7 +20,7 @@ IUSE="avahi debug ldap"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64 ~x86 ~x86-fbsd"
+	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 fi
 
 COMMON_DEPEND="
@@ -50,8 +50,22 @@ DEPEND="${COMMON_DEPEND}
 RDEPEND="${COMMON_DEPEND}
 	!<app-crypt/seahorse-plugins-2.91.0_pre20110114
 "
+if [[ ${PV} = 9999 ]]; then
+	DEPEND="${DEPEND}
+		app-text/yelp-tools"
+fi
 
-pkg_setup() {
+src_prepare() {
+	# FIXME: Do not mess with CFLAGS with USE="debug"
+	sed -e '/CFLAGS="$CFLAGS -g/d' \
+		-e '/CFLAGS="$CFLAGS -O0/d' \
+		-i configure.ac configure || die "sed 1 failed"
+
+	gnome2_src_prepare
+}
+
+src_configure() {
+	DOCS="AUTHORS ChangeLog NEWS README TODO THANKS"
 	G2CONF="${G2CONF}
 		--enable-pgp
 		--enable-ssh
@@ -61,14 +75,7 @@ pkg_setup() {
 		$(use_enable avahi sharing)
 		$(use_enable debug)
 		$(use_enable ldap)"
-	DOCS="AUTHORS ChangeLog NEWS README TODO THANKS"
-}
+	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
 
-src_prepare() {
-	# FIXME: Do not mess with CFLAGS with USE="debug"
-	sed -e '/CFLAGS="$CFLAGS -g/d' \
-		-e '/CFLAGS="$CFLAGS -O0/d' \
-		-i configure.ac configure || die "sed 1 failed"
-
-	gnome2_src_prepare
+	gnome2_src_configure
 }

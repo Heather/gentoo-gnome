@@ -3,8 +3,6 @@
 <pkgmetadata>
   <herd>gnome</herd>
   <use>
-    <flag name="introspection">Use
-	<pkg>dev-libs/gobject-introspection</pkg> for introspection</flag>
     <flag name="ldap">Enable seahorse to manipulate GPG keys on a LDAP server.</flag>
   </use>
   <longdescription>Seahorse is a Gnome interface for GnuPG.  It's main purpose is to be a PGP/GPG Key Manager, though 
@@ -28,5 +26,5 @@ Delete Key
 Plugins:
 Nautilus Integration
 Gedit plugin
-</longdescription>
+  </longdescription>
 </pkgmetadata>
