@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -14,7 +14,7 @@ fi
 DESCRIPTION="Archive manager for GNOME"
 HOMEPAGE="http://fileroller.sourceforge.net/"
 
-LICENSE="GPL-2+"
+LICENSE="GPL-2+ CCPL-Attribution-ShareAlike-3.0"
 SLOT="0"
 IUSE="nautilus packagekit"
 if [[ ${PV} = 9999 ]]; then
@@ -33,18 +33,19 @@ RDEPEND=">=dev-libs/glib-2.29.14:2
 	x11-libs/pango
 	x11-libs/libSM
 	x11-libs/libICE
-	>=x11-libs/gtk+-3.4.0:3
-	>=app-arch/libarchive-3.0.0
-	>=x11-libs/libnotify-0.4.3
-	>=dev-libs/json-glib-0.14.0
+	>=x11-libs/gtk+-3.4:3
+	>=app-arch/libarchive-3:=
+	>=x11-libs/libnotify-0.4.3:=
+	>=dev-libs/json-glib-0.14
 	nautilus? ( >=gnome-base/nautilus-3 )
 	packagekit? ( app-admin/packagekit-base )
 "
 DEPEND="${RDEPEND}
-	app-text/gnome-doc-utils
 	>=dev-util/intltool-0.40.0
 	sys-devel/gettext
 	virtual/pkgconfig"
+# eautoreconf needs:
+#	gnome-base/gnome-common
 
 if [[ ${PV} = 9999 ]]; then
 	DEPEND="${DEPEND}
@@ -93,7 +94,7 @@ pkg_postinst() {
 	elog "  jar,zip - app-arch/zip and app-arch/unzip"
 	elog "  lha     - app-arch/lha"
 	elog "  lzop    - app-arch/lzop"
-	elog "  rar     - app-arch/unrar"
+	elog "  rar     - app-arch/unrar or app-arch/unar"
 	elog "  rpm     - app-arch/rpm"
 	elog "  unstuff - app-arch/stuffit"
 	elog "  zoo     - app-arch/zoo"
