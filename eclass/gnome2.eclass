@@ -187,6 +187,11 @@ gnome2_src_configure() {
 		G2CONF="${G2CONF} --disable-schemas-install"
 	fi
 
+	# Pass --disable-schemas-compile when possible
+	if grep -q "disable-schemas-compile" ${ECONF_SOURCE:-.}/configure; then
+		G2CONF="${G2CONF} --disable-schemas-compile"
+	fi
+
 	# Avoid sandbox violations caused by gnome-vfs (bug #128289 and #345659)
 	addwrite "$(unset HOME; echo ~)/.gnome2"
 
