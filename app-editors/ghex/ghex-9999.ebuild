@@ -37,8 +37,6 @@ DEPEND="${RDEPEND}
 
 src_configure() {
 	DOCS="AUTHORS NEWS README"
-	G2CONF="${G2CONF}
-		--disable-schemas-compile
-		--disable-static"
+	G2CONF="${G2CONF} --disable-static"
 	gnome2_src_configure
 }
