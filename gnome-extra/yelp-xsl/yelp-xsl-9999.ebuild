@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 
 inherit gnome.org
 if [[ ${PV} = 9999 ]]; then
@@ -12,7 +12,7 @@ fi
 DESCRIPTION="XSL stylesheets for yelp"
 HOMEPAGE="http://www.gnome.org/"
 
-LICENSE="GPL-2 LGPL-2.1"
+LICENSE="GPL-2+ LGPL-2.1+ MIT FDL-1.1+"
 SLOT="0"
 IUSE=""
 if [[ ${PV} = 9999 ]]; then
