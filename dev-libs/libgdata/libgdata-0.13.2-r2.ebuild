@@ -56,8 +56,12 @@ src_prepare() {
 		$(use_enable gnome)
 		$(use_enable introspection)"
 
-	# in next version, fixes bug #444270
-	epatch "${FILESDIR}/${P}-libgdata.pc.patch"
+	# Two patches to correct deps in libgdata.pc, bug #444270
+	# upstream, in 0.13.3
+	epatch "${FILESDIR}/${P}-Requires.private.patch"
+	# https://bugzilla.gnome.org/show_bug.cgi?id=690281
+	epatch "${FILESDIR}/${PN}-0.13.2-libgdata.pc-unused-deps.patch"
+
 	eautoreconf
 
 	gnome2_src_prepare
