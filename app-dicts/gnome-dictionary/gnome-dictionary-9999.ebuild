@@ -25,9 +25,9 @@ else
 fi
 
 COMMON_DEPEND="
-	>=dev-libs/glib-2.28.0:2
+	>=dev-libs/glib-2.28:2
 	x11-libs/cairo
-	>=x11-libs/gtk+-3.0.0:3
+	>=x11-libs/gtk+-3:3
 	x11-libs/pango
 "
 RDEPEND="${COMMON_DEPEND}
@@ -36,7 +36,6 @@ RDEPEND="${COMMON_DEPEND}
 "
 # ${PN} was part of gnome-utils before 3.4
 DEPEND="${COMMON_DEPEND}
-	app-text/yelp-tools
 	>=dev-util/gtk-doc-am-1.15
 	>=dev-util/intltool-0.40
 	>=sys-devel/gettext-0.17
@@ -45,13 +44,13 @@ DEPEND="${COMMON_DEPEND}
 
 if [[ ${PV} = 9999 ]]; then
 	DEPEND="${DEPEND}
+		app-text/yelp-tools
 		doc? ( >=dev-util/gtk-doc-1.15 )"
 fi
 
 src_configure() {
 	DOCS="AUTHORS NEWS README TODO"
-	G2CONF="${G2CONF}
-		--disable-schemas-compile
-		$(use_enable ipv6)"
+	G2CONF="${G2CONF} $(use_enable ipv6)"
+	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
 	gnome2_src_configure
 }
