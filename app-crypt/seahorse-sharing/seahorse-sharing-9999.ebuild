@@ -3,7 +3,7 @@
 # $Header: $
 
 EAPI="4"
-GCONF_DEUBG="yes" # disable asserts
+GCONF_DEBUG="yes" # disable asserts
 
 inherit gnome2
 if [[ ${PV} = 9999 ]]; then
@@ -46,6 +46,7 @@ src_prepare() {
 	gnome2_src_prepare
 
 	# Drop stupid CFLAGS
+	# FIXME: doing configure.ac triggers maintainer mode rebuild
 	sed -e 's:$CFLAGS -g -O0:$CFLAGS:' \
 		-i configure || die "sed failed"
 }
