@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -6,7 +6,7 @@ EAPI="4"
 PYTHON_USE_WITH="xml"
 PYTHON_DEPEND="2:2.5"
 
-inherit base python
+inherit python
 if [[ ${PV} = 9999 ]]; then
 	inherit autotools git-2
 fi
@@ -19,13 +19,13 @@ else
 	SRC_URI="http://files.itstool.org/itstool/${P}.tar.bz2"
 fi
 
-# files in /usr/share/itstool/its are as-is
-LICENSE="GPL-3 as-is"
+# files in /usr/share/itstool/its are HPND/as-is || GPL-3
+LICENSE="GPL-3+ || ( HPND GPL-3+ )"
 SLOT="0"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64 mips ~ppc ~ppc64 ~x86"
 fi
 IUSE=""
 
@@ -34,6 +34,8 @@ DEPEND="${RDEPEND}"
 
 pkg_setup() {
 	DOCS=(ChangeLog NEWS) # AUTHORS, README are empty
+	python_set_active_version 2
+	python_pkg_setup
 }
 
 src_prepare() {
