@@ -2,12 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes" # plugins are dlopened
-PYTHON_DEPEND="2"
+PYTHON_COMPAT=( python{2_6,2_7} )
 
-inherit gnome2 multilib python eutils virtualx
+inherit eutils gnome2 multilib python-single-r1 virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -15,7 +15,7 @@ fi
 DESCRIPTION="A text editor for the GNOME desktop"
 HOMEPAGE="http://live.gnome.org/Gedit"
 
-LICENSE="GPL-2"
+LICENSE="GPL-2+ CCPL-Attribution-ShareAlike-3.0"
 SLOT="0"
 IUSE="+introspection +python spell zeitgeist"
 if [[ ${PV} = 9999 ]]; then
@@ -45,13 +45,14 @@ COMMON_DEPEND="
 
 	introspection? ( >=dev-libs/gobject-introspection-0.9.3 )
 	python? (
+		${PYTHON_DEPS}
 		>=dev-libs/gobject-introspection-0.9.3
 		>=x11-libs/gtk+-3:3[introspection]
 		>=x11-libs/gtksourceview-3.6:3.0[introspection]
 		dev-python/pycairo
-		>=dev-python/pygobject-3:3[cairo] )
+		>=dev-python/pygobject-3:3[cairo,${PYTHON_USEDEP}] )
 	spell? (
-		>=app-text/enchant-1.2
+		>=app-text/enchant-1.2:=
 		>=app-text/iso-codes-0.35 )
 	zeitgeist? ( dev-libs/libzeitgeist )"
 RDEPEND="${COMMON_DEPEND}
@@ -65,7 +66,7 @@ DEPEND="${COMMON_DEPEND}
 	>=sys-devel/gettext-0.17
 	virtual/pkgconfig
 "
-# yelp-tools, gnome-common and gtk-doc-am needed to eautoreconf
+# yelp-tools, gnome-common needed to eautoreconf
 
 if [[ ${PV} = 9999 ]]; then
 	DEPEND="${DEPEND}
@@ -82,7 +83,6 @@ src_prepare() {
 	DOCS="AUTHORS BUGS ChangeLog MAINTAINERS NEWS README"
 	G2CONF="${G2CONF}
 		--disable-deprecations
-		--disable-schemas-compile
 		--enable-updater
 		--enable-gvfs-metadata
 		$(use_enable introspection)
@@ -92,8 +92,6 @@ src_prepare() {
 	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
 
 	gnome2_src_prepare
-
-	use python && python_clean_py-compile_files
 }
 
 src_test() {
@@ -102,19 +100,4 @@ src_test() {
 
 	unset DBUS_SESSION_BUS_ADDRESS
 	GSETTINGS_SCHEMA_DIR="${S}/data" Xemake check
-}
-
-pkg_postinst() {
-	gnome2_pkg_postinst
-	if use python; then
-		python_mod_optimize /usr/$(get_libdir)/gedit/plugins
-		# FIXME: take care of gi.overrides with USE=introspection
-	fi
-}
-
-pkg_postrm() {
-	gnome2_pkg_postrm
-	if use python; then
-		python_mod_cleanup /usr/$(get_libdir)/gedit/plugins
-	fi
 }
