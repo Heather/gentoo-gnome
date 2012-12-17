@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
@@ -30,27 +30,15 @@ fi
 
 RDEPEND="~net-libs/libsoup-${PV}[introspection?]
 	|| ( gnome-base/libgnome-keyring <gnome-base/gnome-keyring-2.29.4 )
-	dev-db/sqlite:3
+	dev-db/sqlite:3=
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )"
 DEPEND="${RDEPEND}
-	sys-devel/gettext
-	>=dev-util/intltool-0.35
 	>=dev-util/gtk-doc-am-1.10
+	>=dev-util/intltool-0.35
+	sys-devel/gettext
 	virtual/pkgconfig"
 
 S=${WORKDIR}/${MY_P}
-
-pkg_setup() {
-	# Disable apache tests until they are usable on Gentoo, bug #326957
-	G2CONF="${G2CONF}
-		--disable-static
-		--disable-tls-check
-		$(use_enable introspection)
-		--with-libsoup-system
-		--with-gnome
-		--without-apache-httpd"
-	DOCS="AUTHORS NEWS README"
-}
 
 src_prepare() {
 	# Use lib present on the system
@@ -60,6 +48,15 @@ src_prepare() {
 }
 
 src_configure() {
+	# Disable apache tests until they are usable on Gentoo, bug #326957
+	G2CONF="${G2CONF}
+		--disable-static
+		--disable-tls-check
+		$(use_enable introspection)
+		--with-libsoup-system
+		--with-gnome
+		--without-apache-httpd"
+
 	# FIXME: we need addpredict to workaround bug #324779 until
 	# root cause (bug #249496) is solved
 	addpredict /usr/share/snmp/mibs/.index
