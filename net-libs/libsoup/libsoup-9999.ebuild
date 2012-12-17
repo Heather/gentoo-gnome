@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
@@ -28,15 +28,19 @@ RDEPEND=">=dev-libs/glib-2.33.1:2
 	>=dev-libs/libxml2-2:2
 	>=net-libs/glib-networking-2.30.0[ssl?]
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
-	samba? ( net-fs/samba )"
+	samba? ( net-fs/samba )
+"
 DEPEND="${RDEPEND}
-	sys-devel/gettext
-	virtual/pkgconfig
 	=dev-lang/python-2*
 	>=dev-util/intltool-0.35
-	>=dev-util/gtk-doc-am-1.10"
-[[ ${PV} = 9999 ]] && DEPEND="${DEPEND}
-	doc? ( >=dev-util/gtk-doc-1.10 )"
+	>=dev-util/gtk-doc-am-1.10
+	sys-devel/gettext
+	virtual/pkgconfig
+"
+if [[ ${PV} = 9999 ]]; then
+	DEPEND="${DEPEND}
+		doc? ( >=dev-util/gtk-doc-1.10 )"
+fi
 #	test? (	www-servers/apache[ssl,apache2_modules_auth_digest,apache2_modules_alias,apache2_modules_auth_basic,
 #		apache2_modules_authn_file,apache2_modules_authz_host,apache2_modules_authz_user,apache2_modules_dir,
 #		apache2_modules_mime,apache2_modules_proxy,apache2_modules_proxy_http,apache2_modules_proxy_connect]
@@ -50,16 +54,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# Disable apache tests until they are usable on Gentoo, bug #326957
-	DOCS="AUTHORS NEWS README"
-	G2CONF="${G2CONF}
-		--disable-static
-		--disable-tls-check
-		--without-gnome
-		--without-apache-httpd
-		$(use_enable introspection)
-		$(use_with samba ntlm-auth ${EPREFIX}/usr/bin/ntlm_auth)"
-
 	if [[ ${PV} = 9999 ]]; then
 		# prevent SOUP_MAINTAINER_FLAGS from getting set
 		mv .git .git-bck || die
@@ -79,6 +73,15 @@ src_prepare() {
 }
 
 src_configure() {
+	# Disable apache tests until they are usable on Gentoo, bug #326957
+	G2CONF="${G2CONF}
+		--disable-static
+		--disable-tls-check
+		--without-gnome
+		--without-apache-httpd
+		$(use_enable introspection)
+		$(use_with samba ntlm-auth ${EPREFIX}/usr/bin/ntlm_auth)"
+
 	# FIXME: we need addpredict to workaround bug #324779 until
 	# root cause (bug #249496) is solved
 	addpredict /usr/share/snmp/mibs/.index
