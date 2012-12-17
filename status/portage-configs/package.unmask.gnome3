@@ -7,6 +7,7 @@
 # Core libraries to be unmasked first:
 =app-accessibility/at-spi2-atk-2.6*:2
 =app-accessibility/at-spi2-core-2.6*:2
+=app-admin/gnome-system-log-3.6*
 =dev-cpp/glibmm-2.34*:2
 =dev-cpp/gtkmm-3.6*
 =dev-libs/atk-2.6*
