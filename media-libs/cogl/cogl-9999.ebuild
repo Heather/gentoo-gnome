@@ -25,9 +25,9 @@ fi
 
 # XXX: need uprof for optional profiling support
 COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
-	x11-libs/cairo
+	x11-libs/cairo:=
 	>=x11-libs/gdk-pixbuf-2:2
-	x11-libs/libdrm
+	x11-libs/libdrm:=
 	x11-libs/libX11
 	>=x11-libs/libXcomposite-0.4
 	x11-libs/libXdamage
@@ -66,12 +66,13 @@ src_prepare() {
 		$(use_enable gles2)
 		$(use_enable gles2 cogl-gles2)
 		$(use_enable gles2 xlib-egl-platform)
+		"$(usex gles2 --with-default-driver=gles2 "")"
 		--enable-glib
 		--enable-deprecated
 		$(use_enable introspection)
 		$(use_enable pango cogl-pango)
 		$(use_enable doc gtk-doc)"
-	use gles2 && G2CONF="${G2CONF} --with-default-driver=gles2"
+	# Really need --enable-gtk-doc for docs
 
 	gnome2_src_prepare
 }
