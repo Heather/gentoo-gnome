@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -11,11 +11,11 @@ if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
 
-DESCRIPTION="The Gnome Devtool Libraries"
+DESCRIPTION="GNOME docking library"
 HOMEPAGE="http://www.gnome.org/"
 
-LICENSE="LGPL-2.1"
-SLOT="3"
+LICENSE="LGPL-2.1+"
+SLOT="3/5" # subslot = libgdl-3 soname version
 IUSE="+introspection"
 if [[ ${PV} = 9999 ]]; then
 	IUSE="${IUSE} doc"
