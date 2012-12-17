@@ -1,8 +1,8 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 
 inherit gnome2
@@ -13,7 +13,7 @@ fi
 DESCRIPTION="Collection of tools for building and converting documentation"
 HOMEPAGE="http://www.gnome.org/"
 
-LICENSE="|| ( GPL-2 freedist ) GPL-2" # yelp.m4 is GPL2 || freely distributable
+LICENSE="|| ( GPL-2+ freedist ) GPL-2+" # yelp.m4 is GPL2 || freely distributable
 SLOT="0"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
@@ -29,5 +29,3 @@ RDEPEND=">=dev-libs/libxml2-2.6.12
 	sys-apps/gawk"
 DEPEND="${RDEPEND}
 	virtual/pkgconfig"
-
-DOCS="AUTHORS NEWS README"
