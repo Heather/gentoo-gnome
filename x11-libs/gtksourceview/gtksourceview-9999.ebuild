@@ -1,8 +1,8 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtksourceview/gtksourceview-3.2.3.ebuild,v 1.2 2012/01/22 14:46:11 jer Exp $
+# $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -16,11 +16,12 @@ HOMEPAGE="http://projects.gnome.org/gtksourceview/"
 
 LICENSE="GPL-2+ LGPL-2.1+"
 SLOT="3.0"
-IUSE="doc glade +introspection"
+IUSE="glade +introspection"
 if [[ ${PV} = 9999 ]]; then
+	IUSE="${IUSE} doc"
 	KEYWORDS=""
 else
-	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-solaris"
+	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-solaris"
 fi
 
 # Note: has native OSX support, prefix teams, attack!
@@ -33,8 +34,12 @@ DEPEND="${RDEPEND}
 	dev-util/gtk-doc-am
 	>=dev-util/intltool-0.50
 	>=sys-devel/gettext-0.17
-	virtual/pkgconfig
-	doc? ( >=dev-util/gtk-doc-1.11 )"
+	virtual/pkgconfig"
+
+if [[ ${PV} = 9999 ]]; then
+	 DEPEND="${DEPEND}
+		doc? ( >=dev-util/gtk-doc-1.11 )"
+fi
 
 src_prepare() {
 	DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README"
