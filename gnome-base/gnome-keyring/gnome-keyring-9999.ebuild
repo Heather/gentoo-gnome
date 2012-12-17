@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="yes" # Not gnome macro but similar
 GNOME2_LA_PUNT="yes"
 
@@ -12,11 +12,11 @@ if [[ ${PV} = 9999 ]]; then
 fi
 
 DESCRIPTION="Password and keyring managing daemon"
-HOMEPAGE="https://live.gnome.org/GnomeKeyring"
+HOMEPAGE="http://live.gnome.org/GnomeKeyring"
 
 LICENSE="GPL-2+ LGPL-2+"
 SLOT="0"
-IUSE="+caps debug doc pam selinux"
+IUSE="+caps debug pam selinux"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -24,18 +24,18 @@ else
 fi
 
 RDEPEND="
-	>=app-crypt/gcr-3.5.3
+	>=app-crypt/gcr-3.5.3:=
 	>=dev-libs/glib-2.32.0:2
 	>=x11-libs/gtk+-3.0:3
 	app-misc/ca-certificates
-	>=dev-libs/libgcrypt-1.2.2
+	>=dev-libs/libgcrypt-1.2.2:=
 	>=sys-apps/dbus-1.0
 	caps? ( sys-libs/libcap-ng )
 	pam? ( virtual/pam )
 "
 DEPEND="${RDEPEND}
-	sys-devel/gettext
 	>=dev-util/intltool-0.35
+	sys-devel/gettext
 	virtual/pkgconfig
 "
 PDEPEND=">=gnome-base/libgnome-keyring-3.1.92"
@@ -53,7 +53,6 @@ src_prepare() {
 }
 
 src_configure() {
-	DOCS="AUTHORS ChangeLog NEWS README"
 	G2CONF="${G2CONF}
 		$(use_with caps libcap-ng)
 		$(use_enable pam)
@@ -72,7 +71,7 @@ src_test() {
 }
 
 pkg_postinst() {
-	use caps && fcaps 0:0 755 cap_ipc_lock "${ROOT}"/usr/bin/gnome-keyring-daemon
+	use caps && fcaps 0:0 755 cap_ipc_lock "${EROOT}"/usr/bin/gnome-keyring-daemon
 
 	gnome2_pkg_postinst
 }
