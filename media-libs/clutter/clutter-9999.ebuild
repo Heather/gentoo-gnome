@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/clutter/clutter-1.10.8.ebuild,v 1.2 2012/07/14 13:19:30 blueness Exp $
+# $Header: $
 
 EAPI="5"
 CLUTTER_LA_PUNT="yes"
@@ -32,11 +32,11 @@ RDEPEND="
 	>=dev-libs/json-glib-0.12[introspection?]
 	>=media-libs/cogl-1.9.6:1.0=[introspection?,pango]
 	media-libs/fontconfig
-	>=x11-libs/cairo-1.10[glib]
+	>=x11-libs/cairo-1.10:=[glib]
 	>=x11-libs/pango-1.30[introspection?]
 
 	virtual/opengl
-	x11-libs/libdrm
+	x11-libs/libdrm:=
 	>=x11-libs/libX11-1.3.1
 	x11-libs/libXext
 	x11-libs/libXdamage
@@ -69,8 +69,6 @@ src_prepare() {
 	# XXX: Profiling, coverage disabled for now
 	# XXX: What about cex100/egl/osx/wayland/win32 backends?
 	# XXX: evdev/tslib input seem to be experimental?
-	myconf="--enable-debug=minimum"
-	use debug && myconf="--enable-debug=yes"
 	G2CONF="${G2CONF} ${myconf}
 		--enable-xinput
 		--enable-x11-backend=yes
@@ -84,6 +82,7 @@ src_prepare() {
 		--disable-win32-backend
 		--disable-tslib-input
 		--disable-evdev-input
+		$(usex debug --enable-debug=yes --enable-debug=minimum)
 		$(use_enable gtk gdk-backend)
 		$(use_enable introspection)
 		$(use_enable doc docs)
