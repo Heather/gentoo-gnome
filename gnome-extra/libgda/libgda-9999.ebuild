@@ -2,10 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GNOME2_LA_PUNT="yes"
 GCONF_DEBUG="yes"
-PYTHON_DEPEND="2"
+PYTHON_COMPAT=( python{2_6,2_7} )
 VALA_MIN_API_VERSION="0.18"
 VALA_USE_DEPEND="vapigen"
 
@@ -14,13 +14,18 @@ if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
 
-DESCRIPTION="Gnome Database Access Library"
+DESCRIPTION="Gnome database access library"
 HOMEPAGE="http://www.gnome-db.org/"
 LICENSE="GPL-2+ LGPL-2+"
 
-IUSE="berkdb bindist canvas firebird gnome-keyring gtk graphviz http +introspection json ldap mdb mysql oci8 postgres sourceview ssl vala"
-REQUIRED_USE="vala? ( introspection )"
-SLOT="5"
+IUSE="berkdb bindist canvas firebird gnome-keyring gtk graphviz http +introspection json ldap mdb mysql oci8 postgres reports sourceview ssl vala"
+REQUIRED_USE="canvas? ( gtk )
+	firebird? ( !bindist )
+	graphviz? ( gtk )
+	sourceview? ( gtk )
+	vala? ( introspection )"
+# firebird license is not GPL compatible
+SLOT="5/4" # subslot = libgda-5.0 soname version
 if [[ ${PV} = 9999 ]]; then
 	IUSE="${IUSE} doc"
 	KEYWORDS=""
@@ -33,13 +38,13 @@ RDEPEND="
 	>=dev-libs/glib-2.32:2
 	>=dev-libs/libxml2-2
 	dev-libs/libxslt
-	sys-libs/readline
-	sys-libs/ncurses
+	sys-libs/readline:=
+	sys-libs/ncurses:=
 	berkdb?   ( sys-libs/db )
 	!bindist? ( firebird? ( dev-db/firebird ) )
 	gtk? (
 		>=x11-libs/gtk+-3.0.0:3
-		canvas? ( x11-libs/goocanvas:2.0 )
+		canvas? ( x11-libs/goocanvas:2.0= )
 		sourceview? ( x11-libs/gtksourceview:3.0 )
 		graphviz? ( media-gfx/graphviz )
 	)
@@ -47,24 +52,31 @@ RDEPEND="
 	http? ( >=net-libs/libsoup-2.24:2.4 )
 	introspection? ( >=dev-libs/gobject-introspection-1.30 )
 	json?     ( dev-libs/json-glib )
-	ldap?     ( net-nds/openldap )
-	mdb?      ( >app-office/mdbtools-0.5 )
-	mysql?    ( virtual/mysql )
-	postgres? ( dev-db/postgresql-base )
-	ssl?      ( dev-libs/openssl )
-	>=dev-db/sqlite-3.6.22:3"
-
+	ldap?     ( net-nds/openldap:= )
+	mdb?      ( >app-office/mdbtools-0.5:= )
+	mysql?    ( virtual/mysql:= )
+	postgres? ( dev-db/postgresql-base:= )
+	reports? (
+		${PYTHON_DEPS}
+		dev-java/fop
+		dev-python/reportlab )
+	ssl?      ( dev-libs/openssl:= )
+	>=dev-db/sqlite-3.6.22:3=
+"
 DEPEND="${RDEPEND}
 	>=app-text/gnome-doc-utils-0.9
 	dev-util/gtk-doc-am
 	>=dev-util/intltool-0.40.6
 	virtual/pkgconfig
 	java? ( virtual/jdk:1.6 )
-	vala? ( $(vala_depend) )"
-[[ ${PV} = 9999 ]] && DEPEND="${DEPEND}
-	doc? (
-		>=dev-util/gtk-doc-1.14
-		vala? ( app-text/yelp-tools ) )"
+	vala? ( $(vala_depend) )
+"
+if [[ ${PV} = 9999 ]]; then
+	DEPEND="${DEPEND}
+		app-text/yelp-tools
+		doc? ( >=dev-util/gtk-doc-1.14 )
+		vala? ( $(vala_depend) )"
+fi
 
 pkg_setup() {
 	java-pkg-opt-2_pkg_setup
@@ -73,27 +85,14 @@ pkg_setup() {
 }
 
 src_prepare() {
-	DOCS="AUTHORS ChangeLog NEWS README"
-
-	if use canvas || use graphviz || use sourceview; then
-		if ! use gtk; then
-			ewarn "You must enable USE=gtk to make use of canvas, graphivz or sourceview USE flag."
-			ewarn "Disabling for now."
-			G2CONF="${G2CONF} --without-goocanvas --without-graphivz --without-gtksourceview"
-		else
-			G2CONF="${G2CONF}
-				$(use_with canvas goocanvas)
-				$(use_with graphviz)
-				$(use_with sourceview gtksourceview)"
-		fi
-	fi
-
 	G2CONF="${G2CONF}
-		--disable-scrollkeeper
 		--disable-static
 		--enable-system-sqlite
 		$(use_with berkdb bdb /usr)
+		$(use_with canvas goocanvas)
+		$(use_with firebird firebird /usr)
 		$(use_with gnome-keyring)
+		$(use_with graphviz)
 		$(use_with gtk ui)
 		$(use_with http libsoup)
 		$(use_enable introspection)
@@ -104,6 +103,8 @@ src_prepare() {
 		$(use_with mysql mysql /usr)
 		$(use_with postgres postgres /usr)
 		$(use_enable ssl crypto)
+		$(use_with sourceview gtksourceview)
+		--disable-default-binary
 		$(use_enable vala)"
 
 	if use bindist; then
@@ -116,9 +117,10 @@ src_prepare() {
 	use berkdb && append-cppflags "-I$(db_includedir)"
 	use oci8 || G2CONF="${G2CONF} --without-oracle"
 
-	# Not in portage
-	G2CONF="${G2CONF}
-		--disable-default-binary"
+	use reports ||
+		sed -e '/SUBDIRS =/ s/trml2html//' \
+			-e '/SUBDIRS =/ s/trml2pdf//' \
+			-i libgda-report/RML/Makefile.{am,in} || die
 
 	# Prevent file collisions with libgda:4
 	epatch "${FILESDIR}/${PN}-4.99.1-gda-browser-help-collision.patch"
@@ -142,26 +144,18 @@ src_prepare() {
 			die "mv ${f} failed"
 	done
 
-	python_convert_shebangs -r 2 libgda-report/RML/trml2{html,pdf}
-
 	[[ ${PV} = 9999 ]] || eautoreconf
 	gnome2_src_prepare
 	java-pkg-opt-2_src_prepare
 	use vala && vala_src_prepare
 }
 
-pkg_postinst() {
-	gnome2_pkg_postinst
-	local d
-	for d in /usr/share/libgda-5.0/gda_trml2{html,pdf} ; do
-		python_mod_optimize ${d}
-	done
-}
-
-pkg_postrm() {
-	gnome2_pkg_postrm
-	local d
-	for d in /usr/share/libgda-5.0/gda_trml2{html,pdf} ; do
-		python_mod_cleanup ${d}
-	done
+src_install() {
+	gnome2_src_install
+	if use reports; then
+		for t in trml2{html,pdf}; do
+			python_scriptinto /usr/share/libgda-5.0/gda_${t}
+			python_doscript libgda-report/RML/${t}/${t}.py
+		done
+	fi
 }
