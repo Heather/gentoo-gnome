@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
@@ -12,14 +12,14 @@ if [[ ${PV} = 9999 ]]; then
 fi
 
 DESCRIPTION="An integrated VNC server for GNOME"
-HOMEPAGE="http://www.gnome.org/"
+HOMEPAGE="http://live.gnome.org/Vino"
 
 LICENSE="GPL-2+"
 SLOT="0"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+	KEYWORDS="~amd64 ~ppc ~ppc64 ~x86 ~x86-fbsd"
 fi
 IUSE="avahi crypt gnome-keyring ipv6 jpeg libnotify networkmanager ssl +telepathy +zlib"
 
@@ -27,11 +27,11 @@ IUSE="avahi crypt gnome-keyring ipv6 jpeg libnotify networkmanager ssl +telepath
 # libSM and libICE used in eggsmclient-xsmp
 RDEPEND=">=dev-libs/glib-2.26:2
 	>=x11-libs/gtk+-3.0.0:3
-	>=dev-libs/libgcrypt-1.1.90
+	>=dev-libs/libgcrypt-1.1.90:=
 	>=net-libs/libsoup-2.24:2.4
 
 	dev-libs/dbus-glib
-	x11-libs/cairo
+	x11-libs/cairo:=
 	x11-libs/pango[X]
 	x11-libs/libICE
 	x11-libs/libX11
@@ -41,15 +41,15 @@ RDEPEND=">=dev-libs/glib-2.26:2
 	x11-libs/libSM
 	x11-libs/libXtst
 
-	avahi? ( >=net-dns/avahi-0.6[dbus] )
-	crypt? ( >=dev-libs/libgcrypt-1.1.90 )
+	avahi? ( >=net-dns/avahi-0.6:=[dbus] )
+	crypt? ( >=dev-libs/libgcrypt-1.1.90:= )
 	gnome-keyring? ( app-crypt/libsecret )
-	jpeg? ( virtual/jpeg:0 )
-	libnotify? ( >=x11-libs/libnotify-0.7.0 )
+	jpeg? ( virtual/jpeg:0= )
+	libnotify? ( >=x11-libs/libnotify-0.7:= )
 	networkmanager? ( >=net-misc/networkmanager-0.7 )
-	ssl? ( >=net-libs/gnutls-2.2.0 )
-	telepathy? ( >=net-libs/telepathy-glib-0.18.0 )
-	zlib? ( sys-libs/zlib )"
+	ssl? ( >=net-libs/gnutls-2.2:= )
+	telepathy? ( >=net-libs/telepathy-glib-0.18:= )
+	zlib? ( sys-libs/zlib:= )"
 DEPEND="${RDEPEND}
 	>=dev-lang/perl-5
 	>=dev-util/intltool-0.50
@@ -61,7 +61,6 @@ DEPEND="${RDEPEND}
 REQUIRED_USE="jpeg? ( zlib )"
 
 src_prepare() {
-	DOCS="AUTHORS ChangeLog* NEWS README"
 	G2CONF="${G2CONF}
 		--disable-schemas-compile
 		--enable-http-server
