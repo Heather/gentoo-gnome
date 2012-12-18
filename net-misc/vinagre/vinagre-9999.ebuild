@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -12,9 +12,9 @@ if [[ ${PV} = 9999 ]]; then
 fi
 
 DESCRIPTION="VNC Client for the GNOME Desktop"
-HOMEPAGE="http://www.gnome.org/projects/vinagre/"
+HOMEPAGE="http://live.gnome.org/Vinagre"
 
-LICENSE="GPL-2"
+LICENSE="GPL-3+"
 SLOT="0"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
@@ -25,12 +25,13 @@ IUSE="avahi rdp +ssh spice +telepathy"
 
 # cairo used in vinagre-tab
 # gdk-pixbuf used all over the place
-RDEPEND=">=dev-libs/glib-2.28.0:2
-	app-crypt/libsecret
+RDEPEND="
+	>=dev-libs/glib-2.28.0:2
 	>=x11-libs/gtk+-3.0.3:3
+	app-crypt/libsecret
 	>=dev-libs/libxml2-2.6.31:2
 	>=net-libs/gtk-vnc-0.4.3[gtk3]
-	x11-libs/cairo
+	x11-libs/cairo:=
 	x11-libs/gdk-pixbuf:2
 	x11-themes/gnome-icon-theme
 
@@ -60,7 +61,6 @@ src_configure() {
 	DOCS="AUTHORS ChangeLog ChangeLog.pre-git NEWS README"
 	G2CONF="${G2CONF}
 		VALAC=$(type -P valac-0.18)
-		--disable-schemas-compile
 		$(use_with avahi)
 		$(use_enable rdp)
 		$(use_enable ssh)
