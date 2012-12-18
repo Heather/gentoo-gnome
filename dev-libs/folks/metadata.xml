@@ -4,7 +4,7 @@
   <herd>gnome</herd>
   <use>
     <flag name="socialweb">Load web service contacts using
-    <pkg>net-libs/libsocialweb</pkg></flag>
+      <pkg>net-libs/libsocialweb</pkg></flag>
     <flag name="tracker">Load contacts from <pkg>app-misc/tracker</pkg>
 	  index</flag>
     <flag name="telepathy">Load contacts from the Telepathy framework</flag>

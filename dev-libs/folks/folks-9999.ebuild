@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 VALA_MIN_API_VERSION="0.18"
@@ -16,7 +16,7 @@ fi
 DESCRIPTION="libfolks is a library that aggregates people from multiple sources"
 HOMEPAGE="http://telepathy.freedesktop.org/wiki/Folks"
 
-LICENSE="LGPL-2"
+LICENSE="LGPL-2.1+"
 SLOT="0"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
@@ -26,19 +26,20 @@ fi
 # TODO: --enable-profiling
 IUSE="eds socialweb +telepathy test tracker utils vala"
 
-COMMON_DEPEND=">=dev-libs/glib-2.32:2
+COMMON_DEPEND="
+	>=dev-libs/glib-2.32:2
 	dev-libs/dbus-glib
 	<dev-libs/libgee-0.7:0[introspection]
 	dev-libs/libxml2
 	sys-libs/ncurses
 	sys-libs/readline
 
-	eds? ( >=gnome-extra/evolution-data-server-3.5.4 )
+	eds? ( >=gnome-extra/evolution-data-server-3.5.4:= )
 	socialweb? ( >=net-libs/libsocialweb-0.25.20 )
 	telepathy? (
 		>=dev-libs/libzeitgeist-0.3.14
-		>=net-libs/telepathy-glib-0.19.0 )
-	tracker? ( >=app-misc/tracker-0.14 )
+		>=net-libs/telepathy-glib-0.19 )
+	tracker? ( >=app-misc/tracker-0.14:= )
 "
 # telepathy-mission-control needed at runtime; it is used by the telepathy
 # backend via telepathy-glib's AccountManager binding.
@@ -58,14 +59,13 @@ DEPEND="${COMMON_DEPEND}
 	vala? (
 		$(vala_depend)
 		>=net-libs/telepathy-glib-0.13.1[vala]
-		eds? ( >=gnome-extra/evolution-data-server-3.5.4[vala] ) )
+		eds? ( >=gnome-extra/evolution-data-server-3.5.4:=[vala] ) )
 "
 # the inspect tool requires --enable-vala
 REQUIRED_USE="utils? ( vala )"
 
 src_prepare() {
 	local vala_version=$(vala_best_api_version)
-	DOCS="AUTHORS ChangeLog NEWS README"
 	# Rebuilding docs needs valadoc, which has no release
 	G2CONF="${G2CONF}
 		$(use_enable eds eds-backend)
