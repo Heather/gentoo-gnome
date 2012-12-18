@@ -2,15 +2,15 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2
 [[ ${PV} = 9999 ]] && inherit gnome2-live
 
-DESCRIPTION="Lightweight HTML Rendering/Printing/Editing Engine"
-HOMEPAGE="http://www.gnome.org/"
+DESCRIPTION="Lightweight HTML rendering/printing/editing engine"
+HOMEPAGE="http://projects.gnome.org/evolution/"
 
 LICENSE="GPL-2+ LGPL-2+"
 SLOT="4.0"
@@ -23,10 +23,10 @@ IUSE=""
 
 # orbit is referenced in configure, but is not used anywhere else
 RDEPEND=">=x11-libs/gtk+-3.0.2:3
-	>=x11-libs/cairo-1.10
+	>=x11-libs/cairo-1.10:=
 	x11-libs/pango
 	>=x11-themes/gnome-icon-theme-2.22.0
-	>=app-text/enchant-1.1.7
+	>=app-text/enchant-1.1.7:=
 	gnome-base/gsettings-desktop-schemas
 	>=app-text/iso-codes-0.49
 	>=net-libs/libsoup-2.26.0:2.4"
@@ -36,14 +36,11 @@ DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40.0
 	virtual/pkgconfig"
 
-pkg_setup() {
+src_prepare() {
 	ELTCONF="--reverse-deps"
 	G2CONF="${G2CONF}
 		--disable-static"
-	DOCS="AUTHORS BUGS ChangeLog NEWS README TODO"
-}
 
-src_prepare() {
 	# Regenerate marshallers for <glib-2.31 compatibility
 	if [[ ${PV} != 9999 ]]; then
 		rm -v components/editor/gtkhtml-spell-marshal.{c,h} \
