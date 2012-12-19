@@ -21,7 +21,7 @@ if [[ ${PV} = 9999 ]]; then
 	IUSE="${IUSE} doc"
 	KEYWORDS=""
 else
-	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+	KEYWORDS="~amd64 ~ppc ~ppc64 ~x86"
 fi
 
 # gtk+ is needed for gdk
