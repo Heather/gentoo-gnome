@@ -3,8 +3,6 @@
 <pkgmetadata>
   <herd>gnome</herd>
   <use>
-    <flag name="introspection">Use <pkg>dev-libs/gobject-introspection</pkg>
-			for introspection</flag>
     <flag name="sendto">Build the <pkg>gnome-extra/nautilus-sendto</pkg>
 			plugin</flag>
   </use>

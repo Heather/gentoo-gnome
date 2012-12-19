@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/cheese/cheese-3.4.2.ebuild,v 1.1 2012/05/24 08:04:54 tetromino Exp $
+# $Header: $
 
 EAPI="5"
 GCONF_DEBUG="no"
@@ -21,14 +21,14 @@ if [[ ${PV} = 9999 ]]; then
 	IUSE="${IUSE} doc"
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64 ~ppc ~ppc64 ~x86"
 fi
 
 COMMON_DEPEND="
 	>=dev-libs/glib-2.28:2
 	>=dev-libs/libgee-0.6.3:0
 	>=x11-libs/gtk+-3.4.4:3[introspection?]
-	>=x11-libs/cairo-1.10
+	>=x11-libs/cairo-1.10:=
 	>=x11-libs/pango-1.28.0
 	>=gnome-base/gnome-desktop-2.91.6:3=
 	>=gnome-base/librsvg-2.32.0:2
@@ -46,7 +46,7 @@ COMMON_DEPEND="
 	media-libs/gstreamer:1.0[introspection?]
 	media-libs/gst-plugins-base:1.0[introspection?,ogg,pango,theora,vorbis,X]
 
-	>=virtual/udev-171[gudev]
+	>=virtual/udev-171:=[gudev]
 	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )"
 RDEPEND="${COMMON_DEPEND}
 	media-libs/gst-plugins-bad:1.0
@@ -74,7 +74,6 @@ if [[ ${PV} = 9999 ]]; then
 fi
 
 src_configure() {
-	DOCS="AUTHORS ChangeLog NEWS README"
 	G2CONF="${G2CONF}
 		GST_INSPECT=$(type -P true)
 		VALAC=$(type -P valac-0.18)
