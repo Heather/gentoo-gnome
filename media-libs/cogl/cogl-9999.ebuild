@@ -55,6 +55,7 @@ src_prepare() {
 	DOCS="NEWS README"
 	EXAMPLES="examples/{*.c,*.jpg}"
 	# XXX: think about kms-egl, quartz, sdl, wayland
+	# Prefer gl over gles2 if both are selected
 	G2CONF="${G2CONF}
 		--disable-examples-install
 		--disable-profile
@@ -66,7 +67,7 @@ src_prepare() {
 		$(use_enable gles2)
 		$(use_enable gles2 cogl-gles2)
 		$(use_enable gles2 xlib-egl-platform)
-		"$(usex gles2 --with-default-driver=gles2 "")"
+		"$(usex gles2 --with-default-driver=$(usex opengl gl gles2 ) "")"
 		--enable-glib
 		--enable-deprecated
 		$(use_enable introspection)
