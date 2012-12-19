@@ -2,12 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
-PYTHON_DEPEND="2"
 VALA_MIN_API_VERSION="0.18"
 VALA_USE_DEPEND="vapigen"
+# No PYTHON_DEPEND, python is only needed at build time
 
 inherit db-use eutils flag-o-matic gnome2 python vala versionator virtualx
 if [[ ${PV} = 9999 ]]; then
@@ -19,7 +19,7 @@ HOMEPAGE="http://projects.gnome.org/evolution/"
 
 # Note: explicitly "|| ( LGPL-2 LGPL-3 )", not "LGPL-2+".
 LICENSE="|| ( LGPL-2 LGPL-3 ) BSD Sleepycat"
-SLOT="0"
+SLOT="0/40" # subslot = libcamel-1.2 soname version
 IUSE="api-doc-extras +gnome-online-accounts +introspection ipv6 ldap kerberos vala +weather"
 REQUIRED_USE="vala? ( introspection )"
 
@@ -33,34 +33,35 @@ fi
 
 RDEPEND=">=dev-libs/glib-2.32:2
 	>=x11-libs/gtk+-3.2:3
-	>=dev-db/sqlite-3.5
-	>=dev-libs/libgdata-0.10
+	>=dev-db/sqlite-3.5:=
+	>=dev-libs/libgdata-0.10:=
 	>=gnome-base/gnome-keyring-2.20.1
-	>=dev-libs/libical-0.43
+	>=dev-libs/libical-0.43:=
 	>=net-libs/libsoup-2.38.1:2.4
 	>=dev-libs/libxml2-2
-	>=sys-libs/db-4
-	>=dev-libs/nspr-4.4
-	>=dev-libs/nss-3.9
+	>=sys-libs/db-4:=
+	>=dev-libs/nspr-4.4:=
+	>=dev-libs/nss-3.9:=
 	>=app-crypt/gcr-3.4
 
-	sys-libs/zlib
+	sys-libs/zlib:=
 	virtual/libiconv
 
 	gnome-online-accounts? (
 		>=net-libs/gnome-online-accounts-3.2
 		>=net-libs/liboauth-0.9.4 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.12 )
-	kerberos? ( virtual/krb5 )
-	ldap? ( >=net-nds/openldap-2 )
-	weather? ( >=dev-libs/libgweather-3.5:2 )
+	kerberos? ( virtual/krb5:= )
+	ldap? ( >=net-nds/openldap-2:= )
+	weather? ( >=dev-libs/libgweather-3.5:2= )
 "
 DEPEND="${RDEPEND}
+	=dev-lang/python-2*
 	dev-util/fix-la-relink-command
 	dev-util/gperf
+	>=dev-util/gtk-doc-am-1.9
 	>=dev-util/intltool-0.35.5
 	>=gnome-base/gnome-common-2
-	>=dev-util/gtk-doc-am-1.9
 	>=sys-devel/gettext-0.17
 	virtual/pkgconfig
 	vala? ( $(vala_depend) )"
@@ -74,6 +75,11 @@ DEPEND="${RDEPEND}
 RESTRICT="test"
 
 pkg_setup() {
+	python_set_active_version 2
+	python_pkg_setup
+}
+
+src_prepare() {
 	DOCS="ChangeLog MAINTAINERS NEWS TODO"
 	# Uh, what to do about dbus-call-timeout ?
 	G2CONF="${G2CONF}
@@ -91,10 +97,7 @@ pkg_setup() {
 		--enable-largefile
 		--enable-smime
 		--with-libdb=${EPREFIX}/usr"
-	python_set_active_version 2
-}
 
-src_prepare() {
 	gnome2_src_prepare
 	use vala && vala_src_prepare
 
