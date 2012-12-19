@@ -1,8 +1,8 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libgweather/libgweather-2.30.3.ebuild,v 1.3 2010/11/14 23:05:07 eva Exp $
+# $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -12,16 +12,16 @@ if [[ ${PV} = 9999 ]]; then
 fi
 
 DESCRIPTION="Library to access weather information from online services"
-HOMEPAGE="http://www.gnome.org/"
+HOMEPAGE="https://live.gnome.org/LibGWeather"
 
-LICENSE="GPL-2"
-SLOT="2"
+LICENSE="GPL-2+"
+SLOT="2/3-1" # subslot = 3-(libgweather-3 soname suffix)
 IUSE="+introspection"
 if [[ ${PV} = 9999 ]]; then
 	IUSE="${IUSE} doc"
 	KEYWORDS=""
 else
-	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~x86-solaris"
 fi
 
 # libsoup-gnome is to be used because libsoup[gnome] might not
