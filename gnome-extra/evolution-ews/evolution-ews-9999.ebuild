@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -24,15 +24,15 @@ fi
 IUSE="kerberos"
 
 RDEPEND="
-	dev-db/sqlite:3
-	dev-libs/libical
+	dev-db/sqlite:3=
+	dev-libs/libical:=
 	>=mail-client/evolution-${PV}:2.0[kerberos?]
-	>=gnome-extra/evolution-data-server-${PV}[kerberos?]
+	>=gnome-extra/evolution-data-server-${PV}:=[kerberos?]
 	>=dev-libs/glib-2.28:2
 	>=dev-libs/libxml2-2
 	>=net-libs/libsoup-2.30:2.4
 	>=x11-libs/gtk+-3:3
-	kerberos? ( virtual/krb5 )
+	kerberos? ( virtual/krb5:= )
 "
 DEPEND="${RDEPEND}
 	>=dev-util/gtk-doc-am-1.9
@@ -44,7 +44,6 @@ DEPEND="${RDEPEND}
 RESTRICT="test"
 
 src_configure() {
-	DOCS="ChangeLog NEWS README" # AUTHORS is empty
 	G2CONF="${G2CONF} $(use_with kerberos krb5)"
 	gnome2_src_configure
 }
