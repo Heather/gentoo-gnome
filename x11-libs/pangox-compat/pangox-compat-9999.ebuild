@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -28,9 +28,8 @@ RDEPEND=">=dev-libs/glib-2.31:2
 DEPEND="${RDEPEND}
 	virtual/pkgconfig"
 
-src_prepare() {
-	DOCS="AUTHORS ChangeLog NEWS README"
+src_configure() {
 	G2CONF="${G2CONF} --disable-static"
 
-	gnome2_src_prepare
+	gnome2_src_configure
 }
