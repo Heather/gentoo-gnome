@@ -45,6 +45,8 @@ x11-libs/pangox-compat
 =app-text/yelp-tools-3.6*
 >=dev-cpp/gstreamermm-0.10.11
 =dev-libs/gdl-3.6*
+>=dev-libs/json-glib-0.15
+>=dev-libs/libgdata-0.13
 =dev-libs/libgweather-3.6*
 =dev-libs/libxml2-2.9*
 =dev-util/anjuta-3.6*
