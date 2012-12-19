@@ -11,6 +11,7 @@
 =dev-cpp/glibmm-2.34*:2
 =dev-cpp/gtkmm-3.6*
 =dev-libs/atk-2.6*
+=dev-libs/folks-0.8*
 =dev-libs/gjs-1.34*
 =dev-libs/glib-2.34*:2
 =dev-libs/gobject-introspection-1.34*
@@ -23,6 +24,8 @@
 =net-libs/glib-networking-2.34*
 >=x11-libs/gdk-pixbuf-2.26.5
 =x11-libs/gtk+-3.6*:3
+=x11-libs/pango-1.32*
+x11-libs/pangox-compat
 =x11-themes/gnome-themes-standard-3.6*
 # Other stuff
 =app-accessibility/accerciser-3.6*
@@ -42,6 +45,7 @@
 =app-text/yelp-tools-3.6*
 >=dev-cpp/gstreamermm-0.10.11
 =dev-libs/gdl-3.6*
+=dev-libs/libgweather-3.6*
 =dev-libs/libxml2-2.9*
 =dev-util/anjuta-3.6*
 >=dev-util/d-feet-0.3
