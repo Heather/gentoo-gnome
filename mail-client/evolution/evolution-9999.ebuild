@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -33,14 +33,14 @@ PINENTRY_DEPEND="|| ( app-crypt/pinentry[gtk] app-crypt/pinentry-qt app-crypt/pi
 # pst is not mature enough and changes API/ABI frequently
 # also supports gstreamer 1.0
 COMMON_DEPEND=">=dev-libs/glib-2.32:2
-	>=x11-libs/cairo-1.9.15[glib]
+	>=x11-libs/cairo-1.9.15:=[glib]
 	>=x11-libs/gtk+-3.4.0:3
-	>=gnome-base/gnome-desktop-2.91.3:3
+	>=gnome-base/gnome-desktop-2.91.3:3=
 	>=gnome-base/gsettings-desktop-schemas-2.91.92
-	>=dev-libs/libgweather-3.5.0:2
+	>=dev-libs/libgweather-3.5.0:2=
 	>=media-libs/libcanberra-0.25[gtk3]
-	>=x11-libs/libnotify-0.7
-	>=gnome-extra/evolution-data-server-${PV}[gnome-online-accounts?,weather]
+	>=x11-libs/libnotify-0.7:=
+	>=gnome-extra/evolution-data-server-${PV}:=[gnome-online-accounts?,weather]
 	>=gnome-extra/gtkhtml-4.5.2:4.0
 	dev-libs/atk
 	>=dev-libs/dbus-glib-0.6
@@ -48,7 +48,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.32:2
 	>=net-libs/libsoup-gnome-2.38.1:2.4
 	>=x11-misc/shared-mime-info-0.22
 	>=x11-themes/gnome-icon-theme-2.30.2.1
-	>=dev-libs/libgdata-0.10
+	>=dev-libs/libgdata-0.10:=
 	>=net-libs/webkit-gtk-1.8.0
 	!=net-libs/webkit-gtk-1.9.90
 
@@ -66,20 +66,21 @@ COMMON_DEPEND=">=dev-libs/glib-2.32:2
 	gstreamer? (
 		>=media-libs/gstreamer-0.10:0.10
 		>=media-libs/gst-plugins-base-0.10:0.10 )
-	kerberos? ( virtual/krb5 )
-	ldap? ( >=net-nds/openldap-2 )
+	kerberos? ( virtual/krb5:= )
+	ldap? ( >=net-nds/openldap-2:= )
 	map? (
 		>=app-misc/geoclue-0.12.0
 		>=media-libs/libchamplain-0.12:0.12 )
 	ssl? (
-		>=dev-libs/nspr-4.6.1
-		>=dev-libs/nss-3.11 )"
+		>=dev-libs/nspr-4.6.1:=
+		>=dev-libs/nss-3.11:= )"
 DEPEND="${COMMON_DEPEND}
 	app-text/docbook-xml-dtd:4.1.2
 	dev-util/gtk-doc-am
 	>=dev-util/intltool-0.40.0
 	virtual/pkgconfig"
 # eautoreconf needs:
+#	app-text/yelp-tools
 #	>=gnome-base/gnome-common-2.12
 RDEPEND="${COMMON_DEPEND}
 	app-text/highlight
@@ -91,7 +92,7 @@ if [[ ${PV} = 9999 ]]; then
 		doc? ( >=dev-util/gtk-doc-1.14 )"
 fi
 
-pkg_setup() {
+src_prepare() {
 	ELTCONF="--reverse-deps"
 	DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS* README"
 	# image-inline plugin needs a gtk+:3 gtkimageview, which does not exist yet
@@ -122,9 +123,7 @@ pkg_setup() {
 			--without-nss-includes"
 	fi
 	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
-}
 
-src_prepare() {
 	# Fix paths for Gentoo spamassassin executables
 	epatch "${FILESDIR}/${PN}-3.3.91-spamassassin-paths.patch"
 
