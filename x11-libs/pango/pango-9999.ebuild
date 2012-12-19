@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
@@ -22,14 +22,15 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
 fi
 
-IUSE="X deprecated +introspection"
+IUSE="X +introspection"
 
 RDEPEND="
-	>=media-libs/harfbuzz-0.9.3
+	>=media-libs/harfbuzz-0.9.9:=
 	>=dev-libs/glib-2.33.12:2
-	>=media-libs/fontconfig-2.5.0:1.0
-	media-libs/freetype:2
-	>=x11-libs/cairo-1.7.6[X?]
+	>=media-libs/fontconfig-2.5.0:1.0=
+	media-libs/freetype:2=
+	>=x11-libs/cairo-1.7.6:=[X?]
+	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 	X? (
 		x11-libs/libXrender
 		x11-libs/libX11
@@ -37,10 +38,8 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	>=dev-util/gtk-doc-am-1.13
 	virtual/pkgconfig
-	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 	X? ( x11-proto/xproto )
 	!<=sys-devel/autoconf-2.63:2.5"
-PDEPEND="deprecated? ( x11-libs/pangox-compat )"
 
 src_prepare() {
 	tc-export CXX
@@ -48,8 +47,8 @@ src_prepare() {
 	G2CONF="${G2CONF}
 		$(use_enable introspection)
 		$(use_with X xft)
-		$(use X && echo --x-includes=${EPREFIX}/usr/include)
-		$(use X && echo --x-libraries=${EPREFIX}/usr/$(get_libdir))"
+		"$(usex X --x-includes="${EPREFIX}/usr/include" "")"
+		"$(usex X --x-libraries="${EPREFIX}/usr/$(get_libdir)" "")
 
 	epatch "${FILESDIR}/${PN}-1.32.1-lib64.patch"
 	eautoreconf
@@ -84,7 +83,9 @@ pkg_postinst() {
 	fi
 	rm "${tmp_file}"
 
-	elog "In >=${PN}-1.30.1, default configuration file locations moved from"
-	elog "~/.pangorc and ~/.pangox_aliases to ~/.config/pango/pangorc and"
-	elog "~/.config/pango/pangox.aliases"
+	if [[ ${REPLACING_VERSIONS} < 1.30.1 ]]; then
+		elog "In >=${PN}-1.30.1, default configuration file locations moved from"
+		elog "~/.pangorc and ~/.pangox_aliases to ~/.config/pango/pangorc and"
+		elog "~/.config/pango/pangox.aliases"
+	fi
 }
