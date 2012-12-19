@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
@@ -14,11 +14,9 @@ fi
 DESCRIPTION="Help browser for GNOME"
 HOMEPAGE="http://www.gnome.org/"
 
-LICENSE="GPL-2"
+LICENSE="GPL-2+"
 SLOT="0"
-# FIXME: gtk-doc scanner fails assertion in gtk_icon_theme_get_for_screen().
-# How? Why?
-IUSE="doc" # doc
+IUSE=""
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -26,10 +24,9 @@ else
 fi
 
 RDEPEND="
-	app-arch/bzip2
-	>=app-arch/xz-utils-4.9
-	dev-db/sqlite:3
-	>=dev-libs/dbus-glib-0.71
+	app-arch/bzip2:=
+	>=app-arch/xz-utils-4.9:=
+	dev-db/sqlite:3=
 	>=dev-libs/glib-2.25.11:2
 	>=dev-libs/libxml2-2.6.5:2
 	>=dev-libs/libxslt-1.1.4
@@ -38,11 +35,11 @@ RDEPEND="
 	>=x11-libs/gtk+-2.91.8:3
 	x11-themes/gnome-icon-theme-symbolic"
 DEPEND="${RDEPEND}
+	>=dev-util/gtk-doc-am-1.13
 	>=dev-util/intltool-0.41.0
 	>=sys-devel/gettext-0.17
 	virtual/pkgconfig
-	gnome-base/gnome-common
-	doc? ( >=dev-util/gtk-doc-1.13 )"
+	gnome-base/gnome-common"
 # If eautoreconf:
 #	gnome-base/gnome-common
 
@@ -54,7 +51,6 @@ if [[ ${PV} = 9999 ]]; then
 fi
 
 src_prepare() {
-	DOCS="AUTHORS ChangeLog NEWS README TODO"
 	G2CONF="${G2CONF}
 		--disable-static
 		--disable-schemas-compile
