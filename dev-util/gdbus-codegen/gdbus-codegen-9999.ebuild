@@ -2,12 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GNOME_ORG_MODULE="glib"
-PYTHON_COMPAT="python2_5 python2_6 python2_7 python3_1 python3_2"
-PYTHON_USE="xml"
+PYTHON_COMPAT=( python{2_5,2_6,2_7,3_1,3_2,3_3} )
+PYTHON_REQ_USE="xml"
 
-inherit eutils python-distutils-ng
+inherit eutils distutils-r1
 if [[ ${PV} = 9999 ]]; then
 	EGIT_REPO_URI="git://git.gnome.org/${GNOME_ORG_MODULE}"
 	inherit git-2
@@ -27,8 +27,8 @@ else
 fi
 IUSE=""
 
-RDEPEND=""
-DEPEND=""
+RDEPEND="${PYTHON_DEPS}"
+DEPEND="${RDEPEND}"
 
 # To prevent circular dependencies with glib[test]
 PDEPEND=">=dev-libs/glib-${PV}:2"
@@ -40,7 +40,7 @@ python_prepare_all() {
 	sed -e "s:\"/usr/local\":\"${EPREFIX}/usr\":" \
 		-i config.py || die "sed config.py failed"
 
-	mv gdbus-codegen.in gdbus-codegen || die "mv failed"
+	sed -e 's:#!@PYTHON@:#!/usr/bin/env python:' gdbus-codegen.in > gdbus-codegen || die
 	cp "${FILESDIR}/setup.py-2.32.4" setup.py || die "cp failed"
 	sed -e "s/@PV@/${PV}/" -i setup.py || die "sed setup.py failed"
 }
