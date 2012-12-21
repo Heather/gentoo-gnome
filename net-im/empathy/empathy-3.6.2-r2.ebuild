@@ -5,9 +5,9 @@
 EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
-PYTHON_DEPEND="2:2.5"
+PYTHON_COMPAT=( python2_{5,6,7} )
 
-inherit gnome2 python virtualx
+inherit gnome2 python-any-r1 virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -15,7 +15,7 @@ fi
 DESCRIPTION="Telepathy instant messaging and video/audio call client for GNOME"
 HOMEPAGE="http://live.gnome.org/Empathy"
 
-LICENSE="GPL-2"
+LICENSE="GPL-2 CCPL-Attribution-ShareAlike-3.0"
 SLOT="0"
 IUSE="debug +geocode +geoloc gnome gnome-online-accounts +map sendto spell test +v4l"
 if [[ ${PV} = 9999 ]]; then
@@ -25,12 +25,13 @@ else
 fi
 
 # gdk-pixbuf and pango extensively used in libempathy-gtk
-COMMON_DEPEND=">=dev-libs/glib-2.33.3:2
+COMMON_DEPEND="
+	>=dev-libs/glib-2.33.3:2
 	x11-libs/gdk-pixbuf:2
 	>=x11-libs/gtk+-3.5.1:3
 	x11-libs/pango
 	>=dev-libs/dbus-glib-0.51
-	>=dev-libs/folks-0.7.3:=
+	>=dev-libs/folks-0.7.3:=[telepathy]
 	dev-libs/libgee:0=
 	>=app-crypt/libsecret-0.5
 	>=media-libs/libcanberra-0.25[gtk3]
@@ -38,16 +39,16 @@ COMMON_DEPEND=">=dev-libs/glib-2.33.3:2
 	>=net-libs/webkit-gtk-1.3.13:3
 	>=x11-libs/libnotify-0.7
 
-	media-libs/gstreamer:0.10
+	media-libs/gstreamer:1.0
 	>=media-libs/clutter-1.10.0:1.0
 	>=media-libs/clutter-gtk-1.1.2:1.0
-	>=media-libs/clutter-gst-1.5.2:1.0
+	media-libs/clutter-gst:2.0
 	media-libs/cogl:1.0=
 
-	net-libs/farstream
-	>=net-libs/telepathy-farstream-0.2.1
+	net-libs/farstream:0.2
+	>=net-libs/telepathy-farstream-0.5:=
 	>=net-libs/telepathy-glib-0.19.9
-	>=net-im/telepathy-logger-0.2.13
+	>=net-im/telepathy-logger-0.2.13:=
 
 	app-crypt/gcr
 	dev-libs/libxml2:2
@@ -68,46 +69,36 @@ COMMON_DEPEND=">=dev-libs/glib-2.33.3:2
 		>=app-text/enchant-1.2
 		>=app-text/iso-codes-0.35 )
 	v4l? (
-		media-plugins/gst-plugins-v4l2:0.10
+		media-plugins/gst-plugins-v4l2:1.0
+		>=media-video/cheese-3.4
 		virtual/udev[gudev] )"
-#		>=media-video/cheese-3.4
-
-# FIXME: gst-plugins-bad is required for the valve plugin. This should move to good
-# eventually at which point the dep can be dropped
-# empathy-3.4 is incompatible with telepathy-rakia-0.6, bug #403861
+# >=empathy-3.4 is incompatible with telepathy-rakia-0.6, bug #403861
 RDEPEND="${COMMON_DEPEND}
-	media-libs/gst-plugins-base:0.10
-	media-libs/gst-plugins-bad:0.10
+	media-libs/gst-plugins-base:1.0
 	net-im/telepathy-connection-managers
 	!<net-voip/telepathy-rakia-0.7
 	x11-themes/gnome-icon-theme-symbolic
 	gnome? ( gnome-extra/gnome-contacts )"
 DEPEND="${COMMON_DEPEND}
+	${PYTHON_DEPENDS}
 	dev-libs/libxml2:2
-
+	dev-libs/libxslt
 	>=dev-util/intltool-0.50.0
 	virtual/pkgconfig
 	test? (
 		sys-apps/grep
 		>=dev-libs/check-0.9.4 )
-	dev-libs/libxslt"
-PDEPEND=">=net-im/telepathy-mission-control-5.12"
-
-pkg_setup() {
-	# Build time python tools need python2
-	python_set_active_version 2
-	python_pkg_setup
-}
+"
+PDEPEND=">=net-im/telepathy-mission-control-5.14"
 
 src_configure() {
 	DOCS="CONTRIBUTORS AUTHORS ChangeLog NEWS README"
 	G2CONF="${G2CONF}
 		--disable-ubuntu-online-accounts
 		--disable-coding-style-checks
-		--disable-schemas-compile
 		--disable-static
 		--disable-Werror
-		--disable-gst-1.0
+		--enable-gst-1.0
 		$(use_enable debug)
 		$(use_enable geocode)
 		$(use_enable geoloc location)
@@ -115,10 +106,8 @@ src_configure() {
 		$(use_enable map)
 		$(use_enable sendto nautilus-sendto)
 		$(use_enable spell)
-		--without-cheese
+		$(use_with v4l cheese)
 		$(use_enable v4l gudev)"
-#		$(use_with v4l cheese)
-#		cheese-3.6 is gst-1.0-only; readd it when we have "--enable-gst-1.0"
 	[[ ${PV} = 9999 ]] || G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
 	gnome2_src_configure
 }
