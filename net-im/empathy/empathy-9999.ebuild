@@ -15,7 +15,7 @@ fi
 DESCRIPTION="Telepathy instant messaging and video/audio call client for GNOME"
 HOMEPAGE="http://live.gnome.org/Empathy"
 
-LICENSE="GPL-2 CCPL-Attribution-ShareAlike-3.0"
+LICENSE="GPL-2 CCPL-Attribution-ShareAlike-3.0 FDL-1.3 LGPL-2.1"
 SLOT="0"
 IUSE="debug +geocode +geoloc gnome gnome-online-accounts +map sendto spell test +v4l"
 if [[ ${PV} = 9999 ]]; then
