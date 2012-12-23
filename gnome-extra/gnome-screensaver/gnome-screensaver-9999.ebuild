@@ -1,11 +1,11 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-extra/gnome-screensaver/gnome-screensaver-2.30.2.ebuild,v 1.2 2010/11/02 02:33:58 ford_prefect Exp $
+# $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="yes"
 
-inherit gnome2
+inherit eutils gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -13,7 +13,7 @@ fi
 DESCRIPTION="Replaces xscreensaver, integrating with the desktop."
 HOMEPAGE="http://live.gnome.org/GnomeScreensaver"
 
-LICENSE="GPL-2"
+LICENSE="GPL-2+"
 SLOT="0"
 IUSE="debug doc pam systemd"
 if [[ ${PV} = 9999 ]]; then
@@ -25,7 +25,7 @@ fi
 RDEPEND="
 	>=dev-libs/glib-2.25.6:2
 	>=x11-libs/gtk+-2.99.3:3
-	>=gnome-base/gnome-desktop-3.1.91:3
+	>=gnome-base/gnome-desktop-3.1.91:3=
 	>=gnome-base/gsettings-desktop-schemas-0.1.7
 	>=gnome-base/libgnomekbd-0.1
 	>=dev-libs/dbus-glib-0.71
@@ -58,6 +58,13 @@ DEPEND="${RDEPEND}
 "
 
 src_prepare() {
+	epatch_user
+	# Regenerate marshaling code for <glib-2.31 compat
+	rm -v src/gs-marshal.{c,h} || die
+	gnome2_src_prepare
+}
+
+src_configure() {
 	DOCS="AUTHORS ChangeLog HACKING NEWS README"
 	G2CONF="${G2CONF}
 		$(use_enable doc docbook-docs)
@@ -66,13 +73,10 @@ src_prepare() {
 		--with-mit-ext
 		--with-pam-prefix=/etc
 		--with-xf86gamma-ext
-		--with-kbd-layout-indicator
-		--disable-schemas-compile"
+		--with-kbd-layout-indicator"
 	# Do not use --without-console-kit, it would provide no benefit: there is
 	# no build-time or run-time check for consolekit, $PN merely listens to
 	# consolekit's messages over dbus.
 	# xscreensaver and custom screensaver capability removed
 	# poke and inhibit commands were also removed, bug 579430
-
-	gnome2_src_prepare
 }
