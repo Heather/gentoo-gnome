@@ -2,7 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
+GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
 inherit gnome2
@@ -15,8 +16,9 @@ HOMEPAGE="http://git.gnome.org/browse/libzapojit"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-IUSE="doc +introspection"
+IUSE="+introspection"
 if [[ ${PV} = 9999 ]]; then
+	IUSE="${IUSE} doc"
 	KEYWORDS=""
 else
 	KEYWORDS="~amd64 ~x86"
@@ -31,17 +33,30 @@ RDEPEND="
 
 	introspection? ( >=dev-libs/gobject-introspection-1.30.0 )"
 DEPEND="${RDEPEND}
+	>=dev-util/gtk-doc-am-1.11
 	>=dev-util/intltool-0.35.0
 	sys-devel/gettext
-	gnome-base/gnome-common:3
 	virtual/pkgconfig
-	doc? ( >=dev-util/gtk-doc-1.11 )"
+"
+# eautoreconf needs:
+#	gnome-base/gnome-common:3
 
-pkg_setup() {
+if [[ ${PV} = 9999 ]]; then
+	DEPEND="${DEPEND}
+		gnome-base/gnome-common:3
+		doc? ( >=dev-util/gtk-doc-1.11 )"
+fi
+
+src_configure() {
 	G2CONF="${G2CONF}
 		--enable-compile-warnings=minimum
-		--disable-maintainer-mode
 		--disable-static
 		$(use_enable introspection)"
-	DOCS="AUTHORS ChangeLog NEWS README"
+	gnome2_src_configure
+}
+
+src_install() {
+	gnome2_src_install
+	# Drop self-installed documentation
+	rm -r "${ED}"/usr/share/doc/libzapojit/ || die
 }
