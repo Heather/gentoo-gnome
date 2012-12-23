@@ -122,7 +122,9 @@ gnome-extra/gnome-clocks
 =net-libs/libsoup-gnome-2.40*
 net-libs/libzapojit
 >=net-libs/rest-0.7.90
+=net-im/telepathy-logger-0.6*
 =net-libs/telepathy-glib-0.20*
+=net-libs/telepathy-farstream-0.6*
 =net-libs/webkit-gtk-1.10*
 =net-misc/vinagre-3.6*
 =net-misc/vino-3.6*
