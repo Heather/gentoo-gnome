@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -14,7 +14,7 @@ fi
 DESCRIPTION="Color profile manager for the GNOME desktop"
 HOMEPAGE="http://projects.gnome.org/gnome-color-manager/"
 
-LICENSE="GPL-2"
+LICENSE="GPL-2+"
 SLOT="0"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
@@ -23,10 +23,10 @@ else
 fi
 IUSE="clutter packagekit raw"
 
-# FIXME: fix detection of docbook2man
 # Need gtk+-3.3.8 for https://bugzilla.gnome.org/show_bug.cgi?id=673331
-COMMON_DEPEND=">=dev-libs/glib-2.31.10:2
-	gnome-base/gnome-desktop:3
+COMMON_DEPEND="
+	>=dev-libs/glib-2.31.10:2
+	gnome-base/gnome-desktop:3=
 	>=media-libs/lcms-2.2:2
 	>=media-libs/libcanberra-0.10[gtk3]
 	media-libs/libexif
@@ -43,7 +43,8 @@ COMMON_DEPEND=">=dev-libs/glib-2.31.10:2
 		media-libs/clutter-gtk:1.0
 		media-libs/mash:0.2 )
 	packagekit? ( app-admin/packagekit-base )
-	raw? ( media-gfx/exiv2 )"
+	raw? ( media-gfx/exiv2 )
+"
 RDEPEND="${COMMON_DEPEND}
 	media-gfx/shared-color-profiles"
 # docbook-sgml-{utils,dtd:4.1} needed to generate man pages
@@ -52,7 +53,8 @@ DEPEND="${COMMON_DEPEND}
 	app-text/docbook-sgml-utils
 	dev-libs/libxslt
 	>=dev-util/intltool-0.35
-	virtual/pkgconfig"
+	virtual/pkgconfig
+"
 
 if [[ ${PV} = 9999 ]]; then
 	DEPEND="${DEPEND}
@@ -66,7 +68,6 @@ src_configure() {
 	# Always enable tests since they are check_PROGRAMS anyway
 	G2CONF="${G2CONF}
 		--disable-static
-		--disable-schemas-compile
 		--enable-tests
 		$(use_enable clutter)
 		$(use_enable packagekit)
@@ -78,6 +79,8 @@ src_configure() {
 pkg_postinst() {
 	gnome2_pkg_postinst
 
-	elog "If you want to do display or scanner calibration, you will need to"
-	elog "install media-gfx/argyllcms"
+	if ! has_version media-gfx/argyllcms ; then
+		elog "If you want to do display or scanner calibration, you will need to"
+		elog "install media-gfx/argyllcms"
+	fi
 }
