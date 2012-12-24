@@ -1,8 +1,8 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/gnome-disk-utility/gnome-disk-utility-3.4.1.ebuild,v 1.4 2012/06/15 06:40:33 mr_bones_ Exp $
+# $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -14,13 +14,13 @@ fi
 DESCRIPTION="Disk Utility for GNOME using udisks"
 HOMEPAGE="http://git.gnome.org/browse/gnome-disk-utility"
 
-LICENSE="LGPL-2"
+LICENSE="GPL-2+"
 SLOT="0"
 IUSE="fat"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64 ~arm ~ppc ~ppc64 ~sh ~x86"
+	KEYWORDS="~amd64 ~x86"
 fi
 
 COMMON_DEPEND="
@@ -28,18 +28,19 @@ COMMON_DEPEND="
 	>=sys-fs/udisks-1.99.0:2
 	>=x11-libs/gtk+-3.5.8:3
 	>=app-crypt/libsecret-0.7
-	dev-libs/libpwquality"
+	dev-libs/libpwquality
+"
 RDEPEND="${COMMON_DEPEND}
 	>=x11-themes/gnome-icon-theme-symbolic-2.91
-	fat? ( sys-fs/dosfstools )"
+	fat? ( sys-fs/dosfstools )
+"
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.50
 	dev-libs/libxslt
-	virtual/pkgconfig"
+	virtual/pkgconfig
+"
 
-pkg_setup() {
-	G2CONF="${G2CONF}
-		--disable-libsystemd-login
-		--disable-maintainer-mode
-		--disable-schemas-compile"
+src_configure() {
+	G2CONF="${G2CONF} --disable-libsystemd-login"
+	gnome2_src_configure
 }
