@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -39,15 +39,16 @@ RDEPEND="${COMMON_DEPEND}
 "
 # ${PN} was part of gnome-utils before 3.4
 DEPEND="${COMMON_DEPEND}
-	app-text/yelp-tools
 	>=dev-util/intltool-0.40
 	>=sys-devel/gettext-0.17
 	virtual/pkgconfig
 "
 
+if [[ ${PV} = 9999 ]]; then
+	DEPEND="${DEPEND} app-text/yelp-tools"
+fi
+
 src_configure() {
-	DOCS="AUTHORS NEWS"
-	G2CONF="${G2CONF} --disable-schemas-compile"
 	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
 	gnome2_src_configure
 }
