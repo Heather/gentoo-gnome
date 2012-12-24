@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -17,7 +17,7 @@ HOMEPAGE="http://live.gnome.org/Nautilus"
 LICENSE="GPL-2+ LGPL-2+ FDL-1.1"
 SLOT="0"
 # profiling?
-IUSE="exif gnome +introspection packagekit +previewer sendto tracker xmp"
+IUSE="debug exif gnome +introspection packagekit +previewer sendto tracker xmp"
 if [[ ${PV} = 9999 ]]; then
 	IUSE="${IUSE} doc"
 	KEYWORDS=""
@@ -29,24 +29,26 @@ fi
 # "FAIL: check failed in nautilus-file.c, line 8307"
 RESTRICT="test"
 
+# FIXME: selinux support is automagic
 # Require {glib,gdbus-codegen}-2.30.0 due to GDBus API changes between 2.29.92
 # and 2.30.0
-COMMON_DEPEND=">=dev-libs/glib-2.33.13:2
+COMMON_DEPEND="
+	>=dev-libs/glib-2.33.13:2
 	>=x11-libs/pango-1.28.3
 	>=x11-libs/gtk+-3.5.12:3[introspection?]
 	>=dev-libs/libxml2-2.7.8:2
-	>=gnome-base/gnome-desktop-3.0.0:3
+	>=gnome-base/gnome-desktop-3:3=
 
 	gnome-base/dconf
 	gnome-base/gsettings-desktop-schemas
-	>=x11-libs/libnotify-0.7
+	>=x11-libs/libnotify-0.7:=
 	x11-libs/libX11
 	x11-libs/libXext
 	x11-libs/libXrender
 
 	exif? ( >=media-libs/libexif-0.6.20 )
 	introspection? ( >=dev-libs/gobject-introspection-0.6.4 )
-	tracker? ( >=app-misc/tracker-0.14 )
+	tracker? ( >=app-misc/tracker-0.14:= )
 	xmp? ( >=media-libs/exempi-2.1.0 )"
 DEPEND="${COMMON_DEPEND}
 	>=dev-lang/perl-5
@@ -77,26 +79,26 @@ if [[ ${PV} = 9999 ]]; then
 fi
 
 src_prepare() {
+	# Restore the nautilus-2.x Delete shortcut (Ctrl+Delete will still work);
+	# bug #393663
+	epatch "${FILESDIR}/${PN}-3.5.91-delete.patch"
+
+	gnome2_src_prepare
+}
+
+src_configure() {
+	DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS README THANKS"
 	G2CONF="${G2CONF}
 		--disable-profiling
 		--disable-update-mimedb
+		$(use_enable debug)
 		$(use_enable exif libexif)
 		$(use_enable introspection)
 		$(use_enable packagekit)
 		$(use_enable sendto nst-extension)
 		$(use_enable tracker)
 		$(use_enable xmp)"
-	DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS README THANKS"
-
-	# Restore the nautilus-2.x Delete shortcut (Ctrl+Delete will still work);
-	# bug #393663
-	epatch "${FILESDIR}/${PN}-3.5.91-delete.patch"
-
-	# Remove crazy CFLAGS
-	sed 's:-DG.*DISABLE_DEPRECATED::g' -i configure.in configure \
-		|| die "sed 1 failed"
-
-	gnome2_src_prepare
+	gnome2_src_configure
 }
 
 src_test() {

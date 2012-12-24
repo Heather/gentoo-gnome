@@ -3,8 +3,6 @@
 <pkgmetadata>
   <herd>gnome</herd>
   <use>
-    <flag name="introspection">Use <pkg>dev-libs/gobject-introspection</pkg> for
-		introspection</flag>
     <flag name="packagekit">Use packagekit to search for programs to open
 		unknown file types</flag>
     <flag name="previewer">Use <pkg>gnome-extra/sushi</pkg> to preview files
