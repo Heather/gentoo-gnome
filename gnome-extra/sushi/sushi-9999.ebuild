@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -14,7 +14,7 @@ fi
 DESCRIPTION="A quick previewer for Nautilus, the GNOME file manager"
 HOMEPAGE="http://git.gnome.org/browse/sushi"
 
-LICENSE="GPL-3"
+LICENSE="GPL-2+"
 SLOT="0"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
@@ -26,13 +26,14 @@ IUSE="office"
 # Optional app-office/unoconv support (OOo to pdf)
 # freetype needed for font loader
 # libX11 needed for sushi_create_foreign_window()
-COMMON_DEPEND=">=x11-libs/gdk-pixbuf-2.22.1[introspection]
+COMMON_DEPEND="
+	>=x11-libs/gdk-pixbuf-2.22.1[introspection]
 	>=dev-libs/gjs-0.7.7
 	>=dev-libs/glib-2.29.14:2
 	>=dev-libs/gobject-introspection-0.9.6
 	>=media-libs/clutter-1.11.4:1.0[introspection]
 	>=media-libs/clutter-gtk-1.0.1:1.0[introspection]
-	>=x11-libs/gtk+-3.0.0:3[introspection]
+	>=x11-libs/gtk+-3:3[introspection]
 
 	>=app-text/evince-3.0[introspection]
 	media-libs/freetype:2
@@ -56,15 +57,12 @@ RDEPEND="${COMMON_DEPEND}
 	x11-themes/gnome-icon-theme-symbolic
 "
 
-src_prepare() {
-	DOCS="AUTHORS NEWS README TODO"
+src_configure() {
 	G2CONF="${G2CONF}
 		UNOCONV=$(type -P false)
-		--disable-schemas-compile
 		--disable-static"
 	if use office; then
 		G2CONF="${G2CONF} UNOCONV=$(type -P unoconv)"
 	fi
-
-	gnome2_src_prepare
+	gnome2_src_configure
 }
