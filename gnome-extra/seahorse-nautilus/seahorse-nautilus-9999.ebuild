@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no" # --disable-debug disables all assertions
 GNOME2_LA_PUNT="yes"
 
@@ -23,7 +23,8 @@ else
 fi
 IUSE=""
 
-COMMON_DEPEND=">=app-crypt/gpgme-1.0.0
+COMMON_DEPEND="
+	>=app-crypt/gpgme-1.0.0
 	>=app-crypt/gcr-3.4
 	>=dev-libs/dbus-glib-0.35
 	>=dev-libs/glib-2.28:2
@@ -31,7 +32,7 @@ COMMON_DEPEND=">=app-crypt/gpgme-1.0.0
 	>=gnome-base/nautilus-3
 	x11-libs/gtk+:3
 	x11-libs/libcryptui
-	>=x11-libs/libnotify-0.3
+	>=x11-libs/libnotify-0.3:=
 	|| (
 		=app-crypt/gnupg-1.4*
 		=app-crypt/gnupg-2.0* )"
@@ -40,7 +41,8 @@ RDEPEND="${COMMON_DEPEND}
 	!app-crypt/seahorse-plugins[nautilus]"
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.35
-	virtual/pkgconfig"
+	virtual/pkgconfig
+"
 
 src_prepare() {
 	DOCS="AUTHORS NEWS README THANKS" # ChangeLog is not used
