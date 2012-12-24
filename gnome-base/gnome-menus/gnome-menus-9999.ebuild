@@ -2,15 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
+PYTHON_COMPAT=( python{2_6,2_7} )
 
-PYTHON_DEPEND="2:2.5"
-SUPPORT_PYTHON_ABIS="1"
-RESTRICT_PYTHON_ABIS="3.*"
-
-inherit eutils gnome2 python
+inherit eutils gnome2 python-r1
 [[ ${PV} = 9999 ]] && inherit gnome2-live
 
 DESCRIPTION="The GNOME menu system, implementing the F.D.O cross-desktop spec"
@@ -26,42 +23,23 @@ fi
 
 # +python for gmenu-simple-editor
 IUSE="debug +introspection +python test"
+REQUIRED_USE="python? ( introspection )"
 
 COMMON_DEPEND=">=dev-libs/glib-2.29.15:2
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 	python? (
-		>=dev-libs/gobject-introspection-0.9.5
-		dev-python/pygobject:3
+		${PYTHON_DEPS}
+		dev-python/pygobject:3[${PYTHON_USEDEP}]
 		x11-libs/gdk-pixbuf:2[introspection]
 		x11-libs/gtk+:3[introspection] )"
 # Older versions of slot 0 install the menu editor and the desktop directories
 RDEPEND="${COMMON_DEPEND}
 	!<gnome-base/gnome-menus-3.0.1-r1:0"
 DEPEND="${COMMON_DEPEND}
+	>=dev-util/intltool-0.40
 	sys-devel/gettext
 	virtual/pkgconfig
-	>=dev-util/intltool-0.40
 	test? ( dev-libs/gjs )"
-
-pkg_setup() {
-	use python && python_pkg_setup
-	DOCS="AUTHORS ChangeLog HACKING NEWS README"
-
-	# Do NOT compile with --disable-debug/--enable-debug=no
-	# It disables api usage checks
-	if ! use debug ; then
-		G2CONF="${G2CONF} --enable-debug=minimum"
-	fi
-
-	if use python || use introspection; then
-		use introspection || ewarn "Enabling introspection due to USE=python"
-		G2CONF="${G2CONF} --enable-introspection"
-	else
-		G2CONF="${G2CONF} --disable-introspection"
-	fi
-
-	G2CONF="${G2CONF} --disable-static"
-}
 
 src_prepare() {
 	gnome2_src_prepare
@@ -70,7 +48,6 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-3.0.0-ignore_kde_standalone.patch"
 
 	if use python; then
-		python_clean_py-compile_files
 		python_copy_sources
 	else
 		sed -e 's/\(SUBDIRS.*\) simple-editor/\1/' \
@@ -79,8 +56,17 @@ src_prepare() {
 }
 
 src_configure() {
+	DOCS="AUTHORS ChangeLog HACKING NEWS README"
+
+	# Do NOT compile with --disable-debug/--enable-debug=no
+	# It disables api usage checks
+	G2CONF="${G2CONF}
+		$(usex debug --enable-debug=yes --enable-debug=minimum)
+		$(use_enable introspection)
+		--disable-static"
+
 	if use python; then
-		python_execute_function -s gnome2_src_configure
+		python_foreach_impl run_in_build_dir gnome2_src_configure
 	else
 		gnome2_src_configure
 	fi
@@ -88,7 +74,7 @@ src_configure() {
 
 src_compile() {
 	if use python; then
-		python_execute_function -s gnome2_src_compile
+		python_foreach_impl run_in_build_dir gnome2_src_compile
 	else
 		gnome2_src_compile
 	fi
@@ -96,7 +82,7 @@ src_compile() {
 
 src_test() {
 	if use python; then
-		python_execute_function -s -d
+		python_foreach_impl run_in_build_dir default
 	else
 		default
 	fi
@@ -104,8 +90,14 @@ src_test() {
 
 src_install() {
 	if use python; then
-		python_execute_function -s gnome2_src_install
-		python_clean_installation_image
+		installing() {
+			gnome2_src_install
+			# Massage shebang to make python_doscript happy
+			sed -e 's:#!'"${PYTHON}:#!/usr/bin/python:" \
+				-i simple-editor/gmenu-simple-editor || die
+				python_doscript simple-editor/gmenu-simple-editor
+			}
+		python_foreach_impl run_in_build_dir installing
 	else
 		gnome2_src_install
 	fi
@@ -118,16 +110,8 @@ src_install() {
 	newexe "${FILESDIR}/10-xdg-menu-gnome-r1" 10-xdg-menu-gnome
 }
 
-pkg_postinst() {
-	gnome2_pkg_postinst
-	if use python; then
-		python_mod_optimize GMenuSimpleEditor
-	fi
-}
-
-pkg_postrm() {
-	gnome2_pkg_postrm
-	if use python; then
-		python_mod_cleanup GMenuSimpleEditor
-	fi
+run_in_build_dir() {
+	pushd "${BUILD_DIR}" > /dev/null || die
+	"$@"
+	popd > /dev/null
 }
