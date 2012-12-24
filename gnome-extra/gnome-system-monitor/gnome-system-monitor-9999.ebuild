@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 
 inherit gnome2
@@ -32,14 +32,16 @@ RDEPEND=">=dev-libs/glib-2.28:2
 	>=dev-libs/libxml2-2.0:2
 	>=gnome-base/librsvg-2.35:2
 
-	systemd? ( >=sys-apps/systemd-38 )"
+	systemd? ( >=sys-apps/systemd-38 )
+"
 DEPEND="${RDEPEND}
+	>=app-text/gnome-doc-utils-0.20
 	>=dev-util/intltool-0.41.0
 	>=sys-devel/gettext-0.17
 	virtual/pkgconfig
-	>=app-text/gnome-doc-utils-0.20
 
-	systemd? ( !=sys-apps/systemd-43* )"
+	systemd? ( !=sys-apps/systemd-43* )
+"
 
 if [[ ${PV} = 9999 ]]; then
 	DEPEND="${DEPEND}
@@ -47,9 +49,7 @@ if [[ ${PV} = 9999 ]]; then
 fi
 
 src_configure() {
-	DOCS="AUTHORS ChangeLog NEWS README"
 	G2CONF="${G2CONF}
-		--disable-schemas-compile
 		$(use_enable systemd)"
 	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
 	gnome2_src_configure
