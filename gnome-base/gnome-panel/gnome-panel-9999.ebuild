@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -26,15 +26,15 @@ else
 fi
 
 RDEPEND=">=dev-libs/glib-2.31.14:2
-	>=dev-libs/libgweather-3.5.1:2
+	>=dev-libs/libgweather-3.5.1:2=
 	dev-libs/libxml2:2
 	>=gnome-base/dconf-0.13.4
 	>=gnome-base/gconf-2.6.1:2[introspection?]
-	>=gnome-base/gnome-desktop-2.91:3
+	>=gnome-base/gnome-desktop-2.91:3=
 	>=gnome-base/gnome-menus-3.1.4:3
 	gnome-base/gsettings-desktop-schemas
 	gnome-base/librsvg:2
-	>=net-libs/telepathy-glib-0.14.0
+	>=net-libs/telepathy-glib-0.14
 	sys-auth/polkit
 	>=x11-libs/cairo-1[X]
 	>=x11-libs/gdk-pixbuf-2.25.2:2
@@ -46,16 +46,19 @@ RDEPEND=">=dev-libs/glib-2.31.14:2
 	>=x11-libs/libwnck-2.91:3
 	>=x11-libs/pango-1.15.4[introspection?]
 
-	eds? ( >=gnome-extra/evolution-data-server-3.5.3 )
+	eds? ( >=gnome-extra/evolution-data-server-3.5.3:= )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
-	networkmanager? ( >=net-misc/networkmanager-0.6.7 )"
+	networkmanager? ( >=net-misc/networkmanager-0.6.7 )
+"
 DEPEND="${RDEPEND}
 	app-text/docbook-xml-dtd:4.1.2
 	>=dev-lang/perl-5
 	dev-util/gtk-doc-am
 	>=dev-util/intltool-0.40
-	virtual/pkgconfig"
+	virtual/pkgconfig
+"
 # eautoreconf needs
+#	dev-libs/gobject-introspection-common
 #	gnome-base/gnome-common
 
 if [[ ${PV} = 9999 ]]; then
@@ -70,7 +73,6 @@ src_configure() {
 	G2CONF="${G2CONF}
 		--disable-deprecation-flags
 		--disable-static
-		--disable-schemas-install
 		--with-in-process-applets=clock,notification-area,wncklet
 		--enable-telepathy-glib
 		$(use_enable networkmanager network-manager)
@@ -79,22 +81,4 @@ src_configure() {
 	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
 	DOCS="AUTHORS ChangeLog HACKING NEWS README"
 	gnome2_src_configure
-}
-
-pkg_postinst() {
-	local entries="${EROOT}etc/gconf/schemas/panel-default-setup.entries"
-	local gconftool="${EROOT}usr/bin/gconftool-2"
-
-	if [ -e "$entries" ]; then
-		einfo "Setting panel gconf defaults..."
-
-		GCONF_CONFIG_SOURCE="$("${gconftool}" --get-default-source | sed "s;:/;:${ROOT};")"
-
-		"${gconftool}" --direct --config-source \
-			"${GCONF_CONFIG_SOURCE}" --load="${entries}"
-	fi
-
-	# Calling this late so it doesn't process the GConf schemas file we already
-	# took care of.
-	gnome2_pkg_postinst
 }

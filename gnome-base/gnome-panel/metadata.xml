@@ -4,8 +4,6 @@
   <herd>gnome</herd>
   <use>
     <flag name="bonobo">Enable Bonobo compatibility modules for applets
-	still not ported to DBUS.</flag>
-    <flag name="introspection">Use
-	<pkg>dev-libs/gobject-introspection</pkg> for introspection</flag>
+	  still not ported to DBUS.</flag>
   </use>
 </pkgmetadata>
