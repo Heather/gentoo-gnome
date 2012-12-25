@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -14,7 +14,7 @@ fi
 DESCRIPTION="GNOME document manager"
 HOMEPAGE="https://live.gnome.org/Design/Apps/Documents"
 
-LICENSE="GPL-2"
+LICENSE="GPL-2+"
 SLOT="0"
 IUSE=""
 if [[ ${PV} = 9999 ]]; then
@@ -25,13 +25,13 @@ fi
 
 # Need gdk-pixbuf-2.25 for gdk_pixbuf_get_pixels_with_length
 COMMON_DEPEND="
-	>=app-misc/tracker-0.13.1
+	>=app-misc/tracker-0.13.1:=
 	>=app-text/evince-3.3.0[introspection]
 	dev-libs/gjs
 	>=dev-libs/glib-2.31.6:2
 	>=dev-libs/gobject-introspection-1.31.6
 	>=dev-libs/libgdata-0.13.1[gnome,introspection]
-	gnome-base/gnome-desktop:3
+	gnome-base/gnome-desktop:3=
 	>=media-libs/clutter-1.10:1.0
 	>=media-libs/clutter-gtk-1.3.2:1.0[introspection]
 	>=net-libs/gnome-online-accounts-3.2.0
@@ -39,18 +39,15 @@ COMMON_DEPEND="
 	>=net-libs/libzapojit-0.0.2
 	>=x11-libs/gdk-pixbuf-2.25:2[introspection]
 	>=x11-libs/gtk+-3.5.5:3[introspection]
-	x11-libs/pango[introspection]"
+	x11-libs/pango[introspection]
+"
 RDEPEND="${COMMON_DEPEND}
 	media-libs/clutter[introspection]
 	sys-apps/dbus
-	x11-themes/gnome-icon-theme-symbolic"
+	x11-themes/gnome-icon-theme-symbolic
+"
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.40
 	>=sys-devel/gettext-0.17
-	virtual/pkgconfig"
-
-src_configure() {
-	DOCS="AUTHORS NEWS README TODO"
-	G2CONF="${G2CONF} --disable-schemas-compile"
-	gnome2_src_configure
-}
+	virtual/pkgconfig
+"
