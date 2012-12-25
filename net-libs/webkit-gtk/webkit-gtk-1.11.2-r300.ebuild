@@ -28,6 +28,7 @@ REQUIRED_USE="introspection? ( geoloc gstreamer )"
 # gtk2 is needed for plugin process support
 # TODO: There's 3 acceleration backends: opengl, egl and gles2
 RDEPEND="
+	app-crypt/libsecret
 	dev-libs/libxml2:2
 	dev-libs/libxslt
 	virtual/jpeg
