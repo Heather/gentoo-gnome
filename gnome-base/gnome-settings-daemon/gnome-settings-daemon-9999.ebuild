@@ -1,8 +1,8 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-settings-daemon/gnome-settings-daemon-3.4.2.ebuild,v 1.2 2012/08/07 08:59:55 tetromino Exp $
+# $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -20,14 +20,18 @@ IUSE="+colord +cups debug +i18n packagekit policykit +short-touchpad-timeout sma
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64 ~arm ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
+	KEYWORDS="~amd64 ~arm ~ppc ~ppc64 ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 fi
+REQUIRED_USE="
+	packagekit? ( udev )
+	smartcard? ( udev )
+"
 
 # colord-0.1.13 needed to avoid polkit errors in CreateProfile and CreateDevice
 COMMON_DEPEND="
 	>=dev-libs/glib-2.31.0:2
 	>=x11-libs/gtk+-3.3.4:3
-	>=gnome-base/gnome-desktop-3.5.3:3
+	>=gnome-base/gnome-desktop-3.5.3:3=
 	>=gnome-base/gsettings-desktop-schemas-3.5.90
 	media-fonts/cantarell
 	media-libs/fontconfig
@@ -37,7 +41,7 @@ COMMON_DEPEND="
 	>=sys-power/upower-0.9.11
 	x11-libs/cairo
 	x11-libs/gdk-pixbuf:2
-	>=x11-libs/libnotify-0.7.3
+	>=x11-libs/libnotify-0.7.3:=
 	x11-libs/libX11
 	x11-libs/libxkbfile
 	x11-libs/libXi
@@ -45,17 +49,12 @@ COMMON_DEPEND="
 	x11-libs/libXfixes
 	x11-libs/libXtst
 	x11-libs/libXxf86misc
-	>=media-sound/pulseaudio-0.9.16
 
 	colord? ( >=x11-misc/colord-0.1.13 )
 	cups? ( >=net-print/cups-1.4[dbus] )
 	i18n? ( >=app-i18n/ibus-1.4.99 )
-	packagekit? (
-		virtual/udev[gudev]
-		>=app-admin/packagekit-base-0.7.4 )
-	smartcard? (
-		virtual/udev[gudev]
-		>=dev-libs/nss-3.11.2 )
+	packagekit? ( >=app-admin/packagekit-base-0.7.4 )
+	smartcard? ( >=dev-libs/nss-3.11.2 )
 	systemd? ( >=sys-apps/systemd-31 )
 	udev? ( virtual/udev[gudev] )
 	wacom? (
@@ -89,23 +88,6 @@ DEPEND="${COMMON_DEPEND}
 "
 
 src_prepare() {
-	# README is empty
-	DOCS="AUTHORS NEWS ChangeLog MAINTAINERS"
-	G2CONF="${G2CONF}
-		--disable-static
-		--disable-schemas-compile
-		--enable-man
-		$(use_enable colord color)
-		$(use_enable cups)
-		$(use_enable debug)
-		$(use_enable debug more-warnings)
-		$(use_enable i18n ibus)
-		$(use_enable packagekit)
-		$(use_enable smartcard smartcard-support)
-		$(use_enable systemd)
-		$(use_enable udev gudev)
-		$(use_enable wacom)"
-
 	# https://bugzilla.gnome.org/show_bug.cgi?id=621836
 	# Apparently this change severely affects touchpad usability for some
 	# people, so revert it if USE=short-touchpad-timeout.
@@ -119,6 +101,25 @@ src_prepare() {
 	[[ ${PV} != 9999 ]] && eautoreconf
 
 	gnome2_src_prepare
+}
+
+src_configure() {
+	# README is empty
+	DOCS="AUTHORS NEWS ChangeLog MAINTAINERS"
+	G2CONF="${G2CONF}
+		--disable-static
+		--enable-man
+		$(use_enable colord color)
+		$(use_enable cups)
+		$(use_enable debug)
+		$(use_enable debug more-warnings)
+		$(use_enable i18n ibus)
+		$(use_enable packagekit)
+		$(use_enable smartcard smartcard-support)
+		$(use_enable systemd)
+		$(use_enable udev gudev)
+		$(use_enable wacom)"
+	gnome2_src_configure
 }
 
 src_test() {
