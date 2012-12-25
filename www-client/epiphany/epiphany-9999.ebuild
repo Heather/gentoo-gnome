@@ -1,8 +1,8 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-client/epiphany/epiphany-3.2.1.ebuild,v 1.1 2011/11/06 04:57:01 tetromino Exp $
+# $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="yes"
 
 inherit autotools eutils gnome2 pax-utils versionator virtualx
@@ -16,8 +16,9 @@ HOMEPAGE="http://projects.gnome.org/epiphany/"
 # TODO: coverage
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="doc +introspection +jit +nss test"
+IUSE="+introspection +jit +nss test"
 if [[ ${PV} = 9999 ]]; then
+	IUSE="${IUSE} doc"
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
@@ -35,8 +36,8 @@ RDEPEND="
 	>=net-libs/webkit-gtk-1.9.6:3[introspection?]
 	>=net-libs/libsoup-gnome-2.39.6:2.4
 	>=x11-libs/gtk+-3.5.2:3[introspection?]
-	>=x11-libs/libnotify-0.5.1
-	gnome-base/gnome-desktop:3
+	>=x11-libs/libnotify-0.5.1:=
+	gnome-base/gnome-desktop:3=
 
 	dev-db/sqlite:3
 	x11-libs/libX11
@@ -46,28 +47,22 @@ RDEPEND="
 
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 	!jit? ( net-libs/webkit-gtk[-jit] )
-	nss? ( dev-libs/nss )"
+	nss? ( dev-libs/nss )
+"
 # paxctl needed for bug #407085
 # eautoreconf requires gnome-common-3.5.5
 DEPEND="${RDEPEND}
 	introspection? ( jit? ( >=gnome-base/gnome-common-3.5.5 ) )
+	>=dev-util/gtk-doc-am-1
 	>=dev-util/intltool-0.50
 	sys-apps/paxctl
 	sys-devel/gettext
 	virtual/pkgconfig
-	doc? ( >=dev-util/gtk-doc-1 )"
-
-pkg_setup() {
-	DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS README TODO"
-	G2CONF="${G2CONF}
-		--enable-shared
-		--disable-schemas-compile
-		--disable-static
-		--with-distributor-name=Gentoo
-		$(use_enable introspection)
-		$(use_enable nss)
-		$(use_enable test tests)"
-}
+"
+if [[ ${PV} = 9999 ]]; then
+	DEPEND="${DEPEND}
+		doc? ( >=dev-util/gtk-doc-1 )"
+fi
 
 src_prepare() {
 	# Build-time segfaults under PaX with USE=introspection when building
@@ -80,10 +75,29 @@ src_prepare() {
 	gnome2_src_prepare
 }
 
+src_configure() {
+	DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS README TODO"
+	G2CONF="${G2CONF}
+		--enable-shared
+		--disable-static
+		--with-distributor-name=Gentoo
+		$(use_enable introspection)
+		$(use_enable nss)
+		$(use_enable test tests)"
+	gnome2_src_configure
+}
+
+src_compile() {
+	# needed to avoid "Command line `dbus-launch ...' exited with non-zero exit status 1"
+	unset DISPLAY
+	gnome2_src_compile
+}
+
 src_test() {
 	# FIXME: this should be handled at eclass level
 	"${EROOT}${GLIB_COMPILE_SCHEMAS}" --allow-any-name "${S}/data" || die
 
+	use jit && pax-mark m $(list-paxables tests/test*) #415801
 	GSETTINGS_SCHEMA_DIR="${S}/data" Xemake check
 }
 
