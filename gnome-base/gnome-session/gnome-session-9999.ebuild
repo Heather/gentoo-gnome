@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="yes"
 
 inherit gnome2
@@ -26,7 +26,8 @@ IUSE="doc elibc_FreeBSD gconf ipv6 systemd"
 # create .config/user-dirs.dirs which is read by glib to get G_USER_DIRECTORY_*
 # xdg-user-dirs-update is run during login (see 10-user-dirs-update-gnome below).
 # gdk-pixbuf used in the inhibit dialog
-COMMON_DEPEND=">=dev-libs/glib-2.33.4:2
+COMMON_DEPEND="
+	>=dev-libs/glib-2.33.4:2
 	x11-libs/gdk-pixbuf:2
 	>=x11-libs/gtk+-2.90.7:3
 	>=dev-libs/json-glib-0.10
@@ -47,7 +48,8 @@ COMMON_DEPEND=">=dev-libs/glib-2.33.4:2
 	x11-misc/xdg-user-dirs-gtk
 	x11-apps/xdpyinfo
 
-	gconf? ( >=gnome-base/gconf-2:2 )"
+	gconf? ( >=gnome-base/gconf-2:2 )
+"
 # Pure-runtime deps from the session files should *NOT* be added here
 # Otherwise, things like gdm pull in gnome-shell
 # gnome-themes-standard is needed for the failwhale dialog themeing
@@ -58,24 +60,31 @@ RDEPEND="${COMMON_DEPEND}
 	>=x11-themes/gnome-themes-standard-2.91.92
 	sys-apps/dbus[X]
 	systemd? ( >=sys-apps/systemd-183 )
-	!systemd? ( sys-auth/consolekit )"
+	!systemd? ( sys-auth/consolekit )
+"
 DEPEND="${COMMON_DEPEND}
 	>=dev-lang/perl-5
 	>=sys-devel/gettext-0.10.40
 	>=dev-util/intltool-0.40.6
+	x11-libs/pango[X]
 	virtual/pkgconfig
 	!<gnome-base/gdm-2.20.4
 	doc? (
 		app-text/xmlto
-		dev-libs/libxslt )"
+		dev-libs/libxslt )
+"
 # gnome-common needed for eautoreconf
 # gnome-base/gdm does not provide gnome.desktop anymore
 
+src_prepare() {
+	# Silence errors due to weird checks for libX11
+	sed -e 's/\(PANGO_PACKAGES="\)pangox/\1/' -i configure.ac configure || die
+	gnome2_src_prepare
+}
+
 src_configure() {
-	DOCS="AUTHORS ChangeLog NEWS README"
 	G2CONF="${G2CONF}
 		--disable-deprecation-flags
-		--disable-schemas-compile
 		--docdir="${EPREFIX}/usr/share/doc/${PF}"
 		$(use_enable doc docbook-docs)
 		$(use_enable gconf)
