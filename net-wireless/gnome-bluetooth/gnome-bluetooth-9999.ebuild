@@ -55,8 +55,8 @@ DEPEND="${COMMON_DEPEND}
 
 if [[ ${PV} = 9999 ]]; then
 	DEPEND="${DEPEND}
-		app-text/yelp-tools"
-		doc? ( >=dev-util/gtk-doc-1.9 )
+		app-text/yelp-tools
+		doc? ( >=dev-util/gtk-doc-1.9 )"
 fi
 
 pkg_setup() {
