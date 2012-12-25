@@ -2,15 +2,15 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
-PYTHON_DEPEND="2:2.5"
-PYTHON_USE_WITH="xml"
+PYTHON_COMPAT=( python2_{6,7} )
+PYTHON_REQ_USE="xml"
 
 # Make sure games is inherited first so that the gnome2
 # functions will be called if they are not overridden
-inherit games gnome2 python virtualx
+inherit games gnome2 python-r1 virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -24,8 +24,12 @@ SLOT="0"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64 ~mips ~x86"
 fi
+# FIXME: we should decide whether to have USE flag for games or features
+# IUSE="artworkextra clutter opengl python test"
+# vs
+# IUSE="artworkextra aisleriot glchess quadrapassel swell-foop lightsoff gnibbles sudoku"
 IUSE="artworkextra +aisleriot +clutter +glchess +sudoku test"
 
 COMMON_DEPEND="
@@ -49,16 +53,16 @@ COMMON_DEPEND="
 "
 RDEPEND="${COMMON_DEPEND}
 	sudoku? (
+		${PYTHON_DEPS}
 		dev-python/pycairo
-		dev-python/pygobject:3[cairo]
+		dev-python/pygobject:3[cairo,${PYTHON_USEDEP}]
 		x11-libs/gdk-pixbuf:2[introspection]
 		x11-libs/pango[introspection]
-		>=x11-libs/gtk+-3.0.0:3[introspection] )
+		>=x11-libs/gtk+-3:3[introspection] )
 
 	!<gnome-extra/gnome-games-extra-data-3
 "
 DEPEND="${COMMON_DEPEND}
-	app-text/yelp-tools
 	>=dev-util/intltool-0.40.4
 	dev-util/itstool
 	>=sys-devel/gettext-0.10.40
@@ -67,6 +71,7 @@ DEPEND="${COMMON_DEPEND}
 
 if [[ ${PV} = 9999 ]]; then
 	DEPEND="${COMMON_DEPEND}
+		app-text/yelp-tools
 		>=dev-lang/vala-0.15.1:0.16"
 fi
 
@@ -83,15 +88,19 @@ _omitgame() {
 pkg_setup() {
 	# create the games user / group
 	games_pkg_setup
-
-	python_set_active_version 2
 	python_pkg_setup
 }
 
 src_prepare() {
+	gnome2_src_prepare
+	if use sudoku ; then
+		python_copy_sources
+	fi
+}
+
+src_configure() {
 	G2CONF="${G2CONF}
 		--disable-static
-		ITSTOOL=$(type -P true)
 		VALAC=$(type -P true)
 		--with-platform=gnome
 		--with-scores-group=${GAMES_GROUP}
@@ -112,20 +121,43 @@ src_prepare() {
 
 	if ! use sudoku; then
 		_omitgame gnome-sudoku
-	else
-		python_convert_shebangs -r 2 gnome-sudoku/src
-		python_clean_py-compile_files
 	fi
 
-	gnome2_src_prepare
+	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
+
+	if use sudoku ; then
+		python_foreach_impl run_in_build_dir gnome2_src_configure
+	else
+		gnome2_src_configure
+	fi
+}
+
+src_compile() {
+	if use sudoku ; then
+		python_foreach_impl run_in_build_dir gnome2_src_compile
+	else
+		gnome2_src_compile
+	fi
 }
 
 src_test() {
-	Xemake check || die "tests failed"
+	if use sudoku ; then
+		python_foreach_impl run_in_build_dir Xemake check
+	else
+		Xemake check || die "tests failed"
+	fi
 }
 
 src_install() {
-	gnome2_src_install
+	if use sudoku ; then
+		install_python() {
+				gnome2_src_install
+				python_doscript gnome-sudoku/src/gnome-sudoku
+		}
+		python_foreach_impl run_in_build_dir install_python
+	else
+		gnome2_src_install
+	fi
 
 	# Documentation install for each of the games
 	for game in \
@@ -153,11 +185,14 @@ pkg_preinst() {
 pkg_postinst() {
 	games_pkg_postinst
 	gnome2_pkg_postinst
-	python_need_rebuild
-	use sudoku && python_mod_optimize gnome_sudoku
 }
 
 pkg_postrm() {
 	gnome2_pkg_postrm
-	python_mod_cleanup gnome_sudoku
+}
+
+run_in_build_dir() {
+	pushd "${BUILD_DIR}" > /dev/null || die
+	"$@"
+	popd > /dev/null
 }
