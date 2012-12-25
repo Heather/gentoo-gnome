@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 
 inherit eutils gnome2 virtualx
@@ -25,7 +25,7 @@ fi
 COMMON_DEPEND="
 	>=dev-libs/glib-2.31.10
 	>=x11-libs/gtk+-3.3.8:3
-	>=x11-libs/cairo-1.0.0
+	>=x11-libs/cairo-1
 	>=sys-power/upower-0.9.1
 "
 RDEPEND="${COMMON_DEPEND}
@@ -48,7 +48,6 @@ DEPEND="${COMMON_DEPEND}
 # docbook-xml-dtd-4.4 and -4.1.2 are used by the xml files under ${S}/docs.
 
 src_prepare() {
-	DOCS="AUTHORS ChangeLog NEWS README"
 	G2CONF="${G2CONF}
 		$(use_enable test tests)
 		--enable-compile-warnings=minimum
