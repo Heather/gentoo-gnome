@@ -144,7 +144,7 @@ src_prepare() {
 	# TODO epatch "${FILESDIR}/${PN}-1.8.1-tests-xvfb.patch"
 
 	# bug #417523, https://bugs.webkit.org/show_bug.cgi?id=96602
-	epatch "${FILESDIR}/${P}-libdl.patch"
+	epatch "${FILESDIR}/${PN}-1.11.1-libdl.patch"
 
 	# uclibc fix, bug #441674
 	epatch "${FILESDIR}/${PN}-1.10.1-disable-backtrace-uclibc.patch"
