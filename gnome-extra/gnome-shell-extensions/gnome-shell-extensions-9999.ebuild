@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-extra/gnome-shell-extensions/gnome-shell-extensions-3.2.2.ebuild,v 1.2 2011/12/12 19:56:13 tetromino Exp $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -43,18 +43,18 @@ RDEPEND="${COMMON_DEPEND}
 	x11-libs/gdk-pixbuf:2[introspection]
 	x11-libs/gtk+:3[introspection]
 	x11-libs/pango[introspection]
-	x11-themes/gnome-icon-theme-symbolic"
+	x11-themes/gnome-icon-theme-symbolic
+"
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.50
 	sys-devel/gettext
-	virtual/pkgconfig"
+	virtual/pkgconfig
+"
 # eautoreconf needs gnome-base/gnome-common
 
-pkg_setup() {
-	DOCS="NEWS README"
-	G2CONF="${G2CONF}
-		--enable-extensions=all
-		--disable-schemas-compile"
+src_configure() {
+	G2CONF="${G2CONF} --enable-extensions=all"
+	gnome2_src_configure
 }
 
 src_install() {
