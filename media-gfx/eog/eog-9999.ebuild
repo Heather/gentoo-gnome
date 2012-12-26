@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
@@ -26,11 +26,12 @@ fi
 
 REQUIRED_USE="exif? ( jpeg )"
 
-RDEPEND=">=x11-libs/gtk+-3.3.6:3[introspection,X]
-	>=dev-libs/glib-2.31.0:2
+RDEPEND="
+	>=x11-libs/gtk+-3.3.6:3[introspection,X]
+	>=dev-libs/glib-2.31:2
 	>=dev-libs/libxml2-2:2
-	>=dev-libs/libpeas-0.7.4[gtk]
-	>=gnome-base/gnome-desktop-2.91.2:3
+	>=dev-libs/libpeas-0.7.4:=[gtk]
+	>=gnome-base/gnome-desktop-2.91.2:3=
 	>=gnome-base/gsettings-desktop-schemas-2.91.92
 	>=x11-themes/gnome-icon-theme-2.19.1
 	>=x11-misc/shared-mime-info-0.20
@@ -43,12 +44,14 @@ RDEPEND=">=x11-libs/gtk+-3.3.6:3[introspection,X]
 	jpeg? ( virtual/jpeg:0 )
 	lcms? ( media-libs/lcms:2 )
 	svg? ( >=gnome-base/librsvg-2.36.2:2 )
-	xmp? ( media-libs/exempi:2 )"
+	xmp? ( media-libs/exempi:2 )
+"
 DEPEND="${RDEPEND}
-	dev-util/gtk-doc-am
+	>=dev-util/gtk-doc-am-1.10
 	>=dev-util/intltool-0.40
 	sys-devel/gettext
-	virtual/pkgconfig"
+	virtual/pkgconfig
+"
 
 if [[ ${PV} = 9999 ]]; then
 	DEPEND="${DEPEND}
@@ -63,8 +66,7 @@ src_configure() {
 		$(use_with exif libexif)
 		$(use_with lcms cms)
 		$(use_with xmp)
-		$(use_with svg librsvg)
-		--disable-schemas-compile"
+		$(use_with svg librsvg)"
 	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
 	DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README THANKS TODO"
 	gnome2_src_configure
