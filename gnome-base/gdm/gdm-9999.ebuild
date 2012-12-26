@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GNOME2_LA_PUNT="yes"
 
 inherit autotools eutils gnome2 pam systemd user
@@ -31,24 +31,23 @@ fi
 # dconf, dbus and g-s-d are needed at install time for dconf update
 # libdaemon needed for our fix-daemonize-regression.patch
 COMMON_DEPEND="
+	app-text/iso-codes
 	>=dev-libs/glib-2.33.2:2
 	>=x11-libs/gtk+-2.91.1:3
+	dev-libs/libdaemon
 	>=x11-libs/pango-1.3
 	dev-libs/nspr
 	>=dev-libs/nss-3.11.1
-	>=media-libs/fontconfig-2.5.0
-	>=media-libs/libcanberra-0.4[gtk3]
-	>=x11-misc/xdg-utils-1.0.2-r3
-	>=sys-power/upower-0.9
-	>=sys-apps/accountsservice-0.6.12
-
 	>=gnome-base/dconf-0.11.6
 	>=gnome-base/gnome-settings-daemon-3.1.4
 	gnome-base/gsettings-desktop-schemas
+	>=media-libs/fontconfig-2.5.0
+	>=media-libs/libcanberra-0.4[gtk3]
 	sys-apps/dbus
+	>=sys-apps/accountsservice-0.6.12
+	>=sys-power/upower-0.9
 
-	app-text/iso-codes
-
+	x11-apps/sessreg
 	x11-base/xorg-server
 	x11-libs/libXi
 	x11-libs/libXau
@@ -57,12 +56,10 @@ COMMON_DEPEND="
 	x11-libs/libXext
 	x11-libs/libXft
 	x11-libs/libXrandr
-	x11-apps/sessreg
+	>=x11-misc/xdg-utils-1.0.2-r3
 
 	virtual/pam
 	sys-auth/pambase[consolekit?,systemd?]
-
-	dev-libs/libdaemon
 
 	accessibility? ( x11-libs/libXevie )
 	audit? ( sys-process/audit )
@@ -70,9 +67,10 @@ COMMON_DEPEND="
 	introspection? ( >=dev-libs/gobject-introspection-0.9.12 )
 	plymouth? ( sys-boot/plymouth )
 	selinux? ( sys-libs/libselinux )
-	systemd? ( >=sys-apps/systemd-39[pam] )
+	systemd? ( >=sys-apps/systemd-186[pam] )
 	tcpd? ( >=sys-apps/tcp-wrappers-7.6 )
-	xinerama? ( x11-libs/libXinerama )"
+	xinerama? ( x11-libs/libXinerama )
+"
 # XXX: These deps are from session and desktop files in data/ directory
 # at-spi:1 is needed for at-spi-registryd (spawned by simple-chooser)
 # fprintd is used via dbus by gdm-fingerprint-extension
@@ -98,16 +96,18 @@ RDEPEND="${COMMON_DEPEND}
 		app-crypt/coolkey
 		sys-auth/pam_pkcs11 )
 
-	!gnome-extra/fast-user-switch-applet"
+	!gnome-extra/fast-user-switch-applet
+"
 DEPEND="${COMMON_DEPEND}
-	test? ( >=dev-libs/check-0.9.4 )
-	xinerama? ( x11-proto/xineramaproto )
 	app-text/docbook-xml-dtd:4.1.2
+	>=dev-util/intltool-0.40.0
 	>=sys-devel/gettext-0.17
+	virtual/pkgconfig
 	x11-proto/inputproto
 	x11-proto/randrproto
-	>=dev-util/intltool-0.40.0
-	virtual/pkgconfig"
+	test? ( >=dev-libs/check-0.9.4 )
+	xinerama? ( x11-proto/xineramaproto )
+"
 
 if [[ ${PV} = 9999 ]]; then
 	DEPEND="${DEPEND}
@@ -132,33 +132,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	DOCS="AUTHORS ChangeLog NEWS README TODO"
-
-	# PAM is the only auth scheme supported
-	# even though configure lists shadow and crypt
-	# they don't have any corresponding code.
-	# --with-at-spi-registryd-directory= needs to be passed explicitly because
-	# of https://bugzilla.gnome.org/show_bug.cgi?id=607643#c4
-	G2CONF="${G2CONF}
-		--disable-static
-		--localstatedir=${EPREFIX}/var
-		--with-xdmcp=yes
-		--enable-authentication-scheme=pam
-		--with-pam-prefix=${EPREFIX}/etc
-		--with-default-pam-config=none
-		--with-at-spi-registryd-directory=${EPREFIX}/usr/libexec
-		--with-initial-vt=7
-		$(use_with accessibility xevie)
-		$(use_with audit libaudit)
-		$(use_enable ipv6)
-		$(use_with consolekit console-kit)
-		$(use_with plymouth)
-		$(use_with selinux)
-		$(use_with systemd)
-		$(use_with tcpd tcp-wrappers)
-		$(use_with xinerama)"
-	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
-
 	# GDM grabs VT2 instead of VT7, bug 261339, bug 284053, bug 288852
 	# XXX: We can now pass a hard-coded initial value; temporary fix
 	#epatch "${FILESDIR}/${PN}-2.32.0-fix-vt-problems.patch"
@@ -190,6 +163,37 @@ src_prepare() {
 	fi
 
 	gnome2_src_prepare
+}
+
+src_configure() {
+	DOCS="AUTHORS ChangeLog NEWS README TODO"
+
+	# PAM is the only auth scheme supported
+	# even though configure lists shadow and crypt
+	# they don't have any corresponding code.
+	# --with-at-spi-registryd-directory= needs to be passed explicitly because
+	# of https://bugzilla.gnome.org/show_bug.cgi?id=607643#c4
+	G2CONF="${G2CONF}
+		--disable-static
+		--localstatedir=${EPREFIX}/var
+		--with-xdmcp=yes
+		--enable-authentication-scheme=pam
+		--with-pam-prefix=${EPREFIX}/etc
+		--with-default-pam-config=none
+		--with-at-spi-registryd-directory=${EPREFIX}/usr/libexec
+		--with-initial-vt=7
+		$(use_with accessibility xevie)
+		$(use_with audit libaudit)
+		$(use_enable ipv6)
+		$(use_with consolekit console-kit)
+		$(use_with plymouth)
+		$(use_with selinux)
+		$(use_with systemd)
+		$(systemd_with_unitdir)
+		$(use_with tcpd tcp-wrappers)
+		$(use_with xinerama)"
+	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
+	gnome2_src_configure
 }
 
 src_install() {
@@ -256,23 +260,6 @@ pkg_postinst() {
 		elog "file.  It has been moved to /etc/X11/gdm/gdm-pre-gnome-2.16"
 		mv /etc/X11/gdm/gdm.conf /etc/X11/gdm/gdm-pre-gnome-2.16
 	fi
-
-	# https://bugzilla.redhat.com/show_bug.cgi?id=513579
-	# Lennart says this problem is fixed, but users are still reporting problems
-	# XXX: Do we want this elog?
-#	if has_version "media-libs/libcanberra[pulseaudio]" ; then
-#		elog
-#		elog "You have media-libs/libcanberra with the pulseaudio USE flag"
-#		elog "enabled. GDM will start a pulseaudio process to play sounds. This"
-#		elog "process should automatically terminate when a user logs into a"
-#		elog "desktop session. If GDM's pulseaudio fails to terminate and"
-#		elog "causes problems for users' audio, you can prevent GDM from"
-#		elog "starting pulseaudio by editing /var/lib/gdm/.pulse/client.conf"
-#		elog "so it contains the following two lines:"
-#		elog
-#		elog "autospawn = no"
-#		elog "daemon-binary = /bin/true"
-#	fi
 }
 
 pkg_postrm() {
