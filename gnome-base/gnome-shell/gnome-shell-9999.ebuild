@@ -2,12 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
-PYTHON_DEPEND="2:2.5"
+PYTHON_COMPAT=( python2_{6,7} )
 
-inherit autotools eutils gnome2 multilib pax-utils python
+inherit autotools eutils gnome2 multilib pax-utils python-r1
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -29,6 +29,7 @@ fi
 # gstreamer? ( >=media-libs/gstreamer-0.11.92 )
 COMMON_DEPEND="
 	>=app-accessibility/at-spi2-atk-2.5.3
+	>=dev-libs/atk-2[introspection]
 	>=app-crypt/gcr-3.3.90[introspection]
 	>=dev-libs/glib-2.31.6:2
 	>=dev-libs/gjs-1.33.2
@@ -37,12 +38,12 @@ COMMON_DEPEND="
 	>=media-libs/clutter-1.11.11:1.0[introspection]
 	>=dev-libs/json-glib-0.13.2
 	>=dev-libs/libcroco-0.6.2:0.6
-	>=gnome-base/gnome-desktop-3.5.1:3[introspection]
+	>=gnome-base/gnome-desktop-3.5.1:3=[introspection]
 	>=gnome-base/gsettings-desktop-schemas-3.5.4
 	>=gnome-base/gnome-keyring-3.3.90
 	>=gnome-base/gnome-menus-3.5.3:3[introspection]
 	gnome-base/libgnome-keyring
-	>=gnome-extra/evolution-data-server-3.5.3
+	>=gnome-extra/evolution-data-server-3.5.3:=
 	>=media-libs/gstreamer-0.11.92:1.0
 	>=net-im/telepathy-logger-0.2.4[introspection]
 	>=net-libs/telepathy-glib-0.19[introspection]
@@ -50,6 +51,9 @@ COMMON_DEPEND="
 	>=x11-libs/libXfixes-5.0
 	>=x11-wm/mutter-${PV}[introspection]
 	>=x11-libs/startup-notification-0.11
+
+	${PYTHON_DEPS}
+	dev-python/pygobject:3[${PYTHON_USEDEP}]
 
 	dev-libs/dbus-glib
 	dev-libs/libxml2:2
@@ -90,7 +94,6 @@ RDEPEND="${COMMON_DEPEND}
 	sys-power/upower[introspection]
 
 	>=gnome-base/gnome-session-2.91.91
-
 	>=gnome-base/gnome-settings-daemon-2.91
 	>=gnome-base/gnome-control-center-2.91.92-r1[bluetooth(+)?]
 
@@ -107,32 +110,17 @@ RDEPEND="${COMMON_DEPEND}
 	!systemd? ( sys-auth/consolekit )
 "
 DEPEND="${COMMON_DEPEND}
-	>=sys-devel/gettext-0.17
 	dev-libs/libxslt
+	>=dev-util/gtk-doc-am-1.17
 	>=dev-util/intltool-0.40
 	gnome-base/gnome-common
+	>=sys-devel/gettext-0.17
 	virtual/pkgconfig
 	!!=dev-lang/spidermonkey-1.8.2*"
 # libmozjs.so is picked up from /usr/lib while compiling, so block at build-time
 # https://bugs.gentoo.org/show_bug.cgi?id=360413
 
-pkg_setup() {
-	python_set_active_version 2
-	python_pkg_setup
-}
-
 src_prepare() {
-	DOCS="AUTHORS NEWS README"
-	# Don't error out on warnings
-	G2CONF="${G2CONF}
-		--enable-man
-		--enable-compile-warnings=maximum
-		--disable-jhbuild-wrapper-script
-		$(use_with bluetooth)
-		$(use_enable networkmanager)
-		$(use_with systemd)
-		BROWSER_PLUGIN_DIR=${EPREFIX}/usr/$(get_libdir)/nsbrowser/plugins"
-
 	# Fix automagic gnome-bluetooth dep, bug #398145
 	epatch "${FILESDIR}/${PN}-3.5.x-bluetooth-flag.patch"
 
@@ -143,9 +131,23 @@ src_prepare() {
 	gnome2_src_prepare
 }
 
+src_configure() {
+	# Do not error out on warnings
+	G2CONF="${G2CONF}
+		--enable-man
+		--enable-compile-warnings=maximum
+		--disable-jhbuild-wrapper-script
+		$(use_with bluetooth)
+		$(use_enable networkmanager)
+		$(use_with systemd)
+		BROWSER_PLUGIN_DIR=${EPREFIX}/usr/$(get_libdir)/nsbrowser/plugins"
+	gnome2_src_configure
+}
+
 src_install() {
 	gnome2_src_install
-	python_convert_shebangs 2 "${ED}/usr/bin/gnome-shell-extension-tool"
+	python_replicate_script "${ED}/usr/bin/gnome-shell-extension-tool"
+	python_replicate_script "${ED}/usr/bin/gnome-shell-perf-tool"
 
 	# Required for gnome-shell on hardened/PaX, bug #398941
 	# Future-proof for >=spidermonkey-1.8.7 following polkit's example
@@ -163,7 +165,7 @@ pkg_postinst() {
 	   ! has_version 'media-plugins/gst-plugins-vpx:1.0'; then
 		ewarn "To make use of GNOME Shell's built-in screen recording utility,"
 		ewarn "you need to either install media-libs/gst-plugins-good:1.0"
-		ewarn "and media-plugins/gst-plugins-vp8:1.0, or use dconf-editor to change"
+		ewarn "and media-plugins/gst-plugins-vpx:1.0, or use dconf-editor to change"
 		ewarn "apps.gnome-shell.recorder/pipeline to what you want to use."
 	fi
 
