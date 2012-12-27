@@ -158,7 +158,7 @@ gnome2_src_configure() {
 	# rebuild docs.
 	# Preserve old behavior for older EAPI.
 	if grep -q "enable-gtk-doc" ${ECONF_SOURCE:-.}/configure ; then
-		if has ${EAPI-0} 0 1 2 3 4 && has doc ${IUSE} ; then
+		if has ${EAPI:-0} 0 1 2 3 4 && in_iuse doc ; then
 			G2CONF="${G2CONF} $(use_enable doc gtk-doc)"
 		else
 			G2CONF="${G2CONF} --disable-gtk-doc"
@@ -266,7 +266,7 @@ gnome2_src_install() {
 	if has ${EAPI:-0} 0 1 2 3 4; then
 		if [[ "${GNOME2_LA_PUNT}" != "no" ]]; then
 			ebegin "Removing .la files"
-			if ! { has static-libs ${IUSE//+} && use static-libs; }; then
+			if ! { in_iuse static-libs && use static-libs; }; then
 				find "${D}" -name '*.la' -exec rm -f {} + || die "la file removal failed"
 			fi
 			eend
