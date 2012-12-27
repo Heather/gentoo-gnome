@@ -150,11 +150,12 @@ gnome2_src_configure() {
 		fi
 	fi
 
-	# 2012-11-25
 	# Starting with EAPI=5, we consider packages installing gtk-doc to be
 	# handled by adding DEPEND="dev-util/gtk-doc-am" which provides tools to
 	# relink URLs in documentation to already installed documentation.
 	# This decision also greatly helps with constantly broken doc generation.
+	# Remember to drop 'doc' USE flag from your package if it was only used to
+	# rebuild docs.
 	# Preserve old behavior for older EAPI.
 	if grep -q "enable-gtk-doc" ${ECONF_SOURCE:-.}/configure ; then
 		if has ${EAPI-0} 0 1 2 3 4 && has doc ${IUSE} ; then
@@ -230,9 +231,24 @@ gnome2_src_install() {
 
 	unset GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL
 
-	# Manual document installation
-	if [[ -n "${DOCS}" ]]; then
-		dodoc ${DOCS} || die "dodoc failed"
+	# Handle documentation as 'default' for eapi5 and newer, bug #373131
+	if has ${EAPI:-0} 0 1 2 3 4; then
+		# Manual document installation
+		if [[ -n "${DOCS}" ]]; then
+			dodoc ${DOCS} || die "dodoc failed"
+		fi
+	else
+		if ! declare -p DOCS >/dev/null 2>&1 ; then
+			local d
+			for d in README* ChangeLog AUTHORS NEWS TODO CHANGES THANKS BUGS \
+					FAQ CREDITS CHANGELOG ; do
+				[[ -s "${d}" ]] && dodoc "${d}"
+			done
+		elif declare -p DOCS | grep -q '^declare -a' ; then
+			dodoc "${DOCS[@]}"
+		else
+			dodoc ${DOCS}
+		fi
 	fi
 
 	# Do not keep /var/lib/scrollkeeper because:
