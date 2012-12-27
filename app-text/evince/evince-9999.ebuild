@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
@@ -14,9 +14,10 @@ fi
 DESCRIPTION="Simple document viewer for GNOME"
 HOMEPAGE="http://www.gnome.org/projects/evince/"
 
-LICENSE="GPL-2+"
-SLOT="0"
-IUSE="dbus debug djvu dvi gnome-keyring +introspection nautilus +postscript t1lib tiff xps"
+LICENSE="GPL-2+ CCPL-Attribution-ShareAlike-3.0"
+# subslot = evd3.(suffix of libevdocument3)-evv3.(suffix of libevview3)
+SLOT="0/evd3.4-evv3.3"
+IUSE="debug djvu dvi gnome-keyring +introspection nautilus +postscript t1lib tiff xps"
 if [[ ${PV} = 9999 ]]; then
 	IUSE="${IUSE} doc"
 	KEYWORDS=""
@@ -31,36 +32,38 @@ fi
 # libX11 used for totem-screensaver
 RDEPEND="
 	dev-libs/atk
-	>=dev-libs/glib-2.33.0:2
+	>=dev-libs/glib-2.33:2
 	>=dev-libs/libxml2-2.5:2
-	sys-libs/zlib
+	sys-libs/zlib:=
 	x11-libs/gdk-pixbuf:2
 	>=x11-libs/gtk+-3.0.2:3[introspection?]
-	x11-libs/libX11
-	>=x11-libs/libSM-1
-	x11-libs/libICE
+	x11-libs/libX11:=
+	>=x11-libs/libSM-1:=
+	x11-libs/libICE:=
 	gnome-base/gsettings-desktop-schemas
 	|| (
 		>=x11-themes/gnome-icon-theme-2.17.1
 		>=x11-themes/hicolor-icon-theme-0.10 )
-	>=x11-libs/cairo-1.10.0
-	>=app-text/poppler-0.20.0[cairo]
-	djvu? ( >=app-text/djvu-3.5.17 )
+	>=x11-libs/cairo-1.10:=
+	>=app-text/poppler-0.20:=[cairo]
+	djvu? ( >=app-text/djvu-3.5.17:= )
 	dvi? (
 		virtual/tex-base
-		dev-libs/kpathsea
-		t1lib? ( >=media-libs/t1lib-5.0.0 ) )
-	gnome-keyring? ( >=gnome-base/gnome-keyring-2.22.0 )
-	introspection? ( >=dev-libs/gobject-introspection-1.0 )
+		dev-libs/kpathsea:=
+		t1lib? ( >=media-libs/t1lib-5:= ) )
+	gnome-keyring? ( >=gnome-base/gnome-keyring-2.22 )
+	introspection? ( >=dev-libs/gobject-introspection-1 )
 	nautilus? ( >=gnome-base/nautilus-2.91.4[introspection?] )
-	postscript? ( >=app-text/libspectre-0.2.0 )
-	tiff? ( >=media-libs/tiff-3.6:0 )
-	xps? ( >=app-text/libgxps-0.2.1 )"
+	postscript? ( >=app-text/libspectre-0.2.0:= )
+	tiff? ( >=media-libs/tiff-3.6:0= )
+	xps? ( >=app-text/libgxps-0.2.1:= )
+"
 DEPEND="${RDEPEND}
 	app-text/docbook-xml-dtd:4.3
+	dev-util/gdbus-codegen
 	sys-devel/gettext
-	>=dev-util/intltool-0.35
 	>=dev-util/gtk-doc-am-1.13
+	>=dev-util/intltool-0.35
 	virtual/pkgconfig"
 
 if [[ ${PV} = 9999 ]]; then
@@ -75,9 +78,8 @@ ELTCONF="--portage"
 # Releases: http://people.redhat.com/zcerza/dogtail/releases/
 RESTRICT="test"
 
-pkg_setup() {
+src_prepare() {
 	G2CONF="${G2CONF}
-		--disable-schemas-compile
 		--disable-static
 		--disable-tests
 		--enable-pdf
@@ -85,7 +87,7 @@ pkg_setup() {
 		--enable-thumbnailer
 		--with-smclient=xsmp
 		--with-platform=gnome
-		$(use_enable dbus)
+		--enable-dbus
 		$(use_enable djvu)
 		$(use_enable dvi)
 		$(use_with gnome-keyring keyring)
@@ -96,10 +98,7 @@ pkg_setup() {
 		$(use_enable tiff)
 		$(use_enable xps)"
 	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
-	DOCS="AUTHORS ChangeLog NEWS README TODO"
-}
 
-src_prepare() {
 	# Fix .desktop file so menu item shows up
 	epatch "${FILESDIR}"/${PN}-0.7.1-display-menu.patch
 
