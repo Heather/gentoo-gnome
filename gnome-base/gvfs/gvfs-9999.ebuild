@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
@@ -36,8 +36,8 @@ RDEPEND=">=dev-libs/glib-2.33.12:2
 	sys-apps/dbus
 	dev-libs/libxml2:2
 	net-misc/openssh
-	afp? ( >=dev-libs/libgcrypt-1.2.2 )
-	archive? ( app-arch/libarchive )
+	afp? ( >=dev-libs/libgcrypt-1.2.2:= )
+	archive? ( app-arch/libarchive:= )
 	avahi? ( >=net-dns/avahi-0.6 )
 	bluetooth? (
 		>=app-mobilephone/obex-data-server-0.4.5
@@ -51,7 +51,7 @@ RDEPEND=">=dev-libs/glib-2.33.12:2
 		=sys-apps/gnome-disk-utility-3.0.2-r300
 		=sys-apps/gnome-disk-utility-3.0.2-r200 ) )
 	gnome-keyring? ( app-crypt/libsecret )
-	gphoto2? ( >=media-libs/libgphoto2-2.4.7 )
+	gphoto2? ( >=media-libs/libgphoto2-2.4.7:= )
 	gtk? ( >=x11-libs/gtk+-3.0:3 )
 	http? ( >=net-libs/libsoup-gnome-2.26.0 )
 	ios? (
@@ -60,24 +60,48 @@ RDEPEND=">=dev-libs/glib-2.33.12:2
 	samba? ( >=net-fs/samba-3.4.6[smbclient] )
 	systemd? ( sys-apps/systemd )
 	udev? (
-		virtual/udev[gudev]
-		cdda? ( >=dev-libs/libcdio-0.78.2[-minimal] ) )
+		cdda? ( >=dev-libs/libcdio-0.78.2[-minimal] )
+		virtual/udev[gudev] )
 	udisks? ( >=sys-fs/udisks-1.97:2[systemd?] )"
 DEPEND="${RDEPEND}
 	dev-libs/libxslt
 	>=dev-util/intltool-0.40
 	virtual/pkgconfig
+	dev-util/gdbus-codegen
 	dev-util/gtk-doc-am
 	doc? ( >=dev-util/gtk-doc-1 )"
 
 REQUIRED_USE="cdda? ( udev )"
 
-pkg_setup() {
+src_prepare() {
+	if use archive; then
+		epatch "${FILESDIR}"/${PN}-1.2.2-expose-archive-backend.patch
+		echo mount-archive.desktop.in >> po/POTFILES.in
+		echo mount-archive.desktop.in.in >> po/POTFILES.in
+	fi
+
+	if ! use udev; then
+		sed -e 's/gvfsd-burn/ /' \
+			-e 's/burn.mount.in/ /' \
+			-e 's/burn.mount/ /' \
+			-i daemon/Makefile.am || die
+	fi
+
+	if use archive || ! use udev; then
+		# libgcrypt.m4 needed for eautoreconf, bug #399043
+		mv "${WORKDIR}/libgcrypt.m4" "${S}"/ || die
+
+		[[ ${PV} = 9999 ]] || AT_M4DIR=. eautoreconf
+	fi
+
+	gnome2_src_prepare
+}
+
+src_configure() {
 	# --enable-documentation installs man pages
 	G2CONF="${G2CONF}
 		--disable-bash-completion
 		--disable-hal
-		--disable-schemas-compile
 		--with-dbus-service-dir="${EPREFIX}"/usr/share/dbus-1/services
 		--enable-documentation
 		$(use_enable afp)
@@ -86,6 +110,7 @@ pkg_setup() {
 		$(use_enable bluetooth obexftp)
 		$(use_enable bluray)
 		$(use_enable cdda)
+		$(use_enable doc gtk-doc)
 		$(use_enable fuse)
 		$(use_enable gdu)
 		$(use_enable gphoto2)
@@ -98,29 +123,7 @@ pkg_setup() {
 		$(use_enable samba)
 		$(use_enable systemd libsystemd-login)
 		$(use_enable udisks udisks2)"
-}
-
-src_prepare() {
-	if use archive; then
-		epatch "${FILESDIR}"/${PN}-1.2.2-expose-archive-backend.patch
-		echo mount-archive.desktop.in >> po/POTFILES.in
-		echo mount-archive.desktop.in.in >> po/POTFILES.in
-	fi
-
-	if ! use udev; then
-		sed -i -e 's/gvfsd-burn/ /' daemon/Makefile.am || die
-		sed -i -e 's/burn.mount.in/ /' daemon/Makefile.am || die
-		sed -i -e 's/burn.mount/ /' daemon/Makefile.am || die
-	fi
-
-	if use archive || ! use udev; then
-		# libgcrypt.m4 needed for eautoreconf, bug #399043
-		mv "${WORKDIR}/libgcrypt.m4" "${S}"/ || die
-
-		[[ ${PV} = 9999 ]] || AT_M4DIR=. eautoreconf
-	fi
-
-	gnome2_src_prepare
+	gnome2_src_configure
 }
 
 src_install() {
