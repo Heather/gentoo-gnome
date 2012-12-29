@@ -1,4 +1,4 @@
-From 5e6162f78e72c60130638061ed8b94a3cb4aa352 Mon Sep 17 00:00:00 2001
+From 8cfd2056e1e630b1702fe238e389ad3a4f37a8ad Mon Sep 17 00:00:00 2001
 From: Gilles Dartiguelongue <eva@gentoo.org>
 Date: Sat, 29 Dec 2012 16:48:30 +0100
 Subject: [PATCH 4/5] Fix build failure with evolution-data-server-3.6
@@ -6,9 +6,24 @@ Subject: [PATCH 4/5] Fix build failure with evolution-data-server-3.6
 Only cover plugin code enabled through --enable-eds.
 EDS backend has been broken for a long time and needs more work.
 ---
- configure.ac             |   2 +-
- src/planner-eds-plugin.c | 112 +++++++++++++++++++++++------------------------
- 2 files changed, 57 insertions(+), 57 deletions(-)
+ configure.ac                                |   2 +-
+ docs/libplanner/tmpl/libplanner-unused.sgml |   8 --
+ docs/libplanner/tmpl/mrp-application.sgml   |   4 +
+ docs/libplanner/tmpl/mrp-assignment.sgml    |   6 +-
+ docs/libplanner/tmpl/mrp-calendar.sgml      |  11 +--
+ docs/libplanner/tmpl/mrp-day.sgml           |   6 ++
+ docs/libplanner/tmpl/mrp-error.sgml         |   3 +
+ docs/libplanner/tmpl/mrp-group.sgml         |   4 +
+ docs/libplanner/tmpl/mrp-object.sgml        |   7 +-
+ docs/libplanner/tmpl/mrp-project.sgml       |   5 +-
+ docs/libplanner/tmpl/mrp-property.sgml      |   3 +
+ docs/libplanner/tmpl/mrp-relation.sgml      |   3 +
+ docs/libplanner/tmpl/mrp-resource.sgml      |   4 +
+ docs/libplanner/tmpl/mrp-task.sgml          |   7 +-
+ docs/libplanner/tmpl/mrp-time.sgml          |  13 +++
+ docs/libplanner/tmpl/planner.sgml           |   3 +
+ src/planner-eds-plugin.c                    | 141 +++++++++++++++-------------
+ 17 files changed, 139 insertions(+), 91 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
 index 9f3d112..7e0cd8a 100644
@@ -23,8 +38,382 @@ index 9f3d112..7e0cd8a 100644
      EDS_PACKAGE=1.2
      PKG_CHECK_MODULES(EDS, 
      [
+diff --git a/docs/libplanner/tmpl/libplanner-unused.sgml b/docs/libplanner/tmpl/libplanner-unused.sgml
+index e8bee74..a389b98 100644
+--- a/docs/libplanner/tmpl/libplanner-unused.sgml
++++ b/docs/libplanner/tmpl/libplanner-unused.sgml
+@@ -131,14 +131,6 @@ mrproject
+ 
+ @Returns: 
+ 
+-<!-- ##### FUNCTION mrp_time_from_tm ##### -->
+-<para>
+-
+-</para>
+-
+-@tm: 
+-@Returns: 
+-
+ <!-- ##### MACRO textdomain ##### -->
+ <para>
+ 
+diff --git a/docs/libplanner/tmpl/mrp-application.sgml b/docs/libplanner/tmpl/mrp-application.sgml
+index 6511324..1e2e794 100644
+--- a/docs/libplanner/tmpl/mrp-application.sgml
++++ b/docs/libplanner/tmpl/mrp-application.sgml
+@@ -17,6 +17,9 @@ the main project application object.
+ <!-- ##### SECTION Stability_Level ##### -->
+ 
+ 
++<!-- ##### SECTION Image ##### -->
++
++
+ <!-- ##### STRUCT MrpApplicationPriv ##### -->
+ <para>
+ A private struct for internal use only.  The definition of this
+@@ -39,6 +42,7 @@ libmrproject.
+ 
+ </para>
+ 
++@void: 
+ @Returns: 
+ 
+ 
+diff --git a/docs/libplanner/tmpl/mrp-assignment.sgml b/docs/libplanner/tmpl/mrp-assignment.sgml
+index 178bf2c..29f367e 100644
+--- a/docs/libplanner/tmpl/mrp-assignment.sgml
++++ b/docs/libplanner/tmpl/mrp-assignment.sgml
+@@ -17,6 +17,9 @@ MrpAssignment
+ <!-- ##### SECTION Stability_Level ##### -->
+ 
+ 
++<!-- ##### SECTION Image ##### -->
++
++
+ <!-- ##### STRUCT MrpAssignmentPriv ##### -->
+ <para>
+ A private struct for internal use only.  The definition of this
+@@ -50,6 +53,7 @@ Represents an assignment, i.e. the assignment of a task to a resource.
+ 
+ </para>
+ 
++@void: 
+ @Returns: 
+ 
+ 
+@@ -78,7 +82,5 @@ Represents an assignment, i.e. the assignment of a task to a resource.
+ 
+ @assignment: 
+ @Returns: 
+-<!-- # Unused Parameters # -->
+-@assignemnt: 
+ 
+ 
+diff --git a/docs/libplanner/tmpl/mrp-calendar.sgml b/docs/libplanner/tmpl/mrp-calendar.sgml
+index 5de7f6f..cda9da4 100644
+--- a/docs/libplanner/tmpl/mrp-calendar.sgml
++++ b/docs/libplanner/tmpl/mrp-calendar.sgml
+@@ -25,6 +25,9 @@ can be overridden to use another day type as well.
+ <!-- ##### SECTION Stability_Level ##### -->
+ 
+ 
++<!-- ##### SECTION Image ##### -->
++
++
+ <!-- ##### STRUCT MrpCalendarPriv ##### -->
+ <para>
+ A private struct for internal use only.  The definition of this
+@@ -166,8 +169,6 @@ Represents a time interval.
+ @date: 
+ @check_ancestors: 
+ @Returns: 
+-<!-- # Unused Parameters # -->
+-@time: 
+ 
+ 
+ <!-- ##### FUNCTION mrp_calendar_get_default_day ##### -->
+@@ -178,8 +179,6 @@ Represents a time interval.
+ @calendar: 
+ @week_day: 
+ @Returns: 
+-<!-- # Unused Parameters # -->
+-@time: 
+ 
+ 
+ <!-- ##### FUNCTION mrp_calendar_set_default_days ##### -->
+@@ -189,7 +188,7 @@ Represents a time interval.
+ 
+ @calendar: 
+ @week_day: 
+-@Varargs: 
++@...: 
+ 
+ 
+ <!-- ##### FUNCTION mrp_calendar_set_days ##### -->
+@@ -199,7 +198,7 @@ Represents a time interval.
+ 
+ @calendar: 
+ @date: 
+-@Varargs: 
++@...: 
+ 
+ 
+ <!-- ##### FUNCTION mrp_calendar_get_parent ##### -->
+diff --git a/docs/libplanner/tmpl/mrp-day.sgml b/docs/libplanner/tmpl/mrp-day.sgml
+index 1ae4601..1d5751c 100644
+--- a/docs/libplanner/tmpl/mrp-day.sgml
++++ b/docs/libplanner/tmpl/mrp-day.sgml
+@@ -18,6 +18,9 @@ day. Other examples might be custom types like half day, or a holiday.
+ <!-- ##### SECTION Stability_Level ##### -->
+ 
+ 
++<!-- ##### SECTION Image ##### -->
++
++
+ <!-- ##### STRUCT MrpDay ##### -->
+ <para>
+ Object representing a day in the project.
+@@ -120,6 +123,7 @@ Object representing a day in the project.
+ 
+ </para>
+ 
++@void: 
+ @Returns: 
+ 
+ 
+@@ -128,6 +132,7 @@ Object representing a day in the project.
+ 
+ </para>
+ 
++@void: 
+ @Returns: 
+ 
+ 
+@@ -136,6 +141,7 @@ Object representing a day in the project.
+ 
+ </para>
+ 
++@void: 
+ @Returns: 
+ 
+ 
+diff --git a/docs/libplanner/tmpl/mrp-error.sgml b/docs/libplanner/tmpl/mrp-error.sgml
+index 19c170c..31ebf03 100644
+--- a/docs/libplanner/tmpl/mrp-error.sgml
++++ b/docs/libplanner/tmpl/mrp-error.sgml
+@@ -17,6 +17,9 @@ MrpError
+ <!-- ##### SECTION Stability_Level ##### -->
+ 
+ 
++<!-- ##### SECTION Image ##### -->
++
++
+ <!-- ##### MACRO MRP_ERROR ##### -->
+ <para>
+ Error domain for libmrproject.
+diff --git a/docs/libplanner/tmpl/mrp-group.sgml b/docs/libplanner/tmpl/mrp-group.sgml
+index 7075576..b1be5ad 100644
+--- a/docs/libplanner/tmpl/mrp-group.sgml
++++ b/docs/libplanner/tmpl/mrp-group.sgml
+@@ -17,6 +17,9 @@ MrpGroup
+ <!-- ##### SECTION Stability_Level ##### -->
+ 
+ 
++<!-- ##### SECTION Image ##### -->
++
++
+ <!-- ##### STRUCT MrpGroupPriv ##### -->
+ <para>
+ A private struct for internal use only.  The definition of this
+@@ -55,6 +58,7 @@ Object representing a resource group.
+ 
+ </para>
+ 
++@void: 
+ @Returns: 
+ 
+ 
+diff --git a/docs/libplanner/tmpl/mrp-object.sgml b/docs/libplanner/tmpl/mrp-object.sgml
+index 50a3f23..3aff517 100644
+--- a/docs/libplanner/tmpl/mrp-object.sgml
++++ b/docs/libplanner/tmpl/mrp-object.sgml
+@@ -17,6 +17,9 @@ MrpObject
+ <!-- ##### SECTION Stability_Level ##### -->
+ 
+ 
++<!-- ##### SECTION Image ##### -->
++
++
+ <!-- ##### STRUCT MrpObjectPriv ##### -->
+ <para>
+ A private struct for internal use only.  The definition of this
+@@ -74,7 +77,7 @@ The base class for objects in libmrproject.
+ 
+ @object: 
+ @first_property_name: 
+-@Varargs: 
++@...: 
+ 
+ 
+ <!-- ##### FUNCTION mrp_object_get ##### -->
+@@ -84,7 +87,7 @@ The base class for objects in libmrproject.
+ 
+ @object: 
+ @first_property_name: 
+-@Varargs: 
++@...: 
+ 
+ 
+ <!-- ##### FUNCTION mrp_object_set_valist ##### -->
+diff --git a/docs/libplanner/tmpl/mrp-project.sgml b/docs/libplanner/tmpl/mrp-project.sgml
+index bac078d..a88d923 100644
+--- a/docs/libplanner/tmpl/mrp-project.sgml
++++ b/docs/libplanner/tmpl/mrp-project.sgml
+@@ -17,6 +17,9 @@ MrpProject
+ <!-- ##### SECTION Stability_Level ##### -->
+ 
+ 
++<!-- ##### SECTION Image ##### -->
++
++
+ <!-- ##### STRUCT MrpProjectPriv ##### -->
+ <para>
+ A private struct for internal use only.  The definition of this
+@@ -505,8 +508,6 @@ mrp_project_task_traverse(). The traversal can be stopped by returning
+ @start: 
+ @finish: 
+ @Returns: 
+-<!-- # Unused Parameters # -->
+-@duration: 
+ 
+ 
+ <!-- ##### FUNCTION mrp_project_get_properties_from_type ##### -->
+diff --git a/docs/libplanner/tmpl/mrp-property.sgml b/docs/libplanner/tmpl/mrp-property.sgml
+index 01585a8..f09425e 100644
+--- a/docs/libplanner/tmpl/mrp-property.sgml
++++ b/docs/libplanner/tmpl/mrp-property.sgml
+@@ -19,6 +19,9 @@ GUI application, or plugins that add functionality.
+ <!-- ##### SECTION Stability_Level ##### -->
+ 
+ 
++<!-- ##### SECTION Image ##### -->
++
++
+ <!-- ##### TYPEDEF MrpProperty ##### -->
+ <para>
+ Object representing a custom property in the project.
+diff --git a/docs/libplanner/tmpl/mrp-relation.sgml b/docs/libplanner/tmpl/mrp-relation.sgml
+index 7c651ad..fd790c7 100644
+--- a/docs/libplanner/tmpl/mrp-relation.sgml
++++ b/docs/libplanner/tmpl/mrp-relation.sgml
+@@ -20,6 +20,9 @@ finished, plus a lag time.
+ <!-- ##### SECTION Stability_Level ##### -->
+ 
+ 
++<!-- ##### SECTION Image ##### -->
++
++
+ <!-- ##### STRUCT MrpRelationPriv ##### -->
+ <para>
+ A private struct for internal use only.  The definition of this
+diff --git a/docs/libplanner/tmpl/mrp-resource.sgml b/docs/libplanner/tmpl/mrp-resource.sgml
+index 528459c..2ceaab3 100644
+--- a/docs/libplanner/tmpl/mrp-resource.sgml
++++ b/docs/libplanner/tmpl/mrp-resource.sgml
+@@ -17,6 +17,9 @@ represents a resource in the project.
+ <!-- ##### SECTION Stability_Level ##### -->
+ 
+ 
++<!-- ##### SECTION Image ##### -->
++
++
+ <!-- ##### STRUCT MrpResourcePriv ##### -->
+ <para>
+ A private struct for internal use only.  The definition of this
+@@ -105,6 +108,7 @@ The type of the resource, work or material.
+ 
+ </para>
+ 
++@void: 
+ @Returns: 
+ 
+ 
+diff --git a/docs/libplanner/tmpl/mrp-task.sgml b/docs/libplanner/tmpl/mrp-task.sgml
+index 6f27c03..7928ae0 100644
+--- a/docs/libplanner/tmpl/mrp-task.sgml
++++ b/docs/libplanner/tmpl/mrp-task.sgml
+@@ -17,6 +17,9 @@ represents a task in the project.
+ <!-- ##### SECTION Stability_Level ##### -->
+ 
+ 
++<!-- ##### SECTION Image ##### -->
++
++
+ <!-- ##### STRUCT MrpTaskPriv ##### -->
+ <para>
+ A private struct for internal use only.  The definition of this
+@@ -179,6 +182,7 @@ The type of constraint for the task. The default is %MRP_CONSTRAINT_ASAP.
+ 
+ </para>
+ 
++@void: 
+ @Returns: 
+ 
+ 
+@@ -278,9 +282,6 @@ The type of constraint for the task. The default is %MRP_CONSTRAINT_ASAP.
+ @task_a: 
+ @task_b: 
+ @Returns: 
+-<!-- # Unused Parameters # -->
+-@a: 
+-@b: 
+ 
+ 
+ <!-- ##### FUNCTION mrp_task_has_relation ##### -->
+diff --git a/docs/libplanner/tmpl/mrp-time.sgml b/docs/libplanner/tmpl/mrp-time.sgml
+index 346bf68..bce9a34 100644
+--- a/docs/libplanner/tmpl/mrp-time.sgml
++++ b/docs/libplanner/tmpl/mrp-time.sgml
+@@ -17,6 +17,9 @@ mrptime
+ <!-- ##### SECTION Stability_Level ##### -->
+ 
+ 
++<!-- ##### SECTION Image ##### -->
++
++
+ <!-- ##### TYPEDEF mrptime ##### -->
+ <para>
+ Corresponds to the standard C <type>time_t</type> type.
+@@ -49,6 +52,16 @@ Represents the maximium value for #mrptime.
+ 
+ </para>
+ 
++@void: 
++@Returns: 
++
++
++<!-- ##### FUNCTION mrp_time_from_tm ##### -->
++<para>
++
++</para>
++
++@tm: 
+ @Returns: 
+ 
+ 
+diff --git a/docs/libplanner/tmpl/planner.sgml b/docs/libplanner/tmpl/planner.sgml
+index 5397496..8179208 100644
+--- a/docs/libplanner/tmpl/planner.sgml
++++ b/docs/libplanner/tmpl/planner.sgml
+@@ -17,3 +17,6 @@ planner
+ <!-- ##### SECTION Stability_Level ##### -->
+ 
+ 
++<!-- ##### SECTION Image ##### -->
++
++
 diff --git a/src/planner-eds-plugin.c b/src/planner-eds-plugin.c
-index 4eb060c..ad4473b 100644
+index 4eb060c..a8229c9 100644
 --- a/src/planner-eds-plugin.c
 +++ b/src/planner-eds-plugin.c
 @@ -30,7 +30,6 @@
@@ -71,7 +460,7 @@ index 4eb060c..ad4473b 100644
  					 PlannerPlugin         *plugin);
  static void eds_ok_button_clicked       (GtkButton             *button,
  					 PlannerPlugin         *plugin);
-@@ -130,15 +128,15 @@ static MrpResource * eds_find_resource  (PlannerPlugin         *plugin,
+@@ -130,15 +128,14 @@ static MrpResource * eds_find_resource  (PlannerPlugin         *plugin,
  					 const gchar           *uid,
  					 GList                 *resources_orig);
  static gboolean eds_create_uid_property (PlannerPlugin         *plugin);
@@ -79,9 +468,11 @@ index 4eb060c..ad4473b 100644
 +static void eds_load_resources          (ESource               *source,
  					 PlannerPlugin         *plugin,
  					 const gchar           *search);
- static void eds_receive_contacts_cb     (EBook                 *book,
- 					 EBookStatus            status,
- 					 GList                 *contacts,
+-static void eds_receive_contacts_cb     (EBook                 *book,
+-					 EBookStatus            status,
+-					 GList                 *contacts,
++static void eds_receive_contacts_cb     (EBookClient           *book,
++					 GAsyncResult          *result,
  					 gpointer               plugin);
 -static void eds_receive_book_cb         (EBook                 *book,
 -					 EBookStatus            status,
@@ -90,7 +481,7 @@ index 4eb060c..ad4473b 100644
  					 gpointer               user_data);
  static void eds_plugin_busy             (PlannerPlugin         *plugin,
  					 gboolean               busy);
-@@ -236,9 +234,7 @@ eds_plugin_import (GtkAction   *action,
+@@ -236,9 +233,7 @@ eds_plugin_import (GtkAction   *action,
  	PlannerPlugin     *plugin;
  	PlannerPluginPriv *priv;
  	GtkCellRenderer   *renderer;
@@ -101,7 +492,7 @@ index 4eb060c..ad4473b 100644
  	gchar             *filename;
  
  	plugin = PLANNER_PLUGIN (user_data);
-@@ -293,11 +289,9 @@ eds_plugin_import (GtkAction   *action,
+@@ -293,11 +288,9 @@ eds_plugin_import (GtkAction   *action,
  	gtk_widget_show (priv->dialog_get_resources);
  
  
@@ -115,7 +506,7 @@ index 4eb060c..ad4473b 100644
  	eds_create_groups_model (groups, plugin);
  	gtk_combo_box_set_model (priv->select_group, priv->groups_model);
  	renderer = gtk_cell_renderer_text_new ();
-@@ -305,16 +299,16 @@ eds_plugin_import (GtkAction   *action,
+@@ -305,52 +298,58 @@ eds_plugin_import (GtkAction   *action,
  				    renderer, TRUE);
  	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (priv->select_group),
  					renderer, "text", 0, NULL);
@@ -128,23 +519,35 @@ index 4eb060c..ad4473b 100644
 +eds_create_groups_model (GList         *groups,
  			 PlannerPlugin *plugin)
  {
++	PlannerPluginPriv *priv;
  	GtkListStore *model;
  	GtkTreeIter   iter;
 -	GSList       *sl;
 +	GList        *sl;
++	ESource      *parent;
++	const gchar  *parent_name;
  	const gchar  *name;
  
  	if (groups == NULL) {
-@@ -324,7 +318,7 @@ eds_create_groups_model (GSList        *groups,
+ 		return;
+ 	}
+ 
++	priv = plugin->priv;
  	model = gtk_list_store_new (NUM_GROUP_COLS, G_TYPE_STRING, G_TYPE_OBJECT);
  
  	for (sl = groups; sl; sl = sl->next) {
 -		name = e_source_group_peek_name (sl->data);
 +		name = e_source_get_display_name (sl->data);
++		parent = e_source_registry_ref_source(priv->registry, e_source_get_parent(sl->data));
++		parent_name = e_source_get_display_name(parent);
  		gtk_list_store_append (model, &iter);
  		gtk_list_store_set (model, &iter,
- 				    COL_GROUP_NAME, name,
-@@ -334,23 +328,21 @@ eds_create_groups_model (GSList        *groups,
+-				    COL_GROUP_NAME, name,
++				    COL_GROUP_NAME, g_strdup_printf("%s (%s)", name, parent_name),
+ 				    COL_GROUP_OBJECT, sl->data, -1);
++		g_object_unref(parent);
+ 	}
+ 	plugin->priv->groups_model = GTK_TREE_MODEL (model);
  }
  
  /* For now we show all the sources from a group in a List.
@@ -168,7 +571,7 @@ index 4eb060c..ad4473b 100644
 -	sources = e_source_group_peek_sources (group);
 +	g_return_if_fail (E_IS_SOURCE (source));
  
--	priv = plugin->priv;
+ 	priv = plugin->priv;
  	model = GTK_LIST_STORE (priv->resources_model);
  
 -	if (sources == NULL) {
@@ -176,11 +579,10 @@ index 4eb060c..ad4473b 100644
  		if (model) {
  			gtk_list_store_clear (model);
  		}
-@@ -439,9 +431,13 @@ eds_load_resources (ESourceGroup  *group,
+@@ -439,9 +438,12 @@ eds_load_resources (ESourceGroup  *group,
  		gtk_tree_view_set_headers_clickable (priv->resources_tree_view, TRUE);
  	}
  
-+	priv = plugin->priv;
 +	sources = e_source_registry_list_sources (priv->registry,
 +						  E_SOURCE_EXTENSION_ADDRESS_BOOK);
 +
@@ -192,7 +594,7 @@ index 4eb060c..ad4473b 100644
  
  		g_free (plugin->priv->current_query_id);
  		plugin->priv->current_query_id = e_uid_new ();
-@@ -450,11 +446,12 @@ eds_load_resources (ESourceGroup  *group,
+@@ -450,11 +452,12 @@ eds_load_resources (ESourceGroup  *group,
  		async_query->uid = plugin->priv->current_query_id;
  		async_query->search = search;
  
@@ -207,7 +609,7 @@ index 4eb060c..ad4473b 100644
  }
  
  static gboolean
-@@ -478,16 +475,17 @@ eds_query_cancelled (PlannerPlugin *plugin,
+@@ -478,16 +481,17 @@ eds_query_cancelled (PlannerPlugin *plugin,
  }
  
  static void
@@ -228,7 +630,7 @@ index 4eb060c..ad4473b 100644
  	GtkListStore  *model;
  
  	async_query = user_data;
-@@ -499,25 +497,25 @@ eds_receive_book_cb (EBook         *client,
+@@ -499,25 +503,25 @@ eds_receive_book_cb (EBook         *client,
  	gtk_list_store_clear (model);
  	g_free (async_query);
  
@@ -259,7 +661,7 @@ index 4eb060c..ad4473b 100644
  	plugin->priv->books = g_list_append (plugin->priv->books, client);
  
  	async_query = g_new0 (AsyncQuery, 1);
-@@ -527,9 +525,10 @@ eds_receive_book_cb (EBook         *client,
+@@ -527,22 +531,23 @@ eds_receive_book_cb (EBook         *client,
  	async_query->plugin = plugin;
  
  	query = e_book_query_any_field_contains (search);
@@ -273,7 +675,57 @@ index 4eb060c..ad4473b 100644
  
  	eds_plugin_busy (plugin, TRUE);
  	e_book_query_unref (query);
-@@ -697,13 +696,13 @@ eds_group_selected (GtkComboBox   *select_group,
+ }
+ 
+ static void
+-eds_receive_contacts_cb (EBook         *book,
+-			 EBookStatus    status,
+-			 GList         *contacts,
++eds_receive_contacts_cb (EBookClient   *client,
++			 GAsyncResult  *result,
+ 			 gpointer       user_data)
+ {
+ 	GtkTreeIter        iter;
+-	GList             *l;
++	GSList             *l;
++	GSList            *contacts;
+ 	GtkListStore      *model;
+ 	PlannerPlugin     *plugin;
+ 	PlannerPluginPriv *priv;
+@@ -550,6 +555,7 @@ eds_receive_contacts_cb (EBook         *book,
+ 	AsyncQuery        *async_query;
+ 	const gchar       *uid;
+ 	gchar             *filename;
++	GError            *error;
+ 
+ 	async_query = (AsyncQuery *) user_data;
+ 
+@@ -565,11 +571,10 @@ eds_receive_contacts_cb (EBook         *book,
+ 		return;
+ 	}
+ 
+-	g_message ("Book status response: %d", status);
+ 	g_message ("Answer for the query: %s", uid);
+ 
+-	/* Exceed limit is E_BOOK_ERROR_OTHER_ERROR :( */
+-	if (status == E_BOOK_ERROR_OK || status == E_BOOK_ERROR_OTHER_ERROR) {
++	if (e_book_client_get_contacts_finish(client, result, &contacts, &error)) {
++		g_message ("Book status response: %d", g_slist_length(contacts));
+ 		filename = mrp_paths_get_image_dir ("/resources.png");
+ 		pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
+ 		g_free (filename);
+@@ -586,8 +591,9 @@ eds_receive_contacts_cb (EBook         *book,
+ 					    COL_RESOURCE_PHOTO, pixbuf,
+ 					    COL_RESOURCE_OBJECT, l->data, -1);
+ 		}
++		e_client_util_free_object_slist(contacts);
+ 	} else {
+-		g_warning ("Problem getting contacts ...");
++		g_warning ("Problem getting contacts: %s", error->message);
+ 	}
+ 
+ 	eds_plugin_busy (plugin, FALSE);
+@@ -697,13 +703,13 @@ eds_group_selected (GtkComboBox   *select_group,
  {
  	GtkTreeIter        iter;
  	PlannerPluginPriv *priv = plugin->priv;
@@ -290,7 +742,7 @@ index 4eb060c..ad4473b 100644
  	}
  }
  
-@@ -805,14 +804,14 @@ eds_search_button_clicked (GtkButton     *button,
+@@ -805,14 +811,14 @@ eds_search_button_clicked (GtkButton     *button,
  	const gchar       *search;
  	PlannerPluginPriv *priv = plugin->priv;
  	GtkTreeIter        iter;
@@ -308,7 +760,7 @@ index 4eb060c..ad4473b 100644
  	}
  }
  
-@@ -823,13 +822,13 @@ eds_search_key_pressed (GtkEntry      *entry,
+@@ -823,13 +829,13 @@ eds_search_key_pressed (GtkEntry      *entry,
  {
  	PlannerPluginPriv *priv = plugin->priv;
  	GtkTreeIter        iter;
@@ -325,7 +777,7 @@ index 4eb060c..ad4473b 100644
  		}
  	}
  	return FALSE;
-@@ -935,6 +934,7 @@ plugin_init (PlannerPlugin *plugin)
+@@ -935,6 +941,7 @@ plugin_init (PlannerPlugin *plugin)
  	plugin->priv = priv;
  	priv->project = planner_window_get_project (plugin->main_window);
  

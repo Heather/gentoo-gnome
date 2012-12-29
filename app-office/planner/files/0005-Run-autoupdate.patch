@@ -1,4 +1,4 @@
-From f84e26a52707ab42b26a01516a59783301937ea8 Mon Sep 17 00:00:00 2001
+From 93f39fce452e874f1240b3580e242fefb8c7c5c3 Mon Sep 17 00:00:00 2001
 From: Gilles Dartiguelongue <eva@gentoo.org>
 Date: Sat, 29 Dec 2012 17:08:33 +0100
 Subject: [PATCH 5/5] Run autoupdate
