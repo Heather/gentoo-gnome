@@ -15,7 +15,7 @@ DESCRIPTION="Fork of bluez-gnome focused on integration with GNOME"
 HOMEPAGE="http://live.gnome.org/GnomeBluetooth"
 
 LICENSE="GPL-2+ LGPL-2.1+ FDL-1.1+"
-SLOT="2"
+SLOT="2/11" # subslot = libgnome-bluetooth soname version
 IUSE="+introspection sendto"
 if [[ ${PV} = 9999 ]]; then
 	IUSE="${IUSE} doc"
