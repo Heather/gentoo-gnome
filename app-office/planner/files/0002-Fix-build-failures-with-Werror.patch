@@ -1,0 +1,61 @@
+From 9e3361bea793519682b073823b6ae284c476fe66 Mon Sep 17 00:00:00 2001
+From: Gilles Dartiguelongue <eva@gentoo.org>
+Date: Sat, 29 Dec 2012 00:12:46 +0100
+Subject: [PATCH 2/5] Fix build failures with -Werror
+
+---
+ src/planner-python-plugin.c | 4 +---
+ tests/calendar-test.c       | 1 +
+ tests/time-test.c           | 1 +
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/planner-python-plugin.c b/src/planner-python-plugin.c
+index 61dc077..bd717d6 100644
+--- a/src/planner-python-plugin.c
++++ b/src/planner-python-plugin.c
+@@ -148,7 +148,7 @@ plugin_execute_scripts(PlannerPlugin *plugin, const gchar *dirname)
+ 		filename = g_dir_read_name (dir);
+ 	}
+ 
+-	g_free (dirname);
++	g_free ((gpointer) dirname);
+ 	g_dir_close (dir);
+ }
+ 
+@@ -156,9 +156,7 @@ G_MODULE_EXPORT void
+ plugin_init (PlannerPlugin *plugin)
+ {
+ 	PlannerPluginPriv *priv;
+-	GDir              *dir;
+ 	gchar             *dirname;
+-	const gchar       *filename;
+ 
+ 	priv = g_new0 (PlannerPluginPriv, 1);
+ 	plugin->priv = priv;
+diff --git a/tests/calendar-test.c b/tests/calendar-test.c
+index a73b569..fa8c4ba 100644
+--- a/tests/calendar-test.c
++++ b/tests/calendar-test.c
+@@ -168,6 +168,7 @@ main (gint argc, gchar **argv)
+         CHECK_INTEGER_RESULT (mrp_day_get_id (day_a),
+                               mrp_day_get_id (day_b));
+ 
++	g_object_unref (app);
+ 	return EXIT_SUCCESS;
+ }
+ 
+diff --git a/tests/time-test.c b/tests/time-test.c
+index 37a1540..abb0d45 100644
+--- a/tests/time-test.c
++++ b/tests/time-test.c
+@@ -22,6 +22,7 @@ main (gint argc, gchar **argv)
+ 	t = mrp_time_compose (2002, 3, 31, 0, 0, 0);
+ 
+ 	/* Test mrp_time_new_from_string */
++	CHECK_STRING_RESULT (mrp_time_to_string (t), "20020331T000000Z");
+ 	CHECK_STRING_RESULT (STRING (mrp_time_from_string ("20020329", NULL)), "20020329T000000Z");
+ 	CHECK_STRING_RESULT (STRING (mrp_time_from_string ("19991231", NULL)), "19991231T000000Z");
+ 	CHECK_STRING_RESULT (STRING (mrp_time_from_string ("invalid", NULL)), "19700101T000000Z");
+-- 
+1.8.0.2
+
