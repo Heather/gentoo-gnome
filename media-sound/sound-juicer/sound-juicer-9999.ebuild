@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
@@ -14,7 +14,7 @@ fi
 DESCRIPTION="CD ripper for GNOME"
 HOMEPAGE="http://www.burtonini.com/blog/computers/sound-juicer/"
 
-LICENSE="GPL-2"
+LICENSE="GPL-2+"
 SLOT="0"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
@@ -35,15 +35,16 @@ COMMON_DEPEND="
 	>=media-libs/musicbrainz-5.0.1:5
 
 	media-libs/gstreamer:1.0
-	media-libs/gst-plugins-base:1.0[flac?,vorbis?]
+	media-libs/gst-plugins-base:1.0[vorbis?]
+	flac? ( media-plugins/gst-plugins-flac:1.0 )
 "
 RDEPEND="${COMMON_DEPEND}
 	gnome-base/gvfs[cdda,udev]
 	|| (
 		media-plugins/gst-plugins-cdparanoia:1.0
 		media-plugins/gst-plugins-cdio:1.0 )
-	>=media-plugins/gst-plugins-meta-0.10-r2:0.10"
-
+	media-plugins/gst-plugins-meta:1.0
+"
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.40
 	>=app-text/scrollkeeper-0.3.5
@@ -51,12 +52,15 @@ DEPEND="${COMMON_DEPEND}
 	virtual/pkgconfig
 	test? ( ~app-text/docbook-xml-dtd-4.3 )"
 
-src_configure() {
-	DOCS="AUTHORS ChangeLog NEWS README TODO"
-	# GST_INSPECT needed to get around some sandboxing checks
-	G2CONF="${G2CONF}
-		GST_INSPECT=$(type -P true)"
-	gnome2_src_configure
+src_prepare() {
+	gnome2_src_prepare
+
+	# FIXME: gst macros does not take GST_INSPECT override anymore but we need a
+	# way to disable inspection due to gst-clutter always creating a GL context
+	# which is forbidden in sandbox since it needs write access to
+	# /dev/card*/dri
+	sed -e "s|\(gstinspect=\).*|\1$(type -P true)|" \
+		-i configure || die
 }
 
 pkg_postinst() {
