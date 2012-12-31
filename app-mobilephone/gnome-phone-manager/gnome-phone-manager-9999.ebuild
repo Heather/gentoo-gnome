@@ -5,6 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
+GNOME_LIVE_MODULE="phonemgr"
 
 inherit autotools eutils gnome2
 if [[ ${PV} = 9999 ]]; then
