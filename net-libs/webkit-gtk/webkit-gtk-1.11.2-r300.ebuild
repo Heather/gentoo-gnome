@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -75,21 +75,33 @@ DEPEND="${RDEPEND}
 
 S="${WORKDIR}/${MY_P}"
 
-CHECKREQS_DISK_BUILD="6G"
+CHECKREQS_DISK_BUILD="18G" # and even this might not be enough, bug #417307
 
 pkg_pretend() {
-	if is-flagq "-g*" ; then
+	if [[ ${MERGE_TYPE} != "binary" ]] && is-flagq "-g*" ; then
+		einfo "Checking for sufficient disk space to build ${PN} with debugging CFLAGS"
 		check-reqs_pkg_pretend
 	fi
 }
 
 pkg_setup() {
 	# Check whether any of the debugging flags is enabled
-	if is-flagq "-g*" ; then
+	if [[ ${MERGE_TYPE} != "binary" ]] && is-flagq "-g*" ; then
+		if is-flagq "-ggdb" && [[ ${WEBKIT_GTK_GGDB} != "yes" ]]; then
+			replace-flags -ggdb -g
+			ewarn "Replacing \"-ggdb\" with \"-g\" in your CFLAGS."
+			ewarn "Building ${PN} with \"-ggdb\" produces binaries which are too"
+			ewarn "large for current binutils releases (bug #432784) and has very"
+			ewarn "high temporary build space and memory requirements."
+			ewarn "If you really want to build ${PN} with \"-ggdb\", add"
+			ewarn "WEBKIT_GTK_GGDB=yes"
+			ewarn "to your make.conf file."
+		fi
+		einfo "You need to have at least 18GB of temporary build space available"
+		einfo "to build ${PN} with debugging CFLAGS. Note that it might still"
+		einfo "not be enough, as the total space requirements depend on the flags"
+		einfo "(-ggdb vs -g1) and enabled features."
 		check-reqs_pkg_setup
-		einfo "You have at least 6GB of temporary build space available, but "
-		einfo "it may still not be enough, as the total space requirements "
-		einfo "depends on the debugging flags (-ggdb vs -g1) and enabled features."
 	fi
 }
 
@@ -172,7 +184,7 @@ src_configure() {
 	# XXX: Check Web Audio support
 	# XXX: dependency-tracking is required so parallel builds won't fail
 	# XXX: There's 3 acceleration backends: opengl, egl and gles2
-    #      should somehow let user select between them?
+	#      should somehow let user select between them?
 	myconf="
 		$(use_enable coverage)
 		$(use_enable debug)
