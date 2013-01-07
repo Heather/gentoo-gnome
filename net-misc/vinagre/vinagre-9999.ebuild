@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -11,7 +11,7 @@ if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
 
-DESCRIPTION="VNC Client for the GNOME Desktop"
+DESCRIPTION="VNC client for the GNOME desktop"
 HOMEPAGE="http://live.gnome.org/Vinagre"
 
 LICENSE="GPL-3+"
@@ -19,7 +19,7 @@ SLOT="0"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 fi
 IUSE="avahi rdp +ssh spice +telepathy"
 
@@ -59,14 +59,14 @@ fi
 
 src_configure() {
 	DOCS="AUTHORS ChangeLog ChangeLog.pre-git NEWS README"
-	G2CONF="${G2CONF}
-		VALAC=$(type -P valac-0.18)
-		$(use_with avahi)
-		$(use_enable rdp)
-		$(use_enable ssh)
-		$(use_enable spice)
-		$(use_with telepathy)"
-	gnome2_src_configure
+	[[ ${PV} = 9999 ]] || G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
+	gnome2_src_configure \
+		VALAC=$(type -P valac-0.18) \
+		$(use_with avahi) \
+		$(use_enable rdp) \
+		$(use_enable ssh) \
+		$(use_enable spice) \
+		$(use_with telepathy)
 }
 
 src_install() {
