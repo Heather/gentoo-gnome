@@ -14,8 +14,7 @@ SRC_URI="http://www.webkitgtk.org/releases/${MY_P}.tar.xz"
 
 LICENSE="LGPL-2+ BSD"
 SLOT="3"
-#KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-macos"
-KEYWORDS=""
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-macos"
 IUSE="aqua coverage debug +geoloc +gstreamer +introspection +jit spell +webgl"
 # bugs 372493, 416331
 REQUIRED_USE="introspection? ( geoloc gstreamer )"
@@ -28,13 +27,15 @@ RDEPEND="
 	app-crypt/libsecret
 	dev-libs/libxml2:2
 	dev-libs/libxslt
+	media-libs/harfbuzz
+	media-libs/libwebp
 	virtual/jpeg:=
 	>=media-libs/libpng-1.4:0=
 	>=x11-libs/cairo-1.10:=
 	>=dev-libs/glib-2.32:2
 	>=x11-libs/gtk+-3.4:3[aqua=,introspection?]
 	>=dev-libs/icu-3.8.1-r1:=
-	>=net-libs/libsoup-2.39.2:2.4[introspection?]
+	>=net-libs/libsoup-2.40.0:2.4[introspection?]
 	dev-db/sqlite:3=
 	>=x11-libs/pango-1.21
 	x11-libs/libXrender
@@ -154,9 +155,6 @@ src_prepare() {
 
 	# bug #417523, https://bugs.webkit.org/show_bug.cgi?id=96602
 	epatch "${FILESDIR}/${PN}-1.11.1-libdl.patch"
-
-	# uclibc fix, bug #441674
-	epatch "${FILESDIR}/${PN}-1.10.1-disable-backtrace-uclibc.patch"
 
 	# Respect CC, otherwise fails on prefix #395875
 	tc-export CC
