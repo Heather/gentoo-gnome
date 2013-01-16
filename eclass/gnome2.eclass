@@ -1,11 +1,11 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
 # @ECLASS: gnome2.eclass
 # @MAINTAINER:
 # gnome@gentoo.org
-# @BLURB: 
+# @BLURB: Provides phases for Gnome/Gtk+ based packages.
 # @DESCRIPTION:
 # Exports portage base functions used by ebuilds written for packages using the
 # GNOME framework. For additional functions, see gnome2-utils.eclass.
@@ -40,7 +40,7 @@ esac
 #fi
 
 # @ECLASS-VARIABLE: G2CONF
-# @DEFAULT-UNSET
+# @DEFAULT_UNSET
 # @DESCRIPTION:
 # Extra configure opts passed to econf
 G2CONF=${G2CONF:-""}
@@ -56,20 +56,19 @@ else
 fi
 
 # @ECLASS-VARIABLE: ELTCONF
-# @DEFAULT-UNSET
+# @DEFAULT_UNSET
 # @DESCRIPTION:
 # Extra options passed to elibtoolize
 ELTCONF=${ELTCONF:-""}
 
 # @ECLASS-VARIABLE: USE_EINSTALL
-# @DEFAULT-UNSET
-# @DEPRECATED
+# @DEFAULT_UNSET
 # @DESCRIPTION:
-# Should we use EINSTALL instead of DESTDIR
+# Should we use EINSTALL instead of DESTDIR. DEPRECATED
 USE_EINSTALL=${USE_EINSTALL:-""}
 
 # @ECLASS-VARIABLE: DOCS
-# @DEFAULT-UNSET
+# @DEFAULT_UNSET
 # @DESCRIPTION:
 # String containing documents passed to dodoc command.
 
@@ -304,8 +303,6 @@ gnome2_pkg_postinst() {
 	ewarn "**************************************************************"
 }
 
-# @#FUNCTION: gnome2_pkg_prerm
-# @#DESCRIPTION:
 # # FIXME Handle GConf schemas removal
 #gnome2_pkg_prerm() {
 #	gnome2_gconf_uninstall
