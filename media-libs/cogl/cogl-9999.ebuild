@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -33,7 +33,6 @@ COMMON_DEPEND=">=dev-libs/glib-2.28.0:2
 	x11-libs/libXdamage
 	x11-libs/libXext
 	>=x11-libs/libXfixes-3
-	virtual/glu
 	virtual/opengl
 	gles2? ( media-libs/mesa[gles2] )
 
