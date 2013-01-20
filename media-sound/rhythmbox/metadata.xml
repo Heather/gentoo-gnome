@@ -4,7 +4,7 @@
   <herd>gnome</herd>
   <herd>gstreamer</herd>
   <use>
-	<flag name="clutter">Build the visualizer plugin which uses
+	<flag name="visualizer">Build the visualizer plugin which uses
 		<pkg>media-libs/clutter</pkg> and <pkg>x11-libs/mx</pkg></flag>
     <flag name="dbus">Allow the im-status plugin to set the status of your IM
     	clients using <pkg>dev-python/dbus-python</pkg></flag>
