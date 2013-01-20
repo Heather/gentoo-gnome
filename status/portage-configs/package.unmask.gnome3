@@ -27,6 +27,7 @@
 =x11-libs/pango-1.32*
 x11-libs/pangox-compat
 =x11-themes/gnome-themes-standard-3.6*
+
 # Other stuff
 =app-accessibility/accerciser-3.6*
 =app-accessibility/orca-3.6*

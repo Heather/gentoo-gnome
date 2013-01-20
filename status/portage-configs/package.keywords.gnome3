@@ -7,11 +7,14 @@ gnome-base/gnome-extra-apps
 gnome-base/gnome-core-apps
 gnome-base/gnome-core-libs
 
-# Core
+# a11y
+dev-libs/libgee:0.8
 app-accessibility/at-spi2-atk
 app-accessibility/at-spi2-core
 app-accessibility/caribou
 app-accessibility/orca
+
+# Core
 app-admin/packagekit-base
 app-admin/packagekit-gtk
 app-arch/file-roller
@@ -19,7 +22,6 @@ app-cdr/brasero
 app-misc/tracker
 dev-lang/orc
 dev-libs/atk
-dev-libs/gdl:1
 dev-libs/gdl:3
 dev-libs/glib
 dev-libs/libgweather
@@ -39,7 +41,7 @@ gnome-base/dconf
 gnome-base/gconf
 gnome-base/gdm
 gnome-base/gnome-desktop:2
-gnome-base/gnome-desktop:3
+gnome-base/gnome-desktop:3/4
 gnome-base/gnome-menus:0
 gnome-base/gnome-menus:3
 gnome-base/gnome-session
@@ -87,7 +89,6 @@ net-misc/vinagre
 net-misc/vino
 net-wireless/gnome-bluetooth
 sys-apps/accountsservice
-sys-libs/libosinfo
 x11-libs/gdk-pixbuf
 x11-libs/goocanvas:2.0
 x11-libs/goocanvas:0
@@ -97,12 +98,15 @@ x11-libs/gtksourceview:3.0
 x11-libs/libnotify
 x11-libs/libwnck
 x11-libs/libxklavier
-x11-libs/pango
-x11-libs/pangox-compat
 x11-misc/notification-daemon
 x11-plugins/pidgin-libnotify
 x11-terms/gnome-terminal
 x11-wm/mutter
+
+# Text rendering
+media-libs/harfbuzz
+x11-libs/pango
+x11-libs/pangox-compat
 
 # GNOME Control Center
 ~dev-libs/libpwquality-1.2.0
@@ -110,14 +114,27 @@ sys-auth/nss-myhostname
 app-admin/openrc-settingsd
 gnome-base/gnome-control-center
 
+# GNOME Boxes
+sys-libs/libosinfo
+gnome-extra/gnome-boxes
+gnome-extra/gnome-boxes-nonfree
+
 # GNOME Documents
 net-libs/libzapojit
 dev-libs/libgdata
 gnome-extra/gnome-documents
 
 # GNOME Disk Utility
-~sys-auth/polkit-0.107
+dev-lang/spidermonkey:0/mozjs185
+~sys-auth/polkit-0.110
 =sys-apps/util-linux-2.21*
+~app-arch/xz-utils-5.0.4
+~sys-apps/kmod-12
+~sys-fs/udev-init-scripts-17
+=virtual/udev-196
+~sys-fs/lvm2-2.02.97
+sys-apps/hwids
+~sys-fs/udev-196
 sys-fs/udisks:2
 sys-apps/gnome-disk-utility
 
@@ -146,17 +163,17 @@ app-i18n/ibus
 gnome-base/gnome-settings-daemon
 
 # Glib Networking
-net-libs/gnutls
 net-libs/glib-networking
 
 # Development utilities
 app-text/gnome-doc-utils
 app-text/yelp-tools
 dev-util/gdbus-codegen
-#dev-util/gtk-builder-convert
+dev-util/gtk-builder-convert
 dev-util/itstool
 dev-util/gtk-doc
 dev-util/gtk-doc-am
+gnome-base/gnome-common
 
 # Themes
 x11-themes/gnome-backgrounds
@@ -182,17 +199,14 @@ dev-cpp/pangomm
 
 # Clutter
 dev-libs/json-glib
-media-libs/cogl:1.0
+media-libs/cogl:1.0/11
 media-libs/clutter:1.0
 media-libs/clutter-gtk:1.0
 media-libs/clutter-gst:1.0
+media-libs/clutter-gst:2.0
 
 # Colord
 gnome-extra/gnome-color-manager
-media-gfx/shared-color-profiles
-media-libs/mash
-x11-libs/colord-gtk
-x11-misc/colord
 
 # libcanberra
 media-libs/libcanberra
@@ -211,6 +225,7 @@ www-client/epiphany-extensions
 
 # Folks
 dev-python/isodate
+dev-python/pyxdg
 dev-python/rdflib
 gnome-extra/zeitgeist
 dev-libs/libzeitgeist
@@ -224,6 +239,7 @@ media-libs/libchamplain:0.12
 media-libs/memphis
 net-im/telepathy-logger
 net-im/telepathy-mission-control
+media-plugins/gst-plugins-libnice:1.0
 net-libs/farstream
 net-libs/libnice
 net-libs/telepathy-farstream
@@ -234,15 +250,16 @@ net-im/empathy
 
 # NM
 net-misc/mobile-broadband-provider-info
-#net-wireless/wimax-tools
 #net-wireless/wimax
-~net-misc/networkmanager-0.9.4.0
-#>=net-misc/networkmanager-vpnc-0.8.990
-#>=net-misc/networkmanager-pptp-0.8.990
-#>=net-misc/networkmanager-openvpn-0.8.990
-#>=net-misc/networkmanager-openswan-0.8.990
-#>=net-misc/modemmanager-0.4.996
-#>=gnome-extra/nm-applet-0.8.990
+#net-wireless/wimax-tools
+=net-misc/networkmanager-0.9.6*
+=net-misc/networkmanager-vpnc-0.9.6*
+=net-misc/networkmanager-pptp-0.9.6*
+=net-misc/networkmanager-openvpn-0.9.6*
+=net-misc/networkmanager-openswan-0.9.6*
+=net-misc/networkmanager-openconnect-0.9.6*
+=net-misc/modemmanager-0.6*
+=gnome-extra/nm-applet-0.9.6*
 
 # Nautilus
 gnome-base/nautilus
@@ -250,20 +267,19 @@ gnome-extra/sushi
 gnome-extra/nautilus-tracker-tags
 
 # Rhythmbox, Sound Juicer, Totem
-dev-libs/gmime:2.4
-dev-libs/gmime:2.6
 dev-libs/totem-pl-parser
 media-libs/libgnome-media-profiles:3
 media-libs/libdmapsharing:3.0
 media-libs/musicbrainz:4
 media-libs/musicbrainz:5
+media-plugins/gst-plugins-meta:1.0
 net-misc/npapi-sdk
 media-sound/rhythmbox
 >=media-sound/sound-juicer-2.99
 >=media-video/totem-3.0
 
 # Shotwell
-dev-libs/libunique:1
+~dev-db/sqlite-3.7.14.1:3
 media-gfx/shotwell
 
 # Tomboy & clones
@@ -272,6 +288,7 @@ app-misc/tomboy
 
 # GNOME Shell
 dev-libs/gjs
+dev-libs/libcroco:0.6
 gnome-base/gnome-shell
 
 # Gvfs
@@ -293,8 +310,7 @@ gnome-extra/gnome-games
 gnome-extra/gnome-games-extra-data
 
 # Printing
-~app-text/qpdf-3.0.1
-~dev-python/pycups-1.9.62
+~app-text/qpdf-3.0.2
 net-print/cups-pk-helper
 net-print/cups-filters
 net-print/cups
@@ -322,12 +338,7 @@ gnome-base/libgnome-keyring
 gnome-base/gnome-keyring
 
 # Vala
-=dev-libs/vala-common-0.17*
-dev-lang/vala:0.10
-dev-lang/vala:0.12
-dev-lang/vala:0.14
-dev-lang/vala:0.16
-dev-lang/vala:0.18
+#dev-lang/vala:0.18
 
 # Vte
 x11-libs/gnome-pty-helper
@@ -336,9 +347,61 @@ x11-libs/vte:2.90
 
 # Extras
 gnome-extra/drwright
+gnome-extra/gnome-clocks
 gnome-extra/gnome-tweak-tool
 gnome-extra/mousetweaks
 gnome-extra/office-runner
+
+# GStreamer 1.0
+media-libs/gst-plugins-bad:1.0
+media-libs/gst-plugins-base:1.0
+media-libs/gst-plugins-good:1.0
+media-libs/gst-plugins-ugly:1.0
+media-libs/gstreamer:1.0
+media-plugins/gst-plugins-a52dec:1.0
+media-plugins/gst-plugins-assrender:1.0
+media-plugins/gst-plugins-cdio:1.0
+media-plugins/gst-plugins-cdparanoia:1.0
+media-plugins/gst-plugins-dts:1.0
+media-plugins/gst-plugins-dv:1.0
+media-plugins/gst-plugins-dvb:1.0
+media-plugins/gst-plugins-dvdread:1.0
+media-plugins/gst-plugins-faac:1.0
+media-plugins/gst-plugins-faad:1.0
+media-plugins/gst-plugins-flac:1.0
+media-plugins/gst-plugins-jack:1.0
+media-plugins/gst-plugins-jpeg:1.0
+media-plugins/gst-plugins-lame:1.0
+media-plugins/gst-plugins-libmms:1.0
+media-plugins/gst-plugins-libpng:1.0
+media-plugins/gst-plugins-libvisual:1.0
+media-plugins/gst-plugins-mad:1.0
+media-plugins/gst-plugins-mimic:1.0
+media-plugins/gst-plugins-modplug:1.0
+media-plugins/gst-plugins-mpeg2dec:1.0
+media-plugins/gst-plugins-mpeg2enc:1.0
+media-plugins/gst-plugins-mplex:1.0
+media-plugins/gst-plugins-oss:1.0
+media-plugins/gst-plugins-pulse:1.0
+media-plugins/gst-plugins-raw1394:1.0
+media-plugins/gst-plugins-resindvd:1.0
+media-plugins/gst-plugins-rtmp:1.0
+media-plugins/gst-plugins-schroedinger:1.0
+media-plugins/gst-plugins-shout2:1.0
+media-plugins/gst-plugins-sidplay:1.0
+media-plugins/gst-plugins-soundtouch:1.0
+media-plugins/gst-plugins-soup:1.0
+media-plugins/gst-plugins-speex:1.0
+media-plugins/gst-plugins-taglib:1.0
+media-plugins/gst-plugins-twolame:1.0
+media-plugins/gst-plugins-v4l2:1.0
+media-plugins/gst-plugins-wavpack:1.0
+media-plugins/gst-plugins-x264:1.0
+media-plugins/gst-plugins-ximagesrc:1.0
+media-plugins/gst-plugins-libav:1.0
+media-plugins/gst-plugins-voaacenc:1.0
+media-plugins/gst-plugins-voamrwbenc:1.0
+media-plugins/gst-plugins-vpx:1.0
 
 #################
 ## END GNOME 3 ##
