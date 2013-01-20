@@ -33,14 +33,13 @@ REQUIRED_USE="
 	webkit? ( python )"
 
 # FIXME: double check what to do with fm-radio plugin
-# NOTE: gst-python is still needed because gstreamer introspection is incomplete
 COMMON_DEPEND=">=dev-libs/glib-2.32.0:2
 	dev-libs/json-glib
 	>=dev-libs/libxml2-2.7.8:2
 	>=x11-libs/gtk+-3.4:3[introspection]
 	>=x11-libs/gdk-pixbuf-2.18.0:2
 	>=dev-libs/gobject-introspection-0.10.0
-	>=dev-libs/libpeas-0.7.3[gtk]
+	>=dev-libs/libpeas-0.7.3[gtk,python?]
 	>=dev-libs/totem-pl-parser-3.2.0
 	>=net-libs/libsoup-2.26:2.4
 	>=net-libs/libsoup-gnome-2.26:2.4
@@ -86,10 +85,9 @@ RDEPEND="${COMMON_DEPEND}
 		x11-libs/gdk-pixbuf:2[introspection]
 		x11-libs/gtk+:3[introspection]
 		x11-libs/pango[introspection]
-		dev-libs/libpeas[introspection]
 
 		dbus? ( sys-apps/dbus )
-		gnome-keyring? ( gnome-base/gnome-keyring[introspection] )
+		gnome-keyring? ( gnome-base/libgnome-keyring[introspection] )
 		webkit? (
 			dev-python/mako
 			>=net-libs/webkit-gtk-1.3.9:3[introspection] ) )
