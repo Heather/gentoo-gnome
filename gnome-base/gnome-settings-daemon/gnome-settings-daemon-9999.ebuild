@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -14,20 +14,20 @@ fi
 DESCRIPTION="Gnome Settings Daemon"
 HOMEPAGE="http://www.gnome.org"
 
-LICENSE="GPL-2"
+LICENSE="GPL-2+"
 SLOT="0"
-IUSE="+colord +cups debug +i18n packagekit policykit +short-touchpad-timeout smartcard systemd +udev wacom"
+IUSE="+colord +cups debug +i18n input_devices_wacom packagekit policykit +short-touchpad-timeout smartcard systemd +udev"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64 ~arm ~ppc ~ppc64 ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
+	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 fi
 REQUIRED_USE="
 	packagekit? ( udev )
 	smartcard? ( udev )
 "
 
-# colord-0.1.13 needed to avoid polkit errors in CreateProfile and CreateDevice
+# require colord-0.1.27 dependency for connection type support
 COMMON_DEPEND="
 	>=dev-libs/glib-2.31.0:2
 	>=x11-libs/gtk+-3.3.4:3
@@ -50,16 +50,16 @@ COMMON_DEPEND="
 	x11-libs/libXtst
 	x11-libs/libXxf86misc
 
-	colord? ( >=x11-misc/colord-0.1.13 )
+	colord? ( >=x11-misc/colord-0.1.27:= )
 	cups? ( >=net-print/cups-1.4[dbus] )
 	i18n? ( >=app-i18n/ibus-1.4.99 )
+	input_devices_wacom? (
+		>=dev-libs/libwacom-0.6
+		x11-drivers/xf86-input-wacom )
 	packagekit? ( >=app-admin/packagekit-base-0.7.4 )
 	smartcard? ( >=dev-libs/nss-3.11.2 )
 	systemd? ( >=sys-apps/systemd-31 )
 	udev? ( virtual/udev[gudev] )
-	wacom? (
-		>=dev-libs/libwacom-0.6
-		x11-drivers/xf86-input-wacom )
 "
 # Themes needed by g-s-d, gnome-shell, gtk+:3 apps to work properly
 # <gnome-color-manager-3.1.1 has file collisions with g-s-d-3.1.x
@@ -96,7 +96,7 @@ src_prepare() {
 		epatch "${FILESDIR}/${PN}-3.5.91-short-touchpad-timeout.patch"
 
 	# Make colord and wacom optional; requires eautoreconf
-	epatch "${FILESDIR}/${PN}-3.5.91-optional-color-wacom.patch"
+	epatch "${FILESDIR}/${PN}-3.6.4-optional-color-wacom.patch"
 
 	[[ ${PV} != 9999 ]] && eautoreconf
 
@@ -106,20 +106,19 @@ src_prepare() {
 src_configure() {
 	# README is empty
 	DOCS="AUTHORS NEWS ChangeLog MAINTAINERS"
-	G2CONF="${G2CONF}
-		--disable-static
-		--enable-man
-		$(use_enable colord color)
-		$(use_enable cups)
-		$(use_enable debug)
-		$(use_enable debug more-warnings)
-		$(use_enable i18n ibus)
-		$(use_enable packagekit)
-		$(use_enable smartcard smartcard-support)
-		$(use_enable systemd)
-		$(use_enable udev gudev)
-		$(use_enable wacom)"
-	gnome2_src_configure
+	gnome2_src_configure \
+		--disable-static \
+		--enable-man \
+		$(use_enable colord color) \
+		$(use_enable cups) \
+		$(use_enable debug) \
+		$(use_enable debug more-warnings) \
+		$(use_enable i18n ibus) \
+		$(use_enable packagekit) \
+		$(use_enable smartcard smartcard-support) \
+		$(use_enable systemd) \
+		$(use_enable udev gudev) \
+		$(use_enable input_devices_wacom wacom)
 }
 
 src_test() {
