@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -19,7 +19,7 @@ SLOT="0"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 fi
 IUSE="clutter packagekit raw"
 
@@ -46,7 +46,7 @@ COMMON_DEPEND="
 	raw? ( media-gfx/exiv2 )
 "
 RDEPEND="${COMMON_DEPEND}
-	media-gfx/shared-color-profiles"
+	|| ( >=x11-misc/colord-0.1.27 media-gfx/shared-color-profiles )"
 # docbook-sgml-{utils,dtd:4.1} needed to generate man pages
 DEPEND="${COMMON_DEPEND}
 	app-text/docbook-sgml-dtd:4.1
@@ -66,14 +66,13 @@ RESTRICT="test"
 
 src_configure() {
 	# Always enable tests since they are check_PROGRAMS anyway
-	G2CONF="${G2CONF}
-		--disable-static
-		--enable-tests
-		$(use_enable clutter)
-		$(use_enable packagekit)
-		$(use_enable raw exiv)"
 	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
-	gnome2_src_configure
+	gnome2_src_configure \
+		--disable-static \
+		--enable-tests \
+		$(use_enable clutter) \
+		$(use_enable packagekit) \
+		$(use_enable raw exiv)
 }
 
 pkg_postinst() {
