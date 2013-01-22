@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -13,18 +13,20 @@ fi
 DESCRIPTION="GNOME framework for accessing online accounts"
 HOMEPAGE="https://live.gnome.org/GnomeOnlineAccounts"
 
-LICENSE="LGPL-2"
+LICENSE="LGPL-2+"
 SLOT="0"
 IUSE="gnome +introspection kerberos"
 if [[ ${PV} = 9999 ]]; then
 	IUSE="${IUSE} doc"
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64 ~ppc ~ppc64 ~x86"
+	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 fi
 
 # pango used in goaeditablelabel
 # libsoup used in goaoauthprovider
+# goa kerberos provider is incompatible with app-crypt/heimdal, see
+# https://bugzilla.gnome.org/show_bug.cgi?id=692250
 RDEPEND="
 	>=dev-libs/glib-2.32:2
 	app-crypt/libsecret
@@ -41,7 +43,7 @@ RDEPEND="
 	introspection? ( >=dev-libs/gobject-introspection-0.6.2 )
 	kerberos? (
 		app-crypt/gcr
-		virtual/krb5 )
+		app-crypt/mit-krb5 )
 "
 # goa-daemon can launch gnome-control-center
 PDEPEND="gnome? ( >=gnome-base/gnome-control-center-3.2[gnome-online-accounts(+)] )"
@@ -60,12 +62,11 @@ fi
 
 src_configure() {
 	# TODO: Give users a way to set the G/Y!/FB/Twitter/Windows Live secrets
-	G2CONF="${G2CONF}
-		--disable-static
-		--enable-documentation
-		--enable-exchange
-		--enable-facebook
-		--enable-windows-live
-		$(use_enable kerberos)"
-	gnome2_src_configure
+	gnome2_src_configure \
+		--disable-static \
+		--enable-documentation \
+		--enable-exchange \
+		--enable-facebook \
+		--enable-windows-live \
+		$(use_enable kerberos)
 }
