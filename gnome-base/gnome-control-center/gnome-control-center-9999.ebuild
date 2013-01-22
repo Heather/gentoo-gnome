@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -16,11 +16,11 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2+"
 SLOT="2"
-IUSE="+bluetooth +colord +cups +gnome-online-accounts +i18n kerberos +networkmanager +socialweb systemd v4l wacom"
+IUSE="+bluetooth +colord +cups +gnome-online-accounts +i18n input_devices_wacom kerberos +networkmanager +socialweb systemd v4l"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64 ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
+	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 fi
 
 # XXX: NetworkManager-0.9 support is automagic, make hard-dep once it's released
@@ -59,6 +59,9 @@ COMMON_DEPEND="
 	cups? ( >=net-print/cups-1.4[dbus] )
 	gnome-online-accounts? ( >=net-libs/gnome-online-accounts-3.5.90 )
 	i18n? ( >=app-i18n/ibus-1.4.99 )
+	input_devices_wacom? (
+		>=dev-libs/libwacom-0.6
+		>=x11-libs/libXi-1.2 )
 	kerberos? ( virtual/krb5 )
 	networkmanager? (
 		>=gnome-extra/nm-applet-0.9.1.90
@@ -69,12 +72,10 @@ COMMON_DEPEND="
 		media-libs/gstreamer:1.0
 		media-libs/clutter-gtk:1.0
 		>=media-video/cheese-3.5.91 )
-	wacom? (
-		>=dev-libs/libwacom-0.6
-		>=x11-libs/libXi-1.2 )
 "
 # <gnome-color-manager-3.1.2 has file collisions with g-c-c-3.1.x
 RDEPEND="${COMMON_DEPEND}
+	gnome-base/gnome-settings-daemon[input_devices_wacom?]
 	sys-apps/accountsservice
 	x11-themes/gnome-icon-theme-symbolic
 	colord? ( >=gnome-extra/gnome-color-manager-3 )
@@ -84,7 +85,6 @@ RDEPEND="${COMMON_DEPEND}
 	!systemd? (
 		app-admin/openrc-settingsd
 		sys-auth/consolekit )
-	wacom? ( gnome-base/gnome-settings-daemon[wacom] )
 
 	!<gnome-base/gdm-2.91.94
 	!<gnome-extra/gnome-color-manager-3.1.2
@@ -142,10 +142,10 @@ src_configure() {
 		$(use_enable cups)
 		$(use_enable gnome-online-accounts goa)
 		$(use_enable i18n ibus)
+		$(use_enable input_devices_wacom wacom)
 		$(use_with socialweb libsocialweb)
 		$(use_enable systemd)
-		$(use_with v4l cheese)
-		$(use_enable wacom)"
+		$(use_with v4l cheese)"
 	# XXX: $(use_with kerberos) # for 3.7.x
 	if ! use kerberos; then
 		G2CONF+=" KRB5_CONFIG=$(type -P true)"
