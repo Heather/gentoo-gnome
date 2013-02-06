@@ -4,7 +4,7 @@
 
 EAPI="5"
 
-inherit eutils gnome.org
+inherit gnome.org
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -23,16 +23,9 @@ fi
 
 RDEPEND=">=dev-libs/libxml2-2.6.12
 	>=dev-libs/libxslt-1.1.8"
-# Requires gawk, not virtual/awk: nawk fails with syntax errors
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
 	dev-util/itstool
-	sys-apps/gawk
 	sys-devel/gettext
+	virtual/awk
 	virtual/pkgconfig"
-
-src_prepare() {
-	epatch "${FILESDIR}/${PN}-3.6.1-gawk.patch"
-	sed -e 's/$(YELP_XSL_AWK)/gawk/' -i doc/yelp-xsl/Makefile.{am,in} || die
-	default
-}
