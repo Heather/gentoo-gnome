@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="no"
 
-inherit eutils gnome2
+inherit gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -22,16 +22,10 @@ else
 fi
 IUSE=""
 
-# Requires gawk, not virtual/awk; using nawk as awk results in syntax errors
 RDEPEND=">=dev-libs/libxml2-2.6.12
 	>=dev-libs/libxslt-1.1.8
 	dev-util/itstool
 	gnome-extra/yelp-xsl
-	sys-apps/gawk"
+	virtual/awk"
 DEPEND="${RDEPEND}
 	virtual/pkgconfig"
-
-src_prepare() {
-	epatch "${FILESDIR}/${PN}-3.6.1-gawk.patch"
-	default
-}
