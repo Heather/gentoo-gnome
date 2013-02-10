@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -15,14 +15,14 @@ DESCRIPTION="Integrated mail, addressbook and calendaring functionality"
 HOMEPAGE="http://projects.gnome.org/evolution/"
 
 # Note: explicitly "|| ( LGPL-2 LGPL-3 )", not "LGPL-2+".
-LICENSE="|| ( LGPL-2 LGPL-3 ) CCPL-Attribution-ShareAlike-3.0 FDL-1.3+ OPENLDAP"
+LICENSE="|| ( LGPL-2 LGPL-3 ) CC-BY-SA-3.0 FDL-1.3+ OPENLDAP"
 SLOT="2.0"
-IUSE="crypt +gnome-online-accounts gstreamer kerberos ldap map ssl"
+IUSE="crypt +gnome-online-accounts gstreamer kerberos ldap map ssl +weather"
 if [[ ${PV} = 9999 ]]; then
 	IUSE="${IUSE} doc"
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64 ~ppc ~x86 ~x86-fbsd"
+	KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 fi
 
 # We need a graphical pinentry frontend to be able to ask for the GPG
@@ -37,10 +37,10 @@ COMMON_DEPEND=">=dev-libs/glib-2.32:2
 	>=x11-libs/gtk+-3.4.0:3
 	>=gnome-base/gnome-desktop-2.91.3:3=
 	>=gnome-base/gsettings-desktop-schemas-2.91.92
-	>=dev-libs/libgweather-3.5.0:2=
 	>=media-libs/libcanberra-0.25[gtk3]
 	>=x11-libs/libnotify-0.7:=
-	>=gnome-extra/evolution-data-server-${PV}:=[gnome-online-accounts?,weather]
+	>=gnome-extra/evolution-data-server-${PV}:=[gnome-online-accounts?,weather?]
+	=gnome-extra/evolution-data-server-${MY_MAJORV}*
 	>=gnome-extra/gtkhtml-4.5.2:4.0
 	dev-libs/atk
 	>=dev-libs/dbus-glib-0.6
@@ -73,7 +73,8 @@ COMMON_DEPEND=">=dev-libs/glib-2.32:2
 		>=media-libs/libchamplain-0.12:0.12 )
 	ssl? (
 		>=dev-libs/nspr-4.6.1:=
-		>=dev-libs/nss-3.11:= )"
+		>=dev-libs/nss-3.11:= )
+	weather? ( >=dev-libs/libgweather-3.5.0:2= )"
 DEPEND="${COMMON_DEPEND}
 	app-text/docbook-xml-dtd:4.1.2
 	dev-util/gtk-doc-am
@@ -95,34 +96,6 @@ fi
 src_prepare() {
 	ELTCONF="--reverse-deps"
 	DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS* README"
-	# image-inline plugin needs a gtk+:3 gtkimageview, which does not exist yet
-	G2CONF="${G2CONF}
-		--disable-schemas-compile
-		--without-glade-catalog
-		--without-kde-applnk-path
-		--disable-image-inline
-		--disable-pst-import
-		--enable-canberra
-		--enable-weather
-		$(use_enable ssl nss)
-		$(use_enable ssl smime)
-		$(use_enable gnome-online-accounts goa)
-		$(use_enable gstreamer audio-inline)
-		$(use_enable map contact-maps)
-		$(use_with ldap openldap)
-		$(use_with kerberos krb5 ${EPREFIX}/usr)"
-
-	# Use NSS/NSPR only if 'ssl' is enabled.
-	if use ssl ; then
-		G2CONF="${G2CONF} --enable-nss=yes"
-	else
-		G2CONF="${G2CONF}
-			--without-nspr-libs
-			--without-nspr-includes
-			--without-nss-libs
-			--without-nss-includes"
-	fi
-	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
 
 	# Fix paths for Gentoo spamassassin executables
 	epatch "${FILESDIR}/${PN}-3.3.91-spamassassin-paths.patch"
@@ -136,6 +109,31 @@ src_prepare() {
 	# Fix compilation flags crazyness
 	sed -e 's/\(AM_CPPFLAGS="\)$WARNING_FLAGS/\1/' \
 		-i configure || die "CPPFLAGS sed failed"
+}
+
+src_configure() {
+	# Use NSS/NSPR only if 'ssl' is enabled.
+	# image-inline plugin needs a gtk+:3 gtkimageview, which does not exist yet
+	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
+	gnome2_src_configure \
+		--disable-schemas-compile \
+		--without-glade-catalog \
+		--without-kde-applnk-path \
+		--disable-image-inline \
+		--disable-pst-import \
+		--enable-canberra \
+		$(use_enable ssl nss) \
+		$(use_enable ssl smime) \
+		$(use_enable gnome-online-accounts goa) \
+		$(use_enable gstreamer audio-inline) \
+		$(use_enable map contact-maps) \
+		$(use_with ldap openldap) \
+		$(use_with kerberos krb5 "${EPREFIX}"/usr) \
+		$(usex ssl --enable-nss=yes "--without-nspr-libs
+			--without-nspr-includes
+			--without-nss-libs
+			--without-nss-includes") \
+		$(use_enable weather)
 }
 
 pkg_postinst() {
