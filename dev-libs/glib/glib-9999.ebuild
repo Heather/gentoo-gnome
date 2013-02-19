@@ -1,8 +1,8 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 PYTHON_DEPEND="utils? 2"
 # Avoid runtime dependency on python when USE=test
 
@@ -122,6 +122,8 @@ src_prepare() {
 	# bashcomp goes in /usr/share/bash-completion
 	epatch "${FILESDIR}/${PN}-2.32.4-bashcomp.patch"
 
+	epatch_user
+
 	# disable pyc compiling
 	use test && python_clean_py-compile_files
 
@@ -179,7 +181,8 @@ src_configure() {
 		$(use_enable systemtap systemtap) \
 		--enable-man \
 		--with-pcre=internal \
-		--with-threads=posix
+		--with-threads=posix \
+		--with-xml-catalog="${EPREFIX}/etc/xml/catalog"
 }
 
 src_install() {
@@ -204,7 +207,7 @@ src_install() {
 
 	# Completely useless with or without USE static-libs, people need to use
 	# pkg-config
-	find "${D}" -name '*.la' -exec rm -f {} +
+	prune_libtool_files --modules
 }
 
 src_test() {
@@ -236,6 +239,7 @@ pkg_preinst() {
 	# * The user has gobject-introspection
 	# * Has glib already installed
 	# * Previous version was different from new version
+	# TODO: add a subslotted virtual to trigger this automatically
 	if has_version "dev-libs/gobject-introspection" && ! has_version "=${CATEGORY}/${PF}"; then
 		ewarn "You must rebuild gobject-introspection so that the installed"
 		ewarn "typelibs and girs are regenerated for the new APIs in glib"
@@ -244,6 +248,7 @@ pkg_preinst() {
 
 pkg_postinst() {
 	# Inform users about possible breakage when updating glib and not dbus-glib, bug #297483
+	# TODO: add a subslotted virtual to trigger this automatically
 	if has_version dev-libs/dbus-glib; then
 		ewarn "If you experience a breakage after updating dev-libs/glib try"
 		ewarn "rebuilding dev-libs/dbus-glib"
