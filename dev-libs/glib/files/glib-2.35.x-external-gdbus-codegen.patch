@@ -1,42 +1,56 @@
-From 457ac2926e754bbebd72ee3606ad405ccfd2e952 Mon Sep 17 00:00:00 2001
+From 4a74adf19d7e46aef7c9ede87ffb0264193311dc Mon Sep 17 00:00:00 2001
 From: Priit Laes <plaes@plaes.org>
-Date: Fri, 3 Feb 2012 09:08:28 +0200
+Date: Thu, 28 Feb 2013 08:28:01 +0200
 Subject: [PATCH] Split out gdbus codegen
 
 ---
- configure.ac                                       |    3 +--
- docs/reference/gio/Makefile.am                     |    3 +--
- gio/Makefile.am                                    |    2 +-
- gio/tests/Makefile.am                              |    6 ++----
- gio/tests/gdbus-object-manager-example/Makefile.am |    6 ++----
- 5 files changed, 7 insertions(+), 13 deletions(-)
+ configure.ac                                       | 17 ++++++++---------
+ docs/reference/gio/Makefile.am                     |  3 +--
+ gio/Makefile.am                                    |  2 +-
+ gio/tests/Makefile.am                              |  6 ++----
+ gio/tests/gdbus-object-manager-example/Makefile.am |  6 ++----
+ 5 files changed, 14 insertions(+), 20 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index 833891b..697ce60 100644
+index f734b7c..8076e7f 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -380,7 +380,7 @@ fi
- AC_SUBST(PERL_PATH)
- 
- # Need suitable python path for greport
+@@ -374,14 +374,14 @@ AC_SUBST(PERL_PATH)
+ # option to specify python interpreter to use; this just sets $PYTHON, so that
+ # we will fallback to reading $PYTHON if --with-python is not given, and
+ # python.m4 will get the expected input
+-AC_ARG_WITH(python,
+-            AS_HELP_STRING([--with-python=PATH],
+-                           [Path to Python interpreter; searches $PATH if only a program name is given; if not given, searches for a few standard names such as "python3" or "python2"]),
+-            [PYTHON="$withval"], [])
+-if test x"$PYTHON" = xyes; then
+-  AC_MSG_ERROR([--with-python option requires a path or program argument])
+-fi
 -AM_PATH_PYTHON(2.5,,PYTHON="/usr/bin/env python2.5")
++# AC_ARG_WITH(python,
++#             AS_HELP_STRING([--with-python=PATH],
++#                            [Path to Python interpreter; searches $PATH if only a program name is given; if not given, searches for a few standard names such as "python3" or "python2"]),
++#             [PYTHON="$withval"], [])
++# if test x"$PYTHON" = xyes; then
++#   AC_MSG_ERROR([--with-python option requires a path or program argument])
++# fi
 +# AM_PATH_PYTHON(2.5,,PYTHON="/usr/bin/env python2.5")
  
  
  dnl ***********************
-@@ -3561,7 +3561,6 @@ gobject/glib-mkenums
+@@ -3697,7 +3697,6 @@ gobject/glib-mkenums
  gobject/tests/Makefile
  gthread/Makefile
  gio/Makefile
 -gio/gdbus-2.0/codegen/Makefile
  gio/gdbus-2.0/codegen/config.py
+ gio/gnetworking.h
  gio/xdgmime/Makefile
- gio/inotify/Makefile
 diff --git a/docs/reference/gio/Makefile.am b/docs/reference/gio/Makefile.am
-index 7d2d264..7cac0b2 100644
+index 99606d3..067cd50 100644
 --- a/docs/reference/gio/Makefile.am
 +++ b/docs/reference/gio/Makefile.am
-@@ -148,8 +148,7 @@ man_MANS =			\
+@@ -152,8 +152,7 @@ man_MANS +=			\
  	glib-compile-resources.1	\
  	gsettings.1		\
  	gresource.1		\
@@ -44,10 +58,10 @@ index 7d2d264..7cac0b2 100644
 -	gdbus-codegen.1
 +	gdbus.1
  
- if ENABLE_MAN
- 
+ XSLTPROC_FLAGS = \
+         --nonet \
 diff --git a/gio/Makefile.am b/gio/Makefile.am
-index dae04b4..835ccc7 100644
+index 94d7f59..c07d00d 100644
 --- a/gio/Makefile.am
 +++ b/gio/Makefile.am
 @@ -2,7 +2,7 @@ include $(top_srcdir)/Makefile.decl
@@ -60,11 +74,11 @@ index dae04b4..835ccc7 100644
  if OS_UNIX
  SUBDIRS += xdgmime
 diff --git a/gio/tests/Makefile.am b/gio/tests/Makefile.am
-index c5cf59d..be9e48c 100644
+index c8a4090..feece02 100644
 --- a/gio/tests/Makefile.am
 +++ b/gio/tests/Makefile.am
-@@ -293,10 +293,8 @@ gdbus_close_pending_SOURCES = gdbus-close-pending.c gdbus-sessionbus.c gdbus-ses
- gdbus_close_pending_LDADD = $(progs_ldadd)
+@@ -212,10 +212,8 @@ gdbus_bz627724_SOURCES = gdbus-bz627724.c gdbus-sessionbus.c gdbus-sessionbus.h
+ gdbus_close_pending_SOURCES = gdbus-close-pending.c gdbus-sessionbus.c gdbus-sessionbus.h gdbus-tests.h gdbus-tests.c
  
  if OS_UNIX
 -gdbus-test-codegen-generated.h gdbus-test-codegen-generated.c : test-codegen.xml Makefile $(top_builddir)/gio/gdbus-2.0/codegen/gdbus-codegen
@@ -77,7 +91,7 @@ index c5cf59d..be9e48c 100644
  		--generate-c-code gdbus-test-codegen-generated \
  		--c-generate-object-manager \
 diff --git a/gio/tests/gdbus-object-manager-example/Makefile.am b/gio/tests/gdbus-object-manager-example/Makefile.am
-index 9861d0e..9ca6eb9 100644
+index 6875210..264c3c1 100644
 --- a/gio/tests/gdbus-object-manager-example/Makefile.am
 +++ b/gio/tests/gdbus-object-manager-example/Makefile.am
 @@ -21,10 +21,8 @@ GDBUS_GENERATED = 										\
@@ -94,5 +108,5 @@ index 9861d0e..9ca6eb9 100644
  		--c-namespace Example \
  		--c-generate-object-manager \
 -- 
-1.7.8.6
+1.8.1.2
 
