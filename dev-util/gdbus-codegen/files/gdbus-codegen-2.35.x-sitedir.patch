@@ -1,5 +1,14 @@
+From ada31d785ca16c18e203bf83823adb8c7d45f7cf Mon Sep 17 00:00:00 2001
+From: Priit Laes <plaes@plaes.org>
+Date: Thu, 28 Feb 2013 09:03:51 +0200
+Subject: [PATCH] Fix for split gdbus-codegen imports
+
+---
+ gio/gdbus-2.0/codegen/gdbus-codegen.in | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
+
 diff --git a/gio/gdbus-2.0/codegen/gdbus-codegen.in b/gio/gdbus-2.0/codegen/gdbus-codegen.in
-index 217c755..8520bb8 100644
+index 253d151..67714a5 100644
 --- a/gio/gdbus-2.0/codegen/gdbus-codegen.in
 +++ b/gio/gdbus-2.0/codegen/gdbus-codegen.in
 @@ -29,13 +29,9 @@ srcdir = os.getenv('UNINSTALLED_GLIB_SRCDIR', None)
@@ -12,10 +21,13 @@ index 217c755..8520bb8 100644
 +    sys.path.insert(0, os.path.abspath(path))
 +    from codegen import codegen_main
  else:
--    path = os.path.join('@libdir@', 'gdbus-2.0')
+-    path = os.path.join('@datadir@', 'glib-2.0')
 -
 -sys.path.insert(0, os.path.abspath(path))
 -from codegen import codegen_main
 +    from gdbus_codegen import codegen_main
  
  sys.exit(codegen_main.codegen_main())
+-- 
+1.8.1.2
+
