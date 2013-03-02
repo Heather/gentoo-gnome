@@ -25,7 +25,7 @@ else
 fi
 
 COMMON_DEPEND="
-	>=dev-libs/glib-2.31.0:2
+	>=dev-libs/glib-2.32.0:2
 	crypt? ( >=dev-libs/libgcrypt-1.2.2 )
 	introspection? ( >=dev-libs/gobject-introspection-1.29 )"
 RDEPEND="${COMMON_DEPEND}
