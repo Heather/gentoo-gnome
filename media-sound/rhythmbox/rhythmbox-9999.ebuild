@@ -18,8 +18,8 @@ HOMEPAGE="http://www.rhythmbox.org/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="cdr daap dbus doc gnome-keyring html ipod libnotify lirc mtp nsplugin
-+python test +udev upnp-av visualizer webkit zeitgeist"
+IUSE="cdr daap dbus doc keyring html ipod libnotify lirc mtp nsplugin +python
+test +udev upnp-av visualizer webkit zeitgeist"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -36,7 +36,7 @@ REQUIRED_USE="
 COMMON_DEPEND=">=dev-libs/glib-2.32.0:2
 	dev-libs/json-glib
 	>=dev-libs/libxml2-2.7.8:2
-	>=x11-libs/gtk+-3.4:3[introspection]
+	>=x11-libs/gtk+-3.6:3[introspection]
 	>=x11-libs/gdk-pixbuf-2.18.0:2
 	>=dev-libs/gobject-introspection-0.10.0
 	>=dev-libs/libpeas-0.7.3[gtk,python?]
@@ -58,7 +58,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.32.0:2
 		>=net-libs/libdmapsharing-2.9.16:3.0
 		>=net-dns/avahi-0.6
 		media-plugins/gst-plugins-soup:1.0 )
-	gnome-keyring? ( >=gnome-base/gnome-keyring-0.4.9 )
+	keyring? ( app-crypt/libsecret )
 	html? ( >=net-libs/webkit-gtk-1.3.9:3 )
 	libnotify? ( >=x11-libs/libnotify-0.7.0 )
 	lirc? ( app-misc/lirc )
@@ -87,7 +87,7 @@ RDEPEND="${COMMON_DEPEND}
 		x11-libs/pango[introspection]
 
 		dbus? ( sys-apps/dbus )
-		gnome-keyring? ( gnome-base/libgnome-keyring[introspection] )
+		keyring? ( >=app-crypt/libsecret-0.13[introspection] )
 		webkit? (
 			dev-python/mako
 			>=net-libs/webkit-gtk-1.3.9:3[introspection] ) )
@@ -130,7 +130,7 @@ pkg_setup() {
 		$(use_enable upnp-av grilo)
 		$(use_with cdr brasero)
 		$(use_with daap mdns avahi)
-		$(use_with gnome-keyring)
+		$(use_with keyring)
 		$(use_with html webkit)
 		$(use_with ipod)
 		$(use_with mtp)
@@ -141,6 +141,9 @@ pkg_setup() {
 
 src_prepare() {
 	gnome2_src_prepare
+	# https://bugzilla.gnome.org/show_bug.cgi?id=694981
+	epatch "${FILESDIR}/${PN}-port-to-libsecret.patch"
+	epatch "${FILESDIR}/${PN}-port-magnatune-to-libsecret.patch"
 	echo > py-compile
 }
 
