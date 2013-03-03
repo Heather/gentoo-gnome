@@ -6,10 +6,11 @@ EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit eutils flag-o-matic gnome2
+inherit eutils flag-o-matic gnome2 versionator
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
+MY_MAJORV=$(get_version_component_range 1-2)
 
 DESCRIPTION="Integrated mail, addressbook and calendaring functionality"
 HOMEPAGE="http://projects.gnome.org/evolution/"
@@ -17,7 +18,7 @@ HOMEPAGE="http://projects.gnome.org/evolution/"
 # Note: explicitly "|| ( LGPL-2 LGPL-3 )", not "LGPL-2+".
 LICENSE="|| ( LGPL-2 LGPL-3 ) CC-BY-SA-3.0 FDL-1.3+ OPENLDAP"
 SLOT="2.0"
-IUSE="crypt +gnome-online-accounts gstreamer kerberos ldap map ssl +weather"
+IUSE="bogofilter crypt +gnome-online-accounts gstreamer highlight kerberos ldap map spamassassin ssl +weather"
 if [[ ${PV} = 9999 ]]; then
 	IUSE="${IUSE} doc"
 	KEYWORDS=""
@@ -31,8 +32,7 @@ PINENTRY_DEPEND="|| ( app-crypt/pinentry[gtk] app-crypt/pinentry-qt app-crypt/pi
 
 # glade-3 support is for maintainers only per configure.ac
 # pst is not mature enough and changes API/ABI frequently
-# also supports gstreamer 1.0
-COMMON_DEPEND=">=dev-libs/glib-2.32:2
+COMMON_DEPEND=">=dev-libs/glib-2.34:2
 	>=x11-libs/cairo-1.9.15:=[glib]
 	>=x11-libs/gtk+-3.4.0:3
 	>=gnome-base/gnome-desktop-2.91.3:3=
@@ -45,32 +45,34 @@ COMMON_DEPEND=">=dev-libs/glib-2.32:2
 	dev-libs/atk
 	>=dev-libs/dbus-glib-0.6
 	>=dev-libs/libxml2-2.7.3:2
-	>=net-libs/libsoup-gnome-2.38.1:2.4
+	>=net-libs/libsoup-gnome-2.40.3:2.4
 	>=x11-misc/shared-mime-info-0.22
 	>=x11-themes/gnome-icon-theme-2.30.2.1
 	>=dev-libs/libgdata-0.10:=
-	>=net-libs/webkit-gtk-1.8.0
-	!=net-libs/webkit-gtk-1.9.90
+	>=net-libs/webkit-gtk-1.10.0
 
 	x11-libs/libSM
 	x11-libs/libICE
 
-	map? (
-		>=media-libs/clutter-1.0.0:1.0
-		>=media-libs/clutter-gtk-0.90:1.0
-		x11-libs/mx:1.0 )
 	crypt? ( || (
 		( >=app-crypt/gnupg-2.0.1-r2 ${PINENTRY_DEPEND} )
 		=app-crypt/gnupg-1.4* ) )
-	gnome-online-accounts? ( >=net-libs/gnome-online-accounts-3.2 )
-	gstreamer? (
-		>=media-libs/gstreamer-0.10:0.10
-		>=media-libs/gst-plugins-base-0.10:0.10 )
-	kerberos? ( virtual/krb5:= )
-	ldap? ( >=net-nds/openldap-2:= )
 	map? (
 		>=app-misc/geoclue-0.12.0
-		>=media-libs/libchamplain-0.12:0.12 )
+		>=media-libs/libchamplain-0.12:0.12
+		>=media-libs/clutter-1.0.0:1.0
+		>=media-libs/clutter-gtk-0.90:1.0
+		>=sci-geosciences/geocode-glib-0.99.0
+		x11-libs/mx:1.0 )
+	gnome-online-accounts? ( >=net-libs/gnome-online-accounts-3.2 )
+	gstreamer? ( || (
+		 ( media-libs/gstreamer:1.0
+		   media-libs/gst-plugins-base:1.0 )
+		 ( media-libs/gstreamer:0.10
+		   media-libs/gst-plugins-base:0.10 )
+	) )
+	kerberos? ( virtual/krb5:= )
+	ldap? ( >=net-nds/openldap-2:= )
 	ssl? (
 		>=dev-libs/nspr-4.6.1:=
 		>=dev-libs/nss-3.11:= )
@@ -84,7 +86,9 @@ DEPEND="${COMMON_DEPEND}
 #	app-text/yelp-tools
 #	>=gnome-base/gnome-common-2.12
 RDEPEND="${COMMON_DEPEND}
-	app-text/highlight
+	bogofilter? ( mail-filter/bogofilter )
+	highlight? ( app-text/highlight )
+	spamassassin? ( mail-filter/spamassassin )
 	!<gnome-extra/evolution-exchange-2.32"
 
 if [[ ${PV} = 9999 ]]; then
@@ -96,9 +100,6 @@ fi
 src_prepare() {
 	ELTCONF="--reverse-deps"
 	DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS* README"
-
-	# Fix paths for Gentoo spamassassin executables
-	epatch "${FILESDIR}/${PN}-3.3.91-spamassassin-paths.patch"
 
 	sed -e "s:@EPREFIX@:${EPREFIX}:g" \
 		-i data/org.gnome.evolution.spamassassin.gschema.xml.in \
@@ -122,13 +123,16 @@ src_configure() {
 		--disable-image-inline \
 		--disable-pst-import \
 		--enable-canberra \
-		$(use_enable ssl nss) \
-		$(use_enable ssl smime) \
+		$(use_enable bogofilter) \
 		$(use_enable gnome-online-accounts goa) \
 		$(use_enable gstreamer audio-inline) \
+		$(use_enable highlight) \
 		$(use_enable map contact-maps) \
-		$(use_with ldap openldap) \
+		$(use_enable spamassassin) \
+		$(use_enable ssl nss) \
+		$(use_enable ssl smime) \
 		$(use_with kerberos krb5 "${EPREFIX}"/usr) \
+		$(use_with ldap openldap) \
 		$(usex ssl --enable-nss=yes "--without-nspr-libs
 			--without-nspr-includes
 			--without-nss-libs
@@ -149,9 +153,4 @@ pkg_postinst() {
 	elog ""
 	elog "(replace firefox.desktop with the name of the appropriate .desktop"
 	elog "file from /usr/share/applications if you use a different browser)."
-	elog ""
-	elog "Junk filters are now a run-time choice. You will get a choice of"
-	elog "bogofilter or spamassassin based on which you have installed"
-	elog ""
-	elog "You have to install one of these for the spam filtering to actually work"
 }
