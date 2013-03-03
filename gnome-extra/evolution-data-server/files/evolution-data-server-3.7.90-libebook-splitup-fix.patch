@@ -1,0 +1,25 @@
+From 794f538befedadaded6f19004738cf3babd5e9c5 Mon Sep 17 00:00:00 2001
+From: Tristan Van Berkom <tristanvb@openismus.com>
+Date: Mon, 18 Feb 2013 12:05:22 +0000
+Subject: Fixing pkg-config files for libebook & libedata-book
+
+This part was missed while the libebook / libebook-contacts library
+splitup was done manually.
+---
+(limited to 'addressbook/libebook')
+
+diff --git a/addressbook/libebook/libebook.pc.in b/addressbook/libebook/libebook.pc.in
+index 993870b..293cdc0 100644
+--- a/addressbook/libebook/libebook.pc.in
++++ b/addressbook/libebook/libebook.pc.in
+@@ -10,7 +10,7 @@ privincludedir=@privincludedir@
+ Name: libebook
+ Description: Client library for evolution address books
+ Version: @VERSION@
+-Requires: libedataserver-1.2
++Requires: libedataserver-1.2 libebook-contacts-1.2 libedata-book-1.2
+ Requires.private: camel-1.2
+ Libs: -L${libdir} -lebook-1.2
+ Cflags: -I${privincludedir}
+--
+cgit v0.9.1
