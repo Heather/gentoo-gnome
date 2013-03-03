@@ -27,7 +27,6 @@ RDEPEND="
 	app-crypt/libsecret
 	dev-libs/libxml2:2
 	dev-libs/libxslt
-	media-libs/harfbuzz
 	media-libs/libwebp
 	virtual/jpeg:=
 	>=media-libs/libpng-1.4:0=
@@ -43,8 +42,8 @@ RDEPEND="
 
 	geoloc? ( app-misc/geoclue )
 	gstreamer? (
-		media-libs/gstreamer:1.0
-		media-libs/gst-plugins-base:1.0 )
+		>=media-libs/gstreamer-1.0.3:1.0
+		>=media-libs/gst-plugins-base-1.0.3:1.0 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 	spell? ( >=app-text/enchant-0.22:= )
 	webgl? (
@@ -113,11 +112,8 @@ src_prepare() {
 	# https://bugs.webkit.org/show_bug.cgi?id=28727
 	use aqua && epatch "${FILESDIR}"/${PN}-1.6.1-darwin-quartz.patch
 
-	# Drop DEPRECATED flags
-	LC_ALL=C sed -i -e 's:-D[A-Z_]*DISABLE_DEPRECATED:$(NULL):g' GNUmakefile.am || die
-
 	# Don't force -O2
-	sed -i 's/-O2//g' "${S}"/configure.ac || die
+	sed -i 's/-O2//g' "${S}"/Source/autotools/SetupCompilerFlags.m4 || die
 
 	# Build-time segfaults under PaX with USE="introspection jit", bug #404215
 	if use introspection && use jit; then
@@ -156,6 +152,8 @@ src_prepare() {
 	# Respect CC, otherwise fails on prefix #395875
 	tc-export CC
 
+	epatch "${FILESDIR}/${P}-gtk-docize-fix.patch"
+
 	# Prevent maintainer mode from being triggered during make
 	AT_M4DIR=Source/autotools eautoreconf
 
@@ -183,7 +181,6 @@ src_configure() {
 	myconf="
 		$(use_enable coverage)
 		$(use_enable debug)
-		$(use_enable debug debug-features)
 		$(use_enable geoloc geolocation)
 		$(use_enable spell spellcheck)
 		$(use_enable introspection)
@@ -193,7 +190,6 @@ src_configure() {
 		--disable-egl
 		--disable-gles2
 		--with-gtk=3.0
-		--with-gstreamer=1.0
 		--enable-accelerated-compositing
 		--enable-dependency-tracking
 		--disable-gtk-doc
