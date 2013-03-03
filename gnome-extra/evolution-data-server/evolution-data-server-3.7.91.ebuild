@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -102,8 +102,6 @@ src_prepare() {
 
 	gnome2_src_prepare
 	use vala && vala_src_prepare
-
-	epatch "${FILESDIR}/${P}-libebook-splitup-fix.patch"
 
 	# /usr/include/db.h is always db-1 on FreeBSD
 	# so include the right dir in CPPFLAGS
