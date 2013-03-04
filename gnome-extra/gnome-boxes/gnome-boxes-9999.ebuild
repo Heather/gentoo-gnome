@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 
 inherit linux-info gnome2
@@ -15,7 +15,7 @@ HOMEPAGE="https://live.gnome.org/Design/Apps/Boxes"
 
 LICENSE="LGPL-2"
 SLOT="0"
-IUSE="bindist"
+IUSE="bindist smartcard usbredir"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -29,13 +29,14 @@ RDEPEND="
 	>=dev-libs/glib-2.29.90:2
 	>=dev-libs/gobject-introspection-0.9.6
 	>=sys-libs/libosinfo-0.2.1
-	app-emulation/qemu[spice]
+	>=app-emulation/qemu-1.3.1[spice,smartcard?,usbredir?]
 	>=app-emulation/libvirt-0.9.3[libvirtd,qemu]
 	>=app-emulation/libvirt-glib-0.1.2
 	>=x11-libs/gtk+-3.5.5:3
 	>=net-libs/gtk-vnc-0.4.4[gtk3]
-	>=net-misc/spice-gtk-0.12.101[gtk3]
-	>=app-misc/tracker-0.14[iso]
+	>=net-misc/spice-gtk-0.16[gtk3,smartcard?,usbredir?]
+
+	>=app-misc/tracker-0.14:0=[iso]
 
 	>=media-libs/clutter-gtk-1.3.2:1.0
 	>=media-libs/clutter-1.11.14:1.0
@@ -71,15 +72,23 @@ pkg_pretend() {
 	fi
 }
 
+src_prepare() {
+	# Do not change CFLAGS, wondering about VALA ones but appears to be
+	# needed as noted in configure comments below
+	sed 's/CFLAGS="$CFLAGS -O0 -ggdb3"' -i configure.ac || die
+	gnome2_src_configure
+}
+
 src_configure() {
 	DOCS="AUTHORS README NEWS THANKS TODO"
-	G2CONF="${G2CONF}
-		--disable-schemas-compile
-		--disable-strict-cc
-		VALAC=$(type -P valac-0.18)
+	# debug needed for splitdebug proper behavior (cardoe)
+	gnome2_src_configure \
+		--enable-debug \
+		--disable-strict-cc \
+		$(use_enable usbredir) \
+		$(use_enable smartcard) \
+		VALAC=$(type -P valac-0.18) \
 		VAPIGEN=$(type -P vapigen-0.18)
-	"
-	gnome2_src_configure
 }
 
 pkg_postinst() {
