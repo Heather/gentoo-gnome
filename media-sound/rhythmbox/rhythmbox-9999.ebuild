@@ -33,6 +33,7 @@ REQUIRED_USE="
 	webkit? ( python )"
 
 # FIXME: double check what to do with fm-radio plugin
+# webkit-gtk-1.10 is needed because it uses gstreamer-1.0
 COMMON_DEPEND=">=dev-libs/glib-2.32.0:2
 	dev-libs/json-glib
 	>=dev-libs/libxml2-2.7.8:2
@@ -59,7 +60,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.32.0:2
 		>=net-dns/avahi-0.6
 		media-plugins/gst-plugins-soup:1.0 )
 	keyring? ( >=app-crypt/libsecret-0.14 )
-	html? ( >=net-libs/webkit-gtk-1.3.9:3 )
+	html? ( >=net-libs/webkit-gtk-1.10:3 )
 	libnotify? ( >=x11-libs/libnotify-0.7.0 )
 	lirc? ( app-misc/lirc )
 	python? ( >=dev-python/pygobject-3.0:3 )
@@ -90,7 +91,7 @@ RDEPEND="${COMMON_DEPEND}
 		keyring? ( >=app-crypt/libsecret-0.14[introspection] )
 		webkit? (
 			dev-python/mako
-			>=net-libs/webkit-gtk-1.3.9:3[introspection] ) )
+			>=net-libs/webkit-gtk-1.10:3[introspection] ) )
 "
 # gtk-doc-am needed for eautoreconf
 #	dev-util/gtk-doc-am
