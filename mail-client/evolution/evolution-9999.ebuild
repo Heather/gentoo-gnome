@@ -101,10 +101,6 @@ src_prepare() {
 	ELTCONF="--reverse-deps"
 	DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS* README"
 
-	sed -e "s:@EPREFIX@:${EPREFIX}:g" \
-		-i data/org.gnome.evolution.spamassassin.gschema.xml.in \
-		-i modules/spamassassin/evolution-spamassassin.c || die "sed failed"
-
 	gnome2_src_prepare
 
 	# Fix compilation flags crazyness
@@ -115,7 +111,8 @@ src_prepare() {
 src_configure() {
 	# Use NSS/NSPR only if 'ssl' is enabled.
 	# image-inline plugin needs a gtk+:3 gtkimageview, which does not exist yet
-	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
+	local myconf
+	[[ ${PV} != 9999 ]] && myconf="${myconf} ITSTOOL=$(type -P true)"
 	gnome2_src_configure \
 		--disable-schemas-compile \
 		--without-glade-catalog \
@@ -137,7 +134,8 @@ src_configure() {
 			--without-nspr-includes
 			--without-nss-libs
 			--without-nss-includes") \
-		$(use_enable weather)
+		$(use_enable weather) \
+		${myconf}
 }
 
 pkg_postinst() {
