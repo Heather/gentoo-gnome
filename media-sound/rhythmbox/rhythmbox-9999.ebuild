@@ -18,7 +18,7 @@ HOMEPAGE="http://www.rhythmbox.org/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="cdr daap dbus doc keyring html ipod libnotify lirc mtp nsplugin +python
+IUSE="cdr daap dbus doc +keyring html ipod libnotify lirc mtp nsplugin +python
 test +udev upnp-av visualizer webkit zeitgeist"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
@@ -58,7 +58,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.32.0:2
 		>=net-libs/libdmapsharing-2.9.16:3.0
 		>=net-dns/avahi-0.6
 		media-plugins/gst-plugins-soup:1.0 )
-	keyring? ( app-crypt/libsecret )
+	keyring? ( >=app-crypt/libsecret-0.14 )
 	html? ( >=net-libs/webkit-gtk-1.3.9:3 )
 	libnotify? ( >=x11-libs/libnotify-0.7.0 )
 	lirc? ( app-misc/lirc )
@@ -87,7 +87,7 @@ RDEPEND="${COMMON_DEPEND}
 		x11-libs/pango[introspection]
 
 		dbus? ( sys-apps/dbus )
-		keyring? ( >=app-crypt/libsecret-0.13[introspection] )
+		keyring? ( >=app-crypt/libsecret-0.14[introspection] )
 		webkit? (
 			dev-python/mako
 			>=net-libs/webkit-gtk-1.3.9:3[introspection] ) )
@@ -130,7 +130,7 @@ pkg_setup() {
 		$(use_enable upnp-av grilo)
 		$(use_with cdr brasero)
 		$(use_with daap mdns avahi)
-		$(use_with keyring)
+		$(use_with keyring libsecret)
 		$(use_with html webkit)
 		$(use_with ipod)
 		$(use_with mtp)
@@ -143,7 +143,6 @@ src_prepare() {
 	gnome2_src_prepare
 	# https://bugzilla.gnome.org/show_bug.cgi?id=694981
 	epatch "${FILESDIR}/${PN}-port-to-libsecret.patch"
-	epatch "${FILESDIR}/${PN}-port-magnatune-to-libsecret.patch"
 	echo > py-compile
 }
 
