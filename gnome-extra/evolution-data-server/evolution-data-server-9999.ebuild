@@ -88,15 +88,9 @@ src_prepare() {
 	# /usr/include/db.h is always db-1 on FreeBSD
 	# so include the right dir in CPPFLAGS
 	append-cppflags "-I$(db_includedir)"
-
-	# FIXME: Fix compilation flags crazyness
-	# Touch configure.ac if doing eautoreconf
-	sed 's/^\(AM_CPPFLAGS="\)$WARNING_FLAGS/\1/' \
-		-i configure || die "sed failed"
 }
 
 src_configure() {
-
 	gnome2_src_configure \
 		--disable-schemas-compile \
 		--disable-uoa \
