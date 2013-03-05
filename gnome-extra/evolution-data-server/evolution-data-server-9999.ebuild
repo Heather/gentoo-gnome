@@ -81,24 +81,6 @@ pkg_setup() {
 
 src_prepare() {
 	DOCS="ChangeLog MAINTAINERS NEWS TODO"
-	# TODO: ubuntu-online-accounts uoa
-	G2CONF="${G2CONF}
-		--disable-schemas-compile
-		$(use_enable api-doc-extras gtk-doc)
-		$(use_with api-doc-extras private-docs)
-		$(use_enable gnome-online-accounts goa)
-		$(use_enable google)
-		$(use_enable introspection)
-		$(use_enable ipv6)
-		$(use_with kerberos krb5 ${EPREFIX}/usr)
-		$(use_with ldap openldap)
-		$(use_enable vala vala-bindings)
-		$(use_enable weather)
-		--disable-uoa
-		--enable-nntp
-		--enable-largefile
-		--enable-smime
-		--with-libdb=${EPREFIX}/usr"
 
 	gnome2_src_prepare
 	use vala && vala_src_prepare
@@ -111,6 +93,27 @@ src_prepare() {
 	# Touch configure.ac if doing eautoreconf
 	sed 's/^\(AM_CPPFLAGS="\)$WARNING_FLAGS/\1/' \
 		-i configure || die "sed failed"
+}
+
+src_configure() {
+
+	gnome2_src_configure \
+		--disable-schemas-compile \
+		--disable-uoa \
+		$(use_enable api-doc-extras gtk-doc) \
+		$(use_with api-doc-extras private-docs) \
+		$(use_enable gnome-online-accounts goa) \
+		$(use_enable google) \
+		$(use_enable introspection) \
+		$(use_enable ipv6) \
+		$(use_with kerberos krb5 "${EPREFIX}"/usr) \
+		$(use_with ldap openldap) \
+		$(use_enable vala vala-bindings) \
+		$(use_enable weather) \
+		--enable-nntp \
+		--enable-largefile \
+		--enable-smime \
+		--with-libdb="${EPREFIX}"/usr
 }
 
 src_install() {
