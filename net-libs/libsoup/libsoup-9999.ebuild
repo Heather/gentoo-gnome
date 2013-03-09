@@ -28,7 +28,7 @@ RDEPEND="
 	dev-db/sqlite:3=
     >=dev-libs/glib-2.35.0:2
 	>=dev-libs/libxml2-2:2
-	>=net-libs/glib-networking-2.30.0[ssl?]
+	>=net-libs/glib-networking-2.35.3[ssl?]
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 	samba? ( net-fs/samba )
 "
