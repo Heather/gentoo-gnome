@@ -59,11 +59,11 @@ COMMON_DEPEND="
 	>=x11-misc/xdg-utils-1.0.2-r3
 
 	virtual/pam
-	sys-auth/pambase[consolekit?,systemd?]
+	sys-auth/pambase[systemd?]
 
 	accessibility? ( x11-libs/libXevie )
 	audit? ( sys-process/audit )
-	consolekit? ( sys-auth/consolekit[pam] )
+	consolekit? ( sys-auth/consolekit )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.12 )
 	plymouth? ( sys-boot/plymouth )
 	selinux? ( sys-libs/libselinux )
