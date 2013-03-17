@@ -116,14 +116,13 @@ src_configure() {
 	gnome2_src_configure \
 		--disable-schemas-compile \
 		--without-glade-catalog \
-		--without-kde-applnk-path \
 		--disable-image-inline \
 		--disable-pst-import \
 		--enable-canberra \
 		$(use_enable bogofilter) \
 		$(use_enable gnome-online-accounts goa) \
 		$(use_enable gstreamer audio-inline) \
-		$(use_enable highlight) \
+		$(use_enable highlight text-highlight) \
 		$(use_enable map contact-maps) \
 		$(use_enable spamassassin) \
 		$(use_enable ssl nss) \
