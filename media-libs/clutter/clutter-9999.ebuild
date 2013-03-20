@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -20,7 +20,7 @@ IUSE="debug doc gtk +introspection test" # evdev tslib
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~alpha ~amd64 ~mips ~ppc ~ppc64 ~x86"
+	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86"
 fi
 
 # NOTE: glx flavour uses libdrm + >=mesa-7.3
@@ -30,7 +30,7 @@ RDEPEND="
 	>=dev-libs/glib-2.31.19:2
 	>=dev-libs/atk-2.5.3[introspection?]
 	>=dev-libs/json-glib-0.12[introspection?]
-	>=media-libs/cogl-1.9.6:1.0=[introspection?,pango]
+	>=media-libs/cogl-1.13.4:1.0=[introspection?,pango]
 	media-libs/fontconfig
 	>=x11-libs/cairo-1.10:=[glib]
 	>=x11-libs/pango-1.30[introspection?]
