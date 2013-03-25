@@ -82,6 +82,9 @@ pkg_setup() {
 src_prepare() {
 	DOCS="ChangeLog MAINTAINERS NEWS TODO"
 
+	# https://bugzilla.gnome.org/show_bug.cgi?id=693101
+	epatch "${FILESDIR}/${P}-fix-imapx-redownload.patch"
+
 	gnome2_src_prepare
 	use vala && vala_src_prepare
 
