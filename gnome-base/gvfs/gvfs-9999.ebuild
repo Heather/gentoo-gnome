@@ -29,7 +29,7 @@ SRC_URI="${SRC_URI}
 	http://dev.gentoo.org/~tetromino/distfiles/aclocal/libgcrypt.m4.bz2"
 
 IUSE="afp archive avahi bluetooth bluray cdda doc fuse gnome-online-accounts gdu
-gnome-keyring gphoto2 gtk +http ios mtp samba systemd +udev udisks"
+gnome-keyring gphoto2 gtk +http ios +mtp samba systemd +udev udisks"
 REQUIRED_USE="systemd? ( udisks )"
 
 # Can use libgphoto-2.5.0 as well. Automagic detection.
