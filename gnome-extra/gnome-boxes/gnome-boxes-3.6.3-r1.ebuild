@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 
 inherit linux-info gnome2
@@ -35,8 +35,7 @@ RDEPEND="
 	>=x11-libs/gtk+-3.5.5:3
 	>=net-libs/gtk-vnc-0.4.4[gtk3]
 	>=net-misc/spice-gtk-0.12.101[gtk3]
-	>=app-misc/tracker-0.14[iso]
-	<app-misc/tracker-0.16
+	>=app-misc/tracker-0.16:0=[iso]
 
 	>=media-libs/clutter-gtk-1.3.2:1.0
 	>=media-libs/clutter-1.11.14:1.0
@@ -72,15 +71,20 @@ pkg_pretend() {
 	fi
 }
 
+src_prepare() {
+	# Add support for tracker-0.16
+	sed -e "s/\(tracker-sparql\)-.*/\1-0.16/" \
+		-i configure.ac configure || die
+
+	gnome2_src_prepare
+}
+
 src_configure() {
 	DOCS="AUTHORS README NEWS THANKS TODO"
-	G2CONF="${G2CONF}
-		--disable-schemas-compile
-		--disable-strict-cc
-		VALAC=$(type -P valac-0.18)
+	gnome2_src_configure \
+		--disable-strict-cc \
+		VALAC=$(type -P valac-0.18) \
 		VAPIGEN=$(type -P vapigen-0.18)
-	"
-	gnome2_src_configure
 }
 
 pkg_postinst() {

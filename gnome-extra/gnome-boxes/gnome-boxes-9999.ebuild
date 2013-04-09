@@ -36,7 +36,7 @@ RDEPEND="
 	>=net-libs/gtk-vnc-0.4.4[gtk3]
 	>=net-misc/spice-gtk-0.16[gtk3,smartcard?,usbredir?]
 
-	>=app-misc/tracker-0.14:0=[iso]
+	>=app-misc/tracker-0.16:0=[iso]
 
 	>=media-libs/clutter-gtk-1.3.2:1.0
 	>=media-libs/clutter-1.11.14:1.0
