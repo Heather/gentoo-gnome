@@ -34,7 +34,7 @@ REQUIRED_USE="
 
 # FIXME: double check what to do with fm-radio plugin
 # webkit-gtk-1.10 is needed because it uses gstreamer-1.0
-COMMON_DEPEND=">=dev-libs/glib-2.32.0:2
+COMMON_DEPEND=">=dev-libs/glib-2.34.0:2
 	dev-libs/json-glib
 	>=dev-libs/libxml2-2.7.8:2
 	>=x11-libs/gtk+-3.6:3[introspection]
@@ -57,7 +57,6 @@ COMMON_DEPEND=">=dev-libs/glib-2.32.0:2
 	cdr? ( >=app-cdr/brasero-2.91.90 )
 	daap? (
 		>=net-libs/libdmapsharing-2.9.16:3.0
-		>=net-dns/avahi-0.6
 		media-plugins/gst-plugins-soup:1.0 )
 	keyring? ( >=app-crypt/libsecret-0.14 )
 	html? ( >=net-libs/webkit-gtk-1.10:3 )
@@ -130,7 +129,7 @@ pkg_setup() {
 		$(use_enable python)
 		$(use_enable upnp-av grilo)
 		$(use_with cdr brasero)
-		$(use_with daap mdns avahi)
+		$(use_with daap)
 		$(use_with keyring libsecret)
 		$(use_with html webkit)
 		$(use_with ipod)
@@ -142,8 +141,6 @@ pkg_setup() {
 
 src_prepare() {
 	gnome2_src_prepare
-	# https://bugzilla.gnome.org/show_bug.cgi?id=694981
-	epatch "${FILESDIR}/${PN}-port-to-libsecret.patch"
 	echo > py-compile
 }
 
