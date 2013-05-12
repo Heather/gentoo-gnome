@@ -4,8 +4,10 @@
 
 EAPI="5"
 GCONF_DEBUG="no"
+VALA_USE_DEPEND="vapigen"
+VALA_MIN_API_VERSION="0.18"
 
-inherit linux-info gnome2
+inherit linux-info gnome2 vala
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -55,7 +57,7 @@ DEPEND="${RDEPEND}
 
 if [[ ${PV} = 9999 ]]; then
 	DEPEND="${DEPEND}
-		>=dev-lang/vala-0.17.2:0.18[vapigen]
+		$(vala_depend)
 		sys-libs/libosinfo[introspection,vala]
 		app-emulation/libvirt-glib[introspection,vala]
 		net-libs/gtk-vnc[introspection,vala]
@@ -77,14 +79,13 @@ src_prepare() {
 		-i configure.ac configure || die
 
 	gnome2_src_prepare
+	vala_src_prepare
 }
 
 src_configure() {
 	DOCS="AUTHORS README NEWS THANKS TODO"
 	gnome2_src_configure \
-		--disable-strict-cc \
-		VALAC=$(type -P valac-0.18) \
-		VAPIGEN=$(type -P vapigen-0.18)
+		--disable-strict-cc
 }
 
 pkg_postinst() {
