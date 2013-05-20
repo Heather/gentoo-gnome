@@ -1,11 +1,11 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
 EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
-PYTHON_COMPAT=( python2_{5,6,7} )
+PYTHON_COMPAT=( python2_{6,7} )
 
 inherit autotools eutils gnome2 python-single-r1
 if [[ ${PV} = 9999 ]]; then
@@ -36,7 +36,7 @@ RDEPEND="
 	>=dev-libs/libxslt-1.1.23
 	python? (
 		${PYTHON_DEPS}
-		>=dev-python/pygtk-2.6:2 )
+		>=dev-python/pygtk-2.6:2[${PYTHON_USEDEP}] )
 	eds? (
 		>=gnome-extra/evolution-data-server-3.6
 		>=mail-client/evolution-3.6 )"
@@ -58,17 +58,8 @@ src_prepare() {
 	# Find python in a faster way, bug #344231, upstream bug #654044
 	epatch "${FILESDIR}"/0001-Speed-up-python-path-detection.patch
 
-	# Fix build failures
-	epatch "${FILESDIR}"/0002-Fix-build-failures-with-Werror.patch
-
-	# Switch from GValueArray to GArray
-	epatch "${FILESDIR}"/0003-Port-GValueArray-to-GArray.patch
-
 	# Fix build with eds-3.6
-	epatch "${FILESDIR}"/0004-Fix-build-failure-with-evolution-data-server-3.6.patch
-
-	# Fix eautoreconf failures
-	epatch "${FILESDIR}"/0005-Run-autoupdate.patch
+	epatch "${FILESDIR}"/0002-Fix-build-failure-with-evolution-data-server-3.6.patch
 
 	[[ ${PV} != 9999 ]] && eautoreconf
 
@@ -80,15 +71,15 @@ src_prepare() {
 
 src_configure() {
 	# FIXME: disable eds backend for now, it fails, upstream bug #654005
-	G2CONF="${G2CONF}
-		$(use_enable python)
-		$(use_enable python python-plugin)
-		$(use_enable eds)
-		--disable-eds-backend
-		--with-database=no
-		--disable-update-mimedb"
+	gnome2_src_configure \
+		$(use_enable python) \
+		$(use_enable python python-plugin) \
+		$(use_enable eds) \
+		--disable-eds-backend \
+		--with-database=no \
+		--disable-update-mimedb \
+		--enable-compile-warnings=yes
 		#$(use_enable eds eds-backend)
-	gnome2_src_configure
 }
 
 src_install() {
