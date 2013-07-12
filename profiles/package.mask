@@ -5,3 +5,5 @@
 #
 # NOTE: Please add your entry at the top!
 #
+>=gnome-extra/evolution-data-server-3.9
+>=mail-client/evolution-3.9
