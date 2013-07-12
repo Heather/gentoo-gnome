@@ -3,25 +3,25 @@
 # $Header: $
 
 EAPI="5"
+PYTHON_COMPAT=( python{2_7,3,3} )
 GCONF_DEBUG="no"
-GNOME2_LA_PUNT="yes"
 VALA_MIN_API_VERSION="0.18"
 VALA_USE_DEPEND="vapigen"
 # No PYTHON_DEPEND, python is only needed at build time
 
-inherit db-use eutils flag-o-matic gnome2 python vala versionator virtualx
+inherit db-use eutils flag-o-matic gnome2 python-any-r1 vala versionator virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
 
 DESCRIPTION="Evolution groupware backend"
-HOMEPAGE="http://projects.gnome.org/evolution/"
+HOMEPAGE="http://projects.gnome.org/evolution/arch.shtml"
 
 # Note: explicitly "|| ( LGPL-2 LGPL-3 )", not "LGPL-2+".
 LICENSE="|| ( LGPL-2 LGPL-3 ) BSD Sleepycat"
-SLOT="0/43" # subslot = libcamel-1.2 soname version
+SLOT="0/44" # subslot = libcamel-1.2 soname version
 # TODO: Ubuntu online accounts (libaccounts-glib, rest, json-glib, libsignon-glib )
-IUSE="api-doc-extras +gnome-online-accounts +google +gtk +introspection ipv6 ldap kerberos vala +weather"
+IUSE="api-doc-extras +gnome-online-accounts +gtk +introspection ipv6 ldap kerberos vala +weather"
 REQUIRED_USE="vala? ( introspection )"
 
 if [[ ${PV} = 9999 ]]; then
@@ -33,30 +33,29 @@ else
 fi
 
 RDEPEND="
-	>=app-crypt/gcr-3.4
-    >=app-crypt/libsecret-0.5
+	>=dev-libs/glib-2.34:2
 	>=dev-db/sqlite-3.5:=
-    >=dev-libs/glib-2.34:2
+	>=dev-libs/libgdata-0.10:=
+	>=app-crypt/libsecret-0.5
 	>=dev-libs/libical-0.43:=
 	>=net-libs/libsoup-2.40.3:2.4
 	>=dev-libs/libxml2-2
 	>=sys-libs/db-4:=
 	>=dev-libs/nspr-4.4:=
 	>=dev-libs/nss-3.9:=
+	>=app-crypt/gcr-3.4
 
 	sys-libs/zlib:=
 	virtual/libiconv
 
-	gnome-online-accounts? ( >=net-libs/gnome-online-accounts-3.2 )
-	google? ( >=dev-libs/libgdata-0.10:= )
 	gtk? ( >=x11-libs/gtk+-3.2:3 )
+	gnome-online-accounts? ( >=net-libs/gnome-online-accounts-3.8 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.12 )
 	kerberos? ( virtual/krb5:= )
 	ldap? ( >=net-nds/openldap-2:= )
 	weather? ( >=dev-libs/libgweather-3.5:2= )
 "
 DEPEND="${RDEPEND}
-	=dev-lang/python-2*
 	dev-util/fix-la-relink-command
 	dev-util/gperf
 	>=dev-util/gtk-doc-am-1.9
@@ -71,20 +70,11 @@ DEPEND="${RDEPEND}
 [[ ${PV} = 9999 ]] && DEPEND="${DEPEND}
 	doc? ( >=dev-util/gtk-doc-1.14 )"
 
-# FIXME
-RESTRICT="test"
-
 pkg_setup() {
-	python_set_active_version 2
-	python_pkg_setup
+	python-any-r1_pkg_setup
 }
 
 src_prepare() {
-	DOCS="ChangeLog MAINTAINERS NEWS TODO"
-
-	# https://bugzilla.gnome.org/show_bug.cgi?id=693101
-	epatch "${FILESDIR}/${P}-fix-imapx-redownload.patch"
-
 	gnome2_src_prepare
 	use vala && vala_src_prepare
 
@@ -100,13 +90,14 @@ src_configure() {
 		$(use_enable api-doc-extras gtk-doc) \
 		$(use_with api-doc-extras private-docs) \
 		$(use_enable gnome-online-accounts goa) \
-		$(use_enable google) \
+		$(use_enable gtk) \
 		$(use_enable introspection) \
 		$(use_enable ipv6) \
 		$(use_with kerberos krb5 "${EPREFIX}"/usr) \
 		$(use_with ldap openldap) \
 		$(use_enable vala vala-bindings) \
 		$(use_enable weather) \
+		--enable-google \
 		--enable-nntp \
 		--enable-largefile \
 		--enable-smime \
