@@ -3,11 +3,11 @@
 # $Header: $
 
 EAPI="5"
-PYTHON_COMPAT=( python{2_7,3,3} )
 GCONF_DEBUG="no"
+# python3 not really supported, bug #478678
+PYTHON_COMPAT=( python2_7 pypy{1_9,2_0} )
 VALA_MIN_API_VERSION="0.18"
 VALA_USE_DEPEND="vapigen"
-# No PYTHON_DEPEND, python is only needed at build time
 
 inherit db-use eutils flag-o-matic gnome2 python-any-r1 vala versionator virtualx
 if [[ ${PV} = 9999 ]]; then
@@ -19,7 +19,7 @@ HOMEPAGE="http://projects.gnome.org/evolution/arch.shtml"
 
 # Note: explicitly "|| ( LGPL-2 LGPL-3 )", not "LGPL-2+".
 LICENSE="|| ( LGPL-2 LGPL-3 ) BSD Sleepycat"
-SLOT="0/44" # subslot = libcamel-1.2 soname version
+SLOT="0/45" # subslot = libcamel-1.2 soname version
 # TODO: Ubuntu online accounts (libaccounts-glib, rest, json-glib, libsignon-glib )
 IUSE="api-doc-extras +gnome-online-accounts +gtk +introspection ipv6 ldap kerberos vala +weather"
 REQUIRED_USE="vala? ( introspection )"
