@@ -36,6 +36,7 @@ COMMON_DEPEND="
 	>=dev-libs/glib-2.34:2
 	>=x11-libs/cairo-1.9.15:=[glib]
 	>=x11-libs/gtk+-3.4.0:3
+	>=x11-libs/gdk-pixbuf-2.24
 	>=gnome-base/gnome-desktop-2.91.3:3=
 	>=gnome-base/gsettings-desktop-schemas-2.91.92
 	>=media-libs/libcanberra-0.25[gtk3]
