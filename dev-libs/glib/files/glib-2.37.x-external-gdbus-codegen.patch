@@ -1,0 +1,90 @@
+diff -Nuar -Naur glib-2.37.6.orig/configure.ac glib-2.37.6/configure.ac
+--- glib-2.37.6.orig/configure.ac	2013-08-30 13:33:15.630308233 +0400
++++ glib-2.37.6/configure.ac	2013-08-30 13:43:51.872309588 +0400
+@@ -378,14 +378,14 @@
+ # option to specify python interpreter to use; this just sets $PYTHON, so that
+ # we will fallback to reading $PYTHON if --with-python is not given, and
+ # python.m4 will get the expected input
+-AC_ARG_WITH(python,
+-            AS_HELP_STRING([--with-python=PATH],
+-                           [Path to Python interpreter; searches $PATH if only a program name is given; if not given, searches for a few standard names such as "python3" or "python2"]),
+-            [PYTHON="$withval"], [])
+-if test x"$PYTHON" = xyes; then
+-  AC_MSG_ERROR([--with-python option requires a path or program argument])
+-fi
+-AM_PATH_PYTHON(2.5,,PYTHON="/usr/bin/env python2.5")
++#AC_ARG_WITH(python,
++#            AS_HELP_STRING([--with-python=PATH],
++#                           [Path to Python interpreter; searches $PATH if only a program name is given; if not given, searches for a few standard names such as "python3" or "python2"]),
++#            [PYTHON="$withval"], [])
++#if test x"$PYTHON" = xyes; then
++#  AC_MSG_ERROR([--with-python option requires a path or program argument])
++#fi
++#AM_PATH_PYTHON(2.5,,PYTHON="/usr/bin/env python2.5")
+ 
+ 
+ dnl ***********************
+@@ -3783,7 +3783,6 @@
+ gobject/tests/Makefile
+ gthread/Makefile
+ gio/Makefile
+-gio/gdbus-2.0/codegen/Makefile
+ gio/gdbus-2.0/codegen/config.py
+ gio/gnetworking.h
+ gio/xdgmime/Makefile
+diff -Nuar -Naur glib-2.37.6.orig/docs/reference/gio/Makefile.am glib-2.37.6/docs/reference/gio/Makefile.am
+--- glib-2.37.6.orig/docs/reference/gio/Makefile.am	2013-08-30 13:33:15.030315776 +0400
++++ glib-2.37.6/docs/reference/gio/Makefile.am	2013-08-30 13:45:32.561043759 +0400
+@@ -151,8 +151,7 @@
+ 	glib-compile-resources.1	\
+ 	gsettings.1		\
+ 	gresource.1		\
+-	gdbus.1			\
+-	gdbus-codegen.1
++	gdbus.1
+ 
+ XSLTPROC_FLAGS = \
+         --nonet \
+diff -Nuar -Naur glib-2.37.6.orig/gio/Makefile.am glib-2.37.6/gio/Makefile.am
+--- glib-2.37.6.orig/gio/Makefile.am	2013-08-30 13:33:15.590308736 +0400
++++ glib-2.37.6/gio/Makefile.am	2013-08-30 13:46:59.339952801 +0400
+@@ -1,6 +1,6 @@
+ include $(top_srcdir)/glib.mk
+ 
+-SUBDIRS = gdbus-2.0/codegen
++SUBDIRS =
+ 
+ if OS_UNIX
+ SUBDIRS += xdgmime
+diff -Nuar -Naur glib-2.37.6.orig/gio/tests/gdbus-object-manager-example/Makefile.am glib-2.37.6/gio/tests/gdbus-object-manager-example/Makefile.am
+--- glib-2.37.6.orig/gio/tests/gdbus-object-manager-example/Makefile.am	2013-08-30 13:33:15.610308485 +0400
++++ glib-2.37.6/gio/tests/gdbus-object-manager-example/Makefile.am	2013-08-30 13:49:47.357840530 +0400
+@@ -11,10 +11,8 @@
+ 	gdbus-example-objectmanager-generated-org.gtk.GDBus.Example.ObjectManager.Cat.xml	\
+ 	$(NULL)
+ 
+-$(GDBUS_GENERATED) : gdbus-example-objectmanager.xml Makefile $(top_builddir)/gio/gdbus-2.0/codegen/gdbus-codegen
+-	$(AM_V_GEN) UNINSTALLED_GLIB_SRCDIR=$(top_srcdir) \
+-		UNINSTALLED_GLIB_BUILDDIR=$(top_builddir) \
+-		$(PYTHON) $(top_builddir)/gio/gdbus-2.0/codegen/gdbus-codegen \
++$(GDBUS_GENERATED) : gdbus-example-objectmanager.xml Makefile
++	$(AM_V_GEN) gdbus-codegen \
+ 		--interface-prefix org.gtk.GDBus.Example.ObjectManager. \
+ 		--c-namespace Example \
+ 		--c-generate-object-manager \
+diff -Nuar -Naur glib-2.37.6.orig/gio/tests/Makefile.am glib-2.37.6/gio/tests/Makefile.am
+--- glib-2.37.6.orig/gio/tests/Makefile.am	2013-08-30 13:33:15.600308610 +0400
++++ glib-2.37.6/gio/tests/Makefile.am	2013-08-30 13:48:38.878701429 +0400
+@@ -358,10 +358,8 @@
+ nodist_gdbus_test_codegen_SOURCES        = gdbus-test-codegen-generated.c gdbus-test-codegen-generated.h
+ 
+ gdbus-test-codegen.o: gdbus-test-codegen-generated.h
+-gdbus-test-codegen-generated.h gdbus-test-codegen-generated.c: test-codegen.xml Makefile $(top_builddir)/gio/gdbus-2.0/codegen/gdbus-codegen
+-	$(AM_V_GEN) UNINSTALLED_GLIB_SRCDIR=$(top_srcdir) \
+-		UNINSTALLED_GLIB_BUILDDIR=$(top_builddir) \
+-		$(PYTHON) $(top_builddir)/gio/gdbus-2.0/codegen/gdbus-codegen \
++gdbus-test-codegen-generated.h gdbus-test-codegen-generated.c : test-codegen.xml Makefile
++	$(AM_V_GEN) gdbus-codegen \
+ 		--interface-prefix org.project. \
+ 		--generate-c-code gdbus-test-codegen-generated \
+ 		--c-generate-object-manager \
