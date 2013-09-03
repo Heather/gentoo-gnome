@@ -125,8 +125,7 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-defaults.patch"
 
 	# Fix automagic gnome-bluetooth dep, bug #398145
-	#FIXME
-	#epatch "${FILESDIR}/${PN}-3.7.90-bluetooth-flag.patch"
+	epatch "${FILESDIR}/${PN}-3.9.90-bluetooth-flag.patch"
 
 	# Make networkmanager optional, bug #398593
 	#FIXME
