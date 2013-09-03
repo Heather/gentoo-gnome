@@ -128,8 +128,7 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-3.9.90-bluetooth-flag.patch"
 
 	# Make networkmanager optional, bug #398593
-	#FIXME
-	#epatch "${FILESDIR}/${PN}-3.8.3-networkmanager-flag.patch"
+	epatch "${FILESDIR}/${PN}-3.9.90-networkmanager-flag.patch"
 
 	# Re-lock the screen if we're restarted from a previously crashed shell (from 'master')
 	#FIXME
