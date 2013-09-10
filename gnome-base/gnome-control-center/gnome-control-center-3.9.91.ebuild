@@ -28,10 +28,10 @@ QA_CONFIGURE_OPTIONS=".*"
 #
 # kerberos unfortunately means mit-krb5; build fails with heimdal
 COMMON_DEPEND="
-	>=dev-libs/glib-2.37.1:2
+	>=dev-libs/glib-2.37.7:2
 	>=x11-libs/gdk-pixbuf-2.23.0:2
 	>=x11-libs/gtk+-3.7.10:3
-	>=gnome-base/gsettings-desktop-schemas-3.7.2.2
+	>=gnome-base/gsettings-desktop-schemas-3.9.91
 	>=gnome-base/gnome-desktop-3.9.90:3=
 	>=gnome-base/gnome-settings-daemon-3.8.3[colord?,policykit]
 	>=gnome-base/libgnomekbd-2.91.91
