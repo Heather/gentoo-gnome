@@ -48,14 +48,14 @@ COMMON_DEPEND="
 	>=dev-libs/libwacom-0.7
 	x11-drivers/xf86-input-wacom
 
+	>=sci-geosciences/geocode-glib-0.99.3
+
 	colord? ( >=x11-misc/colord-0.1.27:= )
 	cups? ( >=net-print/cups-1.4[dbus] )
 	i18n? ( >=app-i18n/ibus-1.4.99 )
 	packagekit? ( >=app-admin/packagekit-base-0.7.4 )
 	smartcard? ( >=dev-libs/nss-3.11.2 )
 	udev? ( virtual/udev[gudev] )
-
-	>=geocode-glib-0.99.3
 "
 # Themes needed by g-s-d, gnome-shell, gtk+:3 apps to work properly
 # <gnome-color-manager-3.1.1 has file collisions with g-s-d-3.1.x
