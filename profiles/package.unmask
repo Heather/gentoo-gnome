@@ -1,9 +1,12 @@
 ####################################################################
-# $Header: /var/cvsroot/gentoo-x86/profiles/package.mask,v 1.6869 2007/02/26 09:10:56 opfer Exp $
+# $Header:  $
 # When you add an entry to this file, add your name, the date, and an
 # explanation of why something is getting masked
 #
 # NOTE: Please add your entry at the top!
 #
->=gnome-extra/evolution-data-server-3.9
->=mail-client/evolution-3.9
+
+
+#Unmasks for gnome-light 3.9.91
+=sci-geosciences/geocode-glib-0.99.3
+=app-text/poppler-0.24.1
