@@ -13,7 +13,7 @@ HOMEPAGE="http://www.clutter-project.org/"
 
 LICENSE="LGPL-2.1+ FDL-1.1+"
 SLOT="1.0/12" # subslot = .so version
-IUSE="doc examples +introspection +opengl gles2 +pango profile"
+IUSE="doc examples +introspection +opengl gles2 +pango"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86"
 
 # XXX: need uprof for optional profiling support
@@ -66,7 +66,8 @@ src_configure() {
 		$(usex gles2 --with-default-driver=$(usex opengl gl gles2)) \
 		$(use_enable introspection) \
 		$(use_enable pango cogl-pango) \
-		$(use_enable profile)
+		--disable-profile
+	#$(use_enable profile) -- missing uprof
 }
 
 src_test() {
