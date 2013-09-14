@@ -50,7 +50,8 @@ disable_python_for_x86() {
 		cd ${BUILD_DIR}
 
 		# disable configure checks
-		epatch ${FILESDIR}/disable_python.patch
+		#FIXME
+		#epatch ${FILESDIR}/disable_python.patch
 
 		# disable python bindings
 		sed -i -e "s/include Makefile-giscanner.am//" Makefile.am || die "sed failed"
