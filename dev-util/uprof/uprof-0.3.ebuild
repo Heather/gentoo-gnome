@@ -23,7 +23,6 @@ DEPEND="${RDEPEND}"
 S="${WORKDIR}/UProf-${PV}"
 
 AUTOTOOLS_IN_SOURCE_BUILD=1
-MAKEOPTS+=" -j1"
 
 src_prepare() {
 	epatch "${FILESDIR}/disable-tests.patch"
