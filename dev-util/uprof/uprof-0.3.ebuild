@@ -23,9 +23,9 @@ DEPEND="${RDEPEND}"
 S="${WORKDIR}/UProf-${PV}"
 
 AUTOTOOLS_IN_SOURCE_BUILD=1
+AUTOTOOLS_AUTORECONF=1
 
 src_prepare() {
 	epatch "${FILESDIR}/disable-tests.patch"
-	autotools-utils_autoreconf
 	autotools-utils_src_prepare
 }
