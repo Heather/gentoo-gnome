@@ -10,7 +10,7 @@ HOMEPAGE="http://freedesktop.org/wiki/Software/GeoClue"
 SRC_URI="http://cgit.freedesktop.org/geoclue/snapshot/${P}.tar.gz"
 
 LICENSE="LGPL-2"
-SLOT="0"
+SLOT="2"
 KEYWORDS="alpha amd64 arm ia64 ppc ppc64 sparc x86 ~amd64-fbsd"
 IUSE="connman geonames gps gsmloc gtk hostip manual networkmanager nominatim plazes skyhook static-libs yahoo-geo"
 

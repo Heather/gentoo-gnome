@@ -44,7 +44,7 @@ RDEPEND="
 	x11-libs/libXrender
 	>=x11-libs/gtk+-2.24.10:2
 
-	geoloc? ( app-misc/geoclue )
+	geoloc? ( app-misc/geoclue:0 )
 	gstreamer? (
 		>=media-libs/gstreamer-1.0.3:1.0
 		>=media-libs/gst-plugins-base-1.0.3:1.0 )
