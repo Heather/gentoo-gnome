@@ -1,10 +1,9 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/gdk-pixbuf/gdk-pixbuf-2.28.2.ebuild,v 1.3 2013/09/03 21:59:11 eva Exp $
+# $Header: $
 
 EAPI="5"
-
-inherit gnome.org gnome2-utils multilib libtool
+inherit gnome.org libtool multilib-minimal
 
 DESCRIPTION="Image loading library for GTK+"
 HOMEPAGE="http://www.gtk.org/"
@@ -15,13 +14,13 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86
 IUSE="+X debug +introspection jpeg jpeg2k tiff test"
 
 COMMON_DEPEND="
-	>=dev-libs/glib-2.34.0:2
-	>=media-libs/libpng-1.4:0=
-	introspection? ( >=dev-libs/gobject-introspection-0.9.3 )
-	jpeg? ( virtual/jpeg:0= )
-	jpeg2k? ( media-libs/jasper:= )
-	tiff? ( >=media-libs/tiff-3.9.2:0= )
-	X? ( x11-libs/libX11 )
+	>=dev-libs/glib-2.34.0:2[${MULTILIB_USEDEP}]
+	>=media-libs/libpng-1.4:0=[${MULTILIB_USEDEP}]
+	introspection? ( >=dev-libs/gobject-introspection-0.9.3[${MULTILIB_USEDEP}] )
+	jpeg? ( virtual/jpeg:=[${MULTILIB_USEDEP}] )
+	jpeg2k? ( media-libs/jasper:=[${MULTILIB_USEDEP}] )
+	tiff? ( >=media-libs/tiff-3.9.2:0=[${MULTILIB_USEDEP}] )
+	X? ( x11-libs/libX11[${MULTILIB_USEDEP}] )
 "
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/gtk-doc-am-1.11
@@ -46,9 +45,11 @@ src_prepare() {
 	sed -e 's:l in libpng16:l in libpng libpng16:' -i configure || die
 	default
 	elibtoolize # for Darwin modules, bug #????
+
+	multilib_copy_sources
 }
 
-src_configure() {
+multilib_src_configure() {
 	# png always on to display icons
 	econf \
 		$(usex debug --enable-debug=yes "") \
@@ -60,22 +61,32 @@ src_configure() {
 		--with-libpng
 }
 
-src_install() {
+multilib_src_install() {
 	default
 	prune_libtool_files --modules
-}
 
-pkg_preinst() {
-	gnome2_gdk_pixbuf_savelist
+	if multilib_is_native_abi; then
+		# Move files back.
+		if path_exists -o "${ED}"/tmp/gdk-pixbuf-query-loaders.*; then
+			mv "${ED}"/tmp/gdk-pixbuf-query-loaders.* "${ED}"/usr/bin || die
+		fi
+	else
+		# Preserve ABI-variant of gdk-pixbuf-query-loaders,
+		# then drop all the executables
+		mkdir -p "${ED}"/tmp || die
+		mv "${ED}"/usr/bin/gdk-pixbuf-query-loaders "${ED}"/tmp/gdk-pixbuf-query-loaders.${ABI} || die
+		rm -r "${ED}"/usr/bin || die
+	fi
 }
 
 pkg_postinst() {
 	# causes segfault if set, see bug 375615
 	unset __GL_NO_DSO_FINALIZER
 
-	gnome2_gdk_pixbuf_update
+	multilib_foreach_abi gdk_pixbuf_query_loaders
 
-	# Migration snippet for when this was handled by gtk+
+	# FIXME: use subslots to get rebuilds when really needed
+	# Every major version bump???
 	if [ -e "${EROOT}"usr/lib/gtk-2.0/2.*/loaders ]; then
 		elog "You need to rebuild ebuilds that installed into" "${EROOT}"usr/lib/gtk-2.0/2.*/loaders
 		elog "to do that you can use qfile from portage-utils:"
@@ -83,8 +94,20 @@ pkg_postinst() {
 	fi
 }
 
-pkg_postrm() {
-	if [[ -z ${REPLACED_BY_VERSIONS} ]]; then
-		rm -f "${EROOT}"usr/$(get_libdir)/${PN}-2.0/2.10.0/loaders.cache
+gdk_pixbuf_query_loaders() {
+	tmp_file=$(mktemp -t tmp_gdk_pixbuf_ebuild.XXXXXXXXXX)
+	# be atomic!
+
+	if multilib_is_native_abi; then
+		gdk-pixbuf-query-loaders > "${tmp_file}"
+	else
+		gdk-pixbuf-query-loaders.${ABI} > "${tmp_file}"
 	fi
+
+	if [ "${?}" = "0" ]; then
+		cat "${tmp_file}" > "${EROOT}usr/$(get_libdir)/gdk-pixbuf-2.0/2.10.0/loaders.cache"
+	else
+		ewarn "Cannot update loaders.cache, gdk-pixbuf-query-loaders failed to run"
+	fi
+	rm "${tmp_file}"
 }
