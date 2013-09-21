@@ -8,5 +8,5 @@
 
 
 #Unmasks for gnome-light 3.9.91
-=sci-geosciences/geocode-glib-0.99.3
+sci-geosciences/geocode-glib
 =app-text/poppler-0.24.1
