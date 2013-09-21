@@ -49,7 +49,7 @@ COMMON_DEPEND="
 	x11-drivers/xf86-input-wacom
 
 	>=sci-geosciences/geocode-glib-0.99.3
-	>=app-misc/geoclue-1.99.4
+	>=app-misc/geoclue-1.99.4:2
 
 	colord? ( >=x11-misc/colord-0.1.27:= )
 	cups? ( >=net-print/cups-1.4[dbus] )
