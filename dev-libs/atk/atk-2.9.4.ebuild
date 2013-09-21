@@ -2,11 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
-GNOME2_LA_PUNT="yes"
 
-inherit gnome2
+inherit gnome2 multilib-minimal
 
 DESCRIPTION="GTK+ & GNOME Accessibility Toolkit"
 HOMEPAGE="http://projects.gnome.org/accessibility/"
@@ -14,20 +13,20 @@ HOMEPAGE="http://projects.gnome.org/accessibility/"
 LICENSE="LGPL-2+"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~arm-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris ~x86-winnt"
-IUSE="+introspection nls"
+IUSE="+introspection nls test"
 
-RDEPEND=">=dev-libs/glib-2.31.2:2
-	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )"
+RDEPEND="
+	>=dev-libs/glib-2.31.2:2[${MULTILIB_USEDEP}]
+	introspection? ( >=dev-libs/gobject-introspection-0.6.7[${MULTILIB_USEDEP}] )
+"
 DEPEND="${RDEPEND}
 	>=dev-lang/perl-5
 	dev-util/gtk-doc-am
 	virtual/pkgconfig
-	nls? ( sys-devel/gettext )"
+	nls? ( sys-devel/gettext )
+"
 
 src_prepare() {
-	G2CONF="${G2CONF} $(use_enable introspection)"
-	DOCS="AUTHORS ChangeLog NEWS README"
-
 	gnome2_src_prepare
 
 	if ! use test; then
@@ -35,4 +34,10 @@ src_prepare() {
 		sed 's/^\(SUBDIRS =.*\)tests\(.*\)$/\1\2/' -i Makefile.am Makefile.in \
 			|| die "sed failed"
 	fi
+
+	multilib_copy_sources
+}
+
+multilib_src_configure() {
+	gnome2_src_configure $(use_enable introspection)
 }
