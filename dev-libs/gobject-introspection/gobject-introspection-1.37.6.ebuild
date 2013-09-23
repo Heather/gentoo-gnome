@@ -7,7 +7,7 @@ GCONF_DEBUG="no"
 PYTHON_COMPAT=( python2_7 )
 PYTHON_REQ_USE="xml"
 
-inherit eutils gnome2 python-single-r1 toolchain-funcs
+inherit eutils gnome2 python-single-r1 toolchain-funcs autotools multilib-minimal
 
 DESCRIPTION="Introspection infrastructure for generating gobject library bindings for various languages"
 HOMEPAGE="http://live.gnome.org/GObjectIntrospection/"
@@ -21,10 +21,9 @@ REQUIRED_USE="test? ( cairo )"
 
 RDEPEND="
 	>=dev-libs/gobject-introspection-common-${PV}
-	>=dev-libs/glib-2.37:2
+	>=dev-libs/glib-2.37:2[${MULTILIB_USEDEP}]
 	doctool? ( dev-python/mako )
-	virtual/libffi:=
-	!<dev-lang/vala-0.20.0
+	virtual/libffi:=[${MULTILIB_USEDEP}]
 "
 # Wants real bison, not virtual/yacc
 DEPEND="${RDEPEND}
@@ -32,12 +31,36 @@ DEPEND="${RDEPEND}
 	sys-devel/bison
 	sys-devel/flex
 	virtual/pkgconfig
+	x11-proto/xproto[${MULTILIB_USEDEP}]
 "
 # PDEPEND to avoid circular dependencies, bug #391213
-PDEPEND="cairo? ( x11-libs/cairo[glib] )"
+PDEPEND="cairo? ( x11-libs/cairo[glib,${MULTILIB_USEDEP}] )"
 
 pkg_setup() {
 	python-single-r1_pkg_setup
+}
+
+disable_python_for_x86() {
+	# x86 build on AMD64 fails due to missing 32bit python. We just remove the
+	# Python parts and those that depend on it as they are not required.
+	
+	if use amd64 && [ "$ABI" == "x86" ]; then
+		cd ${BUILD_DIR}
+		
+		# disable configure checks
+		epatch ${FILESDIR}/${P}-disable_python.patch
+		
+		# disable python bindings
+		sed -i "s/include Makefile-giscanner.am//" Makefile.am || die "sed failed"
+		
+		# disable stuff that doesn't get installed anyways
+		sed -i "s/include Makefile-tools.am//" Makefile.am || die "sed failed"
+		sed -i "s/include Makefile-gir.am//" Makefile.am || die "sed failed"
+		
+		# disable tests
+		sed -i "s/SUBDIRS = . docs tests/SUBDIRS = . docs/" Makefile.am || die "sed failed"
+		eautoreconf
+	fi
 }
 
 src_prepare() {
@@ -56,8 +79,12 @@ src_prepare() {
 		export CAIRO_LIBS="-lcairo -lcairo-gobject"
 		export CAIRO_CFLAGS="-I${EPREFIX}/usr/include/cairo"
 	fi
+	
+	multilib_copy_sources
+	multilib_foreach_abi disable_python_for_x86
 }
-src_configure(){
+
+multilib_src_configure(){
 	gnome2_src_configure \
 		--disable-static \
 		YACC=$(type -p yacc) \
@@ -65,9 +92,11 @@ src_configure(){
 		$(use_enable doctool)
 }
 
-src_install() {
+multilib_src_install() {
 	gnome2_src_install
+}
 
+multilib_src_install_all() {
 	# Prevent collision with gobject-introspection-common
 	rm -v "${ED}"usr/share/aclocal/introspection.m4 \
 		"${ED}"usr/share/gobject-introspection-1.0/Makefile.introspection || die
