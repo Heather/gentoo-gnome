@@ -7,6 +7,8 @@
 #
 
 
-#Unmasks for gnome-light 3.9.91
+#Unmasks for gnome-light >=3.9.90
+
 sci-geosciences/geocode-glib
 =app-text/poppler-0.24.1
+=media-libs/mesa-9.2.0-r1
