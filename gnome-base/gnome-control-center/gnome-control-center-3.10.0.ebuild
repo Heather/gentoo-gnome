@@ -14,7 +14,7 @@ HOMEPAGE="https://git.gnome.org/browse/gnome-control-center/"
 LICENSE="GPL-2+"
 SLOT="2"
 
-IUSE="+bluetooth +colord +cups +gnome-online-accounts +i18n input_devices_wacom kerberos modemmanager +socialweb v4l"
+IUSE="+colord +cups +gnome-online-accounts +i18n input_devices_wacom kerberos +socialweb v4l"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 
 # False positives caused by nested configure scripts
@@ -49,7 +49,7 @@ COMMON_DEPEND="
 	>=x11-libs/libnotify-0.7.3:0=
 
 	>=gnome-extra/nm-applet-0.9.7.995
-	>=net-misc/networkmanager-0.9.8[modemmanager?]
+	>=net-misc/networkmanager-0.9.8[modemmanager]
 
 	virtual/opengl
 	x11-apps/xmodmap
@@ -57,7 +57,7 @@ COMMON_DEPEND="
 	x11-libs/libXxf86misc
 	>=x11-libs/libXi-1.2
 
-	bluetooth? ( >=net-wireless/gnome-bluetooth-3.5.5:= )
+	>=net-wireless/gnome-bluetooth-3.5.5:=
 	colord? ( >=x11-misc/colord-0.1.29 )
 	cups? (
 		>=net-print/cups-1.4[dbus]
@@ -65,7 +65,7 @@ COMMON_DEPEND="
 	gnome-online-accounts? ( >=net-libs/gnome-online-accounts-3.9.90 )
 	i18n? ( >=app-i18n/ibus-1.4.99 )
 	kerberos? ( app-crypt/mit-krb5 )
-	modemmanager? ( >=net-misc/modemmanager-0.7.990 )
+	>=net-misc/modemmanager-0.7.990
 	socialweb? ( net-libs/libsocialweb )
 	v4l? (
 		media-libs/gstreamer:1.0
@@ -121,21 +121,12 @@ src_prepare() {
 	sed -i "s|^completiondir =.*|completiondir = $(get_bashcompdir)|" \
 		shell/Makefile.am || die "sed completiondir failed"
 
-	# Make some panels optional; requires eautoreconf
-	# https://bugzilla.gnome.org/697478
-	#FIXME
-	#epatch "${FILESDIR}/${PN}-3.8.0-optional-r1.patch"
-
 	# https://bugzilla.gnome.org/686840
 	epatch "${FILESDIR}/${PN}-3.8.4-optional-kerberos.patch"
 
 	# Fix some absolute paths to be appropriate for Gentoo
 	epatch "${FILESDIR}/${PN}-3.8.0-paths-makefiles.patch"
 	epatch "${FILESDIR}/${PN}-3.8.0-paths.patch"
-
-	# Make modemmanager optional, bug 463852, upstream bug #700145
-	#FIXME
-	#epatch "${FILESDIR}/${PN}-3.8.1.5-optional-modemmanager.patch"
 
 	epatch_user
 	eautoreconf
@@ -151,20 +142,15 @@ src_prepare() {
 }
 
 src_configure() {
-	# FIXME: add $(use_with kerberos) support?
-#	! use kerberos && G2CONF+=" KRB5_CONFIG=$(type -P true)"
-
 	gnome2_src_configure \
 		--disable-update-mimedb \
 		--disable-static \
 		--enable-documentation \
-		$(use_enable bluetooth) \
 		$(use_enable colord color) \
 		$(use_enable cups) \
 		$(use_enable gnome-online-accounts goa) \
 		$(use_enable i18n ibus) \
 		$(use_enable kerberos) \
-		$(use_enable modemmanager) \
 		$(use_with socialweb libsocialweb) \
 		$(use_with v4l cheese) \
 		$(use_enable input_devices_wacom wacom)
