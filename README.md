@@ -1,3 +1,6 @@
+
+![logo](![Alt text](/ss.png "s"))
+
 * This is the experimental gnome overlay, USE AT YOUR OWN RISK.
 * It will probably break your deptree, your system, and your backbone.
 * For bugs, head over to #gentoo-desktop @ FreeNode, or https://bugs.gentoo.org/
