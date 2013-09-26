@@ -14,7 +14,7 @@ HOMEPAGE="http://live.gnome.org/GnomeShell"
 
 LICENSE="GPL-2+ LGPL-2+"
 SLOT="0"
-IUSE="+bluetooth +i18n +networkmanager"
+IUSE="+i18n"
 KEYWORDS="~amd64 ~arm ~ppc ~ppc64 ~x86"
 
 # libXfixes-5.0 needed for pointer barriers
@@ -46,7 +46,7 @@ COMMON_DEPEND="
 	>=net-libs/telepathy-glib-0.19[introspection]
 	>=sys-auth/polkit-0.100[introspection]
 	>=x11-libs/libXfixes-5.0
-	>=x11-wm/mutter-3.8.3[introspection]
+	>=x11-wm/mutter-${PV}[introspection]
 	>=x11-libs/startup-notification-0.11
 
 	${PYTHON_DEPS}
@@ -64,8 +64,8 @@ COMMON_DEPEND="
 	x11-libs/pango[introspection]
 	x11-apps/mesa-progs
 
-	bluetooth? ( >=net-wireless/gnome-bluetooth-3.5[introspection] )
-	networkmanager? ( >=net-misc/networkmanager-0.9.6[introspection] )
+	>=net-wireless/gnome-bluetooth-3.5[introspection]
+	>=net-misc/networkmanager-0.9.6[introspection]
 "
 # Runtime-only deps are probably incomplete and approximate.
 # Introspection deps generated using:
@@ -91,8 +91,8 @@ RDEPEND="${COMMON_DEPEND}
 	sys-power/upower[introspection]
 
 	>=gnome-base/gnome-session-2.91.91
-	>=gnome-base/gnome-settings-daemon-3.8.3
-	>=gnome-base/gnome-control-center-3.8.3[bluetooth(+)?]
+	>=gnome-base/gnome-settings-daemon-3.9.90
+	>=gnome-base/gnome-control-center-3.9.91
 
 	>=sys-apps/systemd-31
 
@@ -102,9 +102,8 @@ RDEPEND="${COMMON_DEPEND}
 	x11-themes/gnome-icon-theme-symbolic
 
 	i18n? ( >=app-i18n/ibus-1.4.99[dconf,gtk3,introspection] )
-	networkmanager? (
-		net-misc/mobile-broadband-provider-info
-		sys-libs/timezone-data )
+	net-misc/mobile-broadband-provider-info
+	sys-libs/timezone-data
 "
 DEPEND="${COMMON_DEPEND}
 	dev-libs/libxslt
@@ -123,41 +122,7 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 src_prepare() {
 	# Change favorites defaults, bug #479918
 	epatch "${FILESDIR}/${PN}-defaults.patch"
-
-	# Fix automagic gnome-bluetooth dep, bug #398145
-	#FIXME
-	#epatch "${FILESDIR}/${PN}-3.9.90-bluetooth-flag.patch"
-
-	# Make networkmanager optional, bug #398593
-	#FIXME
-	#epatch "${FILESDIR}/${PN}-3.9.90-networkmanager-flag.patch"
-
-	# Re-lock the screen if we're restarted from a previously crashed shell (from 'master')
-	#FIXME
-	#epatch "${FILESDIR}/${PN}-3.8.3-relock-screen.patch"
-
-	# Reset opacity when not animating (from 3.8 branch)
-	#FIXME
-	#epatch "${FILESDIR}/${P}-reset-opacity.patch"
-
-	# Unconditionally allocate scrollbars (from 3.8 branch)
-	#FIXME
-	#epatch "${FILESDIR}/${P}-allocate-scrollbars.patch"
-
-	# ScreenShield: don't allow events through the lock dialog (from 3.8 branch)
-	#FIXME
-	#epatch "${FILESDIR}/${P}-events-lock.patch"
-
-	# Revert "background: fix asynchronous management of background loading operations" (#481918)
-	#FIXME
-	#epatch "${FILESDIR}/${P}-revert-async.patch"
-
-	# AppDisplay/FrequentView: filter out hidden applications (from 'master')
-	#FIXME
-	#epatch "${FILESDIR}/${PN}-3.8.4-nodisplay.patch"
-
 	epatch_user
-
 	eautoreconf
 	gnome2_src_prepare
 }
@@ -167,8 +132,6 @@ src_configure() {
 	gnome2_src_configure \
 		--enable-man \
 		--disable-jhbuild-wrapper-script \
-		$(use_with bluetooth) \
-		$(use_enable networkmanager) \
 		BROWSER_PLUGIN_DIR="${EPREFIX}"/usr/$(get_libdir)/nsbrowser/plugins
 }
 
