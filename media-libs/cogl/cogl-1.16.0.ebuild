@@ -13,7 +13,7 @@ HOMEPAGE="http://www.clutter-project.org/"
 
 LICENSE="LGPL-2.1+ FDL-1.1+"
 SLOT="1.0/12" # subslot = .so version
-IUSE="doc examples +introspection +opengl gles2 +pango profile"
+IUSE="doc examples +introspection +opengl -gles2 +pango profile"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86"
 
 # XXX: need uprof for optional profiling support
@@ -50,6 +50,11 @@ DEPEND="${COMMON_DEPEND}
 src_configure() {
 	# XXX: think about kms-egl, quartz, sdl, wayland
 	# Prefer gl over gles2 if both are selected
+
+	if use gles2 -a use opengl; then
+		ewarn "Note that gles2 has use flag has known problems with opengl use flag"
+	fi
+
 	gnome2_src_configure \
 		--disable-examples-install \
 		--disable-maintainer-flags \
