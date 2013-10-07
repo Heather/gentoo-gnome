@@ -31,10 +31,10 @@ RDEPEND="media-libs/fontconfig[${MULTILIB_USEDEP}]
 	sys-libs/zlib[${MULTILIB_USEDEP}]
 	>=x11-libs/pixman-0.28.0[${MULTILIB_USEDEP}]
 	directfb? ( dev-libs/DirectFB[${MULTILIB_USEDEP}] )
-	gles2? ( media-libs/mesa[gles2,${MULTILIB_USEDEP}] )
+	gles2? ( >=media-libs/mesa-9.2.0-r1[gles2,${MULTILIB_USEDEP}] )
 	glib? ( >=dev-libs/glib-2.28.6:2[${MULTILIB_USEDEP}] )
-	opengl? ( || ( media-libs/mesa[egl,${MULTILIB_USEDEP}] media-libs/opengl-apple ) )
-	openvg? ( media-libs/mesa[openvg,${MULTILIB_USEDEP}] )
+	opengl? ( || ( >=media-libs/mesa-9.2.0-r1[egl,${MULTILIB_USEDEP}] media-libs/opengl-apple ) )
+	openvg? ( >=media-libs/mesa-9.2.0-r1[openvg,${MULTILIB_USEDEP}] )
 	qt4? ( >=dev-qt/qtgui-4.8:4[${MULTILIB_USEDEP}] )
 	X? (
 		>=x11-libs/libXrender-0.6[${MULTILIB_USEDEP}]
@@ -42,7 +42,7 @@ RDEPEND="media-libs/fontconfig[${MULTILIB_USEDEP}]
 		x11-libs/libX11[${MULTILIB_USEDEP}]
 		drm? (
 			>=virtual/udev-136[${MULTILIB_USEDEP}]
-			gallium? ( media-libs/mesa[gallium,${MULTILIB_USEDEP}] )
+			gallium? ( >=media-libs/mesa-9.2.0-r1[gallium,${MULTILIB_USEDEP}] )
 		)
 	)
 	xcb? (
