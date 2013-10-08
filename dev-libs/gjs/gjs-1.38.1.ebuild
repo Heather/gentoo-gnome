@@ -17,11 +17,11 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-fbsd"
 
 RDEPEND="
 	>=dev-libs/glib-2.37.0:2
-	>=dev-libs/gobject-introspection-1.36.0
+	>=dev-libs/gobject-introspection-1.38.0
 
 	dev-libs/dbus-glib
 	sys-libs/readline
-	>=dev-lang/spidermonkey-1.8.5:0
+	>=dev-lang/spidermonkey-17.0.0:17
 	virtual/libffi
 	cairo? ( x11-libs/cairo )
 "
