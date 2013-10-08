@@ -46,10 +46,10 @@ COMMON_DEPEND="
 		media-libs/mesa[wayland,${MULTILIB_USEDEP}]
 		>=x11-libs/libxkbcommon-0.2[${MULTILIB_USEDEP}]
 	)
-	>=dev-libs/glib-2.35.3:2[${MULTILIB_USEDEP}]
+	>=dev-libs/glib-2.37.5:2[${MULTILIB_USEDEP}]
 	>=x11-libs/pango-1.32.4[introspection?,${MULTILIB_USEDEP}]
 	>=dev-libs/atk-2.7.5[introspection?,${MULTILIB_USEDEP}]
-	>=x11-libs/cairo-1.10.0[aqua?,glib,svg,X?,${MULTILIB_USEDEP}]
+	>=x11-libs/cairo-1.12.0[aqua?,glib,svg,X?,${MULTILIB_USEDEP}]
 	>=x11-libs/gdk-pixbuf-2.27.1:2[introspection?,X?,${MULTILIB_USEDEP}]
 	>=x11-libs/gtk+-2.24:2[${MULTILIB_USEDEP}]
 	media-libs/fontconfig[${MULTILIB_USEDEP}]
