@@ -70,6 +70,7 @@ DEPEND="${COMMON_DEPEND}
 		x11-proto/damageproto[${MULTILIB_USEDEP}]
 		xinerama? ( x11-proto/xineramaproto[${MULTILIB_USEDEP}] )
 	)
+	>=sys-devel/automake-1.13
 	>=dev-util/gtk-doc-am-1.11
 	test? (
 		media-fonts/font-misc-misc
