@@ -35,10 +35,10 @@ fi
 RDEPEND="
 	>=dev-libs/glib-2.34:2
 	>=dev-db/sqlite-3.5:=
-	>=dev-libs/libgdata-0.10:=
 	>=app-crypt/libsecret-0.5
 	>=dev-libs/libical-0.43:=
-	>=net-libs/libsoup-2.40.3:2.4
+	>=net-libs/libsoup-2.43:2.4
+	>=dev-libs/libgdata-0.10
 	>=dev-libs/libxml2-2
 	>=sys-libs/db-4:=
 	>=dev-libs/nspr-4.4:=
