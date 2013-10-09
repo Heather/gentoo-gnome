@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-text/yelp-tools/yelp-tools-3.6.1.ebuild,v 1.23 2013/08/29 15:04:34 jer Exp $
+# $Header: $
 
 EAPI="5"
 GCONF_DEBUG="no"
