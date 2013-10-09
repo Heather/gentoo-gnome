@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Header: /var/cvsroot/gentoo-x86/media-video/totem/totem-3.8.2-r1.ebuild,v 1.2 2013/09/01 19:18:50 pacho Exp $
 
 EAPI="5"
 GCONF_DEBUG="yes"
@@ -96,6 +96,9 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# Prevent pylint usage by tests, bug #482538
+	sed -i -e 's/ check-pylint//' src/plugins/Makefile.plugins || die
+
 	eautoreconf
 	gnome2_src_prepare
 
