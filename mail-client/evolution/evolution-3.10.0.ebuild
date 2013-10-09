@@ -47,10 +47,9 @@ COMMON_DEPEND="
 	dev-libs/atk
 	>=dev-libs/dbus-glib-0.6
 	>=dev-libs/libxml2-2.7.3:2
-	|| ( >=net-libs/libsoup-2.42:2.4 >=net-libs/libsoup-gnome-2.40.3:2.4 )
+	>=net-libs/libsoup-2.43:2.4
 	>=x11-misc/shared-mime-info-0.22
 	>=x11-themes/gnome-icon-theme-2.30.2.1
-	>=dev-libs/libgdata-0.10:=
 	>=net-libs/webkit-gtk-1.10.0
 
 	x11-libs/libSM
