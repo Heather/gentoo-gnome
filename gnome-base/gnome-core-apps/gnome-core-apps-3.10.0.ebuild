@@ -30,6 +30,7 @@ RDEPEND="
 	>=gnome-base/gnome-keyring-${PV}
 	>=gnome-extra/evolution-data-server-${PV}
 
+	>=app-crypt/seahorse-${PV}
 	>=app-editors/gedit-${PV}
 	>=app-text/evince-${PV}
 	>=gnome-extra/gnome-contacts-3.10
@@ -52,7 +53,6 @@ RDEPEND="
 	!gnome-base/gnome-applets
 "
 # Temporarily removed from RDEPEND. Put them back once version bumped to 3.10
-#	>=app-crypt/seahorse-${PV}
 #	>=gnome-extra/gnome-user-docs-${PV}
 
 DEPEND=""
