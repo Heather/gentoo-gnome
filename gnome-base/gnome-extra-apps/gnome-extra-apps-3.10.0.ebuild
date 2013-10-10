@@ -31,6 +31,7 @@ RDEPEND="
 	>=gnome-extra/gnome-search-tool-3.6
 	>=gnome-extra/gnome-system-monitor-${PV}
 	>=gnome-extra/gnome-tweak-tool-${PV}
+	>=gnome-extra/gucharmap-3.9.99:2.90
 	>=gnome-extra/sushi-${PV}
 	>=mail-client/evolution-${PV}
 	>=media-gfx/gnome-font-viewer-${PV}
@@ -50,7 +51,6 @@ RDEPEND="
 # Temporarily removed from RDEPEND. Put them back once version bumped to 3.10
 #	>=gnome-extra/nautilus-sendto-${PV}
 #	>=gnome-extra/gnome-packagekit-${PV}
-#	>=gnome-extra/gucharmap-${PV}:2.90
 #	>=net-analyzer/gnome-nettool-${PV}
 #	games? (
 #		>=games-arcade/gnome-nibbles-${PV}
