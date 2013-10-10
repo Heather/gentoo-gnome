@@ -24,6 +24,7 @@ RDEPEND="
 
 	>=app-admin/gnome-system-log-3.9.90
 	>=app-arch/file-roller-${PV}
+	>=app-dicts/gnome-dictionary-3.9.0
 	>=gnome-extra/gconf-editor-3
 	>=gnome-extra/gnome-power-manager-${PV}
 	>=gnome-extra/gnome-search-tool-3.6
@@ -46,7 +47,6 @@ RDEPEND="
 		>=gnome-extra/gnome-documents-${PV} )
 "
 # Temporarily removed from RDEPEND. Put them back once version bumped to 3.10
-#	>=app-dicts/gnome-dictionary-${PV}
 #	>=gnome-extra/nautilus-sendto-${PV}
 #	>=gnome-extra/gnome-calculator-${PV}
 #	>=gnome-extra/gnome-packagekit-${PV}
