@@ -38,6 +38,7 @@ RDEPEND="
 	>=media-gfx/gnome-screenshot-${PV}
 	>=media-sound/sound-juicer-3.5.0
 	>=media-video/cheese-${PV}
+	>=net-analyzer/gnome-nettool-3.2
 	>=net-misc/vino-${PV}
 	>=net-misc/vinagre-${PV}
 	>=sys-apps/baobab-3.10
@@ -51,7 +52,6 @@ RDEPEND="
 # Temporarily removed from RDEPEND. Put them back once version bumped to 3.10
 #	>=gnome-extra/nautilus-sendto-${PV}
 #	>=gnome-extra/gnome-packagekit-${PV}
-#	>=net-analyzer/gnome-nettool-${PV}
 #	games? (
 #		>=games-arcade/gnome-nibbles-${PV}
 #		>=games-arcade/gnome-robots-${PV}
