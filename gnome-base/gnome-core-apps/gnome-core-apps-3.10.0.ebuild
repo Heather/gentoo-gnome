@@ -39,6 +39,7 @@ RDEPEND="
 	>=net-im/empathy-${PV}
 	>=x11-terms/gnome-terminal-${PV}
 
+	>=gnome-extra/gnome-user-docs-${PV}
 	>=gnome-extra/yelp-${PV}
 
 	>=x11-themes/gtk-engines-2.20.2:2
@@ -52,8 +53,6 @@ RDEPEND="
 
 	!gnome-base/gnome-applets
 "
-# Temporarily removed from RDEPEND. Put them back once version bumped to 3.10
-#	>=gnome-extra/gnome-user-docs-${PV}
 
 DEPEND=""
 
