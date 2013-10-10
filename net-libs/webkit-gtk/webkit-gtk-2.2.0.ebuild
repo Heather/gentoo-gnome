@@ -62,8 +62,9 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	${PYTHON_DEPS}
 	dev-lang/perl
-	|| ( virtual/rubygems[ruby_targets_ruby19]
-	     virtual/rubygems[ruby_targets_ruby18] )
+	|| ( virtual/rubygems[ruby_targets_ruby20]
+		virtual/rubygems[ruby_targets_ruby18]
+		virtual/rubygems[ruby_targets_ruby19] )
 	>=app-accessibility/at-spi2-core-2.5.3
 	>=dev-util/gtk-doc-am-1.10
 	dev-util/gperf
@@ -210,7 +211,9 @@ src_configure() {
 		"$(usex aqua "--with-font-backend=pango --with-target=quartz" "")
 		# Aqua support in gtk3 is untested
 
-	if has_version "virtual/rubygems[ruby_targets_ruby19]"; then
+	if has_version "virtual/rubygems[ruby_targets_ruby20]"; then
+		myconf="${myconf} RUBY=$(type -P ruby20)"
+	elif has_version "virtual/rubygems[ruby_targets_ruby29]"; then
 		myconf="${myconf} RUBY=$(type -P ruby19)"
 	else
 		myconf="${myconf} RUBY=$(type -P ruby18)"
