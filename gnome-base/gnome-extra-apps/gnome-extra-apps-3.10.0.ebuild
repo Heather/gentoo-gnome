@@ -33,7 +33,6 @@ RDEPEND="
 	>=media-gfx/gnome-font-viewer-${PV}
 	>=media-gfx/gnome-screenshot-${PV}
 	>=media-sound/sound-juicer-3.5.0
-	>=media-video/cheese-${PV}
 	>=net-misc/vino-${PV}
 	>=net-misc/vinagre-${PV}
 	>=sys-apps/baobab-3.10
@@ -51,6 +50,7 @@ RDEPEND="
 #	>=gnome-extra/gnome-calculator-${PV}
 #	>=gnome-extra/gnome-packagekit-${PV}
 #	>=gnome-extra/gucharmap-${PV}:2.90
+#	>=media-video/cheese-${PV}
 #	>=net-analyzer/gnome-nettool-${PV}
 #	games? (
 #		>=games-arcade/gnome-nibbles-${PV}
