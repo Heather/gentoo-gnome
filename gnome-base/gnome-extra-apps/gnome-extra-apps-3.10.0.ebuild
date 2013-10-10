@@ -26,6 +26,7 @@ RDEPEND="
 	>=app-arch/file-roller-${PV}
 	>=app-dicts/gnome-dictionary-3.9.0
 	>=gnome-extra/gconf-editor-3
+	>=gnome-extra/gnome-calculator-${PV}
 	>=gnome-extra/gnome-power-manager-${PV}
 	>=gnome-extra/gnome-search-tool-3.6
 	>=gnome-extra/gnome-system-monitor-${PV}
@@ -48,7 +49,6 @@ RDEPEND="
 "
 # Temporarily removed from RDEPEND. Put them back once version bumped to 3.10
 #	>=gnome-extra/nautilus-sendto-${PV}
-#	>=gnome-extra/gnome-calculator-${PV}
 #	>=gnome-extra/gnome-packagekit-${PV}
 #	>=gnome-extra/gucharmap-${PV}:2.90
 #	>=net-analyzer/gnome-nettool-${PV}
