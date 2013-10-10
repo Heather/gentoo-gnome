@@ -21,17 +21,24 @@ RDEPEND="
 	>=gnome-base/gnome-core-libs-${PV}[cups?]
 
 	>=gnome-base/gnome-session-${PV}
+	>=gnome-base/gnome-menus-${PV}:3
 	>=gnome-base/gnome-settings-daemon-${PV}[cups?]
 	>=gnome-base/gnome-control-center-${PV}[cups?]
 
 	>=app-crypt/gcr-${PV}
 	>=gnome-base/nautilus-${PV}
 	>=gnome-base/gnome-keyring-${PV}
+	>=gnome-extra/evolution-data-server-${PV}
 
 	>=app-editors/gedit-${PV}
 	>=app-text/evince-${PV}
+	>=gnome-extra/gnome-contacts-3.10
 	>=media-gfx/eog-${PV}
+	>=media-video/totem-${PV}
+	>=net-im/empathy-${PV}
 	>=x11-terms/gnome-terminal-${PV}
+
+	>=gnome-extra/yelp-${PV}
 
 	>=x11-themes/gtk-engines-2.20.2:2
 	>=x11-themes/gnome-icon-theme-${PV}
@@ -46,13 +53,7 @@ RDEPEND="
 "
 # Temporarily removed from RDEPEND. Put them back once version bumped to 3.10
 #	>=app-crypt/seahorse-${PV}
-#	>=gnome-base/gnome-menus-${PV}:3
-#	>=gnome-extra/evolution-data-server-${PV}
-#	>=gnome-extra/gnome-contacts-${PV}
 #	>=gnome-extra/gnome-user-docs-${PV}
-#	>=gnome-extra/yelp-${PV}
-#	>=media-video/totem-${PV}
-#	>=net-im/empathy-${PV}
 
 DEPEND=""
 

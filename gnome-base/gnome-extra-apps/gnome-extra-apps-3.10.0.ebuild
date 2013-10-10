@@ -25,31 +25,33 @@ RDEPEND="
 	>=app-arch/file-roller-${PV}
 	>=gnome-extra/gconf-editor-3
 	>=gnome-extra/gnome-packagekit-${PV}
+	>=gnome-extra/gnome-power-manager-${PV}
 	>=gnome-extra/gnome-search-tool-3.6
+	>=gnome-extra/gnome-system-monitor-${PV}
 	>=gnome-extra/gnome-tweak-tool-${PV}
+	>=gnome-extra/sushi-${PV}
+	>=mail-client/evolution-${PV}
+	>=media-gfx/gnome-font-viewer-${PV}
+	>=media-gfx/gnome-screenshot-${PV}
 	>=media-sound/sound-juicer-3.5.0
+	>=media-video/cheese-${PV}
+	>=net-misc/vino-${PV}
+	>=net-misc/vinagre-${PV}
+	>=sys-apps/baobab-3.10
+	>=www-client/epiphany-${PV}
 
 	shotwell? ( >=media-gfx/shotwell-0.15 )
-	tracker? ( >=app-misc/tracker-0.16 )
+	tracker? (
+		>=app-misc/tracker-0.16
+		>=gnome-extra/gnome-documents-${PV} )
 "
 # Temporarily removed from RDEPEND. Put them back once version bumped to 3.10
 #	>=app-admin/gnome-system-log-${PV}
 #	>=app-dicts/gnome-dictionary-${PV}
 #	>=gnome-extra/nautilus-sendto-${PV}
 #	>=gnome-extra/gnome-calculator-${PV}
-#	>=gnome-extra/gnome-power-manager-${PV}
-#	>=gnome-extra/gnome-system-monitor-${PV}
 #	>=gnome-extra/gucharmap-${PV}:2.90
-#	>=gnome-extra/sushi-${PV}
-#	>=mail-client/evolution-${PV}
-#	>=media-gfx/gnome-font-viewer-${PV}
-#	>=media-gfx/gnome-screenshot-${PV}
-#	>=media-video/cheese-${PV}
 #	>=net-analyzer/gnome-nettool-${PV}
-#	>=net-misc/vinagre-${PV}
-#	>=net-misc/vino-${PV}
-#	>=sys-apps/baobab-${PV}
-#	>=www-client/epiphany-${PV}
 #	games? (
 #		>=games-arcade/gnome-nibbles-${PV}
 #		>=games-arcade/gnome-robots-${PV}
@@ -67,7 +69,6 @@ RDEPEND="
 #		>=games-puzzle/lightsoff-${PV}
 #		>=games-puzzle/quadrapassel-${PV}
 #		>=games-puzzle/swell-foop-${PV} )
-#	tracker? ( >=gnome-extra/gnome-documents-${PV} )
 
 # Note: bug-buddy is broken with GNOME 3
 # Note: aisleriot-3.4 is masked for guile-2

@@ -31,6 +31,7 @@ RDEPEND="
 	>=x11-wm/mutter-${PV}
 	>=gnome-base/gnome-shell-${PV}
 
+	>=x11-themes/gnome-backgrounds-${PV}
 	>=x11-themes/gnome-icon-theme-extras-3.6.2
 	x11-themes/sound-theme-freedesktop
 
@@ -41,7 +42,6 @@ RDEPEND="
 	extras? ( >=gnome-base/gnome-extra-apps-${PV} )
 "
 # Temporarily removed from RDEPEND. Put them back once version bumped to 3.10
-#	>=x11-themes/gnome-backgrounds-${PV}
 #	accessibility? (
 #		>=app-accessibility/orca-{PV}
 #		>=gnome-extra/mousetweaks-${PV} )
