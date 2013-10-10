@@ -22,6 +22,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 RDEPEND="
 	>=gnome-base/gnome-core-libs-${PV}
 
+	>=app-admin/gnome-system-log-3.9.90
 	>=app-arch/file-roller-${PV}
 	>=gnome-extra/gconf-editor-3
 	>=gnome-extra/gnome-power-manager-${PV}
@@ -45,7 +46,6 @@ RDEPEND="
 		>=gnome-extra/gnome-documents-${PV} )
 "
 # Temporarily removed from RDEPEND. Put them back once version bumped to 3.10
-#	>=app-admin/gnome-system-log-${PV}
 #	>=app-dicts/gnome-dictionary-${PV}
 #	>=gnome-extra/nautilus-sendto-${PV}
 #	>=gnome-extra/gnome-calculator-${PV}
