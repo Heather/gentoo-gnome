@@ -56,10 +56,6 @@ DEPEND="${RDEPEND}
 REQUIRED_USE="jpeg? ( zlib )"
 
 src_prepare() {
-	# Apply upstream patch as announced on distributor list
-	# will be in 3.8.2/3.10
-	epatch "${FILESDIR}"/${P}-new-client.patch
-
 	# <glib-2.31 compatibility
 	rm -v server/vino-marshal.{c,h} || die
 	gnome2_src_prepare
