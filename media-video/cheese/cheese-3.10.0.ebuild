@@ -51,6 +51,7 @@ RDEPEND="
 	media-libs/gst-plugins-good:1.0
 	media-plugins/gst-plugins-taglib:1.0
 	media-plugins/gst-plugins-meta:1.0
+	media-video/gnome-video-effects
 
 	x11-libs/libICE
 	x11-libs/libSM
