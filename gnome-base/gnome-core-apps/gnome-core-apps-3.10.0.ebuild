@@ -8,9 +8,7 @@ DESCRIPTION="Sub-meta package for the core applications integrated with GNOME 3"
 HOMEPAGE="http://www.gnome.org/"
 LICENSE="metapackage"
 SLOT="3.0"
-IUSE="+bluetooth cups +networkmanager"
-# Don't have brasero yet, add to IUSE when it's bumped to 3.10
-# IUSE="+cdr"
+IUSE="+bluetooth +cdr cups +networkmanager"
 
 # when unmasking for an arch
 # double check none of the deps are still masked !
@@ -40,6 +38,7 @@ RDEPEND="
 	>=x11-themes/gnome-icon-theme-symbolic-${PV}
 	>=x11-themes/gnome-themes-standard-${PV}
 
+	cdr? ( >=app-cdr/brasero-3.8.0 )
 	bluetooth? ( >=net-wireless/gnome-bluetooth-${PV} )
 	networkmanager? ( >=gnome-extra/nm-applet-0.9.8.0[bluetooth?] )
 
@@ -54,7 +53,6 @@ RDEPEND="
 #	>=gnome-extra/yelp-${PV}
 #	>=media-video/totem-${PV}
 #	>=net-im/empathy-${PV}
-#	cdr? ( >=app-cdr/brasero-${PV} )
 
 DEPEND=""
 

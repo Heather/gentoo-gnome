@@ -14,10 +14,9 @@ SLOT="2.0" # Cannot be installed at the same time as gnome-2
 # double check none of the deps are still masked !
 KEYWORDS="~amd64 ~arm ~ppc ~ppc64 ~x86"
 
-IUSE="accessibility +bluetooth cups +extras"
-# Don't have brasero or fallback yet, add to IUSE when it's bumped to 3.10
-# IUSE="+cdr fallback"
-#	>=gnome-base/gnome-core-apps-${PV}[cups?,bluetooth?,cdr?]
+IUSE="accessibility +bluetooth +cdr cups +extras"
+# Don't have fallback yet, add to IUSE when it's bumped to 3.10
+# IUSE="fallback"
 
 S=${WORKDIR}
 
@@ -25,7 +24,7 @@ S=${WORKDIR}
 # GDM-3.0 integrates very nicely with GNOME Shell
 RDEPEND="
 	>=gnome-base/gnome-core-libs-${PV}[cups?]
-	>=gnome-base/gnome-core-apps-${PV}[cups?,bluetooth?]
+	>=gnome-base/gnome-core-apps-${PV}[cups?,bluetooth?,cdr?]
 
 	>=gnome-base/gdm-${PV}
 
