@@ -39,7 +39,7 @@ RDEPEND="!gnome-base/gnome
 	>=x11-terms/gnome-terminal-${PV}
 "
 DEPEND=""
-PDEPEND=">=gnome-base/gvfs-1.16.0"
+PDEPEND=">=gnome-base/gvfs-1.18.0"
 S="${WORKDIR}"
 
 pkg_pretend() {

@@ -50,7 +50,7 @@ RDEPEND="
 
 DEPEND=""
 
-PDEPEND="|| ( >=gnome-base/gvfs-1.12.1[udisks] >=gnome-base/gvfs-1.12.1[gdu] )"
+PDEPEND="|| ( >=gnome-base/gvfs-1.18.0[udisks] >=gnome-base/gvfs-1.18.0[gdu] )"
 
 # Broken from assumptions of gnome-vfs headers being included in nautilus headers,
 # which isn't the case with nautilus-2.22, bug #216019
