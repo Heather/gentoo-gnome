@@ -25,6 +25,7 @@ RDEPEND="
 	>=app-admin/gnome-system-log-3.9.90
 	>=app-arch/file-roller-${PV}
 	>=app-dicts/gnome-dictionary-3.9.0
+	>=app-misc/bijiben-${PV}
 	>=gnome-extra/gconf-editor-3
 	>=gnome-extra/gnome-calculator-${PV}
 	>=gnome-extra/gnome-clocks-${PV}
