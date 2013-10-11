@@ -9,6 +9,8 @@ GNOME2_LA_PUNT="yes"
 inherit eutils gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
+else
+	KEYWORDS="~amd64 ~arm ~hppa ~x86 ~amd64-fbsd"
 fi
 
 DESCRIPTION="D-Bus accessibility specifications and registration daemon"
@@ -16,11 +18,6 @@ HOMEPAGE="http://live.gnome.org/Accessibility"
 
 LICENSE="LGPL-2+"
 SLOT="2"
-if [[ ${PV} = 9999 ]]; then
-	KEYWORDS=""
-else
-	KEYWORDS="~amd64 ~arm ~hppa ~x86 ~amd64-fbsd"
-fi
 IUSE="doc +introspection"
 
 RDEPEND=">=dev-libs/glib-2.28:2
