@@ -39,12 +39,11 @@ RDEPEND="
 		>=app-accessibility/at-spi2-atk-2.10
 		>=app-accessibility/at-spi2-core-2.10
 		>=app-accessibility/caribou-0.4.12
+		>=app-accessibility/orca-${PV}
 		>=gnome-extra/mousetweaks-${PV} )
 	extras? ( >=gnome-base/gnome-extra-apps-${PV} )
 "
 # Temporarily removed from RDEPEND. Put them back once version bumped to 3.10
-#	accessibility? (
-#		>=app-accessibility/orca-{PV} )
 #	fallback? ( >=gnome-base/gnome-fallback-${PV} )
 
 DEPEND=""
