@@ -6,7 +6,6 @@ EAPI="5"
 
 PYTHON_COMPAT=( python{2_6,2_7} )
 
-GENTOO_DEPEND_ON_PERL="no"
 inherit base eutils cmake-utils python-any-r1 multilib-minimal
 
 DESCRIPTION="Library providing rendering capabilities for complex non-Roman writing systems"
@@ -65,11 +64,6 @@ multilib_src_configure() {
 
 multilib_src_compile() {
 	cmake-utils_src_compile
-	if use perl; then
-		cd contrib/perl
-		perl-module_src_prep
-		perl-module_src_compile
-	fi
 }
 
 multilib_src_test() {
