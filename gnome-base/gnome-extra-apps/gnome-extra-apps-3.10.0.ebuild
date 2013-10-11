@@ -8,7 +8,7 @@ DESCRIPTION="Sub-meta package for the applications of GNOME 3"
 HOMEPAGE="http://www.gnome.org/"
 LICENSE="metapackage"
 SLOT="3.0"
-IUSE="+shotwell +tracker"
+IUSE="+tracker"
 # Don't quite have games yet, add to IUSE when games are bumped to 3.10
 # IUSE="+games"
 
@@ -36,6 +36,7 @@ RDEPEND="
 	>=gnome-extra/sushi-${PV}
 	>=mail-client/evolution-${PV}
 	>=media-gfx/gnome-font-viewer-${PV}
+	>=media-gfx/gnome-photos-${PV}
 	>=media-gfx/gnome-screenshot-${PV}
 	>=media-sound/gnome-music-${PV}
 	>=media-sound/sound-juicer-3.5.0
@@ -46,7 +47,6 @@ RDEPEND="
 	>=sys-apps/baobab-3.10
 	>=www-client/epiphany-${PV}
 
-	shotwell? ( >=media-gfx/shotwell-0.15 )
 	tracker? (
 		>=app-misc/tracker-0.16
 		>=gnome-extra/gnome-documents-${PV} )
