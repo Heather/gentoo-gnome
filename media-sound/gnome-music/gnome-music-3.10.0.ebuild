@@ -17,7 +17,8 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 #media-plugins/grilo-plugins maybe optional
 COMMON_DEPEND="
 	>=dev-libs/glib-2.37:2
-	>=x11-libs/gtk+-3.6.0:3
+	>=dev-libs/gobject-introspection-1.35.9
+	>=x11-libs/gtk+-3.9.0:3
 	>=media-libs/grilo-0.2.6
 	media-plugins/grilo-plugins
 "

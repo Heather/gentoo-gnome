@@ -37,6 +37,7 @@ RDEPEND="
 	>=mail-client/evolution-${PV}
 	>=media-gfx/gnome-font-viewer-${PV}
 	>=media-gfx/gnome-screenshot-${PV}
+	>=media-sound/gnome-music-${PV}
 	>=media-sound/sound-juicer-3.5.0
 	>=media-video/cheese-${PV}
 	>=net-analyzer/gnome-nettool-3.2
