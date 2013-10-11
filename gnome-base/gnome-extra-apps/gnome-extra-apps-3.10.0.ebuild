@@ -27,6 +27,7 @@ RDEPEND="
 	>=app-dicts/gnome-dictionary-3.9.0
 	>=gnome-extra/gconf-editor-3
 	>=gnome-extra/gnome-calculator-${PV}
+	>=gnome-extra/gnome-clocks-${PV}
 	>=gnome-extra/gnome-power-manager-${PV}
 	>=gnome-extra/gnome-search-tool-3.6
 	>=gnome-extra/gnome-system-monitor-${PV}
