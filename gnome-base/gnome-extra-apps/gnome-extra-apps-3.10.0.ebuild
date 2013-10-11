@@ -46,6 +46,7 @@ RDEPEND="
 	>=net-analyzer/gnome-nettool-3.2
 	>=net-misc/vino-${PV}
 	>=net-misc/vinagre-${PV}
+	>=sci-geosciences/gnome-maps-${PV}
 	>=sys-apps/baobab-3.10
 	>=www-client/epiphany-${PV}
 
