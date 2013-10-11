@@ -9,6 +9,8 @@ GNOME2_LA_PUNT="yes"
 inherit eutils gnome2 virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
+else
+	KEYWORDS="~amd64 ~arm ~hppa ~x86"
 fi
 
 DESCRIPTION="Gtk module for bridging AT-SPI to Atk"
@@ -16,11 +18,6 @@ HOMEPAGE="http://live.gnome.org/Accessibility"
 
 LICENSE="LGPL-2+"
 SLOT="2"
-if [[ ${PV} = 9999 ]]; then
-	KEYWORDS=""
-else
-	KEYWORDS="~amd64 ~arm ~hppa ~x86"
-fi
 IUSE=""
 
 COMMON_DEPEND="
