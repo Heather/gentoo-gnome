@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-extra/gnome-weather/gnome-weather-3.8.2-r1.ebuild,v 1.2 2013/07/28 08:25:55 eva Exp $
+# $Header: $
 
 EAPI="5"
 GCONF_DEBUG="no"
@@ -17,9 +17,11 @@ IUSE=""
 
 RDEPEND="
 	dev-libs/gjs
+	>=dev-libs/libgweather-3.9.5
 	>=dev-libs/glib-2.32:2
 	>=dev-libs/gobject-introspection-1.35.9
-	>=x11-libs/gtk+-3.7.10:3
+	x11-libs/gdk-pixbuf
+	>=x11-libs/gtk+-3.9.4:3
 "
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.26
