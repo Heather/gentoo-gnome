@@ -1,16 +1,2 @@
-net-libs/gtk-vnc gtk3
-net-libs/farsight2 python
-net-libs/libproxy python
-
-# required by folks via empathy
-gnome-extra/evolution-data-server vala
-# required by nautilus
-gnome-base/gvfs gtk
-# required by gnome-contacts
-dev-libs/folks vala
-
-# broken with icu-50
-media-libs/harfbuzz -icu
-
-# required by cheese
-media-libs/gst-plugins-base:1.0 theora
+# required by gnome-user-share
+www-servers/apache apache2_modules_auth_digest
