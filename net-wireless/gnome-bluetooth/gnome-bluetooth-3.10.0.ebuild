@@ -7,8 +7,8 @@ GCONF_DEBUG="yes"
 
 inherit eutils gnome2 udev user
 
-DESCRIPTION="Fork of bluez-gnome focused on integration with GNOME"
-HOMEPAGE="http://live.gnome.org/GnomeBluetooth"
+DESCRIPTION="Bluetooth graphical utilities integrated with GNOME"
+HOMEPAGE="https://wiki.gnome.org/GnomeBluetooth"
 
 LICENSE="GPL-2+ LGPL-2.1+ FDL-1.1+"
 SLOT="2/11" # subslot = libgnome-bluetooth soname version
@@ -41,7 +41,6 @@ DEPEND="${COMMON_DEPEND}
 "
 # eautoreconf needs:
 #	gnome-base/gnome-common
-#	dev-util/gtk-doc-am
 
 pkg_setup() {
 	enewgroup plugdev
@@ -70,7 +69,7 @@ src_install() {
 
 pkg_postinst() {
 	gnome2_pkg_postinst
-	if ! has_version sys-auth/consolekit[acl] ; then
+	if ! has_version sys-auth/consolekit[acl] && ! has_version sys-apps/systemd[acl] ; then
 		elog "Don't forget to add yourself to the plugdev group "
 		elog "if you want to be able to control bluetooth transmitter."
 	fi
