@@ -183,7 +183,7 @@ multilib_src_install() {
 
 	# see bug #133241
 	echo 'gtk-fallback-icon-theme = "gnome"' > "${T}/gtkrc"
-	insinto /etc/gtk-2.0
+	insinto /usr/share/gtk-2.0
 	doins "${T}"/gtkrc
 
 	dodoc AUTHORS ChangeLog* HACKING NEWS* README*
