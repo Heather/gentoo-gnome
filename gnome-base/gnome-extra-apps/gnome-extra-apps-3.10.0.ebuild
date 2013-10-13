@@ -49,6 +49,7 @@ RDEPEND="
 	>=net-misc/vinagre-${PV}
 	>=sci-geosciences/gnome-maps-${PV}
 	>=sys-apps/baobab-3.10
+	>=sys-apps/gnome-disk-utility-${PV}
 	>=www-client/epiphany-${PV}
 
 	tracker? (

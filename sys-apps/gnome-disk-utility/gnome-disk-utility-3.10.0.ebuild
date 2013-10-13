@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/gnome-disk-utility/gnome-disk-utility-3.8.2.ebuild,v 1.6 2013/09/28 09:46:17 pacho Exp $
+# $Header: $
 
 EAPI="5"
 GCONF_DEBUG="no"
@@ -18,7 +18,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86"
 
 COMMON_DEPEND="
 	>=dev-libs/glib-2.31:2
-	>=sys-fs/udisks-2.1.0:2
+	>=sys-fs/udisks-2.1.1:2
 	>=x11-libs/gtk+-3.5.8:3
 	>=app-crypt/libsecret-0.7
 	dev-libs/libpwquality
@@ -37,15 +37,6 @@ DEPEND="${COMMON_DEPEND}
 	dev-libs/libxslt
 	virtual/pkgconfig
 "
-
-src_prepare() {
-	# Fix USE=-gnome, bug #478820
-	#epatch "${FILESDIR}"/${PN}-3.8.2-kill-gsd-automagic.patch
-	#epatch "${FILESDIR}"/${PN}-3.8.2-raise-gsd-dependency.patch
-
-	eautoreconf
-	gnome2_src_prepare
-}
 
 src_configure() {
 	gnome2_src_configure \
