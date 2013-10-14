@@ -33,7 +33,6 @@ RDEPEND="
 	>=gnome-extra/gnome-search-tool-3.6
 	>=gnome-extra/gnome-system-monitor-${PV}
 	>=gnome-extra/gnome-tweak-tool-${PV}
-	>=gnome-extra/gnome-user-share-${PV}
 	>=gnome-extra/gnome-weather-${PV}
 	>=gnome-extra/gucharmap-3.9.99:2.90
 	>=gnome-extra/nautilus-sendto-3.8.1
