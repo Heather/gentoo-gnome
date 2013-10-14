@@ -54,7 +54,8 @@ RDEPEND="
 
 	tracker? (
 		>=app-misc/tracker-0.16
-		>=gnome-extra/gnome-documents-${PV} )
+		>=gnome-extra/gnome-documents-${PV}
+		>=net-libs/gnome-online-miners-${PV} )
 "
 # Temporarily removed from RDEPEND. Put them back once version bumped to 3.10
 #	>=gnome-extra/gnome-packagekit-${PV}
