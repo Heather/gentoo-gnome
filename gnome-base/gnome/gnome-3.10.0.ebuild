@@ -14,7 +14,7 @@ SLOT="2.0" # Cannot be installed at the same time as gnome-2
 # double check none of the deps are still masked !
 KEYWORDS="~amd64 ~arm ~ppc ~ppc64 ~x86"
 
-IUSE="accessibility +bluetooth +cdr cups +extras"
+IUSE="accessibility +bluetooth +cdr cups +extras +tracker"
 # Don't have fallback yet, add to IUSE when it's bumped to 3.10
 # IUSE="fallback"
 
@@ -24,7 +24,7 @@ S=${WORKDIR}
 # GDM-3.0 integrates very nicely with GNOME Shell
 RDEPEND="
 	>=gnome-base/gnome-core-libs-${PV}[cups?]
-	>=gnome-base/gnome-core-apps-${PV}[cups?,bluetooth?,cdr?]
+	>=gnome-base/gnome-core-apps-${PV}[cups?,bluetooth?,cdr?,tracker?]
 
 	>=gnome-base/gdm-${PV}
 
@@ -41,7 +41,7 @@ RDEPEND="
 		>=app-accessibility/caribou-0.4.12
 		>=app-accessibility/orca-${PV}
 		>=gnome-extra/mousetweaks-${PV} )
-	extras? ( >=gnome-base/gnome-extra-apps-${PV} )
+	extras? ( >=gnome-base/gnome-extra-apps-${PV}[tracker?] )
 "
 # Temporarily removed from RDEPEND. Put them back once version bumped to 3.10
 #	fallback? ( >=gnome-base/gnome-fallback-${PV} )
