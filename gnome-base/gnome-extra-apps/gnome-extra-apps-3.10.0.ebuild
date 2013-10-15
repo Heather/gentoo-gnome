@@ -8,9 +8,7 @@ DESCRIPTION="Sub-meta package for the applications of GNOME 3"
 HOMEPAGE="http://www.gnome.org/"
 LICENSE="metapackage"
 SLOT="3.0"
-IUSE="+tracker"
-# Don't quite have games yet, add to IUSE when games are bumped to 3.10
-# IUSE="+games"
+IUSE="+games +tracker"
 
 # when unmasking for an arch
 # double check none of the deps are still masked !
@@ -56,26 +54,27 @@ RDEPEND="
 		>=app-misc/tracker-0.16
 		>=gnome-extra/gnome-documents-${PV}
 		>=net-libs/gnome-online-miners-${PV} )
+
+	games? (
+		>=games-arcade/gnome-nibbles-${PV}
+		>=games-arcade/gnome-robots-${PV}
+		>=games-board/aisleriot-3.2.3.2
+		>=games-board/four-in-a-row-${PV}
+		>=games-board/gnome-chess-${PV}
+		>=games-board/gnome-mahjongg-${PV}
+		>=games-board/gnome-mines-${PV}
+		>=games-board/iagno-${PV}
+		>=games-board/tali-${PV}
+		>=games-puzzle/five-or-more-${PV}
+		>=games-puzzle/gnome-klotski-${PV}
+		>=games-puzzle/gnome-sudoku-${PV}
+		>=games-puzzle/gnome-tetravex-${PV}
+		>=games-puzzle/lightsoff-${PV}
+		>=games-puzzle/quadrapassel-${PV}
+		>=games-puzzle/swell-foop-${PV} )
 "
 # Temporarily removed from RDEPEND. Put them back once version bumped to 3.10
 #	>=gnome-extra/gnome-packagekit-${PV}
-#	games? (
-#		>=games-arcade/gnome-nibbles-${PV}
-#		>=games-arcade/gnome-robots-${PV}
-#		>=games-board/aisleriot-3.2.3.2
-#		>=games-board/four-in-a-row-${PV}
-#		>=games-board/gnome-chess-${PV}
-#		>=games-board/gnome-mahjongg-${PV}
-#		>=games-board/gnome-mines-${PV}
-#		>=games-board/iagno-${PV}
-#		>=games-board/tali-${PV}
-#		>=games-puzzle/five-or-more-${PV}
-#		>=games-puzzle/gnome-klotski-${PV}
-#		>=games-puzzle/gnome-sudoku-${PV}
-#		>=games-puzzle/gnome-tetravex-${PV}
-#		>=games-puzzle/lightsoff-${PV}
-#		>=games-puzzle/quadrapassel-${PV}
-#		>=games-puzzle/swell-foop-${PV} )
 
 # Note: bug-buddy is broken with GNOME 3
 # Note: aisleriot-3.4 is masked for guile-2
