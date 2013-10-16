@@ -6,7 +6,7 @@ EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit eutils gnome2 virtualx multilib-minimal
+inherit eutils gnome2 virtualx
 
 DESCRIPTION="Gtk module for bridging AT-SPI to Atk"
 HOMEPAGE="http://live.gnome.org/Accessibility"
@@ -17,9 +17,9 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd6
 IUSE=""
 
 COMMON_DEPEND="
-	>=app-accessibility/at-spi2-core-2.9.92[${MULTILIB_USEDEP}]
-	>=dev-libs/atk-2.9.4[${MULTILIB_USEDEP}]
-	>=dev-libs/glib-2.32:2[${MULTILIB_USEDEP}]
+	>=app-accessibility/at-spi2-core-2.7.5
+	>=dev-libs/atk-2.10.0
+	>=dev-libs/glib-2.37:2
 	>=sys-apps/dbus-1
 "
 RDEPEND="${COMMON_DEPEND}
@@ -29,17 +29,10 @@ DEPEND="${COMMON_DEPEND}
 	virtual/pkgconfig
 "
 
-
-src_prepare() {
-	default
-
-	multilib_copy_sources
-}
-
-multilib_src_configure(){
+src_configure() {
 	gnome2_src_configure --enable-p2p
 }
 
-multilib_src_test() {
+src_test() {
 	Xemake check
 }
