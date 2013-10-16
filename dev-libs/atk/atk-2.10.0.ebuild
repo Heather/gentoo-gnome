@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="no"
 
-inherit gnome2 multilib-minimal
+inherit gnome2
 
 DESCRIPTION="GTK+ & GNOME Accessibility Toolkit"
 HOMEPAGE="http://projects.gnome.org/accessibility/"
@@ -16,8 +16,8 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86
 IUSE="+introspection nls test"
 
 RDEPEND="
-	>=dev-libs/glib-2.31.2:2[${MULTILIB_USEDEP}]
-	introspection? ( >=dev-libs/gobject-introspection-0.6.7[${MULTILIB_USEDEP}] )
+	>=dev-libs/glib-2.38.2:2
+	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
 "
 DEPEND="${RDEPEND}
 	>=dev-lang/perl-5
@@ -34,10 +34,8 @@ src_prepare() {
 		sed 's/^\(SUBDIRS =.*\)tests\(.*\)$/\1\2/' -i Makefile.am Makefile.in \
 			|| die "sed failed"
 	fi
-
-	multilib_copy_sources
 }
 
-multilib_src_configure() {
+src_configure() {
 	gnome2_src_configure $(use_enable introspection)
 }

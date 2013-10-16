@@ -17,7 +17,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd64-fbsd
 
 # Note: has native OSX support, prefix teams, attack!
 RDEPEND="
-	>=x11-libs/gtk+-3.7.12:3[introspection?]
+	>=x11-libs/gtk+-3.10:3[introspection?]
 	>=dev-libs/libxml2-2.6:2
 	>=dev-libs/glib-2.34.0:2
 	glade? ( >=dev-util/glade-3.9:3.10 )
