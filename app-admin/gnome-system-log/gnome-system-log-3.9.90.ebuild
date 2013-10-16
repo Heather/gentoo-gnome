@@ -18,7 +18,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-fr
 COMMON_DEPEND="
 	>=dev-libs/glib-2.31:2
 	sys-libs/zlib:=
-	>=x11-libs/gtk+-3.9.11:3
+	>=x11-libs/gtk+-3.10:3
 	x11-libs/pango
 "
 RDEPEND="${COMMON_DEPEND}
