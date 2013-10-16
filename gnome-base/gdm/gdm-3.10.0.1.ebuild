@@ -12,7 +12,7 @@ HOMEPAGE="https://live.gnome.org/GDM"
 
 LICENSE="GPL-2+"
 SLOT="0"
-IUSE="accessibility audit +fallback fprint +gnome-shell +introspection ipv6 plymouth selinux smartcard tcpd test xinerama"
+IUSE="accessibility audit fprint +gnome-shell +introspection ipv6 plymouth selinux smartcard tcpd test xinerama"
 KEYWORDS="~amd64 ~arm ~ppc64 ~sh ~x86"
 
 # NOTE: x11-base/xorg-server dep is for X_SERVER_PATH etc, bug #295686
@@ -72,7 +72,6 @@ RDEPEND="${COMMON_DEPEND}
 		app-accessibility/gok
 		app-accessibility/orca
 		gnome-extra/at-spi:1 )
-	fallback? ( x11-wm/metacity )
 	fprint? (
 		sys-auth/fprintd
 		sys-auth/pam_fprint )
@@ -135,12 +134,6 @@ src_prepare() {
 	# Gentoo does not have a fingerprint-auth pam stack
 	epatch "${FILESDIR}/${PN}-3.8.4-fingerprint-auth.patch"
 
-	# make gdm-fallback session the default if USE=-gnome-shell
-	if ! use gnome-shell; then
-		sed -e "s:'gdm-shell':'gdm-fallback':" \
-			-i data/00-upstream-settings || die "sed failed"
-	fi
-
 	# don't load accessibility support at runtime when USE=-accessibility
 	use accessibility || epatch "${FILESDIR}/${PN}-3.7.3.1-disable-accessibility.patch"
 
@@ -171,7 +164,6 @@ src_configure() {
 		--without-console-kit \
 		$(use_with accessibility xevie) \
 		$(use_with audit libaudit) \
-		$(use_enable fallback fallback-greeter) \
 		$(use_enable ipv6) \
 		$(use_with plymouth) \
 		$(use_with selinux) \
