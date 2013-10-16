@@ -4,7 +4,7 @@
 
 EAPI="5"
 
-inherit eutils flag-o-matic gnome.org gnome2-utils virtualx multilib-minimal
+inherit eutils flag-o-matic gnome.org gnome2-utils multilib virtualx
 
 DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="http://www.gtk.org/"
@@ -28,49 +28,47 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd6
 # Use gtk+:2 for gtk-update-icon-cache
 COMMON_DEPEND="
 	X? (
-		>=app-accessibility/at-spi2-atk-2.5.3[${MULTILIB_USEDEP}]
-		x11-libs/libXrender[${MULTILIB_USEDEP}]
-		x11-libs/libX11[${MULTILIB_USEDEP}]
-		>=x11-libs/libXi-1.3[${MULTILIB_USEDEP}]
-		x11-libs/libXt[${MULTILIB_USEDEP}]
-		x11-libs/libXext[${MULTILIB_USEDEP}]
-		>=x11-libs/libXrandr-1.3[${MULTILIB_USEDEP}]
-		x11-libs/libXcursor[${MULTILIB_USEDEP}]
-		x11-libs/libXfixes[${MULTILIB_USEDEP}]
-		x11-libs/libXcomposite[${MULTILIB_USEDEP}]
-		x11-libs/libXdamage[${MULTILIB_USEDEP}]
-		xinerama? ( x11-libs/libXinerama[${MULTILIB_USEDEP}] )
+		>=app-accessibility/at-spi2-atk-2.5.3
+		x11-libs/libXrender
+		x11-libs/libX11
+		>=x11-libs/libXi-1.3
+		x11-libs/libXext
+		>=x11-libs/libXrandr-1.3
+		x11-libs/libXcursor
+		x11-libs/libXfixes
+		x11-libs/libXcomposite
+		x11-libs/libXdamage
+		xinerama? ( x11-libs/libXinerama )
 	)
 	wayland? (
-		>=dev-libs/wayland-1.0[${MULTILIB_USEDEP}]
-		media-libs/mesa[wayland,${MULTILIB_USEDEP}]
-		>=x11-libs/libxkbcommon-0.2[${MULTILIB_USEDEP}]
+		>=dev-libs/wayland-1.0
+		media-libs/mesa[wayland]
+		>=x11-libs/libxkbcommon-0.2
 	)
-	>=dev-libs/glib-2.37.5:2[${MULTILIB_USEDEP}]
-	>=x11-libs/pango-1.32.4[introspection?,${MULTILIB_USEDEP}]
-	>=dev-libs/atk-2.7.5[introspection?,${MULTILIB_USEDEP}]
-	>=x11-libs/cairo-1.12.0[aqua?,glib,svg,X?,${MULTILIB_USEDEP}]
-	>=x11-libs/gdk-pixbuf-2.27.1:2[introspection?,X?,${MULTILIB_USEDEP}]
-	>=x11-libs/gtk+-2.24:2[${MULTILIB_USEDEP}]
-	media-libs/fontconfig[${MULTILIB_USEDEP}]
+	>=dev-libs/glib-2.35.3:2
+	>=x11-libs/pango-1.32.4[introspection?]
+	>=dev-libs/atk-2.7.5[introspection?]
+	>=x11-libs/cairo-1.10.0[aqua?,glib,svg,X?]
+	>=x11-libs/gdk-pixbuf-2.27.1:2[introspection?,X?]
+	>=x11-libs/gtk+-2.24:2
+	media-libs/fontconfig
 	x11-misc/shared-mime-info
 	colord? ( >=x11-misc/colord-0.1.9 )
 	cups? ( >=net-print/cups-1.2 )
-	introspection? ( >=dev-libs/gobject-introspection-1.32[${MULTILIB_USEDEP}] )
+	introspection? ( >=dev-libs/gobject-introspection-1.32 )
 "
 DEPEND="${COMMON_DEPEND}
 	app-text/docbook-xsl-stylesheets
 	app-text/docbook-xml-dtd:4.1.2
-	dev-libs/libxslt[${MULTILIB_USEDEP}]
+	dev-libs/libxslt
 	virtual/pkgconfig
 	X? (
-		x11-proto/xextproto[${MULTILIB_USEDEP}]
-		x11-proto/xproto[${MULTILIB_USEDEP}]
-		x11-proto/inputproto[${MULTILIB_USEDEP}]
-		x11-proto/damageproto[${MULTILIB_USEDEP}]
-		xinerama? ( x11-proto/xineramaproto[${MULTILIB_USEDEP}] )
+		x11-proto/xextproto
+		x11-proto/xproto
+		x11-proto/inputproto
+		x11-proto/damageproto
+		xinerama? ( x11-proto/xineramaproto )
 	)
-	>=sys-devel/automake-1.13
 	>=dev-util/gtk-doc-am-1.11
 	test? (
 		media-fonts/font-misc-misc
@@ -133,28 +131,16 @@ src_prepare() {
 		strip_builddir SRC_SUBDIRS demos Makefile.in
 	fi
 
-	#FIXME: it's below hacks works wrong, so better fix them
-	epatch "${FILESDIR}//gtk+-3.9.12-uite-makefile-fix.patch"
-
-	multilib_copy_sources
+	epatch "${FILESDIR}/gtk+-post-makefile-sed.patch"
 }
 
-multilib_src_configure() {
+src_configure() {
 	# Passing --disable-debug is not recommended for production use
 	# need libdir here to avoid a double slash in a path that libtool doesn't
 	# grok so well during install (// between $EPREFIX and usr ...)
-
-	if multilib_is_native_abi; then
-		myconf+="
-			$(use_enable colord)
-		"
-	else
-		myconf=""
-	fi
-
 	econf \
 		$(use_enable aqua quartz-backend) \
-		${myconf} \
+		$(use_enable colord) \
 		$(use_enable cups cups auto) \
 		$(usex debug --enable-debug=yes "") \
 		$(use_enable introspection) \
@@ -175,7 +161,7 @@ multilib_src_configure() {
 		--libdir="${EPREFIX}/usr/$(get_libdir)"
 }
 
-multilib_src_test() {
+src_test() {
 	# Tests require a new gnome-themes-standard, but adding it to DEPEND
 	# would result in circular dependencies.
 	# https://bugzilla.gnome.org/show_bug.cgi?id=669562
@@ -190,7 +176,7 @@ multilib_src_test() {
 	Xemake check
 }
 
-multilib_src_install() {
+src_install() {
 	emake DESTDIR="${D}" install
 
 	insinto /etc/gtk-3.0

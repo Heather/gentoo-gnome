@@ -20,7 +20,7 @@ COMMON_DEPEND="
 	gnome-base/libgtop:2=
 	x11-libs/cairo
 	x11-libs/gdk-pixbuf
-	>=x11-libs/gtk+-3.8.0:3
+	>=x11-libs/gtk+-3.10:3
 	x11-libs/pango
 "
 RDEPEND="${COMMON_DEPEND}
