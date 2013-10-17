@@ -64,6 +64,9 @@ src_prepare() {
 	# Compat with Ubuntu metacity themes (e.g. x11-themes/light-themes)
 	epatch "${FILESDIR}/${PN}-3.2.1-ignore-shadow-and-padding.patch"
 
+	# Fix compilation with GCC 4.8*
+	epatch "${FILESDIR}/${PN}-3.10.1.1-gcc-4.8-compile-fix.patch"
+
 	gnome2_src_prepare
 }
 

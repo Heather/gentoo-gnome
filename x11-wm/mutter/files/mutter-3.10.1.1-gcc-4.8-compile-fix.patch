@@ -1,0 +1,12 @@
+diff -r -u mutter-orig/src/core/window.c mutter/src/core/window.c
+--- mutter-orig/src/core/window.c	2013-10-16 20:40:54.194231908 -0700
++++ mutter/src/core/window.c	2013-10-16 20:42:13.246311137 -0700
+@@ -10266,7 +10266,7 @@
+                            gboolean    frame_action,
+                            guint32     timestamp)
+ {
+-  int x, y;
++  int x = 0, y = 0;
+ 
+   warp_grab_pointer (window,
+                      op, &x, &y);
