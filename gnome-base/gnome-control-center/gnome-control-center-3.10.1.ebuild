@@ -127,6 +127,7 @@ src_prepare() {
 	# Fix some absolute paths to be appropriate for Gentoo
 	epatch "${FILESDIR}/${PN}-3.8.0-paths-makefiles.patch"
 	epatch "${FILESDIR}/${PN}-3.8.0-paths.patch"
+	epatch "${FILESDIR}/${P}-fixbuild.patch"
 
 	epatch_user
 	eautoreconf
