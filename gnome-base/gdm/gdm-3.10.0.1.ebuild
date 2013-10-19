@@ -10,9 +10,17 @@ inherit autotools eutils gnome2 pam readme.gentoo systemd user
 DESCRIPTION="GNOME Display Manager"
 HOMEPAGE="https://live.gnome.org/GDM"
 
-LICENSE="GPL-2+"
+SRC_URI="${SRC_URI}
+	branding? ( http://www.mail-archive.com/tango-artists@lists.freedesktop.org/msg00043/tango-gentoo-v1.1.tar.gz )
+"
+
+LICENSE="
+	GPL-2+
+	branding? ( CC-Sampling-Plus-1.0 )
+"
+
 SLOT="0"
-IUSE="accessibility audit fprint +gnome-shell +introspection ipv6 plymouth selinux smartcard tcpd test xinerama"
+IUSE="accessibility audit branding fprint +gnome-shell +introspection ipv6 plymouth selinux smartcard tcpd test xinerama"
 KEYWORDS="~amd64 ~arm ~ppc64 ~sh ~x86"
 
 # NOTE: x11-base/xorg-server dep is for X_SERVER_PATH etc, bug #295686
@@ -137,6 +145,9 @@ src_prepare() {
 	# don't load accessibility support at runtime when USE=-accessibility
 	use accessibility || epatch "${FILESDIR}/${PN}-3.7.3.1-disable-accessibility.patch"
 
+	# Show logo when branding is enabled
+	use branding && epatch "${FILESDIR}/${PN}-3.8.4-logo.patch"
+
 	mkdir -p "${S}"/m4
 	sed -i 's/AM_CONFIG_HEADER/AC_CONFIG_HEADERS/g' configure.ac || die
 	eautoreconf
@@ -190,6 +201,8 @@ src_install() {
 	# install XDG_DATA_DIRS gdm changes
 	echo 'XDG_DATA_DIRS="/usr/share/gdm"' > 99xdg-gdm
 	doenvd 99xdg-gdm
+
+	use branding && newicon "${WORKDIR}/tango-gentoo-v1.1/scalable/gentoo.svg" gentoo-gdm.svg
 
 	readme.gentoo_create_doc
 }
