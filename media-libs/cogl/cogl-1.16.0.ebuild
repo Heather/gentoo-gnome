@@ -74,7 +74,8 @@ src_configure() {
 		$(use_enable pango cogl-pango) \
 		$(use_enable profile) \
 		$(use_enable wayland wayland-egl-platform ) \
-		$(use_enable wayland wayland-egl-server )
+		$(use_enable wayland wayland-egl-server ) \
+		$(use_enable wayland kms-egl-platform )
 }
 
 src_test() {
