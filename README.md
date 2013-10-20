@@ -10,7 +10,7 @@
 
 Why?
 ----
-there are message on official gnome overlay:
+there is message on official gnome overlay:
 
 * If you plan on forking the overlay to work on some gnome stuff, don't hesitate
   to send us a mail at gnome_at_gentoo_dot_org to inform us or ask for a merge
