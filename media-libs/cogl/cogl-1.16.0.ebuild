@@ -13,7 +13,7 @@ HOMEPAGE="http://www.clutter-project.org/"
 
 LICENSE="LGPL-2.1+ FDL-1.1+"
 SLOT="1.0/12" # subslot = .so version
-IUSE="doc examples +introspection +opengl -gles2 +pango profile wayland"
+IUSE="doc examples +introspection +opengl -gles2 -kms +pango profile wayland"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86"
 
 # XXX: need uprof for optional profiling support
@@ -32,6 +32,10 @@ COMMON_DEPEND="
 	gles2? ( media-libs/mesa[gles2] )
 
 	introspection? ( >=dev-libs/gobject-introspection-1.34.2 )
+	kms? ( 
+	         x11-libs/libdrm 
+		 media-libs/mesa[gbm]
+	     )
 	pango? ( >=x11-libs/pango-1.20.0[introspection?] )
 	wayland? ( >=dev-libs/wayland-1.1.90 )
 "
@@ -71,11 +75,12 @@ src_configure() {
 		$(use_enable gles2 xlib-egl-platform) \
 		$(usex gles2 --with-default-driver=$(usex opengl gl gles2)) \
 		$(use_enable introspection) \
+		$(use_enable kms kms-egl-platform ) \
 		$(use_enable pango cogl-pango) \
 		$(use_enable profile) \
 		$(use_enable wayland wayland-egl-platform ) \
-		$(use_enable wayland wayland-egl-server ) \
-		$(use_enable wayland kms-egl-platform )
+		$(use_enable wayland wayland-egl-server ) 
+	
 }
 
 src_test() {
