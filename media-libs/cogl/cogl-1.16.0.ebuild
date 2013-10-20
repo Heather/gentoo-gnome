@@ -32,10 +32,8 @@ COMMON_DEPEND="
 	gles2? ( media-libs/mesa[gles2] )
 
 	introspection? ( >=dev-libs/gobject-introspection-1.34.2 )
-	kms? ( 
-	         x11-libs/libdrm 
-		 media-libs/mesa[gbm]
-	     )
+	kms? (	x11-libs/libdrm 
+		media-libs/mesa[gbm] )
 	pango? ( >=x11-libs/pango-1.20.0[introspection?] )
 	wayland? ( >=dev-libs/wayland-1.1.90 )
 "
