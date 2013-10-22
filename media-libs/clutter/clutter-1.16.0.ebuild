@@ -13,7 +13,7 @@ DESCRIPTION="Clutter is a library for creating graphical user interfaces"
 
 LICENSE="LGPL-2.1+ FDL-1.1+"
 SLOT="1.0"
-IUSE="debug doc gtk +introspection test wayland" # evdev tslib
+IUSE="debug doc evdev gtk +introspection test wayland" # tslib
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86"
 
 # NOTE: glx flavour uses libdrm + >=mesa-7.3
@@ -37,7 +37,12 @@ RDEPEND="
 	>=x11-libs/libXi-1.3
 	>=x11-libs/libXfixes-3
 	>=x11-libs/libXcomposite-0.4
-
+	
+	evdev? (  
+	       	  dev-libs/libevdev
+	          x11-libs/libxkbcommon 
+		  virtual/udev[gudev]
+		)
 	gtk? ( >=x11-libs/gtk+-3.3.18:3 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.6 )
 	wayland? (
@@ -90,6 +95,7 @@ src_configure() {
 		--disable-tslib-input \
 		--disable-evdev-input \
 		$(usex debug --enable-debug=yes --enable-debug=minimum) \
+		$(usex evdev --enable-evdev-input=yes ) \
 		$(use_enable gtk gdk-backend) \
 		$(use_enable introspection) \
 		$(use_enable doc docs) \
