@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
+EAPI="5"
 inherit autotools eutils
 
 DESCRIPTION="A geoinformation D-Bus service"
@@ -11,7 +11,7 @@ SRC_URI="http://cgit.freedesktop.org/geoclue/snapshot/${P}.tar.gz"
 
 LICENSE="LGPL-2"
 SLOT="2"
-KEYWORDS="alpha amd64 arm ia64 ppc ppc64 sparc x86 ~amd64-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-fbsd"
 IUSE="connman geonames gps gsmloc gtk hostip manual networkmanager nominatim plazes skyhook static-libs yahoo-geo"
 
 REQUIRED_USE="skyhook? ( networkmanager )"
