@@ -135,7 +135,7 @@ src_prepare() {
 
 	# automake 1.13 is hard-coded in bundled configure script. Running
 	# autoreconf to regenerate.
-	eautoreconf || die "autoreconf failed"
+	eautoreconf
 }
 
 src_configure() {

@@ -4,7 +4,7 @@
 
 EAPI="5"
 
-inherit eutils flag-o-matic gnome.org gnome2-utils multilib virtualx
+inherit autotools eutils flag-o-matic gnome.org gnome2-utils multilib virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -137,6 +137,8 @@ src_prepare() {
 	fi
 
 	[[ ${PV} = 9999 ]] && gnome2_src_prepare
+
+	eautoreconf
 }
 
 src_configure() {
