@@ -24,6 +24,7 @@ REQUIRED_USE="
 # require colord-0.1.27 dependency for connection type support
 COMMON_DEPEND="
 	>=dev-libs/glib-2.37.3:2
+	>=dev-libs/libgweather-${PV}
 	>=x11-libs/gtk+-3.7.8:3
 	>=gnome-base/gnome-desktop-3.7.90:3=
 	>=gnome-base/gsettings-desktop-schemas-3.7.2.1
