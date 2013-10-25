@@ -7,7 +7,7 @@ inherit autotools eutils
 
 DESCRIPTION="A geoinformation D-Bus service"
 HOMEPAGE="http://freedesktop.org/wiki/Software/GeoClue"
-SRC_URI="http://cgit.freedesktop.org/geoclue/snapshot/${P}.tar.gz"
+SRC_URI="http://www.freedesktop.org/software/${PN}/releases/2.0/${P}.tar.xz"
 
 LICENSE="LGPL-2"
 SLOT="2"
