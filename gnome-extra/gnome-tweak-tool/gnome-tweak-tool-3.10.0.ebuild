@@ -20,6 +20,7 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 
 COMMON_DEPEND="
+	${PYTHON_DEPS}
 	>=gnome-base/gsettings-desktop-schemas-3.4
 	>=dev-python/pygobject-3.2.1:3[${PYTHON_USEDEP}]
 	gnome-base/gconf:2
