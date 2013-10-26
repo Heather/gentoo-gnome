@@ -26,6 +26,7 @@ RDEPEND="
 	net-libs/rest:0.7
 	>=net-libs/webkit-gtk-2.1.90:3
 	>=x11-libs/gtk+-3.5.1:3
+	>=net-libs/telepathy-glib-0.19.9
 	x11-libs/pango
 
 	introspection? ( >=dev-libs/gobject-introspection-0.6.2 )
