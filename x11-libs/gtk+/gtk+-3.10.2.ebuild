@@ -131,11 +131,11 @@ src_prepare() {
 		strip_builddir SRC_SUBDIRS demos Makefile.in
 	fi
 
-	epatch "${FILESDIR}/gtk+-post-makefile-sed.patch"
+	#epatch "${FILESDIR}/gtk+-post-makefile-sed.patch"
 
 	# automake 1.13 is hard-coded in bundled configure script. Running
 	# autoreconf to regenerate.
-	eautoreconf
+	# eautoreconf
 }
 
 src_configure() {
