@@ -22,6 +22,7 @@ COMMON_DEPEND="
 	>=x11-libs/gtk+-3.5.8:3
 	>=app-crypt/libsecret-0.7
 	dev-libs/libpwquality
+	>=app-arch/xz-utils-5.0.5
 	systemd? ( >=sys-apps/systemd-44 )
 "
 RDEPEND="${COMMON_DEPEND}
