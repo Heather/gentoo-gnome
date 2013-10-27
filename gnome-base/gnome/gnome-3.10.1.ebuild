@@ -26,7 +26,7 @@ RDEPEND="
 	>=gnome-base/gnome-core-libs-${PV}[cups?]
 	>=gnome-base/gnome-core-apps-${PV}[cups?,bluetooth?,cdr?,tracker?]
 
-	>=gnome-base/gdm-${PV}
+	>=gnome-base/gdm-3.10.0.1
 
 	>=x11-wm/mutter-${PV}
 	>=gnome-base/gnome-shell-${PV}
@@ -40,7 +40,7 @@ RDEPEND="
 		>=app-accessibility/at-spi2-core-2.10
 		>=app-accessibility/caribou-0.4.12
 		>=app-accessibility/orca-${PV}
-		>=gnome-extra/mousetweaks-${PV} )
+		>=gnome-extra/mousetweaks-3.10.0 )
 	extras? ( >=gnome-base/gnome-extra-apps-${PV}[tracker?] )
 "
 # Temporarily removed from RDEPEND. Put them back once version bumped to 3.10

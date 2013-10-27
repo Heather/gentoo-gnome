@@ -25,52 +25,52 @@ RDEPEND="
 	>=app-dicts/gnome-dictionary-3.9.0
 	>=app-misc/bijiben-${PV}
 	>=gnome-extra/gconf-editor-3
-	>=gnome-extra/gnome-calculator-${PV}
+	>=gnome-extra/gnome-calculator-3.10.0
 	>=gnome-extra/gnome-clocks-${PV}
 	>=gnome-extra/gnome-power-manager-${PV}
 	>=gnome-extra/gnome-search-tool-3.6
 	>=gnome-extra/gnome-system-monitor-${PV}
-	>=gnome-extra/gnome-tweak-tool-${PV}
+	>=gnome-extra/gnome-tweak-tool-3.10.0
 	>=gnome-extra/gnome-weather-${PV}
 	>=gnome-extra/gucharmap-3.9.99:2.90
 	>=gnome-extra/nautilus-sendto-3.8.1
-	>=gnome-extra/sushi-${PV}
+	>=gnome-extra/sushi-3.10.0
 	>=mail-client/evolution-${PV}
-	>=media-gfx/gnome-font-viewer-${PV}
+	>=media-gfx/gnome-font-viewer-3.10.0
 	>=media-gfx/gnome-photos-${PV}
-	>=media-gfx/gnome-screenshot-${PV}
+	>=media-gfx/gnome-screenshot-3.10.0
 	>=media-sound/gnome-music-${PV}
 	>=media-sound/sound-juicer-3.5.0
 	>=media-video/cheese-${PV}
 	>=net-analyzer/gnome-nettool-3.2
 	>=net-misc/vino-${PV}
 	>=net-misc/vinagre-${PV}
-	>=sci-geosciences/gnome-maps-${PV}
+	>=sci-geosciences/gnome-maps-3.10.0
 	>=sys-apps/baobab-3.10
-	>=sys-apps/gnome-disk-utility-${PV}
+	>=sys-apps/gnome-disk-utility-3.10.0
 	>=www-client/epiphany-${PV}
 
 	tracker? (
 		>=app-misc/tracker-0.16
-		>=gnome-extra/gnome-documents-${PV}
-		>=net-libs/gnome-online-miners-${PV} )
+		>=gnome-extra/gnome-documents-3.10.0
+		>=net-libs/gnome-online-miners-3.10.0 )
 
 	games? (
 		>=games-arcade/gnome-nibbles-${PV}
-		>=games-arcade/gnome-robots-${PV}
+		>=games-arcade/gnome-robots-3.10.0
 		>=games-board/aisleriot-3.2.3.2
 		>=games-board/four-in-a-row-${PV}
 		>=games-board/gnome-chess-${PV}
 		>=games-board/gnome-mahjongg-${PV}
 		>=games-board/gnome-mines-${PV}
 		>=games-board/iagno-${PV}
-		>=games-board/tali-${PV}
+		>=games-board/tali-3.10.0
 		>=games-puzzle/five-or-more-${PV}
-		>=games-puzzle/gnome-klotski-${PV}
+		>=games-puzzle/gnome-klotski-3.10.0
 		>=games-puzzle/gnome-sudoku-${PV}
 		>=games-puzzle/gnome-tetravex-${PV}
 		>=games-puzzle/lightsoff-${PV}
-		>=games-puzzle/quadrapassel-${PV}
+		>=games-puzzle/quadrapassel-3.10.0
 		>=games-puzzle/swell-foop-${PV} )
 "
 # Temporarily removed from RDEPEND. Put them back once version bumped to 3.10

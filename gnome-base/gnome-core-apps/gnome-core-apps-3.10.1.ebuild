@@ -26,13 +26,13 @@ RDEPEND="
 	>=gnome-base/gnome-control-center-${PV}[cups?]
 
 	>=app-crypt/gcr-${PV}
-	>=gnome-base/nautilus-${PV}[tracker?]
+	>=gnome-base/nautilus-3.10.0[tracker?]
 	>=gnome-base/gnome-keyring-${PV}
 	>=gnome-extra/evolution-data-server-${PV}
 
 	>=app-crypt/seahorse-${PV}
 	>=app-editors/gedit-${PV}
-	>=app-text/evince-${PV}
+	>=app-text/evince-3.10.0
 	>=gnome-extra/gnome-contacts-3.10
 	>=media-gfx/eog-${PV}
 	>=media-video/totem-${PV}
@@ -43,12 +43,12 @@ RDEPEND="
 	>=gnome-extra/yelp-${PV}
 
 	>=x11-themes/gtk-engines-2.20.2:2
-	>=x11-themes/gnome-icon-theme-${PV}
+	>=x11-themes/gnome-icon-theme-3.10.0
 	>=x11-themes/gnome-icon-theme-symbolic-${PV}
-	>=x11-themes/gnome-themes-standard-${PV}
+	>=x11-themes/gnome-themes-standard-3.10.0
 
 	cdr? ( >=app-cdr/brasero-3.8.0[tracker?] )
-	bluetooth? ( >=net-wireless/gnome-bluetooth-${PV} )
+	bluetooth? ( >=net-wireless/gnome-bluetooth-3.10.0 )
 	networkmanager? ( >=gnome-extra/nm-applet-0.9.8.0[bluetooth?] )
 
 	!gnome-base/gnome-applets
