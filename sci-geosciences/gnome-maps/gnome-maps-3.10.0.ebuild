@@ -17,6 +17,7 @@ IUSE=""
 RDEPEND="
 	>=dev-libs/glib-2.38.0
 	>=dev-libs/gjs-1.38.0
+	>=media-libs/libchamplain-0.12.5
 "
 
 DEPEND="${RDEPEND}
