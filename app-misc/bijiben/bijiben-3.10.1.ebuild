@@ -32,3 +32,8 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext
 	virtual/pkgconfig
 "
+
+src_configure() {
+	G2CONF+=" --disable-update-mimedb"
+	gnome2_src_configure
+}
