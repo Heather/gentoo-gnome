@@ -15,8 +15,6 @@ SLOT="2.0" # Cannot be installed at the same time as gnome-2
 KEYWORDS="~amd64 ~arm ~ppc ~ppc64 ~x86"
 
 IUSE="accessibility +bluetooth +cdr cups +extras +tracker"
-# Don't have fallback yet, add to IUSE when it's bumped to 3.10
-# IUSE="fallback"
 
 S=${WORKDIR}
 
@@ -43,9 +41,6 @@ RDEPEND="
 		>=gnome-extra/mousetweaks-3.10.0 )
 	extras? ( >=gnome-base/gnome-extra-apps-${PV}[tracker?] )
 "
-# Temporarily removed from RDEPEND. Put them back once version bumped to 3.10
-#	fallback? ( >=gnome-base/gnome-fallback-${PV} )
-
 DEPEND=""
 
 PDEPEND="|| ( >=gnome-base/gvfs-1.18.0[udisks] >=gnome-base/gvfs-1.18.0[gdu] )"
