@@ -52,7 +52,7 @@ COMMON_DEPEND="
 	>=sci-geosciences/geocode-glib-0.99.3
 	>=app-misc/geoclue-1.99.4:2
 
-	colord? ( >=x11-misc/colord-0.1.27:= )
+	colord? ( >=x11-misc/colord-1.0.2:= )
 	cups? ( >=net-print/cups-1.4[dbus] )
 	i18n? ( >=app-i18n/ibus-1.4.99 )
 	packagekit? ( >=app-admin/packagekit-base-0.8.1 )

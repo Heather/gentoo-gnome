@@ -17,7 +17,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd64-fbsd
 
 COMMON_DEPEND="
 	>=app-crypt/gnupg-2
-	>=app-crypt/p11-kit-0.6
+	>=app-crypt/p11-kit-0.19.0
 	>=dev-libs/glib-2.32:2
 	>=dev-libs/libgcrypt-1.2.2:=
 	>=dev-libs/libtasn1-1:=
