@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <herd>gnome</herd>
+  <use>
+    <flag name="client">Build the command line client</flag>
+    <flag name="cups">Build CUPS printer support</flag>
+    <flag name="debug">Enable compiling with debugging
+	information</flag>
+    <flag name="obex">Build OBEX profile support</flag>
+    <flag name="systemd">Enable systemd integration</flag>
+  </use>
+</pkgmetadata>
