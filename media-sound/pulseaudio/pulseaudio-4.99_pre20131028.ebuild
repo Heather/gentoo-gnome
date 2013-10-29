@@ -10,6 +10,7 @@ DESCRIPTION="A networked sound server with an advanced plugin system"
 HOMEPAGE="http://www.pulseaudio.org/"
 
 EGIT_REPO_URI="git://anongit.freedesktop.org/pulseaudio/pulseaudio.git"
+EGIT_COMMIT="09e88de0afd225189a07fc32b5076a8a7aea3089" # 2013-10-23 06:30:46 (GMT)
 
 # libpulse-simple and libpulse link to libpulse-core; this is daemon's
 # library and can link to gdbm and other GPL-only libraries. In this
@@ -17,7 +18,7 @@ EGIT_REPO_URI="git://anongit.freedesktop.org/pulseaudio/pulseaudio.git"
 # GPL-forcing USE flags for those who use them.
 LICENSE="!gdbm? ( LGPL-2.1 ) gdbm? ( GPL-2 )"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~x86"
 IUSE="+alsa +asyncns avahi bluetooth +caps dbus doc equalizer +gdbm +glib gnome
 gtk ipv6 jack libsamplerate lirc neon +orc oss qt4 realtime ssl systemd
 system-wide tcpd test +udev +webrtc-aec +X xen"
