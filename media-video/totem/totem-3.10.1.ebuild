@@ -35,7 +35,7 @@ RDEPEND="
 	>=dev-libs/glib-2.33:2
 	>=x11-libs/gdk-pixbuf-2.23.0:2
 	>=x11-libs/gtk+-3.7.10:3[introspection?]
-	>=dev-libs/totem-pl-parser-2.32.4[introspection?]
+	>=dev-libs/totem-pl-parser-3.9.92[introspection?]
 	>=dev-libs/libpeas-1.1.0[gtk]
 	>=x11-themes/gnome-icon-theme-2.16
 	x11-libs/cairo
