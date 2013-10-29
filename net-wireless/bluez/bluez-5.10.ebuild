@@ -41,3 +41,10 @@ src_configure() {
 		$(use_enable systemd) \
 		--with-systemdunitdir="$(systemd_get_unitdir)"
 }
+
+src_install() {
+	default
+
+	elog "If you need support for bluetooth audio devices, you will"
+	elog "need to emerge >=media-sound/pulseaudio-4.99_pre20131028."
+}
