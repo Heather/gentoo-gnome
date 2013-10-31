@@ -30,6 +30,13 @@ RDEPEND="${CDEPEND}"
 
 DOCS=( AUTHORS ChangeLog README )
 
+src_prepare() {
+	default
+	# https://github.com/Heather/gentoo-gnome/issues/38
+	# https://bugs.launchpad.net/ubuntu/+source/bluez/+bug/269851
+	epatch "${FILESDIR}"/bluez-5.10-work-around-Logitech-diNovo-Edge-keyboard-firmware-issue.patch
+}
+
 src_configure() {
 	econf \
 		--localstatedir=/var \
