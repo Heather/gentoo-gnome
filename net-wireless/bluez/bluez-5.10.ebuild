@@ -3,7 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/bluez-4.101-r7.ebuild,v 1.2 2013/10/06 08:29:26 pacho Exp $
 
 EAPI=5
-inherit autotools eutils multilib systemd user
+inherit autotools eutils multilib systemd user udev
 
 DESCRIPTION="Bluetooth Tools and System Daemons for Linux"
 HOMEPAGE="http://www.bluez.org/"
@@ -28,13 +28,17 @@ DEPEND="${CDEPEND}
 "
 RDEPEND="${CDEPEND}"
 
-DOCS=( AUTHORS ChangeLog README )
+DOCS=( AUTHORS ChangeLog README TODO )
 
 src_prepare() {
 	default
 	# https://github.com/Heather/gentoo-gnome/issues/38
 	# https://bugs.launchpad.net/ubuntu/+source/bluez/+bug/269851
 	epatch "${FILESDIR}"/bluez-5.10-work-around-Logitech-diNovo-Edge-keyboard-firmware-issue.patch
+
+	# Gentoo installs CUPS backends to /usr/libexec
+	sed -i Makefile.in \
+		-e 's:cupsdir = \$(libdir):cupsdir = ${exec_prefix}/libexec:'
 }
 
 src_configure() {
@@ -46,12 +50,21 @@ src_configure() {
 		$(use_enable debug) \
 		$(use_enable obex) \
 		$(use_enable systemd) \
-		--with-systemdunitdir="$(systemd_get_unitdir)"
+		--with-udevdir="$(get_udevdir)" \
+		--with-systemdsystemunitdir="$(systemd_get_unitdir)" \
+		--with-systemduserunitdir="$(systemd_get_userunitdir)"
 }
 
 src_install() {
 	default
 
+	insinto /etc/bluetooth
+	find profiles -type f -name \*.conf | xargs doins src/main.conf
+
 	elog "If you need support for bluetooth audio devices, you will"
 	elog "need to emerge >=media-sound/pulseaudio-4.99_pre20131028."
+}
+
+pkg_postinst() {
+	udev_reload
 }
