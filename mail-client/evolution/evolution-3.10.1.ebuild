@@ -121,6 +121,11 @@ src_prepare() {
 	# https://bugzilla.gnome.org/show_bug.cgi?id=710852
 	epatch "${FILESDIR}"/evolution-3.10.1-alarm-notify-depends-on-mail-formatter.patch
 
+	# Port contact map to geocode-glib >= 0.99.1
+	# https://bugzilla.gnome.org/show_bug.cgi?id=689055
+	# https://github.com/Heather/gentoo-gnome/issues/33
+	epatch "${FILESDIR}"/evolution-3.10.1-port-contact-map-to-geocode-3.10.patch
+
 	ELTCONF="--reverse-deps"
 	DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS* README"
 
