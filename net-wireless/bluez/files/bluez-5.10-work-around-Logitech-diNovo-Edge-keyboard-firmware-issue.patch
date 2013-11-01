@@ -6,10 +6,10 @@ diff -burN bluez-5.10/tools/hid2hci.rules bluez-5.10.new/tools/hid2hci.rules
  
  # Logitech devices
 -KERNEL=="hiddev*", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c70[345abce]|c71[34bc]", \
-+KERNEL=="hiddev*", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c70[345abce]|c71[3bc]", \
++KERNEL=="hiddev*", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c70[345abce]|c713", \
 +  RUN+="hid2hci --method=logitech-hid --devpath=%p"
 +# Logitech, Inc. diNovo Edge Keyboard
-+KERNEL=="hidraw*", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c714", \
++KERNEL=="hidraw*", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c71[4bc]", \
    RUN+="hid2hci --method=logitech-hid --devpath=%p"
  
  ENV{DEVTYPE}!="usb_device", GOTO="hid2hci_end"
