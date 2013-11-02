@@ -29,6 +29,8 @@ dev-libs/libgweather
 dev-libs/libpeas
 dev-libs/libunique:3
 dev-libs/libwacom
+dev-python/bsddb3
+dev-python/html5lib
 dev-python/pyatspi
 dev-python/pycairo
 dev-python/pygobject:3
@@ -264,6 +266,7 @@ net-misc/npapi-sdk
 media-sound/rhythmbox
 >=media-sound/sound-juicer-2.99
 >=media-video/totem-3.0
+dev-lang/orc
 
 # Shotwell
 media-gfx/shotwell
@@ -291,6 +294,7 @@ dev-libs/libcroco:0.6
 =x11-base/xorg-server-1.14*
 x11-wm/mutter
 gnome-base/gnome-shell
+
 
 # Gvfs
 gnome-base/libgdu
@@ -357,10 +361,13 @@ gnome-extra/gnome-tweak-tool
 gnome-extra/mousetweaks
 gnome-extra/office-runner
 
-# GStreamer 1.0
-media-plugins/gst-plugins-vpx:1.0
-media-libs/gst-plugins-good:1.0
-media-libs/gst-plugins-bad:1.0
+
+# GStreamer 1.2
+media-libs/gstreamer:1.2
+media-plugins/gst-plugins-vpx:1.2
+media-libs/gst-plugins-good:1.2
+media-libs/gst-plugins-bad:1.2
+media-libs/gst-plugins-base:1.2
 
 #################
 ## END GNOME 3 ##
