@@ -14,7 +14,7 @@ SLOT="2.0" # Cannot be installed at the same time as gnome-2
 # double check none of the deps are still masked !
 KEYWORDS="~amd64 ~arm ~ppc ~ppc64 ~x86"
 
-IUSE="accessibility +bluetooth +cdr cups +extras +tracker"
+IUSE="accessibility +bluetooth +classic +cdr cups +extras +tracker"
 
 S=${WORKDIR}
 
@@ -39,6 +39,7 @@ RDEPEND="
 		>=app-accessibility/caribou-0.4.12
 		>=app-accessibility/orca-${PV}
 		>=gnome-extra/mousetweaks-3.10.0 )
+	classic? ( >=gnome-extra/gnome-shell-extensions-${PV} )
 	extras? ( >=gnome-base/gnome-extra-apps-${PV}[tracker?] )
 "
 DEPEND=""
