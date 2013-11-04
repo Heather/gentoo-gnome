@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="yes"
 
-inherit autotools eutils gnome2 pax-utils versionator virtualx
+inherit eutils gnome2 pax-utils versionator virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -32,9 +32,9 @@ RDEPEND="
 	>=dev-libs/libxslt-1.1.7
 	>=gnome-base/gsettings-desktop-schemas-0.0.1
 	>=net-dns/avahi-0.6.22
-	>=net-libs/webkit-gtk-1.11.5:3
-	>=net-libs/libsoup-2.41.3:2.4
-	>=x11-libs/gtk+-3.7.10:3
+	>=net-libs/webkit-gtk-2.1.4:3
+	>=net-libs/libsoup-2.42.1:2.4
+	>=x11-libs/gtk+-3.9.12:3
 	>=x11-libs/libnotify-0.5.1:=
 	gnome-base/gnome-desktop:3=
 
