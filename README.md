@@ -9,15 +9,4 @@ Currently this overlay is for **GNOME 3.10** development for Gentoo.
 * For bugs use GitHub issues https://github.com/Heather/gentoo-gnome/issues?state=open
 * Scripts for development available in ./scripts/
 * Please use `pull --rebase` to resolve conflicts or set `branch.autosetuprebase = always`
-* This overlay will be added to layman as `gnome-next` but it's not added yet, you should use it as a local overlay.
-
-Why fork?
----------
-
-This is the message on the official gnome overlay:
-
-* If you plan on forking the overlay to work on some gnome stuff, don't hesitate
-  to send us a mail at gnome_at_gentoo_dot_org to inform us or ask for a merge
-  of your work.
-
-And it doesn't work. Well, at least it's not that easy. So this overlay is for collaboration.
+* This overlay is also available via `layman` as `gnome-next`.
