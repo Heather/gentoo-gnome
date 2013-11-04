@@ -50,6 +50,9 @@ RDEPEND="
 	>=media-libs/gst-plugins-bad-1.0.2:1.0
 	media-libs/gst-plugins-good:1.0
 	media-plugins/gst-plugins-taglib:1.0
+	media-plugins/gst-plugins-vpx:1.0
+	media-plugins/gst-plugins-jpeg:1.0
+	media-plugins/gst-plugins-v4l2:1.0
 	media-plugins/gst-plugins-meta:1.0
 	media-video/gnome-video-effects
 
