@@ -15,7 +15,9 @@ LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~ppc ~ppc64 ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 
-IUSE="+colord +cups debug +i18n packagekit policykit +short-touchpad-timeout smartcard +udev"
+IUSE="+cups debug +i18n packagekit policykit +short-touchpad-timeout smartcard +udev"
+# TODO: ^ Add +colord back when it is made optional.
+
 REQUIRED_USE="
 	packagekit? ( udev )
 	smartcard? ( udev )
@@ -52,13 +54,15 @@ COMMON_DEPEND="
 	>=sci-geosciences/geocode-glib-0.99.3
 	>=app-misc/geoclue-1.99.4:2
 
-	colord? ( >=x11-misc/colord-1.0.2:= )
+	>=x11-misc/colord-1.0.2:=
 	cups? ( >=net-print/cups-1.4[dbus] )
 	i18n? ( >=app-i18n/ibus-1.4.99 )
 	packagekit? ( >=app-admin/packagekit-base-0.8.1 )
 	smartcard? ( >=dev-libs/nss-3.11.2 )
 	udev? ( virtual/udev[gudev] )
 "
+# TODO: ^ Surround colord with USE flag condition once it is made back optional.
+
 # Themes needed by g-s-d, gnome-shell, gtk+:3 apps to work properly
 # <gnome-color-manager-3.1.1 has file collisions with g-s-d-3.1.x
 # <gnome-power-manager-3.1.3 has file collisions with g-s-d-3.1.x
@@ -108,7 +112,6 @@ src_configure() {
 	gnome2_src_configure \
 		--disable-static \
 		--enable-man \
-		$(use_enable colord color) \
 		$(use_enable cups) \
 		$(use_enable debug) \
 		$(use_enable debug more-warnings) \
@@ -116,6 +119,7 @@ src_configure() {
 		$(use_enable packagekit) \
 		$(use_enable smartcard smartcard-support) \
 		$(use_enable udev gudev) 
+# TODO: $(use_enable colord color) \
 
 		#FIXME: Maybe with patch it will be possible
 		#$(use_enable input_devices_wacom wacom)
