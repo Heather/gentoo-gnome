@@ -91,7 +91,7 @@ strip_builddir() {
 	shift
 	local directory=$1
 	shift
-	sed -e "s/^\(${rule} =.*\)${directory}\(.*\)$/\1\2/" -i $@ \
+	sed -e "s/^\(${rule} =.*\) ${directory} \(.*\)$/\1 \2/" -i $@ \
 		|| die "Could not strip director ${directory} from build."
 }
 
@@ -106,25 +106,17 @@ src_prepare() {
 	# epatch "${FILESDIR}/${PN}-3.3.18-fallback-theme.patch"
 
 	if use test; then
-		# Non-working test in gentoo's env
-		sed 's:\(g_test_add_func ("/ui-tests/keys-events.*\):/*\1*/:g' \
-			-i gtk/tests/testing.c || die "sed 1 failed"
-		sed '\%/recent-manager/add%,/recent_manager_purge/ d' \
-			-i gtk/tests/recentmanager.c || die "sed 2 failed"
-
 		# FIXME: multiple reftests fail when run from portage (but succeed when
 		# run from a manual compile in a temp directory)
 		sed -e 's:\(SUBDIRS.*\)reftests:\1:' \
 			-i tests/Makefile.* || die "sed 3 failed"
-
-		# Test results depend on the list of mounted filesystems!
-		rm -v tests/a11y/pickers.{ui,txt} || die "rm failed"
 	else
 		# don't waste time building tests
-		strip_builddir SRC_SUBDIRS testsuite Makefile.am
-		strip_builddir SRC_SUBDIRS testsuite Makefile.in
 		strip_builddir SRC_SUBDIRS tests Makefile.am
 		strip_builddir SRC_SUBDIRS tests Makefile.in
+
+		strip_builddir SRC_SUBDIRS testsuite Makefile.am
+		strip_builddir SRC_SUBDIRS testsuite Makefile.in
 	fi
 
 	if ! use examples; then
@@ -132,8 +124,6 @@ src_prepare() {
 		strip_builddir SRC_SUBDIRS demos Makefile.am
 		strip_builddir SRC_SUBDIRS demos Makefile.in
 	fi
-
-	#epatch "${FILESDIR}/gtk+-post-makefile-sed.patch"
 
 	# automake 1.13 is hard-coded in bundled configure script. Running
 	# autoreconf to regenerate.
