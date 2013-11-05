@@ -33,7 +33,7 @@ COMMON_DEPEND="
 	>=x11-libs/gtk+-3.7.10:3
 	>=gnome-base/gsettings-desktop-schemas-3.9.91
 	>=gnome-base/gnome-desktop-3.9.90:3=
-	>=gnome-base/gnome-settings-daemon-3.8.3[colord?,policykit]
+	>=gnome-base/gnome-settings-daemon-3.8.3[policykit]
 	>=gnome-base/libgnomekbd-2.91.91
 
 	>=dev-libs/libpwquality-1.2.2
