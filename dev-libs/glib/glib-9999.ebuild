@@ -168,13 +168,13 @@ src_configure() {
 	use debug && myconf="--enable-debug"
 
 	if use test; then
-		myconf="${myconf} --enable-modular-tests"
+		myconf="${myconf} --enable-always-build-tests"
 	else
 		if [[ ${PV} = 9999 ]] && use doc; then
 			# need to build tests if USE=doc for bug #387385
-			myconf="${myconf} --enable-modular-tests"
+			myconf="${myconf} --enable-always-build-tests"
 		else
-			myconf="${myconf} --disable-modular-tests"
+			myconf="${myconf} --disable-always-build-tests"
 		fi
 	fi
 

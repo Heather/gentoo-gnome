@@ -195,7 +195,7 @@ multilib_src_configure() {
 		$(use_enable static-libs static) \
 		$(use_enable systemtap dtrace) \
 		$(use_enable systemtap systemtap) \
-		$(use_enable test modular-tests) \
+		$(use_enable test always-build-tests) \
 		--enable-man \
 		--with-pcre=internal \
 		--with-threads=posix \
