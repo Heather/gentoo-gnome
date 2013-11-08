@@ -14,7 +14,7 @@ HOMEPAGE="http://live.gnome.org/GnomeShell"
 
 LICENSE="GPL-2+ LGPL-2+"
 SLOT="0"
-IUSE="+i18n"
+IUSE="+bluetooth +i18n"
 KEYWORDS="~amd64 ~arm ~ppc ~ppc64 ~x86"
 
 # libXfixes-5.0 needed for pointer barriers
@@ -64,7 +64,7 @@ COMMON_DEPEND="
 	x11-libs/pango[introspection]
 	x11-apps/mesa-progs
 
-	>=net-wireless/gnome-bluetooth-3.5[introspection]
+	bluetooth? ( >=net-wireless/gnome-bluetooth-3.5[introspection] )
 	>=net-misc/networkmanager-0.9.6[introspection]
 "
 # Runtime-only deps are probably incomplete and approximate.
