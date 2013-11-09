@@ -131,7 +131,6 @@ src_configure() {
 	# Do not error out on warnings
 	gnome2_src_configure \
 		--enable-man \
-		--disable-jhbuild-wrapper-script \
 		BROWSER_PLUGIN_DIR="${EPREFIX}"/usr/$(get_libdir)/nsbrowser/plugins
 }
 
