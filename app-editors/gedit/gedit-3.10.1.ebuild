@@ -23,8 +23,8 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd64-fbsd
 # X libs are not needed for OSX (aqua)
 COMMON_DEPEND="
 	>=dev-libs/libxml2-2.5.0:2
-	>=dev-libs/glib-2.35.4:2
-	>=x11-libs/gtk+-3.7.10:3[introspection?]
+	>=dev-libs/glib-2.37.5:2
+	>=x11-libs/gtk+-3.9.9:3[introspection?]
 	>=x11-libs/gtksourceview-3.9.91:3.0[introspection?]
 	>=dev-libs/libpeas-1.7.0[gtk]
 
@@ -38,9 +38,9 @@ COMMON_DEPEND="
 	introspection? ( >=dev-libs/gobject-introspection-0.9.3 )
 	python? (
 		${PYTHON_DEPS}
-		>=dev-libs/gobject-introspection-0.9.3
-		>=x11-libs/gtk+-3:3[introspection]
-		>=x11-libs/gtksourceview-3.6:3.0[introspection]
+		>=dev-libs/gobject-introspection-1.38.0
+		>=x11-libs/gtk+-3.9.9:3[introspection]
+		>=x11-libs/gtksourceview-3.9.91:3.0[introspection]
 		dev-python/pycairo[${PYTHON_USEDEP}]
 		>=dev-python/pygobject-3:3[cairo,${PYTHON_USEDEP}] )
 	spell? (
