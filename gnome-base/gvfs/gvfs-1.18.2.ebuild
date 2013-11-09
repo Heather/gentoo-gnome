@@ -20,7 +20,7 @@ IUSE="afp archive avahi bluetooth bluray cdda fuse gdu gnome-keyring gnome-onlin
 
 # Can use libgphoto-2.5.0 as well. Automagic detection.
 RDEPEND="
-	>=dev-libs/glib-2.35:2
+	>=dev-libs/glib-2.37:2
 	sys-apps/dbus
 	dev-libs/libxml2:2
 	net-misc/openssh
