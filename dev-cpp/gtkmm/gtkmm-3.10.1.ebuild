@@ -17,8 +17,8 @@ IUSE="aqua doc examples test wayland +X"
 REQUIRED_USE="|| ( aqua wayland X )"
 
 RDEPEND="
-	>=dev-cpp/glibmm-2.36.2:2
-	>=x11-libs/gtk+-3.8.0:3[aqua?,wayland?,X?]
+	>=dev-cpp/glibmm-2.38.0:2
+	>=x11-libs/gtk+-3.10.0:3[aqua?,wayland?,X?]
 	>=x11-libs/gdk-pixbuf-2.22.1:2
 	>=dev-cpp/atkmm-2.22.2
 	>=dev-cpp/cairomm-1.9.2.2
