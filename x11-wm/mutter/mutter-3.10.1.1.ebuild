@@ -21,7 +21,7 @@ COMMON_DEPEND="
 	x11-libs/gdk-pixbuf:2[introspection?]
 	>=x11-libs/gtk+-3.3.7:3[X,introspection?]
 	>=dev-libs/glib-2.36.0:2
-	>=media-libs/clutter-1.14.3:1.0[introspection?]
+	>=media-libs/clutter-1.15.90:1.0[introspection?]
 	>=media-libs/cogl-1.15.0:1.0=[introspection?]
 	>=media-libs/libcanberra-0.26[gtk3]
 	>=x11-libs/startup-notification-0.7
