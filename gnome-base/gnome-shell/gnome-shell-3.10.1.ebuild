@@ -29,21 +29,21 @@ COMMON_DEPEND="
 	>=dev-libs/atk-2[introspection]
 	>=app-crypt/gcr-3.7.5[introspection]
 	>=dev-libs/glib-2.37:2
-	>=dev-libs/gjs-1.37.4
+	>=dev-libs/gjs-1.38.1
 	>=dev-libs/gobject-introspection-0.10.1
 	>=x11-libs/gtk+-3.7.9:3[introspection]
 	>=media-libs/clutter-1.13.4:1.0[introspection]
 	>=dev-libs/json-glib-0.13.2
 	>=dev-libs/libcroco-0.6.8:0.6
-	>=gnome-base/gnome-desktop-3.9.90:3=[introspection]
+	>=gnome-base/gnome-desktop-3.5.3:3=[introspection]
 	>=gnome-base/gsettings-desktop-schemas-3.7.4
 	>=gnome-base/gnome-keyring-3.3.90
 	>=gnome-base/gnome-menus-3.5.3:3[introspection]
 	gnome-base/libgnome-keyring
-	>=gnome-extra/evolution-data-server-3.9.90:=
+	>=gnome-extra/evolution-data-server-3.5.3:=
 	>=media-libs/gstreamer-0.11.92:1.0
 	>=net-im/telepathy-logger-0.2.4[introspection]
-	>=net-libs/telepathy-glib-0.19[introspection]
+	>=net-libs/telepathy-glib-0.17.5[introspection]
 	>=sys-auth/polkit-0.100[introspection]
 	>=x11-libs/libXfixes-5.0
 	>=x11-wm/mutter-${PV}[introspection]
@@ -65,7 +65,7 @@ COMMON_DEPEND="
 	x11-apps/mesa-progs
 
 	>=net-wireless/gnome-bluetooth-3.5[introspection]
-	>=net-misc/networkmanager-0.9.6[introspection]
+	>=net-misc/networkmanager-0.9.8[introspection]
 "
 # Runtime-only deps are probably incomplete and approximate.
 # Introspection deps generated using:
