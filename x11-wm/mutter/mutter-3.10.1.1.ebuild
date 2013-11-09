@@ -19,10 +19,10 @@ COMMON_DEPEND="
 	>=x11-libs/pango-1.2[X,introspection?]
 	>=x11-libs/cairo-1.10[X]
 	x11-libs/gdk-pixbuf:2[introspection?]
-	>=x11-libs/gtk+-3.3.7:3[X,introspection?]
+	>=x11-libs/gtk+-3.9.11:3[X,introspection?]
 	>=dev-libs/glib-2.36.0:2
 	>=media-libs/clutter-1.15.90:1.0[introspection?]
-	>=media-libs/cogl-1.15.0:1.0=[introspection?]
+	>=media-libs/cogl-1.15.6:1.0=[introspection?]
 	>=media-libs/libcanberra-0.26[gtk3]
 	>=x11-libs/startup-notification-0.7
 	>=x11-libs/libXcomposite-0.2
