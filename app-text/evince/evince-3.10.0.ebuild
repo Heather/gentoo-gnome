@@ -24,11 +24,11 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebs
 # libX11 used for totem-screensaver
 COMMON_DEPEND="
 	dev-libs/atk
-	>=dev-libs/glib-2.33:2
+	>=dev-libs/glib-2.36.0:2
 	>=dev-libs/libxml2-2.5:2
 	sys-libs/zlib:=
 	x11-libs/gdk-pixbuf:2
-	>=x11-libs/gtk+-3.7.5:3[introspection?]
+	>=x11-libs/gtk+-3.8.0:3[introspection?]
 	x11-libs/libX11:=
 	>=x11-libs/libSM-1:=
 	x11-libs/libICE:=
