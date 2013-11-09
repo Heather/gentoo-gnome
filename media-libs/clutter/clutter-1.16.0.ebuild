@@ -37,10 +37,10 @@ RDEPEND="
 	>=x11-libs/libXi-1.3
 	>=x11-libs/libXfixes-3
 	>=x11-libs/libXcomposite-0.4
-	
-	evdev? (  
+
+	evdev? (
 	       	  dev-libs/libevdev
-	          x11-libs/libxkbcommon 
+	          x11-libs/libxkbcommon
 		  virtual/udev[gudev]
 		)
 	gtk? ( >=x11-libs/gtk+-3.3.18:3 )
