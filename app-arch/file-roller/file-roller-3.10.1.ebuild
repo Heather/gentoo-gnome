@@ -21,9 +21,9 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebs
 # pango used in fr-window
 RDEPEND="
 	>=app-arch/libarchive-3:=
-	>=dev-libs/glib-2.29.14:2
+	>=dev-libs/glib-2.36.0:2
 	>=dev-libs/json-glib-0.14
-	>=x11-libs/gtk+-3.6:3
+	>=x11-libs/gtk+-3.9.3:3
 	>=x11-libs/libnotify-0.4.3:=
 	sys-apps/file
 	x11-libs/cairo
