@@ -21,9 +21,9 @@ REQUIRED_USE="gedit? ( ${PYTHON_REQUIRED_USE} )"
 
 # FIXME: automagic python dependency
 COMMON_DEPEND="
-	>=dev-libs/glib-2.32:2
-	>=x11-libs/gtk+-3.7.10:3
-	>=net-libs/webkit-gtk-1.10.0:3
+	>=dev-libs/glib-2.37.3:2
+	>=x11-libs/gtk+-3.9.8:3
+	>=net-libs/webkit-gtk-2.0.0:3
 "
 RDEPEND="${COMMON_DEPEND}
 	gedit? (
