@@ -27,25 +27,25 @@ REQUIRED_USE="
 "
 
 RDEPEND="
-	>=app-editors/gedit-3.7.1[python?]
+	>=app-editors/gedit-3.9.3[python?]
 	>=dev-libs/glib-2.32:2
 	>=dev-libs/libpeas-1.7.0[gtk,python?]
-	>=x11-libs/gtk+-3.4:3
-	>=x11-libs/gtksourceview-3:3.0
+	>=x11-libs/gtk+-3.9.0:3
+	>=x11-libs/gtksourceview-3.9.2:3.0
 	python? (
 		${PYTHON_DEPS}
-		>=app-editors/gedit-3[introspection,${PYTHON_USEDEP}]
-		dev-libs/libpeas[${PYTHON_USEDEP}]
+		>=app-editors/gedit-3.9.3[introspection,${PYTHON_USEDEP}]
+		>=dev-libs/libpeas-1.7.0[${PYTHON_USEDEP}]
 		dev-python/dbus-python[${PYTHON_USEDEP}]
 		dev-python/pycairo
 		dev-python/pygobject:3[cairo,${PYTHON_USEDEP}]
-		>=x11-libs/gtk+-3.4:3[introspection]
-		>=x11-libs/gtksourceview-3:3.0[introspection]
+		>=x11-libs/gtk+-3.9.3:3[introspection]
+		>=x11-libs/gtksourceview-3.9.2:3.0[introspection]
 		x11-libs/pango[introspection]
 		x11-libs/gdk-pixbuf:2[introspection]
 	)
 	charmap? ( >=gnome-extra/gucharmap-3:2.90[introspection] )
-	git? ( >=dev-libs/libgit2-glib-0.0.2 )
+	git? ( >=dev-libs/libgit2-glib-0.0.6 )
 	terminal? ( x11-libs/vte:2.90[introspection] )
 "
 DEPEND="${RDEPEND}
