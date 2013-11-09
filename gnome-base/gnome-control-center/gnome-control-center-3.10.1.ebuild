@@ -14,7 +14,7 @@ HOMEPAGE="https://git.gnome.org/browse/gnome-control-center/"
 LICENSE="GPL-2+"
 SLOT="2"
 
-IUSE="+colord +cups +gnome-online-accounts +i18n input_devices_wacom kerberos +socialweb v4l"
+IUSE="+bluetooth +colord +cups +gnome-online-accounts +i18n input_devices_wacom kerberos +socialweb v4l"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 
 # False positives caused by nested configure scripts
@@ -57,7 +57,7 @@ COMMON_DEPEND="
 	x11-libs/libXxf86misc
 	>=x11-libs/libXi-1.2
 
-	>=net-wireless/gnome-bluetooth-3.5.5:=
+	bluetooth? ( >=net-wireless/gnome-bluetooth-3.5.5:= )
 	colord? ( >=x11-misc/colord-0.1.29 )
 	cups? (
 		>=net-print/cups-1.4[dbus]
@@ -129,6 +129,9 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-3.8.0-paths.patch"
 	epatch "${FILESDIR}/${P}-fixbuild.patch"
 
+	# Add support for optional bluetooth / colord / gnome-online-accounts / wacom
+	epatch "${FILESDIR}/${P}-optional-bluetooth-colord-goa-wacom.patch"
+
 	epatch_user
 	eautoreconf
 	cd egg-list-box/ && eautoreconf && cd ..
@@ -147,6 +150,7 @@ src_configure() {
 		--disable-update-mimedb \
 		--disable-static \
 		--enable-documentation \
+		$(use_enable bluetooth) \
 		$(use_enable colord color) \
 		$(use_enable cups) \
 		$(use_enable gnome-online-accounts goa) \
