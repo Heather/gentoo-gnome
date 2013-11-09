@@ -25,11 +25,11 @@ REQUIRED_USE="
 
 # require colord-0.1.27 dependency for connection type support
 COMMON_DEPEND="
-	>=dev-libs/glib-2.37.3:2
-	>=dev-libs/libgweather-${PV}
+	>=dev-libs/glib-2.37.7:2
+	>=dev-libs/libgweather-3.9.5
 	>=x11-libs/gtk+-3.7.8:3
-	>=gnome-base/gnome-desktop-3.7.90:3=
-	>=gnome-base/gsettings-desktop-schemas-3.7.2.1
+	>=gnome-base/gnome-desktop-3.9.0:3=
+	>=gnome-base/gsettings-desktop-schemas-3.9.91
 	>=gnome-base/librsvg-2.36.2
 	media-fonts/cantarell
 	media-libs/fontconfig
@@ -51,7 +51,7 @@ COMMON_DEPEND="
 	>=dev-libs/libwacom-0.7
 	x11-drivers/xf86-input-wacom
 
-	>=sci-geosciences/geocode-glib-0.99.3
+	>=sci-geosciences/geocode-glib-3.10.0
 	>=app-misc/geoclue-1.99.4:2
 
 	>=x11-misc/colord-1.0.2:=
