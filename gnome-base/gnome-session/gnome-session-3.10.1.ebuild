@@ -20,12 +20,12 @@ IUSE="doc elibc_FreeBSD gconf ipv6 systemd"
 # xdg-user-dirs-update is run during login (see 10-user-dirs-update-gnome below).
 # gdk-pixbuf used in the inhibit dialog
 COMMON_DEPEND="
-	>=dev-libs/glib-2.37.0:2
+	>=dev-libs/glib-2.35.0:2
 	x11-libs/gdk-pixbuf:2
 	>=x11-libs/gtk+-2.90.7:3
 	>=dev-libs/json-glib-0.10
 	>=dev-libs/dbus-glib-0.76
-	>=gnome-base/gnome-desktop-3.7.90:3
+	>=gnome-base/gnome-desktop-3.9.91:3
 	>=sys-power/upower-0.9.0
 	elibc_FreeBSD? ( dev-libs/libexecinfo )
 
