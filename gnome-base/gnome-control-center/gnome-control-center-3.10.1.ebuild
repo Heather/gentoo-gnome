@@ -30,7 +30,7 @@ QA_CONFIGURE_OPTIONS=".*"
 COMMON_DEPEND="
 	>=dev-libs/glib-2.37.7:2
 	>=x11-libs/gdk-pixbuf-2.23.0:2
-	>=x11-libs/gtk+-3.7.10:3
+	>=x11-libs/gtk+-3.9.12:3
 	>=gnome-base/gsettings-desktop-schemas-3.9.91
 	>=gnome-base/gnome-desktop-3.9.90:3=
 	>=gnome-base/gnome-settings-daemon-3.8.3[policykit]
@@ -41,10 +41,11 @@ COMMON_DEPEND="
 	gnome-base/gnome-menus:3
 	gnome-base/libgtop:2
 	media-libs/fontconfig
+	media-libs/clutter
 
 	>=media-libs/libcanberra-0.13[gtk3]
 	>=media-sound/pulseaudio-2[glib]
-	>=sys-auth/polkit-0.97
+	>=sys-auth/polkit-0.103
 	>=sys-power/upower-0.9.1
 	>=x11-libs/libnotify-0.7.3:0=
 
@@ -82,7 +83,7 @@ RDEPEND="${COMMON_DEPEND}
 	x11-themes/gnome-icon-theme-symbolic
 	colord? (
 		>=gnome-extra/gnome-color-manager-3
-		>=x11-misc/colord-0.1.29
+		>=x11-misc/colord-0.1.34
 		>=x11-libs/colord-gtk-0.1.24 )
 	cups? (
 		>=app-admin/system-config-printer-gnome-1.3.5
