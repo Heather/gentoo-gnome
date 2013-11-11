@@ -113,19 +113,6 @@ x-scheme-handler/https=firefox.desktop
 file from /usr/share/applications if you use a different browser)."
 
 src_prepare() {
-	# Use webkit_dom_element_get_id:
-	# https://bugzilla.gnome.org/show_bug.cgi?id=707112
-	epatch "${FILESDIR}"/evolution-3.10.0-use-webkit-dom-element-get-set-id.patch
-
-	# Link libevolution-mail-formatter.la to evolution-alarm-notify
-	# https://bugzilla.gnome.org/show_bug.cgi?id=710852
-	epatch "${FILESDIR}"/evolution-3.10.1-alarm-notify-depends-on-mail-formatter.patch
-
-	# Port contact map to geocode-glib >= 0.99.1
-	# https://bugzilla.gnome.org/show_bug.cgi?id=689055
-	# https://github.com/Heather/gentoo-gnome/issues/33
-	epatch "${FILESDIR}"/evolution-3.10.1-port-contact-map-to-geocode-3.10.patch
-
 	ELTCONF="--reverse-deps"
 	DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS* README"
 
