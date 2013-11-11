@@ -20,7 +20,7 @@ COMMON_DEPEND="
 	>=app-misc/tracker-0.16:=
 	>=app-text/evince-3.7.4[introspection]
 	dev-libs/gjs
-	>=dev-libs/glib-2.35.1:2
+	>=dev-libs/glib-2.37.0:2
 	>=dev-libs/gobject-introspection-1.31.6
 	>=dev-libs/libgdata-0.13.3[gnome,introspection]
 	gnome-base/gnome-desktop:3=
@@ -31,7 +31,7 @@ COMMON_DEPEND="
 	>=net-libs/libzapojit-0.0.2
 	>=net-libs/webkit-gtk-1.10.0:3
 	>=x11-libs/gdk-pixbuf-2.25:2[introspection]
-	>=x11-libs/gtk+-3.7.7:3[introspection]
+	>=x11-libs/gtk+-3.9.11:3[introspection]
 	x11-libs/pango[introspection]
 "
 RDEPEND="${COMMON_DEPEND}
