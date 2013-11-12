@@ -23,7 +23,8 @@ RDEPEND=">=dev-libs/dbus-glib-0.100
 	gps? ( sci-geosciences/gpsd )
 	gtk? ( x11-libs/gtk+:2 )
 	networkmanager? ( net-misc/networkmanager )
-	skyhook? ( net-libs/libsoup )"
+	skyhook? ( net-libs/libsoup )
+	!<sci-geosciences/geocode-glib-3.10.0"
 DEPEND="${RDEPEND}
 	dev-util/gtk-doc
 	dev-util/gtk-doc-am
