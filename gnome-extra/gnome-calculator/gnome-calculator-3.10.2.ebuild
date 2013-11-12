@@ -13,7 +13,7 @@ HOMEPAGE="https://live.gnome.org/Calculator"
 LICENSE="GPL-2"
 SLOT="0"
 IUSE=""
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~x86"
 
 COMMON_DEPEND="
 	>=x11-libs/gtk+-3:3
