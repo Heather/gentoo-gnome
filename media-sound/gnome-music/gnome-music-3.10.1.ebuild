@@ -4,7 +4,7 @@
 
 EAPI="5"
 
-inherit autotools gnome2
+inherit gnome2
 
 DESCRIPTION="Music management for GNOME"
 HOMEPAGE="https://git.gnome.org/browse/gnome-music/"
@@ -12,7 +12,7 @@ HOMEPAGE="https://git.gnome.org/browse/gnome-music/"
 LICENSE="GPL-2"
 SLOT="0"
 IUSE=""
-KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+KEYWORDS="~amd64 ~arm ~ppc ~ppc64 ~x86"
 
 #media-plugins/grilo-plugins maybe optional
 COMMON_DEPEND="
