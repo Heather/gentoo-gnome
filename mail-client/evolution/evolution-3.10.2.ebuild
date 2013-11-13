@@ -6,11 +6,10 @@ EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit autotools eutils flag-o-matic readme.gentoo gnome2 versionator
+inherit autotools eutils flag-o-matic readme.gentoo gnome2
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
-MY_MAJORV=$(get_version_component_range 1-2)
 
 DESCRIPTION="Integrated mail, addressbook and calendaring functionality"
 HOMEPAGE="https://live.gnome.org/Evolution http://projects.gnome.org/evolution/"
@@ -33,7 +32,8 @@ PINENTRY_DEPEND="|| ( app-crypt/pinentry[gtk] app-crypt/pinentry-qt app-crypt/pi
 # glade-3 support is for maintainers only per configure.ac
 # pst is not mature enough and changes API/ABI frequently
 COMMON_DEPEND="
-	>=dev-libs/glib-2.34:2
+	>=app-crypt/gcr-3.4
+	>=dev-libs/glib-2.36:2
 	>=x11-libs/cairo-1.9.15:=[glib]
 	>=x11-libs/gtk+-3.4.0:3
 	>=x11-libs/gdk-pixbuf-2.24
@@ -42,15 +42,15 @@ COMMON_DEPEND="
 	>=media-libs/libcanberra-0.25[gtk3]
 	>=x11-libs/libnotify-0.7:=
 	>=gnome-extra/evolution-data-server-${PV}:=[weather?]
-	=gnome-extra/evolution-data-server-${MY_MAJORV}*
 	>=gnome-extra/gtkhtml-4.5.2:4.0
 	dev-libs/atk
 	>=dev-libs/dbus-glib-0.6
 	>=dev-libs/libxml2-2.7.3:2
-	>=net-libs/libsoup-2.43:2.4
+	|| ( >=net-libs/libsoup-2.42:2.4 >=net-libs/libsoup-gnome-2.40.3:2.4 )
 	>=x11-misc/shared-mime-info-0.22
 	>=x11-themes/gnome-icon-theme-2.30.2.1
-	>=net-libs/webkit-gtk-1.10.0
+	>=dev-libs/libgdata-0.10:=
+	>=net-libs/webkit-gtk-2.0.1
 
 	x11-libs/libSM
 	x11-libs/libICE
@@ -63,7 +63,7 @@ COMMON_DEPEND="
 		>=media-libs/libchamplain-0.12:0.12
 		>=media-libs/clutter-1.0.0:1.0
 		>=media-libs/clutter-gtk-0.90:1.0
-		>=sci-geosciences/geocode-glib-0.99.0
+		>=sci-geosciences/geocode-glib-3.10.0
 		x11-libs/mx:1.0 )
 	gstreamer? ( || (
 		 ( media-libs/gstreamer:1.0
