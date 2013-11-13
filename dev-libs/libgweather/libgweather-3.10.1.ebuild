@@ -4,15 +4,17 @@
 
 EAPI="5"
 GCONF_DEBUG="no"
+VALA_MIN_API_VERSION="0.22"
 
-inherit gnome2
+inherit gnome2 vala
 
 DESCRIPTION="Library to access weather information from online services"
 HOMEPAGE="https://live.gnome.org/LibGWeather"
 
 LICENSE="GPL-2+"
 SLOT="2/3-3" # subslot = 3-(libgweather-3 soname suffix)
-IUSE="+introspection"
+IUSE="+introspection +vala"
+REQUIRED_USE="introspection? ( vala )"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~x86-solaris"
 
 COMMON_DEPEND="
@@ -32,13 +34,15 @@ DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.50
 	sys-devel/gettext
 	virtual/pkgconfig
+	vala? ( $(vala_depend) )
 "
 
 src_configure() {
 	DOCS="AUTHORS ChangeLog MAINTAINERS NEWS"
-	# Do not add --disable-all-translations-in-one-xml : it will enable them
+
 	gnome2_src_configure \
 		--enable-locations-compression \
 		--disable-static \
 		$(use_enable introspection)
+		$(use_enable vala)
 }
