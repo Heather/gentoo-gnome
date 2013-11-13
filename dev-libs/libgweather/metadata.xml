@@ -4,5 +4,6 @@
   <herd>gnome</herd>
   <use>
     <flag name="vala">Enable bindings for dev-lang/vala</flag>
+    <flag name="glade">Install the glade catalog</flag>
   </use>
 </pkgmetadata>

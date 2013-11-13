@@ -13,7 +13,7 @@ HOMEPAGE="https://live.gnome.org/LibGWeather"
 
 LICENSE="GPL-2+"
 SLOT="2/3-3" # subslot = 3-(libgweather-3 soname suffix)
-IUSE="+introspection +vala"
+IUSE="+introspection glade +vala"
 REQUIRED_USE="introspection? ( vala )"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~x86-solaris"
 
@@ -41,8 +41,8 @@ src_configure() {
 	DOCS="AUTHORS ChangeLog MAINTAINERS NEWS"
 
 	gnome2_src_configure \
-		--enable-locations-compression \
 		--disable-static \
 		$(use_enable introspection)
 		$(use_enable vala)
+		$(use_enable glade glade-catalog)
 }
