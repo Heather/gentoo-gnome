@@ -132,7 +132,6 @@ src_prepare() {
 
 	epatch_user
 	eautoreconf
-	cd egg-list-box/ && eautoreconf && cd ..
 
 	# panels/datetime/Makefile.am gets touched as a result of something in our
 	# src_prepare(). We need to touch timedated{c,h} to prevent them from being
