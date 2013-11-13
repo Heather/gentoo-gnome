@@ -6,7 +6,7 @@ EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit autotools eutils gnome2
+inherit eutils gnome2
 
 DESCRIPTION="Disk Utility for GNOME using udisks"
 HOMEPAGE="http://git.gnome.org/browse/gnome-disk-utility"
