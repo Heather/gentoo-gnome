@@ -26,6 +26,7 @@ COMMON_DEPEND="
 	gnome-base/gnome-desktop:3=
 	>=media-libs/clutter-1.10:1.0
 	>=media-libs/clutter-gtk-1.3.2:1.0[introspection]
+	media-libs/gd:2
 	>=net-libs/gnome-online-accounts-3.2.0
 	>=net-libs/libsoup-2.41.3:2.4
 	>=net-libs/libzapojit-0.0.2
