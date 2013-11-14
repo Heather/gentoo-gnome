@@ -14,7 +14,7 @@ DESCRIPTION="Clutter is a library for creating graphical user interfaces"
 LICENSE="LGPL-2.1+ FDL-1.1+"
 SLOT="1.0"
 IUSE="debug doc evdev gtk +introspection test wayland" # tslib
-KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86"
+KEYWORDS="~amd64 ~arm ~mips ~x86"
 
 # NOTE: glx flavour uses libdrm + >=mesa-7.3
 # XXX: uprof needed for profiling
