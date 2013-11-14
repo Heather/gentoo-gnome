@@ -56,12 +56,11 @@ src_prepare() {
 }
 
 src_configure() {
-	myconf="ITSTOOL=$(type -P true)"
 	gnome2_src_configure \
 		--disable-static \
 		$(use_enable debug) \
 		$(use_with X x11-support) \
-		${myconf}
+		ITSTOOL=$(type -P true)
 }
 
 src_install() {
