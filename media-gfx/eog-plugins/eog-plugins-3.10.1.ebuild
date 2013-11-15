@@ -23,7 +23,7 @@ REQUIRED_USE="
 RDEPEND="
 	>=dev-libs/glib-2.32:2
 	>=dev-libs/libpeas-0.7.4:=
-	>=media-gfx/eog-3.5.5
+	>=media-gfx/eog-3.9.1
 	>=x11-libs/gtk+-3.3.8:3
 	exif? ( >=media-libs/libexif-0.6.16 )
 	flickr? ( media-gfx/postr )
