@@ -19,7 +19,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 REQUIRED_USE="exif? ( jpeg )"
 
 RDEPEND="
-	>=x11-libs/gtk+-3.5.4:3[introspection,X]
+	>=x11-libs/gtk+-3.7.8:3[introspection,X]
 	>=dev-libs/glib-2.31:2
 	>=dev-libs/libxml2-2:2
 	>=dev-libs/libpeas-0.7.4:=[gtk]
