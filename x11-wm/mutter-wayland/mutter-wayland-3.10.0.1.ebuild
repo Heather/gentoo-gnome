@@ -13,7 +13,7 @@ HOMEPAGE="http://git.gnome.org/browse/mutter/"
 LICENSE="GPL-2+"
 SLOT="0"
 IUSE="+introspection test"
-KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+KEYWORDS="~amd64 ~arm ~x86"
 
 COMMON_DEPEND="
 	>=x11-libs/pango-1.2[X,introspection?]
@@ -44,13 +44,13 @@ COMMON_DEPEND="
 	gnome-extra/zenity
 
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
-	
+
 	x11-libs/libdrm
-	
-	sys-apps/systemd	
-	
+
+	sys-apps/systemd
+
 	dev-libs/wayland
-	dev-libs/weston	
+	dev-libs/weston
 "
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/gtk-doc-am-1.15
@@ -62,7 +62,7 @@ DEPEND="${COMMON_DEPEND}
 	x11-proto/xproto
 
 	!x11-wm/mutter
-	
+
 	test? ( app-text/docbook-xml-dtd:4.5 )
 "
 RDEPEND="${COMMON_DEPEND}
