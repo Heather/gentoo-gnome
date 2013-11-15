@@ -136,7 +136,7 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-2.32.0-xinitrc-ssh-agent.patch"
 
 	# Fix automagic selinux, upstream bug #704188
-    #FIXME
+	#FIXME
 	#epatch "${FILESDIR}/${PN}-3.6.0-selinux-automagic.patch"
 
 	# Gentoo does not have a fingerprint-auth pam stack
