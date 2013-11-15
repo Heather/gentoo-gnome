@@ -21,7 +21,6 @@ RDEPEND="
 	>=dev-libs/glib-2.26:2
 	>=x11-libs/gtk+-3.0.0:3
 	>=dev-libs/libgcrypt-1.1.90:0=
-	>=net-libs/libsoup-2.24:2.4
 
 	dev-libs/dbus-glib
 	x11-libs/cairo:=
