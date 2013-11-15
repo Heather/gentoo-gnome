@@ -21,7 +21,7 @@ COMMON_DEPEND="
 	media-libs/fontconfig:1.0
 	media-libs/freetype:2
 	x11-libs/cairo
-	>=x11-libs/gtk+-3.7.10:3
+	>=x11-libs/gtk+-3.9.11:3
 	x11-libs/pango
 "
 RDEPEND="${COMMON_DEPEND}
