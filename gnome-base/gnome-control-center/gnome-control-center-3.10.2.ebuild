@@ -77,9 +77,6 @@ COMMON_DEPEND="
 		>=x11-libs/libXi-1.2 )
 "
 # <gnome-color-manager-3.1.2 has file collisions with g-c-c-3.1.x
-#
-# FIXME: add below when gnome-settings-daemon will support optional input_devices_wacom
-# input_devices_wacom? ( gnome-base/gnome-settings-daemon[input_devices_wacom] )
 RDEPEND="${COMMON_DEPEND}
 	|| ( ( app-admin/openrc-settingsd sys-auth/consolekit ) >=sys-apps/systemd-31 )
 	>=sys-apps/accountsservice-0.6.30
@@ -91,6 +88,7 @@ RDEPEND="${COMMON_DEPEND}
 	cups? (
 		>=app-admin/system-config-printer-gnome-1.3.5
 		net-print/cups-pk-helper )
+	input_devices_wacom? ( gnome-base/gnome-settings-daemon[input_devices_wacom] )
 
 	!<gnome-base/gdm-2.91.94
 	!<gnome-extra/gnome-color-manager-3.1.2

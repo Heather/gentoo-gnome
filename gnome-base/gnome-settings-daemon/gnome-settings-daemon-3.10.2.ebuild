@@ -15,8 +15,7 @@ LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~ppc ~ppc64 ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 
-IUSE="+cups debug +i18n packagekit policykit +short-touchpad-timeout smartcard +udev"
-# TODO: ^ Add +colord back when it is made optional.
+IUSE="+colord +cups debug +i18n input_devices_wacom packagekit policykit +short-touchpad-timeout smartcard +udev"
 
 REQUIRED_USE="
 	packagekit? ( udev )
@@ -48,13 +47,14 @@ COMMON_DEPEND="
 	x11-libs/libXtst
 	x11-libs/libXxf86misc
 
-	>=dev-libs/libwacom-0.7
-	x11-drivers/xf86-input-wacom
+	input_devices_wacom? (
+		>=dev-libs/libwacom-0.7
+		x11-drivers/xf86-input-wacom )
 
 	>=sci-geosciences/geocode-glib-3.10.0
 	>=app-misc/geoclue-1.99.4:2
 
-	>=x11-misc/colord-1.0.2:=
+	colord? ( >=x11-misc/colord-1.0.2:= )
 	cups? ( >=net-print/cups-1.4[dbus] )
 	i18n? ( >=app-i18n/ibus-1.4.99 )
 	packagekit? ( >=app-admin/packagekit-base-0.8.1 )
@@ -99,8 +99,7 @@ src_prepare() {
 		epatch "${FILESDIR}/${PN}-3.7.90-short-touchpad-timeout.patch"
 
 	# Make colord and wacom optional; requires eautoreconf
-	#FIXME:
-	#epatch "${FILESDIR}/${PN}-3.7.90-optional-color-wacom.patch"
+	epatch "${FILESDIR}/${PN}-3.10.0-optional-color-wacom.patch"
 
 	epatch_user
 	eautoreconf
@@ -112,17 +111,15 @@ src_configure() {
 	gnome2_src_configure \
 		--disable-static \
 		--enable-man \
+		$(use_enable colord color) \
 		$(use_enable cups) \
 		$(use_enable debug) \
 		$(use_enable debug more-warnings) \
 		$(use_enable i18n ibus) \
 		$(use_enable packagekit) \
 		$(use_enable smartcard smartcard-support) \
-		$(use_enable udev gudev) 
-# TODO: $(use_enable colord color) \
-
-		#FIXME: Maybe with patch it will be possible
-		#$(use_enable input_devices_wacom wacom)
+		$(use_enable udev gudev) \
+		$(use_enable input_devices_wacom wacom)
 }
 
 src_test() {
