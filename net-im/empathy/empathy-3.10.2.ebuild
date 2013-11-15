@@ -27,12 +27,12 @@ QA_CONFIGURE_OPTIONS=".*"
 
 # gdk-pixbuf and pango extensively used in libempathy-gtk
 COMMON_DEPEND="
-	>=dev-libs/glib-2.33.3:2
+	>=dev-libs/glib-2.37.6:2
 	x11-libs/gdk-pixbuf:2
-	>=x11-libs/gtk+-3.5.1:3
+	>=x11-libs/gtk+-3.9.4:3
 	x11-libs/pango
 	>=dev-libs/dbus-glib-0.51
-	>=dev-libs/folks-0.9.0:=[telepathy]
+	>=dev-libs/folks-0.9.5:=[telepathy]
 	dev-libs/libgee:0.8=
 	>=app-crypt/libsecret-0.5
 	>=media-libs/libcanberra-0.25[gtk3]
