@@ -8,6 +8,7 @@ GCONF_DEBUG="no"
 inherit eutils gnome2
 
 DESCRIPTION="GNOME thumbnailer utility which will generate a thumbnail for a directory"
+HOMEPAGE="https://wiki.gnome.org/GnomeDirectoryThumbnailer"
 
 LICENSE="GPL-2+"
 SLOT="0"
