@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/games-board/aisleriot/aisleriot-3.4.1-r1.ebuild,v 1.1 2012/08/26 15:43:23 tetromino Exp $
 
@@ -14,7 +14,7 @@ HOMEPAGE="http://live.gnome.org/Aisleriot"
 
 LICENSE="GPL-3 LGPL-3 FDL-1.1"
 SLOT="0"
-KEYWORDS="~amd64 ~mips ~x86"
+KEYWORDS="~mips"
 IUSE="gnome"
 
 # FIXME: quartz support?
@@ -61,12 +61,12 @@ pkg_setup() {
 		--disable-schemas-compile
 		--with-card-theme-formats=all
 		--with-kde-card-theme-path="${EPREFIX}"/usr/share/apps/carddecks
-		--with-pysol-card-theme-path=${GAMES_DATADIR}/pysolfc
-		--exec-prefix=${GAMES_PREFIX}
-		--localstatedir=${GAMES_STATEDIR}
+		--with-pysol-card-theme-path="${GAMES_DATADIR}"/pysolfc
+		--exec-prefix="${GAMES_PREFIX}"
+		--localstatedir="${GAMES_STATEDIR}"
 		--with-valgrind-dir="${EPREFIX}"/usr/$(get_libdir)/valgrind"
 
-	export MAKEOPTS="${MAKEOPTS} pkgdatadir=${GAMES_DATADIR}/aisleriot"
+	export MAKEOPTS="${MAKEOPTS} pkgdatadir="${GAMES_DATADIR}"/aisleriot"
 
 	games_pkg_setup
 }
