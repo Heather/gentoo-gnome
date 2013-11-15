@@ -21,7 +21,7 @@ COMMON_DEPEND="
 	x11-libs/cairo
 	gtk? (
 		>=x11-libs/gtk+-2.24.15:2
-		>=x11-libs/gtk+-3.6.2:3 )
+		>=x11-libs/gtk+-3.9.12:3 )
 "
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.40
