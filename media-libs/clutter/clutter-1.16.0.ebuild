@@ -20,7 +20,7 @@ KEYWORDS="~amd64 ~arm ~mips ~x86"
 # XXX: uprof needed for profiling
 # >=libX11-1.3.1 needed for X Generic Event support
 RDEPEND="
-	>=dev-libs/glib-2.31.19:2
+	>=dev-libs/glib-2.37.3:2
 	>=dev-libs/atk-2.5.3[introspection?]
 	>=dev-libs/json-glib-0.12[introspection?]
 	>=media-libs/cogl-1.16.0:1.0=[introspection?,pango]
