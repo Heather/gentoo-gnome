@@ -28,8 +28,8 @@ VALA_DEPEND="
 "
 # Configure is wrong; it needs cheese-3.5.91, not 3.3.91
 RDEPEND="
-	>=dev-libs/folks-0.7.3:=[eds,telepathy]
-	>=dev-libs/glib-2.31.10:2
+	>=dev-libs/folks-0.9.5:=[eds,telepathy]
+	>=dev-libs/glib-2.37.6:2
 	>=dev-libs/libgee-0.10:0.8
 	>=gnome-extra/evolution-data-server-3.5.3:=[gnome-online-accounts]
 	>=gnome-base/gnome-desktop-3.0:3=
@@ -38,7 +38,7 @@ RDEPEND="
 	x11-libs/cairo:=
 	x11-libs/gdk-pixbuf:2
 	x11-libs/libnotify:=
-	>=x11-libs/gtk+-3.7.10:3
+	>=x11-libs/gtk+-3.9.11:3
 	x11-libs/pango
 	v4l? ( >=media-video/cheese-3.5.91:= )
 "
