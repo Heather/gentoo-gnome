@@ -13,11 +13,10 @@ HOMEPAGE="https://wiki.gnome.org/Chess"
 
 LICENSE="GPL-2+"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm ~x86"
 IUSE=""
 
 RDEPEND="
-	dev-db/sqlite:3
 	dev-libs/glib:2
 	>=gnome-base/librsvg-2.32.0
 	virtual/glu
@@ -28,7 +27,7 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	$(vala_depend)
 	app-text/yelp-tools
-	>=dev-util/intltool-0.35.0
+	>=dev-util/intltool-0.50
 	sys-devel/gettext
 	virtual/pkgconfig
 "
