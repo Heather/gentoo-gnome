@@ -11,7 +11,7 @@ PYTHON_COMPAT=( python{2_6,2_7} )
 VALA_MIN_API_VERSION="0.22"
 VALA_MAX_API_VERSION="${VALA_MIN_API_VERSION}"
 
-inherit autotools gnome2 flag-o-matic readme.gentoo python-single-r1 vala
+inherit gnome2 flag-o-matic readme.gentoo python-single-r1 vala
 
 DESCRIPTION="A versatile IDE for GNOME"
 HOMEPAGE="http://projects.gnome.org/anjuta/"
@@ -98,8 +98,6 @@ will need to:
 	# python2.7-configure in Fedora vs. python-configure in Gentoo
 	sed -e 's:$PYTHON-config:$PYTHON$PYTHON_VERSION-config:g' \
 		-i plugins/am-project/tests/anjuta.lst || die "sed failed"
-
-	eautoreconf # for the librtpatch
 
 	use vala && vala_src_prepare
 	gnome2_src_prepare
