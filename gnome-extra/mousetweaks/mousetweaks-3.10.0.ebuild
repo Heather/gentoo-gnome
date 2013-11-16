@@ -16,7 +16,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 IUSE=""
 
 RDEPEND="
-	>=dev-libs/glib-2.25.3:2
+	>=dev-libs/glib-2.25.9:2
 	>=x11-libs/gtk+-3:3
 	>=gnome-base/gsettings-desktop-schemas-0.1
 
