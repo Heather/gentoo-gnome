@@ -12,7 +12,7 @@ HOMEPAGE="https://live.gnome.org/Five%20or%20more"
 
 LICENSE="GPL-2+"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~arm ~x86"
 IUSE=""
 
 RDEPEND="
