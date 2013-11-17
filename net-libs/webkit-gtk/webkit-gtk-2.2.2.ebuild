@@ -88,13 +88,15 @@ S="${WORKDIR}/${MY_P}"
 CHECKREQS_DISK_BUILD="18G" # and even this might not be enough, bug #417307
 
 pkg_pretend() {
-	if [[ ${MERGE_TYPE} != "binary" ]] && is-flagq "-g*" && ! is-flagq "-g*0" ; then
-		einfo "Checking for sufficient disk space to build ${PN} with debugging CFLAGS"
-		check-reqs_pkg_pretend
-	fi
+	if [[ ${MERGE_TYPE} != "binary" ]]; then
+		if is-flagq "-g*" && ! is-flagq "-g*0" ; then
+			einfo "Checking for sufficient disk space to build ${PN} with debugging CFLAGS"
+			check-reqs_pkg_pretend
+		fi
 
-	if ! test-flag-CXX -std=c++11; then
-		die "You need at least GCC 4.7.x or Clang >= 3.0 for C++11-specific compiler flags"
+		if ! test-flag-CXX -std=c++11; then
+			die "You need at least GCC 4.7.x or Clang >= 3.0 for C++11-specific compiler flags"
+		fi
 	fi
 }
 
