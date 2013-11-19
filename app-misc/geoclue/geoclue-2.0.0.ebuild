@@ -31,7 +31,7 @@ DEPEND="${RDEPEND}
 
 pkg_setup() {
 	enewgroup geoclue
-	enewuser geoclue -1 -1 -1 geoclue
+	enewuser geoclue -1 -1 /var/lib/geoclue geoclue
 }
 
 src_configure() {
