@@ -22,7 +22,7 @@ COMMON_DEPEND="
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 "
 RDEPEND="${COMMON_DEPEND}
-	>=net-wireless/bluez-4.34
+	>=net-wireless/bluez-5
 	app-mobilephone/obexd
 	x11-themes/gnome-icon-theme-symbolic
 "
