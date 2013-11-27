@@ -17,7 +17,7 @@ IUSE="doc debug examples test"
 
 RDEPEND="
 	>=dev-libs/libsigc++-2.2.10:2
-	>=dev-libs/glib-2.36.1:2
+	>=dev-libs/glib-2.38.0:2
 "
 DEPEND="${RDEPEND}
 	virtual/pkgconfig
