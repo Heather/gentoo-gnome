@@ -172,7 +172,7 @@ src_configure() {
 		--enable-authentication-scheme=pam \
 		--with-default-pam-config=exherbo \
 		--with-at-spi-registryd-directory="${EPREFIX}"/usr/libexec \
-		$(use plymouth || echo --with-initial-vt=7) \
+		$(use plymouth || echo -n --with-initial-vt=7) \
 		--with-systemd \
 		--enable-systemd-journal \
 		--without-console-kit \
