@@ -101,7 +101,7 @@ RDEPEND="${COMMON_DEPEND}
 	media-fonts/dejavu
 	x11-themes/gnome-icon-theme-symbolic
 
-	i18n? ( >=app-i18n/ibus-1.4.99[dconf,gtk3,introspection] )
+	i18n? ( >=app-i18n/ibus-1.4.99[dconf(+),gtk3,introspection] )
 	net-misc/mobile-broadband-provider-info
 	sys-libs/timezone-data
 "
