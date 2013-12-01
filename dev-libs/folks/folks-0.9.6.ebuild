@@ -28,7 +28,7 @@ COMMON_DEPEND="
 	sys-libs/ncurses:=
 	sys-libs/readline:=
 
-	eds? ( >=gnome-extra/evolution-data-server-3.8.1:=[vala] )
+	>=gnome-extra/evolution-data-server-3.8.1:=[vala]
 	socialweb? ( >=net-libs/libsocialweb-0.25.20 )
 	telepathy? ( >=net-libs/telepathy-glib-0.19[vala] )
 	tracker? ( >=app-misc/tracker-0.16:= )
