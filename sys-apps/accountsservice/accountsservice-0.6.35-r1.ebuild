@@ -39,6 +39,10 @@ DEPEND="${RDEPEND}
 
 src_prepare() {
 	epatch "${FILESDIR}/${PN}-0.6.35-gentoo-system-users.patch"
+
+	# Upstreamed, critical patch
+	epatch "${FILESDIR}/0001-Avoid-deleting-the-root-user.patch"
+
 	gnome2_src_prepare
 }
 
