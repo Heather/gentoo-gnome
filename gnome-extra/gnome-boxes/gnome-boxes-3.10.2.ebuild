@@ -1,11 +1,11 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
 EAPI="5"
 GCONF_DEBUG="no"
 VALA_USE_DEPEND="vapigen"
-VALA_MIN_API_VERSION="0.18"
+VALA_MIN_API_VERSION="0.22"
 
 inherit linux-info gnome2 vala
 if [[ ${PV} = 9999 ]]; then
@@ -17,7 +17,7 @@ HOMEPAGE="https://live.gnome.org/Design/Apps/Boxes"
 
 LICENSE="LGPL-2"
 SLOT="0"
-IUSE="bindist"
+IUSE="bindist smartcard usbredir"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -25,18 +25,19 @@ else
 fi
 
 # NOTE: sys-fs/* stuff is called via exec()
+# FIXME: ovirt is not available in tree
 RDEPEND="
-	>=dev-libs/libxml2-2.7.8:2
-	>=virtual/udev-165[gudev]
-	>=dev-libs/glib-2.29.90:2
+	>=dev-libs/glib-2.32:2
 	>=dev-libs/gobject-introspection-0.9.6
-	>=sys-libs/libosinfo-0.2.1
-	app-emulation/qemu[spice]
+	>=dev-libs/libxml2-2.7.8:2
+	>=sys-libs/libosinfo-0.2.7
+	>=app-emulation/qemu-1.3.1[spice,smartcard?,usbredir?]
 	>=app-emulation/libvirt-0.9.3[libvirtd,qemu]
-	>=app-emulation/libvirt-glib-0.1.2
-	>=x11-libs/gtk+-3.5.5:3
+	>=app-emulation/libvirt-glib-0.1.7
+	>=x11-libs/gtk+-3.9:3
 	>=net-libs/gtk-vnc-0.4.4[gtk3]
-	>=net-misc/spice-gtk-0.12.101[gtk3]
+	>=net-misc/spice-gtk-0.16[gtk3,smartcard?,usbredir?]
+
 	>=app-misc/tracker-0.16:0=[iso]
 
 	>=media-libs/clutter-gtk-1.3.2:1.0
@@ -47,9 +48,12 @@ RDEPEND="
 	sys-fs/fuse
 	sys-fs/fuseiso
 	sys-fs/mtools
+	>=virtual/udev-165[gudev]
 	!bindist? ( gnome-extra/gnome-boxes-nonfree )
 "
 DEPEND="${RDEPEND}
+	app-text/yelp-tools
+	dev-util/desktop-file-utils
 	>=dev-util/intltool-0.40
 	>=sys-devel/gettext-0.17
 	virtual/pkgconfig
@@ -61,7 +65,8 @@ if [[ ${PV} = 9999 ]]; then
 		sys-libs/libosinfo[introspection,vala]
 		app-emulation/libvirt-glib[introspection,vala]
 		net-libs/gtk-vnc[introspection,vala]
-		net-misc/spice-gtk[introspection,vala]"
+		net-misc/spice-gtk[introspection,vala]
+		net-libs/rest:0.7[introspection]"
 fi
 
 pkg_pretend() {
@@ -74,18 +79,23 @@ pkg_pretend() {
 }
 
 src_prepare() {
-	# Add support for tracker-0.16
-	sed -e "s/\(tracker-sparql\)-.*/\1-0.16/" \
-		-i configure.ac configure || die
+	# Do not change CFLAGS, wondering about VALA ones but appears to be
+	# needed as noted in configure comments below
+	sed 's/CFLAGS="$CFLAGS -O0 -ggdb3"//' -i configure{.ac,} || die
 
-	gnome2_src_prepare
 	vala_src_prepare
+	gnome2_src_prepare
 }
 
 src_configure() {
 	DOCS="AUTHORS README NEWS THANKS TODO"
+	# debug needed for splitdebug proper behavior (cardoe)
 	gnome2_src_configure \
-		--disable-strict-cc
+		--enable-debug \
+		--disable-strict-cc \
+		$(use_enable usbredir) \
+		$(use_enable smartcard) \
+		--enable-ovirt=no
 }
 
 pkg_postinst() {
