@@ -55,6 +55,8 @@ src_prepare() {
 	# Regenerate C files until folks-0.9.4 lands the tree, bug #479600
 	touch backends/telepathy/lib/tpf-persona.vala || die
 
+	epatch "${FILESDIR}/${P}-fix-individual.patch"
+
 	vala_src_prepare
 	gnome2_src_prepare
 }
