@@ -1,7 +1,19 @@
 Unofficial Gentoo GNOME overlay
 -------------------------------
 
-Currently this overlay is for **GNOME 3.10** development for Gentoo.
+This overlay was designed for **GNOME 3.10** development for Gentoo.
+
+**But goes wild currently**
+
+ - stable branch is stable and really target **GNOME 3.10**
+ - master branch goes forward 3.11 -> ...
+
+NOTE
+====
+
+ - There is official gnome overlay: http://git.overlays.gentoo.org/gitweb/?p=proj/gnome.git;a=summary
+ - Also you can try `openrc-force` use flag if you hate systemd (currently awailable only there)
+ - Use my overlay only if official team still have no time for reviews / etc ...
 
 ![](ss.png?raw=true)
 
