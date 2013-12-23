@@ -16,7 +16,7 @@ NOTE
  - There is official gnome overlay: http://git.overlays.gentoo.org/gitweb/?p=proj/gnome.git;a=summary
  - Also you can try `openrc-force` use flag if you hate systemd (currently awailable only there)
  - Use my overlay only if official team still have no time for reviews / etc ...
-
+<hr/>
 * For bugs use GitHub issues https://github.com/Heather/gentoo-gnome/issues?state=open
 * Scripts for development available in ./scripts/
 * Please use `pull --rebase` to resolve conflicts or set `branch.autosetuprebase = always`
