@@ -19,6 +19,7 @@ IUSE="+nautilus"
 # FIXME: automagic dependency on gtk+[X]
 RDEPEND="
 	>=dev-libs/glib-2.33.2:2
+	>=dev-util/gdbus-codegen-2.36.4
 	>=x11-libs/gtk+-3.6:3[X]
 	>=x11-libs/vte-0.35.0:2.90
 	>=gnome-base/gconf-2.31.3
