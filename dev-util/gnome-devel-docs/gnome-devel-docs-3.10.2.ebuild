@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-util/gnome-devel-docs/gnome-devel-docs-3.8.1.ebuild,v 1.1 2013/05/14 21:02:36 pacho Exp $
+# $Header: $
 
 EAPI="5"
 GCONF_DEBUG="no"
@@ -16,7 +16,7 @@ KEYWORDS="~amd64 ~ppc ~x86"
 IUSE=""
 
 RDEPEND=""
-DEPEND="app-text/yelp-tools
+DEPEND="
 	app-text/docbook-xml-dtd:4.1.2
 	app-text/docbook-xml-dtd:4.2
 	dev-libs/libxslt
@@ -26,3 +26,7 @@ DEPEND="app-text/yelp-tools
 
 # This ebuild does not install any binaries
 RESTRICT="binchecks strip"
+
+src_configure() {
+	gnome2_src_configure ITSTOOL=$(type -P true)
+}

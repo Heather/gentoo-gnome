@@ -7,24 +7,23 @@ GCONF_DEBUG="no"
 PYTHON_COMPAT=( python2_7 )
 PYTHON_REQ_USE="xml"
 
-inherit eutils gnome2 python-single-r1 toolchain-funcs
+inherit gnome2 python-single-r1 toolchain-funcs
 
 DESCRIPTION="Introspection infrastructure for generating gobject library bindings for various languages"
 HOMEPAGE="http://live.gnome.org/GObjectIntrospection/"
 
 LICENSE="LGPL-2+ GPL-2+"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~arm-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
-
 IUSE="cairo doctool test"
 REQUIRED_USE="
 	${PYTHON_REQUIRED_USE}
 	test? ( cairo )
 "
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~arm-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 
 RDEPEND="
 	>=dev-libs/gobject-introspection-common-${PV}
-	>=dev-libs/glib-2.38:2
+	>=dev-libs/glib-2.36:2
 	doctool? ( dev-python/mako )
 	virtual/libffi:=
 	!<dev-lang/vala-0.20.0
@@ -43,33 +42,25 @@ pkg_setup() {
 	python-single-r1_pkg_setup
 }
 
-src_prepare() {
-	# To prevent crosscompiling problems, bug #414105
-	CC=$(tc-getCC)
-
-	DOCS="AUTHORS CONTRIBUTORS ChangeLog NEWS README TODO"
-	gnome2_src_prepare
-
-	# avoid GNU-isms
-	sed -i -e 's/\(if test .* \)==/\1=/' configure || die
-
+src_configure(){
 	if ! has_version "x11-libs/cairo[glib]"; then
 		# Bug #391213: enable cairo-gobject support even if it's not installed
 		# We only PDEPEND on cairo to avoid circular dependencies
 		export CAIRO_LIBS="-lcairo -lcairo-gobject"
 		export CAIRO_CFLAGS="-I${EPREFIX}/usr/include/cairo"
 	fi
-}
 
-src_configure(){
+	# To prevent crosscompiling problems, bug #414105
 	gnome2_src_configure \
 		--disable-static \
+		CC=$(tc-getCC) \
 		YACC=$(type -p yacc) \
 		$(use_with cairo) \
 		$(use_enable doctool)
 }
 
 src_install() {
+	DOCS="AUTHORS CONTRIBUTORS ChangeLog NEWS README TODO"
 	gnome2_src_install
 
 	# Prevent collision with gobject-introspection-common

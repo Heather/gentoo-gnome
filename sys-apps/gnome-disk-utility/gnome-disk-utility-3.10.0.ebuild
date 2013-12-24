@@ -6,7 +6,7 @@ EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit eutils gnome2
+inherit autotools eutils gnome2
 
 DESCRIPTION="Disk Utility for GNOME using udisks"
 HOMEPAGE="http://git.gnome.org/browse/gnome-disk-utility"
@@ -20,9 +20,9 @@ COMMON_DEPEND="
 	>=dev-libs/glib-2.31:2
 	>=sys-fs/udisks-2.1.1:2
 	>=x11-libs/gtk+-3.5.8:3
+	>=app-arch/xz-utils-5.0.5
 	>=app-crypt/libsecret-0.7
 	dev-libs/libpwquality
-	>=app-arch/xz-utils-5.0.5
 	systemd? ( >=sys-apps/systemd-44 )
 "
 RDEPEND="${COMMON_DEPEND}
@@ -38,6 +38,15 @@ DEPEND="${COMMON_DEPEND}
 	dev-libs/libxslt
 	virtual/pkgconfig
 "
+
+src_prepare() {
+	# Fix USE=-gnome, bug #478820
+	epatch "${FILESDIR}"/${PN}-3.10.0-kill-gsd-automagic.patch
+	epatch "${FILESDIR}"/${PN}-3.10.0-raise-gsd-dependency.patch
+
+	eautoreconf
+	gnome2_src_prepare
+}
 
 src_configure() {
 	gnome2_src_configure \

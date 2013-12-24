@@ -21,7 +21,7 @@ REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 RDEPEND="
 	>=dev-libs/glib-2.32:2
 	>=dev-libs/gobject-introspection-0.10.1
-	gjs? ( >=dev-libs/gjs-1.31.11 )
+	gjs? ( >=dev-libs/gjs-1.37.1 )
 	glade? ( >=dev-util/glade-3.9.1:3.10 )
 	gtk? ( >=x11-libs/gtk+-3:3[introspection] )
 	python? (
@@ -50,7 +50,7 @@ src_prepare() {
 }
 
 src_configure() {
-	G2CONF="${G2CONF}
+	local myconf="
 		$(use_enable gjs)
 		$(use_enable glade glade-catalog)
 		$(use_enable gtk)
@@ -61,16 +61,16 @@ src_configure() {
 	# What do we do about gdb, valgrind, gcov, etc?
 
 	configuration() {
-		local G2CONF="${G2CONF}"
-		[[ ${EPYTHON} == python2* ]] && G2CONF+=" --enable-python2 --disable-python3 PYTHON2_CONFIG=/usr/bin/python-config-${EPYTHON#python}"
-		[[ ${EPYTHON} == python3* ]] && G2CONF+=" --enable-python3 --disable-python2 PYTHON3_CONFIG=/usr/bin/python-config-${EPYTHON#python}"
-		gnome2_src_configure
+		local myconf="$@"
+		[[ ${EPYTHON} == python2* ]] && myconf+=" --enable-python2 --disable-python3 PYTHON2_CONFIG=/usr/bin/python-config-${EPYTHON#python}"
+		[[ ${EPYTHON} == python3* ]] && myconf+=" --enable-python3 --disable-python2 PYTHON3_CONFIG=/usr/bin/python-config-${EPYTHON#python}"
+		gnome2_src_configure ${myconf}
 	}
 
 	if use python; then
-		python_foreach_impl run_in_build_dir configuration
+		python_foreach_impl run_in_build_dir configuration ${myconf}
 	else
-		gnome2_src_configure
+		gnome2_src_configure ${myconf}
 	fi
 }
 

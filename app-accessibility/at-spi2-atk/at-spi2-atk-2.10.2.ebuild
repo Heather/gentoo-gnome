@@ -17,9 +17,9 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd6
 IUSE=""
 
 COMMON_DEPEND="
-	>=app-accessibility/at-spi2-core-2.7.5
-	>=dev-libs/atk-2.10.0
-	>=dev-libs/glib-2.37:2
+	>=app-accessibility/at-spi2-core-2.9.4
+	>=dev-libs/atk-2.9.4
+	>=dev-libs/glib-2.32:2
 	>=sys-apps/dbus-1
 "
 RDEPEND="${COMMON_DEPEND}

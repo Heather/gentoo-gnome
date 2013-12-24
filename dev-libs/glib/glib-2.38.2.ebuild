@@ -3,7 +3,7 @@
 # $Header: $
 
 EAPI="5"
-PYTHON_COMPAT=( python2_{5,6,7} )
+PYTHON_COMPAT=( python2_{6,7} )
 # Avoid runtime dependency on python when USE=test
 
 inherit autotools bash-completion-r1 gnome.org libtool eutils flag-o-matic gnome2-utils multilib pax-utils python-r1 toolchain-funcs versionator virtualx linux-info multilib-minimal
@@ -128,13 +128,16 @@ src_prepare() {
 
 		# Test relies on /usr/bin/true, but we have /bin/true, upstream bug #698655
 		sed -i -e "s:/usr/bin/true:/bin/true:" gio/tests/desktop-app-info.c || die
-
-		# thread test fails, upstream bug #679306
-		epatch "${FILESDIR}/${PN}-2.34.0-testsuite-skip-thread4.patch"
 	fi
+
+	# thread test fails, upstream bug #679306
+	epatch "${FILESDIR}/${PN}-2.34.0-testsuite-skip-thread4.patch"
 
 	# gdbus-codegen is a separate package
 	epatch "${FILESDIR}/${PN}-2.37.x-external-gdbus-codegen.patch"
+
+	# do not allow libgobject to unload; bug #405173, https://bugzilla.gnome.org/show_bug.cgi?id=707298
+	epatch "${FILESDIR}/${PN}-2.36.4-znodelete.patch"
 
 	# leave python shebang alone
 	sed -e '/${PYTHON}/d' \
@@ -144,10 +147,13 @@ src_prepare() {
 	sed -i "s|^completiondir =.*|completiondir = $(get_bashcompdir)|" \
 		gio/Makefile.am || die
 
+	# Support compilation in clang until upstream solves this, upstream bug #691608
+	append-flags -Wno-format-nonliteral
+
 	epatch_user
 
 	# Needed for the punt-python-check patch, disabling timeout test
-	# Also needed to prevent croscompile failures, see bug #267603
+	# Also needed to prevent cross-compile failures, see bug #267603
 	# Also needed for the no-gdbus-codegen patch
 	eautoreconf
 
@@ -172,6 +178,11 @@ multilib_src_configure() {
 
 	local myconf
 
+	case "${CHOST}" in
+		*-mingw*) myconf="${myconf} --with-threads=win32" ;;
+		*)        myconf="${myconf} --with-threads=posix" ;;
+	esac
+
 	# Building with --disable-debug highly unrecommended.  It will build glib in
 	# an unusable form as it disables some commonly used API.  Please do not
 	# convert this to the use_enable form, as it results in a broken build.
@@ -195,14 +206,15 @@ multilib_src_configure() {
 		$(use_enable static-libs static) \
 		$(use_enable systemtap dtrace) \
 		$(use_enable systemtap systemtap) \
-		$(use_enable test always-build-tests) \
+		--disable-compile-warnings \
 		--enable-man \
 		--with-pcre=internal \
-		--with-threads=posix \
 		--with-xml-catalog="${EPREFIX}/etc/xml/catalog"
 }
 
 multilib_src_install_all() {
+	einstalldocs
+
 	if use utils ; then
 		python_replicate_script "${ED}"/usr/bin/gtester-report
 	else

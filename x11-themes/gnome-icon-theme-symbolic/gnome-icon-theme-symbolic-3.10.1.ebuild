@@ -17,7 +17,11 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-
 
 COMMON_DEPEND=">=x11-themes/hicolor-icon-theme-0.10"
 
-RDEPEND="${COMMON_DEPEND}"
+RDEPEND="${COMMON_DEPEND}
+	!=gnome-extra/gnome-power-manager-3.0*
+"
+# Matches 3.10
+#	!=gnome-extra/gnome-power-manager-3.1*
 
 # keyboard-brightness icon file collision with old gnome-power-manager
 DEPEND="${COMMON_DEPEND}

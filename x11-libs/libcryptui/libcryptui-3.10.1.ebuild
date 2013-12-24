@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/libcryptui/libcryptui-3.8.0.ebuild,v 1.2 2013/04/07 21:57:37 eva Exp $
+# $Header: $
 
 EAPI="5"
 GCONF_DEBUG="yes"
@@ -12,7 +12,7 @@ HOMEPAGE="http://www.gnome.org/projects/seahorse/index.html"
 
 LICENSE="GPL-2+ LGPL-2.1+ FDL-1.1"
 SLOT="0"
-IUSE="+introspection libnotify test"
+IUSE="+introspection libnotify"
 KEYWORDS="~amd64 ~x86 ~x86-fbsd"
 
 # Pull in libnotify-0.7 because it's controlled via an automagic ifdef
@@ -58,6 +58,5 @@ src_configure() {
 		--disable-static \
 		--disable-update-mime-database \
 		$(use_enable introspection) \
-		$(use_enable libnotify) \
-		$(use_enable test tests)
+		$(use_enable libnotify)
 }

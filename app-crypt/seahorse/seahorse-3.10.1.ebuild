@@ -20,7 +20,7 @@ COMMON_DEPEND="
 	>=dev-libs/glib-2.10:2
 	>=x11-libs/gtk+-3.4:3
 	>=app-crypt/libsecret-0.16
-	>=net-libs/libsoup-2.24.0:2.4
+	>=net-libs/libsoup-2.33.92:2.4
 	x11-misc/shared-mime-info
 
 	net-misc/openssh
@@ -61,5 +61,6 @@ src_configure() {
 		$(use_enable avahi sharing) \
 		$(use_enable debug) \
 		$(use_enable ldap) \
-		ITSTOOL=$(type -P true)
+		ITSTOOL=$(type -P true) \
+		VALAC=$(type -P true)
 }

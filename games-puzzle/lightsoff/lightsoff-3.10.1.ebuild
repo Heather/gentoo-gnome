@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/games-puzzle/lightsoff/lightsoff-3.8.0.ebuild,v 1.2 2013/08/31 15:29:17 pinkbyte Exp $
+# $Header: $
 
 EAPI="5"
 GCONF_DEBUG="no"

@@ -1,12 +1,12 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-misc/alacarte/alacarte-3.7.90.ebuild,v 1.2 2013/05/05 09:37:56 pacho Exp $
+# $Header: $
 
 EAPI="5"
 GCONF_DEBUG="no"
+# FIXME: support python3 but installs in a weird location
 PYTHON_COMPAT=( python{2_6,2_7} )
 PYTHON_REQ_USE="xml"
-SUPPORT_PYTHON_ABIS="1"
 
 inherit gnome2 python-r1
 

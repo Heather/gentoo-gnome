@@ -91,7 +91,7 @@ src_prepare() {
 }
 
 src_configure() {
-	DOCS="AUTHORS HACKING MAINTAINERS NEWS README THANKS"
+	DOCS="AUTHORS HACKING MAINTAINERS NEWS README* THANKS"
 	gnome2_src_configure \
 		--disable-profiling \
 		--disable-update-mimedb \

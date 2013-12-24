@@ -25,7 +25,7 @@ COMMON_DEPEND="
 	>=x11-libs/gtk+-2.90.7:3
 	>=dev-libs/json-glib-0.10
 	>=dev-libs/dbus-glib-0.76
-	>=gnome-base/gnome-desktop-3.9.91:3
+	>=gnome-base/gnome-desktop-3.9.91:3=
 	>=sys-power/upower-0.9.0
 	elibc_FreeBSD? ( dev-libs/libexecinfo )
 
@@ -70,12 +70,11 @@ DEPEND="${COMMON_DEPEND}
 # gnome-base/gdm does not provide gnome.desktop anymore
 
 src_prepare() {
-	# Silence errors due to weird checks for libX11
-	sed -e 's/\(PANGO_PACKAGES="\)pangox/\1/' -i configure.ac configure || die
-
 	# Allow people to configure startup apps, bug #464968, upstream bug #663767
-	#FIXME
-	#sed -i -e '/NoDisplay/d' data/session-properties.desktop.in.in || die
+	sed -i -e '/NoDisplay/d' data/gnome-session-properties.desktop.in.in || die
+
+	# Blacklist nv25 (from 'master')
+	epatch "${FILESDIR}"/${PN}-3.8.4-blacklist-nv25.patch
 
 	gnome2_src_prepare
 }

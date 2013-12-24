@@ -8,7 +8,7 @@ GNOME2_LA_PUNT="yes"
 PYTHON_COMPAT=( python{2_6,2_7} )
 # libanjuta-language-vala.so links to a specific slot of libvala; we want to
 # avoid automagic behavior.
-VALA_MIN_API_VERSION="0.22"
+VALA_MIN_API_VERSION="0.20"
 VALA_MAX_API_VERSION="${VALA_MIN_API_VERSION}"
 
 inherit gnome2 flag-o-matic readme.gentoo python-single-r1 vala
@@ -19,7 +19,7 @@ HOMEPAGE="http://projects.gnome.org/anjuta/"
 LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="~amd64 ~ppc ~sparc ~x86 ~x86-fbsd"
-IUSE="debug devhelp glade +introspection packagekit subversion test vala"
+IUSE="debug devhelp glade +introspection packagekit subversion terminal test vala"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
@@ -27,8 +27,7 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 COMMON_DEPEND="
 	>=dev-libs/glib-2.34:2
 	x11-libs/gdk-pixbuf:2
-	>=x11-libs/gtk+-3.6.0:3
-	>=x11-libs/vte-0.27.6:2.90
+	>=x11-libs/gtk+-3.6:3
 	>=dev-libs/libxml2-2.4.23
 	>=dev-libs/gdl-3.5.5:3=
 	>=x11-libs/gtksourceview-3:3.0
@@ -51,6 +50,7 @@ COMMON_DEPEND="
 		>=net-libs/neon-0.28.2:=
 		>=dev-libs/apr-1:=
 		>=dev-libs/apr-util-1:= )
+	terminal? ( >=x11-libs/vte-0.27.6:2.90 )
 	vala? ( $(vala_depend) )
 "
 RDEPEND="${COMMON_DEPEND}
@@ -72,7 +72,7 @@ DEPEND="${COMMON_DEPEND}
 	dev-libs/gobject-introspection-common
 	gnome-base/gnome-common
 "
-# yelp-tools, gi-common and gnome-common are required by eautoreconf 
+# yelp-tools, gi-common and gnome-common are required by eautoreconf
 
 pkg_setup() {
 	python-single-r1_pkg_setup
@@ -99,6 +99,10 @@ will need to:
 	sed -e 's:$PYTHON-config:$PYTHON$PYTHON_VERSION-config:g' \
 		-i plugins/am-project/tests/anjuta.lst || die "sed failed"
 
+	# Do not build benchmarks, they are not installed and for dev purpose only
+	sed -e '/SUBDIRS =/ s/benchmark//' \
+		-i plugins/symbol-db/Makefile.{am,in} || die
+
 	use vala && vala_src_prepare
 	gnome2_src_prepare
 }
@@ -110,9 +114,11 @@ src_configure() {
 		$(use_enable debug) \
 		$(use_enable devhelp plugin-devhelp) \
 		$(use_enable glade plugin-glade) \
+		$(use_enable glade glade-catalog) \
 		$(use_enable introspection) \
 		$(use_enable packagekit) \
 		$(use_enable subversion plugin-subversion) \
+		$(use_enable terminal plugin-terminal) \
 		$(use_enable vala)
 }
 

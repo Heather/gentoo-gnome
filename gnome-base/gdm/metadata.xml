@@ -6,10 +6,10 @@
     <flag name="audit">Enable support for <pkg>sys-process/audit</pkg></flag>
     <flag name="fprint">Enables experimental fingerprint authentication using
 		<pkg>sys-auth/fprintd</pkg></flag>
-    <flag name="gnome-shell">Enables a greeter based on GNOME Shell (uses
-		OpenGL)</flag>
     <flag name="plymouth">Enable support for smooth transition from
 		<pkg>sys-boot/plymouth</pkg></flag>
     <flag name="smartcard">Enables experimental smartcard authentication</flag>
+    <flag name="systemd">Use <pkg>sys-apps/systemd</pkg> for session
+		tracking</flag>
   </use>
 </pkgmetadata>

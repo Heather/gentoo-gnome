@@ -16,7 +16,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86
 IUSE="+introspection nls test"
 
 RDEPEND="
-	>=dev-libs/glib-2.38:2
+	>=dev-libs/glib-2.31.2:2
 	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
 "
 DEPEND="${RDEPEND}

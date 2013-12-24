@@ -21,7 +21,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebs
 # pango used in fr-window
 RDEPEND="
 	>=app-arch/libarchive-3:=
-	>=dev-libs/glib-2.36.0:2
+	>=dev-libs/glib-2.36:2
 	>=dev-libs/json-glib-0.14
 	>=x11-libs/gtk+-3.9.3:3
 	>=x11-libs/libnotify-0.4.3:=
@@ -66,10 +66,6 @@ src_prepare() {
 	# Use absolute path to GNU tar since star doesn't have the same
 	# options. On Gentoo, star is /usr/bin/tar, GNU tar is /bin/tar
 	epatch "${FILESDIR}"/${PN}-2.10.3-use_bin_tar.patch
-
-	# app-arch/{un,}rar-5 support, https://bugzilla.gnome.org/show_bug.cgi?id=707568
-	#FIXME: review if fixed upstream
-	#epatch "${FILESDIR}"/${PN}-3.8.4-rar-5.patch
 
 	# File providing Gentoo package names for various archivers
 	cp -f "${FILESDIR}/3.6.0-packages.match" data/packages.match || die

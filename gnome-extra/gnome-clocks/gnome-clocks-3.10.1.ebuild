@@ -13,7 +13,7 @@ HOMEPAGE="http://live.gnome.org/GnomeClocks"
 
 LICENSE="GPL-2+"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 RDEPEND="
@@ -22,8 +22,8 @@ RDEPEND="
 	>=media-libs/libcanberra-0.30
 	>=dev-libs/libgweather-3.9.91:=
 	>=gnome-base/gnome-desktop-3.7.90:=
-	>=app-misc/geoclue-1.99.3:2
-	>=sci-geosciences/geocode-glib-0.99.3
+	>=sci-geosciences/geocode-glib-0.99.4
+	>=app-misc/geoclue-1.99.3
 	>=x11-libs/libnotify-0.7:=
 "
 DEPEND="${RDEPEND}
@@ -34,6 +34,10 @@ DEPEND="${RDEPEND}
 "
 
 src_prepare() {
-	gnome2_src_prepare
 	vala_src_prepare
+	gnome2_src_prepare
+}
+
+src_configure() {
+	gnome2_src_configure ITSTOOL=$(type -P true)
 }

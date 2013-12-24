@@ -14,19 +14,21 @@ HOMEPAGE="http://www.webkitgtk.org/"
 SRC_URI="http://www.webkitgtk.org/releases/${MY_P}.tar.xz"
 
 LICENSE="LGPL-2+ BSD"
-SLOT="3/25" # soname version
+SLOT="3/29" # soname version
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-macos"
-IUSE="aqua coverage debug +geoloc +gstreamer libsecret +introspection +jit spell +webgl"
+IUSE="aqua coverage debug +egl +geoloc gles2 +gstreamer +introspection +jit libsecret +opengl spell +webgl"
 # bugs 372493, 416331
 REQUIRED_USE="
 	geoloc? ( introspection )
 	introspection? ( gstreamer )
+	webgl? ( ^^ ( gles2 opengl ) )
+	gles2? ( egl )
 "
 
 # use sqlite, svg by default
 # Aqua support in gtk3 is untested
 # gtk2 is needed for plugin process support
-# TODO: There's 3 acceleration backends: opengl, egl and gles2
+# gtk3-3.10 required for wayland
 RDEPEND="
 	dev-libs/libxml2:2
 	dev-libs/libxslt
@@ -44,15 +46,18 @@ RDEPEND="
 	x11-libs/libXrender
 	>=x11-libs/gtk+-2.24.10:2
 
-	geoloc? ( app-misc/geoclue:0 )
+	egl? ( media-libs/mesa[egl] )
+	geoloc? ( app-misc/geoclue )
+	gles2? ( media-libs/mesa[gles2] )
 	gstreamer? (
 		>=media-libs/gstreamer-1.0.3:1.0
 		>=media-libs/gst-plugins-base-1.0.3:1.0 )
 	introspection? ( >=dev-libs/gobject-introspection-1.32.0 )
 	libsecret? ( app-crypt/libsecret )
+	opengl? ( virtual/opengl )
 	spell? ( >=app-text/enchant-0.22:= )
 	webgl? (
-		virtual/opengl
+		x11-libs/cairo[opengl]
 		x11-libs/libXcomposite
 		x11-libs/libXdamage )
 "
@@ -62,9 +67,10 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	${PYTHON_DEPS}
 	dev-lang/perl
-	|| ( virtual/rubygems[ruby_targets_ruby20]
-		virtual/rubygems[ruby_targets_ruby18]
-		virtual/rubygems[ruby_targets_ruby19] )
+	|| (
+		virtual/rubygems[ruby_targets_ruby20]
+		virtual/rubygems[ruby_targets_ruby19]
+		virtual/rubygems[ruby_targets_ruby18] )
 	>=app-accessibility/at-spi2-core-2.5.3
 	>=dev-util/gtk-doc-am-1.10
 	dev-util/gperf
@@ -88,19 +94,21 @@ S="${WORKDIR}/${MY_P}"
 CHECKREQS_DISK_BUILD="18G" # and even this might not be enough, bug #417307
 
 pkg_pretend() {
-	if [[ ${MERGE_TYPE} != "binary" ]]; then
-		if is-flagq "-g*" && ! is-flagq "-g*0" ; then
-			einfo "Checking for sufficient disk space to build ${PN} with debugging CFLAGS"
-			check-reqs_pkg_pretend
-		fi
+	nvidia_check || die #463960
 
-		if ! test-flag-CXX -std=c++11; then
-			die "You need at least GCC 4.7.x or Clang >= 3.0 for C++11-specific compiler flags"
-		fi
+	if [[ ${MERGE_TYPE} != "binary" ]] && is-flagq "-g*" && ! is-flagq "-g*0" ; then
+		einfo "Checking for sufficient disk space to build ${PN} with debugging CFLAGS"
+		check-reqs_pkg_pretend
+	fi
+
+	if ! test-flag-CXX -std=c++11; then
+		die "You need at least GCC 4.7.x or Clang >= 3.0 for C++11-specific compiler flags"
 	fi
 }
 
 pkg_setup() {
+	nvidia_check || die #463960
+
 	# Check whether any of the debugging flags is enabled
 	if [[ ${MERGE_TYPE} != "binary" ]] && is-flagq "-g*" && ! is-flagq "-g*0" ; then
 		if is-flagq "-ggdb" && [[ ${WEBKIT_GTK_GGDB} != "yes" ]]; then
@@ -134,7 +142,6 @@ src_prepare() {
 	sed -i 's/-O2//g' "${S}"/Source/autotools/SetupCompilerFlags.m4 || die
 
 	# Build-time segfaults under PaX with USE="introspection jit", bug #404215
-	#FIXME (but first test if this version fails too)
 	#if use introspection && use jit; then
 	#	epatch "${FILESDIR}/${PN}-1.6.3-paxctl-introspection.patch"
 	#	cp "${FILESDIR}/gir-paxctl-lt-wrapper" "${S}/" || die
@@ -171,6 +178,9 @@ src_prepare() {
 	# bug #459978, upstream bug #113397
 	epatch "${FILESDIR}/${PN}-1.11.90-gtk-docize-fix.patch"
 
+	# Do not build unittests unless requested
+	epatch "${FILESDIR}"/${PN}-2.2.2-unittests-build.patch
+
 	# Prevent maintainer mode from being triggered during make
 	AT_M4DIR=Source/autotools eautoreconf
 }
@@ -188,47 +198,41 @@ src_configure() {
 	# Try to use less memory, bug #469942
 	append-ldflags "-Wl,--no-keep-memory"
 
-	local myconf
-	# TODO: Check Web Audio support
-	# TODO: There's 3 acceleration backends: opengl, egl and gles2
-	# should somehow let user select between them?
-	#
-	# * dependency-tracking is required so parallel builds won't fail
-	myconf="
-		$(use_enable coverage)
-		$(use_enable debug)
-		$(use_enable geoloc geolocation)
-		$(use_enable spell spellcheck)
-		$(use_enable introspection)
-		$(use_enable gstreamer video)
-		$(use_enable jit)
-		$(use_enable libsecret credential_storage)
-		$(use_enable webgl)
-		--disable-egl
-		--disable-gles2
-		--with-gtk=3.0
-		--enable-accelerated-compositing
-		--enable-dependency-tracking
-		--disable-gtk-doc
-		"$(usex aqua "--with-font-backend=pango --with-target=quartz" "")
-		# Aqua support in gtk3 is untested
+	local myconf=""
 
 	if has_version "virtual/rubygems[ruby_targets_ruby20]"; then
 		myconf="${myconf} RUBY=$(type -P ruby20)"
-	elif has_version "virtual/rubygems[ruby_targets_ruby29]"; then
+	elif has_version "virtual/rubygems[ruby_targets_ruby19]"; then
 		myconf="${myconf} RUBY=$(type -P ruby19)"
 	else
 		myconf="${myconf} RUBY=$(type -P ruby18)"
 	fi
 
-	econf ${myconf}
+	# TODO: Check Web Audio support
+	# should somehow let user select between them?
+	#
+	# * Aqua support in gtk3 is untested
+	# * dependency-tracking is required so parallel builds won't fail
+	econf \
+		$(use_enable coverage) \
+		$(use_enable debug) \
+		$(use_enable egl) \
+		$(use_enable geoloc geolocation) \
+		$(use_enable gles2) \
+		$(use_enable gstreamer video) \
+		$(use_enable introspection) \
+		$(use_enable jit) \
+		$(use_enable libsecret credential_storage) \
+		$(use_enable opengl glx) \
+		$(use_enable spell spellcheck) \
+		$(use_enable webgl) \
+		$(use_enable webgl accelerated-compositing) \
+		--with-gtk=3.0 \
+		--enable-dependency-tracking \
+		--disable-gtk-doc \
+		$(usex aqua "--with-font-backend=pango --with-target=quartz" "")
+		${myconf}
 }
-
-#src_compile() {
-	# Avoid parallel make failure with -j9, bug #????
-#	emake DerivedSources/WebCore/JSNode.h
-#	default
-#}
 
 src_test() {
 	# Tests expect an out-of-source build in WebKitBuild
@@ -254,4 +258,21 @@ src_install() {
 
 	# Prevents crashes on PaX systems
 	use jit && pax-mark m "${ED}usr/bin/jsc-3"
+}
+
+nvidia_check() {
+	if [[ ${MERGE_TYPE} != "binary" ]] &&
+	   use introspection &&
+	   has_version '=x11-drivers/nvidia-drivers-325*' &&
+	   [[ $(eselect opengl show 2> /dev/null) = "nvidia" ]]
+	then
+		eerror "${PN} freezes while compiling if x11-drivers/nvidia-drivers-325.* is"
+		eerror "used as the system OpenGL library."
+		eerror "You can either update to >=nvidia-drivers-331.13, or temporarily select"
+		eerror "Mesa as the system OpenGL library:"
+		eerror " # eselect opengl set xorg-x11"
+		eerror "See https://bugs.gentoo.org/463960 for more details."
+		eerror
+		return 1
+	fi
 }

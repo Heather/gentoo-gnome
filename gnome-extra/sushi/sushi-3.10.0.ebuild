@@ -41,7 +41,6 @@ COMMON_DEPEND="
 "
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
-	>=sys-devel/gettext-0.17
 	virtual/pkgconfig
 "
 RDEPEND="${COMMON_DEPEND}

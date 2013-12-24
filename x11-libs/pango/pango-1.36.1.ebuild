@@ -17,8 +17,6 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd6
 
 IUSE="X +introspection"
 
-# Bump cairo dep to be safer:
-# https://bugzilla.gnome.org/show_bug.cgi?id=700247#c4
 RDEPEND="
 	>=media-libs/harfbuzz-0.9.9:=[glib(+),truetype(+)]
 	>=dev-libs/glib-2.33.12:2
@@ -32,15 +30,13 @@ RDEPEND="
 		>=x11-libs/libXft-2.0.0 )
 "
 DEPEND="${RDEPEND}
-	>=dev-util/gtk-doc-am-1.13
+	>=dev-util/gtk-doc-am-1.15
 	virtual/pkgconfig
 	X? ( x11-proto/xproto )
 	!<=sys-devel/autoconf-2.63:2.5
 "
 
 src_prepare() {
-	tc-export CXX
-
 	epatch "${FILESDIR}/${PN}-1.32.1-lib64.patch"
 	eautoreconf
 
@@ -48,7 +44,10 @@ src_prepare() {
 }
 
 src_configure() {
+	tc-export CXX
+
 	gnome2_src_configure \
+		--with-cairo \
 		$(use_enable introspection) \
 		$(use_with X xft) \
 		"$(usex X --x-includes="${EPREFIX}/usr/include" "")" \

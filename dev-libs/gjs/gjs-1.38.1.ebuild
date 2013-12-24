@@ -5,35 +5,40 @@
 EAPI="5"
 GCONF_DEBUG="no"
 
-inherit gnome2 pax-utils virtualx
+inherit autotools eutils gnome2 pax-utils virtualx
 
 DESCRIPTION="Javascript bindings for GNOME"
 HOMEPAGE="http://live.gnome.org/Gjs"
 
 LICENSE="MIT || ( MPL-1.1 LGPL-2+ GPL-2+ )"
 SLOT="0"
-IUSE="+cairo examples"
+IUSE="+cairo examples test"
 KEYWORDS="~alpha ~amd64 ~arm ~ppc ~ppc64 ~sparc ~x86"
 
 RDEPEND="
-	>=dev-libs/glib-2.37.0:2
-	>=dev-libs/gobject-introspection-1.38.0
+	>=dev-libs/glib-2.36:2
+	>=dev-libs/gobject-introspection-1.38
 
-	dev-libs/dbus-glib
 	sys-libs/readline
-	>=dev-lang/spidermonkey-17.0.0:17
+	dev-lang/spidermonkey:17
 	virtual/libffi
 	cairo? ( x11-libs/cairo )
 "
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	virtual/pkgconfig
+	test? ( sys-apps/dbus )
 "
 
-src_configure() {
-	# AUTHORS, ChangeLog are empty
-	DOCS="NEWS README"
+src_prepare() {
+	# From master/1.39
+	epatch "${FILESDIR}/${PN}-1.38.1-fix-unittests.patch"
+	eautoreconf
 
+	gnome2_src_prepare
+}
+
+src_configure() {
 	# FIXME: add systemtap/dtrace support, like in glib:2
 	# FIXME: --enable-systemtap installs files in ${D}/${D} for some reason
 	# XXX: Do NOT enable coverage, completely useless for portage installs
@@ -45,7 +50,6 @@ src_configure() {
 }
 
 src_test() {
-	# Tests need dbus
 	Xemake check
 }
 

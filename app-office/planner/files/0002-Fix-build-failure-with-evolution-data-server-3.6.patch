@@ -1,0 +1,401 @@
+From 60ff192322517ca26e33da36c4a9ec03ae4f3539 Mon Sep 17 00:00:00 2001
+From: Gilles Dartiguelongue <eva@gentoo.org>
+Date: Sat, 29 Dec 2012 16:48:30 +0100
+Subject: [PATCH 2/2] Fix build failure with evolution-data-server-3.6
+
+Only cover plugin code enabled through --enable-eds.
+EDS backend has been broken for a long time and needs more work.
+---
+ configure.ac             |   2 +-
+ src/planner-eds-plugin.c | 141 +++++++++++++++++++++++++----------------------
+ 2 files changed, 75 insertions(+), 68 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 77127c3..5c995d8 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -243,7 +243,7 @@ dnl  -----------------------------
+ AC_ARG_ENABLE(eds, [  --enable-eds  build evolution-data-server support [default=no]], enable_eds="$enableval", enable_eds=no)
+ 
+ if test "x$enable_eds" = "xyes" ; then
+-    EDS_REQUIRED=1.1.0 
++    EDS_REQUIRED=3.6
+     EDS_PACKAGE=1.2
+     PKG_CHECK_MODULES(EDS, 
+     [
+diff --git a/src/planner-eds-plugin.c b/src/planner-eds-plugin.c
+index 4eb060c..a8229c9 100644
+--- a/src/planner-eds-plugin.c
++++ b/src/planner-eds-plugin.c
+@@ -30,7 +30,6 @@
+ #include <gdk/gdkkeysyms.h>
+ #include <glade/glade.h>
+ #include <gtk/gtk.h>
+-#include <gconf/gconf-client.h>
+ #include <libplanner/mrp-object.h>
+ #include <libplanner/mrp-property.h>
+ #include "libplanner/mrp-paths.h"
+@@ -39,13 +38,11 @@
+ #include "planner-resource-cmd.h"
+ 
+ /* Evolution Data Server sources */
+-#include <libedataserver/e-source-list.h>
+-#include <libedataserver/e-source-group.h>
+-#include <libedataserver/e-uid.h>
++#include <libedataserver/libedataserver.h>
+ /* Calendar */
+-#include <libecal/e-cal.h>
++#include <libecal/libecal.h>
+ /* Addressbook */
+-#include <libebook/e-book.h>
++#include <libebook/libebook.h>
+ 
+ struct _PlannerPluginPriv {
+ 	MrpProject    *project;
+@@ -66,7 +63,8 @@ struct _PlannerPluginPriv {
+ 	gchar         *current_query_id;
+ 	GList         *queries_cancelled;
+ 	/* Books open */
+-	GList         *books;
++	ESourceRegistry *registry;
++	GList           *books;
+ 
+ 	GtkActionGroup *actions;
+ };
+@@ -95,7 +93,7 @@ enum {
+ static void eds_plugin_import           (GtkAction             *action,
+ 					 gpointer               user_data,
+ 					 const gchar           *cname);
+-static void eds_create_groups_model     (GSList                *groups,
++static void eds_create_groups_model     (GList                 *groups,
+ 					 PlannerPlugin         *plugin);
+ static void eds_ok_button_clicked       (GtkButton             *button,
+ 					 PlannerPlugin         *plugin);
+@@ -130,15 +128,14 @@ static MrpResource * eds_find_resource  (PlannerPlugin         *plugin,
+ 					 const gchar           *uid,
+ 					 GList                 *resources_orig);
+ static gboolean eds_create_uid_property (PlannerPlugin         *plugin);
+-static void eds_load_resources          (ESourceGroup          *group,
++static void eds_load_resources          (ESource               *source,
+ 					 PlannerPlugin         *plugin,
+ 					 const gchar           *search);
+-static void eds_receive_contacts_cb     (EBook                 *book,
+-					 EBookStatus            status,
+-					 GList                 *contacts,
++static void eds_receive_contacts_cb     (EBookClient           *book,
++					 GAsyncResult          *result,
+ 					 gpointer               plugin);
+-static void eds_receive_book_cb         (EBook                 *book,
+-					 EBookStatus            status,
++static void eds_receive_book_cb         (EBookClient           *book,
++					 GAsyncResult          *result,
+ 					 gpointer               user_data);
+ static void eds_plugin_busy             (PlannerPlugin         *plugin,
+ 					 gboolean               busy);
+@@ -236,9 +233,7 @@ eds_plugin_import (GtkAction   *action,
+ 	PlannerPlugin     *plugin;
+ 	PlannerPluginPriv *priv;
+ 	GtkCellRenderer   *renderer;
+-	GConfClient       *gconf_client;
+-	ESourceList       *source_list;
+-	GSList            *groups;
++	GList             *groups;
+ 	gchar             *filename;
+ 
+ 	plugin = PLANNER_PLUGIN (user_data);
+@@ -293,11 +288,9 @@ eds_plugin_import (GtkAction   *action,
+ 	gtk_widget_show (priv->dialog_get_resources);
+ 
+ 
+-	gconf_client = gconf_client_get_default ();
+-	source_list = e_source_list_new_for_gconf (gconf_client,
+-						   "/apps/evolution/addressbook/sources");
+ 	/* List with addressbook groups */
+-	groups = e_source_list_peek_groups (source_list);
++	groups = e_source_registry_list_sources (priv->registry,
++					         E_SOURCE_EXTENSION_ADDRESS_BOOK);
+ 	eds_create_groups_model (groups, plugin);
+ 	gtk_combo_box_set_model (priv->select_group, priv->groups_model);
+ 	renderer = gtk_cell_renderer_text_new ();
+@@ -305,52 +298,58 @@ eds_plugin_import (GtkAction   *action,
+ 				    renderer, TRUE);
+ 	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (priv->select_group),
+ 					renderer, "text", 0, NULL);
+-	/* g_object_unref (source_list); */
++	g_list_free_full (groups, g_object_unref);
+ }
+ 
+ static void
+-eds_create_groups_model (GSList        *groups,
++eds_create_groups_model (GList         *groups,
+ 			 PlannerPlugin *plugin)
+ {
++	PlannerPluginPriv *priv;
+ 	GtkListStore *model;
+ 	GtkTreeIter   iter;
+-	GSList       *sl;
++	GList        *sl;
++	ESource      *parent;
++	const gchar  *parent_name;
+ 	const gchar  *name;
+ 
+ 	if (groups == NULL) {
+ 		return;
+ 	}
+ 
++	priv = plugin->priv;
+ 	model = gtk_list_store_new (NUM_GROUP_COLS, G_TYPE_STRING, G_TYPE_OBJECT);
+ 
+ 	for (sl = groups; sl; sl = sl->next) {
+-		name = e_source_group_peek_name (sl->data);
++		name = e_source_get_display_name (sl->data);
++		parent = e_source_registry_ref_source(priv->registry, e_source_get_parent(sl->data));
++		parent_name = e_source_get_display_name(parent);
+ 		gtk_list_store_append (model, &iter);
+ 		gtk_list_store_set (model, &iter,
+-				    COL_GROUP_NAME, name,
++				    COL_GROUP_NAME, g_strdup_printf("%s (%s)", name, parent_name),
+ 				    COL_GROUP_OBJECT, sl->data, -1);
++		g_object_unref(parent);
+ 	}
+ 	plugin->priv->groups_model = GTK_TREE_MODEL (model);
+ }
+ 
+ /* For now we show all the sources from a group in a List.
+-   Later we will us a Tree to show them usings groups. */
++   Later we will use a Tree to show them usings groups. */
+ static void
+-eds_load_resources (ESourceGroup  *group,
+-		    PlannerPlugin *plugin,
+-		    const gchar   *search)
++eds_load_resources (ESource         *source,
++		    PlannerPlugin   *plugin,
++		    const gchar     *search)
+ {
+ 	GtkListStore      *model;
+-	GSList            *sources, *sl;
+-	PlannerPluginPriv *priv;
++	GList             *sources, *sl;
++	PlannerPluginPriv *priv = NULL;
+ 
+-	g_return_if_fail (E_IS_SOURCE_GROUP (group));
+-	sources = e_source_group_peek_sources (group);
++	g_return_if_fail (E_IS_SOURCE (source));
+ 
+ 	priv = plugin->priv;
+ 	model = GTK_LIST_STORE (priv->resources_model);
+ 
+-	if (sources == NULL) {
++	if (source == NULL) {
+ 		if (model) {
+ 			gtk_list_store_clear (model);
+ 		}
+@@ -439,9 +438,12 @@ eds_load_resources (ESourceGroup  *group,
+ 		gtk_tree_view_set_headers_clickable (priv->resources_tree_view, TRUE);
+ 	}
+ 
++	sources = e_source_registry_list_sources (priv->registry,
++						  E_SOURCE_EXTENSION_ADDRESS_BOOK);
++
+ 	for (sl = sources; sl; sl = sl->next) {
+-		EBook      *client;
+-		AsyncQuery *async_query = g_new0 (AsyncQuery, 1);
++		EBookClient *client;
++		AsyncQuery  *async_query = g_new0 (AsyncQuery, 1);
+ 
+ 		g_free (plugin->priv->current_query_id);
+ 		plugin->priv->current_query_id = e_uid_new ();
+@@ -450,11 +452,12 @@ eds_load_resources (ESourceGroup  *group,
+ 		async_query->uid = plugin->priv->current_query_id;
+ 		async_query->search = search;
+ 
+-		client = e_book_new (sl->data, NULL);
++		client = e_book_client_new (sl->data, NULL);
+ 		g_message ("Open book async query: %s", async_query->uid);
+-		e_book_async_open (client, TRUE, eds_receive_book_cb, async_query);
++		e_client_open (E_CLIENT (client), TRUE, NULL, (GAsyncReadyCallback) eds_receive_book_cb, async_query);
+ 		eds_plugin_busy (plugin, TRUE);
+ 	}
++	g_list_free_full (sources, g_object_unref);
+ }
+ 
+ static gboolean
+@@ -478,16 +481,17 @@ eds_query_cancelled (PlannerPlugin *plugin,
+ }
+ 
+ static void
+-eds_receive_book_cb (EBook         *client,
+-		     EBookStatus    status,
++eds_receive_book_cb (EBookClient   *client,
++		     GAsyncResult  *result,
+ 		     gpointer       user_data)
+ {
+ 	PlannerPlugin *plugin;
+ 	EBookQuery    *query;
+ 	AsyncQuery    *async_query;
+ 	const gchar   *search;
++	const gchar   *sexp;
+ 	const gchar   *uid;
+-	const gchar   *book_uri;
++	const gchar   *book_uid;
+ 	GtkListStore  *model;
+ 
+ 	async_query = user_data;
+@@ -499,25 +503,25 @@ eds_receive_book_cb (EBook         *client,
+ 	gtk_list_store_clear (model);
+ 	g_free (async_query);
+ 
+-	book_uri = e_book_get_uri (client);
++	book_uid = e_source_get_uid(e_client_get_source(E_CLIENT (client)));
+ 
+ 	if (eds_query_cancelled (plugin, uid)) {
+-		g_message ("Open book query cancelled: %s (%s)", book_uri, uid);
++		g_message ("Open book query cancelled: %s (%s)", book_uid, uid);
+ 		gtk_widget_set_sensitive (glade_xml_get_widget (plugin->priv->glade,
+ 								"search_box"), TRUE);
+ 		eds_plugin_busy (plugin, FALSE);
+ 		return;
+ 	}
+ 
+-	if (status != E_BOOK_ERROR_OK) {
+-		g_warning ("Problems opening: %s", book_uri);
++	if (!e_client_open_finish(E_CLIENT (client), result, NULL)) {
++		g_warning ("Problems opening: %s", book_uid);
+ 		gtk_widget_set_sensitive (glade_xml_get_widget (plugin->priv->glade,
+ 								"search_box"), TRUE);
+ 		eds_plugin_busy (plugin, FALSE);
+ 		return;
+ 	}
+ 
+-	g_message ("Looking the book: %s", book_uri);
++	g_message ("Looking the book: %s", book_uid);
+ 	plugin->priv->books = g_list_append (plugin->priv->books, client);
+ 
+ 	async_query = g_new0 (AsyncQuery, 1);
+@@ -527,22 +531,23 @@ eds_receive_book_cb (EBook         *client,
+ 	async_query->plugin = plugin;
+ 
+ 	query = e_book_query_any_field_contains (search);
+-	e_book_async_get_contacts (client, query,
+-				   eds_receive_contacts_cb,
+-				   (gpointer) async_query);
++	sexp = e_book_query_to_string(query);
++	e_book_client_get_contacts (client, sexp, NULL,
++				    (GAsyncReadyCallback) eds_receive_contacts_cb,
++				    (gpointer) async_query);
+ 
+ 	eds_plugin_busy (plugin, TRUE);
+ 	e_book_query_unref (query);
+ }
+ 
+ static void
+-eds_receive_contacts_cb (EBook         *book,
+-			 EBookStatus    status,
+-			 GList         *contacts,
++eds_receive_contacts_cb (EBookClient   *client,
++			 GAsyncResult  *result,
+ 			 gpointer       user_data)
+ {
+ 	GtkTreeIter        iter;
+-	GList             *l;
++	GSList             *l;
++	GSList            *contacts;
+ 	GtkListStore      *model;
+ 	PlannerPlugin     *plugin;
+ 	PlannerPluginPriv *priv;
+@@ -550,6 +555,7 @@ eds_receive_contacts_cb (EBook         *book,
+ 	AsyncQuery        *async_query;
+ 	const gchar       *uid;
+ 	gchar             *filename;
++	GError            *error;
+ 
+ 	async_query = (AsyncQuery *) user_data;
+ 
+@@ -565,11 +571,10 @@ eds_receive_contacts_cb (EBook         *book,
+ 		return;
+ 	}
+ 
+-	g_message ("Book status response: %d", status);
+ 	g_message ("Answer for the query: %s", uid);
+ 
+-	/* Exceed limit is E_BOOK_ERROR_OTHER_ERROR :( */
+-	if (status == E_BOOK_ERROR_OK || status == E_BOOK_ERROR_OTHER_ERROR) {
++	if (e_book_client_get_contacts_finish(client, result, &contacts, &error)) {
++		g_message ("Book status response: %d", g_slist_length(contacts));
+ 		filename = mrp_paths_get_image_dir ("/resources.png");
+ 		pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
+ 		g_free (filename);
+@@ -586,8 +591,9 @@ eds_receive_contacts_cb (EBook         *book,
+ 					    COL_RESOURCE_PHOTO, pixbuf,
+ 					    COL_RESOURCE_OBJECT, l->data, -1);
+ 		}
++		e_client_util_free_object_slist(contacts);
+ 	} else {
+-		g_warning ("Problem getting contacts ...");
++		g_warning ("Problem getting contacts: %s", error->message);
+ 	}
+ 
+ 	eds_plugin_busy (plugin, FALSE);
+@@ -697,13 +703,13 @@ eds_group_selected (GtkComboBox   *select_group,
+ {
+ 	GtkTreeIter        iter;
+ 	PlannerPluginPriv *priv = plugin->priv;
+-	ESourceGroup      *group;
++	ESource           *source;
+ 
+ 	gtk_widget_set_sensitive (glade_xml_get_widget (priv->glade, "search_box"), TRUE);
+ 
+ 	if (gtk_combo_box_get_active_iter (select_group, &iter)) {
+-		gtk_tree_model_get (priv->groups_model, &iter, COL_GROUP_OBJECT, &group, -1);
+-		eds_load_resources (group, plugin, "");
++		gtk_tree_model_get (priv->groups_model, &iter, COL_GROUP_OBJECT, &source, -1);
++		eds_load_resources (source, plugin, "");
+ 	}
+ }
+ 
+@@ -805,14 +811,14 @@ eds_search_button_clicked (GtkButton     *button,
+ 	const gchar       *search;
+ 	PlannerPluginPriv *priv = plugin->priv;
+ 	GtkTreeIter        iter;
+-	ESourceGroup      *group;
++	ESource           *source;
+ 
+ 	search = gtk_entry_get_text (GTK_ENTRY
+ 				     (glade_xml_get_widget (priv->glade,"search_entry")));
+ 
+ 	if (gtk_combo_box_get_active_iter (priv->select_group, &iter)) {
+-		gtk_tree_model_get (priv->groups_model, &iter, COL_GROUP_OBJECT, &group, -1);
+-		eds_load_resources (group, plugin, search);
++		gtk_tree_model_get (priv->groups_model, &iter, COL_GROUP_OBJECT, &source, -1);
++		eds_load_resources (source, plugin, search);
+ 	}
+ }
+ 
+@@ -823,13 +829,13 @@ eds_search_key_pressed (GtkEntry      *entry,
+ {
+ 	PlannerPluginPriv *priv = plugin->priv;
+ 	GtkTreeIter        iter;
+-	ESourceGroup      *group;
++	ESource           *source;
+ 
+ 	if (event->keyval == GDK_Return) {
+ 		if (gtk_combo_box_get_active_iter (priv->select_group, &iter)) {
+ 			gtk_tree_model_get (priv->groups_model, &iter,
+-					    COL_GROUP_OBJECT, &group, -1);
+-			eds_load_resources (group, plugin, gtk_entry_get_text (entry));
++					    COL_GROUP_OBJECT, &source, -1);
++			eds_load_resources (source, plugin, gtk_entry_get_text (entry));
+ 		}
+ 	}
+ 	return FALSE;
+@@ -935,6 +941,7 @@ plugin_init (PlannerPlugin *plugin)
+ 	plugin->priv = priv;
+ 	priv->project = planner_window_get_project (plugin->main_window);
+ 
++	priv->registry = e_source_registry_new_sync(NULL, NULL);
+ 	priv->actions = gtk_action_group_new ("EDS plugin actions");
+ 	gtk_action_group_set_translation_domain (priv->actions, GETTEXT_PACKAGE);
+ 
+-- 
+1.8.2.1
+

@@ -15,7 +15,8 @@ SLOT="2"
 KEYWORDS="~amd64 ~ppc ~x86 ~x86-interix ~amd64-linux ~x86-linux"
 IUSE=""
 
-RDEPEND=">=dev-libs/atk-1
+RDEPEND="
+	>=dev-libs/atk-1
 	>=dev-libs/glib-2.31.10:2
 	>=x11-libs/gtk+-3.3.8:3
 "

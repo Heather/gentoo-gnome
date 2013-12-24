@@ -3,28 +3,41 @@
 # $Header: $
 
 EAPI="5"
+GCONF_DEBUG="no"
+PYTHON_COMPAT=( python{3_2,3_3} )
 
-inherit gnome2
+inherit gnome2 python-single-r1
 
-DESCRIPTION="Music management for GNOME"
-HOMEPAGE="https://git.gnome.org/browse/gnome-music/"
+DESCRIPTION="Music management for Gnome"
+HOMEPAGE="http://wiki.gnome.org/Apps/Music"
 
-LICENSE="GPL-2"
+LICENSE="GPL-2+"
 SLOT="0"
 IUSE=""
-KEYWORDS="~amd64 ~arm ~ppc ~ppc64 ~x86"
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
+KEYWORDS="~amd64"
 
-#media-plugins/grilo-plugins maybe optional
 COMMON_DEPEND="
-	>=dev-libs/glib-2.37:2
+	${PYTHON_DEPS}
+	>=dev-libs/glib-2.28:2
 	>=dev-libs/gobject-introspection-1.35.9
-	>=x11-libs/gtk+-3.9.0:3
-	>=media-libs/grilo-0.2.6
-	media-plugins/grilo-plugins
+	>=media-libs/grilo-0.2.6:0.2[introspection]
+	>=x11-libs/gtk+-3.9:3[introspection]
 "
 RDEPEND="${COMMON_DEPEND}
-	app-misc/tracker[gstreamer]
-	>=gnome-base/gnome-settings-daemon-3.9.91
+	app-misc/tracker[introspection(+)]
+	|| (
+		app-misc/tracker[gstreamer]
+		app-misc/tracker[xine]
+	)
+	dev-python/pygobject:3[cairo,${PYTHON_USEDEP}]
+	dev-python/dbus-python[${PYTHON_USEDEP}]
+	media-libs/gstreamer:1.0[introspection]
+	media-libs/gst-plugins-base:1.0[introspection]
+	media-plugins/gst-plugins-meta:1.0
+	media-plugins/grilo-plugins:0.2
 "
 DEPEND="${COMMON_DEPEND}
+	>=dev-util/intltool-0.26
+	virtual/pkgconfig
 "

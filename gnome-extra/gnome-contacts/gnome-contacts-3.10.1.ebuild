@@ -1,10 +1,10 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-extra/gnome-contacts/gnome-contacts-3.8.3.ebuild,v 1.2 2013/08/09 11:43:58 pacho Exp $
+# $Header: $
 
 EAPI="5"
 GCONF_DEBUG="no"
-VALA_MIN_API_VERSION="0.18"
+VALA_MIN_API_VERSION="0.22"
 VALA_USE_DEPEND="vapigen"
 
 inherit gnome2 vala
@@ -44,6 +44,7 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	${VALA_DEPEND}
+	dev-libs/libxslt
 	>=dev-util/intltool-0.40
 	>=sys-devel/gettext-0.17
 	virtual/pkgconfig
@@ -55,8 +56,8 @@ src_prepare() {
 		touch src/*.vala
 	fi
 
-	gnome2_src_prepare
 	vala_src_prepare
+	gnome2_src_prepare
 }
 
 src_configure() {

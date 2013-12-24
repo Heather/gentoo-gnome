@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-util/devhelp/devhelp-3.8.2.ebuild,v 1.4 2013/08/31 18:48:40 pacho Exp $
+# $Header: $
 
 EAPI="5"
 GCONF_DEBUG="no"
@@ -23,7 +23,7 @@ REQUIRED_USE="gedit? ( ${PYTHON_REQUIRED_USE} )"
 COMMON_DEPEND="
 	>=dev-libs/glib-2.37.3:2
 	>=x11-libs/gtk+-3.9.8:3
-	>=net-libs/webkit-gtk-2.0.0:3
+	>=net-libs/webkit-gtk-2:3
 "
 RDEPEND="${COMMON_DEPEND}
 	gedit? (
@@ -35,7 +35,6 @@ RDEPEND="${COMMON_DEPEND}
 "
 DEPEND="${COMMON_DEPEND}
 	${PYTHON_DEPS}
-	>=sys-devel/gettext-0.17
 	>=dev-util/intltool-0.40
 	virtual/pkgconfig
 "
@@ -44,12 +43,18 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# ICC is crazy, silence warnings (bug #154010)
-	if [[ $(tc-getCC) == "icc" ]] ; then
-		G2CONF="${G2CONF} --with-compile-warnings=no"
+	if ! use gedit ; then
+		sed -e '/SUBDIRS/ s/gedit-plugin//' -i misc/Makefile.{am,in} || die
 	fi
 
-	use gedit || sed -e '/SUBDIRS/ s/gedit-plugin//' -i misc/Makefile.{am,in} || die
-
 	gnome2_src_prepare
+}
+
+src_configure() {
+	local myconf=""
+	# ICC is crazy, silence warnings (bug #154010)
+	if [[ $(tc-getCC) == "icc" ]] ; then
+		myconf="--with-compile-warnings=no"
+	fi
+	gnome2_src_configure ${myconf}
 }

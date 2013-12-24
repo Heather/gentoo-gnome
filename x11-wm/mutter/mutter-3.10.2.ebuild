@@ -21,12 +21,14 @@ COMMON_DEPEND="
 	x11-libs/gdk-pixbuf:2[introspection?]
 	>=x11-libs/gtk+-3.9.11:3[X,introspection?]
 	>=dev-libs/glib-2.36.0:2
-	>=media-libs/clutter-1.15.90:1.0[introspection?]
+	>=media-libs/clutter-1.14.3:1.0[introspection?]
 	>=media-libs/cogl-1.15.6:1.0=[introspection?]
 	>=media-libs/libcanberra-0.26[gtk3]
 	>=x11-libs/startup-notification-0.7
 	>=x11-libs/libXcomposite-0.2
 	>=gnome-base/gsettings-desktop-schemas-3.7.3[introspection?]
+	gnome-base/gnome-desktop:3=
+	>sys-power/upower-0.9.11
 
 	x11-libs/libICE
 	x11-libs/libSM
@@ -63,9 +65,6 @@ src_prepare() {
 
 	# Compat with Ubuntu metacity themes (e.g. x11-themes/light-themes)
 	epatch "${FILESDIR}/${PN}-3.2.1-ignore-shadow-and-padding.patch"
-
-	# Fix compilation with GCC 4.8*
-	epatch "${FILESDIR}/${PN}-3.10.1.1-gcc-4.8-compile-fix.patch"
 
 	gnome2_src_prepare
 }

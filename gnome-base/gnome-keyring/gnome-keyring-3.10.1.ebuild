@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header $
+# $Header: $
 
 EAPI="5"
 GCONF_DEBUG="yes" # Not gnome macro but similar
@@ -26,14 +26,13 @@ RDEPEND="
 	pam? ( virtual/pam )
 "
 DEPEND="${RDEPEND}
+	app-text/docbook-xml-dtd:4.3
+	dev-libs/libxslt
 	>=dev-util/intltool-0.35
 	sys-devel/gettext
 	virtual/pkgconfig
 "
 PDEPEND=">=gnome-base/libgnome-keyring-3.1.92"
-# eautoreconf needs:
-#	>=dev-util/gtk-doc-am-1.9
-# gtk-doc-am is not needed otherwise (no gtk-docs are installed)
 
 src_prepare() {
 	# Disable stupid CFLAGS
@@ -63,13 +62,17 @@ src_configure() {
 		$(use_enable pam) \
 		$(use_with pam pam-dir $(getpam_mod_dir)) \
 		$(use_enable selinux) \
+		--enable-doc \
 		--enable-ssh-agent \
 		--enable-gpg-agent
 }
 
 src_test() {
-	unset DBUS_SESSION_BUS_ADDRESS
-	Xemake check
+	 # FIXME: this should be handled at eclass level
+	 "${EROOT}${GLIB_COMPILE_SCHEMAS}" --allow-any-name "${S}/schema" || die
+
+	 unset DBUS_SESSION_BUS_ADDRESS
+	 GSETTINGS_SCHEMA_DIR="${S}/schema" Xemake check
 }
 
 pkg_postinst() {

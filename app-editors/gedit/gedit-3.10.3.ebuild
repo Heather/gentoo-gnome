@@ -7,7 +7,7 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes" # plugins are dlopened
 PYTHON_COMPAT=( python3_{2,3} )
 
-inherit gnome2 multilib python-r1 eutils virtualx
+inherit eutils gnome2 multilib python-r1 virtualx
 
 DESCRIPTION="A text editor for the GNOME desktop"
 HOMEPAGE="http://live.gnome.org/Gedit"
@@ -38,9 +38,9 @@ COMMON_DEPEND="
 	introspection? ( >=dev-libs/gobject-introspection-0.9.3 )
 	python? (
 		${PYTHON_DEPS}
-		>=dev-libs/gobject-introspection-1.38.0
-		>=x11-libs/gtk+-3.9.9:3[introspection]
-		>=x11-libs/gtksourceview-3.9.91:3.0[introspection]
+		>=dev-libs/gobject-introspection-0.9.3
+		>=x11-libs/gtk+-3:3[introspection]
+		>=x11-libs/gtksourceview-3.6:3.0[introspection]
 		dev-python/pycairo[${PYTHON_USEDEP}]
 		>=dev-python/pygobject-3:3[cairo,${PYTHON_USEDEP}] )
 	spell? (
@@ -56,8 +56,8 @@ DEPEND="${COMMON_DEPEND}
 	>=app-text/scrollkeeper-0.3.11
 	dev-libs/libxml2:2
 	>=dev-util/gtk-doc-am-1
-	>=dev-util/intltool-0.40
-	>=sys-devel/gettext-0.17
+	>=dev-util/intltool-0.50.1
+	>=sys-devel/gettext-0.18
 	virtual/pkgconfig
 "
 # yelp-tools, gnome-common needed to eautoreconf

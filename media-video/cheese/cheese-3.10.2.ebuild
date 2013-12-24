@@ -52,10 +52,10 @@ RDEPEND="${COMMON_DEPEND}
 DEPEND="${COMMON_DEPEND}
 	$(vala_depend)
 	app-text/docbook-xml-dtd:4.3
+	app-text/yelp-tools
 	dev-libs/libxml2:2
-	>=dev-util/gtk-doc-1.14
+	>=dev-util/gtk-doc-am-1.14
 	>=dev-util/intltool-0.50
-	dev-util/itstool
 	virtual/pkgconfig
 	x11-proto/xf86vidmodeproto
 	test? ( dev-libs/glib:2[utils] )

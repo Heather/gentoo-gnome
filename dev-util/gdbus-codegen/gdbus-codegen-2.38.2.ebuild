@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-util/gdbus-codegen/gdbus-codegen-2.36.4.ebuild,v 1.2 2013/09/05 18:39:23 mgorny Exp $
+# $Header: $
 
 EAPI="5"
 GNOME_ORG_MODULE="glib"
@@ -14,7 +14,7 @@ HOMEPAGE="http://www.gtk.org/"
 
 LICENSE="LGPL-2+"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~sparc-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux"
 IUSE=""
 
 RDEPEND="${PYTHON_DEPS}"
@@ -26,7 +26,9 @@ PDEPEND=">=dev-libs/glib-${PV}:2"
 S="${WORKDIR}/glib-${PV}/gio/gdbus-2.0/codegen"
 
 python_prepare_all() {
-	PATCHES=( "${FILESDIR}/${PN}-2.36.0-sitedir.patch" )
+	PATCHES=(
+		"${FILESDIR}/${PN}-2.36.0-sitedir.patch"
+	)
 	distutils-r1_python_prepare_all
 	sed -e "s:\"/usr/local\":\"${EPREFIX}/usr\":" \
 		-i config.py || die "sed config.py failed"

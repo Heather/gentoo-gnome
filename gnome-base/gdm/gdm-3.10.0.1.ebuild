@@ -7,8 +7,8 @@ GNOME2_LA_PUNT="yes"
 
 inherit autotools eutils gnome2 pam readme.gentoo systemd user
 
-DESCRIPTION="GNOME Display Manager"
-HOMEPAGE="https://live.gnome.org/GDM"
+DESCRIPTION="GNOME Display Manager for managing graphical display servers and user logins"
+HOMEPAGE="https://wiki.gnome.org/GDM"
 
 SRC_URI="${SRC_URI}
 	branding? ( http://www.mail-archive.com/tango-artists@lists.freedesktop.org/msg00043/tango-gentoo-v1.1.tar.gz )
@@ -20,20 +20,17 @@ LICENSE="
 "
 
 SLOT="0"
-IUSE="accessibility audit branding fprint +gnome-shell +introspection ipv6 plymouth selinux smartcard tcpd test xinerama"
-KEYWORDS="~amd64 ~arm ~ppc64 ~sh ~x86"
+IUSE="accessibility audit branding fprint +introspection ipv6 plymouth selinux smartcard +systemd tcpd test xinerama"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86"
 
 # NOTE: x11-base/xorg-server dep is for X_SERVER_PATH etc, bug #295686
 # nspr used by smartcard extension
 # dconf, dbus and g-s-d are needed at install time for dconf update
-# systemd needed for proper restarting, bug #463784
+# We need either systemd or >=openrc-0.12 to restart gdm properly, bug #463784
 COMMON_DEPEND="
 	app-text/iso-codes
 	>=dev-libs/glib-2.35:2
 	>=x11-libs/gtk+-2.91.1:3
-	>=x11-libs/pango-1.3
-	dev-libs/nspr
-	>=dev-libs/nss-3.11.1
 	>=gnome-base/dconf-0.11.6
 	>=gnome-base/gnome-settings-daemon-3.1.4
 	gnome-base/gsettings-desktop-schemas
@@ -41,7 +38,6 @@ COMMON_DEPEND="
 	>=media-libs/libcanberra-0.4[gtk3]
 	sys-apps/dbus
 	>=sys-apps/accountsservice-0.6.12
-	>=sys-power/upower-0.9
 
 	x11-apps/sessreg
 	x11-base/xorg-server
@@ -55,10 +51,14 @@ COMMON_DEPEND="
 	>=x11-misc/xdg-utils-1.0.2-r3
 
 	virtual/pam
-	>=sys-apps/systemd-186[pam]
-	sys-auth/pambase[systemd]
+	systemd? ( >=sys-apps/systemd-186[pam] )
+	!systemd? (
+		>=x11-base/xorg-server-1.14.3-r1
+		sys-auth/consolekit
+		!<sys-apps/openrc-0.12
+	)
+	sys-auth/pambase[systemd?]
 
-	accessibility? ( x11-libs/libXevie )
 	audit? ( sys-process/audit )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.12 )
 	plymouth? ( sys-boot/plymouth )
@@ -67,24 +67,22 @@ COMMON_DEPEND="
 	xinerama? ( x11-libs/libXinerama )
 "
 # XXX: These deps are from session and desktop files in data/ directory
-# at-spi:1 is needed for at-spi-registryd (spawned by simple-chooser)
 # fprintd is used via dbus by gdm-fingerprint-extension
 # gnome-session-3.6 needed to avoid freezing with orca
 RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/gnome-session-3.6
+	>=gnome-base/gnome-shell-3.1.90
+	gnome-extra/polkit-gnome:0
 	x11-apps/xhost
 	x11-themes/gnome-icon-theme-symbolic
 
 	accessibility? (
-		app-accessibility/gnome-mag
-		app-accessibility/gok
-		app-accessibility/orca
-		gnome-extra/at-spi:1 )
+		>=app-accessibility/orca-3.10
+		app-accessibility/caribou
+		gnome-extra/mousetweaks )
 	fprint? (
 		sys-auth/fprintd
 		sys-auth/pam_fprint )
-	gnome-shell? ( >=gnome-base/gnome-shell-3.1.90 )
-	!gnome-shell? ( x11-wm/metacity )
 	smartcard? (
 		app-crypt/coolkey
 		sys-auth/pam_pkcs11 )
@@ -135,21 +133,12 @@ src_prepare() {
 	# ssh-agent handling must be done at xinitrc.d, bug #220603
 	epatch "${FILESDIR}/${PN}-2.32.0-xinitrc-ssh-agent.patch"
 
-	# Fix automagic selinux, upstream bug #704188
-	#FIXME
-	#epatch "${FILESDIR}/${PN}-3.6.0-selinux-automagic.patch"
-
 	# Gentoo does not have a fingerprint-auth pam stack
 	epatch "${FILESDIR}/${PN}-3.8.4-fingerprint-auth.patch"
-
-	# don't load accessibility support at runtime when USE=-accessibility
-	use accessibility || epatch "${FILESDIR}/${PN}-3.7.3.1-disable-accessibility.patch"
 
 	# Show logo when branding is enabled
 	use branding && epatch "${FILESDIR}/${PN}-3.8.4-logo.patch"
 
-	mkdir -p "${S}"/m4
-	sed -i 's/AM_CONFIG_HEADER/AC_CONFIG_HEADERS/g' configure.ac || die
 	eautoreconf
 
 	gnome2_src_prepare
@@ -161,9 +150,7 @@ src_configure() {
 	# they don't have any corresponding code.
 	# --with-at-spi-registryd-directory= needs to be passed explicitly because
 	# of https://bugzilla.gnome.org/show_bug.cgi?id=607643#c4
-	# If plymouth integration is enabled, gdm expects to be always run
-	# on vt1. If using VT7 worked with 3.8, with 3.10 we incur in an almost deadlock
-	# at boot. See Gentoo bug #453392
+	# Xevie is obsolete, bug #482304
 	gnome2_src_configure \
 		--with-run-dir=/run/gdm \
 		--localstatedir="${EPREFIX}"/var \
@@ -172,15 +159,15 @@ src_configure() {
 		--enable-authentication-scheme=pam \
 		--with-default-pam-config=exherbo \
 		--with-at-spi-registryd-directory="${EPREFIX}"/usr/libexec \
-		$(use plymouth || echo -n --with-initial-vt=7) \
-		--with-systemd \
-		--enable-systemd-journal \
-		--without-console-kit \
-		$(use_with accessibility xevie) \
+		--with-initial-vt=7 \
+		--without-xevie \
 		$(use_with audit libaudit) \
 		$(use_enable ipv6) \
 		$(use_with plymouth) \
 		$(use_with selinux) \
+		$(use_with systemd) \
+		$(use_with !systemd console-kit) \
+		$(use_enable systemd systemd-journal) \
 		$(systemd_with_unitdir) \
 		$(use_with tcpd tcp-wrappers) \
 		$(use_with xinerama) \
@@ -189,6 +176,10 @@ src_configure() {
 
 src_install() {
 	gnome2_src_install
+
+	if ! use accessibility ; then
+		rm "${ED}"/usr/share/gdm/greeter/autostart/orca-autostart.desktop || die
+	fi
 
 	insinto /etc/X11/xinit/xinitrc.d
 	newins "${FILESDIR}/49-keychain-r1" 49-keychain
@@ -232,11 +223,5 @@ pkg_postinst() {
 		elog "You had /etc/X11/gdm/gdm.conf which is the old configuration"
 		elog "file.  It has been moved to /etc/X11/gdm/gdm-pre-gnome-2.16"
 		mv /etc/X11/gdm/gdm.conf /etc/X11/gdm/gdm-pre-gnome-2.16
-	fi
-
-	if ! systemd_is_booted; then
-		ewarn "${PN} needs Systemd to be *running* for working"
-		ewarn "properly. Please follow the this guide to migrate:"
-		ewarn "http://wiki.gentoo.org/wiki/Systemd"
 	fi
 }

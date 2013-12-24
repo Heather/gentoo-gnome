@@ -19,6 +19,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd64-fbsd
 COMMON_DEPEND="
 	gnome-base/librsvg:2
 	x11-libs/cairo
+	>=x11-themes/gtk-engines-2.15.3:2
 	gtk? (
 		>=x11-libs/gtk+-2.24.15:2
 		>=x11-libs/gtk+-3.9.12:3 )

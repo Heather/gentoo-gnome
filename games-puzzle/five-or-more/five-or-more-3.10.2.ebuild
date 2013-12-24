@@ -17,8 +17,8 @@ IUSE=""
 
 RDEPEND="
 	dev-libs/glib:2
-	>=gnome-base/librsvg-2.32.0
-	>=x11-libs/gtk+-3.4.0:3
+	>=gnome-base/librsvg-2.32
+	>=x11-libs/gtk+-3.4:3
 "
 DEPEND="${RDEPEND}
 	app-text/yelp-tools

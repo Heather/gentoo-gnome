@@ -15,20 +15,15 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="test"
 
-# Newer gnome-doc-utils is needed for RNGs
-# libxml2 needed for xmllint
-# scrollkeeper is referenced in gnome-user-docs.spec, but is not used
 RDEPEND=""
-DEPEND="test? (
-		>=app-text/gnome-doc-utils-0.20.5
-		dev-libs/libxml2 )
+DEPEND="
+	test? ( dev-libs/libxml2 )
 "
 # eautoreconf requires:
 #	app-text/yelp-tools
 # rebuilding translations requires:
-#	dev-libs/libxml2
+#	app-text/yelp-tools
 #	dev-util/gettext
-#	dev-util/itstool
 
 # This ebuild does not install any binaries
 RESTRICT="binchecks strip"

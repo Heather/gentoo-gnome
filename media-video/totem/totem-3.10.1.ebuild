@@ -16,14 +16,14 @@ HOMEPAGE="http://projects.gnome.org/totem/"
 LICENSE="GPL-2+ LGPL-2+"
 SLOT="0"
 IUSE="flash grilo +introspection lirc nautilus nsplugin +python test zeitgeist"
-KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
-
 # see bug #359379
 REQUIRED_USE="
 	flash? ( nsplugin )
 	python? ( introspection ${PYTHON_REQUIRED_USE} )
 	zeitgeist? ( introspection )
 "
+
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 
 # TODO:
 # Cone (VLC) plugin needs someone with the right setup to test it
@@ -35,7 +35,7 @@ RDEPEND="
 	>=dev-libs/glib-2.33:2
 	>=x11-libs/gdk-pixbuf-2.23.0:2
 	>=x11-libs/gtk+-3.7.10:3[introspection?]
-	>=dev-libs/totem-pl-parser-3.9.92[introspection?]
+	>=dev-libs/totem-pl-parser-3.9.92:0=[introspection?]
 	>=dev-libs/libpeas-1.1.0[gtk]
 	>=x11-themes/gnome-icon-theme-2.16
 	x11-libs/cairo
@@ -75,13 +75,12 @@ RDEPEND="
 		>=dev-python/pygobject-2.90.3:3[${PYTHON_USEDEP}]
 		dev-python/pyxdg[${PYTHON_USEDEP}]
 		dev-python/dbus-python[${PYTHON_USEDEP}]
-		>=x11-libs/gtk+-2.91.7:3[introspection] )
-	zeitgeist? ( dev-libs/libzeitgeist )
+		>=x11-libs/gtk+-3.5.2:3[introspection] )
+	zeitgeist? ( >=gnome-extra/zeitgeist-0.9.12 )
 "
 DEPEND="${RDEPEND}
 	app-text/docbook-xml-dtd:4.5
 	app-text/scrollkeeper
-	app-text/yelp-tools
 	>=dev-util/gtk-doc-am-1.14
 	>=dev-util/intltool-0.40
 	sys-devel/gettext
@@ -128,7 +127,6 @@ src_configure() {
 	# respecting EPYTHON (wait for python-r1)
 	# pylint is checked unconditionally, but is only used for make check
 	gnome2_src_configure \
-		PYLINT=$(type -P true) \
 		--disable-run-in-source-tree \
 		--disable-static \
 		--with-smclient=auto \
@@ -139,6 +137,7 @@ src_configure() {
 		$(use_enable nautilus) \
 		$(use_enable nsplugin browser-plugins) \
 		$(use_enable python) \
+		PYLINT=$(type -P true) \
 		VALAC=$(type -P true) \
 		BROWSER_PLUGIN_DIR=/usr/$(get_libdir)/nsbrowser/plugins \
 		--with-plugins=${plugins}

@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/glib-networking/glib-networking-2.36.2.ebuild,v 1.1 2013/05/15 07:07:24 pacho Exp $
+# $Header: $
 
 EAPI="5"
 GCONF_DEBUG="no"
@@ -17,7 +17,7 @@ IUSE="+gnome +libproxy smartcard +ssl test"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x86-solaris"
 
 RDEPEND="
-	>=dev-libs/glib-2.35.8:2
+	>=dev-libs/glib-2.38:2
 	gnome? ( gnome-base/gsettings-desktop-schemas )
 	libproxy? ( >=net-libs/libproxy-0.4.6-r3:= )
 	smartcard? (
@@ -25,7 +25,7 @@ RDEPEND="
 		>=net-libs/gnutls-2.12.8:=[pkcs11] )
 	ssl? (
 		app-misc/ca-certificates
-		>=net-libs/gnutls-2.11.0:= )
+		>=net-libs/gnutls-2.12.8:= )
 "
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35.0
@@ -35,17 +35,7 @@ DEPEND="${RDEPEND}
 "
 # eautoreconf needs >=sys-devel/autoconf-2.65:2.5
 
-src_prepare() {
-	# Failing tests, upstream #695062 (will be fixed in 2.38)
-	sed -e '/tls.connection.simultaneous-async-rehandshake/,+1 d' \
-		-e '/tls.connection.simultaneous-sync-rehandshake/,+1 d' \
-		-i tls/tests/connection.c || die
-	gnome2_src_prepare
-}
-
 src_configure() {
-	# AUTHORS, ChangeLog are empty
-	DOCS="NEWS README"
 	gnome2_src_configure \
 		--disable-static \
 		--with-ca-certificates="${EPREFIX}"/etc/ssl/certs/ca-certificates.crt \

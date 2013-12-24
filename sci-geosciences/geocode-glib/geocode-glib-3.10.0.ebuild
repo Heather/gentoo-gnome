@@ -10,13 +10,15 @@ inherit gnome2
 DESCRIPTION="GLib geocoding library that uses the Yahoo! Place Finder service"
 HOMEPAGE="http://git.gnome.org/browse/geocode-glib"
 
+# FIXME: should be slot 1.0 but upstream failed at renaming the libs
+#        and some files conflict from previous releases.
+
 LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 IUSE="+introspection test"
 
 RDEPEND="
-	dev-libs/geoip
 	>=dev-libs/glib-2.34:2
 	>=dev-libs/json-glib-0.16.2[introspection?]
 	gnome-base/gvfs[http]
@@ -37,6 +39,13 @@ DEPEND="${RDEPEND}
 #	gnome-base/gnome-common
 
 RESTRICT="test" # Need network #424719
+
+src_prepare() {
+	gnome2_src_prepare
+
+	# Crazy flags
+	sed -e 's:-Wall ::' -i configure || die
+}
 
 #src_test() {
 #	export GVFS_DISABLE_FUSE=1

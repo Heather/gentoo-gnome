@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/pyatspi/pyatspi-2.8.0.ebuild,v 1.2 2013/07/28 18:37:21 eva Exp $
+# $Header: $
 
 EAPI="5"
 GCONF_DEBUG="no"
@@ -35,14 +35,16 @@ DEPEND="${COMMON_DEPEND}
 	virtual/pkgconfig"
 
 src_prepare() {
+	# https://bugzilla.gnome.org/show_bug.cgi?id=689957
+	epatch "${FILESDIR}/${PN}-2.6.0-examples-python3.patch"
+
 	gnome2_src_prepare
 
 	python_copy_sources
 }
 
 src_configure() {
-	G2CONF="${G2CONF} --disable-tests"
-	python_foreach_impl run_in_build_dir gnome2_src_configure
+	python_foreach_impl run_in_build_dir gnome2_src_configure --disable-tests
 }
 
 src_compile() {
@@ -50,9 +52,8 @@ src_compile() {
 }
 
 src_install() {
-	installing() {
-		gnome2_src_install
-		python_doscript examples/magFocusTracker.py
-	}
-	python_foreach_impl run_in_build_dir installing
+	python_foreach_impl run_in_build_dir gnome2_src_install
+
+	docinto examples
+	dodoc examples/*.py
 }

@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-cpp/glibmm/glibmm-2.36.2.ebuild,v 1.1 2013/05/02 07:57:20 pacho Exp $
+# $Header: $
 
 EAPI="5"
 GCONF_DEBUG="no"
@@ -37,6 +37,10 @@ src_prepare() {
 		sed 's/^\(SUBDIRS =.*\)examples\(.*\)$/\1\2/' \
 			-i Makefile.am Makefile.in || die "sed 2 failed"
 	fi
+
+	# Test fails with IPv6 but not v4, upstream bug #720073
+	sed -e 's:giomm_tls_client/test::' \
+		-i tests/Makefile.{am,in} || die
 
 	gnome2_src_prepare
 }

@@ -23,13 +23,14 @@ COMMON_DEPEND="
 	${PYTHON_DEPS}
 	>=gnome-base/gsettings-desktop-schemas-3.4
 	>=dev-python/pygobject-3.2.1:3[${PYTHON_USEDEP}]
-	gnome-base/gconf:2
 "
 # g-s-d, gnome-desktop, gnome-shell etc. needed at runtime for the gsettings schemas
 RDEPEND="${COMMON_DEPEND}
-	gnome-base/gconf:2[introspection]
 	>=gnome-base/gnome-desktop-3.6.0.1:3=[introspection]
-	x11-libs/gtk+:3[introspection]
+	>=x11-libs/gtk+-3.9.10:3[introspection]
+
+	net-libs/libsoup[introspection]
+	x11-libs/libnotify[introspection]
 
 	>=gnome-base/gnome-settings-daemon-3
 	gnome-base/gnome-shell
@@ -38,14 +39,15 @@ RDEPEND="${COMMON_DEPEND}
 "
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.40.0
-	>=sys-devel/gettext-0.17
 	virtual/pkgconfig
 "
 
 src_prepare() {
 	# Add contents of Gentoo's cursor theme directory to cursor theme list
-	#FIXME
-	#epatch "${FILESDIR}/${PN}-3.7.4-gentoo-cursor-themes.patch"
+	epatch "${FILESDIR}/${PN}-3.10.1-gentoo-cursor-themes.patch"
+
+	# Prevent problems setting WM preferences, upstream bug #706834
+	epatch "${FILESDIR}/${PN}-3.8.1-wm-preferences.patch"
 
 	gnome2_src_prepare
 	python_copy_sources

@@ -3,6 +3,7 @@
 # $Header: $
 
 EAPI="5"
+
 inherit gnome.org
 
 DESCRIPTION="XSL stylesheets for yelp"

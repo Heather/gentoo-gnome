@@ -20,9 +20,7 @@ COMMON_DEPEND="
 	gnome-base/gnome-desktop:3=
 	media-libs/fontconfig:1.0
 	media-libs/freetype:2
-	x11-libs/cairo
 	>=x11-libs/gtk+-3.9.11:3
-	x11-libs/pango
 "
 RDEPEND="${COMMON_DEPEND}
 	!<gnome-base/gnome-control-center-2.91
@@ -31,6 +29,5 @@ RDEPEND="${COMMON_DEPEND}
 # ${PN} was part of gnome-utils before 3.4, and of g-c-c before 2.91
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.40
-	>=sys-devel/gettext-0.17
 	virtual/pkgconfig
 "

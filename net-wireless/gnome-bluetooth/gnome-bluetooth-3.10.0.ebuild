@@ -11,12 +11,12 @@ DESCRIPTION="Bluetooth graphical utilities integrated with GNOME"
 HOMEPAGE="https://wiki.gnome.org/GnomeBluetooth"
 
 LICENSE="GPL-2+ LGPL-2.1+ FDL-1.1+"
-SLOT="2/11" # subslot = libgnome-bluetooth soname version
+SLOT="2/12" # subslot = libgnome-bluetooth soname version
 IUSE="+introspection"
 KEYWORDS="~amd64 ~arm ~ppc ~ppc64 ~x86"
 
 COMMON_DEPEND="
-	>=dev-libs/glib-2.29.90:2
+	>=dev-libs/glib-2.37.3:2
 	>=x11-libs/gtk+-2.91.3:3[introspection?]
 	virtual/udev
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
@@ -33,7 +33,6 @@ DEPEND="${COMMON_DEPEND}
 	dev-util/gdbus-codegen
 	>=dev-util/gtk-doc-am-1.9
 	>=dev-util/intltool-0.40.0
-	>=sys-devel/gettext-0.17
 	virtual/pkgconfig
 	x11-libs/libX11
 	x11-libs/libXi

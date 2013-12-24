@@ -11,15 +11,15 @@ DESCRIPTION="A text widget implementing syntax highlighting and other features"
 HOMEPAGE="http://projects.gnome.org/gtksourceview/"
 
 LICENSE="GPL-2+ LGPL-2.1+"
-SLOT="3.0/1"
+SLOT="3.0/2"
 IUSE="glade +introspection"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-solaris"
 
 # Note: has native OSX support, prefix teams, attack!
 RDEPEND="
-	>=x11-libs/gtk+-3.10:3[introspection?]
+	>=dev-libs/glib-2.37.3:2
 	>=dev-libs/libxml2-2.6:2
-	>=dev-libs/glib-2.34.0:2
+	>=x11-libs/gtk+-3.9.9:3[introspection?]
 	glade? ( >=dev-util/glade-3.9:3.10 )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.0 )
 "

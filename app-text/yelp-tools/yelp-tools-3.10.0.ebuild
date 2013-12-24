@@ -12,13 +12,16 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="|| ( GPL-2+ freedist ) GPL-2+" # yelp.m4 is GPL2 || freely distributable
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 ~sh sparc x86 ~amd64-fbsd ~arm-linux ~x86-linux"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd64-fbsd ~arm-linux ~x86-linux"
 IUSE=""
 
-RDEPEND=">=dev-libs/libxml2-2.6.12
+RDEPEND="
+	>=dev-libs/libxml2-2.6.12
 	>=dev-libs/libxslt-1.1.8
 	dev-util/itstool
 	gnome-extra/yelp-xsl
-	virtual/awk"
+	virtual/awk
+"
 DEPEND="${RDEPEND}
-	virtual/pkgconfig"
+	virtual/pkgconfig
+"

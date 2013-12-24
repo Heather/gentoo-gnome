@@ -1,4 +1,4 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -17,14 +17,13 @@ KEYWORDS="~amd64 ~x86"
 
 COMMON_DEPEND="
 	>=dev-libs/glib-2.26:2
-	>=gnome-base/gnome-desktop-2.91.6:3[introspection]
 	>=gnome-base/libgtop-2.28.3[introspection]
 	>=app-admin/eselect-gnome-shell-extensions-20111211
 "
 RDEPEND="${COMMON_DEPEND}
 	>=dev-libs/gjs-1.29
 	dev-libs/gobject-introspection
-	gnome-base/gnome-desktop[introspection]
+	dev-libs/atk[introspection]
 	gnome-base/gnome-menus:3[introspection]
 	>=gnome-base/gnome-shell-3.5.91
 	media-libs/clutter:1.0[introspection]

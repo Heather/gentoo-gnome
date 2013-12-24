@@ -11,7 +11,7 @@ inherit eutils gnome-games python-single-r1
 DESCRIPTION="Test your logic skills in this number grid puzzle"
 HOMEPAGE="https://wiki.gnome.org/GnomeSudoku"
 
-LICENSE="GPL-2+"
+LICENSE="LGPL-2+"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~x86"
 IUSE=""
