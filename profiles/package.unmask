@@ -1,0 +1,26 @@
+####################################################################
+# $Header: $
+#
+# When you add an entry to the top of this file, add your name, the date, and
+# an explanation of why something is getting masked. Please be extremely
+# careful not to commit atoms that are not valid, as it can cause large-scale
+# breakage, especially if it ends up in the daily snapshot.
+#
+
+# Tim Harder <radhermit@gentoo.org> (22 May 2013)
+# masked for testing
+=media-libs/quvi-0.9*
+=media-libs/libquvi-0.9*
+=media-libs/libquvi-scripts-0.9*
+
+# Alexandre Rostovtsev <tetromino@gentoo.org> (04 Aug 2013)
+# API break, reverse dependencies need patching; bug #479458.
+>=sci-geosciences/geocode-glib-0.99.1
+
+# Alexandre Rostovtsev <tetromino@gentoo.org> (02 Sep 2013)
+# Silent API/ABI change; mask until seahorse is patched; bug #483414
+>=app-crypt/libsecret-0.16
+
+# Heather Cynede <cynede@gentoo.org> (24 Dec 2013)
+# unmask for gnome-next
+>=x11-libs/gdk-pixbuf-2.30.2
