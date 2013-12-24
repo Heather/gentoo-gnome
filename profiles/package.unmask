@@ -22,5 +22,14 @@
 >=app-crypt/libsecret-0.16
 
 # Heather Cynede <cynede@gentoo.org> (24 Dec 2013)
-# unmask for gnome-next
->=x11-libs/gdk-pixbuf-2.30.2
+# unmask masked in tree stuff for gnome-next
+x11-libs/gdk-pixbuf
+app-crypt/gcr
+dev-libs/atk
+mail-client/evolution
+net-libs/libsoup-gnome
+sys-apps/gnome-disk-utility
+app-admin/gnome-system-log
+gnome-extra/evolution-data-server
+app-shells/bash-completion
+
