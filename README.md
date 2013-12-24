@@ -5,17 +5,15 @@ This overlay was designed for **GNOME 3.10** development for Gentoo.
 
 **But goes wild currently**
 
- - stable branch is stable and really target **GNOME 3.10**
- - master branch goes forward 3.11 -> ...
+ - stable branch is target **Sabayon 14.01** ( https://github.com/Heather/gentoo-gnome/tree/stable )
+ - master branch goes forward 3.11 -> ... and damn unstable for now
+ - for `3.10` There is official gnome overlay: http://git.overlays.gentoo.org/gitweb/?p=proj/gnome.git;a=summary
 
 ![](ss.png?raw=true)
 
 NOTE
 ====
-
- - There is official gnome overlay: http://git.overlays.gentoo.org/gitweb/?p=proj/gnome.git;a=summary
  - Also you can try `openrc-force` use flag if you hate systemd (currently awailable only there)
- - Use my overlay only if official team still have no time for reviews / etc ...
 <hr/>
 * For bugs use GitHub issues https://github.com/Heather/gentoo-gnome/issues?state=open
 * Scripts for development available in ./scripts/
