@@ -153,3 +153,10 @@
 >=gnome-base/gnome-extra-apps-3.8.0
 >=gnome-base/gnome-3.8.0
 >=gnome-base/gnome-light-3.8.0
+
+net-libs/libsoup-gnome
+app-shells/gentoo-bashcomp
+app-dicts/gnome-dictionary
+app-shells/bash-completion
+x11-libs/gdk-pixbuf
+
