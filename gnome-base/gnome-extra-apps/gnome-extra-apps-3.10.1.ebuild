@@ -53,7 +53,7 @@ RDEPEND="
 	tracker? (
 		>=app-misc/tracker-0.16
 		>=gnome-extra/gnome-documents-3.10.0
-		>=net-libs/gnome-online-miners-3.10.0 )
+		>=net-misc/gnome-online-miners-3.10.0 )
 
 	games? (
 		>=games-arcade/gnome-nibbles-${PV}
