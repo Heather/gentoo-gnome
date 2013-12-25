@@ -8,7 +8,7 @@ This overlay was designed for **GNOME 3.10** development for Gentoo...
 **Current status: 3.11.2**
 
  - stable branch is target **Sabayon 14.01** ( https://github.com/Heather/gentoo-gnome/tree/stable )
- - master branch goes forward 3.11 -> ... and damn unstable for now
+ - master branch goes forward 3.11.2 -> ... and works already
  - for `3.10` There is official gnome overlay: http://git.overlays.gentoo.org/gitweb/?p=proj/gnome.git;a=summary
  - if something is broken now or there is missing feature check this commit: https://github.com/Heather/gentoo-gnome/commit/402fb79024123a1279cd6ee99eb6578768fbf622
  - contributors are still welcome.
