@@ -23,7 +23,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~ppc ~ppc64 ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linu
 COMMON_DEPEND="
 	>=dev-libs/glib-2.37.7:2
 	>=x11-libs/gtk+-3.7.8:3
-	>=gnome-base/gnome-desktop-3.9:3=
+	>=gnome-base/gnome-desktop-3.11:3=
 	>=gnome-base/gsettings-desktop-schemas-3.9.91.1
 	>=gnome-base/librsvg-2.36.2
 	media-fonts/cantarell
