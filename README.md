@@ -1,9 +1,11 @@
 Unofficial Gentoo GNOME overlay
 -------------------------------
 
-This overlay was designed for **GNOME 3.10** development for Gentoo.
+This overlay was designed for **GNOME 3.10** development for Gentoo...
 
-**But goes wild currently**
+**But goes wild!** (note that I really hope that we helped EVA at least a bit)
+
+**Current status: 3.11.2**
 
  - stable branch is target **Sabayon 14.01** ( https://github.com/Heather/gentoo-gnome/tree/stable )
  - master branch goes forward 3.11 -> ... and damn unstable for now
