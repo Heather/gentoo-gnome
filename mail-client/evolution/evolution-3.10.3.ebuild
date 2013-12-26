@@ -7,9 +7,6 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
 inherit eutils flag-o-matic readme.gentoo gnome2 #autotools
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
 
 DESCRIPTION="Integrated mail, addressbook and calendaring functionality"
 HOMEPAGE="https://live.gnome.org/Evolution http://projects.gnome.org/evolution/"
@@ -18,12 +15,7 @@ HOMEPAGE="https://live.gnome.org/Evolution http://projects.gnome.org/evolution/"
 LICENSE="|| ( LGPL-2 LGPL-3 ) CC-BY-SA-3.0 FDL-1.3+ OPENLDAP"
 SLOT="2.0"
 IUSE="+bogofilter crypt gstreamer highlight kerberos ldap map spamassassin ssl +weather"
-if [[ ${PV} = 9999 ]]; then
-	IUSE="${IUSE} doc"
-	KEYWORDS=""
-else
-	KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
-fi
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 
 # We need a graphical pinentry frontend to be able to ask for the GPG
 # password from inside evolution, bug 160302
@@ -90,12 +82,6 @@ RDEPEND="${COMMON_DEPEND}
 	!gnome-extra/evolution-exchange
 "
 
-if [[ ${PV} = 9999 ]]; then
-	DEPEND="${DEPEND}
-		app-text/yelp-tools
-		doc? ( >=dev-util/gtk-doc-1.14 )"
-fi
-
 DISABLE_AUTOFORMATTING="yes"
 DOC_CONTENTS="To change the default browser if you are not using GNOME, edit
 ~/.local/share/applications/mimeapps.list so it includes the
@@ -127,7 +113,6 @@ src_configure() {
 	# Use NSS/NSPR only if 'ssl' is enabled.
 	# image-inline plugin needs a gtk+:3 gtkimageview, which does not exist yet
 	local myconf
-	[[ ${PV} != 9999 ]] && myconf="${myconf} ITSTOOL=$(type -P true)"
 	gnome2_src_configure \
 		--without-glade-catalog \
 		--disable-image-inline \

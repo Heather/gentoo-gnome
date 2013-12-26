@@ -161,5 +161,6 @@ x11-libs/gdk-pixbuf
 
 # Heather Cynede <cynede@gentoo.org> (26 Dec 2013)
 dev-lang/perl
+app-text/yelp-tools
 
 #STOP MASKING ALL THE STUFF :(
