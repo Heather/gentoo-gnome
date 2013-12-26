@@ -23,8 +23,6 @@
 
 # Heather Cynede <cynede@gentoo.org> (24 Dec 2013)
 # unmask masked in tree stuff for gnome-next
-# Pacho Ramos <pacho@gentoo.org> (28 Mar 2013)
-# Gnome 3.8 Mask
 >=app-accessibility/accerciser-3.8
 >=app-accessibility/at-spi2-atk-2.8
 >=app-accessibility/at-spi2-core-2.8
@@ -154,9 +152,14 @@
 >=gnome-base/gnome-3.8.0
 >=gnome-base/gnome-light-3.8.0
 
+# Heather Cynede <cynede@gentoo.org> (25 Dec 2013)
 net-libs/libsoup-gnome
 app-shells/gentoo-bashcomp
 app-dicts/gnome-dictionary
 app-shells/bash-completion
 x11-libs/gdk-pixbuf
 
+# Heather Cynede <cynede@gentoo.org> (26 Dec 2013)
+dev-lang/perl
+
+#STOP MASKING ALL THE STUFF :(
