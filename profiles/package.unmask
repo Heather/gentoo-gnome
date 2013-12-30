@@ -16,6 +16,7 @@
 # Alexandre Rostovtsev <tetromino@gentoo.org> (04 Aug 2013)
 # API break, reverse dependencies need patching; bug #479458.
 >=sci-geosciences/geocode-glib-0.99.1
+app-misc/geoclue
 
 # Alexandre Rostovtsev <tetromino@gentoo.org> (02 Sep 2013)
 # Silent API/ABI change; mask until seahorse is patched; bug #483414
