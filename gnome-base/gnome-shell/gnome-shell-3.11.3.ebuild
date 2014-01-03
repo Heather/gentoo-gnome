@@ -1,4 +1,4 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -145,6 +145,10 @@ src_configure() {
 		$(use_with bluetooth) \
 		$(use_enable networkmanager) \
 		BROWSER_PLUGIN_DIR="${EPREFIX}"/usr/$(get_libdir)/nsbrowser/plugins
+}
+
+src_compile() {
+	emake -j1
 }
 
 src_install() {
