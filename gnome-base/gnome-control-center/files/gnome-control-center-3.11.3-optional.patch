@@ -53,7 +53,7 @@ index 19bebaf..8b4177a 100644
 +AC_SUBST(ONLINE_ACCOUNTS_PANEL_CFLAGS)
 +AC_SUBST(ONLINE_ACCOUNTS_PANEL_LIBS)
 +
- PKG_CHECK_MODULES(POWER_PANEL, $COMMON_MODULES upower-glib >= 0.9.1
+ PKG_CHECK_MODULES(POWER_PANEL, $COMMON_MODULES upower-glib >= 0.99.0
                    gnome-settings-daemon >= $GSD_REQUIRED_VERSION)
 -PKG_CHECK_MODULES(COLOR_PANEL, $COMMON_MODULES
 -                  colord >= $COLORD_REQUIRED_VERSION
@@ -94,7 +94,7 @@ index 19bebaf..8b4177a 100644
  fi
  
  # Check for gnome-bluetooth
--PKG_CHECK_MODULES(BLUETOOTH, $COMMON_MODULES gnome-bluetooth-1.0 >= 3.9.3,
+-PKG_CHECK_MODULES(BLUETOOTH, $COMMON_MODULES gnome-bluetooth-1.0 >= 3.11.1,
 -		  [have_bluetooth=yes], have_bluetooth=no)
 +have_bluetooth=no
 +AC_ARG_ENABLE(bluetooth,
