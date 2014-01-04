@@ -24,7 +24,7 @@ RDEPEND="
 	>=dev-libs/dbus-glib-0.82
 	>=dev-libs/glib-2.30:2
 	>=sys-apps/dbus-0.95
-	>=net-libs/telepathy-glib-0.19
+	>=net-libs/telepathy-glib-0.23.0
 	gnome-base/libgnome-keyring
 	connman? ( net-misc/connman )
 	networkmanager? ( >=net-misc/networkmanager-0.7 )
