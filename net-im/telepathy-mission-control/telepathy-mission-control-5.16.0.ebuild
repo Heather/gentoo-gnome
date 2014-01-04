@@ -1,4 +1,4 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Founxdation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -17,15 +17,15 @@ SRC_URI="http://telepathy.freedesktop.org/releases/${PN}/${P}.tar.gz"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~alpha amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc x86 ~amd64-linux ~arm-linux ~x86-linux"
-IUSE="connman debug gnome-keyring networkmanager +upower" # test
+IUSE="connman debug networkmanager +upower" # test
 REQUIRED_USE="?? ( connman networkmanager )"
 
+#FIXME: not shure how gnome-keyring is here or not
 RDEPEND="
 	>=dev-libs/dbus-glib-0.82
 	>=dev-libs/glib-2.30:2
 	>=sys-apps/dbus-0.95
 	>=net-libs/telepathy-glib-0.23.0
-	gnome-base/libgnome-keyring
 	connman? ( net-misc/connman )
 	networkmanager? ( >=net-misc/networkmanager-0.7 )
 	upower? ( >=sys-power/upower-0.9.11 )
