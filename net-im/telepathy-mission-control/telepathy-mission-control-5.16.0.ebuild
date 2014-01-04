@@ -17,7 +17,7 @@ SRC_URI="http://telepathy.freedesktop.org/releases/${PN}/${P}.tar.gz"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~alpha amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc x86 ~amd64-linux ~arm-linux ~x86-linux"
-IUSE="connman debug networkmanager +upower" # test
+IUSE="connman debug networkmanager -upower" # test
 REQUIRED_USE="?? ( connman networkmanager )"
 
 #FIXME: not shure how gnome-keyring is here or not
@@ -41,12 +41,13 @@ DEPEND="${RDEPEND}
 # upstream doesn't want it enabled everywhere (#29334#c12)
 RESTRICT="test"
 
+#FIXME: fails with upower
 src_configure() {
 	# creds is not available
 	gnome2_src_configure \
 		 --disable-static \
 		$(use_enable debug) \
 		$(use_with connman connectivity connman) \
-		$(use_with networkmanager connectivity nm) \
+		$(use_with networkmanager connectivity nm)
 		$(use_enable upower)
 }
