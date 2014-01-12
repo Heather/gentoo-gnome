@@ -25,7 +25,7 @@ COMMON_DEPEND="
 	>=dev-libs/libxml2-2.5.0:2
 	>=dev-libs/glib-2.37.5:2
 	>=x11-libs/gtk+-3.9.9:3[introspection?]
-	>=x11-libs/gtksourceview-3.9.91:3.0[introspection?]
+	>=x11-libs/gtksourceview-3.11.2:3.0[introspection?]
 	>=dev-libs/libpeas-1.7.0[gtk]
 
 	gnome-base/gsettings-desktop-schemas
