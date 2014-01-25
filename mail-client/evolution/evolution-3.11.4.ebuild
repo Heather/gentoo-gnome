@@ -68,6 +68,7 @@ COMMON_DEPEND="
 "
 DEPEND="${COMMON_DEPEND}
 	app-text/docbook-xml-dtd:4.1.2
+	>=app-text/gtkspell-3.0.3
 	dev-util/gtk-doc-am
 	>=dev-util/intltool-0.40.0
 	virtual/pkgconfig
