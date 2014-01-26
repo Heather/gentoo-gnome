@@ -169,8 +169,10 @@ src_prepare() {
 		sed -e '/Programs\/WebKit2APITests\/TestWebKitWebView/ d' \
 			-i Source/WebKit2/UIProcess/API/gtk/tests/GNUmakefile.am || die
 	fi
+
+	# Test if it fixed
 	# garbage collection test fails intermittently if icedtea-web is installed, bug #????
-	epatch "${FILESDIR}/${PN}-1.7.90-test_garbage_collection.patch"
+	#epatch "${FILESDIR}/${PN}-1.7.90-test_garbage_collection.patch"
 
 	# Respect CC, otherwise fails on prefix #395875
 	tc-export CC
@@ -178,8 +180,9 @@ src_prepare() {
 	# bug #459978, upstream bug #113397
 	epatch "${FILESDIR}/${PN}-1.11.90-gtk-docize-fix.patch"
 
+	# Test if fixed
 	# Do not build unittests unless requested
-	epatch "${FILESDIR}"/${PN}-2.2.2-unittests-build.patch
+	#epatch "${FILESDIR}"/${PN}-2.2.2-unittests-build.patch
 
 	# Prevent maintainer mode from being triggered during make
 	AT_M4DIR=Source/autotools eautoreconf
