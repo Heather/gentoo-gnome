@@ -1,0 +1,17 @@
+--- gdbus-codegen.in	2014-02-01 21:20:41.063157923 +0000
++++ gdbus-codegen.new.in	2014-02-01 21:22:26.596163030 +0000
+@@ -29,13 +29,5 @@
+ 
+ if srcdir is not None:
+     path = os.path.join(srcdir, 'gio', 'gdbus-2.0')
+-elif os.name == 'nt':
+-    # Makes gdbus-codegen 'relocatable' at runtime on Windows.
+-    path = os.path.join(os.path.dirname(__file__), '..', 'share', 'glib-2.0')
+ else:
+-    path = os.path.join('@datadir@', 'glib-2.0')
+-
+-sys.path.insert(0, os.path.abspath(path))
+-from codegen import codegen_main
+-
+-sys.exit(codegen_main.codegen_main())
++   from gdbus_codegen import codegen_main
