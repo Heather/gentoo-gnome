@@ -22,11 +22,10 @@ DEPEND="${RDEPEND}"
 
 # To prevent circular dependencies with glib[test]
 PDEPEND=">=dev-libs/glib-${PV}:2"
-
+PATCHES=( "${FILESDIR}/${PN}-2.39.2-sitedir.patch" )
 S="${WORKDIR}/glib-${PV}/gio/gdbus-2.0/codegen"
 
 python_prepare_all() {
-	PATCHES=( "${FILESDIR}/${PN}-2.36.0-sitedir.patch" )
 	distutils-r1_python_prepare_all
 	sed -e "s:\"/usr/local\":\"${EPREFIX}/usr\":" \
 		-i config.py || die "sed config.py failed"
