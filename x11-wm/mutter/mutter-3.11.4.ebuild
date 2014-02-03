@@ -22,7 +22,7 @@ COMMON_DEPEND="
 	>=x11-libs/gtk+-3.9.11:3[X,introspection?]
 	>=dev-libs/glib-2.36.0:2
 	>=media-libs/clutter-1.14.3:1.0[introspection?]
-	>=media-libs/cogl-1.15.6:1.0=[introspection?]
+	>=media-libs/cogl-1.17.1:1.0=[introspection?]
 	>=media-libs/libcanberra-0.26[gtk3]
 	>=x11-libs/startup-notification-0.7
 	>=x11-libs/libXcomposite-0.2
@@ -49,6 +49,9 @@ COMMON_DEPEND="
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/gtk-doc-am-1.15
 	>=dev-util/intltool-0.35
+	>=dev-util/gdbus-codegen-2.38.2
+	<dev-util/gdbus-codegen-2.39.2
+
 	sys-devel/gettext
 	virtual/pkgconfig
 	x11-proto/xextproto
