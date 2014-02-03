@@ -22,7 +22,7 @@ DEPEND="${RDEPEND}"
 
 # To prevent circular dependencies with glib[test]
 PDEPEND=">=dev-libs/glib-${PV}:2"
-PATCHES=( "${FILESDIR}/${PN}-2.39.2-sitedir.patch" )
+
 S="${WORKDIR}/glib-${PV}/gio/gdbus-2.0/codegen"
 
 python_prepare_all() {
