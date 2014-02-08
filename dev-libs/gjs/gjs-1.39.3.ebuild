@@ -1,4 +1,4 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -16,8 +16,8 @@ IUSE="+cairo examples test"
 KEYWORDS="~alpha ~amd64 ~arm ~ppc ~ppc64 ~sparc ~x86"
 
 RDEPEND="
-	>=dev-libs/glib-2.36:2
-	>=dev-libs/gobject-introspection-1.38
+	>=dev-libs/glib-2.39:2
+	>=dev-libs/gobject-introspection-1.39
 
 	sys-libs/readline
 	dev-lang/spidermonkey:17
