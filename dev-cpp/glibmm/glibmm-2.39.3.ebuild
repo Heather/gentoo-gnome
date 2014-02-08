@@ -1,4 +1,4 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -17,7 +17,7 @@ IUSE="doc debug examples test"
 
 RDEPEND="
 	>=dev-libs/libsigc++-2.2.10:2
-	>=dev-libs/glib-2.38.0:2
+	>=dev-libs/glib-2.39.3:2
 "
 DEPEND="${RDEPEND}
 	virtual/pkgconfig
