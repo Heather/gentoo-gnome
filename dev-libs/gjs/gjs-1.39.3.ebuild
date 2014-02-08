@@ -20,7 +20,7 @@ RDEPEND="
 	>=dev-libs/gobject-introspection-1.39
 
 	sys-libs/readline
-	dev-lang/spidermonkey:17
+	dev-lang/spidermonkey:24
 	virtual/libffi
 	cairo? ( x11-libs/cairo )
 "
