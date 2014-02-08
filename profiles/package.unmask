@@ -57,7 +57,6 @@ app-misc/geoclue
 >=dev-python/pygobject-3.8
 >=dev-util/anjuta-3.8
 >=dev-util/devhelp-3.8
->=dev-util/gdbus-codegen-2.36
 >=dev-util/gnome-devel-docs-3.8
 >=gnome-base/dconf-0.16
 >=gnome-base/gdm-3.8
