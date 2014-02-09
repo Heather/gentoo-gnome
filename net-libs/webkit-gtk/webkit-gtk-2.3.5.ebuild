@@ -184,6 +184,9 @@ src_prepare() {
 	# Do not build unittests unless requested
 	#epatch "${FILESDIR}"/${PN}-2.2.2-unittests-build.patch
 
+	# upstream bug #128080
+	epatch "${FILESDIR}/${PN}-2.3.4-install.patch"
+
 	# Prevent maintainer mode from being triggered during make
 	AT_M4DIR=Source/autotools eautoreconf
 }
