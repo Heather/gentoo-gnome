@@ -48,6 +48,6 @@ src_configure() {
 		 --disable-static \
 		$(use_enable debug) \
 		$(use_with connman connectivity connman) \
-		$(use_with networkmanager connectivity nm)
+		$(use_with networkmanager connectivity nm) \
 		$(use_enable upower)
 }
