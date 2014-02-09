@@ -54,7 +54,7 @@ src_configure() {
 		--enable-shared \
 		--disable-static \
 		--with-distributor-name=Gentoo \
-		$(use_enable nss)
+		$(use_enable nss) \
 		$(use_enable test tests)
 }
 
