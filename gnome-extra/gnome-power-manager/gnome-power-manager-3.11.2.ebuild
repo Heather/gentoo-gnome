@@ -19,7 +19,7 @@ COMMON_DEPEND="
 	>=dev-libs/glib-2.36:2
 	>=x11-libs/gtk+-3.3.8:3
 	>=x11-libs/cairo-1
-	>=sys-power/upower-0.9.1
+	>=sys-power/upower-0.9.99
 "
 RDEPEND="${COMMON_DEPEND}
 	x11-themes/gnome-icon-theme-symbolic
@@ -29,7 +29,7 @@ DEPEND="${COMMON_DEPEND}
 	app-text/docbook-sgml-utils
 	>=app-text/gnome-doc-utils-0.3.2
 	app-text/scrollkeeper
-	>=dev-util/intltool-0.35
+	>=dev-util/intltool-0.50
 	sys-devel/gettext
 	x11-proto/randrproto
 	virtual/pkgconfig
