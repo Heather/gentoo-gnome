@@ -1,0 +1,30 @@
+From bbb6d6a639aa1e41d97349232b5247174b809133 Mon Sep 17 00:00:00 2001
+From: Claudio Saavedra <csaavedra@igalia.com>
+Date: Fri, 07 Feb 2014 21:24:06 +0000
+Subject: EphyWebView: Avoid a dangling signal handler
+
+We should use g_signal_connect_object() with the page-created
+EmbedShell to avoid the callback to be called for the webview
+after this is destroyed.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=723725
+---
+diff --git a/embed/ephy-web-view.c b/embed/ephy-web-view.c
+index 9c58bcb..874b7d6 100644
+--- a/embed/ephy-web-view.c
++++ b/embed/ephy-web-view.c
+@@ -2022,9 +2022,9 @@ ephy_web_view_init (EphyWebView *web_view)
+                     G_CALLBACK (ge_popup_blocked_cb),
+                     NULL);
+ 
+-  g_signal_connect (ephy_embed_shell_get_default (), "page-created",
+-                    G_CALLBACK (page_created_cb),
+-                    web_view);
++  g_signal_connect_object (ephy_embed_shell_get_default (), "page-created",
++                           G_CALLBACK (page_created_cb),
++                           web_view, 0);
+ }
+ 
+ /**
+--
+cgit v0.9.2

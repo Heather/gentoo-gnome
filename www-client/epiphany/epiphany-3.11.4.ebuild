@@ -54,8 +54,15 @@ src_configure() {
 		--enable-shared \
 		--disable-static \
 		--with-distributor-name=Gentoo \
-		$(use_enable nss)
+		$(use_enable nss) \
 		$(use_enable test tests)
+}
+
+src_prepare() {
+	# Backport, see upstream bug #723725
+	epatch "${FILESDIR}/${P}-avoid-dangling-signal.patch"
+
+	gnome2_src_prepare
 }
 
 src_compile() {
