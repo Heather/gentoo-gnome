@@ -16,6 +16,9 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 
 # Note to developers:
 # This is a wrapper for the core libraries used by GNOME 3
+
+# 20.02.2014 <Heather>
+# Removed [gtk] from librsvg, not sure if that is right
 RDEPEND="
 	>=dev-libs/glib-2.36.0:2
 	>=x11-libs/gdk-pixbuf-2.28.0:2
@@ -24,7 +27,8 @@ RDEPEND="
 	>=x11-libs/gtk+-3.9.12:3[cups?]
 	>=dev-libs/atk-2.8
 	>=x11-libs/libwnck-3.4.5:3
-	>=gnome-base/librsvg-2.36.4[gtk]
+
+	>=gnome-base/librsvg-2.36.4
 	>=gnome-base/gnome-desktop-${PV}:3
 	>=gnome-base/libgnomekbd-3.6
 	>=x11-libs/startup-notification-0.12
@@ -48,8 +52,3 @@ DEPEND=""
 
 S="${WORKDIR}"
 
-# FIXME: Update with future upgrade guide
-#pkg_pretend() {
-#	elog "See http://www.gentoo.org/proj/en/desktop/gnome/howtos/gnome-3.6-upgrade.xml"
-#	elog "for the Gentoo GNOME 3.6 upgrade guide."
-#}
