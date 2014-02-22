@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libgdata/libgdata-0.14.0.ebuild,v 1.3 2013/12/08 18:01:35 pacho Exp $
 
 EAPI="5"
 GCONF_DEBUG="yes"
@@ -8,6 +8,9 @@ VALA_MIN_API_VERSION="0.20"
 VALA_USE_DEPEND="vapigen"
 
 inherit autotools eutils gnome2 vala
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="GLib-based library for accessing online service APIs using the GData protocol"
 HOMEPAGE="http://live.gnome.org/libgdata"
@@ -15,7 +18,12 @@ HOMEPAGE="http://live.gnome.org/libgdata"
 LICENSE="LGPL-2.1+"
 SLOT="0/13" # subslot = libgdata soname version
 IUSE="gnome gnome-online-accounts +introspection static-libs vala"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc x86"
+if [[ ${PV} = 9999 ]]; then
+	IUSE="${IUSE} doc"
+	KEYWORDS=""
+else
+	KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc x86"
+fi
 REQUIRED_IUSE="vala? ( introspection )"
 
 # gtk+ is needed for gdk
@@ -49,14 +57,12 @@ if [[ ${PV} = 9999 ]]; then
 fi
 
 src_prepare() {
-	#disable not provided patch...
-	#epatch "${FILESDIR}/disable-uhttpmock.patch"
-	
+	epatch "${FILESDIR}/disable-uhttpmock.patch"
+	eautoreconf
 	# Disable tests requiring network access, bug #307725
 	sed -e '/^TEST_PROGS = / s:\(.*\):TEST_PROGS = general perf calendar client-login-authorizer contacts documents oauth1-authorizer picasaweb youtube \nOLD_\1:' \
 		-i gdata/tests/Makefile.in || die "network test disable failed"
 
-	eautoreconf
 	vala_src_prepare
 	gnome2_src_prepare
 }
