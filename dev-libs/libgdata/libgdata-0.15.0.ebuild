@@ -49,12 +49,14 @@ if [[ ${PV} = 9999 ]]; then
 fi
 
 src_prepare() {
-	epatch "${FILESDIR}/disable-uhttpmock.patch"
-	eautoreconf
+	#disable not provided patch...
+	#epatch "${FILESDIR}/disable-uhttpmock.patch"
+	
 	# Disable tests requiring network access, bug #307725
 	sed -e '/^TEST_PROGS = / s:\(.*\):TEST_PROGS = general perf calendar client-login-authorizer contacts documents oauth1-authorizer picasaweb youtube \nOLD_\1:' \
 		-i gdata/tests/Makefile.in || die "network test disable failed"
 
+	eautoreconf
 	vala_src_prepare
 	gnome2_src_prepare
 }
