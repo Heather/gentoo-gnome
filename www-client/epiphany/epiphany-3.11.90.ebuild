@@ -20,14 +20,14 @@ RDEPEND="
 	>=app-crypt/libsecret-0.14
 	>=app-crypt/gcr-3.5.5
 	>=app-text/iso-codes-0.35
-	>=dev-libs/glib-2.35.6:2
+	>=dev-libs/glib-2.38.0:2
 	>=dev-libs/libxml2-2.6.12:2
 	>=dev-libs/libxslt-1.1.7
 	>=gnome-base/gsettings-desktop-schemas-0.0.1
 	>=net-dns/avahi-0.6.22
-	>=net-libs/webkit-gtk-2.3.4:3
+	>=net-libs/webkit-gtk-2.3.90:3
 	>=net-libs/libsoup-2.42.1:2.4
-	>=x11-libs/gtk+-3.11.2:3
+	>=x11-libs/gtk+-3.11.6:3
 	>=x11-libs/libnotify-0.5.1:=
 	gnome-base/gnome-desktop:3=
 
@@ -56,13 +56,6 @@ src_configure() {
 		--with-distributor-name=Gentoo \
 		$(use_enable nss) \
 		$(use_enable test tests)
-}
-
-src_prepare() {
-	# Backport, see upstream bug #723725
-	epatch "${FILESDIR}/${P}-avoid-dangling-signal.patch"
-
-	gnome2_src_prepare
 }
 
 src_compile() {
