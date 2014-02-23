@@ -27,7 +27,7 @@ REQUIRED_USE="
 "
 
 RDEPEND="
-	>=app-editors/gedit-3.9[python?]
+	>=app-editors/gedit-3.11.3[python?]
 	>=dev-libs/glib-2.32:2
 	>=dev-libs/libpeas-1.7.0[gtk,python?]
 	>=x11-libs/gtk+-3.9:3
