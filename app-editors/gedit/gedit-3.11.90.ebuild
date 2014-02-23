@@ -23,8 +23,8 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd64-fbsd
 # X libs are not needed for OSX (aqua)
 COMMON_DEPEND="
 	>=dev-libs/libxml2-2.5.0:2
-	>=dev-libs/glib-2.37.5:2
-	>=x11-libs/gtk+-3.9.9:3[introspection?]
+	>=dev-libs/glib-2.39.5:2
+	>=x11-libs/gtk+-3.11.6:3[introspection?]
 	>=x11-libs/gtksourceview-3.11.2:3.0[introspection?]
 	>=dev-libs/libpeas-1.7.0[gtk]
 
