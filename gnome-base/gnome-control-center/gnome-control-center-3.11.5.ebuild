@@ -52,7 +52,7 @@ COMMON_DEPEND="
 	>=x11-libs/libnotify-0.7.3:0=
 
 	>=gnome-extra/nm-applet-0.9.7.995
-	>net-misc/networkmanager-0.9.8[modemmanager]
+	=net-misc/networkmanager-9999[modemmanager]
 	>=net-misc/modemmanager-0.7.990
 
 	virtual/opengl
