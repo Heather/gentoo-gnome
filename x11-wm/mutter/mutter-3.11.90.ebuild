@@ -1,4 +1,4 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -28,7 +28,7 @@ COMMON_DEPEND="
 	>=x11-libs/libXcomposite-0.2
 	>=gnome-base/gsettings-desktop-schemas-3.7.3[introspection?]
 	gnome-base/gnome-desktop:3=
-	>=sys-power/upower-0.99.0
+	sys-power/upower
 
 	x11-libs/libICE
 	x11-libs/libSM
