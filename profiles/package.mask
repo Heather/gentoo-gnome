@@ -1,2 +1,2 @@
 >dev-util/gdbus-codegen-2.39
-=sys-power/upower-0.99.0
+#=sys-power/upower-0.99.0
