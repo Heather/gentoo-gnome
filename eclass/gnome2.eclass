@@ -294,8 +294,8 @@ gnome2_pkg_postinst() {
 
 	# This should only be in the overlay
 	ewarn "**************************************************************"
-	ewarn "This is the *experimental* Gentoo GNOME Overlay"
-	ewarn "Please report bugs at #gentoo-desktop @ FreeNode"
+	ewarn "This is the *experimental* gnome-next Overlay"
+	ewarn "Please report bugs at https://github.com/Heather/gentoo-gnome/issues"
 	ewarn "Do NOT go to upstream with bugs without checking with us first"
 	ewarn "**************************************************************"
 }
