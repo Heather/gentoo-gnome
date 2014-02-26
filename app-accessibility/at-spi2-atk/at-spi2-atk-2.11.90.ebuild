@@ -18,7 +18,7 @@ IUSE=""
 
 COMMON_DEPEND="
 	>=app-accessibility/at-spi2-core-2.11.2
-	>=dev-libs/atk-2.11.3
+	>=dev-libs/atk-${PV}
 	>=dev-libs/glib-2.32:2
 	>=sys-apps/dbus-1
 "
