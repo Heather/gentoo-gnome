@@ -47,7 +47,7 @@ RDEPEND="
 	>=x11-libs/gtk+-2.24.10:2
 
 	egl? ( media-libs/mesa[egl] )
-	geoloc? ( app-misc/geoclue )
+	geoloc? ( app-misc/geoclue:0 )
 	gles2? ( media-libs/mesa[gles2] )
 	gstreamer? (
 		>=media-libs/gstreamer-1.0.3:1.0
