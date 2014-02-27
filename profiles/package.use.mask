@@ -1,2 +1,4 @@
 dev-libs/totem-pl-parser quvi
 mail-client/evolution map
+
+#net-im/telepathy-mission-control upower

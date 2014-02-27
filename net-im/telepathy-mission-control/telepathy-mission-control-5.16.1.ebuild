@@ -17,7 +17,7 @@ SRC_URI="http://telepathy.freedesktop.org/releases/${PN}/${P}.tar.gz"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~alpha amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc x86 ~amd64-linux ~arm-linux ~x86-linux"
-IUSE="connman debug networkmanager -upower" # test
+IUSE="connman debug networkmanager -upower"
 REQUIRED_USE="?? ( connman networkmanager )"
 
 #FIXME: not shure how gnome-keyring is here or not
@@ -28,7 +28,8 @@ RDEPEND="
 	>=net-libs/telepathy-glib-0.23.0
 	connman? ( net-misc/connman )
 	networkmanager? ( >=net-misc/networkmanager-0.7 )
-	upower? ( >=sys-power/upower-0.9.11 )
+	upower? ( >=sys-power/upower-0.9.11
+		  >=sys-power/upower-0.99 )
 "
 DEPEND="${RDEPEND}
 	${PYTHON_DEPS}
