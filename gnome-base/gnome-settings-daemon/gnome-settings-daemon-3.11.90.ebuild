@@ -48,7 +48,10 @@ COMMON_DEPEND="
 	>=dev-libs/libgweather-3.9.5:2
 	>=sci-geosciences/geocode-glib-3.10
 	>=sys-auth/polkit-0.103
-
+	
+	>=dev-libs/libwacom-0.7
+	x11-drivers/xf86-input-wacom
+	
 	colord? ( >=x11-misc/colord-1.0.2:= )
 	cups? ( >=net-print/cups-1.4[dbus] )
 	i18n? ( >=app-i18n/ibus-1.4.99 )
