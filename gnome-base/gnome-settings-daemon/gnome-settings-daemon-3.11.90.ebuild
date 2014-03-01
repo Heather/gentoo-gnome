@@ -52,7 +52,6 @@ COMMON_DEPEND="
 	>=dev-libs/libwacom-0.7
 	x11-drivers/xf86-input-wacom
 	
-
 	colord? ( >=x11-misc/colord-1.0.2:= )
 	cups? ( >=net-print/cups-1.4[dbus] )
 	i18n? ( >=app-i18n/ibus-1.4.99 )
