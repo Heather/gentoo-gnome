@@ -35,7 +35,7 @@ COMMON_DEPEND="
 	>=app-crypt/gcr-3.4
 	>=dev-libs/glib-2.36:2
 	>=x11-libs/cairo-1.9.15:=[glib]
-	>=x11-libs/gtk+-3.4.0:3
+	>=x11-libs/gtk+-3.8.0:3
 	>=x11-libs/gdk-pixbuf-2.24:2
 	>=gnome-base/gnome-desktop-2.91.3:3=
 	>=gnome-base/gsettings-desktop-schemas-2.91.92
