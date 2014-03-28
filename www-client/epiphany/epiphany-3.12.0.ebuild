@@ -25,7 +25,7 @@ RDEPEND="
 	>=dev-libs/libxslt-1.1.7
 	>=gnome-base/gsettings-desktop-schemas-0.0.1
 	>=net-dns/avahi-0.6.22
-	>=net-libs/webkit-gtk-2.3.90:3
+	>=net-libs/webkit-gtk-2.4.0:3
 	>=net-libs/libsoup-2.42.1:2.4
 	>=x11-libs/gtk+-3.11.6:3
 	>=x11-libs/libnotify-0.5.1:=
