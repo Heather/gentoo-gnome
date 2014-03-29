@@ -47,6 +47,8 @@ COMMON_DEPEND="
 
 	>=media-libs/libcanberra-0.13[gtk3]
 	>=media-sound/pulseaudio-2[glib]
+	>=media-libs/grilo-0.2.6
+
 	>=sys-auth/polkit-0.97
 	>=sys-power/upower-0.9.1
 	>=x11-libs/libnotify-0.7.3:0=
