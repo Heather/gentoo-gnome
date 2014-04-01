@@ -21,7 +21,7 @@ RDEPEND="app-misc/ca-certificates
 	>=dev-libs/glib-2.24:2
 	dev-libs/libxml2:2
 	net-libs/libsoup:2.4
-	gnome? ( >=net-libs/libsoup-2.45.90 )
+	gnome? ( >=net-libs/libsoup-gnome-2.25.1:2.4 )
 	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )"
 
 DEPEND="${RDEPEND}
