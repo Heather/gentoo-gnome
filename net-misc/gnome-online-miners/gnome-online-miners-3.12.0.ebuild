@@ -22,10 +22,11 @@ RDEPEND="
 	>=media-libs/grilo-0.2.6:0.2
 	>=net-libs/libzapojit-0.0.2
 	>=app-misc/tracker-0.16:0=
+	>=media-libs/gfbgraph-0.2.2
 "
 DEPEND="${RDEPEND}
 	virtual/pkgconfig
-"
+	"
 
 src_configure() {
 	gnome2_src_configure \
