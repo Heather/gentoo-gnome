@@ -14,7 +14,7 @@ HOMEPAGE="http://www.clutter-project.org/"
 LICENSE="LGPL-2.1+ FDL-1.1+"
 SLOT="1.0/12" # subslot = .so version
 # doc and profile disable for now due bugs #484750 and #483332
-IUSE="examples gles2 gstreamer +introspection +opengl +pango test" # doc profile
+IUSE="evdev examples gles2 gstreamer +introspection +opengl +pango test wayland" # doc profile
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86"
 
 COMMON_DEPEND="
@@ -69,7 +69,7 @@ src_prepare() {
 }
 
 src_configure() {
-	# TODO: think about kms-egl, quartz, sdl, wayland
+	# TODO: think about kms-egl, quartz, sdl
 	# Prefer gl over gles2 if both are selected
 	# Profiling needs uprof, which is not available in portage yet, bug #484750
 	# FIXME: Doesn't provide prebuilt docs, but they can neither be rebuilt, bug #483332
@@ -81,6 +81,7 @@ src_configure() {
 		--enable-gdk-pixbuf        \
 		--enable-glib              \
 		--disable-gtk-doc          \
+		$(use_enable evdev)        \
 		$(use_enable opengl glx)   \
 		$(use_enable opengl gl)    \
 		$(use_enable gles2)        \
@@ -91,6 +92,10 @@ src_configure() {
 		$(use_enable introspection) \
 		$(use_enable pango cogl-pango) \
 		$(use_enable test unit-tests) \
+		$(use_enable wayland egl)\
+		$(use_enable wayland wayland-egl-platform)\
+		$(use_enable wayland wayland-egl-server)\
+		$(use_enable wayland kms-egl-platform)\
 		--disable-profile
 #		$(use_enable doc gtk-doc)  \
 #		$(use_enable profile)

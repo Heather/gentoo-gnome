@@ -13,7 +13,7 @@ DESCRIPTION="Clutter is a library for creating graphical user interfaces"
 
 LICENSE="LGPL-2.1+ FDL-1.1+"
 SLOT="1.0"
-IUSE="debug doc gtk +introspection test" # evdev tslib
+IUSE="debug doc evdev gtk +introspection test wayland" # tslib
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86"
 
 # NOTE: glx flavour uses libdrm + >=mesa-7.3
@@ -23,7 +23,7 @@ RDEPEND="
 	>=dev-libs/glib-2.37.3:2
 	>=dev-libs/atk-2.5.3[introspection?]
 	>=dev-libs/json-glib-0.12[introspection?]
-	>=media-libs/cogl-1.15.9:1.0=[introspection?,pango]
+	>=media-libs/cogl-1.15.9:1.0=[introspection?,pango,wayland?]
 	media-libs/fontconfig
 	>=x11-libs/cairo-1.10:=[glib]
 	>=x11-libs/pango-1.30[introspection?]
@@ -48,7 +48,8 @@ DEPEND="${RDEPEND}
 		>=dev-util/gtk-doc-1.15
 		>=app-text/docbook-sgml-utils-0.6.14[jadetex]
 		dev-libs/libxslt )
-	test? ( x11-libs/gdk-pixbuf )"
+	test? ( x11-libs/gdk-pixbuf )
+	wayland? ( >=dev-libs/libinput-0.1.0 )"
 
 # Tests fail with both swrast and llvmpipe
 # They pass under r600g or i965, so the bug is in mesa
@@ -79,18 +80,19 @@ src_configure() {
 		--disable-maintainer-flags \
 		--disable-gcov \
 		--disable-cex100-backend \
-		--disable-egl-backend \
 		--disable-quartz-backend \
-		--disable-wayland-backend \
 		--disable-win32-backend \
 		--disable-tslib-input \
-		--disable-evdev-input \
 		$(usex debug --enable-debug=yes --enable-debug=minimum) \
 		$(use_enable doc docs) \
+		$(use_enable evdev evdev-input) \
 		$(use_enable gtk gdk-backend) \
 		$(use_enable introspection) \
 		$(use_enable test conformance) \
-		$(use_enable test gdk-pixbuf)
+		$(use_enable test gdk-pixbuf) \
+		$(use_enable wayland egl-backend) \
+		$(use_enable wayland wayland-backend) \
+		$(use_enable wayland wayland-compositor)
 }
 
 src_compile() {
