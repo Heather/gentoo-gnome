@@ -123,6 +123,8 @@ DEPEND="${COMMON_DEPEND}
 src_prepare() {
 	# Change favorites defaults, bug #479918
 	epatch "${FILESDIR}/${PN}-defaults.patch"
+	# https://bugzilla.gnome.org/show_bug.cgi?id=727948
+	epatch "${FILESDIR}/${P}-as-needed.patch"
 
 	# Fix automagic gnome-bluetooth dep, bug #398145
 	#FIXME
@@ -142,10 +144,6 @@ src_configure() {
 		$(use_with bluetooth) \
 		$(use_enable networkmanager) \
 		BROWSER_PLUGIN_DIR="${EPREFIX}"/usr/$(get_libdir)/nsbrowser/plugins
-}
-
-src_compile() {
-	emake -j1
 }
 
 src_install() {
