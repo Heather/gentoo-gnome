@@ -62,17 +62,15 @@ COMMON_DEPEND="
 	x11-libs/libX11
 	x11-libs/libXxf86misc
 	>=x11-libs/libXi-1.2
+	app-crypt/mit-krb5
+	net-libs/libsoup:2.4
+	>=x11-misc/colord-0.1.34
 
-	bluetooth? ( >=net-wireless/gnome-bluetooth-3.11.3:= )
-	colord? (
-		net-libs/libsoup:2.4
-		>=x11-misc/colord-0.1.34 )
 	cups? (
 		>=net-print/cups-1.4[dbus]
 		>=net-fs/samba-3.6.14-r1[smbclient] )
 	gnome-online-accounts? ( >=net-libs/gnome-online-accounts-3.9.90 )
 	i18n? ( >=app-i18n/ibus-1.5.2 )
-	kerberos? ( app-crypt/mit-krb5 )
 	socialweb? ( net-libs/libsocialweb )
 	v4l? (
 		media-libs/gstreamer:1.0
@@ -89,10 +87,9 @@ RDEPEND="${COMMON_DEPEND}
 	|| ( ( app-admin/openrc-settingsd sys-auth/consolekit ) >=sys-apps/systemd-31 )
 	>=sys-apps/accountsservice-0.6.30
 	x11-themes/gnome-icon-theme-symbolic
-	colord? (
-		>=gnome-extra/gnome-color-manager-3
-		>=x11-misc/colord-0.1.34
-		>=x11-libs/colord-gtk-0.1.24 )
+	>=gnome-extra/gnome-color-manager-3
+	>=x11-misc/colord-0.1.34
+	>=x11-libs/colord-gtk-0.1.24
 	cups? (
 		>=app-admin/system-config-printer-gnome-1.3.5
 		net-print/cups-pk-helper )
@@ -165,12 +162,9 @@ src_configure() {
 		--disable-update-mimedb \
 		--disable-static \
 		--enable-documentation \
-		$(use_enable bluetooth) \
-		$(use_enable colord color) \
 		$(use_enable cups) \
 		$(use_enable gnome-online-accounts goa) \
 		$(use_enable i18n ibus) \
-		$(use_enable kerberos) \
 		$(use_with socialweb libsocialweb) \
 		$(use_with v4l cheese) \
 		$(use_enable input_devices_wacom wacom)

@@ -27,7 +27,7 @@ COMMON_DEPEND="
 	x11-libs/libxkbfile
 	x11-libs/libX11
 	x11-misc/xkeyboard-config
-	>=gnome-base/gsettings-desktop-schemas-3.11.0
+	>=gnome-base/gsettings-desktop-schemas-${PV}
 	introspection? ( >=dev-libs/gobject-introspection-0.9.7 )
 "
 RDEPEND="${COMMON_DEPEND}
