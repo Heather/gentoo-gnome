@@ -15,7 +15,7 @@ LICENSE="GPL-2+ LGPL-2+ FDL-1.1"
 SLOT="0"
 
 # profiling?
-IUSE="debug exif gnome +introspection packagekit +previewer sendto xmp"
+IUSE="debug exif gnome +introspection packagekit +previewer sendto xmp tracker"
 KEYWORDS="~amd64"
 
 # FIXME: tests fails under Xvfb, but pass when building manually
@@ -98,7 +98,7 @@ src_configure() {
 		$(use_enable introspection) \
 		$(use_enable packagekit) \
 		$(use_enable sendto nst-extension) \
-		#$(use_enable tracker) \
+		$(use_enable tracker) \
 		$(use_enable xmp)
 }
 
