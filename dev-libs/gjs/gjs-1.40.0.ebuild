@@ -22,7 +22,7 @@ RDEPEND="
 	sys-libs/readline
 	dev-lang/spidermonkey:24
 	virtual/libffi
-	cairo? ( x11-libs/cairo )
+	cairo? ( >=x11-libs/cairo-1.12 )
 "
 DEPEND="${RDEPEND}
 	sys-devel/gettext

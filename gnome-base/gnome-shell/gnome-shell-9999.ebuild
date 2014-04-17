@@ -49,7 +49,7 @@ COMMON_DEPEND="
 	>=gnome-base/gnome-keyring-3.3.90
 	>=gnome-base/gnome-menus-3.5.3:3[introspection]
 	gnome-base/libgnome-keyring
-	>=gnome-extra/evolution-data-server-3.5.3:=
+	>=gnome-extra/evolution-data-server-3.12.0:0/49
 	>=media-libs/gstreamer-0.11.92:1.0
 	>=net-im/telepathy-logger-0.2.4[introspection]
 	>=net-libs/telepathy-glib-0.19[introspection]
