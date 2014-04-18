@@ -21,7 +21,7 @@ RDEPEND="
 	>=net-libs/gnome-online-accounts-3.2.0
 	>=media-libs/grilo-0.2.6:0.2
 	>=net-libs/libzapojit-0.0.2
-	>=app-misc/tracker-0.16:0=
+	>=app-misc/tracker-1.0:0=
 	>=media-libs/gfbgraph-0.2.2
 "
 DEPEND="${RDEPEND}
