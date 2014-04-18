@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="no"
 VALA_USE_DEPEND="vapigen"
-VALA_MIN_API_VERSION="0.22"
+VALA_MIN_API_VERSION="0.24"
 
 inherit linux-info gnome2 vala
 if [[ ${PV} = 9999 ]]; then
@@ -27,21 +27,19 @@ fi
 # NOTE: sys-fs/* stuff is called via exec()
 # FIXME: ovirt is not available in tree
 RDEPEND="
-	>=dev-libs/glib-2.32:2
+	>=dev-libs/glib-2.38:2
 	>=dev-libs/gobject-introspection-0.9.6
 	>=dev-libs/libxml2-2.7.8:2
-	>=sys-libs/libosinfo-0.2.7
+	>=sys-libs/libosinfo-0.2.9
 	>=app-emulation/qemu-1.3.1[spice,smartcard?,usbredir?]
 	>=app-emulation/libvirt-0.9.3[libvirtd,qemu]
 	>=app-emulation/libvirt-glib-0.1.7
-	>=x11-libs/gtk+-3.9:3
+	>=x11-libs/gtk+-3.11:3
 	>=net-libs/gtk-vnc-0.4.4[gtk3]
 	>=net-misc/spice-gtk-0.16[gtk3,smartcard?,usbredir?]
 
 	>=app-misc/tracker-0.16:0=[iso]
 
-	>=media-libs/clutter-gtk-1.3.2:1.0
-	>=media-libs/clutter-1.11.14:1.0
 	>=sys-apps/util-linux-2.20
 	>=net-libs/libsoup-2.38:2.4
 
