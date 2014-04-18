@@ -6,7 +6,7 @@ EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
+inherit gnome2 autotools
 
 DESCRIPTION="CD/DVD burning application for the GNOME desktop"
 HOMEPAGE="http://projects.gnome.org/brasero/"
@@ -64,6 +64,12 @@ DEPEND="${COMMON_DEPEND}
 #	gnome-base/gnome-common
 
 PDEPEND="gnome-base/gvfs"
+
+src_prepare() {
+	epatch "${FILESDIR}/${P}-tracker10.patch"
+	eautoreconf
+    gnome2_src_prepare
+}
 
 src_configure() {
 	DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README"
