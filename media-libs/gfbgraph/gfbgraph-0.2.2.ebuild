@@ -10,7 +10,7 @@ HOMEPAGE="http://www.gnome.org"
 SRC_URI="https://download.gnome.org/sources/gfbgraph/0.2/${P}.tar.xz"
 
 LICENSE="LGPL-2.1"
-SLOT="0"
+SLOT="0.2"
 KEYWORDS="~amd64"
 IUSE=""
 
@@ -22,8 +22,13 @@ DEPEND="net-libs/gnome-online-accounts
 
 RDEPEND="${DEPEND}"
 
+src_prepare() {
+	sed -i -e 's:libgfbgraphdoc_DATA:noinst_DATA:g' Makefile.am
+}
+
 src_configure() {
-        gnome2_src_configure
+	    DOCS="README COPYING AUTHORS ChangeLog INSTALL NEWS"
+	    gnome2_src_configure
 }
 
 src_install() {
