@@ -1,0 +1,54 @@
+From f6ee2128aa9f8053ebce40dc05ba41bbe8c3d5b2 Mon Sep 17 00:00:00 2001
+From: Maciej Piechotka <uzytkownik2@gmail.com>
+Date: Fri, 18 Apr 2014 18:53:46 +0200
+Subject: [PATCH] Allow building with tracker 1.0
+
+---
+ configure.ac | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index cfadede..96ef543 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -200,15 +200,12 @@ AM_CONDITIONAL([ENABLE_LIBSOCIALWEB],
+ GLIB_REQUIRED=2.38.2
+ VALA_REQUIRED=0.22.0.28-9090
+ VALADOC_REQUIRED=0.3.1
+-TRACKER_SPARQL_MAJOR=0.16
+ TRACKER_SPARQL_REQUIRED=0.15.2
+ EBOOK_REQUIRED=3.9.1
+ EDATASERVER_REQUIRED=3.5.3.1
+ ZEITGEIST_REQUIRED=0.9.14
+ GEE_REQUIRED=0.8.4
+ 
+-AC_SUBST([TRACKER_SPARQL_MAJOR])
+-
+ PKG_CHECK_MODULES([GLIB],
+                   [glib-2.0 >= $GLIB_REQUIRED
+                    gobject-2.0 >= $GLIB_REQUIRED])
+@@ -257,11 +254,18 @@ TP_GLIB_CFLAGS="$TP_GLIB_CFLAGS -DTP_VERSION_MIN_REQUIRED=TP_VERSION_0_20"
+ # Prevent post 0.20 APIs
+ TP_GLIB_CFLAGS="$TP_GLIB_CFLAGS -DTP_VERSION_MAX_ALLOWED=TP_VERSION_0_20"
+ 
++tracker_api=0.16
+ AS_IF([test x$enable_tracker_backend = xyes], [
+-        PKG_CHECK_MODULES([TRACKER_SPARQL],
+-                          [tracker-sparql-$TRACKER_SPARQL_MAJOR >= \
+-                           $TRACKER_SPARQL_REQUIRED])
++        tracker_api=no
++        m4_foreach([VERSION], [[0.16], [0.18], [1.0]], [
++                              PKG_CHECK_MODULES([TRACKER_SPARQL],
++                                                [tracker-sparql-VERSION >= $TRACKER_SPARQL_REQUIRED],
++                                                [tracker_api="VERSION"], [true])
++                              ])
++        AS_IF([test x$tracker_api = xno], AC_MSG_ERROR(tracker >= $TRACKER_SPARQL_REQUIRED not found))
+ ])
++TRACKER_SPARQL_MAJOR=$tracker_api
++AC_SUBST([TRACKER_SPARQL_MAJOR])
+ 
+ AS_IF([test x$enable_eds_backend = xyes], [
+         PKG_CHECK_MODULES([EBOOK], [libebook-1.2 >= $EBOOK_REQUIRED
+-- 
+1.9.2
+
