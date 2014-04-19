@@ -31,6 +31,8 @@ RDEPEND="
 	x11-libs/cairo
 	x11-libs/gdk-pixbuf:2
 	>=x11-libs/gtk+-3.9.11:3
+	>=media-libs/gfbgraph-0.2.1:0.2
+	app-text/yelp-tools
 "
 DEPEND="${RDEPEND}
 	dev-util/desktop-file-utils

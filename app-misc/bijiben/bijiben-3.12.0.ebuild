@@ -16,7 +16,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 RDEPEND="
-	>=app-misc/tracker-0.16:=
+	>=app-misc/tracker-0.18:=
 	>=dev-libs/glib-2.28:2
 	dev-libs/libxml2
 	gnome-extra/zeitgeist
@@ -24,7 +24,7 @@ RDEPEND="
 	net-libs/gnome-online-accounts
 	net-libs/webkit-gtk:3
 	sys-apps/util-linux
-	>=x11-libs/gtk+-3.9.3:3
+	>=x11-libs/gtk+-3.11.4:3
 "
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35.0

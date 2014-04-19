@@ -7,7 +7,7 @@ GCONF_DEBUG="yes"
 VALA_MIN_API_VERSION="0.22"
 VALA_USE_DEPEND="vapigen"
 
-inherit gnome2 vala virtualx
+inherit gnome2 vala virtualx eutils autotools
 
 DESCRIPTION="Library for aggregating people from multiple sources"
 HOMEPAGE="https://live.gnome.org/Folks"
@@ -55,6 +55,8 @@ DEPEND="${COMMON_DEPEND}
 "
 
 src_prepare() {
+	epatch "${FILESDIR}/${P}-tracker-1.0.patch"
+	eautoreconf
 	vala_src_prepare
 	gnome2_src_prepare
 }
