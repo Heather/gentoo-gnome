@@ -45,6 +45,7 @@ RDEPEND="
 	>=media-libs/clutter-gtk-1.0.2:1.0
 	x11-libs/mx:1.0
 
+	media-libs/libmediaart
 	media-libs/gstreamer:1.0
 	media-libs/gst-plugins-base:1.0[X,introspection?,pango]
 	>=media-libs/gst-plugins-bad-1.0.2:1.0
