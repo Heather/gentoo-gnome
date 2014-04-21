@@ -17,7 +17,7 @@ KEYWORDS="~amd64"
 
 # Need gdk-pixbuf-2.25 for gdk_pixbuf_get_pixels_with_length
 COMMON_DEPEND="
-	>=app-misc/tracker-0.16:=
+	>=app-misc/tracker-1.0:=
 	>=app-text/evince-3.7.4[introspection]
 	dev-libs/gjs
 	>=dev-libs/glib-2.37:2
@@ -31,8 +31,9 @@ COMMON_DEPEND="
 	>=net-libs/libzapojit-0.0.2
 	>=net-libs/webkit-gtk-1.10.0:3
 	>=x11-libs/gdk-pixbuf-2.25:2[introspection]
-	>=x11-libs/gtk+-3.9.11:3[introspection]
+	>=x11-libs/gtk+-3.11.5:3[introspection]
 	x11-libs/pango[introspection]
+	gnome-extra/yelp
 "
 RDEPEND="${COMMON_DEPEND}
 	media-libs/clutter[introspection]
