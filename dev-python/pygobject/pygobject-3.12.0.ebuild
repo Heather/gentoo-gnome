@@ -5,9 +5,9 @@
 EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
-PYTHON_COMPAT=( python{2_7,3_2,3_3} )
+PYTHON_COMPAT=( python{2_7,3_2,3_3,3_4} )
 
-inherit gnome2 python-r1 virtualx
+inherit gnome3 python-r1 virtualx
 
 DESCRIPTION="GLib's GObject library bindings for Python"
 HOMEPAGE="http://www.pygtk.org/"
@@ -52,7 +52,9 @@ RDEPEND="${COMMON_DEPEND}
 	!<dev-python/pygobject-2.28.6-r50:2[introspection]"
 
 src_prepare() {
-	gnome2_src_prepare
+	DOCS=( "AUTHORS" "ChangeLog"* "NEWS" "README" )
+
+	gnome3_src_prepare
 	python_copy_sources
 }
 
@@ -61,14 +63,14 @@ src_configure() {
 	# glib-2.29.x rdepend on it anyway
 	# docs disabled by upstream default since they are very out of date
 	python_foreach_impl run_in_build_dir \
-		gnome2_src_configure \
+		gnome3_src_configure \
 			--with-ffi \
 			$(use_enable cairo) \
 			$(use_enable threads thread)
 }
 
 src_compile() {
-	python_foreach_impl run_in_build_dir gnome2_src_compile
+	python_foreach_impl run_in_build_dir gnome3_src_compile
 }
 
 src_test() {
@@ -86,9 +88,8 @@ src_test() {
 }
 
 src_install() {
-	DOCS="AUTHORS ChangeLog* NEWS README"
 
-	python_foreach_impl run_in_build_dir gnome2_src_install
+	python_foreach_impl run_in_build_dir gnome3_src_install
 
 	if use examples; then
 		insinto /usr/share/doc/${PF}

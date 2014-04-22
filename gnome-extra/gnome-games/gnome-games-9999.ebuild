@@ -10,10 +10,7 @@ PYTHON_REQ_USE="xml"
 
 # Make sure games is inherited first so that the gnome2
 # functions will be called if they are not overridden
-inherit games gnome2 python-r1 virtualx
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
+inherit games gnome3 python-single-r1 virtualx
 
 DESCRIPTION="Collection of games for the GNOME desktop"
 HOMEPAGE="http://live.gnome.org/GnomeGames/"
@@ -79,10 +76,10 @@ fi
 PDEPEND="aisleriot? ( games-board/aisleriot )"
 
 # Others are installed below; multiples in this package.
-DOCS="AUTHORS HACKING MAINTAINERS TODO"
+DOCS=( "AUTHORS" "HACKING" "MAINTAINERS" "TODO" )
 
 _omitgame() {
-	G2CONF="${G2CONF},${1}"
+	omitgames="${omitgames},${1}"
 }
 
 pkg_setup() {
@@ -91,20 +88,14 @@ pkg_setup() {
 	python_pkg_setup
 }
 
-src_prepare() {
-	gnome2_src_prepare
-	if use sudoku ; then
-		python_copy_sources
-	fi
-}
-
 src_configure() {
-	G2CONF="${G2CONF}
-		--disable-static
-		VALAC=$(type -P true)
-		--with-platform=gnome
-		--with-scores-group=${GAMES_GROUP}
-		--enable-omitgames=none" # This line should be last for _omitgame
+	local myeconfargs=(
+		"--disable-static"
+		"VALAC=$(type -P true)"
+		"--with-platform=gnome"
+		"--with-scores-group=${GAMES_GROUP}"
+	)
+	local omitgames='--enable-omitgames=none'
 
 	# FIXME: Use REQUIRED_USE once games.eclass is ported to EAPI 4
 	if ! use clutter; then
@@ -123,41 +114,21 @@ src_configure() {
 		_omitgame gnome-sudoku
 	fi
 
-	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
+	[[ ${PV} != 9999 ]] && myeconfargs+=( "ITSTOOL=$(type -P true)" )
 
-	if use sudoku ; then
-		python_foreach_impl run_in_build_dir gnome2_src_configure
-	else
-		gnome2_src_configure
-	fi
+	gnome3_src_configure "${omitgames}"
 }
 
 src_compile() {
-	if use sudoku ; then
-		python_foreach_impl run_in_build_dir gnome2_src_compile
-	else
-		gnome2_src_compile
-	fi
+	gnome3_src_compile
 }
 
 src_test() {
-	if use sudoku ; then
-		python_foreach_impl run_in_build_dir Xemake check
-	else
-		Xemake check || die "tests failed"
-	fi
+	Xemake check || die "tests failed"
 }
 
 src_install() {
-	if use sudoku ; then
-		install_python() {
-				gnome2_src_install
-				python_doscript gnome-sudoku/src/gnome-sudoku
-		}
-		python_foreach_impl run_in_build_dir install_python
-	else
-		gnome2_src_install
-	fi
+	gnome3_src_install
 
 	# Documentation install for each of the games
 	for game in \
@@ -170,7 +141,7 @@ src_install() {
 }
 
 pkg_preinst() {
-	gnome2_pkg_preinst
+	gnome3_pkg_preinst
 	# Avoid overwriting previous .scores files
 	local basefile
 	for scorefile in "${ED}"/var/lib/games/*.scores; do
@@ -184,11 +155,11 @@ pkg_preinst() {
 
 pkg_postinst() {
 	games_pkg_postinst
-	gnome2_pkg_postinst
+	gnome3_pkg_postinst
 }
 
 pkg_postrm() {
-	gnome2_pkg_postrm
+	gnome3_pkg_postrm
 }
 
 run_in_build_dir() {

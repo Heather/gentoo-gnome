@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="yes"
 
-inherit gnome2
+inherit gnome3
 
 DESCRIPTION="An integrated VNC server for GNOME"
 HOMEPAGE="http://live.gnome.org/Vino"
@@ -56,11 +56,11 @@ DEPEND="${RDEPEND}
 src_prepare() {
 	# <glib-2.31 compatibility
 	rm -v server/vino-marshal.{c,h} || die
-	gnome2_src_prepare
+	gnome3_src_prepare
 }
 
 src_configure() {
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--enable-http-server \
 		--with-gcrypt \
 		$(use_with avahi) \

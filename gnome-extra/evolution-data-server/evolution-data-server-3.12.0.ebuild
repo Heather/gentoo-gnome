@@ -3,16 +3,11 @@
 # $Header: $
 
 EAPI="5"
-GCONF_DEBUG="no"
-# python3 not really supported, bug #478678
-PYTHON_COMPAT=( python2_7 pypy2_0 )
+PYTHON_COMPAT=( python{2_7,3_3,3_4} pypy2_0 )
 VALA_MIN_API_VERSION="0.18"
 VALA_USE_DEPEND="vapigen"
 
-inherit db-use flag-o-matic gnome2 python-any-r1 vala virtualx
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
+inherit db-use flag-o-matic gnome3 python-any-r1 vala virtualx
 
 DESCRIPTION="Evolution groupware backend"
 HOMEPAGE="http://projects.gnome.org/evolution/arch.shtml"
@@ -83,7 +78,7 @@ pkg_setup() {
 
 src_prepare() {
 	use vala && vala_src_prepare
-	gnome2_src_prepare
+	gnome3_src_prepare
 
 	# /usr/include/db.h is always db-1 on FreeBSD
 	# so include the right dir in CPPFLAGS
@@ -96,7 +91,7 @@ src_prepare() {
 
 src_configure() {
 	# phonenumber does not exist in tree
-	gnome2_src_configure \
+	gnome3_src_configure \
 		$(use_enable api-doc-extras gtk-doc) \
 		$(use_with api-doc-extras private-docs) \
 		$(use_enable gnome-online-accounts goa) \
@@ -122,8 +117,8 @@ src_install() {
 	# every .la file's relink_command field, forcing libtool to look there
 	# first during relinking. This will mangle the .la files installed by
 	# make install, but we don't care because we will be punting them anyway.
-	fix-la-relink-command . || die "fix-la-relink-command failed"
-	gnome2_src_install
+	fix-la-relink-command "${BUILD_DIR}" || die "fix-la-relink-command failed"
+	gnome3_src_install
 
 	if use ldap; then
 		insinto /etc/openldap/schema

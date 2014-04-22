@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="no"
 
-inherit gnome2
+inherit gnome3
 
 DESCRIPTION="GNOME hexadecimal editor"
 HOMEPAGE="https://live.gnome.org/Ghex"

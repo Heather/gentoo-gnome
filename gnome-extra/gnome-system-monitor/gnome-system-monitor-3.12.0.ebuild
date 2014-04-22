@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="no"
 
-inherit gnome2
+inherit gnome3
 
 DESCRIPTION="The Gnome System Monitor"
 HOMEPAGE="https://help.gnome.org/users/gnome-system-monitor/"
@@ -37,7 +37,7 @@ DEPEND="${RDEPEND}
 "
 
 src_configure() {
-	gnome2_src_configure \
+	gnome3_src_configure \
 		$(use_enable systemd) \
 		$(use_enable X wnck) \
 		ITSTOOL=$(type -P true)

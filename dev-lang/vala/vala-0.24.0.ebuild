@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="no"
 
-inherit gnome2
+inherit gnome3
 
 DESCRIPTION="Compiler for the GObject type system"
 HOMEPAGE="https://wiki.gnome.org/Vala"
@@ -30,9 +30,10 @@ DEPEND="${RDEPEND}
 		>=dev-libs/glib-2.26:2 )
 "
 
+DOCS=( "AUTHORS" "ChangeLog" "MAINTAINERS" "NEWS" "README" )
+
 src_configure() {
-	DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README"
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--disable-unversioned \
 		$(use_enable vapigen)
 }

@@ -5,10 +5,10 @@
 EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes" # plugins are dlopened
-PYTHON_COMPAT=( python3_{2,3} )
+PYTHON_COMPAT=( python3_{2,3,4} )
 PYTHON_REQ_USE="xml"
 
-inherit eutils gnome2 multilib python-r1
+inherit eutils gnome3 multilib python-r1
 
 DESCRIPTION="Official plugins for gedit"
 HOMEPAGE="http://live.gnome.org/GeditPlugins"
@@ -66,7 +66,7 @@ src_configure() {
 		use ${plugin} && myplugins="${myplugins},${plugin}"
 	done
 
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--with-plugins=${myplugins} \
 		$(use_enable python)
 }

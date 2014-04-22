@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="yes"
 
-inherit gnome2
+inherit gnome3
 
 DESCRIPTION="Libraries for the gnome desktop that are not part of the UI"
 HOMEPAGE="https://git.gnome.org/browse/gnome-desktop"
@@ -48,11 +48,11 @@ DEPEND="${COMMON_DEPEND}
 # eventually libXrandr shouldn't RDEPEND on randrproto)
 
 src_configure() {
-	DOCS="AUTHORS ChangeLog HACKING NEWS README"
+	DOCS=( "AUTHORS" "ChangeLog" "HACKING" "NEWS" "README" )
 	# Note: do *not* use "--with-pnp-ids-path" argument. Otherwise, the pnp.ids
 	# file (needed by other packages such as >=gnome-settings-daemon-3.1.2)
 	# will not get installed in ${pnpdatadir} (/usr/share/libgnome-desktop-3.0).
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--disable-static \
 		--with-gnome-distributor=Gentoo \
 		--enable-desktop-docs \

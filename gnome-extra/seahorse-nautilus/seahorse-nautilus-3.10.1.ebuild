@@ -6,7 +6,7 @@ EAPI="5"
 GCONF_DEBUG="no" # --disable-debug disables all assertions
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
+inherit gnome3
 
 DESCRIPTION="Nautilus extension for encrypting and decrypting files with GnuPG"
 HOMEPAGE="http://www.gnome.org/projects/seahorse/"
@@ -42,11 +42,11 @@ src_prepare() {
 	sed -e '/^[ \t]*CFLAGS="$CFLAGS \(-g\|-O0\)/d' -i configure.ac configure ||
 		die "sed failed"
 
-	gnome2_src_prepare
+	gnome3_src_prepare
 }
 
 src_configure() {
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--disable-gpg-check \
 		--enable-libnotify
 }

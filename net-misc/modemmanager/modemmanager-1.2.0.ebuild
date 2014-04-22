@@ -4,11 +4,11 @@
 
 EAPI="5"
 GCONF_DEBUG="no"
-GNOME2_LA_PUNT="yes"
+AUTOTOOLS_PRUNE_LIBTOOL_FILES="modules"
 VALA_MIN_API_VERSION="0.18"
 VALA_USE_DEPEND="vapigen"
 
-inherit gnome2 user readme.gentoo udev vala
+inherit gnome3 user readme.gentoo udev vala
 
 DESCRIPTION="Modem and mobile broadband management libraries"
 HOMEPAGE="http://cgit.freedesktop.org/ModemManager/ModemManager/"
@@ -51,11 +51,11 @@ src_prepare() {
 	fi
 
 	use vala && vala_src_prepare
-	gnome2_src_prepare
+	gnome3_src_prepare
 }
 
 src_configure() {
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--disable-more-warnings \
 		--with-udev-base-dir="$(udev_get_udevdir)" \
 		--disable-static \
@@ -70,7 +70,7 @@ src_configure() {
 }
 
 src_install() {
-	gnome2_src_install
+	gnome3_src_install
 
 	# Allow users in plugdev group full control over their modem
 	if use policykit; then
@@ -82,7 +82,7 @@ src_install() {
 }
 
 pkg_postinst() {
-	gnome2_pkg_postinst
+	gnome3_pkg_postinst
 
 	use policykit && enewgroup plugdev
 

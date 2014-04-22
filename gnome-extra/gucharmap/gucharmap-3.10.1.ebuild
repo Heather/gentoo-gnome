@@ -7,7 +7,7 @@ GCONF_DEBUG="yes"
 VALA_MIN_API_VERSION="0.16"
 VALA_USE_DEPEND="vapigen"
 
-inherit gnome2 vala
+inherit gnome3 vala
 
 DESCRIPTION="Unicode character map viewer and library"
 HOMEPAGE="http://live.gnome.org/Gucharmap"
@@ -47,13 +47,13 @@ src_prepare() {
 	sed -e 's/-Wall //g' -i configure || die "sed failed"
 
 	use vala && vala_src_prepare
-	gnome2_src_prepare
+	gnome3_src_prepare
 }
 
 src_configure() {
 	# Do not add ITSTOOL=$(type -P true); yelp-tools is a true required
 	# dependency here for some LINGUAS.
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--disable-static \
 		$(use_enable introspection) \
 		$(use_enable cjk unihan) \

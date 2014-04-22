@@ -2,12 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/games-board/aisleriot/aisleriot-3.4.1-r1.ebuild,v 1.1 2012/08/26 15:43:23 tetromino Exp $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="yes"
 
 # make sure games is inherited first so that the gnome2
 # functions will be called if they are not overridden
-inherit eutils games gnome2 multilib
+inherit eutils games gnome3 multilib
 
 DESCRIPTION="A collection of solitaire card games for GNOME"
 HOMEPAGE="http://live.gnome.org/Aisleriot"
@@ -44,45 +44,54 @@ DEPEND="${COMMON_DEPEND}
 		app-text/docbook-xml-dtd:4.3
 		>=app-text/yelp-tools-3.1.1 )"
 
+DOCS=( "AUTHORS" "ChangeLog" "TODO" )
+
 pkg_setup() {
-	DOCS="AUTHORS ChangeLog TODO"
-
-	if use gnome; then
-		G2CONF="${G2CONF} --with-platform=gnome --with-help-method=ghelp"
-	else
-		G2CONF="${G2CONF} --with-platform=gtk-only --with-help-method=library
-			ITSTOOL=$(type -P true) XMLLINT=$(type -P true)"
-	fi
-
-	G2CONF="${G2CONF}
-		--with-gtk=3.0
-		--with-guile=2.0
-		--enable-sound
-		--disable-schemas-compile
-		--with-card-theme-formats=all
-		--with-kde-card-theme-path="${EPREFIX}"/usr/share/apps/carddecks
-		--with-pysol-card-theme-path="${GAMES_DATADIR}"/pysolfc
-		--exec-prefix="${GAMES_PREFIX}"
-		--localstatedir="${GAMES_STATEDIR}"
-		--with-valgrind-dir="${EPREFIX}"/usr/$(get_libdir)/valgrind"
-
 	export MAKEOPTS="${MAKEOPTS} pkgdatadir="${GAMES_DATADIR}"/aisleriot"
 
 	games_pkg_setup
 }
 
+src_configure() {
+	local myeconfargs=(
+		"--with-gtk=3.0"
+		"--with-guile=2.0"
+		"--enable-sound"
+		"--disable-schemas-compile"
+		"--with-card-theme-formats=all"
+		"--with-kde-card-theme-path=${EPREFIX}/usr/share/apps/carddecks"
+		"--with-pysol-card-theme-path=${GAMES_DATADIR}/pysolfc"
+		"--exec-prefix=${GAMES_PREFIX}"
+		"--localstatedir=${GAMES_STATEDIR}"
+		"--with-valgrind-dir=${EPREFIX}/usr/$(get_libdir)/valgrind"
+	)
+
+	if use gnome; then
+		myeconfargs+=( "--with-platform=gnome" "--with-help-method=ghelp")
+	else
+		myeconfargs+=(
+			"--with-platform=gtk-only"
+			"--with-help-method=library"
+			"ITSTOOL=$(type -P true)"
+			"XMLLINT=$(type -P true)"
+		)
+	fi
+
+	gnome3_src_configure
+}
+
 src_install() {
-	gnome2_src_install
+	gnome3_src_install
 	prepgamesdirs
 }
 
 pkg_preinst() {
-	gnome2_pkg_preinst
+	gnome3_pkg_preinst
 	games_pkg_preinst
 }
 
 pkg_postinst() {
-	gnome2_pkg_postinst
+	gnome3_pkg_postinst
 	games_pkg_postinst
 
 	elog "Aisleriot can use additional card themes from games-board/pysolfc"

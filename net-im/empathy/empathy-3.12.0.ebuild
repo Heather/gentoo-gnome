@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
-PYTHON_COMPAT=( python2_{6,7} python3_{2,3} )
+PYTHON_COMPAT=( python2_{6,7} python3_{2,3,4} )
 
 inherit gnome2 python-any-r1 virtualx
 

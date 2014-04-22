@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="yes"
 
-inherit gnome2
+inherit gnome3
 
 DESCRIPTION="A GNOME application for managing encryption keys"
 HOMEPAGE="http://projects.gnome.org/seahorse/index.html"
@@ -48,11 +48,11 @@ src_prepare() {
 		-e '/CFLAGS="$CFLAGS -O0/d' \
 		-i configure.ac configure || die "sed 1 failed"
 
-	gnome2_src_prepare
+	gnome3_src_prepare
 }
 
 src_configure() {
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--enable-pgp \
 		--enable-ssh \
 		--enable-pkcs11 \

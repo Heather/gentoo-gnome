@@ -6,7 +6,7 @@ EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit eutils gnome2
+inherit eutils gnome3
 
 DESCRIPTION="D-Bus accessibility specifications and registration daemon"
 HOMEPAGE="http://live.gnome.org/Accessibility"
@@ -35,12 +35,12 @@ src_prepare() {
 	# disable teamspaces test since that requires Novell.ICEDesktop.Daemon
 	epatch "${FILESDIR}/${PN}-2.0.2-disable-teamspaces-test.patch"
 
-	gnome2_src_prepare
+	gnome3_src_prepare
 }
 
 src_configure() {
 	# xevie is deprecated/broken since xorg-1.6/1.7
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--disable-xevie \
 		$(use_enable introspection) \
 		$(use_enable X x11)

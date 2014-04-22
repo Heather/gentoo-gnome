@@ -6,7 +6,7 @@ EAPI="5"
 GCONF_DEBUG="no"
 VALA_MIN_API_VERSION=0.18
 
-inherit gnome2 vala
+inherit gnome3 vala
 
 DESCRIPTION="VNC client for the GNOME desktop"
 HOMEPAGE="https://wiki.gnome.org/Vinagre"
@@ -45,14 +45,15 @@ DEPEND="${RDEPEND}
 	$(vala_depend)
 "
 
+DOCS=( "AUTHORS" "ChangeLog" "ChangeLog.pre-git" "NEWS" "README" )
+
 src_prepare() {
 	vala_src_prepare
-	gnome2_src_prepare
+	gnome3_src_prepare
 }
 
 src_configure() {
-	DOCS="AUTHORS ChangeLog ChangeLog.pre-git NEWS README"
-	gnome2_src_configure \
+	gnome3_src_configure \
 		$(use_with avahi) \
 		$(use_enable rdp) \
 		$(use_enable ssh) \

@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="no"
 
-inherit gnome2
+inherit gnome3
 
 DESCRIPTION="Thumbnail generator for directories"
 HOMEPAGE="https://wiki.gnome.org/GnomeDirectoryThumbnailer"

@@ -2,16 +2,15 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
-GNOME2_LA_PUNT="yes"
+AUTOTOOLS_PRUNE_LIBTOOL_FILES="modules"
 
 # clutter.eclass does not support .xz tarballs
-inherit gnome2 versionator
+inherit gnome3 versionator
 if [[ ${PV} = 9999 ]]; then
 	SRC_URI=""
 	EGIT_REPO_URI="git://github.com/clutter-project/mash.git"
-	inherit gnome2-live
 else
 	RV=($(get_version_components))
 	SRC_URI="http://source.clutter-project.org/sources/${PN}/${RV[0]}.${RV[1]}/${P}.tar.xz"
@@ -41,15 +40,16 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig
 	doc? ( >=dev-util/gtk-doc-1.14 )"
 
-pkg_setup() {
-	DOCS="AUTHORS NEWS README"
-	G2CONF="${G2CONF}
+DOCS=( "AUTHORS" "NEWS" "README" )
+
+src_configure() {
+	gnome3_src_configure \
 		--disable-static
-		$(use_enable introspection)"
+		$(use_enable introspection)
 }
 
 src_install() {
-	gnome2_src_install
+	gnome3_src_install
 
 	if use examples; then
 		insinto /usr/share/doc/${PF}/examples

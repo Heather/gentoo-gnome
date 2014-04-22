@@ -6,7 +6,7 @@ EAPI="5"
 GCONF_DEBUG="no"
 VALA_MIN_API_VERSION="0.22"
 
-inherit gnome2 vala
+inherit gnome3 vala
 
 DESCRIPTION="Clocks application for GNOME"
 HOMEPAGE="http://live.gnome.org/GnomeClocks"
@@ -35,9 +35,9 @@ DEPEND="${RDEPEND}
 
 src_prepare() {
 	vala_src_prepare
-	gnome2_src_prepare
+	gnome3_src_prepare
 }
 
 src_configure() {
-	gnome2_src_configure ITSTOOL=$(type -P true)
+	gnome3_src_configure ITSTOOL=$(type -P true)
 }

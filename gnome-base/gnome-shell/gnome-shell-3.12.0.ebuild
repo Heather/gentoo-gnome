@@ -7,7 +7,7 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_COMPAT=( python2_{6,7} )
 
-inherit autotools eutils gnome2 multilib pax-utils python-r1 systemd
+inherit autotools eutils gnome3 multilib pax-utils python-r1 systemd
 
 DESCRIPTION="Provides core UI functions for the GNOME 3 desktop"
 HOMEPAGE="https://download.gnome.org/sources/gnome-shell/3.11"
@@ -133,12 +133,12 @@ src_prepare() {
 	epatch_user
 
 	eautoreconf
-	gnome2_src_prepare
+	gnome3_src_prepare
 }
 
 src_configure() {
 	# Do not error out on warnings
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--enable-man \
 		--disable-jhbuild-wrapper-script \
 		$(use_with bluetooth) \
@@ -147,7 +147,7 @@ src_configure() {
 }
 
 src_install() {
-	gnome2_src_install
+	gnome3_src_install
 	python_replicate_script "${ED}/usr/bin/gnome-shell-extension-tool"
 	python_replicate_script "${ED}/usr/bin/gnome-shell-perf-tool"
 
@@ -166,7 +166,7 @@ src_install() {
 }
 
 pkg_postinst() {
-	gnome2_pkg_postinst
+	gnome3_pkg_postinst
 
 	if ! has_version 'media-libs/gst-plugins-good:1.0' || \
 	   ! has_version 'media-plugins/gst-plugins-vpx:1.0'; then

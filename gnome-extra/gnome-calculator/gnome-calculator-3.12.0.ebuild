@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="no"
 
-inherit gnome2
+inherit gnome3
 
 DESCRIPTION="A calculator application for GNOME"
 HOMEPAGE="https://download.gnome.org/core/3.11/3.11.3/sources"
@@ -31,7 +31,7 @@ DEPEND="${COMMON_DEPEND}
 "
 
 src_configure() {
-	gnome2_src_configure \
+	gnome3_src_configure \
 		ITSTOOL=$(type -P true) \
 		VALAC=$(type -P true)
 }

@@ -5,7 +5,7 @@
 EAPI="5"
 GNOME2_LA_PUNT="yes"
 
-inherit autotools eutils gnome2 pam readme.gentoo systemd user
+inherit autotools eutils gnome3 pam readme.gentoo systemd user
 
 DESCRIPTION="GNOME Display Manager for managing graphical display servers and user logins"
 HOMEPAGE="https://wiki.gnome.org/GDM"
@@ -141,7 +141,7 @@ src_prepare() {
 
 	eautoreconf
 
-	gnome2_src_prepare
+	gnome3_src_prepare
 }
 
 src_configure() {
@@ -151,7 +151,7 @@ src_configure() {
 	# --with-at-spi-registryd-directory= needs to be passed explicitly because
 	# of https://bugzilla.gnome.org/show_bug.cgi?id=607643#c4
 	# Xevie is obsolete, bug #482304
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--with-run-dir=/run/gdm \
 		--localstatedir="${EPREFIX}"/var \
 		--disable-static \
@@ -176,7 +176,7 @@ src_configure() {
 }
 
 src_install() {
-	gnome2_src_install
+	gnome3_src_install
 
 	if ! use accessibility ; then
 		rm "${ED}"/usr/share/gdm/greeter/autostart/orca-autostart.desktop || die
@@ -205,7 +205,7 @@ src_install() {
 pkg_postinst() {
 	local d ret
 
-	gnome2_pkg_postinst
+	gnome3_pkg_postinst
 
 	dbus-launch dconf update || die "'dconf update' failed"
 

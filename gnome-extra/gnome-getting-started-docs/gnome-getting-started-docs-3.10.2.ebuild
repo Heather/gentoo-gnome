@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="no"
 
-inherit gnome2
+inherit gnome3
 
 DESCRIPTION="Help a new user get started in GNOME"
 HOMEPAGE="https://help.gnome.org/"

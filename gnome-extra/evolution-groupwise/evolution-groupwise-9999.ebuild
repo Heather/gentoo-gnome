@@ -2,14 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit db-use eutils flag-o-matic gnome2
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
+inherit db-use eutils flag-o-matic gnome3
 
 DESCRIPTION="Evolution module for connecting to Novell Groupwise"
 HOMEPAGE="http://www.gnome.org/projects/evolution/"
@@ -41,14 +38,12 @@ DEPEND="${RDEPEND}
 # For now, this package has no gtk-doc documentation to build
 #	doc? ( >=dev-util/gtk-doc-1.9 )
 
-pkg_setup() {
-	DOCS="ChangeLog NEWS" # AUTHORS, README are empty
-}
+DOCS=( "ChangeLog" "NEWS" )
 
 src_prepare() {
 	# /usr/include/db.h is always db-1 on FreeBSD
 	# so include the right dir in CPPFLAGS
 	append-cppflags "-I$(db_includedir)"
 
-	gnome2_src_prepare
+	gnome3_src_prepare
 }

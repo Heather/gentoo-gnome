@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="no"
 
-inherit eutils gnome2 virtualx
+inherit eutils gnome3 virtualx
 
 DESCRIPTION="GNOME power management service"
 HOMEPAGE="http://projects.gnome.org/gnome-power-manager/"
@@ -46,11 +46,11 @@ src_prepare() {
 	# maintainer mode gets triggered -- even if the order is correct
 	sed -e 's:^CPPFLAGS="$CPPFLAGS -g"$::g' \
 		-i configure || die "debugger sed failed"
-	gnome2_src_prepare
+	gnome3_src_prepare
 }
 
 src_configure() {
-	gnome2_src_configure \
+	gnome3_src_configure \
 		$(use_enable test tests) \
 		--enable-compile-warnings=minimum
 }

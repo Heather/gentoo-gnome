@@ -5,9 +5,9 @@
 EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes" # plugins are dlopened
-PYTHON_COMPAT=( python3_{2,3} )
+PYTHON_COMPAT=( python3_{2,3,4} )
 
-inherit gnome2 multilib python-r1 eutils virtualx
+inherit gnome3 multilib python-r1 eutils virtualx
 
 DESCRIPTION="A text editor for the GNOME desktop"
 HOMEPAGE="http://live.gnome.org/Gedit"
@@ -63,8 +63,8 @@ DEPEND="${COMMON_DEPEND}
 # yelp-tools, gnome-common needed to eautoreconf
 
 src_configure() {
-	DOCS="AUTHORS BUGS ChangeLog MAINTAINERS NEWS README"
-	gnome2_src_configure \
+	DOCS=( "AUTHORS" "BUGS" "ChangeLog" "MAINTAINERS" "NEWS" "README" )
+	gnome3_src_configure \
 		--disable-deprecations \
 		--enable-updater \
 		--enable-gvfs-metadata \

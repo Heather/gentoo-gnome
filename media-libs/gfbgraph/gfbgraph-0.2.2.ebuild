@@ -3,7 +3,7 @@
 # $Header: $
 
 EAPI=5
-inherit autotools gnome2
+inherit autotools gnome3
 
 DESCRIPTION="GLib/GObject wrapper for the Facebook Graph API"
 HOMEPAGE="http://www.gnome.org"
@@ -22,15 +22,10 @@ DEPEND="net-libs/gnome-online-accounts
 
 RDEPEND="${DEPEND}"
 
+DOCS=( "README" "COPYING" "AUTHORS" "ChangeLog" "INSTALL" "NEWS" )
+AUTOTOOLS_AUTORECONF="yes"
+
 src_prepare() {
 	sed -i -e 's:libgfbgraphdoc_DATA:noinst_DATA:g' Makefile.am
-}
-
-src_configure() {
-	    DOCS="README COPYING AUTHORS ChangeLog INSTALL NEWS"
-	    gnome2_src_configure
-}
-
-src_install() {
-        gnome2_src_install
+	gnome3_src_prepare
 }

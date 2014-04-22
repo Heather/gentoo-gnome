@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="no"
 
-inherit gnome2
+inherit gnome3
 
 DESCRIPTION="A quick previewer for Nautilus, the GNOME file manager"
 HOMEPAGE="http://git.gnome.org/browse/sushi"
@@ -49,5 +49,5 @@ RDEPEND="${COMMON_DEPEND}
 "
 
 src_configure() {
-	gnome2_src_configure --disable-static
+	gnome3_src_configure --disable-static
 }

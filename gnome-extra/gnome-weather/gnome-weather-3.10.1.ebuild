@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="no"
 
-inherit eutils gnome2
+inherit eutils gnome3
 
 DESCRIPTION="A weather application for GNOME"
 HOMEPAGE="https://live.gnome.org/Design/Apps/Weather"

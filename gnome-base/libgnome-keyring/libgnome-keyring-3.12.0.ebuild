@@ -9,7 +9,7 @@ VALA_MIN_API_VERSION="0.16"
 VALA_USE_DEPEND="vapigen"
 PYTHON_COMPAT=( python{2_6,2_7} )
 
-inherit gnome2 python-any-r1 vala
+inherit gnome3 python-any-r1 vala
 
 DESCRIPTION="Compatibility library for accessing secrets"
 HOMEPAGE="http://live.gnome.org/GnomeKeyring"
@@ -36,7 +36,7 @@ DEPEND="${RDEPEND}
 
 src_prepare() {
 	use vala && vala_src_prepare
-	gnome2_src_prepare
+	gnome3_src_prepare
 
 	# FIXME: Remove silly CFLAGS, report upstream
 	sed -e 's:CFLAGS="$CFLAGS -g:CFLAGS="$CFLAGS:' \
@@ -45,7 +45,7 @@ src_prepare() {
 }
 
 src_configure() {
-	gnome2_src_configure $(use_enable vala)
+	gnome3_src_configure $(use_enable vala)
 }
 
 src_test() {

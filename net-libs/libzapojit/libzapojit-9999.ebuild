@@ -4,12 +4,9 @@
 
 EAPI="5"
 GCONF_DEBUG="no"
-GNOME2_LA_PUNT="yes"
+AUTOTOOLS_PRUNE_LIBTOOL_FILES="modules"
 
-inherit gnome2
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
+inherit gnome3
 
 DESCRIPTION="GLib/GObject wrapper for the SkyDrive and Hotmail REST APIs"
 HOMEPAGE="http://git.gnome.org/browse/libzapojit"
@@ -48,15 +45,14 @@ if [[ ${PV} = 9999 ]]; then
 fi
 
 src_configure() {
-	G2CONF="${G2CONF}
-		--enable-compile-warnings=minimum
-		--disable-static
-		$(use_enable introspection)"
-	gnome2_src_configure
+	gnome3_src_configure \
+		--enable-compile-warnings=minimum \
+		--disable-static \
+		$(use_enable introspection)
 }
 
 src_install() {
-	gnome2_src_install
+	gnome3_src_install
 	# Drop self-installed documentation
 	rm -r "${ED}"/usr/share/doc/libzapojit/ || die
 }
