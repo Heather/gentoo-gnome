@@ -6,7 +6,7 @@ EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit eutils gnome2 readme.gentoo
+inherit eutils gnome3 readme.gentoo
 
 DESCRIPTION="Archive manager for GNOME"
 HOMEPAGE="http://fileroller.sourceforge.net/"
@@ -62,21 +62,24 @@ rpm     - app-arch/rpm
 unstuff - app-arch/stuffit
 zoo     - app-arch/zoo"
 
+PATCHES=(
+	"${FILESDIR}"/${PN}-2.10.3-use_bin_tar.patch
+)
+
 src_prepare() {
 	# Use absolute path to GNU tar since star doesn't have the same
 	# options. On Gentoo, star is /usr/bin/tar, GNU tar is /bin/tar
-	epatch "${FILESDIR}"/${PN}-2.10.3-use_bin_tar.patch
 
 	# File providing Gentoo package names for various archivers
 	cp -f "${FILESDIR}/3.6.0-packages.match" data/packages.match || die
 
-	gnome2_src_prepare
+	gnome3_src_prepare
 }
 
 src_configure() {
-	DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README* TODO"
+	DOCS=( "AUTHORS" "ChangeLog" "HACKING" "MAINTAINERS" "NEWS" "README"* "TODO" )
 	# --disable-debug because enabling it adds -O0 to CFLAGS
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--disable-run-in-place \
 		--disable-static \
 		--disable-debug \
@@ -89,11 +92,11 @@ src_configure() {
 }
 
 src_install() {
-	gnome2_src_install
+	gnome3_src_install
 	readme.gentoo_create_doc
 }
 
 pkg_postinst() {
-	gnome2_pkg_postinst
+	gnome3_pkg_postinst
 	readme.gentoo_print_elog
 }

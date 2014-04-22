@@ -8,7 +8,7 @@ GNOME2_LA_PUNT="yes"
 VALA_MIN_API_VERSION="0.18"
 VALA_USE_DEPEND="vapigen"
 
-inherit autotools eutils gnome2 multilib vala
+inherit autotools eutils gnome3 multilib vala
 
 DESCRIPTION="Scalable Vector Graphics (SVG) rendering library"
 HOMEPAGE="https://live.gnome.org/LibRsvg"
@@ -47,7 +47,7 @@ src_prepare() {
 	use vala && vala_src_prepare
 
 	eautoreconf
-	gnome2_src_prepare
+	gnome3_src_prepare
 }
 
 src_configure() {
@@ -58,7 +58,7 @@ src_configure() {
 		myconf="${myconf} --disable-Bsymbolic"
 	fi
 
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--disable-static \
 		--disable-tools \
 		$(use_enable tools rsvg-view) \
@@ -71,17 +71,17 @@ src_configure() {
 src_compile() {
 	# causes segfault if set, see bug #411765
 	unset __GL_NO_DSO_FINALIZER
-	gnome2_src_compile
+	gnome3_src_compile
 }
 
 pkg_postinst() {
 	# causes segfault if set, see bug 375615
 	unset __GL_NO_DSO_FINALIZER
-	gnome2_pkg_postinst
+	gnome3_pkg_postinst
 }
 
 pkg_postrm() {
 	# causes segfault if set, see bug 375615
 	unset __GL_NO_DSO_FINALIZER
-	gnome2_pkg_postrm
+	gnome3_pkg_postrm
 }

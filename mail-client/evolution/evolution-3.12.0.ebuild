@@ -4,12 +4,9 @@
 
 EAPI="5"
 GCONF_DEBUG="no"
-GNOME2_LA_PUNT="yes"
+AUTOTOOLS_PRUNE_LIBTOOL_FILES="modules"
 
-inherit eutils flag-o-matic readme.gentoo gnome2 #autotools
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
+inherit eutils flag-o-matic readme.gentoo gnome3 #autotools
 
 DESCRIPTION="Integrated mail, addressbook and calendaring functionality"
 HOMEPAGE="https://wiki.gnome.org/Apps/Evolution"
@@ -106,15 +103,12 @@ x-scheme-handler/https=firefox.desktop
 (replace firefox.desktop with the name of the appropriate .desktop
 file from /usr/share/applications if you use a different browser)."
 
+AUTOTOOLS_AUTORECONF="yes"
+
 src_prepare() {
-	# Reason?
-	ELTCONF="--reverse-deps"
+	gnome3_src_prepare
 
-	DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS* README"
-
-	#eautoreconf # See https://bugzilla.gnome.org/701904
-
-	gnome2_src_prepare
+	DOCS=( "AUTHORS" "ChangeLog"* "HACKING" "MAINTAINERS" "NEWS"* "README" )
 
 	# Fix compilation flags crazyness
 	sed -e 's/\(AM_CPPFLAGS="\)$WARNING_FLAGS/\1/' \
@@ -126,7 +120,7 @@ src_configure() {
 	# image-inline plugin needs a gtk+:3 gtkimageview, which does not exist yet
 	local myconf
 	[[ ${PV} != 9999 ]] && myconf="${myconf} ITSTOOL=$(type -P true)"
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--without-glade-catalog \
 		--disable-image-inline \
 		--disable-pst-import \
@@ -148,11 +142,11 @@ src_configure() {
 }
 
 src_install() {
-	gnome2_src_install
+	gnome3_src_install
 	readme.gentoo_create_doc
 }
 
 pkg_postinst() {
-	gnome2_pkg_postinst
+	gnome3_pkg_postinst
 	readme.gentoo_print_elog
 }

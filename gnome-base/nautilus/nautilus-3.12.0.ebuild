@@ -6,7 +6,7 @@ EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes" # Needed with USE 'sendto'
 
-inherit eutils gnome2 readme.gentoo virtualx
+inherit eutils gnome3 readme.gentoo virtualx
 
 DESCRIPTION="A file manager for the GNOME desktop"
 HOMEPAGE="http://live.gnome.org/Nautilus"
@@ -41,6 +41,7 @@ COMMON_DEPEND="
 
 	exif? ( >=media-libs/libexif-0.6.20 )
 	introspection? ( >=dev-libs/gobject-introspection-0.6.4 )
+	tracker? ( >=app-misc/tracker-0.16:= )
 	xmp? ( >=media-libs/exempi-2.1.0 )
 	>=media-libs/exempi-2.1.0
 "
@@ -85,12 +86,12 @@ src_prepare() {
 	# Remove -D*DEPRECATED flags. Don't leave this for eclass! (bug #448822)
 	sed -e 's/DISABLE_DEPRECATED_CFLAGS=.*/DISABLE_DEPRECATED_CFLAGS=/' \
 		-i configure || die "sed failed"
-	gnome2_src_prepare
+	gnome3_src_prepare
 }
 
 src_configure() {
-	DOCS="AUTHORS HACKING MAINTAINERS NEWS README* THANKS"
-	gnome2_src_configure \
+	DOCS=( "AUTHORS" "HACKING" "MAINTAINERS" "NEWS" "README*" "THANKS" )
+	gnome3_src_configure \
 		--disable-profiling \
 		--disable-update-mimedb \
 		$(use_enable debug) \
@@ -112,11 +113,11 @@ src_test() {
 
 src_install() {
 	use previewer && readme.gentoo_create_doc
-	gnome2_src_install
+	gnome3_src_install
 }
 
 pkg_postinst() {
-	gnome2_pkg_postinst
+	gnome3_pkg_postinst
 
 	if use previewer; then
 		readme.gentoo_print_elog

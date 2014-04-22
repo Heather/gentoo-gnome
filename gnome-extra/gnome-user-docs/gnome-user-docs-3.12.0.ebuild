@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="no"
 
-inherit gnome2
+inherit gnome3
 
 DESCRIPTION="GNOME end user documentation"
 HOMEPAGE="https://git.gnome.org/browse/gnome-user-docs"
@@ -31,7 +31,7 @@ RESTRICT="binchecks strip"
 src_configure() {
 	# itstool is only needed for rebuilding translations
 	# xmllint is only needed for tests
-	gnome2_src_configure \
+	gnome3_src_configure \
 		$(usex test "" XMLLINT=$(type -P true)) \
 		ITSTOOL=$(type -P true)
 }

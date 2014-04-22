@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="no"
 
-inherit gnome2
+inherit gnome3
 
 DESCRIPTION="A document manager application for GNOME"
 HOMEPAGE="https://wiki.gnome.org/Design/Apps/Documents"

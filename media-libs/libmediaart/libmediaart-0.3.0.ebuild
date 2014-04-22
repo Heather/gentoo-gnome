@@ -3,7 +3,7 @@
 # $Header: $
 
 EAPI=5
-inherit autotools gnome2
+inherit autotools gnome3
 
 DESCRIPTION="Library for handling media art"
 HOMEPAGE="http://www.gnome.org/pub/gnome/sources/libmediaart/0.3/"
@@ -17,11 +17,3 @@ IUSE=""
 DEPEND="x11-libs/gdk-pixbuf"
 
 RDEPEND="${DEPEND}"
-
-src_configure() {
-        gnome2_src_configure
-}
-
-src_install() {
-        gnome2_src_install
-}

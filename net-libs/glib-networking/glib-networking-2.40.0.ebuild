@@ -4,9 +4,9 @@
 
 EAPI="5"
 GCONF_DEBUG="no"
-GNOME2_LA_PUNT="yes"
+AUTOTOOLS_PRUNE_LIBTOOL_FILES="modules"
 
-inherit gnome2 virtualx
+inherit gnome3 virtualx
 
 DESCRIPTION="Network-related giomodules for glib"
 HOMEPAGE="http://git.gnome.org/browse/glib-networking/"
@@ -36,7 +36,7 @@ DEPEND="${RDEPEND}
 # eautoreconf needs >=sys-devel/autoconf-2.65:2.5
 
 src_configure() {
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--disable-static \
 		--with-ca-certificates="${EPREFIX}"/etc/ssl/certs/ca-certificates.crt \
 		$(use_with gnome gnome-proxy) \

@@ -4,12 +4,9 @@
 
 EAPI="5"
 GCONF_DEBUG="no"
-GNOME2_LA_PUNT="yes"
+AUTOTOOLS_PRUNE_LIBTOOL_FILES="modules"
 
-inherit gnome2 virtualx
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
+inherit gnome3 virtualx
 
 DESCRIPTION="Helper library for RESTful services"
 HOMEPAGE="http://live.gnome.org/Librest"
@@ -45,7 +42,7 @@ if [[ ${PV} = 9999 ]]; then
 fi
 
 src_configure() {
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--disable-static \
 		--disable-gcov \
 		--with-ca-certificates="${EPREFIX}"/etc/ssl/certs/ca-certificates.crt \

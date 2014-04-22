@@ -5,10 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="yes"
 
-inherit eutils gnome2
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
+inherit eutils gnome3
 
 DESCRIPTION="Replaces xscreensaver, integrating with the desktop."
 HOMEPAGE="http://live.gnome.org/GnomeScreensaver"
@@ -58,21 +55,20 @@ DEPEND="${RDEPEND}
 "
 
 src_prepare() {
-	epatch_user
 	# Regenerate marshaling code for <glib-2.31 compat
 	rm -v src/gs-marshal.{c,h} || die
-	gnome2_src_prepare
+	gnome3_src_prepare
 }
 
+DOCS=( "AUTHORS" "ChangeLog" "HACKING" "NEWS" "README" )
 src_configure() {
-	DOCS="AUTHORS ChangeLog HACKING NEWS README"
-	G2CONF="${G2CONF}
-		$(use_enable doc docbook-docs)
-		$(use_enable pam locking)
-		$(use_with systemd)
-		--with-mit-ext
-		--with-pam-prefix=/etc
-		--with-xf86gamma-ext
+	gnome3_src_configure \
+		$(use_enable doc docbook-docs) \
+		$(use_enable pam locking) \
+		$(use_with systemd) \
+		--with-mit-ext \
+		--with-pam-prefix=/etc \
+		--with-xf86gamma-ext \
 		--with-kbd-layout-indicator"
 	# Do not use --without-console-kit, it would provide no benefit: there is
 	# no build-time or run-time check for consolekit, $PN merely listens to

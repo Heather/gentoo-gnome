@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="no"
 
-inherit gnome2 virtualx
+inherit gnome3 virtualx
 
 DESCRIPTION="Rygel is an open source UPnP/DLNA MediaServer"
 HOMEPAGE="http://live.gnome.org/Rygel"
@@ -60,13 +60,13 @@ src_prepare() {
 		-e 's/rygel-playbin-renderer-test$(EXEEXT)//' \
 		-i tests/Makefile.in || die
 
-	gnome2_src_prepare
+	gnome3_src_prepare
 }
 
 src_configure() {
 	# We defined xsltproc because man pages are provided by upstream
 	# and we do not want to regenerate them automagically.
-	gnome2_src_configure \
+	gnome3_src_configure \
 		XSLTPROC=$(type -P false) \
 		--disable-valadoc \
 		--enable-gst-launch-plugin \
@@ -80,7 +80,7 @@ src_configure() {
 }
 
 src_install() {
-	gnome2_src_install
+	gnome3_src_install
 	# Autostart file is not placed correctly, bug #402745
 	insinto /etc/xdg/autostart
 	doins "${D}"/usr/share/applications/rygel.desktop

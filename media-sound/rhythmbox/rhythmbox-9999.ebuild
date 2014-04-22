@@ -5,13 +5,10 @@
 EAPI="5"
 GNOME2_LA_PUNT="yes"
 GCONF_DEBUG="no"
-PYTHON_COMPAT=( python3_{2,3} )
+PYTHON_COMPAT=( python3_{2,3,4} )
 PYTHON_REQ_USE="xml"
 
-inherit eutils gnome2 python-single-r1 multilib virtualx
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
+inherit eutils gnome3 python-single-r1 multilib virtualx
 
 DESCRIPTION="Music management and playback software for GNOME"
 HOMEPAGE="http://www.rhythmbox.org/"
@@ -115,7 +112,7 @@ src_prepare() {
 		MAINTAINERS MAINTAINERS.old NEWS README THANKS"
 
 	rm -v lib/rb-marshal.{c,h} || die
-	gnome2_src_prepare
+	gnome3_src_prepare
 }
 
 src_configure() {
@@ -124,7 +121,7 @@ src_configure() {
 
 	# --enable-vala just installs the sample vala plugin, and the configure
 	# checks are broken, so don't enable it
-	gnome2_src_configure \
+	gnome3_src_configure \
 		MOZILLA_PLUGINDIR=/usr/$(get_libdir)/nsbrowser/plugins \
 		VALAC=$(type -P valac-0.14) \
 		--enable-mmkeys \

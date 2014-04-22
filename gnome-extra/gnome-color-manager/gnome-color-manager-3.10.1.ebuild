@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="no"
 
-inherit gnome2
+inherit gnome3
 
 DESCRIPTION="Color profile manager for the GNOME desktop"
 HOMEPAGE="http://projects.gnome.org/gnome-color-manager/"
@@ -54,7 +54,7 @@ RESTRICT="test"
 
 src_configure() {
 	# Always enable tests since they are check_PROGRAMS anyway
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--disable-static \
 		--enable-tests \
 		$(use_enable clutter) \
@@ -64,7 +64,7 @@ src_configure() {
 }
 
 pkg_postinst() {
-	gnome2_pkg_postinst
+	gnome3_pkg_postinst
 
 	if ! has_version media-gfx/argyllcms ; then
 		elog "If you want to do display or scanner calibration, you will need to"

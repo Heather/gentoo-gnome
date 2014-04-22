@@ -9,10 +9,7 @@ PYTHON_COMPAT=( python{2_6,2_7} )
 VALA_MIN_API_VERSION="0.18"
 VALA_USE_DEPEND="vapigen"
 
-inherit autotools db-use eutils flag-o-matic gnome2 java-pkg-opt-2 python vala
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
+inherit autotools db-use eutils flag-o-matic gnome3 java-pkg-opt-2 python vala
 
 DESCRIPTION="Gnome database access library"
 HOMEPAGE="http://www.gnome-db.org/"
@@ -78,6 +75,13 @@ if [[ ${PV} = 9999 ]]; then
 		vala? ( $(vala_depend) )"
 fi
 
+AUTOTOOLS_AUTORECONF="yes"
+PATCHES=(
+	"${FILESDIR}/${PN}-4.99.1-gda-browser-help-collision.patch"
+	"${FILESDIR}/${PN}-4.99.1-gda-browser-doc-collision.patch"
+	"${FILESDIR}/${PN}-4.99.1-control-center-icon-collision.patch"
+)
+
 pkg_setup() {
 	java-pkg-opt-2_pkg_setup
 	python_set_active_version 2
@@ -85,47 +89,12 @@ pkg_setup() {
 }
 
 src_prepare() {
-	G2CONF="${G2CONF}
-		--disable-static
-		--enable-system-sqlite
-		$(use_with berkdb bdb /usr)
-		$(use_with canvas goocanvas)
-		$(use_with firebird firebird /usr)
-		$(use_with gnome-keyring)
-		$(use_with graphviz)
-		$(use_with gtk ui)
-		$(use_with http libsoup)
-		$(use_enable introspection)
-		$(use_with java java $JAVA_HOME)
-		$(use_enable json)
-		$(use_with ldap)
-		$(use_with mdb mdb /usr)
-		$(use_with mysql mysql /usr)
-		$(use_with postgres postgres /usr)
-		$(use_enable ssl crypto)
-		$(use_with sourceview gtksourceview)
-		--disable-default-binary
-		$(use_enable vala)"
-
-	if use bindist; then
-		# firebird license is not GPL compatible
-		G2CONF="${G2CONF} --without-firebird"
-	else
-		G2CONF="${G2CONF} $(use_with firebird firebird /usr)"
-	fi
-
-	use berkdb && append-cppflags "-I$(db_includedir)"
-	use oci8 || G2CONF="${G2CONF} --without-oracle"
-
 	use reports ||
 		sed -e '/SUBDIRS =/ s/trml2html//' \
 			-e '/SUBDIRS =/ s/trml2pdf//' \
-			-i libgda-report/RML/Makefile.{am,in} || die
+			-i libgda-report/RML/Makefile.am || die
 
 	# Prevent file collisions with libgda:4
-	epatch "${FILESDIR}/${PN}-4.99.1-gda-browser-help-collision.patch"
-	epatch "${FILESDIR}/${PN}-4.99.1-gda-browser-doc-collision.patch"
-	epatch "${FILESDIR}/${PN}-4.99.1-control-center-icon-collision.patch"
 	# Move files with mv (since epatch can't handle rename diffs) and
 	# update pre-generated gtk-doc files (for non-git versions of libgda)
 	local f
@@ -144,14 +113,40 @@ src_prepare() {
 			die "mv ${f} failed"
 	done
 
-	[[ ${PV} = 9999 ]] || eautoreconf
-	gnome2_src_prepare
+	gnome3_src_prepare
 	java-pkg-opt-2_src_prepare
 	use vala && vala_src_prepare
 }
 
+src_configure() {
+	use berkdb && append-cppflags "-I$(db_includedir)"
+	gnome3_src_configure \
+		--disable-static \
+		--enable-system-sqlite \
+		$(use_with berkdb bdb /usr) \
+		$(use_with canvas goocanvas) \
+		$(use_with firebird firebird /usr) \
+		$(use_with gnome-keyring) \
+		$(use_with graphviz) \
+		$(use_with gtk ui) \
+		$(use_with http libsoup) \
+		$(use_enable introspection) \
+		$(use_with java java $JAVA_HOME) \
+		$(use_enable json) \
+		$(use_with ldap) \
+		$(use_with mdb mdb /usr) \
+		$(use_with mysql mysql /usr) \
+		$(use_with postgres postgres /usr) \
+		$(use_enable ssl crypto) \
+		$(use_with sourceview gtksourceview) \
+		--disable-default-binary \
+		$(use_enable vala) \
+		$(use_with firebird firebird /usr) \
+		$(use_with oci8 oracle)
+}
+
 src_install() {
-	gnome2_src_install
+	gnome3_src_install
 	if use reports; then
 		for t in trml2{html,pdf}; do
 			python_scriptinto /usr/share/libgda-5.0/gda_${t}

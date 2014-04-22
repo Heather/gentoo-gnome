@@ -7,10 +7,7 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="no" # bug 340725, no other la files
 PYTHON_COMPAT=( python2_{6,7} )
 
-inherit eutils gnome2 python-single-r1
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
+inherit eutils gnome3 python-single-r1
 
 DESCRIPTION="Applets for the GNOME Desktop and Panel"
 HOMEPAGE="http://www.gnome.org/"
@@ -78,21 +75,20 @@ src_prepare() {
 	# Remove silly check for pygobject:2
 	# https://bugzilla.gnome.org/show_bug.cgi?id=660550
 	sed -e 's/pygobject-2.0/pygobject-3.0/' -i configure || die "sed failed"
-	gnome2_src_prepare
+	gnome3_src_prepare
 }
 
 src_configure() {
 	# We don't want HAL or battstat.
 	# mixer applet uses gstreamer, conflicts with the mixer provided by g-s-d
 	# GNOME 3 has a hard-dependency on pulseaudio, so gstmixer applet is useless
-	G2CONF="${G2CONF}
-		--without-hal
-		--disable-battstat
-		--disable-mixer-applet
-		$(use_enable ipv6)
-		$(use_enable networkmanager)
-		$(use_enable policykit polkit)"
-	gnome2_src_configure
+	gnome3_src_configure \
+		--without-hal \
+		--disable-battstat \
+		--disable-mixer-applet \
+		$(use_enable ipv6) \
+		$(use_enable networkmanager) \
+		$(use_enable policykit polkit)
 }
 
 src_test() {
@@ -103,7 +99,7 @@ src_test() {
 src_install() {
 	python_fix_shebang invest-applet
 
-	gnome2_src_install
+	gnome3_src_install
 
 	local APPLETS="accessx-status charpick cpufreq drivemount geyes
 			 gweather invest-applet mini-commander

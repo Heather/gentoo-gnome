@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="no"
 
-inherit gnome2
+inherit gnome3
 
 DESCRIPTION="Crawls through your online content"
 HOMEPAGE="https://git.gnome.org/browse/gnome-online-miners"
@@ -29,7 +29,7 @@ DEPEND="${RDEPEND}
 	"
 
 src_configure() {
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--disable-static \
 		--docdir="${EPREFIX}"/usr/share/doc/${P}
 }

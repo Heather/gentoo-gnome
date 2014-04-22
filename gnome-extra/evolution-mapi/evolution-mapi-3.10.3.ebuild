@@ -6,10 +6,7 @@ EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
+inherit gnome3
 
 DESCRIPTION="Evolution module for connecting to Microsoft Exchange"
 HOMEPAGE="http://projects.gnome.org/evolution/"
@@ -37,15 +34,16 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig
 "
 
+DOCS=( "AUTHORS" "ChangeLog" "NEWS" "README" )
+
 src_prepare() {
 	# FIXME: Fix compilation flags crazyness
 	sed 's/^\(AM_CPPFLAGS="\)$WARNING_FLAGS/\1/' \
 		-i configure.ac configure || die "sed 1 failed"
 
-	gnome2_src_prepare
+	gnome3_src_prepare
 }
 
 src_configure() {
-	DOCS="AUTHORS ChangeLog NEWS README"
-	gnome2_src_configure --disable-static
+	gnome3_src_configure --disable-static
 }

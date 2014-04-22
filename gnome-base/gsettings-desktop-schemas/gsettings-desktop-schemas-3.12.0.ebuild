@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="no"
 
-inherit gnome2
+inherit gnome3
 
 DESCRIPTION="Collection of GSettings schemas for GNOME desktop"
 HOMEPAGE="https://git.gnome.org/browse/gsettings-desktop-schemas"
@@ -27,6 +27,6 @@ DEPEND="${RDEPEND}
 "
 
 src_configure() {
-	DOCS="AUTHORS HACKING NEWS README"
-	gnome2_src_configure $(use_enable introspection)
+	DOCS=( "AUTHORS" "HACKING" "NEWS" "README" )
+	gnome3_src_configure $(use_enable introspection)
 }

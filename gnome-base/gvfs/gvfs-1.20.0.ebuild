@@ -6,7 +6,7 @@ EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit autotools bash-completion-r1 eutils gnome2
+inherit autotools bash-completion-r1 eutils gnome3
 
 DESCRIPTION="Virtual filesystem implementation for gio"
 HOMEPAGE="https://git.gnome.org/browse/gvfs"
@@ -76,7 +76,7 @@ REQUIRED_USE="cdda? ( udev )
 	systemd? ( udisks )"
 
 src_prepare() {
-	DOCS="AUTHORS ChangeLog NEWS MAINTAINERS README TODO" # ChangeLog.pre-1.2 README.commits
+	DOCS=( "AUTHORS" "ChangeLog" "NEWS" "MAINTAINERS" "README" "TODO" ) # "ChangeLog.pre-1.2" "README.commits"
 
 	if ! use udev; then
 		sed -e 's/gvfsd-burn/ /' \
@@ -87,12 +87,12 @@ src_prepare() {
 		eautoreconf
 	fi
 
-	gnome2_src_prepare
+	gnome3_src_prepare
 }
 
 src_configure() {
 	# --enable-documentation installs man pages
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--disable-bash-completion \
 		--disable-hal \
 		--with-dbus-service-dir="${EPREFIX}"/usr/share/dbus-1/services \
@@ -120,6 +120,6 @@ src_configure() {
 }
 
 src_install() {
-	gnome2_src_install
+	gnome3_src_install
 	dobashcomp programs/completion/gvfs
 }

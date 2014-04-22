@@ -6,7 +6,7 @@ EAPI="5"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes" # gmodule is used, which uses dlopen
 
-inherit autotools bash-completion-r1 eutils gnome2
+inherit autotools bash-completion-r1 eutils gnome3
 
 DESCRIPTION="GNOME's main interface to configure various aspects of the desktop"
 HOMEPAGE="https://git.gnome.org/browse/gnome-control-center/"
@@ -154,11 +154,11 @@ src_prepare() {
 	#[[ -f panels/datetime/timedated.h ]] && rm -f panels/datetime/timedated.h
 	#[[ -f panels/datetime/timedated.c ]] && rm -f panels/datetime/timedated.c
 
-	gnome2_src_prepare
+	gnome3_src_prepare
 }
 
 src_configure() {
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--disable-update-mimedb \
 		--disable-static \
 		--enable-documentation \

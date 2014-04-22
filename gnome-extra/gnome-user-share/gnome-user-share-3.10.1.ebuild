@@ -6,7 +6,7 @@ EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2 multilib
+inherit gnome3 multilib
 
 DESCRIPTION="Personal file sharing for the GNOME desktop"
 HOMEPAGE="https://git.gnome.org/browse/gnome-user-share"
@@ -41,7 +41,7 @@ DEPEND="${RDEPEND}
 "
 
 src_configure() {
-	gnome2_src_configure \
+	gnome3_src_configure \
 		$(use_enable bluetooth) \
 		ITSTOOL=$(type -P true) \
 		--with-httpd=apache2 \
@@ -49,7 +49,7 @@ src_configure() {
 }
 
 src_install() {
-	gnome2_src_install
+	gnome3_src_install
 
 	# FIXME: looks like upstream forgot about this
 	rm "${D}"/etc/xdg/autostart/gnome-user-share-obexpush.desktop || die

@@ -6,8 +6,7 @@ EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
-[[ ${PV} = 9999 ]] && inherit gnome2-live
+inherit gnome3
 
 DESCRIPTION="Lightweight HTML rendering/printing/editing engine"
 HOMEPAGE="http://projects.gnome.org/evolution/"
@@ -37,20 +36,21 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig"
 
 src_prepare() {
-	ELTCONF="--reverse-deps"
-	G2CONF="${G2CONF}
-		--disable-static"
-
 	# Regenerate marshallers for <glib-2.31 compatibility
 	if [[ ${PV} != 9999 ]]; then
 		rm -v components/editor/gtkhtml-spell-marshal.{c,h} \
 			components/editor/gtkhtml-editor-marshal.{c,h} || die
 	fi
-	gnome2_src_prepare
+	gnome3_src_prepare
+}
+
+src_configure() {
+	gnome3_src_configure \
+		--disable-static
 }
 
 src_install() {
-	gnome2_src_install
+	gnome3_src_install
 
 	elog "The gtkhtml-editor-test utility is now called gtkhtml-editor-test-${SLOT}"
 	# Don't collide with 3.14 slot

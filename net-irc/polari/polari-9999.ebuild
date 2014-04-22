@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit gnome2-live
+inherit gnome3
 
 DESCRIPTION="An IRC client for GNOME"
 HOMEPAGE="https://wiki.gnome.org/Apps/Polari"

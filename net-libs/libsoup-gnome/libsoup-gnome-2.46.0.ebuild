@@ -4,12 +4,12 @@
 
 EAPI="5"
 GCONF_DEBUG="yes"
-GNOME2_LA_PUNT="yes"
+AUTOTOOLS_PRUNE_LIBTOOL_FILES="modules"
 
 MY_PN=${PN/-gnome}
 MY_P=${MY_PN}-${PV}
 
-inherit autotools eutils gnome2
+inherit autotools eutils gnome3
 
 DESCRIPTION="GNOME plugin for libsoup"
 HOMEPAGE="http://live.gnome.org/LibSoup"
@@ -35,12 +35,10 @@ DEPEND="${RDEPEND}
 
 S=${WORKDIR}/${MY_P}
 
-src_prepare() {
-	# Use lib present on the system
-	epatch "${FILESDIR}"/${P}-system-lib.patch
-	eautoreconf
-	gnome2_src_prepare
-}
+PATCHES=(
+	"${FILESDIR}"/${P}-system-lib.patch
+)
+AUTOTOOLS_AUTORECONF="yes"
 
 src_configure() {
 	# FIXME: we need addpredict to workaround bug #324779 until
@@ -48,7 +46,7 @@ src_configure() {
 	addpredict /usr/share/snmp/mibs/.index
 
 	# Disable apache tests until they are usable on Gentoo, bug #326957
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--disable-static \
 		--disable-tls-check \
 		$(use_enable introspection) \

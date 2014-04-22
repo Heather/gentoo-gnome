@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="yes"
 
-inherit gnome2
+inherit gnome3
 
 DESCRIPTION="GNOME framework for accessing online accounts"
 HOMEPAGE="https://wiki.gnome.org/GnomeOnlineAccounts"
@@ -53,7 +53,7 @@ QA_CONFIGURE_OPTIONS=".*"
 
 src_configure() {
 	# TODO: Give users a way to set the G/Y!/FB/Twitter/Windows Live secrets
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--disable-static \
 		--enable-documentation \
 		--enable-exchange \

@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="yes"
 
-inherit autotools eutils gnome2
+inherit autotools eutils gnome3
 
 DESCRIPTION="Help browser for GNOME"
 HOMEPAGE="http://projects.gnome.org/yelp/ https://live.gnome.org/Yelp"
@@ -34,19 +34,15 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig
 	gnome-base/gnome-common
 "
+AUTOTOOLS_AUTORECONF="yes"
+PATCHES=(
+	"${FILESDIR}/${PN}-3.0.3-man-compatibility.patch"
+)
 # If eautoreconf:
 #	gnome-base/gnome-common
 
-src_prepare() {
-	# Fix compatibility with Gentoo's sys-apps/man
-	# https://bugzilla.gnome.org/show_bug.cgi?id=648854
-	epatch "${FILESDIR}/${PN}-3.0.3-man-compatibility.patch"
-	eautoreconf
-	gnome2_src_prepare
-}
-
 src_configure() {
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--disable-static \
 		--enable-bz2 \
 		--enable-lzma \

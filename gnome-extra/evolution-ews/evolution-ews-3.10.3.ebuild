@@ -6,7 +6,7 @@ EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
+inherit gnome3
 
 DESCRIPTION="Evolution module for connecting to Microsoft Exchange Web Services"
 HOMEPAGE="http://www.gnome.org/projects/evolution/"
@@ -38,7 +38,7 @@ RESTRICT="test"
 
 src_configure() {
 	# We don't have libmspack, needing internal lzx
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--with-internal-lzx \
 		$(use_with kerberos krb5)
 }

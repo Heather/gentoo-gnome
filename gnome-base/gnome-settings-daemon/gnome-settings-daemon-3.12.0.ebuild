@@ -6,7 +6,7 @@ EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit autotools eutils gnome2 systemd virtualx
+inherit autotools eutils gnome3 systemd virtualx
 
 DESCRIPTION="Gnome Settings Daemon"
 HOMEPAGE="https://git.gnome.org/browse/gnome-settings-daemon"
@@ -104,11 +104,11 @@ src_prepare() {
 	epatch_user
 	eautoreconf
 
-	gnome2_src_prepare
+	gnome3_src_prepare
 }
 
 src_configure() {
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--disable-static \
 		--enable-man \
 		$(use_enable colord color) \
@@ -127,7 +127,7 @@ src_test() {
 }
 
 pkg_postinst() {
-	gnome2_pkg_postinst
+	gnome3_pkg_postinst
 
 	if ! systemd_is_booted; then
 		ewarn "${PN} needs Systemd to be *running* for working"

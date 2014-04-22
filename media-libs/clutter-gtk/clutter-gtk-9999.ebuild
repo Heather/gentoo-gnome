@@ -7,10 +7,7 @@ GCONF_DEBUG="yes"
 CLUTTER_LA_PUNT="yes"
 
 # inherit clutter after gnome2 so that defaults aren't overriden
-inherit gnome2 clutter gnome.org
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
+inherit gnome3 clutter gnome.org
 
 DESCRIPTION="Clutter-GTK - GTK+3 Integration library for Clutter"
 
@@ -33,12 +30,12 @@ DEPEND="${RDEPEND}
 	>=sys-devel/gettext-0.18
 	virtual/pkgconfig"
 
-src_prepare() {
-	DOCS="NEWS README"
-	EXAMPLES="examples/{*.c,redhand.png}"
-	G2CONF="${G2CONF}
-		--disable-maintainer-flags
-		--enable-deprecated
-		$(use_enable introspection)"
-	gnome2_src_prepare
+DOCS=( "NEWS" "README" )
+EXAMPLES="examples/{*.c,redhand.png}"
+
+src_configure() {
+	gnome3_src_configure \
+		--disable-maintainer-flags \
+		--enable-deprecated \
+		$(use_enable introspection)
 }

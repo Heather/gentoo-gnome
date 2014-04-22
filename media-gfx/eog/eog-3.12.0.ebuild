@@ -6,7 +6,7 @@ EAPI="5"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
+inherit gnome3
 
 DESCRIPTION="The Eye of GNOME image viewer"
 HOMEPAGE="http://projects.gnome.org/eog/"
@@ -45,9 +45,10 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig
 "
 
+DOCS=( "AUTHORS" "ChangeLog" "HACKING" "MAINTAINERS" "NEWS" "README" "THANKS" "TODO" )
+
 src_configure() {
-	DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README THANKS TODO"
-	gnome2_src_configure \
+	gnome3_src_configure \
 		$(use_enable introspection) \
 		$(use_with jpeg libjpeg) \
 		$(use_with exif libexif) \

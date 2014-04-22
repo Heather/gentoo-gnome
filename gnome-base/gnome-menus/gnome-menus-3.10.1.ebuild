@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="no"
 
-inherit gnome2
+inherit gnome3
 
 DESCRIPTION="Library for the Desktop Menu fd.o specification"
 HOMEPAGE="https://git.gnome.org/browse/gnome-menus"
@@ -33,18 +33,18 @@ DEPEND="${COMMON_DEPEND}
 "
 
 src_prepare() {
-	DOCS="AUTHORS ChangeLog HACKING NEWS README"
+	DOCS=( "AUTHORS" "ChangeLog" "HACKING" "NEWS" "README" )
 
 	# Don't show KDE standalone settings desktop files in GNOME others menu
 	epatch "${FILESDIR}/${PN}-3.10.0-ignore_kde_standalone.patch"
 
-	gnome2_src_prepare
+	gnome3_src_prepare
 }
 
 src_configure() {
 	# Do NOT compile with --disable-debug/--enable-debug=no
 	# It disables api usage checks
-	gnome2_src_configure \
+	gnome3_src_configure \
 		$(usex debug --enable-debug=yes --enable-debug=minimum) \
 		$(use_enable introspection) \
 		--disable-static

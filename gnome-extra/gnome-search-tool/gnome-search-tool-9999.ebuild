@@ -6,10 +6,7 @@ EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
+inherit gnome3
 
 DESCRIPTION="Search tool for GNOME 3"
 HOMEPAGE="https://live.gnome.org/GnomeUtils"
@@ -49,6 +46,6 @@ if [[ ${PV} = 9999 ]]; then
 fi
 
 src_configure() {
-	[[ ${PV} != 9999 ]] && G2CONF="${G2CONF} ITSTOOL=$(type -P true)"
-	gnome2_src_configure
+	gnome3_src_configure \
+		$( [[ ${PV} != 9999 ]] && echo "ITSTOOL='$(type -P true)'")
 }

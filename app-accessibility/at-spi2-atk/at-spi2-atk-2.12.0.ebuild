@@ -6,7 +6,7 @@ EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit eutils gnome2 virtualx
+inherit eutils gnome3 virtualx
 
 DESCRIPTION="Gtk module for bridging AT-SPI to Atk"
 HOMEPAGE="http://live.gnome.org/Accessibility"
@@ -30,7 +30,7 @@ DEPEND="${COMMON_DEPEND}
 "
 
 src_configure() {
-	gnome2_src_configure --enable-p2p
+	gnome3_src_configure --enable-p2p
 }
 
 src_test() {

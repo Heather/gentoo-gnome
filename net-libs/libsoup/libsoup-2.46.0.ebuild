@@ -4,10 +4,10 @@
 
 EAPI="5"
 GCONF_DEBUG="yes"
-GNOME2_LA_PUNT="yes"
+AUTOTOOLS_PRUNE_LIBTOOL_FILES="modules"
 PYTHON_COMPAT=( python{2_6,2_7} )
 
-inherit gnome2 python-any-r1
+inherit gnome3 python-any-r1
 
 DESCRIPTION="An HTTP library implementation in C"
 HOMEPAGE="http://live.gnome.org/LibSoup"
@@ -46,7 +46,7 @@ src_prepare() {
 			|| die "sed failed"
 	fi
 
-	gnome2_src_prepare
+	gnome3_src_prepare
 }
 
 src_configure() {
@@ -55,7 +55,7 @@ src_configure() {
 	addpredict /usr/share/snmp/mibs/.index
 
 	# Disable apache tests until they are usable on Gentoo, bug #326957
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--disable-static \
 		--disable-tls-check \
 		--without-gnome \

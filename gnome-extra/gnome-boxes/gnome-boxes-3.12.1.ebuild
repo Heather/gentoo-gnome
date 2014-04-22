@@ -7,10 +7,7 @@ GCONF_DEBUG="no"
 VALA_USE_DEPEND="vapigen"
 VALA_MIN_API_VERSION="0.24"
 
-inherit linux-info gnome2 vala
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
+inherit linux-info gnome3 vala
 
 DESCRIPTION="Simple GNOME 3 application to access remote or virtual systems"
 HOMEPAGE="https://live.gnome.org/Design/Apps/Boxes"
@@ -67,6 +64,8 @@ if [[ ${PV} = 9999 ]]; then
 		net-libs/rest:0.7[introspection]"
 fi
 
+DOCS=( "AUTHORS" "README" "NEWS" "THANKS" "TODO" )
+
 pkg_pretend() {
 	linux_config_exists
 
@@ -82,13 +81,12 @@ src_prepare() {
 	sed 's/CFLAGS="$CFLAGS -O0 -ggdb3"//' -i configure{.ac,} || die
 
 	vala_src_prepare
-	gnome2_src_prepare
+	gnome3_src_prepare
 }
 
 src_configure() {
-	DOCS="AUTHORS README NEWS THANKS TODO"
 	# debug needed for splitdebug proper behavior (cardoe)
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--enable-debug \
 		--disable-strict-cc \
 		$(use_enable usbredir) \
@@ -97,7 +95,7 @@ src_configure() {
 }
 
 pkg_postinst() {
-	gnome2_pkg_postinst
+	gnome3_pkg_postinst
 	elog "Before running gnome-boxes, you will need to load the KVM modules"
 	elog "If you have an Intel Processor, run:"
 	elog "	modprobe kvm-intel"

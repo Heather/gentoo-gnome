@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="yes"
 
-inherit eutils gnome2
+inherit eutils gnome3
 
 DESCRIPTION="Gnome session manager"
 HOMEPAGE="https://git.gnome.org/browse/gnome-session"
@@ -70,7 +70,7 @@ DEPEND="${COMMON_DEPEND}
 # gnome-base/gdm does not provide gnome.desktop anymore
 
 src_configure() {
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--disable-deprecation-flags \
 		--docdir="${EPREFIX}/usr/share/doc/${PF}" \
 		--enable-session-selector \
@@ -81,7 +81,7 @@ src_configure() {
 }
 
 src_install() {
-	gnome2_src_install
+	gnome3_src_install
 
 	dodir /etc/X11/Sessions
 	exeinto /etc/X11/Sessions
@@ -100,7 +100,7 @@ src_install() {
 }
 
 pkg_postinst() {
-	gnome2_pkg_postinst
+	gnome3_pkg_postinst
 
 	if ! has_version gnome-base/gdm && ! has_version kde-base/kdm; then
 		ewarn "If you use a custom .xinitrc for your X session,"

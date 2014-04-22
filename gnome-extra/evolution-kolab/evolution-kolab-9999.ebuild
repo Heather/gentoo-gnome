@@ -6,10 +6,7 @@ EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit autotools eutils gnome2
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
+inherit autotools eutils gnome3
 
 DESCRIPTION="Evolution module for connecting to Kolab groupware servers"
 HOMEPAGE="https://live.gnome.org/Evolution/Kolab"
@@ -48,25 +45,23 @@ DEPEND="${RDEPEND}
 
 RESTRICT="test" # test suite is non-functional
 
+myeconfargs=(
+	"--without-krb5"
+)
+PATCHES=(
+	"${FILESDIR}/${PN}-3.4.3-no-hello-world.patch"
+	"${FILESDIR}/${PN}-3.5.5-no-tests.patch"
+)
+
 src_prepare() {
-	G2CONF="${G2CONF} --without-krb5" # --with-krb5 does nothing useful
-
-	# We do not want to install a "hello world" program.
-	epatch "${FILESDIR}/${PN}-3.4.3-no-hello-world.patch"
-
-	# Disable test suite: parts fail, other parts require connection to a live
-	# kolab server, plus it installs test executables to /usr/bin
-	epatch "${FILESDIR}/${PN}-3.5.5-no-tests.patch"
-
 	# Strip stupid cflags
 	sed -e 's/\(ADD_CFLAGS=.*\) -pedantic/\1/' \
 		-i configure.ac configure || die
 
-	[[ ${PV} = 9999 ]] || eautoreconf
-	gnome2_src_prepare
+	gnome3_src_prepare
 }
 
 src_install() {
-	gnome2_src_install
+	gnome3_src_install
 	rm -rv "${ED}usr/doc" || die "rm failed"
 }

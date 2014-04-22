@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="no"
 
-inherit gnome2 bash-completion-r1 virtualx
+inherit gnome3 bash-completion-r1 virtualx
 
 DESCRIPTION="Simple low-level configuration system"
 HOMEPAGE="https://wiki.gnome.org/dconf"
@@ -35,7 +35,7 @@ DEPEND="${RDEPEND}
 "
 
 src_configure() {
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--disable-gcov \
 		--enable-man \
 		$(use_enable X editor) \
@@ -47,7 +47,7 @@ src_test() {
 }
 
 src_install() {
-	gnome2_src_install
+	gnome3_src_install
 
 	# GSettings backend may be one of: memory, gconf, dconf
 	# Only dconf is really considered functional by upstream
@@ -62,7 +62,7 @@ src_install() {
 }
 
 pkg_postinst() {
-	gnome2_pkg_postinst
+	gnome3_pkg_postinst
 	# Kill existing dconf-service processes as recommended by upstream due to
 	# possible changes in the dconf private dbus API.
 	# dconf-service will be dbus-activated on next use.

@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="no"
 
-inherit eutils gnome2 readme.gentoo
+inherit eutils gnome3 readme.gentoo
 
 DESCRIPTION="JavaScript extensions for GNOME Shell"
 HOMEPAGE="http://ftp.gnome.org/pub/gnome/sources/gnome-shell-extensions/3.11"
@@ -51,11 +51,11 @@ gnome-extra/gnome-tweak-tool GUI, or modify the org.gnome.shell
 enabled-extensions gsettings key from the command line or a script."
 
 src_configure() {
-	gnome2_src_configure --enable-extensions=all
+	gnome3_src_configure --enable-extensions=all
 }
 
 src_install() {
-	gnome2_src_install
+	gnome3_src_install
 
 	local example="example@gnome-shell-extensions.gcampax.github.com"
 	if use examples; then
@@ -69,7 +69,7 @@ src_install() {
 }
 
 pkg_postinst() {
-	gnome2_pkg_postinst
+	gnome3_pkg_postinst
 
 	ebegin "Updating list of installed extensions"
 	eselect gnome-shell-extensions update

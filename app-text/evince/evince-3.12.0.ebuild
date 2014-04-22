@@ -4,9 +4,9 @@
 
 EAPI="5"
 GCONF_DEBUG="yes"
-GNOME2_LA_PUNT="yes"
+AUTOTOOLS_PRUNE_LIBTOOL_FILES="modules"
 
-inherit eutils gnome2
+inherit eutils gnome3
 
 DESCRIPTION="Simple document viewer for GNOME"
 HOMEPAGE="http://www.gnome.org/projects/evince/"
@@ -65,10 +65,7 @@ DEPEND="${COMMON_DEPEND}
 RESTRICT="test"
 
 src_prepare() {
-	# ???
-	ELTCONF="--portage"
-
-	gnome2_src_prepare
+	gnome3_src_prepare
 
 	# Do not depend on gnome-icon-theme, bug #326855, #391859
 	sed -e 's/gnome-icon-theme >= $GNOME_ICON_THEME_REQUIRED//g' \
@@ -76,7 +73,7 @@ src_prepare() {
 }
 
 src_configure() {
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--disable-static \
 		--disable-tests \
 		--enable-pdf \

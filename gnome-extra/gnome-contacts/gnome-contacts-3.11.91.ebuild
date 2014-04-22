@@ -7,7 +7,7 @@ GCONF_DEBUG="no"
 VALA_MIN_API_VERSION="0.22"
 VALA_USE_DEPEND="vapigen"
 
-inherit gnome2 vala
+inherit gnome3 vala
 
 DESCRIPTION="GNOME contact management application"
 HOMEPAGE="https://wiki.gnome.org/Design/Apps/Contacts"
@@ -57,9 +57,9 @@ src_prepare() {
 	fi
 
 	vala_src_prepare
-	gnome2_src_prepare
+	gnome3_src_prepare
 }
 
 src_configure() {
-	gnome2_src_configure $(use_with v4l cheese)
+	gnome3_src_configure $(use_with v4l cheese)
 }

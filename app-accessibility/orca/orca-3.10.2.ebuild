@@ -5,10 +5,10 @@
 EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
-PYTHON_COMPAT=( python3_3 )
+PYTHON_COMPAT=( python3_3 python3_4 )
 PYTHON_REQ_USE="threads"
 
-inherit gnome2 python-r1
+inherit gnome3 python-r1
 
 DESCRIPTION="Extensible screen reader that provides access to the desktop"
 HOMEPAGE="http://projects.gnome.org/orca/"
@@ -46,23 +46,23 @@ DEPEND="${COMMON_DEPEND}
 #	app-text/yelp-tools
 
 src_prepare() {
-	gnome2_src_prepare
+	gnome3_src_prepare
 
 	python_copy_sources
 }
 
 src_configure() {
-	python_foreach_impl run_in_build_dir gnome2_src_configure ITSTOOL="$(type -P true)"
+	python_foreach_impl run_in_build_dir gnome3_src_configure ITSTOOL="$(type -P true)"
 }
 
 src_compile() {
-	python_foreach_impl run_in_build_dir gnome2_src_compile
+	python_foreach_impl run_in_build_dir gnome3_src_compile
 }
 
 src_install() {
-	DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README TODO"
+	DOCS=( "AUTHORS" "ChangeLog" "MAINTAINERS" "NEWS" "README" "TODO" )
 	installing() {
-		gnome2_src_install
+		gnome3_src_install
 		# Massage shebang to make python_doscript happy
 		sed -e 's:#!'"${PYTHON}:#!/usr/bin/python:" \
 			-i src/orca/orca || die

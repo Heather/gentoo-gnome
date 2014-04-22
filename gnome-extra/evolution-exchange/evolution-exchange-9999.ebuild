@@ -6,10 +6,7 @@ EAPI="5"
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
+inherit gnome3
 
 DESCRIPTION="Evolution module for connecting to Microsoft Exchange"
 HOMEPAGE="http://projects.gnome.org/evolution/"
@@ -47,9 +44,9 @@ if [[ ${PV} = 9999 ]]; then
 		doc? ( >=dev-util/gtk-doc-1.9 )"
 fi
 
+DOCS=( "AUTHORS" "ChangeLog" "NEWS" "README" )
 src_configure() {
-	DOCS="AUTHORS ChangeLog NEWS README"
-	gnome2_src_configure \
+	gnome3_src_configure \
 		--with-krb5="${EPREFIX}"/usr \
 		--with-openldap \
 		--disable-static \

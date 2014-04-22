@@ -6,7 +6,7 @@ EAPI="5"
 GCONF_DEBUG="yes" # Not gnome macro but similar
 GNOME2_LA_PUNT="yes"
 
-inherit fcaps gnome2 pam versionator virtualx
+inherit fcaps gnome3 pam versionator virtualx
 
 DESCRIPTION="Password and keyring managing daemon"
 HOMEPAGE="http://live.gnome.org/GnomeKeyring"
@@ -53,11 +53,11 @@ src_prepare() {
 	#sed -e '/g_test_add.*gnome2-store.import.pkcs12/,+1 d' \
 	#	-i pkcs11/gnome2-store/tests/test-import.c || die
 
-	gnome2_src_prepare
+	gnome3_src_prepare
 }
 
 src_configure() {
-	gnome2_src_configure \
+	gnome3_src_configure \
 		$(use_with caps libcap-ng) \
 		$(use_enable pam) \
 		$(use_with pam pam-dir $(getpam_mod_dir)) \
@@ -77,5 +77,5 @@ src_test() {
 
 pkg_postinst() {
 	fcaps cap_ipc_lock usr/bin/gnome-keyring-daemon
-	gnome2_pkg_postinst
+	gnome3_pkg_postinst
 }

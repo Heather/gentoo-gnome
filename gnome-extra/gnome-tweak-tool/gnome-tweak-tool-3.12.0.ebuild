@@ -7,7 +7,7 @@ GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 PYTHON_COMPAT=( python2_{6,7} )
 
-inherit eutils gnome2 python-r1
+inherit eutils gnome3 python-single-r1
 
 DESCRIPTION="Tool to customize GNOME 3 options"
 HOMEPAGE="https://wiki.gnome.org/GnomeTweakTool"
@@ -42,33 +42,12 @@ DEPEND="${COMMON_DEPEND}
 	virtual/pkgconfig
 "
 
-src_prepare() {
-	# Add contents of Gentoo's cursor theme directory to cursor theme list
-	epatch "${FILESDIR}/${PN}-3.10.1-gentoo-cursor-themes.patch"
-
-	# Prevent problems setting WM preferences, upstream bug #706834
-	epatch "${FILESDIR}/${PN}-3.8.1-wm-preferences.patch"
-
-	gnome2_src_prepare
-	python_copy_sources
-}
-
-src_configure() {
-	python_foreach_impl run_in_build_dir gnome2_src_configure
-}
-
-src_compile() {
-	python_foreach_impl run_in_build_dir gnome2_src_compile
-}
-
-src_test() {
-	python_foreach_impl run_in_build_dir default
-}
+PATCHES=(
+	"${FILESDIR}/${PN}-3.10.1-gentoo-cursor-themes.patch"
+	"${FILESDIR}/${PN}-3.8.1-wm-preferences.patch"
+)
 
 src_install() {
-	install_python() {
-		gnome2_src_install
-		python_doscript gnome-tweak-tool || die
-	}
-	python_foreach_impl run_in_build_dir install_python
+	gnome3_src_install
+	python_doscript gnome-tweak-tool || die
 }

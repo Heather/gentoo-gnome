@@ -5,7 +5,7 @@
 EAPI="5"
 GCONF_DEBUG="no"
 
-inherit gnome2
+inherit gnome3
 
 DESCRIPTION="Mouse accessibility enhancements for the GNOME desktop"
 HOMEPAGE="http://live.gnome.org/Mousetweaks/Home"
@@ -30,7 +30,4 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig
 "
 
-src_install() {
-	DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README"
-	gnome2_src_install
-}
+DOCS=( "AUTHORS" "ChangeLog" "MAINTAINERS" "NEWS" "README" )
