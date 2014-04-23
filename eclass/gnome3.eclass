@@ -4,7 +4,6 @@
 
 # @ECLASS: gnome2.eclass
 # @MAINTAINER:
-# gnome@gentoo.org
 # @BLURB: Provides phases for Gnome/Gtk+ based packages.
 # @DESCRIPTION:
 # Exports portage base functions used by ebuilds written for packages using the
