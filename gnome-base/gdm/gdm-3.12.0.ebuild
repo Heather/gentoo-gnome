@@ -31,7 +31,7 @@ COMMON_DEPEND="
 	app-text/iso-codes
 	>=dev-libs/glib-2.35:2
 	>=x11-libs/gtk+-2.91.1:3
-	>=gnome-base/dconf-0.11.90
+	>=gnome-base/dconf-0.20.0
 	>=gnome-base/gnome-settings-daemon-3.1.4
 	gnome-base/gsettings-desktop-schemas
 	>=media-libs/fontconfig-2.5.0
