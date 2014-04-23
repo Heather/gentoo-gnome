@@ -28,8 +28,7 @@ RDEPEND="
 	>=net-libs/telepathy-glib-0.23.0
 	connman? ( net-misc/connman )
 	networkmanager? ( >=net-misc/networkmanager-0.7 )
-	upower? ( >=sys-power/upower-0.9.11
-		  >=sys-power/upower-0.99 )
+	upower? ( >=sys-power/upower-0.9.11 <sys-power/upower-0.99 )
 "
 DEPEND="${RDEPEND}
 	${PYTHON_DEPS}
