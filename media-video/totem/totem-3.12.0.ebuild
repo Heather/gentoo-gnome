@@ -63,8 +63,8 @@ RDEPEND="
 
 	flash? ( dev-libs/totem-pl-parser[quvi] )
 	grilo? (
-		>=media-libs/grilo-0.2.9
-		>=media-plugins/grilo-plugins-0.2.9 )
+		>=media-libs/grilo-0.2.10
+		>=media-plugins/grilo-plugins-0.2.10 )
 	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
 	lirc? ( app-misc/lirc )
 	nautilus? ( >=gnome-base/nautilus-2.91.3 )
