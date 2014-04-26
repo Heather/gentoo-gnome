@@ -1,7 +1,7 @@
 Unofficial Gentoo GNOME overlay
 -------------------------------
 
-**Current status: 3.12**
+**Current status: just use gnome overlay**
 
  - stable branch is target **Sabayon 14.01** ( https://github.com/Heather/gentoo-gnome/tree/stable )
  - for `3.10` There is official gnome overlay: http://git.overlays.gentoo.org/gitweb/?p=proj/gnome.git;a=summary
