@@ -47,8 +47,7 @@
 +	"ttrssd",
 +	"vboxguest",
 +	"vdr",
-+	"vdradmin",
-+	NULL
++	"vdradmin"
  };
  
  #define PATH_NOLOGIN "/sbin/nologin"
