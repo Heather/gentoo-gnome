@@ -1,3 +1,6 @@
+WARNING: THIS OVERLAY IS NOT SUPPORTED, DEPRECATED FOR NOW
+==========================================================
+
 Unofficial Gentoo GNOME overlay
 -------------------------------
 
