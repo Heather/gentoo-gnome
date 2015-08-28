@@ -1,6 +1,6 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/gnome2-utils.eclass,v 1.33 2013/09/15 19:29:11 pacho Exp $
+# $Id$
 
 # @ECLASS: gnome2-utils.eclass
 # @MAINTAINER:
@@ -51,12 +51,6 @@ esac
 # @DESCRIPTION:
 # Path to glib-compile-schemas
 : ${GLIB_COMPILE_SCHEMAS:="/usr/bin/glib-compile-schemas"}
-
-# @ECLASS-VARIABLE: GDK_PIXBUF_UPDATE_BIN
-# @INTERNAL
-# @DESCRIPTION:
-# Path to gdk-pixbuf-query-loaders
-: ${GDK_PIXBUF_UPDATE_BIN:="/usr/bin/gdk-pixbuf-query-loaders"}
 
 # @ECLASS-VARIABLE: GNOME2_ECLASS_SCHEMAS
 # @INTERNAL
@@ -409,7 +403,7 @@ gnome2_schemas_update() {
 gnome2_gdk_pixbuf_savelist() {
 	has ${EAPI:-0} 0 1 2 && ! use prefix && ED="${D}"
 	pushd "${ED}" 1>/dev/null
-	export GNOME2_ECLASS_GDK_PIXBUF_LOADERS=$(find "usr/$(get_libdir)/gdk-pixbuf-2.0" -type f 2>/dev/null)
+	export GNOME2_ECLASS_GDK_PIXBUF_LOADERS=$(find usr/lib*/gdk-pixbuf-2.0 -type f 2>/dev/null)
 	popd 1>/dev/null
 }
 
@@ -420,7 +414,11 @@ gnome2_gdk_pixbuf_savelist() {
 # This function should be called from pkg_postinst and pkg_postrm.
 gnome2_gdk_pixbuf_update() {
 	has ${EAPI:-0} 0 1 2 && ! use prefix && EROOT="${ROOT}"
-	local updater="${EROOT}${GDK_PIXBUF_UPDATE_BIN}"
+	local updater="${EROOT}/usr/bin/${CHOST}-gdk-pixbuf-query-loaders"
+
+	if [[ ! -x ${updater} ]]; then
+		updater="${EROOT}/usr/bin/gdk-pixbuf-query-loaders"
+	fi
 
 	if [[ ! -x ${updater} ]]; then
 		debug-print "${updater} is not executable"
@@ -436,43 +434,23 @@ gnome2_gdk_pixbuf_update() {
 	local tmp_file=$(mktemp -t tmp.XXXXXXXXXX_gdkpixbuf)
 	${updater} 1> "${tmp_file}" &&
 	chmod 0644 "${tmp_file}" &&
-	mv -f "${tmp_file}" "${EROOT}usr/$(get_libdir)/gdk-pixbuf-2.0/2.10.0/loaders.cache"
+	cp -f "${tmp_file}" "${EROOT}usr/$(get_libdir)/gdk-pixbuf-2.0/2.10.0/loaders.cache" &&
+	rm "${tmp_file}" # don't replace this with mv, required for SELinux support
 	eend $?
 }
-
 
 # @FUNCTION: gnome2_query_immodules_gtk2
 # @USAGE: gnome2_query_immodules_gtk2
 # @DESCRIPTION:
 # Updates gtk2 immodules/gdk-pixbuf loaders listing.
 gnome2_query_immodules_gtk2() {
-	if has_version ">=x11-libs/gtk+-2.24.20:2"; then
-		"${EPREFIX}/usr/bin/gtk-query-immodules-2.0" --update-cache
-	else
-		local GTK2_CONFDIR="/etc/gtk-2.0/$(get_abi_CHOST)"
+	local updater=${EPREFIX}/usr/bin/${CHOST}-gtk-query-immodules-2.0
+	[[ ! -x ${updater} ]] && updater=${EPREFIX}/usr/bin/gtk-query-immodules-2.0
 
-		local query_exec="${EPREFIX}/usr/bin/gtk-query-immodules-2.0"
-		local gtk_conf="${EPREFIX}${GTK2_CONFDIR}/gtk.immodules"
-		local gtk_conf_dir=$(dirname "${gtk_conf}")
-
-		einfo "Generating Gtk2 immodules/gdk-pixbuf loaders listing:"
-		einfo "-> ${gtk_conf}"
-
-		mkdir -p "${gtk_conf_dir}"
-		local tmp_file=$(mktemp -t tmp.XXXXXXXXXXgtk_query_immodules)
-		if [ -z "${tmp_file}" ]; then
-			ewarn "gtk_query_immodules: cannot create temporary file"
-			return 1
-		fi
-
-		if ${query_exec} > "${tmp_file}"; then
-			cat "${tmp_file}" > "${gtk_conf}" || \
-				ewarn "Failed to write to ${gtk_conf}"
-		else
-			ewarn "Cannot update gtk.immodules, file generation failed"
-		fi
-		rm "${tmp_file}"
-	fi
+	ebegin "Updating gtk2 input method module cache"
+	GTK_IM_MODULE_FILE="${EROOT}usr/$(get_libdir)/gtk-2.0/2.10.0/immodules.cache" \
+		"${updater}" --update-cache
+	eend $?
 }
 
 # @FUNCTION: gnome2_query_immodules_gtk3
@@ -480,7 +458,13 @@ gnome2_query_immodules_gtk2() {
 # @DESCRIPTION:
 # Updates gtk3 immodules/gdk-pixbuf loaders listing.
 gnome2_query_immodules_gtk3() {
-	"${EPREFIX}/usr/bin/gtk-query-immodules-3.0" --update-cache
+	local updater=${EPREFIX}/usr/bin/${CHOST}-gtk-query-immodules-3.0
+	[[ ! -x ${updater} ]] && updater=${EPREFIX}/usr/bin/gtk-query-immodules-3.0
+
+	ebegin "Updating gtk3 input method module cache"
+	GTK_IM_MODULE_FILE="${EROOT}usr/$(get_libdir)/gtk-3.0/3.0.0/immodules.cache" \
+		"${updater}" --update-cache
+	eend $?
 }
 
 # @FUNCTION: gnome2_disable_deprecation_warning
@@ -502,7 +486,7 @@ gnome2_disable_deprecation_warning() {
 
 		LC_ALL=C sed -r -i \
 			-e 's:-D[A-Z_]+_DISABLE_DEPRECATED:$(NULL):g' \
-			-e 's:-DGSEAL_ENABLE:$(NULL):g' \
+			-e 's:-DGSEAL_ENABLE+[A-Z_]:$(NULL):g' \
 			-i "${makefile}"
 
 		if [[ $? -ne 0 ]]; then

@@ -1,5 +1,0 @@
-slotmove =net-libs/rest-0.7* 0 0.7
-slotmove =gnome-extra/gucharmap-2.33.2 0 2.90
-slotmove =gnome-extra/gucharmap-3.0.0 0 2.90
-slotmove =gnome-extra/gucharmap-3.0.1 0 2.90
-move gnome-base/gnome-online-accounts net-libs/gnome-online-accounts

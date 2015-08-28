@@ -1,3 +1,0 @@
-* hamster-applet 2.91 is still an applet; useless with GNOME Shell
-* gnome-keyring's gtk3 version libgcr -> libgcr-3
-  - Difficult to parallel install, though, because other libs are the same
