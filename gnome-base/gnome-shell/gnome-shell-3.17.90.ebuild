@@ -27,7 +27,7 @@ COMMON_DEPEND="
 	>=app-crypt/gcr-3.7.5[introspection]
 	>=dev-libs/glib-2.45.3:2[dbus]
 	>=dev-libs/gjs-1.39
-	>=dev-libs/gobject-introspection-0.10.1:=
+	>=dev-libs/gobject-introspection-0.45.4
 	dev-libs/libical:=
 	>=x11-libs/gtk+-3.15.0:3[introspection]
 	>=media-libs/clutter-1.21.5:1.0[introspection]
