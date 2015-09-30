@@ -44,7 +44,7 @@ COMMON_DEPEND="
 	>=sys-auth/polkit-0.100[introspection]
 	>=x11-libs/libXfixes-5.0
 	x11-libs/libXtst
-	>=x11-wm/mutter-3.17.90[introspection]
+	>=x11-wm/mutter-${PV}[introspection]
 	>=x11-libs/startup-notification-0.11
 
 	${PYTHON_DEPS}
