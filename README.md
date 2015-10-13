@@ -1,7 +1,8 @@
 Unofficial Gentoo GNOME overlay
 -------------------------------
 
- - current stage is `3.18`
+ - current stage is `3.18` / `3.18.1`
+ - use `compare.py` script to update this overlay on top of official
  - official gnome overlay: http://git.overlays.gentoo.org/gitweb/?p=proj/gnome.git;a=summary
  - contributors are still welcome.
  - For bugs use GitHub issues https://github.com/Heather/gentoo-gnome/issues?state=open
