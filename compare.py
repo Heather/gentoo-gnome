@@ -19,6 +19,7 @@ if len(sys.argv) < 2:
   print("pass overlay path to compare with as first argument")
   sys.exit()
 overlay = sys.argv[1]
+print("checking updated ebuilds...")
 for root, dirs, files in os.walk('.', topdown=True, followlinks=False):
   dirs[:] = list(filter(lambda x: not x in [".git", "profiles", "metadata", "files"], dirs))
   if dirs and root != ".":
@@ -38,3 +39,11 @@ for root, dirs, files in os.walk('.', topdown=True, followlinks=False):
             print(maxc, " >= ", maxf)
             print("removing ", realpath)
             shutil.rmtree(realpath)
+print("checking for empty root folders...")
+for chdir in os.listdir('.'):
+  if os.path.isdir(chdir):
+    if not chdir in [".git", "profiles", "metadata", "files"]:
+      if os.listdir(chdir) == []:
+        print("removing ", chdir)
+        os.rmdir(chdir)
+
