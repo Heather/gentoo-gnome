@@ -1,5 +1,5 @@
-Unofficial Gentoo GNOME overlay
--------------------------------
+Unofficial GNOME overlay [![Build Status](https://travis-ci.org/Heather/gentoo-gnome.png?branch=master)](https://travis-ci.org/Heather/gentoo-gnome)
+------------------------
 
  - current stage is `3.18` / `3.18.1`
  - use `compare.py` script to update this overlay on top of official
