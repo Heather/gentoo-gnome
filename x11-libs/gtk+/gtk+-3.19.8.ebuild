@@ -24,7 +24,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86
 # FIXME: introspection data is built against system installation of gtk+:3
 # NOTE: cairo[svg] dep is due to bug 291283 (not patched to avoid eautoreconf)
 COMMON_DEPEND="
-	>=dev-libs/atk-2.15[introspection?,${MULTILIB_USEDEP}]
+	>=dev-libs/atk-2.15.1[introspection?,${MULTILIB_USEDEP}]
 	>=dev-libs/glib-2.45.8:2[${MULTILIB_USEDEP}]
 	media-libs/fontconfig[${MULTILIB_USEDEP}]
 	>=media-libs/libepoxy-1.0[${MULTILIB_USEDEP}]
