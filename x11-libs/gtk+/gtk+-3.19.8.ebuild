@@ -1,8 +1,8 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI="5"
+EAPI=5
 GCONF_DEBUG="yes"
 GNOME2_LA_PUNT="yes"
 
@@ -40,7 +40,8 @@ COMMON_DEPEND="
 	cups? ( >=net-print/cups-1.2[${MULTILIB_USEDEP}] )
 	introspection? ( >=dev-libs/gobject-introspection-1.39:= )
 	wayland? (
-		>=dev-libs/wayland-1.5.91[${MULTILIB_USEDEP}]
+		>=dev-libs/wayland-1.9.91[${MULTILIB_USEDEP}]
+		>=dev-libs/wayland-protocols-1.9.91[${MULTILIB_USEDEP}]
 		media-libs/mesa[wayland,${MULTILIB_USEDEP}]
 		>=x11-libs/libxkbcommon-0.2[${MULTILIB_USEDEP}]
 	)
