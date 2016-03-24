@@ -1,4 +1,4 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -32,7 +32,7 @@ COMMON_DEPEND="
 	>=dev-libs/libxml2-2.5.0:2
 	>=dev-libs/glib-2.44:2[dbus]
 	>=x11-libs/gtk+-3.19:3[introspection?]
-	>=x11-libs/gtksourceview-3.19.4:3.0[introspection?]
+	>=x11-libs/gtksourceview-3.20.0:3.0[introspection?]
 	>=dev-libs/libpeas-1.14.1[gtk]
 
 	gnome-base/gsettings-desktop-schemas
@@ -41,7 +41,7 @@ COMMON_DEPEND="
 	x11-libs/libX11
 
 	net-libs/libsoup:2.4
-	app-text/gspell
+	>=app-text/gspell-1.0.0
 
 	introspection? ( >=dev-libs/gobject-introspection-0.9.3:= )
 	python? (

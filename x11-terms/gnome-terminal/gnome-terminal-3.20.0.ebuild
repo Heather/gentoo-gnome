@@ -1,4 +1,4 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -20,7 +20,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~
 RDEPEND="
 	>=dev-libs/glib-2.42:2[dbus]
 	>=x11-libs/gtk+-3.10:3[X]
-	>=x11-libs/vte-0.43:2.91
+	>=x11-libs/vte-0.44:2.91
   dev-libs/libpcre2
 	>=gnome-base/dconf-0.14
 	>=gnome-base/gsettings-desktop-schemas-0.1.0
@@ -48,10 +48,6 @@ DOC_CONTENTS="To get previous working directory inherited in new opened
 
 src_prepare() {
 	if ! use vanilla; then
-		# OpenSuSE patches, https://bugzilla.gnome.org/show_bug.cgi?id=695371
-		epatch "${FILESDIR}"/${PN}-3.18.2-transparency.patch
-		epatch "${FILESDIR}"/${PN}-3.18.2-transparency-fix-for-broken-themes.patch
-		#epatch "${FILESDIR}"/${PN}-3.18.2-dark-theme.patch
 		eautoreconf
 	fi
 	gnome2_src_prepare
