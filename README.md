@@ -17,3 +17,9 @@ Branches
  - `stable` branch was targeting `Sabayon 14.01`
  - `3.16` branch is saved old master
  - `master` branch is for newer stuff based on `gnome` overlay
+
+TODO
+----
+
+ - fix mutter/gnome-shell hacks (maybe add symlinks)
+ - optional wacom
