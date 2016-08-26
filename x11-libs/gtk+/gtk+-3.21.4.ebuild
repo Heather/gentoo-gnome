@@ -88,7 +88,6 @@ DEPEND="${COMMON_DEPEND}
 # >=xorg-server-1.11.4 needed for
 #  https://mail.gnome.org/archives/desktop-devel-list/2012-March/msg00024.html
 RDEPEND="${COMMON_DEPEND}
-	>=dev-util/gtk-update-icon-cache-3
 	!<gnome-base/gail-1000
 	!<x11-libs/vte-0.31.0:2.90
 	>=x11-themes/adwaita-icon-theme-3.14
