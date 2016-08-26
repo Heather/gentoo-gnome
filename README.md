@@ -21,5 +21,6 @@ Branches
 TODO
 ----
 
- - fix mutter/gnome-shell hacks (maybe add symlinks)
+ - fix mutter/gnome-shell hacks (maybe add symlinks) (they've got patch somewhere)
+ - gnome control center needs gtk+ from git
  - optional wacom
