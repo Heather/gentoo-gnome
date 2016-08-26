@@ -1,7 +1,7 @@
 Unofficial GNOME overlay [![Build Status](https://travis-ci.org/Heather/gentoo-gnome.png?branch=master)](https://travis-ci.org/Heather/gentoo-gnome)
 ------------------------
 
- - current stage is `3.21.2`
+ - current stage is `3.21.x`
  - use `compare.py` script to update this overlay on top of official
  - official gnome overlay: http://git.overlays.gentoo.org/gitweb/?p=proj/gnome.git;a=summary
  - contributors are still welcome.
