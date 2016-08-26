@@ -12,7 +12,7 @@ PYTHON_COMPAT=( python2_7 )
 # pkg-config
 GNOME2_LA_PUNT="yes"
 
-inherit autotools bash-completion-r1 gnome2 libtool eutils flag-o-matic	multilib \
+inherit autotools bash-completion-r1 gnome2 libtool eutils flag-o-matic multilib \
 	pax-utils python-r1 toolchain-funcs versionator virtualx linux-info multilib-minimal
 
 DESCRIPTION="The GLib library of C routines"
@@ -260,11 +260,6 @@ pkg_postinst() {
 	GNOME2_ECLASS_GLIB_SCHEMAS="force"
 
 	gnome2_pkg_postinst
-
-	multilib_pkg_postinst() {
-		gnome2_giomodule_cache_update \
-			|| die "Update GIO modules cache failed (for ${ABI})"
-	}
 	multilib_foreach_abi multilib_pkg_postinst
 }
 

@@ -41,7 +41,15 @@ src_test() {
 	einfo "when merged with FEATURES=test"
 }
 
+src_install() {
+	einfo "the gdbus-codegen package was a
+rather short lived module, and it's unfortunate that people might
+have installed it on their system, also unfortunate that it was
+not created as egg-dbus-codegen or using some non-glib
+invasive namespace."
+}
+
 python_install_all() {
 	distutils-r1_python_install_all # no-op, but prevents QA warning
-	doman "${WORKDIR}/glib-${PV}/docs/reference/gio/gdbus-codegen.1"
+	#doman "${WORKDIR}/glib-${PV}/docs/reference/gio/gdbus-codegen.1"
 }
