@@ -2,7 +2,7 @@ Unofficial GNOME overlay [![Build Status](https://travis-ci.org/Heather/gentoo-g
 ------------------------
 
  - current stage is `3.21.90`
- - at the moment is broken a bit (mutter needs `ln -s /usr/lib64/mutter/lib*.so /usr/lib64`)
+ - at the moment is broken a bit (mutter needs `ln -s /usr/lib64/mutter/lib*.so /usr/lib64`) ! https://bugzilla.gnome.org/show_bug.cgi?id=768781
  - use `compare.py` script to update this overlay on top of official
  - official gnome overlay: http://git.overlays.gentoo.org/gitweb/?p=proj/gnome.git;a=summary
  - contributors are still welcome.
