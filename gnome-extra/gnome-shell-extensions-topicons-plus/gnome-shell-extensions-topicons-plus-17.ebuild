@@ -25,7 +25,8 @@ src_prepare() {
 }
 
 src_install() {
-	insinto "/usr/share/gnome-shell/extensions/${PN}"
+	local uuid='TopIcons@phocean.net'
+	insinto "/usr/share/gnome-shell/extensions/${uuid}"
 	doins *
 }
 
