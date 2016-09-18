@@ -26,8 +26,8 @@ RDEPEND=">=lxde-base/menu-cache-0.3.3
 	x11-terms/gnome-terminal
 	media-gfx/eog
 	gnome-base/nautilus
-	x11-wm/openbox
-	>=x11-misc/obconf-2.0.3_p20111019"
+	x11-wm/mutter
+"
 
 pkg_postinst() {
 	elog "For your convenience you can review the LXDE Configuration HOWTO at"
