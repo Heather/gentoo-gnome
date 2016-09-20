@@ -47,9 +47,6 @@ DOC_CONTENTS="To get previous working directory inherited in new opened
 
 src_prepare() {
 	if ! use vanilla; then
-		# OpenSuSE patches, https://bugzilla.gnome.org/show_bug.cgi?id=695371
-		# http://pkgs.fedoraproject.org/cgit/rpms/gnome-terminal.git/tree/gnome-terminal-transparency-notify.patch (first 3 parts)
-		eapply "${FILESDIR}"/${PN}-3.20.2-transparency.patch
 		eautoreconf
 	fi
 	gnome2_src_prepare
