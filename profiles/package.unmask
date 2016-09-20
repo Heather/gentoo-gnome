@@ -1,5 +1,6 @@
 dev-libs/glib
+dev-util/gdbus-codegen
+
 gnome-extra/gnome-system-monitor
 gnome-extra/zenity
 gnome-extra/gnome-builder
-
