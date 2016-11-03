@@ -1,5 +1,10 @@
 #!/usr/bin/env python
-__author__ = 'Heather'
+
+#TODO:
+#
+# * ignore list
+
+__author__ = 'cynede@gentoo.org'
 
 import os
 import sys
@@ -36,14 +41,14 @@ for root, dirs, files in os.walk('.', topdown=True, followlinks=False):
           maxf = max(enamesf)
           maxc = max(enamesc)
           if nat_cmp(maxc, maxf):
-            print(maxc, " >= ", maxf)
-            print("removing ", realpath)
+            print("%s >= %s" % (maxc, maxf))
+            print("removing %s" % realpath)
             shutil.rmtree(realpath)
 print("checking for empty root folders...")
 for chdir in os.listdir('.'):
   if os.path.isdir(chdir):
     if not chdir in [".git", "profiles", "metadata", "files"]:
       if os.listdir(chdir) == []:
-        print("removing ", chdir)
+        print("removing %s" % chdir)
         os.rmdir(chdir)
 
