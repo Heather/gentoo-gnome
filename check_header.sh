@@ -10,7 +10,7 @@ check_copyright() {
     local e=$1
     
     echo 'FIX "# Copyright" in: '"$e"
-    sed -e 's/^# Copyright .*/# Copyright 1999-2016 Gentoo Foundation/g' -i "${e}"
+    sed -e 's/^# Copyright .*/# Copyright 1999-2017 Gentoo Foundation/g' -i "${e}"
 }
 
 check_header() {
