@@ -147,6 +147,9 @@ src_install() {
 		rm -f "${ED}/usr/bin/js${SLOT}"
 	fi
 
+	rm -f "${ED}/usr/bin/js"
+	rm -f "${ED}/usr/bin/js-config"
+
 	if ! use static-libs; then
 		# We can't actually disable building of static libraries
 		# They're used by the tests and in a few other places
