@@ -1,9 +1,10 @@
 Unofficial GNOME overlay [![Build Status](https://travis-ci.org/Heather/gentoo-gnome.png?branch=master)](https://travis-ci.org/Heather/gentoo-gnome)
 ------------------------
 
- - current stage is `3.22.2`
- - mutter needs `ln -s /usr/lib64/mutter/lib*.so /usr/lib64` https://bugzilla.gnome.org/show_bug.cgi?id=768781
- - there is some problem with gnome builder but it works w/o sandbox `FEATURES="-sandbox -usersandbox" emerge -av gnome-builder`
+!!! DON'T USE, NOT READY AT THE MOMENT !!!
+==========================================
+
+ - current stage is `3.23.4+`
  - use `compare.py` script to update this overlay on top of official
  - official gnome overlay: http://git.overlays.gentoo.org/gitweb/?p=proj/gnome.git;a=summary
  - contributors are still welcome.
@@ -22,6 +23,4 @@ Branches
 TODO
 ----
 
- - fix mutter/gnome-shell hacks (maybe add symlinks) (they've got patch somewhere)
- - gnome control center needs gtk+ from git
  - optional wacom
