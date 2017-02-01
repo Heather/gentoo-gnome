@@ -167,4 +167,5 @@ src_install() {
 
 	insinto /usr/include/mozjs-31/mozilla
 	doins ${WORKDIR}/mozjs-31.2.0/mfbt/*.h
+	doins ${WORKDIR}/mozjs-31.2.0/mfbt/decimal/*.h
 }
