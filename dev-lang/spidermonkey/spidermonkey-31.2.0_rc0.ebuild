@@ -18,7 +18,10 @@ SRC_URI="https://people.mozilla.org/~sstangl/mozjs-31.2.0.rc0.tar.bz2"
 
 LICENSE="NPL-1.1"
 SLOT="31"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
+
+#broken
+#KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
+
 IUSE="debug +jit icu minimal static-libs +system-icu test"
 
 RESTRICT="ia64? ( test )"
