@@ -16,7 +16,7 @@ HOMEPAGE="https://wiki.gnome.org/Apps/Evolution"
 LICENSE="|| ( LGPL-2 LGPL-3 ) BSD Sleepycat"
 SLOT="0/59" # subslot = libcamel-1.2 soname version
 
-IUSE="api-doc-extras berkdb +gnome-online-accounts +gtk google +introspection ipv6 ldap kerberos vala +weather"
+IUSE="api-doc-extras berkdb +gtk google +introspection ipv6 ldap kerberos vala +weather"
 REQUIRED_USE="vala? ( introspection )"
 
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~x86-solaris"
@@ -50,7 +50,7 @@ RDEPEND="
 		>=dev-libs/libgdata-0.15.1:=
 		>=net-libs/webkit-gtk-2.11.91:4
 	)
-	gnome-online-accounts? ( >=net-libs/gnome-online-accounts-3.8:= )
+	>=net-libs/gnome-online-accounts-3.8:=
 	introspection? ( >=dev-libs/gobject-introspection-0.9.12:= )
 	kerberos? ( virtual/krb5:= )
 	ldap? ( >=net-nds/openldap-2:= )
