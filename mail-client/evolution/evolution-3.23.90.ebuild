@@ -26,8 +26,8 @@ PINENTRY_DEPEND="|| ( app-crypt/pinentry[gnome-keyring] app-crypt/pinentry[gtk] 
 # pst is not mature enough and changes API/ABI frequently
 # dconf explicitely needed for backup plugin
 # gnome-desktop support is optional with --enable-gnome-desktop
-# gnome-autoar (currently disabled because no release has been made)
 COMMON_DEPEND="
+	app-arch/gnome-autoar[gtk]
 	>=app-crypt/gcr-3.4:=
 	>=app-text/enchant-1.1.7
 	>=dev-libs/glib-2.46:2[dbus]
