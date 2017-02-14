@@ -6,7 +6,7 @@ EAPI="6"
 VALA_USE_DEPEND="vapigen"
 VALA_MIN_API_VERSION="0.24"
 
-inherit eutils gnome2 vala
+inherit eutils gnome2 vala autotools
 
 DESCRIPTION="Library providing a virtual terminal emulator widget"
 HOMEPAGE="https://wiki.gnome.org/action/show/Apps/Terminal/VTE"
@@ -33,6 +33,7 @@ RDEPEND="
 	introspection? ( >=dev-libs/gobject-introspection-0.9.0:= )
 "
 DEPEND="${RDEPEND}
+	dev-util/gtk-doc
 	dev-libs/libxml2
 	>=dev-util/gtk-doc-am-1.13
 	>=dev-util/intltool-0.35
@@ -46,6 +47,8 @@ RDEPEND="${RDEPEND}
 "
 
 src_prepare() {
+	eautoreconf
+
 	use vala && vala_src_prepare
 
 	# build fails because of -Werror with gcc-5.x
