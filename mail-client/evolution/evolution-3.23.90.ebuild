@@ -69,6 +69,7 @@ COMMON_DEPEND="
 	weather? ( >=dev-libs/libgweather-3.10:2= )
 "
 DEPEND="${COMMON_DEPEND}
+	app-text/highlight
 	app-text/docbook-xml-dtd:4.1.2
 	app-text/yelp-tools
 	>=dev-util/gtk-doc-am-1.14
