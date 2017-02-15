@@ -14,5 +14,5 @@ for root, dirs, files in os.walk('.', topdown=True, followlinks=False):
       efullpath = list(filter(lambda x: not x.endswith("-9999.ebuild"), glob.glob(os.path.join(realpath, "*.ebuild"))))
       if efullpath:
         enamesf = map(lambda x: os.path.splitext(os.path.basename(x))[0], efullpath)
-        print(enamesf)
+        for e in enamesf: print(e)
 
