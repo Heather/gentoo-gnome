@@ -6,6 +6,7 @@ Known problems
 
  - mutter will possibly fail without wayland support
  - wacom is not really optional for now
+ - gnome system monitor 3.23.90 masked, segfaults
 
 Information
 -----------
