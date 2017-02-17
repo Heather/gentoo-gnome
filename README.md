@@ -1,11 +1,12 @@
 Unofficial GNOME overlay [![Build Status](https://travis-ci.org/Heather/gentoo-gnome.png?branch=master)](https://travis-ci.org/Heather/gentoo-gnome)
 ------------------------
 
-!!! DON'T USE, NOT READY AT THE MOMENT !!!
-==========================================
+!!! Absolutely working, everyone is welcome for test/feedback !!!
+=================================================================
 
- - current stage is `3.23.4+`
+ - current stage is `3.23.90`
  - use `compare.py` script to update this overlay on top of official
+ - `list.py` to list packages inside overlay with versions
  - official gnome overlay: http://git.overlays.gentoo.org/gitweb/?p=proj/gnome.git;a=summary
  - contributors are still welcome.
  - For bugs use GitHub issues https://github.com/Heather/gentoo-gnome/issues?state=open
@@ -18,9 +19,9 @@ Branches
 
  - `stable` branch was targeting `Sabayon 14.01`
  - `3.16` branch is saved old master
- - `master` branch is for newer stuff based on `gnome` overlay
+ - `master` branch is for newer stuff based on portage
 
 TODO
 ----
 
- - optional wacom
+ - optional wacom (but I'm really lazy for it)

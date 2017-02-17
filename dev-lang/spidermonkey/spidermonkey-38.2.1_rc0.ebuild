@@ -4,42 +4,34 @@
 
 EAPI="5"
 WANT_AUTOCONF="2.1"
-PYTHON_COMPAT=( python2_{6,7} )
+PYTHON_COMPAT=( python2_7 )
 PYTHON_REQ_USE="threads"
 inherit autotools eutils toolchain-funcs multilib python-any-r1 versionator pax-utils
 
 MY_PN="mozjs"
-MY_PV="${PV/_alpha/a}"
-MY_PV="${PV/_beta/b}"
-MY_P="${MY_PN}-${MY_PV/_/.}"
+MY_P="${MY_PN}-${PV/_/.}"
 DESCRIPTION="Stand-alone JavaScript C library"
-HOMEPAGE="http://www.mozilla.org/js/spidermonkey/"
-SRC_URI="https://people.mozilla.org/~sstangl/mozjs-31.2.0.rc0.tar.bz2"
+HOMEPAGE="https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey"
+SRC_URI="https://people.mozilla.org/~sstangl/${MY_P}.tar.bz2"
 
 LICENSE="NPL-1.1"
-SLOT="31"
-
-#broken
-#KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
-
-IUSE="debug +jit icu minimal static-libs +system-icu test"
+SLOT="38"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 ~s390 ~sh sparc x86 ~x86-fbsd"
+IUSE="debug icu jit minimal static-libs test"
 
 RESTRICT="ia64? ( test )"
-REQUIRED_USE="debug? ( jit )"
 
-S="${WORKDIR}/${MY_P%.rc*}"
-BUILDDIR="${WORKDIR}/jsbuild"
+S="${WORKDIR}/mozjs-38.0.0"
+BUILDDIR="${S}/js/src"
 
 RDEPEND=">=dev-libs/nspr-4.9.4
 	virtual/libffi
-	>=sys-libs/zlib-1.1.4
-	system-icu? ( >=dev-libs/icu-1.51:= )"
-
-#TODO: patch for 4.3 sed
-#patch example: https://github.com/MeisterP/torbrowser-overlay/commit/df66b67f8786cf931b3711cd444ab4d2ce35e174
+	sys-libs/readline:0=
+	>=sys-libs/zlib-1.1.4"
 DEPEND="${RDEPEND}
 	${PYTHON_DEPS}
 	<sys-apps/sed-4.3
+	dev-libs/icu
 	app-arch/zip
 	virtual/pkgconfig"
 
@@ -50,41 +42,38 @@ pkg_setup(){
 	fi
 }
 
-
 src_prepare() {
-	epatch "${FILESDIR}"/mozjs31-1021171.patch
-	epatch "${FILESDIR}"/mozjs31-1037470.patch
-	epatch "${FILESDIR}"/mozjs31-1046176.patch
-	epatch "${FILESDIR}"/mozjs31-1119228.patch
+	#mystical Fedora patch
+	epatch "${FILESDIR}"/mozbz-1143022.patch
 	epatch_user
+
+	if [[ ${CHOST} == *-freebsd* ]]; then
+		# Don't try to be smart, this does not work in cross-compile anyway
+		ln -sfn "${BUILDDIR}/config/Linux_All.mk" "${S}/config/$(uname -s)$(uname -r).mk" || die
+	fi
+
+	cd "${BUILDDIR}" || die
+	eautoconf
 }
 
 src_configure() {
-	mkdir "${BUILDDIR}" && cd "${BUILDDIR}" || die
-
-        local myopts=""
-        if use icu; then # make sure system-icu flag only affects icu-enabled build
-                myopts+="$(use_with system-icu)"
-        else
-                myopts+="--without-system-icu"
-        fi
+	export SHELL=/bin/sh
+	cd "${BUILDDIR}" || die
 
 	CC="$(tc-getCC)" CXX="$(tc-getCXX)" \
 	AR="$(tc-getAR)" RANLIB="$(tc-getRANLIB)" \
 	LD="$(tc-getLD)" \
-	ECONF_SOURCE="${S}/js/src" \
-	econf ${myopts} \
-		--disable-trace-malloc \
+	econf \
 		--enable-jemalloc \
 		--enable-readline \
 		--enable-threadsafe \
 		--with-system-nspr \
 		--enable-system-ffi \
 		--disable-optimize \
-		$(use_with icu intl-api) \
+		$(use_enable icu intl-api) \
 		$(use_enable debug) \
-		$(use_enable jit ion) \
 		$(use_enable jit yarr-jit) \
+		$(use_enable jit ion) \
 		$(use_enable static-libs static) \
 		$(use_enable test tests)
 }
@@ -99,7 +88,6 @@ cross_make() {
 		RANLIB="${BUILD_RANLIB}" \
 		"$@"
 }
-
 src_compile() {
 	cd "${BUILDDIR}" || die
 	if tc-is-cross-compiler; then
@@ -132,15 +120,17 @@ src_compile() {
 }
 
 src_test() {
-	cd "${BUILDDIR}/js/src/jsapi-tests" || die
+	cd "${BUILDDIR}/jsapi-tests" || die
 	emake check
-	cd "${BUILDDIR}" || die
-	emake check-jit-test
 }
 
 src_install() {
 	cd "${BUILDDIR}" || die
 	emake DESTDIR="${D}" install
+
+	mv "${ED}/usr/bin/js" "${ED}/usr/bin/js${SLOT}" || die
+	mv "${ED}/usr/bin/js-config" "${ED}/usr/bin/js${SLOT}-config" || die
+	mv "${ED}/usr/lib64/pkgconfig/js.pc" "${ED}/usr/lib64/pkgconfig/mozjs-${SLOT}.pc" || die
 
 	if ! use minimal; then
 		if use jit; then
@@ -150,26 +140,24 @@ src_install() {
 		rm -f "${ED}/usr/bin/js${SLOT}"
 	fi
 
-	rm -f "${ED}/usr/bin/js"
-	rm -f "${ED}/usr/bin/js-config"
+	#terrible crap is happening here
+	insinto /usr/include/mozjs-38
+	doins ${WORKDIR}/mozjs-38.0.0/js/src/*.h
+	doins ${WORKDIR}/mozjs-38.0.0/js/src/*.msg
+	doins ${WORKDIR}/mozjs-38.0.0/js/src/perf/*.h
+	doins ${BUILDDIR}/js/src/*.h
+
+	insinto /usr/include/mozjs-38/js/
+	doins ${WORKDIR}/mozjs-38.0.0/js/public/*
+
+	insinto /usr/include/mozjs-38/mozilla
+	doins ${WORKDIR}/mozjs-38.0.0/mfbt/*.h
+	doins ${WORKDIR}/mozjs-38.0.0/mfbt/decimal/*.h
+	doins ${WORKDIR}/mozjs-38.0.0/mfbt/double-conversion/*.h
 
 	if ! use static-libs; then
 		# We can't actually disable building of static libraries
 		# They're used by the tests and in a few other places
 		find "${D}" -iname '*.a' -delete || die
 	fi
-
-	insinto /usr/include/mozjs-31
-	doins ${WORKDIR}/mozjs-31.2.0/js/src/*.h
-	doins ${WORKDIR}/mozjs-31.2.0/js/src/*.msg
-	doins ${WORKDIR}/mozjs-31.2.0/js/src/perf/*.h
-	doins ${BUILDDIR}/js/src/*.h
-
-	insinto /usr/include/mozjs-31/js/
-	doins ${WORKDIR}/mozjs-31.2.0/js/public/*
-
-	insinto /usr/include/mozjs-31/mozilla
-	doins ${WORKDIR}/mozjs-31.2.0/mfbt/*.h
-	doins ${WORKDIR}/mozjs-31.2.0/mfbt/decimal/*.h
-	doins ${WORKDIR}/mozjs-31.2.0/mfbt/double-conversion/*.h
 }

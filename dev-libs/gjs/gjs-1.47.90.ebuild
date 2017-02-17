@@ -12,15 +12,14 @@ LICENSE="MIT || ( MPL-1.1 LGPL-2+ GPL-2+ )"
 SLOT="0"
 IUSE="+cairo examples gtk test"
 
-#broken
-#KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 
 RDEPEND="
 	>=dev-libs/glib-2.36:2
 	>=dev-libs/gobject-introspection-1.41.4:=
 
 	sys-libs/readline:0
-	dev-lang/spidermonkey:31
+	dev-lang/spidermonkey:38
 	virtual/libffi
 	cairo? ( x11-libs/cairo[X] )
 	gtk? ( x11-libs/gtk+:3 )
