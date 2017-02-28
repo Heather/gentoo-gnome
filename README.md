@@ -6,12 +6,11 @@ Known problems
 
  - mutter will possibly fail without wayland support
  - wacom is not really optional for now
- - gnome system monitor 3.23.90 masked, segfaults
 
 Information
 -----------
 
- - current stage is `3.23.90`
+ - current stage is `3.23.91`
  - `-O3` safe
  - use `compare.py` script to update this overlay on top of official
  - `list.py` to list packages inside overlay with versions
