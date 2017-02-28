@@ -118,6 +118,9 @@ src_prepare() {
 		sed -i -e 's/ tests//' {.,gio,glib}/Makefile.am || die
 	fi
 
+	# fix broken Makefile
+	eapply "${FILESDIR}"/${PN}-2.51.3.patch
+
 	# gdbus-codegen is a separate package
 	eapply "${FILESDIR}"/${PN}-2.50.0-external-gdbus-codegen.patch
 
