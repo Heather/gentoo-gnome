@@ -12,7 +12,8 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="systemd X"
 
-KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+#gsm_color_button.c:(.text+0x653): undefined reference to `rsvg_handle_new_from_data'
+#KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 
 RDEPEND="
 	>=dev-libs/glib-2.37.3:2
