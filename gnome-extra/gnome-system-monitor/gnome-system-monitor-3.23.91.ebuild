@@ -3,7 +3,7 @@
 # $Id$
 
 EAPI=6
-inherit gnome2
+inherit autotools gnome2
 
 DESCRIPTION="The Gnome System Monitor"
 HOMEPAGE="https://help.gnome.org/users/gnome-system-monitor/"
@@ -12,8 +12,7 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="systemd X"
 
-#gsm_color_button.c:(.text+0x653): undefined reference to `rsvg_handle_new_from_data'
-#KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 
 RDEPEND="
 	>=dev-libs/glib-2.37.3:2
@@ -32,6 +31,12 @@ DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.41.0
 	virtual/pkgconfig
 "
+
+src_prepare() {
+	eapply "${FILESDIR}/${P}.patch"
+	eautoreconf
+	gnome2_src_prepare
+}
 
 src_configure() {
 	# XXX: appdata is deprecated by appstream-glib, upstream must upgrade
