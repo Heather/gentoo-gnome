@@ -12,10 +12,8 @@ HOMEPAGE="https://git.gnome.org/browse/gnome-control-center/"
 
 LICENSE="GPL-2+"
 SLOT="2"
-IUSE="+bluetooth +colord +cups debug +gnome-online-accounts +i18n input_devices_wacom kerberos networkmanager v4l wayland"
-
-#TODO: patches
-#KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~x86-solaris"
+IUSE="+bluetooth +colord debug +gnome-online-accounts +i18n input_devices_wacom kerberos networkmanager v4l wayland"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~x86-solaris"
 
 # False positives caused by nested configure scripts
 QA_CONFIGURE_OPTIONS=".*"
@@ -25,6 +23,8 @@ QA_CONFIGURE_OPTIONS=".*"
 # kerberos unfortunately means mit-krb5; build fails with heimdal
 # udev could be made optional, only conditions gsd-device-panel
 # (mouse, keyboards, touchscreen, etc)
+# display panel requires colord
+# printer panel is not optional and not yet patched
 COMMON_DEPEND="
 	>=dev-libs/glib-2.44.0:2[dbus]
 	>=x11-libs/gdk-pixbuf-2.23.0:2
@@ -32,6 +32,7 @@ COMMON_DEPEND="
 	>=gnome-base/gsettings-desktop-schemas-3.21.4
 	>=gnome-base/gnome-desktop-3.21.2:3=
 	>=gnome-base/gnome-settings-daemon-3.19.1[colord?,policykit]
+	>=x11-misc/colord-0.1.34:0=
 
 	>=dev-libs/libpwquality-1.2.2
 	dev-libs/libxml2:2
@@ -56,10 +57,10 @@ COMMON_DEPEND="
 		net-libs/libsoup:2.4
 		>=x11-misc/colord-0.1.34:0=
 		>=x11-libs/colord-gtk-0.1.24 )
-	cups? (
-		>=net-print/cups-1.4[dbus]
-		>=net-fs/samba-4.0.0[client]
-	)
+
+	>=net-print/cups-1.4[dbus]
+	>=net-fs/samba-4.0.0[client]
+
 	gnome-online-accounts? (
 		>=media-libs/grilo-0.3.0:0.3=
 		>=net-libs/gnome-online-accounts-3.21.5:= )
@@ -88,9 +89,6 @@ RDEPEND="${COMMON_DEPEND}
 	|| ( >=sys-apps/systemd-31 ( app-admin/openrc-settingsd sys-auth/consolekit ) )
 	x11-themes/adwaita-icon-theme
 	colord? ( >=gnome-extra/gnome-color-manager-3 )
-	cups? (
-		app-admin/system-config-printer
-		net-print/cups-pk-helper )
 	input_devices_wacom? ( gnome-base/gnome-settings-daemon[input_devices_wacom] )
 	i18n? ( >=gnome-base/libgnomekbd-3 )
 	wayland? ( dev-libs/libinput )
@@ -128,13 +126,12 @@ DEPEND="${COMMON_DEPEND}
 src_prepare() {
 	# Make some panels and dependencies optional; requires eautoreconf
 	# https://bugzilla.gnome.org/686840, 697478, 700145
-	eapply "${FILESDIR}"/${PN}-3.22.0-optional.patch
+	eapply "${FILESDIR}"/${PN}-3.23.90-optional.patch
 	eapply "${FILESDIR}"/${PN}-3.22.0-make-wayland-optional.patch
-	eapply "${FILESDIR}"/${PN}-3.22.0-keep-panels-optional.patch
-	eapply "${FILESDIR}"/${PN}-3.22.0-make-networkmanager-optional.patch
+	eapply "${FILESDIR}"/${PN}-3.23.90-make-networkmanager-optional.patch
 
 	# Fix some absolute paths to be appropriate for Gentoo
-	eapply "${FILESDIR}"/${PN}-3.22.0-gentoo-paths.patch
+	eapply "${FILESDIR}"/${PN}-3.23.90-gentoo-paths.patch
 
 	eautoreconf
 	gnome2_src_prepare
@@ -147,7 +144,6 @@ src_configure() {
 		--enable-documentation \
 		$(use_enable bluetooth) \
 		$(use_enable colord color) \
-		$(use_enable cups) \
 		$(usex debug --enable-debug=yes ' ') \
 		$(use_enable gnome-online-accounts goa) \
 		$(use_enable i18n ibus) \
