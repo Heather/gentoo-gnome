@@ -5,7 +5,7 @@
 EAPI=6
 GNOME2_LA_PUNT="yes" # Needed with USE 'sendto'
 
-inherit gnome2 readme.gentoo-r1 virtualx
+inherit gnome2 readme.gentoo-r1 virtualx autotools
 
 DESCRIPTION="A file manager for the GNOME desktop"
 HOMEPAGE="https://wiki.gnome.org/Apps/Nautilus"
@@ -75,6 +75,7 @@ src_prepare() {
 			To activate the previewer, select a file and press space; to
 			close the previewer, press space again."
 	fi
+	eautoreconf
 	gnome2_src_prepare
 }
 
