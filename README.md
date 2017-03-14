@@ -1,6 +1,13 @@
 Unofficial GNOME overlay [![Build Status](https://travis-ci.org/Heather/gentoo-gnome.png?branch=master)](https://travis-ci.org/Heather/gentoo-gnome)
 ------------------------
 
+Versions
+--------
+
+ - GNOME `3.23.92`
+ - cinnamon `3.2.8`
+ - Plank panel from Pantheon `live`
+
 Known problems
 --------------
 
@@ -10,8 +17,6 @@ Known problems
 Information
 -----------
 
- - current stage is `3.23.92`
- - `-O3` safe
  - use `compare.py` script to update this overlay on top of official
  - `list.py` to list packages inside overlay with versions
  - official gnome overlay: http://git.overlays.gentoo.org/gitweb/?p=proj/gnome.git;a=summary
