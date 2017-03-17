@@ -31,6 +31,15 @@ DEPEND="${RDEPEND}
 	test? ( sys-apps/dbus )
 "
 
+src_prepare() {
+	# that has reduced the leaks rather drastically - still a few leaks,
+	# but very small, ram use starts around 140mb and hovers around 250mb
+	eapply "${FILESDIR}"/gjs-object-Fix-memory-leak-in-resolve.patch
+
+	eautoreconf
+	gnome2_src_prepare
+}
+
 src_configure() {
 	# FIXME: add systemtap/dtrace support, like in glib:2
 	# FIXME: --enable-systemtap installs files in ${D}/${D} for some reason

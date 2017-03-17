@@ -1,0 +1,62 @@
+From ce0e9c0f74b090df120194f7d420ce7c2ab1ad85 Mon Sep 17 00:00:00 2001
+From: Philip Chimento <philip@endlessm.com>
+Date: Thu, 16 Mar 2017 15:43:09 -0700
+Subject: [PATCH] object: Fix memory leak in resolve
+
+The "name" string, allocated in gjs_get_string_id(), wasn't getting freed
+at every exit point of the function. (It will be nice to clean this up in
+1.49.x with our autoptr classes...)
+
+After a certain point in the function it's not needed, so we just free
+the string there.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=780171
+---
+ gi/object.cpp | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/gi/object.cpp b/gi/object.cpp
+index 17001e2f..b6dc5519 100644
+--- a/gi/object.cpp
++++ b/gi/object.cpp
+@@ -607,7 +607,7 @@ is_vfunc_unchanged(GIVFuncInfo *info,
+ 
+ static GIVFuncInfo *
+ find_vfunc_on_parents(GIObjectInfo *info,
+-                      gchar        *name,
++                      const char   *name,
+                       bool         *out_defined_by_parent)
+ {
+     GIVFuncInfo *vfunc = NULL;
+@@ -774,11 +774,12 @@ object_instance_resolve(JSContext       *context,
+          * rest.
+          */
+ 
+-        gchar *name_without_vfunc_ = &name[6];
++        const char *name_without_vfunc_ = &name[6];  /* lifetime tied to name */
+         GIVFuncInfo *vfunc;
+         bool defined_by_parent;
+ 
+         vfunc = find_vfunc_on_parents(priv->info, name_without_vfunc_, &defined_by_parent);
++        g_free(name);
+         if (vfunc != NULL) {
+             /* In the event that the vfunc is unchanged, let regular
+              * prototypal inheritance take over. */
+@@ -818,8 +819,13 @@ object_instance_resolve(JSContext       *context,
+      * this could be done better.  See
+      * https://bugzilla.gnome.org/show_bug.cgi?id=632922
+      */
+-    if (method_info == NULL)
+-        return object_instance_resolve_no_info(context, obj, resolved, priv, name);
++    if (method_info == NULL) {
++        bool retval = object_instance_resolve_no_info(context, obj, resolved, priv, name);
++        g_free(name);
++        return retval;
++    }
++
++    g_free(name);
+ 
+ #if GJS_VERBOSE_ENABLE_GI_USAGE
+     _gjs_log_info_usage((GIBaseInfo*) method_info);
+-- 
+2.11.0
