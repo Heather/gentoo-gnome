@@ -26,6 +26,20 @@ Information
  - This overlay is NOT available via `layman` currently
  - this script removes implemented upstream things from this overlay https://github.com/Heather/gentoo-gnome/blob/master/compare.py
 
+Plank to autostart
+------------------
+
+add `/usr/share/gnome/autostart/plank.desktop`
+```
+[Desktop Entry]
+Type=Application
+Name=Plank
+Comment=Plank panel
+Exec=/usr/bin/plank
+OnlyShowIn=GNOME;
+X-GNOME-Autostart-Phase=Application
+```
+
 Branches
 --------
 
