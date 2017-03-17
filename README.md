@@ -6,7 +6,7 @@ Versions
 
  - GNOME `3.23.92`
  - cinnamon `3.2.8`
- - Plank panel from Pantheon `live`
+ - Plank/Wingpanel/Gala from Pantheon `live` ebuilds
 
 Known problems
 --------------
@@ -26,8 +26,8 @@ Information
  - This overlay is NOT available via `layman` currently
  - this script removes implemented upstream things from this overlay https://github.com/Heather/gentoo-gnome/blob/master/compare.py
 
-Plank to autostart
-------------------
+Plank to autostart in GNOME
+---------------------------
 
 add `/usr/share/gnome/autostart/plank.desktop`
 ```
@@ -38,6 +38,36 @@ Comment=Plank panel
 Exec=/usr/bin/plank
 OnlyShowIn=GNOME;
 X-GNOME-Autostart-Phase=Application
+```
+
+Run elementary-alike stuff from .xinitrc
+----------------------------------------
+
+``` shell
+#!/bin/sh
+ 
+if [ -d /etc/X11/xinit/xinitrc.d ]; then
+  for f in /etc/X11/xinit/xinitrc.d/*; do
+    [ -x "$f" ] && . "$f"
+  done
+  unset f
+fi
+
+gsettings-data-convert &
+xdg-user-dirs-gtk-update &
+/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
+/usr/lib/gnome-settings-daemon/gnome-settings-daemon &
+/usr/lib/gnome-user-share/gnome-user-share &
+eval $(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh,gpg)
+export GNOME_KEYRING_CONTROL GNOME_KEYRING_PID GPG_AGENT_INFO SSH_AUTH_SOCK
+
+xrdb merge ~/.Xresources &&
+wingpanel &
+plank &
+exec fusion-icon
+
+#exec gala
+#exec mutter
 ```
 
 Branches
