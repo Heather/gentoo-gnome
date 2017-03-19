@@ -6,22 +6,19 @@ EAPI=5
 
 inherit vala cmake-utils bzr
 
-DESCRIPTION="Tweak elementary OS"
-HOMEPAGE="http://www.elementaryupdate.com/2013/06/finally-elementary-tweaks.html"
-EBZR_REPO_URI="lp:elementary-community/elementary-tweaks"
+DESCRIPTION="This library is deprecated"
+HOMEPAGE="https://launchpad.net/libpantheon"
+EBZR_REPO_URI="lp:libpantheon"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE=""
 
-DEPEND="x11-libs/libpantheon"
+DEPEND=""
 RDEPEND="${DEPEND}"
 
 src_prepare() {
-	epatch "${FILESDIR}/${P}-sort.patch"
-	epatch_user
-
 	vala_src_prepare
 	cmake-utils_src_prepare
 }
