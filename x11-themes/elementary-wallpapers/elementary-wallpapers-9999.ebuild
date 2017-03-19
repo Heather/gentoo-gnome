@@ -24,8 +24,5 @@ src_unpack() {
 
 src_install() {
 	insinto /usr/share/backgrounds/elementary
-	doins *.jpg *.png extra/*.jpg
-
-	dodir /usr/share/backgrounds
-	dosym elementary/94.jpg /usr/share/backgrounds/elementaryos-default
+	doins *.jpg extra/*.jpg
 }
