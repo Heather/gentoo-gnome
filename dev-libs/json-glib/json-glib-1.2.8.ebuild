@@ -39,10 +39,6 @@ multilib_src_configure() {
 		--disable-gcov \
 		$(usex debug --enable-debug=yes --enable-debug=minimum) \
 		$(multilib_native_use_enable introspection)
-
-	if multilib_is_native_abi; then
-		ln -s "${S}"/doc/reference/html doc/reference/html || die
-	fi
 }
 
 multilib_src_compile() {
