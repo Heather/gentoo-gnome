@@ -5,9 +5,8 @@ Versions
 --------
 
  - GNOME `3.23.92`
- - cinnamon `3.2.8`
- - Plank/Wingpanel/Gala from Pantheon `live` ebuilds
- - experimental plank-shell stuff
+ - Cinnamon `3.2.8`
+ - Pantheon `live` (so far everything works)
 
 Known problems
 --------------
@@ -29,6 +28,36 @@ Information
  - This overlay is NOT available via `layman` currently
  - this script removes implemented upstream things from this overlay https://github.com/Heather/gentoo-gnome/blob/master/compare.py
 
+Pantheon
+--------
+
+ - I used this fix for Super_L key: http://elementaryos.stackexchange.com/questions/1946/have-application-menu-open-up-with-only-windows-key/2083#2083
+ - It loads stuff from /usr/share/gnome/autoload either (not sure if I should remove plank from there)
+
+and here is `.xinitrc`
+
+```
+#!/bin/sh
+
+if [ -d /etc/X11/xinit/xinitrc.d ]; then
+  for f in /etc/X11/xinit/xinitrc.d/*; do
+    [ -x "$f" ] && . "$f"
+  done
+  unset f
+fi
+
+gsettings-data-convert &
+xdg-user-dirs-gtk-update &
+/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
+/usr/lib/gnome-settings-daemon/gnome-settings-daemon &
+/usr/lib/gnome-user-share/gnome-user-share &
+eval $(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh,gpg)
+export GNOME_KEYRING_CONTROL GNOME_KEYRING_PID GPG_AGENT_INFO SSH_AUTH_SOCK
+
+xrdb merge ~/.Xresources &&
+exec pantheon-session
+```
+
 Plank to autostart in GNOME
 ---------------------------
 
@@ -42,6 +71,8 @@ Exec=/usr/bin/plank
 OnlyShowIn=GNOME;
 X-GNOME-Autostart-Phase=Application
 ```
+
+same way you can add `conky -d`
 
 Branches
 --------
