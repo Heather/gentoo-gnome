@@ -7,12 +7,15 @@ Versions
  - GNOME `3.23.92`
  - cinnamon `3.2.8`
  - Plank/Wingpanel/Gala from Pantheon `live` ebuilds
+ - experimental plank-shell stuff
 
 Known problems
 --------------
 
  - mutter will possibly fail without wayland support
  - wacom is not really optional for now
+ - as for me it seems like gnome-shell leaks a bit, needs more testing
+ - on one (from three) setup first time gnome-session always crashes but then works stable, needs debugging
 
 Information
 -----------
@@ -38,36 +41,6 @@ Comment=Plank panel
 Exec=/usr/bin/plank
 OnlyShowIn=GNOME;
 X-GNOME-Autostart-Phase=Application
-```
-
-Run elementary-alike stuff from .xinitrc
-----------------------------------------
-
-``` shell
-#!/bin/sh
- 
-if [ -d /etc/X11/xinit/xinitrc.d ]; then
-  for f in /etc/X11/xinit/xinitrc.d/*; do
-    [ -x "$f" ] && . "$f"
-  done
-  unset f
-fi
-
-gsettings-data-convert &
-xdg-user-dirs-gtk-update &
-/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
-/usr/lib/gnome-settings-daemon/gnome-settings-daemon &
-/usr/lib/gnome-user-share/gnome-user-share &
-eval $(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh,gpg)
-export GNOME_KEYRING_CONTROL GNOME_KEYRING_PID GPG_AGENT_INFO SSH_AUTH_SOCK
-
-xrdb merge ~/.Xresources &&
-wingpanel &
-plank &
-exec fusion-icon
-
-#exec gala
-#exec mutter
 ```
 
 Branches
