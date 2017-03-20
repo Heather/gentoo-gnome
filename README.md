@@ -4,7 +4,7 @@ Unofficial GNOME overlay [![Build Status](https://travis-ci.org/Heather/gentoo-g
 Versions
 --------
 
- - GNOME `3.23.92`
+ - GNOME `3.24.0`
  - Cinnamon `3.2.8`
  - Pantheon `live` (so far everything works)
 
