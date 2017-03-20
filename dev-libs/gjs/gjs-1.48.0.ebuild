@@ -32,10 +32,6 @@ DEPEND="${RDEPEND}
 "
 
 src_prepare() {
-	# that has reduced the leaks rather drastically - still a few leaks,
-	# but very small, ram use starts around 140mb and hovers around 250mb
-	eapply "${FILESDIR}"/gjs-object-Fix-memory-leak-in-resolve.patch
-
 	eautoreconf
 	gnome2_src_prepare
 }
