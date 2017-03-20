@@ -36,7 +36,7 @@ Pantheon
 
 and here is `.xinitrc`
 
-```
+``` shell
 #!/bin/sh
 
 if [ -d /etc/X11/xinit/xinitrc.d ]; then
@@ -56,6 +56,12 @@ export GNOME_KEYRING_CONTROL GNOME_KEYRING_PID GPG_AGENT_INFO SSH_AUTH_SOCK
 
 xrdb merge ~/.Xresources &&
 exec pantheon-session
+
+#in case if exec pantheon-session will not work
+#you can replace it with simple wm run:
+#wingpanel &
+#plank &
+#exec gala
 ```
 
 Plank to autostart in GNOME
