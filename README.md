@@ -5,7 +5,6 @@ Versions
 --------
 
  - GNOME `3.24.0`
- - Cinnamon `3.2.8`
  - Pantheon `live` (so far everything works)
 
 Known problems

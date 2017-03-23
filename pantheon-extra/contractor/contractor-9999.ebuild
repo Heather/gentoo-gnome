@@ -6,9 +6,8 @@ EAPI=6
 
 VALA_MIN_VERSION=0.26
 
-inherit fdo-mime gnome2-utils vala cmake-utils
+inherit vala cmake-utils bzr
 
-inherit bzr
 EBZR_REPO_URI="lp:${PN}"
 KEYWORDS="~x86 ~amd64"
 
@@ -20,10 +19,11 @@ SLOT="0"
 IUSE="nls"
 
 RDEPEND="
-	x11-libs/granite
-	x11-libs/gtk+:3"
+	dev-libs/libgee:0.8
+	dev-libs/glib:2"
 DEPEND="${RDEPEND}
-	$(vala_depend)"
+	$(vala_depend)
+	virtual/pkgconfig"
 
 src_prepare() {
 	eapply_user
