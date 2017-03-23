@@ -12,8 +12,8 @@ inherit bzr
 EBZR_REPO_URI="lp:${PN}"
 KEYWORDS="~x86 ~amd64"
 
-DESCRIPTION="A tiny, simple calculator written in GTK+ and Vala"
-HOMEPAGE="https://launchpad.net/pantheon-calculator"
+DESCRIPTION="A desktop-wide extension service"
+HOMEPAGE="https://launchpad.net/contcactor"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -26,7 +26,6 @@ DEPEND="${RDEPEND}
 	$(vala_depend)"
 
 src_prepare() {
-	eapply "${FILESDIR}/${PN}-0.1.2-translations.patch"
 	eapply_user
 
 	# Translations
@@ -43,23 +42,4 @@ src_configure() {
 	)
 
 	cmake-utils_src_configure
-}
-
-pkg_preinst() {
-	gnome2_icon_savelist
-	gnome2_schemas_savelist
-}
-
-pkg_postinst() {
-	fdo-mime_desktop_database_update
-	fdo-mime_mime_database_update
-	gnome2_icon_cache_update
-	gnome2_schemas_update
-}
-
-pkg_postrm() {
-	fdo-mime_desktop_database_update
-	fdo-mime_mime_database_update
-	gnome2_icon_cache_update
-	gnome2_schemas_update
 }
