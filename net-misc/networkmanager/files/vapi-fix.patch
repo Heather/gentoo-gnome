@@ -1,0 +1,26 @@
+From 7e2a3059346ce46fa6124749394bf7a650728c38 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Fri, 24 Mar 2017 11:26:55 +0100
+Subject: [PATCH 2/2] libnm-util/vapi: add missing dependencies
+
+Works by dumb luck for in-tree build this works because the .deps files that
+are meant for the distribution are in the builddir. The out-of-tree
+builds would generate an empty file.
+---
+ Makefile.am | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index e3ab756..ccc707b 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -4122,7 +4122,7 @@ vapi_libnm_glib_vapi_METADATADIRS = $(srcdir)/vapi
+ vapi_libnm_glib_vapi_FILES = $(builddir)/libnm-glib/NMClient-1.0.gir
+ vapi_libnm_glib_vapi_VAPIDIRS = $(builddir)/vapi
+ vapi_libnm_glib_vapi_GIRDIRS = $(builddir)/libnm-util
+-vapi_libnm_glib_vapi_DEPS = gio-2.0
++vapi_libnm_glib_vapi_DEPS = gio-2.0 dbus-glib-1 libnm-util
+ 
+ vapi_DATA += \
+ 	$(VAPIGEN_VAPIS) \
+-- 

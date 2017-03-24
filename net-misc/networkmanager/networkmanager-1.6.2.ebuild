@@ -6,9 +6,9 @@ EAPI=6
 GNOME_ORG_MODULE="NetworkManager"
 GNOME2_LA_PUNT="yes"
 VALA_USE_DEPEND="vapigen"
-PYTHON_COMPAT=( python{2_7,3_4,3_5} )
+PYTHON_COMPAT=( python{2_7,3_4,3_5,3_6} )
 
-inherit bash-completion-r1 gnome2 linux-info multilib python-any-r1 systemd \
+inherit bash-completion-r1 gnome2 linux-info multilib python-any-r1 systemd autotools \
 	user readme.gentoo-r1 toolchain-funcs vala versionator virtualx udev multilib-minimal
 
 DESCRIPTION="A set of co-operative tools that make networking simple and straightforward"
@@ -130,6 +130,8 @@ pkg_setup() {
 }
 
 src_prepare() {
+	eapply "${FILESDIR}"/vapi-fix.patch
+	eautoreconf
 	DOC_CONTENTS="To modify system network connections without needing to enter the
 		root password, add your user account to the 'plugdev' group."
 
