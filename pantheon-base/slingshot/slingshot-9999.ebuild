@@ -18,6 +18,7 @@ KEYWORDS="~x86 ~amd64"
 IUSE="nls"
 
 RDEPEND="
+	dev-libs/appstream[vala]
 	dev-libs/glib:2
 	dev-libs/json-glib
 	dev-libs/libgee:0.8
