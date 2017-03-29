@@ -20,6 +20,9 @@ COMMON_DEPEND="
 	>=dev-libs/json-glib-0.10
 	>=gnome-base/gnome-desktop-3.18:3
 	>=gnome-base/gnome-session-3.24.0
+	x11-wm/metacity
+	gnome-base/gnome-panel
+	gnome-base/gnome-applets
 "
 
 RDEPEND="${COMMON_DEPEND}
