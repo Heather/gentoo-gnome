@@ -4,7 +4,8 @@ Unofficial GNOME overlay [![Build Status](https://travis-ci.org/Heather/gentoo-g
 Versions
 --------
 
- - GNOME `3.24.0`
+ - GNOME `3.24.X`
+ - GNOME FLASHBACK `3.24`
  - Pantheon `live` (so far everything works)
 
 Known problems
