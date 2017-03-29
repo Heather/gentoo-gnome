@@ -23,6 +23,7 @@ COMMON_DEPEND="
 	x11-wm/metacity
 	gnome-base/gnome-panel
 	gnome-base/gnome-applets
+	net-wireless/gnome-bluetooth
 "
 
 RDEPEND="${COMMON_DEPEND}
