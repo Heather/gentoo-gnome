@@ -18,7 +18,7 @@ def regex_key(key):
   return [convert(c) for c in re.split('([0-9]+)', key)]
 
 def nat_cmp(a, b):
-  return (regex_key(a) >= regex_key(b))
+  return (regex_key(a) > regex_key(b))
 
 if len(sys.argv) < 2:
   print("pass overlay path to compare with as first argument")
@@ -41,7 +41,7 @@ for root, dirs, files in os.walk('.', topdown=True, followlinks=False):
           maxf = max(enamesf)
           maxc = max(enamesc)
           if nat_cmp(maxc, maxf):
-            print("%s >= %s" % (maxc, maxf))
+            print("%s > %s" % (maxc, maxf))
             print("removing %s" % realpath)
             shutil.rmtree(realpath)
 print("checking for empty root folders...")
