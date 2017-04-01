@@ -5,7 +5,7 @@ Versions
 --------
 
  - GNOME `3.24.X`
- - GNOME FLASHBACK `3.24`
+ - GNOME FLASHBACK `3.24` (well, gnome-panel segfaults in runtime for now)
  - Pantheon `live` (so far everything works)
 
 Known problems
