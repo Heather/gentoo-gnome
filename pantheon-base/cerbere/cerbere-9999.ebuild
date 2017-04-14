@@ -6,11 +6,11 @@ EAPI=6
 
 VALA_MIN_API_VERSION=0.16
 
-inherit fdo-mime gnome2-utils vala cmake-utils bzr
+inherit fdo-mime gnome2-utils vala cmake-utils git-r3
 
 DESCRIPTION="A simple service to relaunch pantheon applications"
 HOMEPAGE="https://launchpad.net/cerbere"
-EBZR_REPO_URI="lp:cerbere"
+EBZR_REPO_URI="https://github.com/elementary/cerbere.git"
 
 LICENSE="GPL-2"
 SLOT="0"
