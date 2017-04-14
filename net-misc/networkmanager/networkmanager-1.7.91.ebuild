@@ -29,8 +29,7 @@ REQUIRED_USE="
 "
 
 #~alpha amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sparc x86
-#with some reason it still fails on my notebook
-#even with patch
+#make all-am needs fixing
 KEYWORDS=""
 
 # gobject-introspection-0.10.3 is needed due to gnome bug 642300
@@ -133,7 +132,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	eapply "${FILESDIR}"/nm-all-am-fix.patch
 	eautoreconf
 	DOC_CONTENTS="To modify system network connections without needing to enter the
 		root password, add your user account to the 'plugdev' group."
