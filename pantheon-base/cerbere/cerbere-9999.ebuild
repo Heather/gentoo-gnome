@@ -10,7 +10,7 @@ inherit fdo-mime gnome2-utils vala cmake-utils git-r3
 
 DESCRIPTION="A simple service to relaunch pantheon applications"
 HOMEPAGE="https://launchpad.net/cerbere"
-EBZR_REPO_URI="https://github.com/elementary/cerbere.git"
+EGIT_REPO_URI="https://github.com/elementary/cerbere.git"
 
 LICENSE="GPL-2"
 SLOT="0"
