@@ -1,0 +1,46 @@
+From 70a4017af1de5f44a217807c5547d0acf66ae9d9 Mon Sep 17 00:00:00 2001
+From: Poncho <poncho@spahan.ch>
+Date: Sun, 16 Apr 2017 10:29:08 +0200
+Subject: [PATCH] fix build without wayland
+
+see https://bugzilla.gnome.org/show_bug.cgi?id=780533
+---
+ src/compositor/compositor.c | 2 ++
+ src/core/main.c             | 2 ++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/src/compositor/compositor.c b/src/compositor/compositor.c
+index fc43713..9a69c66 100644
+--- a/src/compositor/compositor.c
++++ b/src/compositor/compositor.c
+@@ -388,7 +388,9 @@ meta_begin_modal_for_plugin (MetaCompositor   *compositor,
+       meta_display_sync_wayland_input_focus (display);
+       meta_display_cancel_touch (display);
+ 
++#ifdef HAVE_WAYLAND
+       meta_dnd_wayland_handle_begin_modal (compositor);
++#endif
+     }
+ 
+   return TRUE;
+diff --git a/src/core/main.c b/src/core/main.c
+index 9b82ca7..dc1f1c4 100644
+--- a/src/core/main.c
++++ b/src/core/main.c
+@@ -443,11 +443,13 @@ calculate_compositor_configuration (MetaCompositorType *compositor_type,
+ #endif /* HAVE_WAYLAND */
+     *compositor_type = META_COMPOSITOR_TYPE_X11;
+ 
++#ifdef HAVE_WAYLAND
+   if (opt_nested)
+     {
+       *backend_gtype = META_TYPE_BACKEND_X11_NESTED;
+       return;
+     }
++#endif /* HAVE_WAYLAND */
+ 
+ #ifdef HAVE_NATIVE_BACKEND
+   if (opt_display_server)
+-- 
+2.10.2
+
