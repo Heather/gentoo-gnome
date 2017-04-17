@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 inherit gnome2 virtualx
@@ -80,6 +79,8 @@ DEPEND="${COMMON_DEPEND}
 RDEPEND="${COMMON_DEPEND}
 	!x11-misc/expocity
 "
+
+PATCHES=( "${FILESDIR}/${PV}-fix-build-without-wayland.patch" )
 
 src_prepare() {
 	# Disable building of noinst_PROGRAM for tests

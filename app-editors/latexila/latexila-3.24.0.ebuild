@@ -2,6 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="6"
+VALA_MIN_API_VERSION="0.34"
 VALA_USE_DEPEND="vapigen"
 
 inherit gnome2 vala
@@ -18,12 +19,13 @@ COMMON_DEPEND="
 	$(vala_depend)
 	app-text/enchant
 	>=app-text/gspell-1.0:0=
-	>=dev-libs/glib-2.40:2[dbus]
+	>=dev-libs/glib-2.50:2[dbus]
 	>=dev-libs/libgee-0.10:0.8=
 	gnome-base/gsettings-desktop-schemas
 	>=x11-libs/gtk+-3.20:3
-	>=x11-libs/gtksourceview-3.18:3.0=
+	>=x11-libs/gtksourceview-3.24:3.0=
 	x11-libs/gdk-pixbuf:2
+	>=x11-libs/gtef-2.0.0
 	x11-libs/pango
 	introspection? ( >=dev-libs/gobject-introspection-1.30.0:= )
 "
