@@ -7,14 +7,6 @@ Versions
  - GNOME `3.24.1`
  - Pantheon `live` (so far everything works)
 
-Known problems
---------------
-
- - mutter will possibly fail without wayland support
- - wacom is not really optional for now
- - as for me it seems like gnome-shell leaks a bit, needs more testing
- - on one (from three) setup first time gnome-session always crashes but then works stable, needs debugging
-
 Information
 -----------
 
