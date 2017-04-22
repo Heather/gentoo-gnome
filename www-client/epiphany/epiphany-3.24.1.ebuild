@@ -4,7 +4,7 @@
 EAPI=6
 GNOME2_LA_PUNT="yes"
 
-inherit eutils gnome2 virtualx
+inherit eutils gnome2 virtualx flag-o-matic
 
 DESCRIPTION="GNOME webbrowser based on Webkit"
 HOMEPAGE="https://wiki.gnome.org/Apps/Web"
@@ -54,6 +54,11 @@ PATCHES=(
 	# https://bugzilla.gnome.org/show_bug.cgi?id=751593
 	"${FILESDIR}"/${PN}-3.14.0-unittest-2.patch
 )
+
+src_prepare() {
+	# https://bugzilla.gnome.org/show_bug.cgi?id=778495
+	append-cflags -std=gnu11
+}
 
 src_configure() {
 	gnome2_src_configure \
