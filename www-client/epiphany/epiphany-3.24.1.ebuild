@@ -58,6 +58,7 @@ PATCHES=(
 src_prepare() {
 	# https://bugzilla.gnome.org/show_bug.cgi?id=778495
 	append-cflags -std=gnu11
+	default
 }
 
 src_configure() {
