@@ -2,15 +2,15 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=5
+EAPI=6
 
 VALA_MIN_API_VERSION=0.24
 
-inherit gnome2-utils vala multilib cmake-utils bzr
+inherit gnome2-utils vala multilib cmake-utils git-r3
 
 DESCRIPTION="A development library for elementary development"
 HOMEPAGE="https://launchpad.net/granite"
-EBZR_REPO_URI="lp:granite"
+EGIT_REPO_URI="https://github.com/elementary/granite.git"
 
 LICENSE="LGPL-3"
 SLOT="0"
@@ -26,7 +26,7 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig
 	nls? ( sys-devel/gettext )"
 
-DOCS=( AUTHORS COPYING NEWS README )
+DOCS=( AUTHORS COPYING )
 
 src_prepare() {
 	epatch_user
@@ -39,6 +39,7 @@ src_prepare() {
 
 	cmake-utils_src_prepare
 	vala_src_prepare
+	default
 }
 
 src_configure() {
