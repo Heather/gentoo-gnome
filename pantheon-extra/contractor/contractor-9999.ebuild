@@ -6,9 +6,9 @@ EAPI=6
 
 VALA_MIN_VERSION=0.26
 
-inherit vala cmake-utils bzr
+inherit vala cmake-utils git-r3
 
-EBZR_REPO_URI="lp:${PN}"
+EGIT_REPO_URI="https://github.com/elementary/contractor.git"
 KEYWORDS="~x86 ~amd64"
 
 DESCRIPTION="A desktop-wide extension service"
