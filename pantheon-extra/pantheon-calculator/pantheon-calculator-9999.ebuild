@@ -6,10 +6,9 @@ EAPI=6
 
 VALA_MIN_VERSION=0.26
 
-inherit fdo-mime gnome2-utils vala cmake-utils
+inherit fdo-mime gnome2-utils vala cmake-utils git-r3
 
-inherit bzr
-EBZR_REPO_URI="lp:${PN}"
+EGIT_REPO_URI="https://github.com/elementary/calculator.git"
 KEYWORDS="~x86 ~amd64"
 
 DESCRIPTION="A tiny, simple calculator written in GTK+ and Vala"
