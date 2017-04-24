@@ -2,15 +2,15 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=5
+EAPI=6
 
 VALA_MIN_API_VERSION=0.20
 
-inherit vala cmake-utils bzr
+inherit vala cmake-utils git-r3
 
 DESCRIPTION="Configure which apps should be allowed to show notifications"
 HOMEPAGE="http://launchpad.net/switchboard-plug-notifications"
-EBZR_REPO_URI="lp:switchboard-plug-notifications"
+EGIT_REPO_URI="https://github.com/elementary/switchboard-plug-notifications.git"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -31,6 +31,8 @@ src_prepare() {
 
 	cmake-utils_src_prepare
 	vala_src_prepare
+
+	default
 }
 
 src_configure() {

@@ -2,15 +2,15 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=5
+EAPI=6
 
 VALA_MIN_API_VERSION=0.22
 
-inherit vala cmake-utils bzr
+inherit vala cmake-utils git-r3
 
 DESCRIPTION="Configure various aspects of the security of the system."
 HOMEPAGE="https://launchpad.net/switchboard-plug-security-privacy"
-EBZR_REPO_URI="lp:switchboard-plug-security-privacy"
+EGIT_REPO_URI="https://github.com/elementary/switchboard-plug-security-privacy.git"
 
 LICENSE="GPL-3"
 SLOT="0"

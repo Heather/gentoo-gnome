@@ -2,15 +2,15 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=5
+EAPI=6
 
 VALA_MIN_API_VERSION=0.22
 
-inherit vala cmake-utils bzr
+inherit vala cmake-utils git-r3
 
 DESCRIPTION="Control system power consumption using Switchboard."
 HOMEPAGE="https://launchpad.net/switchboard-plug-power"
-EBZR_REPO_URI="lp:switchboard-plug-power"
+EGIT_REPO_URI="https://github.com/elementary/switchboard-plug-power.git"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -32,6 +32,8 @@ src_prepare() {
 
 	cmake-utils_src_prepare
 	vala_src_prepare
+
+	default
 }
 
 src_configure() {

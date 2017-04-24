@@ -2,14 +2,13 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=5
+EAPI=6
 
 VALA_MIN_API_VERSION=0.20
 
-inherit vala cmake-utils
+inherit vala cmake-utils git-r3
 
-inherit bzr
-EBZR_REPO_URI="lp:${PN}"
+EGIT_REPO_URI="https://github.com/elementary/switchboard-plug-pantheon-shell.git"
 KEYWORDS="~x86 ~amd64"
 
 DESCRIPTION="Configure the Pantheon desktop environment using Switchboard"

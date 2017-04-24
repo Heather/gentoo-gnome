@@ -6,11 +6,11 @@ EAPI=6
 
 VALA_MIN_API_VERSION=0.22
 
-inherit vala cmake-utils bzr
+inherit vala cmake-utils git-r3
 
 DESCRIPTION="Adjust mouse settings from Switchboard"
 HOMEPAGE="https://code.launchpad.net/~elementary-pantheon/switchboard-plug-mouse-touchpad"
-EBZR_REPO_URI="lp:switchboard-plug-mouse-touchpad"
+EGIT_REPO_URI="https://github.com/elementary/switchboard-plug-mouse-touchpad.git"
 
 LICENSE="GPL-3"
 SLOT="0"
