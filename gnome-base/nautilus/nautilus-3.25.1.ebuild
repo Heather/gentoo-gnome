@@ -5,7 +5,7 @@
 EAPI=6
 GNOME2_LA_PUNT="yes" # Needed with USE 'sendto'
 
-inherit gnome2 readme.gentoo-r1 virtualx autotools
+inherit gnome2 readme.gentoo-r1 virtualx multiprocessing
 
 DESCRIPTION="A file manager for the GNOME desktop"
 HOMEPAGE="https://wiki.gnome.org/Apps/Nautilus"
@@ -24,6 +24,7 @@ RESTRICT="test"
 # Require {glib,gdbus-codegen}-2.30.0 due to GDBus API changes between 2.29.92
 # and 2.30.0
 COMMON_DEPEND="
+        >=dev-util/meson-0.40.0
 	>=app-arch/gnome-autoar-0.2.1
 	>=dev-libs/glib-2.51.2:2[dbus]
 	>=x11-libs/pango-1.28.3
@@ -69,37 +70,61 @@ PDEPEND="
 "
 # Need gvfs[gtk] for recent:/// support
 
+MESON_BUILD_DIR="${WORKDIR}/${P}_mesonbuild"
+
 src_prepare() {
 	if use previewer; then
 		DOC_CONTENTS="nautilus uses gnome-extra/sushi to preview media files.
 			To activate the previewer, select a file and press space; to
 			close the previewer, press space again."
 	fi
-	eautoreconf
+	mkdir -p "${MESON_BUILD_DIR}" || die
 	gnome2_src_prepare
 }
 
-src_configure() {
-	gnome2_src_configure \
-		--enable-desktop \
-		--disable-profiling \
-		--disable-update-mimedb \
-		$(use_enable exif libexif) \
-		$(use_enable introspection) \
-		$(use_enable packagekit) \
-		$(use_enable sendto nst-extension) \
-		$(use_enable selinux) \
-		$(use_enable tracker) \
-		$(use_enable xmp)
+meson_use_enable() {
+	echo "-Denable-${2:-${1}}=$(usex ${1} 'true' 'false')"
 }
 
-src_test() {
-	virtx emake check
+src_configure() {
+	local myconf=(
+		--buildtype=plain
+		--libdir="$(get_libdir)"
+		--localstatedir="${EPREFIX}/var"
+		--prefix="${EPREFIX}/usr"
+		--sysconfdir="${EPREFIX}/etc"
+		-Doption=enable-desktop
+		-Doption=disable-profiling
+		-Doption=disable-update-mimedb
+		$(meson_use_enable exif libexif)
+		$(meson_use_enable introspection)
+		$(meson_use_enable packagekit)
+		$(meson_use_enable sendto nst-extension)
+		$(meson_use_enable selinux)
+		$(meson_use_enable tracker)
+		$(meson_use_enable xmp)
+	)
+	set -- meson "${myconf[@]}" "${S}" "${MESON_BUILD_DIR}"
+	echo "$@"
+	"$@" || die
+}
+
+eninja() {
+	if [[ -z ${NINJAOPTS+set} ]]; then
+		NINJAOPTS="-j$(makeopts_jobs) -l$(makeopts_loadavg)"
+	fi
+	set -- ninja -v ${NINJAOPTS} -C "${MESON_BUILD_DIR}" "${@}"
+	echo "${@}"
+	"${@}" || die
+}
+
+src_compile() {
+	eninja
 }
 
 src_install() {
 	use previewer && readme.gentoo_create_doc
-	gnome2_src_install
+	DESTDIR="${ED%/}" eninja install
 }
 
 pkg_postinst() {
