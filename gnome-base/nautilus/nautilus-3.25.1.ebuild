@@ -24,7 +24,7 @@ RESTRICT="test"
 # Require {glib,gdbus-codegen}-2.30.0 due to GDBus API changes between 2.29.92
 # and 2.30.0
 COMMON_DEPEND="
-        >=dev-util/meson-0.40.0
+	>=dev-util/meson-0.40.0
 	>=app-arch/gnome-autoar-0.2.1
 	>=dev-libs/glib-2.51.2:2[dbus]
 	>=x11-libs/pango-1.28.3
