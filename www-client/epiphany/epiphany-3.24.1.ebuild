@@ -13,6 +13,7 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="test"
 KEYWORDS="~amd64 ~arm ~ppc ~ppc64 ~sparc ~x86"
+CFLAGS="${CFLAGS} -std=gnu11"
 
 COMMON_DEPEND="
 	>=app-crypt/gcr-3.5.5:=
