@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit gnome2 flag-o-matic
+inherit gnome2
 
 DESCRIPTION="A library that provides top functionality to applications"
 HOMEPAGE="https://git.gnome.org/browse/libgtop"
@@ -21,11 +21,6 @@ DEPEND="${RDEPEND}
 	>=sys-devel/gettext-0.19.4
 	virtual/pkgconfig
 "
-
-src_prepare() {
-	append-cflags -std=gnu11
-	default
-}
 
 src_configure() {
 	gnome2_src_configure \

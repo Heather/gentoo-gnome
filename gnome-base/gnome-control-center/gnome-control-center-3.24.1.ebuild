@@ -5,7 +5,7 @@
 EAPI=6
 GNOME2_LA_PUNT="yes"
 
-inherit autotools bash-completion-r1 gnome2 flag-o-matic
+inherit autotools bash-completion-r1 gnome2
 
 DESCRIPTION="GNOME's main interface to configure various aspects of the desktop"
 HOMEPAGE="https://git.gnome.org/browse/gnome-control-center/"
@@ -124,8 +124,6 @@ DEPEND="${COMMON_DEPEND}
 #	sys-devel/autoconf-archive
 
 src_prepare() {
-	append-cflags -std=gnu11
-
 	# Make some panels and dependencies optional; requires eautoreconf
 	# https://bugzilla.gnome.org/686840, 697478, 700145
 	eapply "${FILESDIR}"/${PN}-3.23.90-optional.patch
