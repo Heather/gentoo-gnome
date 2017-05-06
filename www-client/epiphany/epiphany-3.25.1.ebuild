@@ -4,7 +4,7 @@
 EAPI=6
 GNOME2_LA_PUNT="yes"
 
-inherit eutils gnome2 virtualx flag-o-matic multiprocessing
+inherit eutils gnome2 virtualx multiprocessing
 
 DESCRIPTION="GNOME webbrowser based on Webkit"
 HOMEPAGE="https://wiki.gnome.org/Apps/Web"
@@ -59,8 +59,6 @@ PATCHES=(
 MESON_BUILD_DIR="${WORKDIR}/${P}_mesonbuild"
 
 src_prepare() {
-	# https://bugzilla.gnome.org/show_bug.cgi?id=778495
-	append-cflags -std=gnu11
 	mkdir -p "${MESON_BUILD_DIR}" || die
 	default
 }
