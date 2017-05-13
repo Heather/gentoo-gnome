@@ -6,7 +6,7 @@ GNOME2_EAUTORECONF="yes"
 GNOME2_LA_PUNT="yes"
 GNOME_ORG_MODULE="network-manager-applet"
 
-inherit gnome2
+inherit gnome2 versionator
 
 DESCRIPTION="GNOME applet for NetworkManager"
 HOMEPAGE="https://wiki.gnome.org/Projects/NetworkManager"
@@ -26,7 +26,7 @@ RDEPEND="
 	>=x11-libs/libnotify-0.7.0
 
 	app-text/iso-codes
-	>=net-misc/networkmanager-1.3:=[introspection?,modemmanager?,teamd?]
+	>=net-misc/networkmanager-$(get_version_component_range 1-2):=[introspection?,modemmanager?,teamd?]
 	net-misc/mobile-broadband-provider-info
 
 	introspection? ( >=dev-libs/gobject-introspection-0.9.6:= )
