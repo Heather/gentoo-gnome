@@ -26,7 +26,7 @@ RDEPEND="
 	>=x11-libs/libnotify-0.7.0
 
 	app-text/iso-codes
-	>=net-misc/networkmanager-1.3:=[introspection?,modemmanager?,teamd?]
+	>=net-misc/networkmanager-1.7:=[introspection?,modemmanager?,teamd?]
 	net-misc/mobile-broadband-provider-info
 
 	introspection? ( >=dev-libs/gobject-introspection-0.9.6:= )
