@@ -178,6 +178,7 @@ multilib_src_configure() {
 			--disable-static \
 			--localstatedir=/var \
 			--disable-lto \
+			--disable-ifnet \
 			--disable-qt \
 			--enable-ifcfg-rh \
 			--enable-dependency-tracking \
