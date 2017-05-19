@@ -17,7 +17,7 @@ HOMEPAGE="https://wiki.gnome.org/Projects/NetworkManager"
 LICENSE="GPL-2+"
 SLOT="0" # add subslot if libnm-util.so.2 or libnm-glib.so.4 bumps soname version
 
-IUSE="audit bluetooth connection-sharing consolekit +dhclient gnutls +introspection \
+IUSE="audit bluetooth connection-sharing consolekit dhclient +dhcpcd gnutls +introspection \
 json kernel_linux +nss +modemmanager ncurses ofono +ppp resolvconf selinux \
 systemd teamd test vala +wext +wifi"
 
@@ -54,6 +54,7 @@ COMMON_DEPEND="
 		net-firewall/iptables )
 	consolekit? ( >=sys-auth/consolekit-1.0.0 )
 	dhclient? ( >=net-misc/dhcp-4[client] )
+	dhcpcd? ( net-misc/dhcpcd )
 	gnutls? (
 		dev-libs/libgcrypt:0=[${MULTILIB_USEDEP}]
 		>=net-libs/gnutls-2.12:=[${MULTILIB_USEDEP}] )
@@ -200,7 +201,7 @@ multilib_src_configure() {
 			$(multilib_native_use_enable json json-validation) \
 			$(multilib_native_use_enable ppp) \
 			$(use_with dhclient) \
-			--without-dhcpcd \
+			$(use_with dhcpcd) \
 			$(multilib_native_use_with modemmanager modem-manager-1) \
 			$(multilib_native_use_with ncurses nmtui) \
 			$(multilib_native_use_with ofono) \
