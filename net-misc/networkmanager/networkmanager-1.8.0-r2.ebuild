@@ -30,7 +30,7 @@ REQUIRED_USE="
 
 #~alpha amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sparc x86
 #make all-am needs fixing
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+KEYWORDS="~alpha amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sparc x86"
 
 # gobject-introspection-0.10.3 is needed due to gnome bug 642300
 # wpa_supplicant-0.7.3-r3 is needed due to bug 359271
@@ -178,6 +178,7 @@ multilib_src_configure() {
 			--disable-static \
 			--localstatedir=/var \
 			--disable-lto \
+			--disable-ifnet \
 			--disable-qt \
 			--enable-ifcfg-rh \
 			--enable-dependency-tracking \
