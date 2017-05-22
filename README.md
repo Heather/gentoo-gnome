@@ -4,7 +4,7 @@ Unofficial GNOME overlay [![Build Status](https://travis-ci.org/Heather/gentoo-g
 Versions
 --------
 
- - GNOME `3.25.1`
+ - GNOME `3.25.2`
  - Pantheon `live` (so far everything works)
 
 Information
