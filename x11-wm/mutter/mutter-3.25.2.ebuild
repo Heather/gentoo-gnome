@@ -16,6 +16,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 
 # libXi-1.7.4 or newer needed per:
 # https://bugzilla.gnome.org/show_bug.cgi?id=738944
+# TODO: make wayland? ( optional, update patch
 COMMON_DEPEND="
 	>=dev-libs/atk-2.5.3
 	>=x11-libs/gdk-pixbuf-2:2
@@ -55,18 +56,18 @@ COMMON_DEPEND="
 	input_devices_wacom? ( >=dev-libs/libwacom-0.13 )
 	introspection? ( >=dev-libs/gobject-introspection-1.42:= )
 	udev? ( virtual/libgudev:= )
-	wayland? (
-		>=dev-libs/libinput-1.4
-		>=dev-libs/wayland-1.6.90
-		>=dev-libs/wayland-protocols-1.7
-		>=media-libs/mesa-10.3[egl,gbm,wayland]
-		sys-apps/systemd
-		virtual/libgudev:=
-		>=virtual/libudev-136:=
-		x11-base/xorg-server[wayland]
-		x11-libs/libdrm:=
-	)
+	
+	>=dev-libs/libinput-1.4
+	>=dev-libs/wayland-1.6.90
+	>=dev-libs/wayland-protocols-1.7
+	>=media-libs/mesa-10.3[egl,gbm,wayland]
+	sys-apps/systemd
+	virtual/libgudev:=
+	>=virtual/libudev-136:=
+	x11-base/xorg-server[wayland]
+	x11-libs/libdrm:=
 "
+
 DEPEND="${COMMON_DEPEND}
 	>=sys-devel/gettext-0.19.6
 	virtual/pkgconfig
@@ -74,13 +75,11 @@ DEPEND="${COMMON_DEPEND}
 	x11-proto/xineramaproto
 	x11-proto/xproto
 	test? ( app-text/docbook-xml-dtd:4.5 )
-	wayland? ( >=sys-kernel/linux-headers-4.4 )
+	>=sys-kernel/linux-headers-4.4
 "
 RDEPEND="${COMMON_DEPEND}
 	!x11-misc/expocity
 "
-
-PATCHES=( "${FILESDIR}/3.24.1-fix-build-without-wayland.patch" )
 
 src_prepare() {
 	# Disable building of noinst_PROGRAM for tests
