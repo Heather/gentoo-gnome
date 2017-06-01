@@ -29,7 +29,7 @@ RDEPEND="
 	>=app-crypt/libsecret-0.5[crypt]
 	>=dev-db/sqlite-3.7.17:=
 	>=dev-libs/glib-2.46:2
-	>=dev-libs/libical-0.43:=
+	>=dev-libs/libical-2:=
 	>=dev-libs/libxml2-2
 	>=dev-libs/nspr-4.4:=
 	>=dev-libs/nss-3.9:=
