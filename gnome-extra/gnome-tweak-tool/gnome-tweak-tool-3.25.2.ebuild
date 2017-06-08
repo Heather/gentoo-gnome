@@ -3,9 +3,9 @@
 
 EAPI=6
 GNOME2_LA_PUNT="yes"
-PYTHON_COMPAT=( python2_7 )
+PYTHON_COMPAT=( python{3_4,3_5} )
 
-inherit gnome2 python-r1
+inherit gnome2 python-r1 meson
 
 DESCRIPTION="Tool to customize GNOME 3 options"
 HOMEPAGE="https://wiki.gnome.org/action/show/Apps/GnomeTweakTool"
@@ -38,7 +38,6 @@ RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/nautilus-3
 "
 DEPEND="${COMMON_DEPEND}
-	>=dev-util/intltool-0.40.0
 	virtual/pkgconfig
 "
 
@@ -51,21 +50,17 @@ src_prepare() {
 }
 
 src_configure() {
-	python_foreach_impl run_in_build_dir gnome2_src_configure
+	meson_src_configure
 }
 
 src_compile() {
-	python_foreach_impl run_in_build_dir gnome2_src_compile
+	meson_src_compile
 }
 
 src_test() {
-	python_foreach_impl run_in_build_dir default
+	meson_src_test
 }
 
 src_install() {
-	install_python() {
-		gnome2_src_install
-		python_doscript gnome-tweak-tool || die
-	}
-	python_foreach_impl run_in_build_dir install_python
+	meson_src_install
 }
