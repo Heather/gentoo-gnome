@@ -6,16 +6,15 @@ EAPI=6
 VALA_USE_DEPEND="vapigen"
 VALA_MIN_API_VERSION="0.24"
 
-inherit eutils gnome2 vala autotools
+inherit eutils gnome2 autotools
 
 DESCRIPTION="Library providing a virtual terminal emulator widget"
 HOMEPAGE="https://wiki.gnome.org/action/show/Apps/Terminal/VTE"
 
 LICENSE="LGPL-2+"
 SLOT="2.91"
-IUSE="+crypt debug glade +introspection vala"
+IUSE="+crypt debug glade +introspection"
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux ~x64-solaris ~x86-solaris"
-REQUIRED_USE="vala? ( introspection )"
 
 SRC_URI="https://git.gnome.org/browse/vte/snapshot/${P}.tar.xz"
 
@@ -39,8 +38,6 @@ DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
 	sys-devel/gettext
 	virtual/pkgconfig
-
-	vala? ( $(vala_depend) )
 "
 RDEPEND="${RDEPEND}
 	!x11-libs/vte:2.90[glade]
@@ -48,8 +45,6 @@ RDEPEND="${RDEPEND}
 
 src_prepare() {
 	eautoreconf
-
-	use vala && vala_src_prepare
 
 	# build fails because of -Werror with gcc-5.x
 	sed -e 's#-Werror=format=2#-Wformat=2#' -i configure || die "sed failed"
@@ -76,7 +71,7 @@ src_configure() {
 		$(use_enable glade glade-catalogue) \
 		$(use_with crypt gnutls) \
 		$(use_enable introspection) \
-		$(use_enable vala) \
+		--disable-vala \
 		${myconf}
 }
 
