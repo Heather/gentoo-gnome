@@ -1,8 +1,7 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
-EAPI=5
+EAPI=6
 GCONF_DEBUG="no"
 PYTHON_COMPAT=( python{3_4,3_5} )
 VALA_USE_DEPEND="vapigen"
@@ -14,7 +13,7 @@ HOMEPAGE="https://wiki.gnome.org/Projects/Libgit2-glib"
 
 LICENSE="LGPL-2+"
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="~amd64 ~x86"
 
 IUSE="python ssh +vala"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
