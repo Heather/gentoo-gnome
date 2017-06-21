@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 GNOME2_LA_PUNT="yes"
@@ -18,7 +17,7 @@ iptc +iso +jpeg kernel_linux libav +miner-fs mp3 nautilus networkmanager pdf
 playlist rss stemmer test thunderbird +tiff upnp-av upower +vorbis +xml xmp
 xps"
 
-KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+KEYWORDS="~amd64 ~arm ~ppc ~ppc64 ~x86"
 
 REQUIRED_USE="
 	?? ( gstreamer ffmpeg )
