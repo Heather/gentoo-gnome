@@ -11,7 +11,8 @@
 	</maintainer>
   <use>
   	<flag name="gtk2">Support GTK+ 2.x instead of GTK+ 3.x</flag>
-    <flag name="introspection">Use <pkg>dev-libs/gobject-introspection</pkg> for introspection</flag>
+	<flag name="gtk3">Support GTK+ 3.x</flag>
+	<flag name="introspection">Use <pkg>dev-libs/gobject-introspection</pkg> for introspection</flag>
   </use>
   <longdescription lang="en">A small little library that was created by pulling out some comon code out of indicator-applet. It passes a menu structure across DBus so that a program can create a menu simply without worrying about how it is displayed on the other side of the bus.</longdescription>
 </pkgmetadata>
