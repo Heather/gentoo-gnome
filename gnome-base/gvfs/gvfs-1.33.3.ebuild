@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 GNOME2_LA_PUNT="yes"
@@ -49,9 +48,7 @@ RDEPEND="
 	policykit? (
 		sys-auth/polkit
 		sys-libs/libcap )
-	samba? ( || (
-		( >=net-fs/samba-3.4.6[smbclient] <net-fs/samba-4[smbclient] )
-		>=net-fs/samba-4[client] ) )
+	samba? ( >=net-fs/samba-4.5.10[client] )
 	systemd? ( >=sys-apps/systemd-206:0= )
 	udev? (
 		cdda? ( dev-libs/libcdio-paranoia )

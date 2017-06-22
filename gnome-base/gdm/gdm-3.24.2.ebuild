@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 GNOME2_LA_PUNT="yes"
@@ -16,7 +15,7 @@ SRC_URI="${SRC_URI}
 
 LICENSE="
 	GPL-2+
-	branding? ( CC-Sampling-Plus-1.0 )
+	branding? ( CC-BY-SA-4.0 )
 "
 
 SLOT="0"
@@ -49,6 +48,7 @@ COMMON_DEPEND="
 	x11-libs/libXdmcp
 	x11-libs/libXext
 	x11-libs/libXft
+	x11-libs/libxcb
 	>=x11-misc/xdg-utils-1.0.2-r3
 
 	virtual/pam
@@ -132,9 +132,6 @@ src_prepare() {
 	# Show logo when branding is enabled
 	use branding && eapply "${FILESDIR}/${PN}-3.8.4-logo.patch"
 
-	# allow setting pam module dir, bug #599714
-	#eapply "${FILESDIR}/${PN}-3.22.1-pam-module-dir.patch"
-
 	eautoreconf
 	gnome2_src_prepare
 }
@@ -152,6 +149,7 @@ src_configure() {
 
 	gnome2_src_configure \
 		--enable-gdm-xsession \
+		--enable-user-display-server \
 		--with-run-dir=/run/gdm \
 		--localstatedir="${EPREFIX}"/var \
 		--disable-static \
@@ -212,9 +210,4 @@ pkg_postinst() {
 	eend ${ret}
 
 	readme.gentoo_print_elog
-
-	if ! version_is_at_least 3.16.0 ${REPLACING_VERSIONS}; then
-		ewarn "GDM will now use a new TTY per logged user as explained at:"
-		ewarn "https://wiki.gentoo.org/wiki/Project:GNOME/GNOME3-Troubleshooting#GDM_.3E.3D_3.16_opens_one_graphical_session_per_user"
-	fi
 }
