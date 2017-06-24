@@ -1,0 +1,2 @@
+# unmask gnome stuff that is masked in ::gentoo
+->=x11-wm/mutter-3.23

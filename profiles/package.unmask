@@ -140,5 +140,4 @@
 >=x11-themes/adwaita-icon-theme-3.21
 >=x11-themes/gnome-backgrounds-3.21
 >=x11-themes/gnome-themes-standard-3.21
->=x11-wm/mutter-3.21
 app-i18n/ibus
