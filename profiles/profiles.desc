@@ -1,0 +1,14 @@
+#############################################
+# This is a list of valid profiles for each architecture.  This file is used by
+# repoman when doing a repoman scan or repoman full.
+# DO NOT ADD PROFILES WITH A "die" or "exit" IN THEM OR IT KILLS REPOMAN
+#
+#layout:
+#arch		profile_directory				status
+
+# This overlay overrides the follwing selinux profiles:
+
+# Hardened Profiles
+amd64		hardened/linux/amd64/selinux				stable
+amd64		hardened/linux/amd64/no-multilib/selinux		stable
+x86		hardened/linux/x86/selinux				stable
