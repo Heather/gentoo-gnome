@@ -35,6 +35,8 @@ DEPEND="${RDEPEND}
 "
 
 src_prepare() {
+	eapply "${FILESDIR}"/gcc-fix.patch
+
 	eautoreconf
 	gnome2_src_prepare
 }

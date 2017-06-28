@@ -1,0 +1,71 @@
+From f876154239d2ac92381c40cf5ed1e68362000717 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Beno=C3=AEt=20Dejean?= <bdejean@gmail.com>
+Date: Thu, 22 Jun 2017 20:36:50 +0200
+Subject: After 35d69c72, std::map<pid_t, ProcInfo> requires ProcInfo to be
+ CopyConstructible for older compiler like gcc 5.4. Make it a std::map<pid_t,
+ std::shared_ptr<ProcInfo>> and implement a wrapper to minimize code change.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=783993
+---
+ src/application.h | 22 ++++++++++++++++++----
+ src/proctable.cpp |  2 +-
+ 2 files changed, 19 insertions(+), 5 deletions(-)
+
+diff --git a/src/application.h b/src/application.h
+index 3190298..d66c26f 100644
+--- a/src/application.h
++++ b/src/application.h
+@@ -152,19 +152,33 @@ class ProcList {
+     // sorted by pid. The map has a nice property : it is sorted
+     // by pid so this helps a lot when looking for the parent node
+     // as ppid is nearly always < pid.
+-    typedef std::map<pid_t, ProcInfo> List;
++    typedef std::map<pid_t, std::shared_ptr<ProcInfo>> List;
+     List data;
+     std::mutex data_lock;
+ public:
+     std::map<pid_t, unsigned long> cpu_times;
+-    typedef List::iterator Iterator;
++
++    struct Iterator
++    {
++        typedef List::iterator It;
++        typedef std::pair<pid_t, ProcInfo&> value_type;
++        It it;
++        std::shared_ptr<value_type> value;
++
++        Iterator(const It& it) : it(it) {}
++        bool operator!=(const Iterator& other) const { return it != other.it; }
++        Iterator& operator++() { ++it; return *this; }
++        value_type* operator->() { value = std::make_shared<value_type>(it->first, *it->second); return value.get(); }
++        value_type& operator*()  { value = std::make_shared<value_type>(it->first, *it->second); return *value.get(); }
++    };
++
+     Iterator begin() { return std::begin(data); }
+     Iterator end() { return std::end(data); }
+     Iterator erase(Iterator it) {
+         std::lock_guard<std::mutex> lg(data_lock);
+-        return data.erase(it);
++        return data.erase(it.it);
+     }
+-    ProcInfo* add(pid_t pid) { return &data.emplace(pid, pid).first->second; }
++    ProcInfo* add(pid_t pid) { return data.emplace(pid, std::make_shared<ProcInfo>(pid)).first->second.get(); }
+     void clear() { return data.clear(); }
+ 
+     ProcInfo* find(pid_t pid);
+diff --git a/src/proctable.cpp b/src/proctable.cpp
+index 384e55f..23b3e3b 100644
+--- a/src/proctable.cpp
++++ b/src/proctable.cpp
+@@ -66,7 +66,7 @@
+ ProcInfo* ProcList::find(pid_t pid)
+ {
+     auto it = data.find(pid);
+-    return (it == data.end() ? nullptr : &it->second);
++    return (it == data.end() ? nullptr : it->second.get());
+ }
+ 
+ static void
+-- 
+cgit v0.12
+
