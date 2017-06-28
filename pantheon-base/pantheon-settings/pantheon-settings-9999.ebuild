@@ -63,6 +63,9 @@ src_install() {
 	insinto /etc/profile.d/
 	doins profile.d/*.sh
 
+	# I don't like this!
+	rm "${D}"/etc/profile.d/pantheon-filechooser-module.sh || die
+
 	insinto /etc/skel/.config/plank/
 	doins -r plank/dock1
 
