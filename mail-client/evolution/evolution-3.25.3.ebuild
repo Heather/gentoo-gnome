@@ -97,10 +97,10 @@ x-scheme-handler/https=firefox.desktop
 file from /usr/share/applications if you use a different browser)."
 
 src_configure() {
-        local mycmakeargs=(
-                -DENABLE_YTNEF=OFF
+	local mycmakeargs=(
+		-DENABLE_YTNEF=OFF
 		-DENABLE_PST_IMPORT=OFF
-        )
+	)
 	cmake-utils_src_configure
 }
 

@@ -58,7 +58,7 @@ src_prepare() {
 src_configure() {
 	# FIXME: we need addpredict to workaround bug #324779 until
 	# root cause (bug #249496) is solved
-	addpredict /usr/share/snmp/mibs/.index
+	addpredict /usr/share/snmp/mibs/.index #nowarn
 
 	multilib-minimal_src_configure
 }

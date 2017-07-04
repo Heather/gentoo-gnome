@@ -74,10 +74,10 @@ extra capabilities beyond these expressed via USE flags. Some of these
 that are currently available with packages include:
 
 * dev-util/ctags with exuberant-ctags selected via "eselect ctags" for
-  C, C++, Python, JavaScript, CSS, HTML and Ruby autocompletion, semantic
-  highlighting and symbol resolving support.
+C, C++, Python, JavaScript, CSS, HTML and Ruby autocompletion, semantic
+highlighting and symbol resolving support.
 * dev-python/jedi and dev-python/lxml for more accurate Python
-  autocompletion support.
+autocompletion support.
 * dev-util/valgrind for integration with valgrind.
 * dev-util/meson for integration with the Meson build system.
 * dev-util/cargo for integration with the Rust Cargo build system.

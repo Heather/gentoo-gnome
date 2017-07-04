@@ -2,9 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=5
+EAPI=6
 
-inherit base bzr
+inherit bzr
 
 DESCRIPTION="The official elementary GTK theme"
 HOMEPAGE="https://launchpad.net/egtk"

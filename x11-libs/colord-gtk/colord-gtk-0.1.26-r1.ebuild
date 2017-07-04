@@ -61,7 +61,7 @@ src_configure() {
 
 src_compile() {
 	if use doc; then
-		MAKEOPTS="${MAKEOPTS} -j1" gnome2_src_compile #482542
+		MAKEOPTS="${MAKEOPTS} -j1" gnome2_src_compile #nowarn
 	else
 		gnome2_src_compile
 	fi

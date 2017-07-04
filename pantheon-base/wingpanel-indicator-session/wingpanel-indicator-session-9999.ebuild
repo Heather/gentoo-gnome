@@ -35,7 +35,6 @@ src_prepare() {
 	cmake-utils_src_prepare
 }
 
-
 src_configure() {
 	mycmakeargs=(
 		-DGSETTINGS_COMPILE=OFF

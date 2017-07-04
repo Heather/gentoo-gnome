@@ -62,4 +62,3 @@ src_install() {
 
 	dobin "${FILESDIR}/pantheon-session"
 }
-

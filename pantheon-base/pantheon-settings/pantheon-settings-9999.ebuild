@@ -52,8 +52,8 @@ src_install() {
 	doins ${P}.gschema.override
 
 	insinto /etc/xdg/autostart/
-	doins dpms/elementary-dpms-helper.desktop 
-	
+	doins dpms/elementary-dpms-helper.desktop
+
 	insinto /etc/xdg/xdg-elementary/autostart/
 	doins light-locker.desktop
 

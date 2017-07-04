@@ -2,9 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=5
+EAPI=6
 
-inherit base bzr
+inherit bzr
 
 DESCRIPTION="A set of wallpapers used by the elementary OS"
 HOMEPAGE="http://www.elementaryos.org"
