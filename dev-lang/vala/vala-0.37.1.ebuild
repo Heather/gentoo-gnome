@@ -25,6 +25,7 @@ DEPEND="${RDEPEND}
 	test? (
 		dev-libs/dbus-glib
 		>=dev-libs/glib-2.26:2 )
+	>=media-gfx/graphviz-2.40.1
 "
 
 src_configure() {
