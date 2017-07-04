@@ -51,9 +51,6 @@ src_prepare() {
 	sed -e 's:python::g' \
 		-i Makefile.am || die
 
-	# Fix direct invocation of python in configure
-	epatch "${FILESDIR}"/${PN}-0.9.15-python-detection.patch
-
 	autotools-utils_src_prepare
 	vala_src_prepare
 }
