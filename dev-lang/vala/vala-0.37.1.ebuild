@@ -31,3 +31,13 @@ DEPEND="${RDEPEND}
 src_configure() {
 	gnome2_src_configure --disable-unversioned
 }
+
+src_install() {
+	emake DESTDIR="${D}" install
+	dosym /usr/bin/vala-"${SLOT}" /usr/bin/vala
+	dosym /usr/bin/vala-gen-introspect-"${SLOT}" /usr/bin/vala-gen-introspect
+	dosym /usr/bin/valac-"${SLOT}" /usr/bin/valac
+	dosym /usr/bin/valadoc-"${SLOT}" /usr/bin/valadoc
+	dosym /usr/bin/vapicheck-"${SLOT}" /usr/bin/vapicheck
+	dosym /usr/bin/vapigen-"${SLOT}" /usr/bin/vapigen
+}
