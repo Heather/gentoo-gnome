@@ -62,7 +62,6 @@ RDEPEND="${COMMON_DEPEND}
 
 PDEPEND="
 	gnome? ( x11-themes/adwaita-icon-theme )
-	tracker? ( >=gnome-extra/nautilus-tracker-tags-0.12 )
 	previewer? ( >=gnome-extra/sushi-0.1.9 )
 	sendto? ( >=gnome-extra/nautilus-sendto-3.0.1 )
 	>=gnome-base/gvfs-1.14[gtk]
