@@ -17,6 +17,7 @@ IUSE=""
 
 COMMON_DEPEND="
 	~app-misc/tracker-${PV}
+	<=app-misc/tracker-1.99.0
 	>=dev-libs/glib-2.44:2
 	>=gnome-base/nautilus-2.90
 	x11-libs/gtk+:3
