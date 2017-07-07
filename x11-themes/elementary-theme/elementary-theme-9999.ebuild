@@ -40,7 +40,6 @@ RESTRICT="binchecks mirror strip"
 DOCS=( AUTHORS CONTRIBUTORS COPYING )
 
 src_prepare() {
-	epatch "${FILESDIR}/${PN}-xfwm4.patch"
 	epatch_user
 
 	# Correct cursor theme name
