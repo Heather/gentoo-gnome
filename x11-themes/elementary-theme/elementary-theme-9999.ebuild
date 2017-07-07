@@ -40,15 +40,14 @@ RESTRICT="binchecks mirror strip"
 DOCS=( AUTHORS CONTRIBUTORS COPYING )
 
 src_prepare() {
-	epatch_user
-
 	# Correct cursor theme name
 	sed -i 's/DMZ-Black/Vanilla-DMZ-AA/' index.theme
+	default
 }
 
 src_install() {
 	insinto /usr/share/themes/elementary
-	doins -r index.theme gtk-2.0 gtk-3.0 xfwm4
+	doins -r index.theme gtk-2.0 gtk-3.0
 
 	base_src_install_docs
 }
