@@ -40,7 +40,8 @@ COMMON_DEPEND="
 	exif? ( >=media-libs/libexif-0.6.20 )
 	introspection? ( >=dev-libs/gobject-introspection-0.6.4:= )
 	selinux? ( >=sys-libs/libselinux-2 )
-	tracker? ( >=app-misc/tracker-0.16:= )
+	tracker? ( 	>=app-misc/tracker-0.16:=
+			<=app-misc/tracker-1.99:= )
 	xmp? ( >=media-libs/exempi-2.1.0 )
 "
 DEPEND="${COMMON_DEPEND}
