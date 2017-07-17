@@ -105,6 +105,7 @@ src_configure() {
 }
 
 src_install() {
+	addwrite /usr/share/evolution
 	addwrite /usr/share/glib-2.0/schemas/org.gnome.Evolution.DefaultSources.gschema.xml
 	addwrite /usr/share/glib-2.0/schemas/org.gnome.evolution-data-server.gschema.xml
 	addwrite /usr/share/glib-2.0/schemas/org.gnome.evolution-data-server.calendar.gschema.xml
