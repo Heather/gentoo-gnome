@@ -3,7 +3,7 @@
 # $Id$
 
 EAPI=6
-inherit gnome2
+inherit gnome2 meson
 
 DESCRIPTION="A set of backgrounds packaged with the GNOME desktop"
 HOMEPAGE="https://git.gnome.org/browse/gnome-backgrounds"
