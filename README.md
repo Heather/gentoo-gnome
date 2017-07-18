@@ -68,6 +68,13 @@ X-GNOME-Autostart-Phase=Application
 
 same way you can add `conky -d`
 
+TODO
+----
+
+ - update gdbus-codegen patch for python then update json-glib
+ - update spidermonkey for gjs
+ - bump gnome-disk
+
 Branches
 --------
 
