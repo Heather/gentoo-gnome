@@ -71,6 +71,7 @@ same way you can add `conky -d`
 TODO
 ----
 
+ - unmask spidermonkey 52 stuff
  - update gdbus-codegen patch for python then update json-glib
  - update spidermonkey for gjs
  - bump gnome-disk

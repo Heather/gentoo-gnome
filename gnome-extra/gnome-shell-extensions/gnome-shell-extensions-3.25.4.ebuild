@@ -12,7 +12,8 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="examples"
 
-KEYWORDS="~amd64 ~x86"
+#waiting for spidermonkey
+#KEYWORDS="~amd64 ~x86"
 
 COMMON_DEPEND="
 	>=dev-libs/glib-2.26:2
