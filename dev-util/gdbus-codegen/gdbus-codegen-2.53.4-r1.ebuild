@@ -40,7 +40,12 @@ src_test() {
 	einfo "when merged with FEATURES=test"
 }
 
+src_install() {
+	einfo "no"
+}
+
 python_install_all() {
-	distutils-r1_python_install_all # no-op, but prevents QA warning
-	doman "${WORKDIR}/glib-${PV}/docs/reference/gio/gdbus-codegen.1"
+	#distutils-r1_python_install_all # no-op, but prevents QA warning
+	#doman "${WORKDIR}/glib-${PV}/docs/reference/gio/gdbus-codegen.1"
+	einfo "no"
 }

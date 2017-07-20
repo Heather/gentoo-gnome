@@ -6,7 +6,7 @@
 # then to be think very closely.
 
 EAPI=6
-PYTHON_COMPAT=( python2_7 )
+PYTHON_COMPAT=( python2_7 python3_{4,5,6} )
 # Completely useless with or without USE static-libs, people need to use
 # pkg-config
 GNOME2_LA_PUNT="yes"
@@ -118,16 +118,16 @@ src_prepare() {
 	fi
 
 	# fix broken Makefile
-	eapply "${FILESDIR}"/${PN}-2.51.3.patch
+	#eapply "${FILESDIR}"/${PN}-2.51.3.patch
 
 	# gdbus-codegen is a separate package
-	eapply "${FILESDIR}"/${PN}-2.50.0-external-gdbus-codegen.patch
+	#eapply "${FILESDIR}"/${PN}-2.50.0-external-gdbus-codegen.patch
 
 	# Leave python shebang alone - handled by python_replicate_script
 	# We could call python_setup and give configure a valid --with-python
 	# arg, but that would mean a build dep on python when USE=utils.
-	sed -e '/${PYTHON}/d' \
-		-i glib/Makefile.{am,in} || die
+	#sed -e '/${PYTHON}/d' \
+	#	-i glib/Makefile.{am,in} || die
 
 	# Also needed to prevent cross-compile failures, see bug #267603
 	eautoreconf
