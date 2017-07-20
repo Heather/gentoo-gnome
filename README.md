@@ -4,7 +4,7 @@ Unofficial GNOME overlay [![Build Status](https://travis-ci.org/Heather/gentoo-g
 Versions
 --------
 
- - GNOME `3.25.3` -> `3.25.4`
+ - GNOME `3.25.4`
  - Pantheon `live` (so far everything works)
 
 Information
@@ -71,7 +71,8 @@ same way you can add `conky -d`
 TODO
 ----
 
- - update gdbus-codegen patch for python then update json-glib
+ - fix dirty mess I've made with glib
+ - possibly remove gdbus-codegen completely
  - bump gnome-disk
 
 Branches
