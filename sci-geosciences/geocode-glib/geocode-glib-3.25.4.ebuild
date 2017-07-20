@@ -3,7 +3,7 @@
 # $Id$
 
 EAPI=6
-inherit gnome2
+inherit gnome2 meson
 
 DESCRIPTION="GLib geocoding library that uses the Yahoo! Place Finder service"
 HOMEPAGE="https://git.gnome.org/browse/geocode-glib"
@@ -33,14 +33,3 @@ DEPEND="${RDEPEND}
 # FIXME: need network #424719, recheck
 # need various locales to be present
 RESTRICT="test"
-
-src_configure() {
-	gnome2_src_configure $(use_enable introspection)
-}
-
-src_test() {
-	export GVFS_DISABLE_FUSE=1
-	export GIO_USE_VFS=gvfs
-	ewarn "Tests require network access to http://where.yahooapis.com"
-	dbus-launch emake check || die "tests failed"
-}

@@ -15,8 +15,7 @@ SLOT="0"
 IUSE="+bluetooth +networkmanager nsplugin +nls -openrc-force"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
-#waiting for spidermonkey
-#KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 
 # libXfixes-5.0 needed for pointer barriers
 # FIXME:
