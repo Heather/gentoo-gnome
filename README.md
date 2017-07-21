@@ -7,6 +7,11 @@ Versions
  - GNOME `3.25.4` -> `3.25.5`
  - Pantheon `live` (so far everything works)
 
+Major differences with main tree
+-------------------------
+
+ - removed gdbus-codegen (I have no idea why it was split but it's a pain to keep)
+
 Information
 -----------
 
@@ -71,8 +76,6 @@ same way you can add `conky -d`
 TODO
 ----
 
- - fix dirty mess I've made with glib
- - possibly remove gdbus-codegen completely
  - bump gnome-disk
 
 Branches
