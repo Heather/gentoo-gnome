@@ -41,7 +41,7 @@ RESTRICT="test"
 # Dependencies found at Source/cmake/OptionsGTK.cmake
 RDEPEND="
 	dev-db/sqlite:3=
-	>=dev-libs/glib-2.36:2
+	>=dev-libs/glib-2.53.4:2
 	dev-libs/hyphen
 	>=dev-libs/icu-3.8.1-r1:=
 	>=dev-libs/libxml2-2.8:2
@@ -104,7 +104,6 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig
 
 	doc? ( >=dev-util/gtk-doc-1.10 )
-	geolocation? ( dev-util/gdbus-codegen )
 	introspection? ( jit? ( sys-apps/paxctl ) )
 	test? (
 		dev-lang/python:2.7

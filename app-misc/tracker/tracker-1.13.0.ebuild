@@ -31,7 +31,7 @@ REQUIRED_USE="
 RDEPEND="
 	>=app-i18n/enca-1.9
 	>dev-db/sqlite-3.8.4.2:=
-	>=dev-libs/glib-2.44:2
+	>=dev-libs/glib-2.53.4:2
 	>=dev-libs/gobject-introspection-0.9.5:=
 	>=dev-libs/icu-4.8.1.1:=
 	>=media-libs/libpng-1.2:0=
@@ -87,7 +87,6 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	${PYTHON_DEPS}
 	$(vala_depend)
-	dev-util/gdbus-codegen
 	>=dev-util/gtk-doc-am-1.8
 	>=dev-util/intltool-0.40.0
 	>=sys-devel/gettext-0.17

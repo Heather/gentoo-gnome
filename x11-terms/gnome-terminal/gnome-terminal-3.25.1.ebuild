@@ -17,7 +17,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~
 
 # FIXME: automagic dependency on gtk+[X], just transitive but needs proper control
 RDEPEND="
-	>=dev-libs/glib-2.42:2[dbus]
+	>=dev-libs/glib-2.53.4:2[dbus]
 	>=x11-libs/gtk+-3.20:3[X]
 	>=x11-libs/vte-0.49.1
 	>=dev-libs/libpcre2-10
@@ -32,7 +32,6 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	app-text/yelp-tools
 	dev-libs/libxml2
-	dev-util/gdbus-codegen
 	>=dev-util/intltool-0.50
 	sys-devel/gettext
 	virtual/pkgconfig

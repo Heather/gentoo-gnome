@@ -30,7 +30,7 @@ REQUIRED_USE="
 # use sqlite, svg by default
 RDEPEND="
 	dev-db/sqlite:3=
-	>=dev-libs/glib-2.36:2
+	>=dev-libs/glib-2.53.4:2
 	>=dev-libs/icu-3.8.1-r1:=
 	>=dev-libs/libxml2-2.6:2
 	>=dev-libs/libxslt-1.1.7
@@ -79,7 +79,6 @@ DEPEND="${RDEPEND}
 	>=sys-devel/make-3.82-r4
 	virtual/pkgconfig
 
-	geoloc? ( dev-util/gdbus-codegen )
 	introspection? ( jit? ( sys-apps/paxctl ) )
 	test? (
 		dev-lang/python:2.7
