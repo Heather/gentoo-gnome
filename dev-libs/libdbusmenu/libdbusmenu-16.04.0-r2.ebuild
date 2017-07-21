@@ -18,9 +18,11 @@ SLOT="0"
 KEYWORDS="alpha amd64 ~arm hppa ~mips ppc ppc64 sparc x86"
 IUSE="debug gtk2 gtk3 +introspection"
 
+#TODO: json-glib switched to meson, harder to mutlilib
 RDEPEND="
 	>=dev-libs/dbus-glib-0.100[${MULTILIB_USEDEP}]
 	>=dev-libs/json-glib-0.13.4[${MULTILIB_USEDEP}]
+	<dev-libs/json-glib-1.3.2[${MULTILIB_USEDEP}]
 	>=dev-libs/glib-2.32[${MULTILIB_USEDEP}]
 	dev-libs/libxml2[${MULTILIB_USEDEP}]
 	gtk2? ( x11-libs/gtk+:2[introspection?,${MULTILIB_USEDEP}] )
