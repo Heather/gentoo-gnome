@@ -73,11 +73,6 @@ X-GNOME-Autostart-Phase=Application
 
 same way you can add `conky -d`
 
-TODO
-----
-
- - bump gnome-disk
-
 Branches
 --------
 

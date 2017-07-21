@@ -5,7 +5,7 @@
 EAPI=6
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
+inherit gnome2 meson
 
 DESCRIPTION="Disk Utility for GNOME using udisks"
 HOMEPAGE="https://git.gnome.org/browse/gnome-disk-utility"
@@ -38,9 +38,3 @@ DEPEND="${COMMON_DEPEND}
 	dev-libs/libxslt
 	virtual/pkgconfig
 "
-
-src_configure() {
-	gnome2_src_configure \
-		$(use_enable gnome gsd-plugin) \
-		$(use_enable systemd libsystemd)
-}
