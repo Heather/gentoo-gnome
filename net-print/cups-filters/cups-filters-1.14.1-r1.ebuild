@@ -1,29 +1,29 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=6
 
 GENTOO_DEPEND_ON_PERL=no
 
-inherit eutils perl-module systemd
+inherit perl-module systemd
 
 if [[ "${PV}" == "9999" ]] ; then
-	inherit bzr
+	inherit bzr autotools
 	EBZR_REPO_URI="http://bzr.linuxfoundation.org/openprinting/cups-filters"
 else
 	SRC_URI="http://www.openprinting.org/download/${PN}/${P}.tar.xz"
-	KEYWORDS="alpha amd64 arm ~arm64 hppa ia64 ~mips ppc ppc64 ~s390 sparc x86 ~amd64-fbsd ~m68k-mint"
+	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sparc ~x86 ~amd64-fbsd ~m68k-mint"
 fi
 DESCRIPTION="Cups PDF filters"
 HOMEPAGE="https://wiki.linuxfoundation.org/openprinting/pdf_as_standard_print_job_format"
 
 LICENSE="MIT GPL-2"
 SLOT="0"
-IUSE="dbus +foomatic jpeg ldap perl png static-libs tiff zeroconf"
+IUSE="dbus +foomatic ipp_autosetup jpeg ldap pdf perl png +postscript static-libs tiff zeroconf"
 
 RDEPEND="
-	>=app-text/ghostscript-gpl-9.09
-	>=app-text/poppler-0.32:=[cxx,jpeg?,lcms,tiff?,utils,xpdf-headers(+)]
+	postscript? ( >=app-text/ghostscript-gpl-9.09[cups] )
+	>=app-text/poppler-0.32:=[cxx,jpeg?,lcms,tiff?,utils]
 	>=app-text/qpdf-3.0.2:=
 	dev-libs/glib:2
 	media-libs/fontconfig
@@ -37,6 +37,7 @@ RDEPEND="
 	foomatic? ( !net-print/foomatic-filters )
 	jpeg? ( virtual/jpeg:0 )
 	ldap? ( net-nds/openldap )
+	pdf? ( app-text/mupdf )
 	perl? ( dev-lang/perl:= )
 	png? ( media-libs/libpng:0= )
 	tiff? ( media-libs/tiff:0 )
@@ -44,26 +45,40 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}"
 
+src_prepare() {
+	default
+	[[ "${PV}" == "9999" ]] && eautoreconf
+}
+
 src_configure() {
-	econf \
-		--docdir="${EPREFIX}/usr/share/doc/${PF}" \
-		$(use_enable dbus) \
-		$(use_enable zeroconf avahi) \
-		$(use_enable static-libs static) \
-		$(use_enable ldap) \
-		--with-fontdir="fonts/conf.avail" \
-		--with-pdftops=pdftops \
-		--enable-imagefilters \
-		$(use_with jpeg) \
-		$(use_with png) \
-		$(use_with tiff) \
-		--with-rcdir=no \
-		--with-browseremoteprotocols=DNSSD,CUPS \
+	local myeconfargs=(
+		--docdir="${EPREFIX}/usr/share/doc/${PF}"
+		--enable-imagefilters
+		--localstatedir="${EPREFIX}"/var
+		--with-browseremoteprotocols=DNSSD,CUPS
+		--with-cups-rundir="${EPREFIX}"/run/cups
+		--with-fontdir="fonts/conf.avail"
+		--with-pdftops=pdftops
+		--with-rcdir=no
 		--without-php
+		$(use_enable dbus)
+		$(use_enable foomatic)
+		$(use_enable ipp_autosetup auto-setup-driverless)
+		$(use_enable ldap)
+		$(use_enable pdf mutool)
+		$(use_enable postscript ghostscript)
+		$(use_enable postscript ijs)
+		$(use_enable static-libs static)
+		$(use_enable zeroconf avahi)
+		$(use_with jpeg)
+		$(use_with png)
+		$(use_with tiff)
+	)
+	econf "${myeconfargs[@]}"
 }
 
 src_compile() {
-	MAKEOPTS=-j1 default
+	default
 
 	if use perl; then
 		pushd "${S}/scripting/perl" > /dev/null
@@ -83,28 +98,27 @@ src_install() {
 		popd > /dev/null
 	fi
 
-	# workaround: some printer drivers still require pstoraster and pstopxl, bug #383831
-	dosym /usr/libexec/cups/filter/gstoraster /usr/libexec/cups/filter/pstoraster
-	dosym /usr/libexec/cups/filter/gstopxl /usr/libexec/cups/filter/pstopxl
+	if use postscript; then
+		# workaround: some printer drivers still require pstoraster and pstopxl, bug #383831
+		dosym gstoraster /usr/libexec/cups/filter/pstoraster
+		dosym gstopxl /usr/libexec/cups/filter/pstopxl
+	fi
 
-	prune_libtool_files --all
+	find "${ED}" \( -name "*.a" -o -name "*.la" \) -delete || die
 
-	cp "${FILESDIR}"/cups-browsed.init.d "${T}"/cups-browsed || die
+	cp "${FILESDIR}"/cups-browsed.init.d-r1 "${T}"/cups-browsed || die
 
 	if ! use zeroconf ; then
 		sed -i -e 's:need cupsd avahi-daemon:need cupsd:g' "${T}"/cups-browsed || die
 		sed -i -e 's:cups\.service avahi-daemon\.service:cups.service:g' "${S}"/utils/cups-browsed.service || die
 	fi
 
-	if ! use foomatic ; then
-		# this needs an upstream solution / configure switch
-		rm -v "${ED}/usr/bin/foomatic-rip" || die
-		rm -v "${ED}/usr/libexec/cups/filter/foomatic-rip" || die
-		rm -v "${ED}/usr/share/man/man1/foomatic-rip.1" || die
-	fi
-
 	doinitd "${T}"/cups-browsed
 	systemd_dounit "${S}/utils/cups-browsed.service"
+}
+
+src_test() {
+	emake check
 }
 
 pkg_postinst() {
