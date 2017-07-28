@@ -43,9 +43,7 @@ RDEPEND="
 	tiff? ( media-libs/tiff:0 )
 	zeroconf? ( net-dns/avahi[dbus] )
 "
-DEPEND="${RDEPEND}
-	dev-util/gdbus-codegen
-"
+DEPEND="${RDEPEND}"
 
 src_prepare() {
 	default
