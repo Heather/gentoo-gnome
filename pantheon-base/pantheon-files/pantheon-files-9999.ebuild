@@ -1,19 +1,18 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
-VALA_MIN_API_VERSION=0.26
+VALA_MIN_API_VERSION=0.34
 
 inherit fdo-mime gnome2-utils vala cmake-utils multilib
 
-inherit bzr
-EBZR_REPO_URI="lp:${PN}"
+inherit git-r3
+EGIT_REPO_URI="https://github.com/elementary/files.git"
 KEYWORDS="~x86 ~amd64"
 
 DESCRIPTION="A simple, powerful, sexy file manager for the Pantheon desktop"
-HOMEPAGE="http://launchpad.net/${PN}"
+HOMEPAGE="https://github.com/elementary/files"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -32,7 +31,7 @@ RDEPEND="
 	x11-libs/pango
 	gvfs? ( gnome-base/gvfs )"
 DEPEND="${RDEPEND}
-	$(vala_depend)
+	>=dev-lang/vala-0.34.8
 	virtual/pkgconfig
 	nls? ( sys-devel/gettext )"
 
