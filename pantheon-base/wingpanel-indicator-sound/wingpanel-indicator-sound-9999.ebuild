@@ -1,16 +1,15 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
-VALA_MIN_VERSION=0.22
+VALA_MIN_VERSION=0.34
 
-inherit gnome2-utils vala cmake-utils bzr
+inherit gnome2-utils vala cmake-utils git-r3
 
 DESCRIPTION="Sound indicator for Wingpanel"
-HOMEPAGE="https://launchpad.net/wingpanel-indicator-sound"
-EBZR_REPO_URI="lp:${PN}"
+HOMEPAGE="https://github.com/elementary/wingpanel-indicator-sound"
+EGIT_REPO_URI="https://github.com/elementary/wingpanel-indicator-sound.git"
 
 LICENSE="GPL-3"
 SLOT="0"
