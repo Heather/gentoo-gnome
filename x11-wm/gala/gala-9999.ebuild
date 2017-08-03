@@ -1,17 +1,15 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
-VALA_MIN_API_VERSION=0.28
-VALA_USE_DEPEND=vapigen
+VALA_MIN_API_VERSION=0.34
 
-inherit gnome2-utils vala autotools bzr
+inherit gnome2-utils vala autotools git-r3
 
 DESCRIPTION="Pantheon's Window Manager"
-HOMEPAGE="https://launchpad.net/gala"
-EBZR_REPO_URI="lp:gala"
+HOMEPAGE="https://github.com/elementary/gala"
+EGIT_REPO_URI="https://github.com/elementary/gala.git"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -30,7 +28,7 @@ RDEPEND="
 	>=x11-wm/mutter-3.14.4
 	gnome-base/gnome-desktop:3"
 DEPEND="${RDEPEND}
-	$(vala_depend)
+	>=dev-lang/vala-0.34.8
 	virtual/pkgconfig"
 
 src_prepare() {
