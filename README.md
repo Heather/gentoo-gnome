@@ -7,6 +7,12 @@ Versions
  - GNOME `3.25.4` -> `3.25.5`
  - Pantheon `live` (so far everything works)
 
+Communication
+-------------
+
+ - Gentoo discord server: https://discord.gg/KEphgqH
+ - issues: https://github.com/Heather/gentoo-gnome/issues
+
 Major differences with main tree
 -------------------------
 
