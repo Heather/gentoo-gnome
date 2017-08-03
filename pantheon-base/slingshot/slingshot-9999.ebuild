@@ -1,16 +1,15 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
-VALA_MIN_API_VERSION=0.22
+VALA_MIN_API_VERSION=0.34
 
-inherit gnome2-utils vala cmake-utils bzr
+inherit gnome2-utils vala cmake-utils git-r3
 
 DESCRIPTION="A lightweight and stylish app launcher for Pantheon and other DEs"
-HOMEPAGE="http://launchpad.net/slingshot"
-EBZR_REPO_URI="lp:slingshot"
+HOMEPAGE=" https://github.com/elementary/applications-menu"
+EGIT_REPO_URI=" https://github.com/elementary/applications-menu.git"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -30,7 +29,7 @@ RDEPEND="
 	pantheon-base/wingpanel
 	>=pantheon-base/switchboard-2"
 DEPEND="${RDEPEND}
-	$(vala_depend)
+	>=dev-lang/vala-0.34.8
 	virtual/pkgconfig
 	nls? ( sys-devel/gettext )"
 
