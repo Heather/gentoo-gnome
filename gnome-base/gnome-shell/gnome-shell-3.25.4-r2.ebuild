@@ -12,7 +12,7 @@ HOMEPAGE="https://wiki.gnome.org/Projects/GnomeShell"
 
 LICENSE="GPL-2+ LGPL-2+"
 SLOT="0"
-IUSE="+bluetooth +networkmanager nsplugin +nls -openrc-force"
+IUSE="+bluetooth +networkmanager nsplugin +ibus -openrc-force"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
@@ -96,7 +96,7 @@ RDEPEND="${COMMON_DEPEND}
 	networkmanager? (
 		net-misc/mobile-broadband-provider-info
 		sys-libs/timezone-data )
-	nls? ( >=app-i18n/ibus-1.4.99[dconf(+),gtk3,introspection] )
+	ibus? ( >=app-i18n/ibus-1.4.99[dconf(+),gtk,introspection] )
 "
 # avoid circular dependency, see bug #546134
 PDEPEND="
