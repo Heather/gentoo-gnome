@@ -27,8 +27,7 @@ CDEPEND="
 	x11-libs/libwnck:3
 	x11-libs/bamf
 	x11-libs/gtk+:3"
-RDEPEND="${CDEPEND}
-	x11-themes/plank-theme-pantheon"
+RDEPEND="${CDEPEND}"
 DEPEND="${CDEPEND}
 	$(vala_depend)
 	dev-util/intltool

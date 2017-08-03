@@ -1,14 +1,13 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
-inherit bzr
+inherit git-r3
 
 DESCRIPTION="The official elementary GTK theme"
-HOMEPAGE="https://launchpad.net/egtk"
-EBZR_REPO_URI="lp:egtk"
+HOMEPAGE="https://github.com/elementary/stylesheet"
+EGIT_REPO_URI="https://github.com/elementary/stylesheet.git"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -39,15 +38,9 @@ RESTRICT="binchecks mirror strip"
 
 DOCS=( AUTHORS CONTRIBUTORS COPYING )
 
-src_prepare() {
-	# Correct cursor theme name
-	sed -i 's/DMZ-Black/Vanilla-DMZ-AA/' index.theme
-	default
-}
-
 src_install() {
 	insinto /usr/share/themes/elementary
-	doins -r index.theme gtk-2.0 gtk-3.0
+	doins -r index.theme gtk-2.0 gtk-3.0 gtk-3.22 plank
 
 	base_src_install_docs
 }
