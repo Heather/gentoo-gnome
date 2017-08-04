@@ -24,7 +24,6 @@ RDEPEND="${CDEPEND}
 	pantheon-base/plank
 	>=pantheon-base/slingshot-0.7
 	>=pantheon-base/wingpanel-0.2
-	pantheon-base/pantheon-settings
 	>=x11-themes/elementary-theme-3.4
 	x11-wm/gala
 	screensaver? ( || ( x11-misc/light-locker gnome-extra/gnome-screensaver x11-misc/xscreensaver ) )"
