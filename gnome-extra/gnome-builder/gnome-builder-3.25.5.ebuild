@@ -3,7 +3,7 @@
 
 EAPI=6
 PYTHON_COMPAT=( python{3_4,3_5,3_6} )
-VALA_MIN_API_VERSION="0.30"
+VALA_MIN_API_VERSION="0.34"
 VALA_USE_DEPEND="vapigen"
 DISABLE_AUTOFORMATTING=1
 FORCE_PRINT_ELOG=1
@@ -18,7 +18,7 @@ LICENSE="GPL-3+ GPL-2+ LGPL-3+ LGPL-2+ MIT CC-BY-SA-3.0 CC0-1.0"
 SLOT="0"
 
 KEYWORDS="~amd64 ~x86"
-IUSE="clang +git sysprof vala webkit"
+IUSE=""
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 # When bumping, pay attention to all the included plugins/*/configure.ac files and the requirements within.
@@ -48,16 +48,13 @@ RDEPEND="
 	>=dev-libs/jsonrpc-glib-3.25.3
 	>=app-text/gspell-1.2.0
 	>=app-text/enchant-1.6.0
-	webkit? ( >=net-libs/webkit-gtk-2.12.0:4=[introspection] )
-	clang? ( sys-devel/clang:= )
-	git? (
-		dev-libs/libgit2[ssh,threads]
-		>=dev-libs/libgit2-glib-0.25.0[ssh] )
+	>=net-libs/webkit-gtk-2.12.0:4=[introspection]
+	sys-devel/clang:=
+	dev-libs/libgit2[ssh,threads]
+	>=dev-libs/libgit2-glib-0.25.0[ssh]
 	>=x11-libs/vte-0.46:2.91
-	sysprof? ( >=dev-util/sysprof-3.23.91[gtk] )
 	dev-libs/libpcre:3
 	${PYTHON_DEPS}
-	vala? ( $(vala_depend) )
 "
 # desktop-file-utils for desktop-file-validate check in configure for 3.22.4
 # mm-common due to not fully clean --disable-idemm behaviour, recheck on bump
@@ -93,12 +90,15 @@ autocompletion support.
 # autotools stuff for autotools plugin; gtkmm/autoconf-archive for C++ template
 # mono/PHPize stuff
 
+#not sure
+#MAKEOPTS="-j1"
+
 pkg_setup() {
 	python-single-r1_pkg_setup
 }
 
 src_prepare() {
-	use vala && vala_src_prepare
+	vala_src_prepare
 	gnome2_src_prepare
 }
 
