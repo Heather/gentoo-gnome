@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit gnome2 virtualx
+inherit gnome2 virtualx meson
 
 DESCRIPTION="Color profile manager for the GNOME desktop"
 HOMEPAGE="https://git.gnome.org/browse/gnome-color-manager"
@@ -38,27 +38,3 @@ DEPEND="${RDEPEND}
 	dev-util/itstool
 	virtual/pkgconfig
 "
-
-src_configure() {
-	# Always enable tests since they are check_PROGRAMS anyway
-	# appstream does not want to be relax by default !
-	gnome2_src_configure \
-		--disable-static \
-		--enable-tests \
-		$(use_enable packagekit) \
-		$(use_enable raw exiv)
-#		APPSTREAM_UTIL=$(type -P true)
-}
-
-src_test() {
-	virtx emake check
-}
-
-pkg_postinst() {
-	gnome2_pkg_postinst
-
-	if ! has_version media-gfx/argyllcms ; then
-		elog "If you want to do display or scanner calibration, you will need to"
-		elog "install media-gfx/argyllcms"
-	fi
-}
