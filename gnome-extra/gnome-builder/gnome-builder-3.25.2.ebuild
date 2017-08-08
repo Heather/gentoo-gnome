@@ -64,6 +64,7 @@ DEPEND="${RDEPEND}
 	>=sys-devel/gettext-0.19.8
 	virtual/pkgconfig
 	!<sys-apps/sandbox-2.10-r3
+	!media-libs/gd
 "
 
 # Tests fail if all plugins aren't enabled (webkit, clang, devhelp, perhaps more)
