@@ -30,6 +30,7 @@ RDEPEND="
 "
 # docbook-sgml-{utils,dtd:4.1} needed to generate man pages
 DEPEND="${RDEPEND}
+	media-gfx/exiv2
 	app-text/docbook-sgml-dtd:4.1
 	app-text/docbook-sgml-utils
 	dev-libs/appstream-glib
