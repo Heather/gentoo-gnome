@@ -19,7 +19,7 @@ RDEPEND="
 	>=dev-libs/glib-2.43.90:2
 	gnome-base/gsettings-desktop-schemas
 	sys-apps/systemd:=
-	>=x11-libs/gtk+-3.19.3:3
+	>=x11-libs/gtk+-3.22.15:3
 "
 DEPEND="${RDEPEND}
 	~app-text/docbook-xml-dtd-4.3
