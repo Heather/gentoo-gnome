@@ -35,6 +35,7 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 # An introspection USE flag of a dep is required if any introspection based language plugin wants to use it. Last full check at 3.22.4
 RDEPEND="
 	dev-util/devhelp
+	dev-util/sysprof[gtk]
 	>=x11-libs/gtk+-3.22.1:3[introspection]
 	>=dev-libs/glib-2.50.0:2[dbus]
 	>=x11-libs/gtksourceview-3.22.0:3.0[introspection]
