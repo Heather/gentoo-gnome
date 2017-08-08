@@ -36,6 +36,7 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 RDEPEND="
 	dev-util/devhelp
 	dev-util/sysprof[gtk]
+	dev-libs/template-glib
 	>=x11-libs/gtk+-3.22.1:3[introspection]
 	>=dev-libs/glib-2.50.0:2[dbus]
 	>=x11-libs/gtksourceview-3.22.0:3.0[introspection]
