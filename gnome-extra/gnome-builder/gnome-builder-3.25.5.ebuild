@@ -100,3 +100,10 @@ src_prepare() {
 	use vala && vala_src_prepare
 	gnome2_src_prepare
 }
+
+src_configure() {
+	local emesonargs=(
+		-Dwith_flatpak=false
+	)
+	meson_src_configure
+}
