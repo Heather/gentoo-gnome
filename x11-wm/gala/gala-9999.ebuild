@@ -21,6 +21,7 @@ RDEPEND="
 	dev-libs/libgee:0.8
 	>=media-libs/clutter-1.12
 	media-libs/clutter-gtk
+	>=pantheon-base/plank-0.3
 	x11-libs/bamf
 	>=x11-libs/granite-0.3
 	>=x11-libs/gtk+-3.4:3
