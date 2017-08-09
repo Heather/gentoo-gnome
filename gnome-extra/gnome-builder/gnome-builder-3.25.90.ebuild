@@ -59,6 +59,8 @@ RDEPEND="
 "
 # desktop-file-utils for desktop-file-validate check in configure for 3.22.4
 # mm-common due to not fully clean --disable-idemm behaviour, recheck on bump
+# will not work with system libgd because they have different libgd...
+# also make install doesn't install their libgd, should be different package
 DEPEND="${RDEPEND}
 	dev-cpp/mm-common
 	dev-libs/appstream-glib
@@ -66,6 +68,7 @@ DEPEND="${RDEPEND}
 	>=sys-devel/gettext-0.19.8
 	virtual/pkgconfig
 	!<sys-apps/sandbox-2.10-r3
+	!media-libs/gd
 "
 
 # Tests fail if all plugins aren't enabled (webkit, clang, devhelp, perhaps more)
