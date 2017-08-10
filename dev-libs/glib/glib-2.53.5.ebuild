@@ -33,6 +33,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~s
 # is always turned on on linux systems, unless explicitly disabled, but
 # this ebuild does not do that anyway) (bug #599586)
 
+# gdbus-codegen-6.6.6 is ugly compatibility hack
 RDEPEND="
 	>=dev-libs/libpcre-8.13:3[${MULTILIB_USEDEP},static-libs?]
 	>=virtual/libiconv-0-r1[${MULTILIB_USEDEP}]
@@ -45,7 +46,7 @@ RDEPEND="
 	fam? ( >=virtual/fam-0-r1[${MULTILIB_USEDEP}] )
 	${PYTHON_DEPS}
 	virtual/libelf:0=
-	!dev-util/gdbus-codegen
+	>=dev-util/gdbus-codegen-6.6.6
 "
 DEPEND="${RDEPEND}
 	app-text/docbook-xml-dtd:4.1.2
@@ -56,7 +57,6 @@ DEPEND="${RDEPEND}
 	test? (
 		sys-devel/gdb
 		${PYTHON_DEPS}
-		>=dev-util/gdbus-codegen-${PV}[${PYTHON_USEDEP}]
 		>=sys-apps/dbus-1.2.14 )
 	!<dev-util/gtk-doc-1.15-r2
 "
