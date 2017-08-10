@@ -41,7 +41,6 @@ src_prepare() {
 		-i Makefile.am Makefile.in || die
 	sed -e "s/\(<book.*name=\"\)libmediaart/\1${PN}-${SLOT}/" \
 		-i html/libmediaart.devhelp2 || die
-	mv libmediaart-docs{,-${SLOT}}.sgml || die
 	mv libmediaart-overrides{,-${SLOT}}.txt || die
 	mv libmediaart-sections{,-${SLOT}}.txt || die
 	mv html/libmediaart{,-${SLOT}}.devhelp2 || die
