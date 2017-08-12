@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit gnome2 virtualx
+inherit gnome2 virtualx multilib
 
 DESCRIPTION="GNOME 3 compositing window manager based on Clutter"
 HOMEPAGE="https://git.gnome.org/browse/mutter/"
@@ -132,4 +132,9 @@ src_configure() {
 
 src_test() {
 	virtx emake check
+}
+
+pkg_postinst() {
+	elog "Creating missing symlinks"
+	ln /usr/"$(get_libdir)"/mutter/*.so /usr/"$(get_libdir)"/ || die
 }
