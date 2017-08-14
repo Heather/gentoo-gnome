@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit gnome2
+inherit gnome2 meson
 
 DESCRIPTION="Manage your online calendars with simple and modern interface"
 HOMEPAGE="https://wiki.gnome.org/Apps/Calendar"
