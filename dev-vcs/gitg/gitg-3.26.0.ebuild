@@ -3,7 +3,7 @@
 
 EAPI=6
 GNOME2_LA_PUNT="yes"
-PYTHON_COMPAT=( python{3_4,3_5} )
+PYTHON_COMPAT=( python{3_4,3_5,3_6} )
 VALA_MIN_API_VERSION="0.32" # Needed when gtk+-3.20 is found
 
 inherit gnome2 pax-utils python-r1 vala
