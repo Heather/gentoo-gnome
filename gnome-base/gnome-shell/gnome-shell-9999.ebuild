@@ -6,6 +6,9 @@ GNOME2_LA_PUNT="yes"
 PYTHON_COMPAT=( python{3_4,3_5,3_6} )
 
 inherit autotools gnome2 multilib pax-utils python-r1 systemd meson ninja-utils
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="Provides core UI functions for the GNOME 3 desktop"
 HOMEPAGE="https://wiki.gnome.org/Projects/GnomeShell"
@@ -15,8 +18,7 @@ SLOT="0"
 IUSE="+bluetooth +networkmanager nsplugin +ibus -openrc-force"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
-#broken
-#KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 
 # libXfixes-5.0 needed for pointer barriers
 # FIXME:
@@ -41,7 +43,7 @@ COMMON_DEPEND="
 	>=sys-auth/polkit-0.100[introspection]
 	>=x11-libs/libXfixes-5.0
 	x11-libs/libXtst
-	>=x11-wm/mutter-${PV}[introspection]
+	>=x11-wm/mutter-3.25.90[introspection]
 	>=x11-libs/startup-notification-0.11
 
 	${PYTHON_DEPS}
@@ -134,11 +136,23 @@ src_configure() {
 	meson_src_configure
 }
 
+src_compile() {
+	cd "${BUILD_DIR}"
+	meson_src_compile
+}
+
 multilib_src_compile() {
-	eninja
+	cd "${BUILD_DIR}"
+	meson_src_compile
+}
+
+src_install() {
+	cd "${BUILD_DIR}"
+	DESTDIR="${D}" eninja install
 }
 
 multilib_src_install() {
+	cd "${BUILD_DIR}"
 	DESTDIR="${D}" eninja install
 }
 
