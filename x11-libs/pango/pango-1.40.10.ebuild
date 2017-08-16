@@ -4,7 +4,7 @@
 EAPI=6
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2 multilib-minimal toolchain-funcs
+inherit gnome2 multilib-minimal toolchain-funcs autotools
 
 DESCRIPTION="Internationalized text layout and rendering library"
 HOMEPAGE="http://www.pango.org/"
@@ -35,6 +35,11 @@ DEPEND="${RDEPEND}
 	X? ( >=x11-proto/xproto-7.0.24[${MULTILIB_USEDEP}] )
 	!<=sys-devel/autoconf-2.63:2.5
 "
+
+src_prepare() {
+	eautoreconf
+	default
+}
 
 multilib_src_configure() {
 	tc-export CXX
