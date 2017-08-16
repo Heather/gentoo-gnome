@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>mudler@sabayonlinux.org</email>
+		<name>mudler</name>
+	</maintainer>
+	<use>
+    		<flag name="pm-utils">Adds support for suspend/resume using <pkg>sys-power/upower-pm-utils</pkg> instead of <pkg>sys-power/upower</pkg></flag>
+  	</use>
+</pkgmetadata>
