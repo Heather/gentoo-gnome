@@ -23,7 +23,9 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 # libXfixes-5.0 needed for pointer barriers
 # FIXME:
 #  * gstreamer support is currently automagic
+#  * having sassc breaks build...
 COMMON_DEPEND="
+	!dev-lang/sassc
 	dev-util/meson
 	>=app-accessibility/at-spi2-atk-2.5.3
 	>=dev-libs/atk-2[introspection]
