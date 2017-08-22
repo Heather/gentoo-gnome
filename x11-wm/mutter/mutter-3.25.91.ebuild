@@ -2,7 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit gnome2 virtualx multilib
+inherit autotools gnome2 virtualx
+if [[ ${PV} = 9999 ]]; then
+	inherit gnome2-live
+fi
 
 DESCRIPTION="GNOME 3 compositing window manager based on Clutter"
 HOMEPAGE="https://git.gnome.org/browse/mutter/"
@@ -81,6 +84,8 @@ RDEPEND="${COMMON_DEPEND}
 "
 
 src_prepare() {
+	eautoreconf
+
 	# Disable building of noinst_PROGRAM for tests
 	if ! use test; then
 		sed -e '/^noinst_PROGRAMS/d' \
@@ -134,7 +139,7 @@ src_test() {
 	virtx emake check
 }
 
-pkg_postinst() {
-	elog "Creating missing symlinks"
-	ln /usr/"$(get_libdir)"/mutter/*.so /usr/"$(get_libdir)"/ || die
-}
+#pkg_postinst() {
+#	elog "Creating missing symlinks"
+#	ln /usr/"$(get_libdir)"/mutter/*.so /usr/"$(get_libdir)"/ || die
+#}
