@@ -40,10 +40,6 @@ DEPEND="${RDEPEND}
 	vala? ( $(vala_depend) )
 "
 
-PATCHES=(
-	"${FILESDIR}"/${P}-disable-demos.patch
-)
-
 src_prepare() {
 	use vala && vala_src_prepare
 	gnome2_src_prepare
