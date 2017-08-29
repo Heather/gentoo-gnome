@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit gnome2 udev user
+inherit gnome2 udev user meson
 
 DESCRIPTION="Bluetooth graphical utilities integrated with GNOME"
 HOMEPAGE="https://wiki.gnome.org/Projects/GnomeBluetooth"
@@ -40,34 +40,4 @@ DEPEND="${COMMON_DEPEND}
 
 pkg_setup() {
 	enewgroup plugdev
-}
-
-src_prepare() {
-	# Regenerate gdbus-codegen files to allow using any glib version; bug #436236
-	# https://bugzilla.gnome.org/show_bug.cgi?id=758096
-	rm -v lib/bluetooth-client-glue.{c,h} || die
-	gnome2_src_prepare
-}
-
-src_configure() {
-	gnome2_src_configure \
-		$(usex debug --enable-debug=yes ' ') \
-		$(use_enable introspection) \
-		--enable-documentation \
-		--disable-desktop-update \
-		--disable-icon-update \
-		--disable-static
-}
-
-src_install() {
-	gnome2_src_install
-	udev_dorules "${FILESDIR}"/61-${PN}.rules
-}
-
-pkg_postinst() {
-	gnome2_pkg_postinst
-	if ! has_version sys-auth/consolekit[acl] && ! has_version sys-apps/systemd[acl] ; then
-		elog "Don't forget to add yourself to the plugdev group "
-		elog "if you want to be able to control bluetooth transmitter."
-	fi
 }
