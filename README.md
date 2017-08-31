@@ -16,6 +16,7 @@ Communication
 Major differences with main tree
 -------------------------
 
+ - if you want to use last vala versions, mask old vala version to see limitations (currently the only way to use new vala is to port everything to this overlay...)
  - removed gdbus-codegen (I have no idea why it was split but it's a pain to keep)
 
 Information
