@@ -31,7 +31,7 @@ DEPEND="${RDEPEND}
 "
 
 src_prepare() {
-	eautoreconf
+	eapply "${FILESDIR}/gjs-1.49.91-fix.patch"
 	gnome2_src_prepare
 }
 

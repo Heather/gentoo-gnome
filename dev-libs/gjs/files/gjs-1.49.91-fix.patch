@@ -1,0 +1,32 @@
+From 62bbcc1fd9c4cd9e247400e33398b26e4a8a368f Mon Sep 17 00:00:00 2001
+From: Philip Chimento <philip@endlessm.com>
+Date: Thu, 24 Aug 2017 16:58:29 -0700
+Subject: [PATCH] object: Only invalidate signals in finalizer
+
+The signal closures will get invalidated anyway in the finalizer, so no
+need to do it in the weak pointer callback, which seems to cause
+problems.
+
+This may cause references to signal handlers to live a bit longer than
+they previously would, but in any case the reference will be dropped when
+the owning object is finalized.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=785657
+---
+ gi/object.cpp | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/gi/object.cpp b/gi/object.cpp
+index 48b827ce..4c0cc81b 100644
+--- a/gi/object.cpp
++++ b/gi/object.cpp
+@@ -1433,7 +1433,6 @@ disassociate_js_gobject(GObject *gobj)
+                    gobj, G_OBJECT_TYPE_NAME(gobj));
+     }
+ 
+-    invalidate_all_signals(priv);
+     release_native_object(priv);
+ 
+     /* Mark that a JS object once existed, but it doesn't any more */
+-- 
+2.11.0
