@@ -45,7 +45,7 @@ src_prepare() {
 
 src_configure() {
         local emesonargs=(
-        -Denable-icon-update=false
+		-Denable-icon-update=false
 		-Denable-introspection=$(usex introspection true false)
 		-Denable-gtk-doc=true
         )
