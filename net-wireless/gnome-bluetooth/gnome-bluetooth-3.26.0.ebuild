@@ -38,6 +38,25 @@ DEPEND="${COMMON_DEPEND}
 # eautoreconf needs:
 #	gnome-base/gnome-common
 
+src_prepare() {
+	default
+	eapply ${FILESDIR}/${PN}-meson_fix.patch
+}
+
+src_configure() {
+        local emesonargs=(
+		-Denable-icon-update=false
+		-Denable-introspection=$(usex introspection true false)
+		-Denable-gtk-doc=true
+        )
+        meson_src_configure
+}
+
 pkg_setup() {
 	enewgroup plugdev
+}
+
+src_install() {
+	meson_src_install
+	udev_dorules "${FILESDIR}"/61-${PN}.rules
 }

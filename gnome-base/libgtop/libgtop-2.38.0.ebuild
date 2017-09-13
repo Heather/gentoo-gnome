@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit gnome2
+inherit gnome2 eutils
 
 DESCRIPTION="A library that provides top functionality to applications"
 HOMEPAGE="https://git.gnome.org/browse/libgtop"
@@ -21,7 +21,6 @@ DEPEND="${RDEPEND}
 	>=sys-devel/gettext-0.19.4
 	virtual/pkgconfig
 "
-
 src_configure() {
 	gnome2_src_configure \
 		--disable-static \
