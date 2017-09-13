@@ -57,7 +57,6 @@ COMMON_DEPEND="
 		>=x11-misc/colord-0.1.34:0=
 		>=x11-libs/colord-gtk-0.1.24 )
 
-	>=net-print/cups-1.4[dbus]
 	>=net-fs/samba-4.0.0[client]
 
 	gnome-online-accounts? (
