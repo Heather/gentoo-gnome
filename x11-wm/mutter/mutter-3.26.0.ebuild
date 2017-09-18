@@ -58,14 +58,12 @@ COMMON_DEPEND="
 	gles2? ( media-libs/mesa[gles2] )
 	input_devices_wacom? ( >=dev-libs/libwacom-0.13 )
 	introspection? ( >=dev-libs/gobject-introspection-1.42:= )
-	udev? ( virtual/libgudev:= )
 	>=dev-libs/libinput-1.4
 	>=dev-libs/wayland-1.6.90
 	>=dev-libs/wayland-protocols-1.7
 	>=media-libs/mesa-10.3[egl,gbm,wayland]
 	sys-apps/systemd:=
-	virtual/libgudev:=
-	>=virtual/libudev-136:=
+	>=virtual/libudev-232:=
 	x11-base/xorg-server[wayland]
 	x11-libs/libdrm:=
 "
