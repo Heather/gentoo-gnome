@@ -25,7 +25,7 @@ COMMON_DEPEND="${PYTHON_DEPS}
 	>=dev-libs/gobject-introspection-1.46.0:=
 	virtual/libffi:=
 	cairo? (
-		>=dev-python/pycairo-1.10.0[${PYTHON_USEDEP}]
+		>=dev-python/pycairo-1.11.1[${PYTHON_USEDEP}]
 		x11-libs/cairo )
 "
 DEPEND="${COMMON_DEPEND}
