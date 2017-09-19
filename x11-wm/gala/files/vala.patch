@@ -1,0 +1,14 @@
+diff --git src/KeyboardManager.vala src/KeyboardManager.vala
+index 0bca80e..1218ce8 100644
+--- src/KeyboardManager.vala
++++ src/KeyboardManager.vala
+@@ -47,7 +47,8 @@ namespace Gala
+ 		construct
+ 		{
+ 			var schema = GLib.SettingsSchemaSource.get_default ().lookup ("org.gnome.desktop.input-sources", true);
+-			return_if_fail (schema != null);
++			/// you can't use return_if_fail in constructor
++			//return_if_fail (schema != null);
+ 			
+ 			settings = new GLib.Settings.full (schema, null, null);
+ 			Signal.connect (settings, "changed", (Callback) set_keyboard_layout, this);

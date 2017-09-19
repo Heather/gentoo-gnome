@@ -32,6 +32,7 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig"
 
 src_prepare() {
+	epatch "${FILESDIR}/vala.patch"
 	eapply_user
 
 	eautoreconf
