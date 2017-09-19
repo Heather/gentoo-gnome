@@ -24,7 +24,7 @@ RDEPEND="
 	gnome-base/gconf:2
 	x11-libs/gtk+:3
 	x11-libs/gtksourceview:3.0
-	>=x11-libs/granite-0.3
+	>=dev-libs/granite-0.3
 	$(vala_depend)
 	contractor? ( pantheon-extra/contractor )
 	pastebin? ( net-libs/libsoup )
