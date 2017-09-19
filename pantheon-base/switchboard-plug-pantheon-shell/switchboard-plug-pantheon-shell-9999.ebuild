@@ -29,6 +29,8 @@ DEPEND="${RDEPEND}
 src_prepare() {
 	use nls || sed -i '/add_subdirectory (po)/d' CMakeLists.txt
 
+	addwrite /usr/share/glib-2.0/schemas/
+
 	cmake-utils_src_prepare
 	vala_src_prepare
 }
