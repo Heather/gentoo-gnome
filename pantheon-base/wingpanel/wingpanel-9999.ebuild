@@ -31,8 +31,6 @@ DEPEND="${RDEPEND}
 
 #pantheon-base/wingpanel-indicator-notifications
 PDEPEND="
-	pantheon-base/wingpanel-indicator-datetime
-	pantheon-base/wingpanel-indicator-session
 	accessibility? ( pantheon-base/wingpanel-indicator-accessibility )
 	bluetooth? ( pantheon-base/wingpanel-indicator-bluetooth )
 	keyboard? ( pantheon-base/wingpanel-indicator-keyboard )
