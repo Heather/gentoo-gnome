@@ -6,7 +6,7 @@ EAPI=6
 
 VALA_MIN_VERSION=0.26
 
-inherit fdo-mime gnome2-utils vala cmake-utils git-r3
+inherit fdo-mime gnome2-utils vala meson git-r3
 
 EGIT_REPO_URI="https://github.com/elementary/calculator.git"
 KEYWORDS="~x86 ~amd64"
@@ -16,7 +16,7 @@ HOMEPAGE="https://launchpad.net/pantheon-calculator"
 
 LICENSE="GPL-3"
 SLOT="0"
-IUSE="nls"
+IUSE=""
 
 RDEPEND="
 	dev-libs/granite
@@ -25,23 +25,13 @@ DEPEND="${RDEPEND}
 	$(vala_depend)"
 
 src_prepare() {
-	eapply "${FILESDIR}/${PN}-0.1.2-translations.patch"
 	eapply_user
-
-	# Translations
-	use nls || sed -i -e 's/add_subdirectory (po)//' CMakeLists.txt
-
-	cmake-utils_src_prepare
+	meson_src_prepare
 	vala_src_prepare
 }
 
 src_configure() {
-	local mycmakeargs=(
-		-DGSETTINGS_COMPILE=OFF
-		-DVALA_EXECUTABLE="${VALAC}"
-	)
-
-	cmake-utils_src_configure
+	meson_src_configure
 }
 
 pkg_preinst() {
