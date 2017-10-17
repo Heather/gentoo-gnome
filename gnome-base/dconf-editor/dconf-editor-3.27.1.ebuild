@@ -3,7 +3,7 @@
 
 EAPI=6
 
-inherit gnome2
+inherit gnome2 meson
 
 DESCRIPTION="Graphical tool for editing the dconf configuration database"
 HOMEPAGE="https://git.gnome.org/browse/dconf-editor"
@@ -27,8 +27,3 @@ DEPEND="${COMMON_DEPEND}
 RDEPEND="${COMMON_DEPEND}
 	!<gnome-base/dconf-0.22[X]
 "
-
-src_configure() {
-	gnome2_src_configure \
-		VALAC="$(type -P true)"
-}
