@@ -25,7 +25,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 #  * gstreamer support is currently automagic
 #  * having sassc breaks build...
 COMMON_DEPEND="
-	dev-util/meson
+	>=dev-util/meson-0.43.0
 	>=app-accessibility/at-spi2-atk-2.5.3
 	>=dev-libs/atk-2[introspection]
 	>=app-crypt/gcr-3.7.5[introspection]
