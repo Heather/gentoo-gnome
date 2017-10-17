@@ -3,7 +3,7 @@
 # $Id$
 
 EAPI=6
-inherit gnome2
+inherit gnome2 meson
 
 DESCRIPTION="Disk usage browser for GNOME"
 HOMEPAGE="https://wiki.gnome.org/Apps/Baobab"
@@ -29,9 +29,3 @@ DEPEND="${COMMON_DEPEND}
 	>=sys-devel/gettext-0.19.8
 	virtual/pkgconfig
 "
-
-src_configure() {
-	gnome2_src_configure   \
-		VALAC=$(type -P true)  \
-		VAPIGEN=$(type -P true)
-}
