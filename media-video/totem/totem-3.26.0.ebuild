@@ -4,17 +4,17 @@
 
 EAPI=6
 GNOME2_LA_PUNT="yes" # plugins are dlopened
-PYTHON_COMPAT=( python{2_7,3_4,3_5} )
+PYTHON_COMPAT=( python{3_4,3_5,3_6} )
 PYTHON_REQ_USE="threads"
 
-inherit autotools gnome2 python-single-r1
+inherit meson gnome2 python-single-r1
 
 DESCRIPTION="Media player for GNOME"
 HOMEPAGE="https://wiki.gnome.org/Apps/Videos"
 
 LICENSE="GPL-2+ LGPL-2+"
 SLOT="0"
-IUSE="debug +introspection lirc nautilus +python test zeitgeist"
+IUSE="debug +introspection lirc nautilus +python test zeitgeist vala doc"
 # see bug #359379
 REQUIRED_USE="
 	python? ( introspection ${PYTHON_REQUIRED_USE} )
@@ -60,7 +60,8 @@ RDEPEND="
 		>=dev-python/pygobject-2.90.3:3[${PYTHON_USEDEP}]
 		dev-python/pyxdg[${PYTHON_USEDEP}]
 		dev-python/dbus-python[${PYTHON_USEDEP}]
-		>=x11-libs/gtk+-3.5.2:3[introspection] )
+		>=x11-libs/gtk+-3.5.2:3[introspection] 
+		dev-python/pylint )
 	zeitgeist? ( >=gnome-extra/zeitgeist-0.9.12 )
 "
 DEPEND="${RDEPEND}
@@ -77,55 +78,34 @@ DEPEND="${RDEPEND}
 	dev-libs/gobject-introspection-common
 	gnome-base/gnome-common
 "
-# eautoreconf needs:
-#	app-text/yelp-tools
-#	dev-libs/gobject-introspection-common
-#	gnome-base/gnome-common
-# docbook-xml-dtd is needed for user doc
-# Prevent dev-python/pylint dep, bug #482538
 
 pkg_setup() {
 	use python && python-single-r1_pkg_setup
 }
 
-src_prepare() {
-	# Prevent pylint usage by tests, bug #482538
-	sed -i -e 's/ check-pylint//' src/plugins/Makefile.plugins || die
+src_configure() {
+	local emesonargs=(
+		-Denable-easy-codec-installation="yes" # Won’t compile if set to "no"
+		-Denable-python=$(usex python yes no)
+		-Denable-vala=$(usex vala yes no)
+		-Dwith-plugins="auto" # Options are "all", "none" and "auto".
+		-Denable-nautilus=$(usex nautilus yes no)
+#		-Dwith-nautilusdir # string defining instalation path
+		-Denable-gtk-doc=$(usex doc true false)
+		-Denable-introspection=$(usex introspection yes no)
+	)
 
-	eautoreconf
-	gnome2_src_prepare
-
-	# FIXME: upstream should provide a way to set GST_INSPECT, bug #358755 & co.
-	# gst-inspect causes sandbox violations when a plugin needs write access to
-	# /dev/dri/card* in its init phase.
-	sed -e "s|\(gst10_inspect=\).*|\1$(type -P true)|" \
-		-i configure || die
+	meson_src_configure
 }
 
-src_configure() {
-	# Disabled: sample-python, sample-vala
-	local plugins="apple-trailers,autoload-subtitles,brasero-disc-recorder"
-	plugins+=",im-status,gromit,media-player-keys,ontop"
-	plugins+=",properties,recent,rotation,screensaver,screenshot"
-	plugins+=",skipto,variable-rate,vimeo"
-	use lirc && plugins+=",lirc"
-	use nautilus && plugins+=",save-file"
-	use python && plugins+=",dbusservice,pythonconsole,opensubtitles"
-	use zeitgeist && plugins+=",zeitgeist-dp"
+src_compile() {
+	meson_src_compile
+}
 
-	# pylint is checked unconditionally, but is only used for make check
-	# appstream-util overriding necessary until upstream fixes their macro
-	# to respect configure switch
-	gnome2_src_configure \
-		--disable-run-in-source-tree \
-		--disable-static \
-		--enable-easy-codec-installation \
-		--enable-vala \
-		$(use_enable introspection) \
-		$(use_enable nautilus) \
-		$(use_enable python) \
-		PYLINT=$(type -P true) \
-		VALAC=$(type -P true) \
-		APPSTREAM_UTIL=$(type -P true) \
-		--with-plugins=${plugins}
+src_test() {
+	meson_src_test
+}
+
+src_install() {
+	meson_src_install
 }

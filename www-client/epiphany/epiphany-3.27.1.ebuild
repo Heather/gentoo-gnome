@@ -22,6 +22,7 @@ COMMON_DEPEND="
 	>=dev-libs/glib-2.44.0:2[dbus]
 	>=dev-libs/libxml2-2.6.12:2
 	>=dev-libs/libxslt-1.1.7
+	>=dev-libs/libdazzle-3.26.1
 	>=gnome-base/gsettings-desktop-schemas-0.0.1
 	>=net-dns/avahi-0.6.22[dbus]
 	>=net-libs/webkit-gtk-2.17.5:4=
