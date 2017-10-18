@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit gnome2 bash-completion-r1 virtualx
+inherit gnome2 bash-completion-r1 virtualx meson
 
 DESCRIPTION="Simple low-level configuration system"
 HOMEPAGE="https://wiki.gnome.org/action/show/Projects/dconf"
@@ -25,19 +25,8 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig
 "
 
-src_configure() {
-	gnome2_src_configure \
-		--disable-gcov \
-		--enable-man \
-		VALAC=$(type -P true)
-}
-
-src_test() {
-	virtx emake check
-}
-
 src_install() {
-	gnome2_src_install
+	meson_src_install
 
 	# GSettings backend may be one of: memory, gconf, dconf
 	# Only dconf is really considered functional by upstream
