@@ -1,4 +1,7 @@
-Unofficial GNOME overlay [![Build Status](https://travis-ci.org/Heather/gentoo-gnome.png?branch=master)](https://travis-ci.org/Heather/gentoo-gnome)
+Unofficial GNOME overlay
+[![Build Status](https://travis-ci.org/Heather/gentoo-gnome.png?branch=master)](https://travis-ci.org/Heather/gentoo-gnome)
+[![Twitter][]](http://www.twitter.com/Cynede)
+[![Donate Bitcoin](https://img.shields.io/badge/donate-bitcoin-orange.svg)](http://heather.github.io/donate-bitcoin/)
 ------------------------
 
 Versions
@@ -85,3 +88,5 @@ Branches
  - `stable` branch was targeting `Sabayon 14.01`
  - `3.16` branch is saved old master
  - `master` branch is for newer stuff based on portage
+
+[Twitter]: http://mxtoolbox.com/Public/images/twitter-icon.png
