@@ -1,0 +1,15 @@
+diff -Naur a/totem-3.26.0/src/backend/meson.build b/totem-3.26.0/src/backend/meson.build
+--- a/src/backend/meson.build	2017-10-19 22:21:11.763897563 +0200
++++ b/src/backend/meson.build	2017-10-19 22:19:56.471745097 +0200
+@@ -9,6 +9,11 @@
+ assert(gst_inspect.found(),
+        'Cannot find required GStreamer-1.0 tool "gst-inspect-1.0". It should be part of gstreamer-1_0-utils. Please install it.')
+
++gst_inspect = find_program(
++   'true',
++   required: true
++)
++
+ gst_base_plugins = [
+   'playbin',
+   'videoscale'

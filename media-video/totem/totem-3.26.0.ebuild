@@ -79,6 +79,13 @@ DEPEND="${RDEPEND}
 	gnome-base/gnome-common
 "
 
+PATCHES=(
+	# FIXME: upstream should provide a way to set GST_INSPECT, bug #358755 & co.
+	# gst-inspect causes sandbox violations when a plugin needs write access to
+	# /dev/dri/card* in its init phase.
+	"${FILESDIR}/${P}-gst-inspect.patch"
+)
+
 pkg_setup() {
 	use python && python-single-r1_pkg_setup
 }
