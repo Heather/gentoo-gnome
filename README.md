@@ -9,6 +9,7 @@ Versions
 
  - GNOME `3.27.x`
  - Pantheon `live` (so far everything works)
+ - Cinnamon `3.6.x`
 
 Communication
 -------------
