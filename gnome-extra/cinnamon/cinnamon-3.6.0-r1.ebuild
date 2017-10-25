@@ -20,7 +20,7 @@ LICENSE="GPL-2+"
 SLOT="0"
 
 # bluetooth support dropped due to bug #511648
-IUSE="+nls +networkmanager" #+bluetooth
+IUSE="+nls" #+bluetooth
 
 # We need *both* python 2.x and 3.x
 REQUIRED_USE="${PYTHON_REQUIRED_USE}
@@ -58,9 +58,8 @@ COMMON_DEPEND="${PYTHON_DEPS}
 	x11-libs/libX11
 	>=x11-libs/libXfixes-5.0
 	>=x11-wm/muffin-3.2.0[introspection]
-	networkmanager? (
-		gnome-base/libgnome-keyring
-		>=net-misc/networkmanager-0.8.999:=[introspection] )
+	gnome-base/libgnome-keyring
+	>=net-misc/networkmanager-0.8.999:=[introspection]
 "
 #bluetooth? ( >=net-wireless/gnome-bluetooth-3.1:=[introspection] )
 
@@ -113,10 +112,9 @@ RDEPEND="${COMMON_DEPEND}
 
 	gnome-extra/polkit-gnome
 
-	networkmanager? (
-		gnome-extra/nm-applet
-		net-misc/mobile-broadband-provider-info
-		sys-libs/timezone-data )
+	gnome-extra/nm-applet
+	net-misc/mobile-broadband-provider-info
+	sys-libs/timezone-data
 	nls? ( >=gnome-extra/cinnamon-translations-2.4 )
 "
 #bluetooth? ( net-wireless/cinnamon-bluetooth )
@@ -147,9 +145,6 @@ src_prepare() {
 	# Fix automagic gnome-bluetooth dep, bug #398145
 	eapply "${FILESDIR}"/${PN}-2.2.6-automagic-gnome-bluetooth.patch
 
-	# Optional NetworkManager, bug #488684
-	eapply "${FILESDIR}"/${PN}-2.6.7-optional-networkmanager.patch
-
 	# Use wheel group instead of sudo (from Fedora/Arch)
 	# https://github.com/linuxmint/Cinnamon/issues/3576
 	eapply "${FILESDIR}"/${PN}-2.8.3-set-wheel.patch
@@ -162,10 +157,6 @@ src_prepare() {
 	# https://github.com/linuxmint/Cinnamon/issues/3579
 	sed -i 's/RequiredComponents=\(.*\)$/RequiredComponents=\1polkit-gnome-authentication-agent-1;/' \
 		files/usr/share/cinnamon-session/sessions/cinnamon*.session || die
-
-	if ! use networkmanager; then
-		rm -rv files/usr/share/cinnamon/applets/network@cinnamon.org || die
-	fi
 
 	# python 2-and-3 shebang fixing craziness
 	local p
@@ -187,7 +178,7 @@ src_configure() {
 	gnome2_src_configure \
 		--libdir="${EPREFIX}/usr/$(get_libdir)" \
 		--disable-jhbuild-wrapper-script \
-		$(use_enable networkmanager) \
+		--enable-networkmanager \
 		--with-ca-certificates="${EPREFIX}/etc/ssl/certs/ca-certificates.crt" \
 		BROWSER_PLUGIN_DIR="${EPREFIX}/usr/$(get_libdir)/nsbrowser/plugins" \
 		--without-bluetooth
