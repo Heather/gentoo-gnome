@@ -1,0 +1,13 @@
+diff --git a/gdk/wayland/Makefile.am b/gdk/wayland/Makefile.am
+index 9295b1a..cccb572 100644
+--- a/gdk/wayland/Makefile.am
++++ b/gdk/wayland/Makefile.am
+@@ -104,6 +104,7 @@ endef
+ 
+ EXTRA_DIST += 					\
+ 	protocol/gtk-primary-selection.xml	\
+-	protocol/gtk-shell.xml
++	protocol/gtk-shell.xml			\
++	protocol/server-decoration.xml
+ 
+ -include $(top_srcdir)/git.mk
