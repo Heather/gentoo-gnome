@@ -10,7 +10,7 @@ inherit gnome2-utils vala cmake-utils git-r3
 
 DESCRIPTION="The terminal of the 21st century"
 HOMEPAGE="https://launchpad.net/pantheon-terminal"
-EGIT_REPO_URI="https://github.com/mpkh/terminal.git"
+EGIT_REPO_URI="https://github.com/elementary/terminal.git"
 
 LICENSE="GPL-3"
 SLOT="0"
