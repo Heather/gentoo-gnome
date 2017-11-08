@@ -125,8 +125,6 @@ src_prepare() {
 		strip_builddir SRC_SUBDIRS examples Makefile.{am,in}
 	fi
 
-	eapply "${FILESDIR}"/gdk-wayland-protocol-server-decoration.patch
-
 	eapply "${FILESDIR}"/${P}-build-fix.patch
 
 	# gtk-update-icon-cache is installed by dev-util/gtk-update-icon-cache
