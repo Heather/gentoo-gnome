@@ -56,7 +56,6 @@ RDEPEND="
 	sys-libs/zlib:0
 	>=dev-libs/atk-2.8.0
 	media-libs/libwebp:=
-	app-arch/brotli
 
 	>=dev-libs/glib-2.40:2
 	>=dev-libs/libxslt-1.1.7
@@ -249,6 +248,7 @@ src_configure() {
 		-DENABLE_ACCELERATED_2D_CANVAS=${canvas_enabled}
 		-DCMAKE_BUILD_TYPE=Release
 		-DPORT=GTK
+		-DUSE_WOFF2=OFF
 		${ruby_interpreter}
 	)
 
