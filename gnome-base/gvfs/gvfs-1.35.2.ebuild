@@ -52,11 +52,11 @@ RDEPEND="
 	systemd? ( >=sys-apps/systemd-206:0= )
 	udev? (
 		cdda? ( dev-libs/libcdio-paranoia )
-		virtual/libgudev:=
-		virtual/libudev:= )
+		virtual/libgudev:= )
 	udisks? ( >=sys-fs/udisks-1.97:2 )
 	zeroconf? ( >=net-dns/avahi-0.6 )
 "
+
 DEPEND="${RDEPEND}
 	app-text/docbook-xsl-stylesheets
 	dev-libs/libxslt
@@ -89,10 +89,11 @@ src_prepare() {
 			-i daemon/Makefile.am || die
 
 		# Uncomment when eautoreconf stops being needed always
-		eautoreconf
+		#eautoreconf
 	fi
 
 	gnome2_src_prepare
+	eautoreconf
 }
 
 src_configure() {

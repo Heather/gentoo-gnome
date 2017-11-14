@@ -5,7 +5,7 @@
 EAPI=6
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2
+inherit gnome2 meson
 
 DESCRIPTION="The Eye of GNOME image viewer"
 HOMEPAGE="https://wiki.gnome.org/Apps/EyeOfGnome"
@@ -43,14 +43,3 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext
 	virtual/pkgconfig
 "
-
-src_configure() {
-	gnome2_src_configure \
-		$(usex debug --enable-debug=yes ' ') \
-		$(use_enable introspection) \
-		$(use_with jpeg libjpeg) \
-		$(use_with exif libexif) \
-		$(use_with lcms cms) \
-		$(use_with xmp) \
-		$(use_with svg librsvg)
-}
