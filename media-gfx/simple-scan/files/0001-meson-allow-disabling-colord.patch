@@ -1,0 +1,70 @@
+From 3820aa58c5db530d68d85212f167640118191c04 Mon Sep 17 00:00:00 2001
+From: David Heidelberg <david@ixit.cz>
+Date: Sat, 18 Nov 2017 21:35:53 +0100
+Subject: [PATCH] meson: allow disabling colord
+
+Signed-off-by: David Heidelberg <david@ixit.cz>
+---
+ meson.build       | 8 +++++++-
+ meson_options.txt | 7 +++++++
+ src/meson.build   | 4 ++--
+ 3 files changed, 16 insertions(+), 3 deletions(-)
+ create mode 100644 meson_options.txt
+
+diff --git a/meson.build b/meson.build
+index a0ccb7d..ebe3463 100644
+--- a/meson.build
++++ b/meson.build
+@@ -25,7 +25,13 @@ zlib_dep = dependency ('zlib')
+ cairo_dep = dependency ('cairo')
+ gdk_pixbuf_dep = dependency ('gdk-pixbuf-2.0')
+ gusb_dep = dependency ('gusb', version: '>= 0.2.7')
+-colord_dep = dependency ('colord', required: false)
++with_colord = get_option('colord')
++if with_colord == 'auto'
++  colord_dep = dependency ('colord', required: false)
++elif with_colord == 'true'
++  colord_dep = dependency ('colord')
++endif
++
+ packagekit_dep = dependency ('packagekit-glib2', version: '>= 1.1.5', required: false)
+ webp_dep = dependency ('libwebp', required: false)
+ webpmux_dep = dependency ('libwebpmux', required: false)
+diff --git a/meson_options.txt b/meson_options.txt
+new file mode 100644
+index 0000000..159fbd4
+--- /dev/null
++++ b/meson_options.txt
+@@ -0,0 +1,7 @@
++option(
++  'colord',
++  type : 'combo',
++  value : 'auto',
++  choices : ['auto', 'true', 'false'],
++  description : 'build with colord support'
++)
+diff --git a/src/meson.build b/src/meson.build
+index 9e40e42..ac53a85 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -4,7 +4,7 @@ resources = gnome.compile_resources ('resources', 'simple-scan.gresource.xml',
+ 
+ vala_args = [ '--pkg=posix', '--vapidir=' + meson.current_source_dir () ]
+ dependencies = [ glib_dep, gtk_dep, zlib_dep, cairo_dep, gdk_pixbuf_dep, gusb_dep, sane_dep ]
+-if colord_dep.found ()
++if with_colord != 'false' and colord_dep.found()
+     vala_args += [ '-D', 'HAVE_COLORD' ]
+     dependencies += colord_dep
+ endif
+@@ -12,7 +12,7 @@ if packagekit_dep.found ()
+     vala_args += [ '-D', 'HAVE_PACKAGEKIT' ]
+     dependencies += packagekit_dep
+ endif
+-if webp_dep.found () and (not colord_dep.found () or webpmux_dep.found ()) # Webpmux only required if colord
++if webp_dep.found () and (not (with_colord != 'false' and colord_dep.found ()) or webpmux_dep.found ()) # Webpmux only required if colord
+     vala_args += [ '-D', 'HAVE_WEBP' ]
+     dependencies += [ webp_dep, webpmux_dep ]
+ endif
+-- 
+2.15.0
+
