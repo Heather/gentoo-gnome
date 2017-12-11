@@ -40,15 +40,9 @@ DEPEND="${COMMON_DEPEND}
 "
 
 src_prepare() {
+	eapply "${FILESDIR}"/libgweather-3.27.1-includes.patch
+
 	use vala && vala_src_prepare
 	gnome2_src_prepare
 	default
 }
-
-#src_configure() {
-#	gnome2_src_configure \
-#		--disable-static \
-#		$(use_enable glade glade-catalog) \
-#		$(use_enable introspection) \
-#		$(use_enable vala)
-#}
