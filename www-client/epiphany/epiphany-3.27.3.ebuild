@@ -25,7 +25,7 @@ COMMON_DEPEND="
 	>=dev-libs/libdazzle-3.26.1
 	>=gnome-base/gsettings-desktop-schemas-0.0.1
 	>=net-dns/avahi-0.6.22[dbus]
-	>=net-libs/webkit-gtk-2.19.2:4=
+	>=net-libs/webkit-gtk-2.19.1:4=
 	>=net-libs/libsoup-2.48:2.4
 	>=x11-libs/gtk+-3.19.1:3
 	>=x11-libs/libnotify-0.5.1:=
