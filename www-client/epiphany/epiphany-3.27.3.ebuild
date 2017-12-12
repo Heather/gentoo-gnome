@@ -15,6 +15,7 @@ IUSE="test"
 KEYWORDS="~amd64 ~arm ~ppc ~ppc64 ~sparc ~x86"
 
 COMMON_DEPEND="
+	>=dev-libs/nettle-3.4
 	>=dev-util/meson-0.40.0
 	>=app-crypt/gcr-3.5.5:=
 	>=app-crypt/libsecret-0.14

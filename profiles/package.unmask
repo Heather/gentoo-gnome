@@ -143,3 +143,6 @@ dev-lang/spidermonkey
 >=x11-themes/gnome-backgrounds-3.21
 >=x11-themes/gnome-themes-standard-3.21
 app-i18n/ibus
+
+# for epiphany
+=dev-libs/nettle-3.4
