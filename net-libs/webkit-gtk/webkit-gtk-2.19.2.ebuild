@@ -150,8 +150,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# https://bugs.gentoo.org/show_bug.cgi?id=555504
-	eapply "${FILESDIR}"/${PN}-2.8.5-fix-ia64-build.patch
 	cmake-utils_src_prepare
 	gnome2_src_prepare
 }
