@@ -15,7 +15,6 @@ IUSE="test"
 KEYWORDS="~amd64 ~arm ~ppc ~ppc64 ~sparc ~x86"
 
 COMMON_DEPEND="
-	>=dev-libs/nettle-3.4
 	>=dev-util/meson-0.40.0
 	>=app-crypt/gcr-3.5.5:=
 	>=app-crypt/libsecret-0.14
@@ -26,7 +25,7 @@ COMMON_DEPEND="
 	>=dev-libs/libdazzle-3.26.1
 	>=gnome-base/gsettings-desktop-schemas-0.0.1
 	>=net-dns/avahi-0.6.22[dbus]
-	>=net-libs/webkit-gtk-2.19.2:4=
+	>=net-libs/webkit-gtk-2.19.1:4=
 	>=net-libs/libsoup-2.48:2.4
 	>=x11-libs/gtk+-3.19.1:3
 	>=x11-libs/libnotify-0.5.1:=
