@@ -41,6 +41,7 @@ RESTRICT="test"
 # Various compile-time optionals for gtk+-3.22.0 - ensure it
 # Missing OpenWebRTC checks and conditionals, but ENABLE_MEDIA_STREAM/ENABLE_WEB_RTC is experimental upstream (PRIVATE OFF)
 RDEPEND="
+	>=dev-libs/nettle-3.4:=
 	>=x11-libs/cairo-1.10.2:=
 	>=media-libs/fontconfig-2.8.0:1.0
 	>=media-libs/freetype-2.4.2:2
