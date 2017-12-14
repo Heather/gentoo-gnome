@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit gnome2
+inherit gnome2 meson
 
 DESCRIPTION="Gnome session manager"
 HOMEPAGE="https://git.gnome.org/browse/gnome-session"
@@ -65,51 +65,6 @@ DEPEND="${COMMON_DEPEND}
 		app-text/xmlto
 		dev-libs/libxslt )
 "
-# gnome-common needed for eautoreconf
-# gnome-base/gdm does not provide gnome.desktop anymore
-
-src_configure() {
-	# 1. Avoid automagic on old upower releases
-	# 2. xsltproc is always checked due to man configure
-	#    switch, even if USE=-doc
-	# 3. Disable old gconf support as other distributions did long time
-	#    ago
-	gnome2_src_configure \
-		--disable-deprecation-flags \
-		--disable-gconf \
-		--enable-session-selector \
-		$(use_enable doc docbook-docs) \
-		$(use_enable ipv6) \
-		$(use_enable systemd) \
-		$(use_enable !systemd consolekit) \
-		UPOWER_CFLAGS="" \
-		UPOWER_LIBS=""
-		# gnome-session-selector pre-generated man page is missing
-		#$(usex !doc XSLTPROC=$(type -P true))
-}
-
-src_install() {
-	gnome2_src_install
-
-	dodir /etc/X11/Sessions
-	exeinto /etc/X11/Sessions
-	doexe "${FILESDIR}/Gnome"
-
-	insinto /usr/share/applications
-	newins "${FILESDIR}/defaults.list-r3" gnome-mimeapps.list
-
-	dodir /etc/X11/xinit/xinitrc.d/
-	exeinto /etc/X11/xinit/xinitrc.d/
-	newexe "${FILESDIR}/15-xdg-data-gnome-r1" 15-xdg-data-gnome
-
-	# This should be done here as discussed in bug #270852
-	newexe "${FILESDIR}/10-user-dirs-update-gnome-r1" 10-user-dirs-update-gnome
-
-	# Set XCURSOR_THEME from current dconf setting instead of installing
-	# default cursor symlink globally and affecting other DEs (bug #543488)
-	# https://bugzilla.gnome.org/show_bug.cgi?id=711703
-	newexe "${FILESDIR}/90-xcursor-theme-gnome" 90-xcursor-theme-gnome
-}
 
 pkg_postinst() {
 	gnome2_pkg_postinst
