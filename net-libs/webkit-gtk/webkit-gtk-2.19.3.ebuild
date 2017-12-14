@@ -201,28 +201,6 @@ src_configure() {
 		ruby_interpreter="-DRUBY_EXECUTABLE=$(type -P ruby21)"
 	fi
 
-	# TODO: Check Web Audio support
-	# should somehow let user select between them?
-	#
-	# FTL_JIT requires llvm
-	#
-	# opengl needs to be explicetly handled, bug #576634
-
-	local opengl_enabled
-	if use opengl || use gles2; then
-		opengl_enabled=ON
-	else
-		opengl_enabled=OFF
-	fi
-
-	# support for webgl (aka 2d-canvas accelerating)
-	local canvas_enabled
-	if use webgl && ! use gles2 ; then
-		canvas_enabled=ON
-	else
-		canvas_enabled=OFF
-	fi
-
 	local mycmakeargs=(
 		-DENABLE_QUARTZ_TARGET=$(usex aqua)
 		-DENABLE_API_TESTS=$(usex test)
@@ -243,8 +221,8 @@ src_configure() {
 		$(cmake-utils_use_find_package egl EGL)
 		$(cmake-utils_use_find_package opengl OpenGL)
 		-DENABLE_X11_TARGET=$(usex X)
-		-DENABLE_OPENGL=${opengl_enabled}
-		-DENABLE_ACCELERATED_2D_CANVAS=${canvas_enabled}
+		-DENABLE_OPENGL=ON
+		-DENABLE_ACCELERATED_2D_CANVAS=OFF
 		-DCMAKE_BUILD_TYPE=Release
 		-DPORT=GTK
 		-DUSE_WOFF2=OFF
