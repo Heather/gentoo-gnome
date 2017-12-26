@@ -53,7 +53,7 @@ ELTCONF=${ELTCONF:-}
 # @ECLASS-VARIABLE: EGIT_REPO_URI
 # @DESCRIPTION:
 # git URI for the project, uses GNOME_LIVE_MODULE by default
-: "${EGIT_REPO_URI:="git://git.gnome.org/${GNOME_LIVE_MODULE}"}"
+: "${EGIT_REPO_URI:="https://git.gnome.org/browse/${GNOME_LIVE_MODULE}"}"
 
 # @ECLASS-VARIABLE: PATCHES
 # @DESCRIPTION:
