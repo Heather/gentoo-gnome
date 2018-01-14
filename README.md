@@ -7,8 +7,8 @@ Unofficial GNOME overlay
 Versions
 --------
 
- - GNOME `3.27.x`
- - Pantheon `live` (so far everything works)
+ - GNOME `3.27.x` (Unstable versions)
+ - Pantheon `live` ebuilds
 
 Communication
 -------------
