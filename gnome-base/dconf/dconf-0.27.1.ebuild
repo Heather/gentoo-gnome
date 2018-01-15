@@ -23,6 +23,7 @@ DEPEND="${RDEPEND}
 	>=dev-util/gtk-doc-am-1.15
 	sys-devel/gettext
 	virtual/pkgconfig
+	>=dev-lang/vala-0.39.4
 "
 
 src_install() {
