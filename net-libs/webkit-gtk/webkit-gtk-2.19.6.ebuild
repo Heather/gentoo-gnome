@@ -191,6 +191,8 @@ src_configure() {
 
 	local ruby_interpreter=""
 
+	if has_version "virtual/rubygems[ruby_targets_ruby25]"; then
+		ruby_interpreter="-DRUBY_EXECUTABLE=$(type -P ruby25)"
 	if has_version "virtual/rubygems[ruby_targets_ruby24]"; then
 		ruby_interpreter="-DRUBY_EXECUTABLE=$(type -P ruby24)"
 	elif has_version "virtual/rubygems[ruby_targets_ruby23]"; then
