@@ -1,0 +1,10 @@
+--- a/meson.build	2018-02-05 20:44:20.000000000 +0400
++++ b/meson.build	2018-02-06 12:14:13.230781903 +0400
+@@ -68,6 +68,7 @@
+ 
+   compiler_flags = cc.get_supported_arguments(test_cflags)
+ else
++  compiler_flags = []
+   common_flags += ['-DG_DISABLE_CHECKS']
+ endif
+ 

@@ -1,11 +1,11 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 GNOME2_LA_PUNT="yes"
-PYTHON_COMPAT=( python{2_7,3_4,3_5,3_6} )
+PYTHON_COMPAT=( python{3_4,3_5,3_6} )
 
-inherit autotools eutils gnome2 python-any-r1 systemd udev virtualx
+inherit autotools eutils gnome2 python-any-r1 systemd udev virtualx meson
 
 DESCRIPTION="Gnome Settings Daemon"
 HOMEPAGE="https://git.gnome.org/browse/gnome-settings-daemon"
@@ -45,7 +45,7 @@ COMMON_DEPEND="
 	>=app-misc/geoclue-2.3.1:2.0
 	>=dev-libs/libgweather-3.9.5:2=
 	>=sci-geosciences/geocode-glib-3.10
-	>=sys-auth/polkit-0.103
+	>=sys-auth/polkit-0.113-r5
 
 	colord? (
 		>=media-libs/lcms-2.2:2
@@ -92,59 +92,28 @@ DEPEND="${COMMON_DEPEND}
 	>=x11-proto/xproto-7.0.15
 "
 
-python_check_deps() {
-	use test && has_version "dev-python/pygobject:3[${PYTHON_USEDEP}]"
-}
-
-pkg_setup() {
-	use test && python-any-r1_pkg_setup
+meson_use_enable() {
+	echo "-Denable-${2:-${1}}=$(usex ${1} 'true' 'false')"
 }
 
 src_prepare() {
-	# Make colord and wacom optional; requires eautoreconf
-	eapply "${FILESDIR}"/${PN}-3.24.0-optional.patch
-
-	eautoreconf
+	eapply "${FILESDIR}"/meson.patch
 	gnome2_src_prepare
 }
 
 src_configure() {
-	gnome2_src_configure \
-		--disable-static \
-		--enable-man \
-		$(use_enable colord color) \
-		$(use_enable cups) \
-		$(use_enable debug) \
-		$(use_enable debug more-warnings) \
-		$(use_enable networkmanager network-manager) \
-		$(use_enable smartcard smartcard-support) \
-		$(use_enable udev gudev) \
-		$(use_enable input_devices_wacom wacom) \
-		$(use_enable wayland)
-}
+	local emesonargs=(
+		-Doption=disable-static
+		$(meson_use_enable udev gudev)
+		$(meson_use_enable colord color)
+		$(meson_use_enable cups)
+		$(meson_use_enable debug)
+		$(meson_use_enable debug more-warnings)
+		$(meson_use_enable networkmanager network-manager)
+		$(meson_use_enable smartcard smartcard-support)
+		$(meson_use_enable input_devices_wacom wacom)
+		$(meson_use_enable wayland)
+	)
 
-src_test() {
-	virtx emake check
-}
-
-src_install() {
-	gnome2_src_install udevrulesdir="$(get_udevdir)"/rules.d #509484
-}
-
-pkg_postinst() {
-	gnome2_pkg_postinst
-
-	if ! systemd_is_booted; then
-		ewarn "${PN} needs Systemd to be *running* for working"
-		ewarn "properly. Please follow the this guide to migrate:"
-		ewarn "https://wiki.gentoo.org/wiki/Systemd"
-	fi
-
-	if use openrc-force; then
-		ewarn "You are enabling 'openrc-force' USE flag to skip systemd requirement,"
-		ewarn "this can lead to unexpected problems and is not supported neither by"
-		ewarn "upstream neither by Gnome Gentoo maintainers. If you suffer any problem,"
-		ewarn "you will need to disable this USE flag system wide and retest before"
-		ewarn "opening any bug report."
-	fi
+	meson_src_configure
 }
