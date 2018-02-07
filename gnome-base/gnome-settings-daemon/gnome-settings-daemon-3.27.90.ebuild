@@ -5,7 +5,7 @@ EAPI=6
 GNOME2_LA_PUNT="yes"
 PYTHON_COMPAT=( python{3_4,3_5,3_6} )
 
-inherit autotools eutils gnome2 python-any-r1 systemd udev virtualx meson
+inherit eutils gnome2 python-any-r1 systemd udev virtualx meson
 
 DESCRIPTION="Gnome Settings Daemon"
 HOMEPAGE="https://git.gnome.org/browse/gnome-settings-daemon"
