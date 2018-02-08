@@ -2,10 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
+GNOME2_EAUTORECONF="yes"
 GNOME2_LA_PUNT="yes"
-PYTHON_COMPAT=( python{3_4,3_5,3_6} )
+#PYTHON_COMPAT=( python{2_7,3_4,3_5,3_6} ) # https://bugzilla.gnome.org/show_bug.cgi?id=783186
+PYTHON_COMPAT=( python2_7 )
 
-inherit eutils gnome2 python-any-r1 systemd udev virtualx meson
+inherit gnome2 python-any-r1 systemd udev virtualx
 
 DESCRIPTION="Gnome Settings Daemon"
 HOMEPAGE="https://git.gnome.org/browse/gnome-settings-daemon"
@@ -16,12 +18,14 @@ IUSE="+colord +cups debug input_devices_wacom -openrc-force networkmanager polic
 REQUIRED_USE="
 	input_devices_wacom? ( udev )
 	smartcard? ( udev )
+	wayland? ( udev )
 "
-#KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~x86-solaris"
+KEYWORDS="~alpha amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sparc x86 ~x86-fbsd ~amd64-linux ~x86-linux ~x86-solaris"
 
 COMMON_DEPEND="
 	>=dev-libs/glib-2.44.0:2[dbus]
-	>=x11-libs/gtk+-3.15.3:3
+	>=x11-libs/gtk+-3.15.3:3[X,wayland?]
+	>=gnome-base/gnome-desktop-3.11.1:3=
 	>=gnome-base/gsettings-desktop-schemas-3.23.3
 	>=gnome-base/librsvg-2.36.2:2
 	media-fonts/cantarell
@@ -45,7 +49,7 @@ COMMON_DEPEND="
 	>=app-misc/geoclue-2.3.1:2.0
 	>=dev-libs/libgweather-3.9.5:2=
 	>=sci-geosciences/geocode-glib-3.10
-	>=sys-auth/polkit-0.113-r5
+	>=sys-auth/polkit-0.103
 
 	colord? (
 		>=media-libs/lcms-2.2:2
@@ -74,46 +78,70 @@ RDEPEND="${COMMON_DEPEND}
 	!<gnome-base/gnome-session-3.23.2
 "
 # xproto-7.0.15 needed for power plugin
-# FIXME: tests require dbus-mock
 DEPEND="${COMMON_DEPEND}
 	cups? ( sys-apps/sed )
 	test? (
 		${PYTHON_DEPS}
 		$(python_gen_any_dep 'dev-python/pygobject:3[${PYTHON_USEDEP}]')
+		$(python_gen_any_dep 'dev-python/dbusmock[${PYTHON_USEDEP}]')
 		gnome-base/gnome-session )
-	app-text/docbook-xsl-stylesheets
 	dev-libs/libxml2:2
-	dev-libs/libxslt
 	sys-devel/gettext
 	>=dev-util/intltool-0.40
 	virtual/pkgconfig
 	x11-proto/inputproto
 	x11-proto/xf86miscproto
+	x11-proto/kbproto
 	>=x11-proto/xproto-7.0.15
 "
 
-meson_use_enable() {
-	echo "-Denable-${2:-${1}}=$(usex ${1} 'true' 'false')"
+# TypeErrors with python3; weird test errors with python2; all in power component that was made required now
+RESTRICT="!test? ( test )"
+
+python_check_deps() {
+	if use test; then
+		has_version "dev-python/pygobject:3[${PYTHON_USEDEP}]" &&
+		has_version "dev-python/dbusmock[${PYTHON_USEDEP}]"
+	fi
 }
 
-src_prepare() {
-	eapply "${FILESDIR}"/meson.patch
-	gnome2_src_prepare
+pkg_setup() {
+	use test && python-any-r1_pkg_setup
 }
 
 src_configure() {
-	local emesonargs=(
-		-Doption=disable-static
-		$(meson_use_enable udev gudev)
-		$(meson_use_enable colord color)
-		$(meson_use_enable cups)
-		$(meson_use_enable debug)
-		$(meson_use_enable debug more-warnings)
-		$(meson_use_enable networkmanager network-manager)
-		$(meson_use_enable smartcard smartcard-support)
-		$(meson_use_enable input_devices_wacom wacom)
-		$(meson_use_enable wayland)
-	)
+	gnome2_src_configure \
+		--disable-static \
+		--with-udevrulesdir="$(get_udevdir)"/rules.d \
+		$(use_enable colord color) \
+		$(use_enable cups) \
+		$(use_enable debug) \
+		$(use_enable debug more-warnings) \
+		$(use_enable networkmanager network-manager) \
+		$(use_enable smartcard smartcard-support) \
+		$(use_enable udev gudev) \
+		$(use_enable input_devices_wacom wacom) \
+		$(use_enable wayland)
+}
 
-	meson_src_configure
+src_test() {
+	virtx emake check
+}
+
+pkg_postinst() {
+	gnome2_pkg_postinst
+
+	if ! systemd_is_booted; then
+		ewarn "${PN} needs Systemd to be *running* for working"
+		ewarn "properly. Please follow the this guide to migrate:"
+		ewarn "https://wiki.gentoo.org/wiki/Systemd"
+	fi
+
+	if use openrc-force; then
+		ewarn "You are enabling 'openrc-force' USE flag to skip systemd requirement,"
+		ewarn "this can lead to unexpected problems and is not supported neither by"
+		ewarn "upstream neither by Gnome Gentoo maintainers. If you suffer any problem,"
+		ewarn "you will need to disable this USE flag system wide and retest before"
+		ewarn "opening any bug report."
+	fi
 }
