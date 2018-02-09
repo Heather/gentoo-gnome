@@ -88,6 +88,7 @@ src_prepare() {
 src_configure() {
 	local mycmakeargs=(
 		-DENABLE_GOA=$(usex gnome-online-accounts)
+		-DENABLE_OAUTH2=ON
 		-DENABLE_GOOGLE_AUTH=$(usex google)
 		-DENABLE_GTK=$(usex gtk)
 		-DENABLE_GTK_DOC=$(usex api-doc-extras)
