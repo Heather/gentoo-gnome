@@ -46,7 +46,7 @@ COMMON_DEPEND="
 # gnome-themes-standard is needed for the failwhale dialog themeing
 # sys-apps/dbus[X] is needed for session management
 RDEPEND="${COMMON_DEPEND}
-	gnome-base/gnome-settings-daemon
+	<gnome-base/gnome-settings-daemon-3.27.90
 	>=gnome-base/gsettings-desktop-schemas-0.1.7
 	x11-themes/adwaita-icon-theme
 	sys-apps/dbus[X]
