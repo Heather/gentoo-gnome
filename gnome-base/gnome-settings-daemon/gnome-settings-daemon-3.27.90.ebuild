@@ -71,7 +71,7 @@ RDEPEND="${COMMON_DEPEND}
 	!<gnome-base/gnome-control-center-2.22
 	!<gnome-extra/gnome-color-manager-3.1.1
 	!<gnome-extra/gnome-power-manager-3.1.3
-	!<gnome-base/gnome-session-3.23.2
+	!<gnome-base/gnome-session-3.27.90
 "
 # xproto-7.0.15 needed for power plugin
 # FIXME: tests require dbus-mock
