@@ -1,0 +1,27 @@
+From d21e480b19ff06ca10fbf69049642e6c29bb7e00 Mon Sep 17 00:00:00 2001
+From: Milan Crha <mcrha@redhat.com>
+Date: Mon, 5 Feb 2018 21:40:53 +0100
+Subject: Correct return value of e_oauth2_service_get_access_token_sync()
+
+Valid (non-expired) token stored in keyring was considered incorrect
+due to this coding error.
+---
+ src/libedataserver/e-oauth2-service.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/libedataserver/e-oauth2-service.c b/src/libedataserver/e-oauth2-service.c
+index b8126f9..791fdc1 100644
+--- a/src/libedataserver/e-oauth2-service.c
++++ b/src/libedataserver/e-oauth2-service.c
+@@ -1504,7 +1504,7 @@ e_oauth2_service_get_access_token_sync (EOAuth2Service *service,
+ 					GError **error)
+ {
+ 	gchar *refresh_token = NULL;
+-	gboolean success = FALSE;
++	gboolean success = TRUE;
+ 
+ 	g_return_val_if_fail (E_IS_OAUTH2_SERVICE (service), FALSE);
+ 	g_return_val_if_fail (E_IS_SOURCE (source), FALSE);
+-- 
+cgit v0.12
+

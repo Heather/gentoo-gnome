@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -79,6 +79,7 @@ pkg_setup() {
 
 src_prepare() {
 	eapply "${FILESDIR}"/vala.patch
+	eapply "${FILESDIR}"/eds-fix.patch
 
 	use vala && vala_src_prepare
 	cmake-utils_src_prepare
