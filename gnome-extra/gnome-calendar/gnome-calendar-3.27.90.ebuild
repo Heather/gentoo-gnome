@@ -21,6 +21,7 @@ RDEPEND="
 	>=net-libs/gnome-online-accounts-3.2.0:=
 	>=x11-libs/gtk+-3.21.6:3
 	>=dev-libs/libdazzle-3.27.1
+	>=dev-libs/libgweather-3.27.4
 "
 DEPEND="${RDEPEND}
 	dev-libs/appstream-glib
