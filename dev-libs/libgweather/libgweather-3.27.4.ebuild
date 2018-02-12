@@ -4,7 +4,7 @@
 EAPI=6
 VALA_USE_DEPEND="vapigen"
 
-inherit vala meson
+inherit vala gnome2 meson
 
 DESCRIPTION="Library to access weather information from online services"
 HOMEPAGE="https://wiki.gnome.org/Projects/LibGWeather"
@@ -38,3 +38,9 @@ DEPEND="${COMMON_DEPEND}
 	virtual/pkgconfig
 	vala? ( $(vala_depend) )
 "
+
+src_prepare() {
+	use vala && vala_src_prepare
+	gnome2_src_prepare
+	default
+}
