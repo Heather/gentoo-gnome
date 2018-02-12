@@ -132,3 +132,8 @@ src_configure() {
 
 	meson_src_configure
 }
+
+src_install() {
+	addwrite /usr/share/icons
+	meson_src_install
+}
