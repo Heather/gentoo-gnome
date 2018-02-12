@@ -51,6 +51,7 @@ COMMON_DEPEND="
 		>=x11-libs/colord-gtk-0.1.24 )
 
 	>=net-fs/samba-4.0.0[client]
+	media-video/cheese
 
 	gnome-online-accounts? (
 		>=media-libs/grilo-0.3.0:0.3=
