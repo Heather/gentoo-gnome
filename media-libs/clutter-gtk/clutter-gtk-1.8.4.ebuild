@@ -12,7 +12,7 @@ LICENSE="LGPL-2.1+"
 
 SLOT="1.0"
 KEYWORDS="~alpha amd64 ~arm ~arm64 ~ia64 ~mips ~ppc ~ppc64 ~sparc x86"
-IUSE="X debug examples gtk +introspection wayland"
+IUSE="X debug examples +gtk +introspection wayland"
 
 RDEPEND="
 	>=x11-libs/gtk+-3.21.0:3[X=,introspection?,wayland=]

@@ -43,6 +43,9 @@ COMMON_DEPEND="
 	x11-libs/libX11
 	x11-libs/libXxf86misc
 	>=x11-libs/libXi-1.2
+	media-libs/clutter-gtk[gtk]
+
+	media-video/cheese
 
 	bluetooth? ( >=net-wireless/gnome-bluetooth-3.18.2:= )
 	colord? (
@@ -51,7 +54,6 @@ COMMON_DEPEND="
 		>=x11-libs/colord-gtk-0.1.24 )
 
 	>=net-fs/samba-4.0.0[client]
-	media-video/cheese
 
 	gnome-online-accounts? (
 		>=media-libs/grilo-0.3.0:0.3=
@@ -63,7 +65,6 @@ COMMON_DEPEND="
 		>=net-misc/networkmanager-1.2.0:=[modemmanager]
 		>=net-misc/modemmanager-0.7.990 )
 	v4l? (
-		media-libs/clutter-gtk:1.0
 		>=media-video/cheese-3.5.91 )
 	input_devices_wacom? (
 		>=dev-libs/libwacom-0.7
