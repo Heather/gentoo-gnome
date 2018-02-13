@@ -21,7 +21,7 @@ COMMON_DEPEND="
 	x11-libs/gdk-pixbuf:2
 	>=x11-libs/gtk+-3.18.0:3
 	>=dev-libs/json-glib-0.10
-	>=gnome-base/gnome-desktop-3.18:3=
+	>=gnome-base/gnome-desktop-3.27.90:3
 	elibc_FreeBSD? ( dev-libs/libexecinfo )
 
 	media-libs/mesa[egl,gles2]
@@ -46,7 +46,7 @@ COMMON_DEPEND="
 # gnome-themes-standard is needed for the failwhale dialog themeing
 # sys-apps/dbus[X] is needed for session management
 RDEPEND="${COMMON_DEPEND}
-	gnome-base/gnome-settings-daemon
+	>=gnome-base/gnome-settings-daemon-3.27.90
 	>=gnome-base/gsettings-desktop-schemas-0.1.7
 	x11-themes/adwaita-icon-theme
 	sys-apps/dbus[X]

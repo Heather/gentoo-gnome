@@ -1,10 +1,10 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2 multilib-minimal virtualx
+inherit gnome2 multilib-minimal virtualx meson
 
 DESCRIPTION="Network-related giomodules for glib"
 HOMEPAGE="https://git.gnome.org/browse/glib-networking/"
@@ -39,15 +39,20 @@ src_prepare() {
 	sed -i -e '/\/tls\/connection\/fallback\/SSL/d' "${S}"/tls/tests/connection.c || die
 }
 
+meson_use_enable() {
+	echo "-Denable-${2:-${1}}=$(usex ${1} 'true' 'false')"
+}
+
 multilib_src_configure() {
-	ECONF_SOURCE=${S} \
-	gnome2_src_configure \
-		--disable-static \
-		--with-ca-certificates="${EPREFIX}"/etc/ssl/certs/ca-certificates.crt \
-		$(use_with gnome gnome-proxy) \
-		$(use_with libproxy) \
-		$(use_with smartcard pkcs11) \
-		$(use_with ssl gnutls)
+	local emesonargs=(
+		-Doption=disable-static
+		$(meson_use_enable libproxy)
+		$(meson_use_enable gnome gnome-proxy)
+		$(meson_use_enable smartcard pkcs11)
+		$(meson_use_enable ssl gnutls)
+	)
+
+	meson_src_configure
 }
 
 multilib_src_test() {
@@ -59,7 +64,7 @@ multilib_src_test() {
 }
 
 multilib_src_install() {
-	gnome2_src_install
+	meson_src_install
 }
 
 pkg_postinst() {
