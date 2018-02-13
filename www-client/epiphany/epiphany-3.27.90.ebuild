@@ -30,7 +30,6 @@ COMMON_DEPEND="
 	>=net-libs/libsoup-2.48:2.4
 	>=x11-libs/gtk+-3.19.1:3
 	>=x11-libs/libnotify-0.5.1:=
-	gnome-base/gnome-desktop:3=
 
 	dev-db/sqlite:3
 	x11-libs/libX11
