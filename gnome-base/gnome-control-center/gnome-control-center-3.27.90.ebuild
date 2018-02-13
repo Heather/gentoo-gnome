@@ -43,6 +43,7 @@ COMMON_DEPEND="
 	x11-libs/libX11
 	x11-libs/libXxf86misc
 	>=x11-libs/libXi-1.2
+	>=media-libs/clutter-1.11.3[gtk]
 	media-libs/clutter-gtk[gtk]
 
 	media-video/cheese
@@ -66,11 +67,8 @@ COMMON_DEPEND="
 		>=net-misc/modemmanager-0.7.990 )
 	v4l? (
 		>=media-video/cheese-3.5.91 )
-	input_devices_wacom? (
-		>=dev-libs/libwacom-0.7
-		>=media-libs/clutter-1.11.3:1.0
-		media-libs/clutter-gtk:1.0
-		>=x11-libs/libXi-1.2 )
+	>=dev-libs/libwacom-0.7
+	>=x11-libs/libXi-1.2
 "
 # <gnome-color-manager-3.1.2 has file collisions with g-c-c-3.1.x
 # libgnomekbd needed only for gkbd-keyboard-display tool
