@@ -34,6 +34,7 @@ DEPEND="${RDEPEND}
 	test? ( media-fonts/cantarell )
 	X? ( >=x11-proto/xproto-7.0.24[${MULTILIB_USEDEP}] )
 	!<=sys-devel/autoconf-2.63:2.5
+	>=dev-libs/fribidi-0.19.7[${MULTILIB_USEDEP}]
 "
 
 multilib_src_configure() {
