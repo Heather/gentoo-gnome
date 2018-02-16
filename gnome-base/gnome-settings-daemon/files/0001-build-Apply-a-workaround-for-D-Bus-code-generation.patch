@@ -1,0 +1,126 @@
+From 5924d72931a030b24554116a48140a661a99652b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?I=C3=B1igo=20Mart=C3=ADnez?= <inigomartinez@gmail.com>
+Date: Mon, 5 Feb 2018 19:38:36 +0100
+Subject: [PATCH] build: Apply a workaround for D-Bus code generation
+
+meson uses gdbus-codegen for D-Bus code generation. However, both
+files are generated implicitly, so meson is not able to know how
+many files are generated, so it does generate only one opaque
+target that represents the two files.
+
+A new script has been created only to call gdbus-codegen and
+simulate the generation of the source code and header as different
+targets.
+
+Please see:
+  https://bugzilla.gnome.org/show_bug.cgi?id=791015
+  https://github.com/mesonbuild/meson/pull/2930
+
+https://bugzilla.gnome.org/show_bug.cgi?id=793087
+---
+ gnome-settings-daemon/codegen.py  | 31 +++++++++++++++++++++++++++++++
+ gnome-settings-daemon/meson.build | 28 ++++++++++++++++++++++++++--
+ 2 files changed, 57 insertions(+), 2 deletions(-)
+ create mode 100644 gnome-settings-daemon/codegen.py
+
+diff --git a/gnome-settings-daemon/codegen.py b/gnome-settings-daemon/codegen.py
+new file mode 100644
+index 00000000..eb0b0ce0
+--- /dev/null
++++ b/gnome-settings-daemon/codegen.py
+@@ -0,0 +1,31 @@
++#!/usr/bin/env python3
++
++'''
++FIXME
++
++This script is used only to call gdbus-codegen and simulate the
++generation of the source code and header as different targets.
++
++Both are generated implicitly, so meson is not able to know how
++many files are generated, so it does generate only one opaque
++target that represents the two files.
++
++Please see:
++   https://bugzilla.gnome.org/show_bug.cgi?id=791015
++   https://github.com/mesonbuild/meson/pull/2930
++'''
++
++import subprocess
++import sys
++
++name = 'org.gnome.' + sys.argv[1]
++
++subprocess.call([
++  'gdbus-codegen',
++  '--interface-prefix=' + name + '.',
++  '--generate-c-code=' + sys.argv[2],
++  '--c-namespace=Gsd',
++  '--annotate', name, 'org.gtk.GDBus.C.Name', sys.argv[1],
++  '--output-directory=' + sys.argv[3],
++  sys.argv[4]
++])
+diff --git a/gnome-settings-daemon/meson.build b/gnome-settings-daemon/meson.build
+index 7039fa53..6c179003 100644
+--- a/gnome-settings-daemon/meson.build
++++ b/gnome-settings-daemon/meson.build
+@@ -9,15 +9,38 @@ dbus_ifaces = [
+   ['Shell', 'gsd-shell-glue']
+ ]
+ 
++dbus_headers = []
++
++codegen = find_program('codegen.py')
++
+ foreach iface: dbus_ifaces
+   name = 'org.gnome.' + iface[0]
+-  sources += gnome.gdbus_codegen(
++
++  # FIXME: Opaque target return from gdbus_codegen
++  # Please see:
++  #   https://bugzilla.gnome.org/show_bug.cgi?id=791015
++  #   https://github.com/mesonbuild/meson/pull/2930
++  '''
++  dbus_sources += gnome.gdbus_codegen(
+     iface[1],
+     name + '.xml',
+     interface_prefix: name + '.',
+     namespace: 'Gsd',
+     annotations: [name, 'org.gtk.GDBus.C.Name', iface[0]]
+   )
++  '''
++
++  # FIXME: Ugly workaround that simulates the generation of
++  #        two different targets.
++  dbus_sources = custom_target(
++    iface[1],
++    input: name + '.xml',
++    output: [iface[1] + '.h', iface[1] + '.c'],
++    command: [codegen, iface[0], iface[1], meson.current_build_dir(), '@INPUT@', '@OUTPUT@']
++  )
++
++  dbus_headers += dbus_sources[0]
++  sources += dbus_sources[1]
+ endforeach
+ 
+ deps = [gio_unix_dep]
+@@ -28,7 +51,7 @@ endif
+ 
+ libgsd = shared_library(
+   'gsd',
+-  sources: sources,
++  sources: sources + dbus_headers,
+   include_directories: top_inc,
+   dependencies: deps,
+   install: true,
+@@ -36,6 +59,7 @@ libgsd = shared_library(
+ )
+ 
+ libgsd_dep = declare_dependency(
++  sources: dbus_headers,
+   include_directories: include_directories('.'),
+   link_with: libgsd
+ )
+-- 
+2.14.3
+

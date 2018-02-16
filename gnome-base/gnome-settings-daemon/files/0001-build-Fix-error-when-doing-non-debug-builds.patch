@@ -1,0 +1,28 @@
+From 94a5cc2c77a77ebc19d0de1a3b44d21809d7c34e Mon Sep 17 00:00:00 2001
+From: Bastien Nocera <hadess@hadess.net>
+Date: Tue, 6 Feb 2018 11:41:31 +0100
+Subject: [PATCH] build: Fix error when doing non-debug builds
+
+compiler_flags needs to be defined both when doing debug builds (as it
+was) and non-debug builds to avoid an error.
+
+Spotted by Kalev Lember <klember@redhat.com>
+---
+ meson.build | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/meson.build b/meson.build
+index 1fc2782f1917..51fd03cbad34 100644
+--- a/meson.build
++++ b/meson.build
+@@ -69,6 +69,7 @@ if get_option('buildtype').contains('debug')
+   compiler_flags = cc.get_supported_arguments(test_cflags)
+ else
+   common_flags += ['-DG_DISABLE_CHECKS']
++  compiler_flags = []
+ endif
+ 
+ # Workaround for meson's bug
+-- 
+2.14.3
+

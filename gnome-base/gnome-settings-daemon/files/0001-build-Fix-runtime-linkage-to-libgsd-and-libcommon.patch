@@ -1,0 +1,288 @@
+From fce89d11ac538075e48923f5f3071f172c97dadc Mon Sep 17 00:00:00 2001
+From: Yanko Kaneti <yaneti@declera.com>
+Date: Fri, 9 Feb 2018 11:55:41 +0200
+Subject: [PATCH] build: Fix runtime linkage to libgsd and libcommon
+
+- turns libcommon to a static uninstalled library
+- inject RPATH for libgsd in every installed plugin/executable
+---
+ plugins/a11y-settings/meson.build       | 1 +
+ plugins/clipboard/meson.build           | 1 +
+ plugins/color/meson.build               | 1 +
+ plugins/common/meson.build              | 3 ++-
+ plugins/datetime/meson.build            | 1 +
+ plugins/dummy/meson.build               | 1 +
+ plugins/housekeeping/meson.build        | 1 +
+ plugins/keyboard/meson.build            | 1 +
+ plugins/media-keys/meson.build          | 1 +
+ plugins/mouse/meson.build               | 2 ++
+ plugins/power/meson.build               | 2 ++
+ plugins/print-notifications/meson.build | 2 ++
+ plugins/rfkill/meson.build              | 1 +
+ plugins/screensaver-proxy/meson.build   | 1 +
+ plugins/sharing/meson.build             | 1 +
+ plugins/smartcard/meson.build           | 1 +
+ plugins/sound/meson.build               | 1 +
+ plugins/wacom/meson.build               | 2 ++
+ plugins/xsettings/meson.build           | 1 +
+ 19 files changed, 24 insertions(+), 1 deletion(-)
+
+diff --git a/plugins/a11y-settings/meson.build b/plugins/a11y-settings/meson.build
+index 8b8c52b8..b4a0fb66 100644
+--- a/plugins/a11y-settings/meson.build
++++ b/plugins/a11y-settings/meson.build
+@@ -15,5 +15,6 @@ executable(
+   dependencies: deps,
+   c_args: cflags,
+   install: true,
++  install_rpath: gsd_pkglibdir,
+   install_dir: gsd_libexecdir
+ )
+diff --git a/plugins/clipboard/meson.build b/plugins/clipboard/meson.build
+index 8adc28ea..b56a9102 100644
+--- a/plugins/clipboard/meson.build
++++ b/plugins/clipboard/meson.build
+@@ -17,5 +17,6 @@ executable(
+   dependencies: deps,
+   c_args: cflags,
+   install: true,
++  install_rpath: gsd_pkglibdir,
+   install_dir: gsd_libexecdir
+ )
+diff --git a/plugins/color/meson.build b/plugins/color/meson.build
+index 969a17a1..6ca8a868 100644
+--- a/plugins/color/meson.build
++++ b/plugins/color/meson.build
+@@ -29,6 +29,7 @@ executable(
+   dependencies: deps,
+   c_args: cflags,
+   install: true,
++  install_rpath: gsd_pkglibdir,
+   install_dir: gsd_libexecdir
+ )
+ 
+diff --git a/plugins/common/meson.build b/plugins/common/meson.build
+index ec54cc1a..65a0757c 100644
+--- a/plugins/common/meson.build
++++ b/plugins/common/meson.build
+@@ -52,7 +52,7 @@ if enable_wacom
+   deps += libwacom_dep
+ endif
+ 
+-libcommon = shared_module(
++libcommon = static_library(
+   plugin_name,
+   sources: sources,
+   include_directories: [top_inc, data_inc],
+@@ -73,5 +73,6 @@ executable(
+   dependencies: gtk_dep,
+   link_with: libcommon,
+   install: true,
++  install_rpath: gsd_pkglibdir,
+   install_dir: gsd_libexecdir
+ )
+diff --git a/plugins/datetime/meson.build b/plugins/datetime/meson.build
+index e5f614b5..ed2d433f 100644
+--- a/plugins/datetime/meson.build
++++ b/plugins/datetime/meson.build
+@@ -35,5 +35,6 @@ executable(
+   dependencies: deps,
+   c_args: cflags,
+   install: true,
++  install_rpath: gsd_pkglibdir,
+   install_dir: gsd_libexecdir
+ )
+diff --git a/plugins/dummy/meson.build b/plugins/dummy/meson.build
+index a4e76187..f563efa6 100644
+--- a/plugins/dummy/meson.build
++++ b/plugins/dummy/meson.build
+@@ -43,5 +43,6 @@ executable(
+   dependencies: deps,
+   c_args: cflags,
+   install: true,
++  install_rpath: gsd_pkglibdir,
+   install_dir: gsd_libexecdir
+ )
+diff --git a/plugins/housekeeping/meson.build b/plugins/housekeeping/meson.build
+index f1593477..5ac2455e 100644
+--- a/plugins/housekeeping/meson.build
++++ b/plugins/housekeeping/meson.build
+@@ -20,6 +20,7 @@ executable(
+   dependencies: deps,
+   c_args: cflags,
+   install: true,
++  install_rpath: gsd_pkglibdir,
+   install_dir: gsd_libexecdir
+ )
+ 
+diff --git a/plugins/keyboard/meson.build b/plugins/keyboard/meson.build
+index cd203a09..172193f6 100644
+--- a/plugins/keyboard/meson.build
++++ b/plugins/keyboard/meson.build
+@@ -16,5 +16,6 @@ executable(
+   dependencies: deps,
+   c_args: cflags,
+   install: true,
++  install_rpath: gsd_pkglibdir,
+   install_dir: gsd_libexecdir
+ )
+diff --git a/plugins/media-keys/meson.build b/plugins/media-keys/meson.build
+index f371d1f5..91848f9b 100644
+--- a/plugins/media-keys/meson.build
++++ b/plugins/media-keys/meson.build
+@@ -43,6 +43,7 @@ executable(
+   dependencies: deps,
+   c_args: cflags,
+   install: true,
++  install_rpath: gsd_pkglibdir,
+   install_dir: gsd_libexecdir
+ )
+ 
+diff --git a/plugins/mouse/meson.build b/plugins/mouse/meson.build
+index 7dc58bac..9de6a1a8 100644
+--- a/plugins/mouse/meson.build
++++ b/plugins/mouse/meson.build
+@@ -19,6 +19,7 @@ executable(
+   dependencies: deps,
+   c_args: cflags,
+   install: true,
++  install_rpath: gsd_pkglibdir,
+   install_dir: gsd_libexecdir
+ )
+ 
+@@ -39,5 +40,6 @@ executable(
+   include_directories: top_inc,
+   dependencies: deps,
+   install: true,
++  install_rpath: gsd_pkglibdir,
+   install_dir: gsd_libexecdir
+ )
+diff --git a/plugins/power/meson.build b/plugins/power/meson.build
+index e24ccd5b..202b6040 100644
+--- a/plugins/power/meson.build
++++ b/plugins/power/meson.build
+@@ -30,6 +30,7 @@ gsd_power = executable(
+   dependencies: deps,
+   c_args: cflags,
+   install: true,
++  install_rpath: gsd_pkglibdir,
+   install_dir: gsd_libexecdir
+ )
+ 
+@@ -91,6 +92,7 @@ if enable_gudev
+     include_directories: top_inc,
+     dependencies: deps,
+     install: true,
++    install_rpath: gsd_pkglibdir,
+     install_dir: gsd_libexecdir
+   )
+ endif
+diff --git a/plugins/print-notifications/meson.build b/plugins/print-notifications/meson.build
+index dabd0588..89a78592 100644
+--- a/plugins/print-notifications/meson.build
++++ b/plugins/print-notifications/meson.build
+@@ -18,6 +18,7 @@ executable(
+   dependencies: deps,
+   c_args: cflags,
+   install: true,
++  install_rpath: gsd_pkglibdir,
+   install_dir: gsd_libexecdir
+ )
+ 
+@@ -30,5 +31,6 @@ executable(
+   dependencies: deps,
+   c_args: '-DGNOME_SETTINGS_LOCALEDIR="@0@"'.format(gsd_localedir),
+   install: true,
++  install_rpath: gsd_pkglibdir,
+   install_dir: gsd_libexecdir
+ )
+diff --git a/plugins/rfkill/meson.build b/plugins/rfkill/meson.build
+index ef2dd7f0..b85620b4 100644
+--- a/plugins/rfkill/meson.build
++++ b/plugins/rfkill/meson.build
+@@ -18,5 +18,6 @@ executable(
+   dependencies: deps,
+   c_args: cflags,
+   install: true,
++  install_rpath: gsd_pkglibdir,
+   install_dir: gsd_libexecdir
+ )
+diff --git a/plugins/screensaver-proxy/meson.build b/plugins/screensaver-proxy/meson.build
+index 945a2525..5430eb8c 100644
+--- a/plugins/screensaver-proxy/meson.build
++++ b/plugins/screensaver-proxy/meson.build
+@@ -12,5 +12,6 @@ executable(
+   dependencies: deps,
+   c_args: cflags,
+   install: true,
++  install_rpath: gsd_pkglibdir,
+   install_dir: gsd_libexecdir
+ )
+diff --git a/plugins/sharing/meson.build b/plugins/sharing/meson.build
+index 5a407401..94843128 100644
+--- a/plugins/sharing/meson.build
++++ b/plugins/sharing/meson.build
+@@ -19,5 +19,6 @@ executable(
+   dependencies: deps,
+   c_args: cflags,
+   install: true,
++  install_rpath: gsd_pkglibdir,
+   install_dir: gsd_libexecdir
+ )
+diff --git a/plugins/smartcard/meson.build b/plugins/smartcard/meson.build
+index f0219f35..916a0fcb 100644
+--- a/plugins/smartcard/meson.build
++++ b/plugins/smartcard/meson.build
+@@ -44,5 +44,6 @@ executable(
+   dependencies: deps,
+   c_args: cflags,
+   install: true,
++  install_rpath: gsd_pkglibdir,
+   install_dir: gsd_libexecdir
+ )
+diff --git a/plugins/sound/meson.build b/plugins/sound/meson.build
+index 1b3940fc..300397f5 100644
+--- a/plugins/sound/meson.build
++++ b/plugins/sound/meson.build
+@@ -15,5 +15,6 @@ executable(
+   dependencies: deps,
+   c_args: cflags,
+   install: true,
++  install_rpath: gsd_pkglibdir,
+   install_dir: gsd_libexecdir
+ )
+diff --git a/plugins/wacom/meson.build b/plugins/wacom/meson.build
+index 29d12dc3..e5300cdb 100644
+--- a/plugins/wacom/meson.build
++++ b/plugins/wacom/meson.build
+@@ -37,6 +37,7 @@ executable(
+   dependencies: deps,
+   c_args: cflags,
+   install: true,
++  install_rpath: gsd_pkglibdir,
+   install_dir: gsd_libexecdir
+ )
+ 
+@@ -58,6 +59,7 @@ if enable_gudev
+       include_directories: top_inc,
+       dependencies: deps,
+       install: true,
++      install_rpath: gsd_pkglibdir,
+       install_dir: gsd_libexecdir
+     )
+   endforeach
+diff --git a/plugins/xsettings/meson.build b/plugins/xsettings/meson.build
+index 8364d3b8..217ba947 100644
+--- a/plugins/xsettings/meson.build
++++ b/plugins/xsettings/meson.build
+@@ -27,6 +27,7 @@ executable(
+   dependencies: deps,
+   c_args: cflags,
+   install: true,
++  install_rpath: gsd_pkglibdir,
+   install_dir: gsd_libexecdir
+ )
+ 
+-- 
+2.14.3
+

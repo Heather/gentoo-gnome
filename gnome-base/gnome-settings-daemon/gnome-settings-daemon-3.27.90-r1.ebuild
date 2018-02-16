@@ -17,7 +17,7 @@ REQUIRED_USE="
 	input_devices_wacom? ( udev )
 	smartcard? ( udev )
 "
-#KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~x86-solaris"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~x86-solaris"
 
 COMMON_DEPEND="
 	>=dev-libs/glib-2.44.0:2[dbus]
@@ -97,6 +97,9 @@ meson_use_enable() {
 }
 
 src_prepare() {
+	eapply "${FILESDIR}"/0001-build-Apply-a-workaround-for-D-Bus-code-generation.patch
+	eapply "${FILESDIR}"/0001-build-Fix-error-when-doing-non-debug-builds.patch
+	eapply "${FILESDIR}"/0001-build-Fix-runtime-linkage-to-libgsd-and-libcommon.patch
 	eapply "${FILESDIR}"/meson.patch
 	gnome2_src_prepare
 }
