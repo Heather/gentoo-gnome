@@ -22,7 +22,7 @@ DEPEND="
 	>=dev-util/intltool-0.40
 	sys-devel/gettext
 	virtual/pkgconfig
-	!x11-themes/gnome-themes-standard
+	!!x11-themes/gnome-themes-standard
 "
 
 src_prepare() {
