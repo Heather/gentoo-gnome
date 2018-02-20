@@ -97,10 +97,6 @@ meson_use_enable() {
 }
 
 src_prepare() {
-	eapply "${FILESDIR}"/0001-build-Apply-a-workaround-for-D-Bus-code-generation.patch
-	eapply "${FILESDIR}"/0001-build-Fix-error-when-doing-non-debug-builds.patch
-	eapply "${FILESDIR}"/0001-build-Fix-runtime-linkage-to-libgsd-and-libcommon.patch
-	eapply "${FILESDIR}"/meson.patch
 	gnome2_src_prepare
 }
 
