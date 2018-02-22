@@ -1,16 +1,16 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
 EAPI=6
-inherit gnome2 readme.gentoo-r1
+inherit gnome2 readme.gentoo-r1 meson
 
 DESCRIPTION="JavaScript extensions for GNOME Shell"
 HOMEPAGE="https://wiki.gnome.org/Projects/GnomeShell/Extensions"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="examples"
+IUSE=""
 
 KEYWORDS="~amd64 ~x86"
 
@@ -48,31 +48,3 @@ Alternatively, to enable/disable extensions on a per-user basis,
 you can use the https://extensions.gnome.org/ web interface, the
 gnome-extra/gnome-tweak-tool GUI, or modify the org.gnome.shell
 enabled-extensions gsettings key from the command line or a script."
-
-src_configure() {
-	gnome2_src_configure --enable-extensions=all
-}
-
-src_install() {
-	gnome2_src_install
-
-	local example="example@gnome-shell-extensions.gcampax.github.com"
-	if use examples; then
-		mv "${ED}usr/share/gnome-shell/extensions/${example}" \
-			"${ED}usr/share/doc/${PF}/" || die
-	else
-		rm -r "${ED}usr/share/gnome-shell/extensions/${example}" || die
-	fi
-
-	readme.gentoo_create_doc
-}
-
-pkg_postinst() {
-	gnome2_pkg_postinst
-
-	ebegin "Updating list of installed extensions"
-	eselect gnome-shell-extensions update
-	eend $?
-
-	readme.gentoo_print_elog
-}
