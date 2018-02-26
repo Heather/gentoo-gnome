@@ -46,6 +46,7 @@ COMMON_DEPEND="
 	x11-libs/libXtst
 	>=x11-wm/mutter-3.25.90[introspection]
 	>=x11-libs/startup-notification-0.11
+	dev-lang/sassc
 
 	${PYTHON_DEPS}
 	dev-python/pygobject:3[${PYTHON_USEDEP}]
