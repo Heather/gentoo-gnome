@@ -15,7 +15,7 @@ HOMEPAGE="https://wiki.gnome.org/Projects/GnomeShell"
 
 LICENSE="GPL-2+ LGPL-2+"
 SLOT="0"
-IUSE="+bluetooth +networkmanager nsplugin +ibus -openrc-force"
+IUSE="+bluetooth +networkmanager nsplugin +ibus -openrc-force systemd"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
@@ -130,9 +130,8 @@ src_prepare() {
 
 src_configure() {
 	local emesonargs=(
-		-Denable-systemd=yes
-		-Dwith_bluetooth=$(usex bluetooth true false)
-		-Denable-networkmanager=$(usex networkmanager yes no)
+		-Dsystemd=$(usex systemd true false)
+		-Dnetworkmanager=$(usex networkmanager true false)
 		-DBROWSER_PLUGIN_DIR="${EPREFIX}"/usr/$(get_libdir)/nsbrowser/plugins
 	)
 	meson_src_configure
