@@ -48,3 +48,11 @@ Alternatively, to enable/disable extensions on a per-user basis,
 you can use the https://extensions.gnome.org/ web interface, the
 gnome-extra/gnome-tweak-tool GUI, or modify the org.gnome.shell
 enabled-extensions gsettings key from the command line or a script."
+
+src_configure() {
+	local emesonargs=(
+		-Dextension_set='all'
+		-Denabled_extensions="['alternate-tab', 'apps-menu', 'places-menu', 'launch-new-instance', 'window-list', 'drive-menu', 'screenshot-window-sizer', 'windowsNavigator', 'workspace-indicator', 'user-theme']"
+	)
+	meson_src_configure
+}
