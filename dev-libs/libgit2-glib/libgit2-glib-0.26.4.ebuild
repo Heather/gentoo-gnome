@@ -1,11 +1,11 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-PYTHON_COMPAT=( python{3_4,3_5,3_6} )
+PYTHON_COMPAT=( python{3_4,3_5,3_6} pypy )
 VALA_USE_DEPEND="vapigen"
 
-inherit gnome2 python-r1 vala
+inherit gnome2 python-r1 vala meson
 
 DESCRIPTION="Git library for GLib"
 HOMEPAGE="https://wiki.gnome.org/Projects/Libgit2-glib"
@@ -33,21 +33,26 @@ DEPEND="${RDEPEND}
 	vala? ( $(vala_depend) )
 "
 
+meson_use_enable() {
+	echo "-Denable-${2:-${1}}=$(usex ${1} 'true' 'false')"
+}
+
 src_prepare() {
 	use vala && vala_src_prepare
 	gnome2_src_prepare
 }
 
 src_configure() {
-	gnome2_src_configure \
-		$(use_enable python) \
-		$(use_enable ssh) \
-		$(use_enable vala)
+	local emesonargs=(
+		$(meson_use_enable python)
+		$(meson_use_enable ssh)
+		$(meson_use_enable vala)
+	)
+	meson_src_configure
 }
 
 src_install() {
-	gnome2_src_install
-
+	meson_src_install
 	if use python ; then
 		install_gi_override() {
 			python_moduleinto "$(python_get_sitedir)/gi/overrides"
