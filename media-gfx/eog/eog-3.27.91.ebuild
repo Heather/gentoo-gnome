@@ -37,6 +37,7 @@ RDEPEND="
 	xmp? ( media-libs/exempi:2 )
 "
 DEPEND="${RDEPEND}
+	media-libs/exempi:2
 	>=dev-util/gtk-doc-am-1.16
 	>=dev-util/intltool-0.50.1
 	dev-util/itstool
