@@ -1,10 +1,10 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 GNOME2_LA_PUNT="yes"
 
-inherit eutils gnome2 multilib-minimal
+inherit eutils gnome2 multilib-minimal meson
 
 DESCRIPTION="D-Bus accessibility specifications and registration daemon"
 HOMEPAGE="https://wiki.gnome.org/Accessibility"
@@ -42,13 +42,25 @@ PATCHES=(
 	"${FILESDIR}/${PN}-2.0.2-disable-teamspaces-test.patch"
 )
 
+meson_use_enable() {
+	echo "-Denable-${2:-${1}}=$(usex ${1} 'true' 'false')"
+}
+
 multilib_src_configure() {
-	# xevie is deprecated/broken since xorg-1.6/1.7
-	ECONF_SOURCE=${S} \
-	gnome2_src_configure \
-		--disable-xevie \
-		$(multilib_native_use_enable introspection) \
-		$(use_enable X x11)
+	local emesonargs=(
+		-Denable-xevie=false
+		$(meson_use_enable introspection)
+		$(meson_use_enable X x11)
+		$(meson_use_enable cups)
+		$(meson_use_enable debug)
+		$(meson_use_enable debug more-warnings)
+		$(meson_use_enable networkmanager network-manager)
+		$(meson_use_enable smartcard smartcard-support)
+		$(meson_use_enable input_devices_wacom wacom)
+		$(meson_use_enable wayland)
+	)
+
+	meson_src_configure
 
 	# work-around gtk-doc out-of-source brokedness
 	if multilib_is_native_abi; then
@@ -56,5 +68,5 @@ multilib_src_configure() {
 	fi
 }
 
-multilib_src_compile() { gnome2_src_compile; }
-multilib_src_install() { gnome2_src_install; }
+multilib_src_compile() { meson_src_compile; }
+multilib_src_install() { meson_src_install; }
