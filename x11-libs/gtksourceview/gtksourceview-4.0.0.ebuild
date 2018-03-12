@@ -53,6 +53,6 @@ src_test() {
 src_install() {
 	gnome2_src_install
 
-	insinto /usr/share/${PN}-3.0/language-specs
+	insinto /usr/share/${PN}-4.0/language-specs
 	doins "${FILESDIR}"/2.0/gentoo.lang
 }
