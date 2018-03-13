@@ -12,7 +12,7 @@ HOMEPAGE="https://git.gnome.org/browse/gnome-settings-daemon"
 
 LICENSE="GPL-2+"
 SLOT="0"
-IUSE="+colord +cups debug input_devices_wacom -openrc-force networkmanager policykit smartcard test +udev wayland"
+IUSE="+colord +cups debug input_devices_wacom -openrc-force +networkmanager policykit smartcard test +udev wayland"
 REQUIRED_USE="
 	input_devices_wacom? ( udev )
 	smartcard? ( udev )
@@ -92,8 +92,8 @@ DEPEND="${COMMON_DEPEND}
 	>=x11-proto/xproto-7.0.15
 "
 
-meson_use_enable() {
-	echo "-Denable-${2:-${1}}=$(usex ${1} 'true' 'false')"
+meson_use() {
+	echo "-D${2:-${1}}=$(usex ${1} 'true' 'false')"
 }
 
 src_prepare() {
@@ -102,16 +102,15 @@ src_prepare() {
 
 src_configure() {
 	local emesonargs=(
-		-Doption=disable-static
-		$(meson_use_enable udev gudev)
-		$(meson_use_enable colord color)
-		$(meson_use_enable cups)
-		$(meson_use_enable debug)
-		$(meson_use_enable debug more-warnings)
-		$(meson_use_enable networkmanager network-manager)
-		$(meson_use_enable smartcard smartcard-support)
-		$(meson_use_enable input_devices_wacom wacom)
-		$(meson_use_enable wayland)
+		$(meson_use udev gudev)
+		$(meson_use colord color)
+		$(meson_use cups)
+		$(meson_use debug)
+		$(meson_use debug more-warnings)
+		$(meson_use networkmanager network_manager)
+		$(meson_use smartcard smartcard-support)
+		$(meson_use input_devices_wacom wacom)
+		$(meson_use wayland)
 	)
 
 	meson_src_configure
