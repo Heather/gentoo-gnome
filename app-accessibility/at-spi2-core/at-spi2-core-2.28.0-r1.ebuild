@@ -71,12 +71,17 @@ multilib_src_configure() {
 multilib_src_compile() { meson_src_compile; }
 multilib_src_install() { meson_src_install; }
 
-# weird hack (needs for multilib support)
+# weird hacks (needs for multilib support)
 pkg_postinst() {
 	if [ -f /usr/lib64/pkgconfig/atspi-2.pc ]; then
 		if [ -f /usr/lib32/libatspi.so.0 ]; then
-			cp /usr/lib64/pkgconfig/atspi-2.pc /usr/lib32/pkgconfig/atspi-2.pc
+			cp -f /usr/lib64/pkgconfig/atspi-2.pc /usr/lib32/pkgconfig/atspi-2.pc
 			sed -i -e 's@lib64@lib32@g' /usr/lib32/pkgconfig/atspi-2.pc
+		fi
+	fi
+	if [ -f /usr/lib32/libatspi.so.0 ]; then
+		if [ ! -f /usr/lib32/libatspi.so ]; then
+			ln /usr/lib32/libatspi.so.0 /usr/lib32/libatspi.so
 		fi
 	fi
 }
