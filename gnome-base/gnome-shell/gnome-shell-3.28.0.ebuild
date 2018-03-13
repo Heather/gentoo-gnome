@@ -3,7 +3,7 @@
 
 EAPI=6
 GNOME2_LA_PUNT="yes"
-PYTHON_COMPAT=( python{3_4,3_5,3_6} pypy )
+PYTHON_COMPAT=( python{3_4,3_5,3_6} )
 
 inherit autotools gnome2 multilib pax-utils python-r1 systemd meson ninja-utils
 if [[ ${PV} = 9999 ]]; then
