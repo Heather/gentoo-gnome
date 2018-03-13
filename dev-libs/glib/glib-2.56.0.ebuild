@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 # Until bug #537330 glib is a reverse dependency of pkgconfig and, then
@@ -6,7 +6,7 @@
 # then to be think very closely.
 
 EAPI=6
-PYTHON_COMPAT=( python2_7 python3_{4,5,6} )
+PYTHON_COMPAT=( python2_7 python3_{4,5,6} pypy )
 # Completely useless with or without USE static-libs, people need to use
 # pkg-config
 GNOME2_LA_PUNT="yes"
@@ -16,7 +16,7 @@ inherit autotools bash-completion-r1 eutils flag-o-matic gnome2 libtool linux-in
 
 DESCRIPTION="The GLib library of C routines"
 HOMEPAGE="http://www.gtk.org/"
-SRC_URI="https://download.gnome.org/sources/glib/2.55/glib-${PV}.tar.xz
+SRC_URI="https://download.gnome.org/sources/glib/2.56/glib-${PV}.tar.xz
 	https://pkgconfig.freedesktop.org/releases/pkg-config-0.28.tar.gz" # pkg.m4 for eautoreconf
 
 LICENSE="LGPL-2+"
