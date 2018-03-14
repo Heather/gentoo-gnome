@@ -11,7 +11,8 @@ HOMEPAGE="https://git.gnome.org/browse/glib-networking/"
 
 LICENSE="LGPL-2+"
 SLOT="0"
-IUSE="+gnome +libproxy smartcard +ssl test"
+#TODO: ssl flag is not used anyhow but other packages wants glib-networking with SSL
+IUSE="+gnome +libproxy smartcard test +ssl"
 KEYWORDS="alpha amd64 arm ~arm64 hppa ia64 ~mips ppc ppc64 ~sh sparc x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x86-solaris"
 
 RDEPEND="
@@ -21,10 +22,10 @@ RDEPEND="
 	smartcard? (
 		>=app-crypt/p11-kit-0.18.4[${MULTILIB_USEDEP}]
 		>=net-libs/gnutls-3:=[pkcs11,${MULTILIB_USEDEP}] )
-	ssl? (
-		app-misc/ca-certificates
-		>=net-libs/gnutls-3:=[${MULTILIB_USEDEP}] )
+	app-misc/ca-certificates
+	>=net-libs/gnutls-3:=[${MULTILIB_USEDEP}]
 "
+
 DEPEND="${RDEPEND}
 	>=sys-devel/gettext-0.19.4
 	>=virtual/pkgconfig-0-r1[${MULTILIB_USEDEP}]
@@ -39,17 +40,12 @@ src_prepare() {
 	sed -i -e '/\/tls\/connection\/fallback\/SSL/d' "${S}"/tls/tests/connection.c || die
 }
 
-meson_use_enable() {
-	echo "-Denable-${2:-${1}}=$(usex ${1} 'true' 'false')"
-}
-
 multilib_src_configure() {
 	local emesonargs=(
 		-Doption=disable-static
-		$(meson_use_enable libproxy)
-		$(meson_use_enable gnome gnome-proxy)
-		$(meson_use_enable smartcard pkcs11)
-		$(meson_use_enable ssl gnutls)
+		$(meson_use libproxy libproxy_support)
+		$(meson_use gnome gnome_proxy_support)
+		$(meson_use smartcard pkcs11_support)
 	)
 
 	meson_src_configure

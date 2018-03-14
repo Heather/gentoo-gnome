@@ -33,10 +33,6 @@ DEPEND="${RDEPEND}
 	vala? ( $(vala_depend) )
 "
 
-meson_use_enable() {
-	echo "-Denable-${2:-${1}}=$(usex ${1} 'true' 'false')"
-}
-
 src_prepare() {
 	use vala && vala_src_prepare
 	gnome2_src_prepare
@@ -44,9 +40,9 @@ src_prepare() {
 
 src_configure() {
 	local emesonargs=(
-		$(meson_use_enable python)
-		$(meson_use_enable ssh)
-		$(meson_use_enable vala)
+		$(meson_use python)
+		$(meson_use ssh)
+		$(meson_use vala vapi)
 	)
 	meson_src_configure
 }

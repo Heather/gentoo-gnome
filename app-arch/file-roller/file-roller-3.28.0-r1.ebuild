@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -35,8 +35,6 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext
 	virtual/pkgconfig
 "
-# eautoreconf needs:
-#	gnome-base/gnome-common
 
 DISABLE_AUTOFORMATTING="yes"
 DOC_CONTENTS="
@@ -65,13 +63,8 @@ src_prepare() {
 
 src_configure() {
 	local emesonargs=(
-		-Doption=disable-static
-		-Doption=disable-run-in-place
-		-Doption=disable-debug
-		-Doption=enable-magic
-		-Doption=enable-libarchive
-		$(meson_use_enable libnotify notification)
-		$(meson_use_enable packagekit)
+		$(meson_use libnotify notification)
+		$(meson_use packagekit)
 	)
 
 	meson_src_configure

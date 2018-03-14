@@ -2,21 +2,20 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-GNOME2_LA_PUNT="yes" # Needed with USE 'sendto'
 
+GNOME2_LA_PUNT="yes"
+
+#TODO: rewrite ebuild using meson eclass
 inherit gnome2 readme.gentoo-r1 virtualx multiprocessing
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
 
 DESCRIPTION="A file manager for the GNOME desktop"
 HOMEPAGE="https://wiki.gnome.org/Apps/Nautilus"
 
 LICENSE="GPL-2+ LGPL-2+ FDL-1.1"
 SLOT="0"
-IUSE="exif gnome +introspection packagekit +previewer selinux sendto tracker xmp"
+IUSE="exif gnome packagekit +previewer selinux +extensions"
 
-#KEYWORDS="~amd64 ~x86 ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux"
+KEYWORDS="~amd64 ~x86 ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux"
 
 # FIXME: tests fails under Xvfb, but pass when building manually
 # "FAIL: check failed in nautilus-file.c, line 8307"
@@ -30,8 +29,9 @@ COMMON_DEPEND="
 	>=app-arch/gnome-autoar-0.2.1
 	>=dev-libs/glib-2.53.4:2[dbus]
 	>=x11-libs/pango-1.28.3
-	>=x11-libs/gtk+-3.21.6:3[introspection?]
+	>=x11-libs/gtk+-3.21.6:3[introspection]
 	>=dev-libs/libxml2-2.7.8:2
+	>=media-libs/gexiv2-0.10.6
 	>=gnome-base/gnome-desktop-3:3=
 
 	gnome-base/dconf
@@ -41,10 +41,9 @@ COMMON_DEPEND="
 	x11-libs/libXrender
 
 	exif? ( >=media-libs/libexif-0.6.20 )
-	introspection? ( >=dev-libs/gobject-introspection-0.6.4:= )
+	>=dev-libs/gobject-introspection-0.6.4:=
 	selinux? ( >=sys-libs/libselinux-2 )
-	tracker? ( >=app-misc/tracker-2.0:= )
-	xmp? ( >=media-libs/exempi-2.1.0 )
+	>=app-misc/tracker-2.0:=
 "
 DEPEND="${COMMON_DEPEND}
 	>=dev-lang/perl-5
@@ -55,17 +54,11 @@ DEPEND="${COMMON_DEPEND}
 "
 RDEPEND="${COMMON_DEPEND}
 	packagekit? ( app-admin/packagekit-base )
-	sendto? ( !<gnome-extra/nautilus-sendto-3.0.1 )
 "
-
-# For eautoreconf
-#	gnome-base/gnome-common
-#	dev-util/gtk-doc-am"
 
 PDEPEND="
 	gnome? ( x11-themes/adwaita-icon-theme )
 	previewer? ( >=gnome-extra/sushi-0.1.9 )
-	sendto? ( >=gnome-extra/nautilus-sendto-3.0.1 )
 	>=gnome-base/gvfs-1.14[gtk]
 "
 # Need gvfs[gtk] for recent:/// support
@@ -82,8 +75,8 @@ src_prepare() {
 	gnome2_src_prepare
 }
 
-meson_use_enable() {
-	echo "-Denable-${2:-${1}}=$(usex ${1} 'true' 'false')"
+meson_use() {
+	echo "-D-${2:-${1}}=$(usex ${1} 'true' 'false')"
 }
 
 src_configure() {
@@ -93,17 +86,10 @@ src_configure() {
 		--localstatedir="${EPREFIX}/var"
 		--prefix="${EPREFIX}/usr"
 		--sysconfdir="${EPREFIX}/etc"
-		-Doption=enable-desktop
-		-Doption=disable-profiling
-		-Doption=disable-update-mimedb
-		-Dselinux=false
-		$(meson_use_enable exif libexif)
-		$(meson_use_enable introspection)
-		$(meson_use_enable packagekit)
-		$(meson_use_enable sendto nst-extension)
-		$(meson_use_enable selinux)
-		$(meson_use_enable tracker)
-		$(meson_use_enable xmp)
+		-Dprofiling=false
+		$(meson_use extensions)
+		$(meson_use packagekit)
+		$(meson_use selinux)
 	)
 	set -- meson "${myconf[@]}" "${S}" "${MESON_BUILD_DIR}"
 	echo "$@"

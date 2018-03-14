@@ -12,11 +12,8 @@ HOMEPAGE="https://git.gnome.org/browse/gnome-settings-daemon"
 
 LICENSE="GPL-2+"
 SLOT="0"
-IUSE="+colord +cups debug input_devices_wacom -openrc-force +networkmanager policykit smartcard test +udev wayland"
-REQUIRED_USE="
-	input_devices_wacom? ( udev )
-	smartcard? ( udev )
-"
+IUSE="+cups debug +networkmanager policykit -smartcard test +udev wayland"
+REQUIRED_USE="udev"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~x86-solaris"
 
 COMMON_DEPEND="
@@ -47,32 +44,31 @@ COMMON_DEPEND="
 	>=sci-geosciences/geocode-glib-3.10
 	>=sys-auth/polkit-0.113-r5
 
-	colord? (
-		>=media-libs/lcms-2.2:2
-		>=x11-misc/colord-1.0.2:= )
+	>=media-libs/lcms-2.2:2
+	>=x11-misc/colord-1.0.2:=
 	cups? ( >=net-print/cups-1.4[dbus] )
-	input_devices_wacom? (
-		>=dev-libs/libwacom-0.7
-		>=x11-libs/pango-1.20
-		x11-drivers/xf86-input-wacom
-		virtual/libgudev:= )
+	>=dev-libs/libwacom-0.7
+	>=x11-libs/pango-1.20
+	x11-drivers/xf86-input-wacom
+	virtual/libgudev:=
 	networkmanager? ( >=net-misc/networkmanager-1.0 )
 	smartcard? ( >=dev-libs/nss-3.11.2 )
 	udev? ( virtual/libgudev:= )
 	wayland? ( dev-libs/wayland )
 "
+
 # Themes needed by g-s-d, gnome-shell, gtk+:3 apps to work properly
 # <gnome-color-manager-3.1.1 has file collisions with g-s-d-3.1.x
 # <gnome-power-manager-3.1.3 has file collisions with g-s-d-3.1.x
 # systemd needed for power and session management, bug #464944
 RDEPEND="${COMMON_DEPEND}
 	gnome-base/dconf
-	!openrc-force? ( sys-apps/systemd )
 	!<gnome-base/gnome-control-center-2.22
 	!<gnome-extra/gnome-color-manager-3.1.1
 	!<gnome-extra/gnome-power-manager-3.1.3
 	!<gnome-base/gnome-session-3.27.90
 "
+
 # xproto-7.0.15 needed for power plugin
 # FIXME: tests require dbus-mock
 DEPEND="${COMMON_DEPEND}
@@ -92,10 +88,6 @@ DEPEND="${COMMON_DEPEND}
 	>=x11-proto/xproto-7.0.15
 "
 
-meson_use() {
-	echo "-D${2:-${1}}=$(usex ${1} 'true' 'false')"
-}
-
 src_prepare() {
 	gnome2_src_prepare
 }
@@ -103,13 +95,9 @@ src_prepare() {
 src_configure() {
 	local emesonargs=(
 		$(meson_use udev gudev)
-		$(meson_use colord color)
 		$(meson_use cups)
-		$(meson_use debug)
-		$(meson_use debug more-warnings)
 		$(meson_use networkmanager network_manager)
-		$(meson_use smartcard smartcard-support)
-		$(meson_use input_devices_wacom wacom)
+		$(meson_use smartcard)
 		$(meson_use wayland)
 	)
 

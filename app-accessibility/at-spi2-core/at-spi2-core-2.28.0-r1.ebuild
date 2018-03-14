@@ -43,7 +43,7 @@ PATCHES=(
 )
 
 meson_use_enable() {
-	echo "-Denable-${2:-${1}}=$(usex ${1} 'true' 'false')"
+	echo "-Denable-${2:-${1}}=$(usex ${1} 'yes' 'no')"
 }
 
 multilib_src_configure() {
@@ -51,13 +51,6 @@ multilib_src_configure() {
 		-Denable-xevie=false
 		$(meson_use_enable introspection)
 		$(meson_use_enable X x11)
-		$(meson_use_enable cups)
-		$(meson_use_enable debug)
-		$(meson_use_enable debug more-warnings)
-		$(meson_use_enable networkmanager network-manager)
-		$(meson_use_enable smartcard smartcard-support)
-		$(meson_use_enable input_devices_wacom wacom)
-		$(meson_use_enable wayland)
 	)
 
 	meson_src_configure

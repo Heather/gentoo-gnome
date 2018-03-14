@@ -64,10 +64,6 @@ src_prepare() {
 	default
 }
 
-meson_use_enable() {
-	echo "-Denable-${2:-${1}}=$(usex ${1} 'true' 'false')"
-}
-
 src_configure() {
 	local myconf=(
 		--buildtype=plain
@@ -75,10 +71,7 @@ src_configure() {
 		--localstatedir="${EPREFIX}/var"
 		--prefix="${EPREFIX}/usr"
 		--sysconfdir="${EPREFIX}/etc"
-		-Doption=enable-shared
-		-Doption=disable-static
-		-Doption=disable-update-mimedb
-		$(meson_use_enable test tests)
+		$(meson_use test unit_tests)
 	)
 	set -- meson "${myconf[@]}" "${S}" "${MESON_BUILD_DIR}"
 	echo "$@"
