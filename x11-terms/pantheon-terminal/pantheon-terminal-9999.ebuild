@@ -29,6 +29,7 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig"
 
 src_prepare() {
+	eapply "${FILESDIR}"/no-appstream.patch
 	default
 }
 
