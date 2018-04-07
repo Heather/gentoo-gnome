@@ -1,7 +1,6 @@
 Unofficial GNOME overlay
 [![Build Status](https://travis-ci.org/Heather/gentoo-gnome.png?branch=master)](https://travis-ci.org/Heather/gentoo-gnome)
 [![Twitter][]](http://www.twitter.com/Cynede)
-[![Donate Bitcoin](https://img.shields.io/badge/donate-bitcoin-orange.svg)](http://heather.github.io/donate-bitcoin/)
 ------------------------
 
 Versions
@@ -20,11 +19,10 @@ Major differences with the main tree
 -------------------------
 
  - To use the latest versions of vala, mask the old vala version to see the limitations. Currently, the only way to use the new vala is to port everything to this overlay.
- - gdbus-codegen was removed.
+ - gdbus-codegen was removed. (`666` version is just used for compatibility with tree packages)
 
 Information
 -----------
- - `compare.py` updates this overlay on top of the official one.
  - `list.py` lists packages inside the overlay and their versions.
  - The official [gnome overlay](http://git.overlays.gentoo.org/gitweb/?p=proj/gnome.git;a=summary).
  - Contributions are welcome.
