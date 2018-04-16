@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -14,9 +14,9 @@ IUSE="doc static-libs test"
 
 RDEPEND=""
 DEPEND="sys-devel/m4
+	>=dev-cpp/mm-common-0.9.12
 	doc? ( app-doc/doxygen )
 	test? ( dev-libs/boost[${MULTILIB_USEDEP}] )"
-# Needs mm-common for eautoreconf
 
 src_prepare() {
 	# don't waste time building examples
