@@ -15,3 +15,43 @@ index 95711f8..1e97c81 100644
  install_data(
      'enable-fish-completion-notifications',
      install_dir: join_paths(get_option('datadir'), meson.project_name())
+diff --git a/src/Widgets/TerminalWidget.vala b/src/Widgets/TerminalWidget.vala
+index 5dc4a9a..5cebcb0 100644
+--- a/src/Widgets/TerminalWidget.vala
++++ b/src/Widgets/TerminalWidget.vala
+@@ -420,6 +420,16 @@ namespace PantheonTerminal {
+             init_complete = true;
+         }
+ 
++        private char[] string_to_char_array(string str) {
++            char[] char_array = new char[str.length];
++
++            for (int i = 0; i < str.length; i++){
++                char_array[i] = (char)str.get_char(str.index_of_nth_char(i));
++            }
++            
++            return char_array;
++        }
++
+         public void drag_received (Gdk.DragContext context, int x, int y,
+                                    Gtk.SelectionData selection_data, uint target_type, uint time_) {
+             switch (target_type) {
+@@ -436,15 +446,15 @@ namespace PantheonTerminal {
+                     }
+ 
+                     string uris_s = string.joinv ("", uris);
+-                    this.feed_child (uris_s, uris_s.length);
++                    this.feed_child (string_to_char_array(uris_s));
+ 
+                     break;
+                 case DropTargets.STRING:
+                 case DropTargets.TEXT:
+-                    var data = selection_data.get_text ();
++                    var data = selection_data.get_text();
+ 
+                     if (data != null) {
+-                        this.feed_child (data, data.length);
++                        this.feed_child (string_to_char_array(data));
+                     }
+ 
+                     break;
