@@ -6,8 +6,8 @@ Unofficial GNOME overlay
 Versions
 --------
 
- - GNOME `3.28.x`
- - Pantheon `live` ebuilds
+ - GNOME `3.29.x`
+ - Pantheon `live` ebuilds (They are slightly outdated possibly)
 
 Communication
 -------------
