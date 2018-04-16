@@ -1,10 +1,10 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 PYTHON_COMPAT=( python{3_4,3_5,3_6} )
 
-inherit gnome2 python-single-r1 toolchain-funcs
+inherit gnome2 python-single-r1 toolchain-funcs meson
 
 DESCRIPTION="An API documentation browser for GNOME"
 HOMEPAGE="https://wiki.gnome.org/Apps/Devhelp"
@@ -18,7 +18,7 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 COMMON_DEPEND="
 	>=dev-libs/glib-2.37.3:2[dbus]
 	>=x11-libs/gtk+-3.19.3:3
-	>=net-libs/webkit-gtk-2.6.0:4
+	>=net-libs/webkit-gtk-2.20:4
 "
 RDEPEND="${COMMON_DEPEND}
 	${PYTHON_DEPS}
@@ -40,13 +40,4 @@ pkg_setup() {
 
 src_prepare() {
 	gnome2_src_prepare
-}
-
-src_configure() {
-	local myconf=""
-	# ICC is crazy, silence warnings (bug #154010)
-	if [[ $(tc-getCC) == "icc" ]] ; then
-		myconf="--with-compile-warnings=no"
-	fi
-	gnome2_src_configure ${myconf}
 }
