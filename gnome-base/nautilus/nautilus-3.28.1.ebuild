@@ -59,7 +59,7 @@ RDEPEND="${COMMON_DEPEND}
 PDEPEND="
 	gnome? ( x11-themes/adwaita-icon-theme )
 	previewer? ( >=gnome-extra/sushi-0.1.9 )
-	>=gnome-base/gvfs-1.14[gtk]
+	>=gnome-base/gvfs-1.14
 "
 # Need gvfs[gtk] for recent:/// support
 

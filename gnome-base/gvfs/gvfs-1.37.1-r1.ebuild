@@ -1,10 +1,10 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 GNOME2_LA_PUNT="yes"
 
-inherit autotools bash-completion-r1 gnome2 systemd
+inherit meson bash-completion-r1 gnome2 systemd
 
 DESCRIPTION="Virtual filesystem implementation for gio"
 HOMEPAGE="https://wiki.gnome.org/Projects/gvfs"
@@ -12,7 +12,7 @@ HOMEPAGE="https://wiki.gnome.org/Projects/gvfs"
 LICENSE="LGPL-2+"
 SLOT="0"
 
-IUSE="afp archive bluray cdda fuse google gnome-keyring gnome-online-accounts gphoto2 gtk +http ios mtp nfs policykit samba systemd test +udev udisks zeroconf"
+IUSE="afp archive bluray cdda fuse google gnome-keyring gnome-online-accounts gphoto2 +http ios nfs policykit systemd test +udev udisks zeroconf samba +mtp"
 REQUIRED_USE="
 	cdda? ( udev )
 	google? ( gnome-online-accounts )
@@ -38,7 +38,7 @@ RDEPEND="
 		>=dev-libs/libgdata-0.17.3:=[crypt,gnome-online-accounts]
 		>=net-libs/gnome-online-accounts-3.17.1:= )
 	gphoto2? ( >=media-libs/libgphoto2-2.5.0:= )
-	gtk? ( >=x11-libs/gtk+-3.0:3 )
+	>=x11-libs/gtk+-3.0:3
 	http? ( >=net-libs/libsoup-2.42:2.4 )
 	ios? (
 		>=app-pda/libimobiledevice-1.2:=
@@ -97,36 +97,37 @@ src_prepare() {
 }
 
 src_configure() {
-	# --enable-documentation installs man pages
-	# --disable-obexftp, upstream bug #729945
-	gnome2_src_configure \
-		--disable-gdu \
-		--disable-hal \
-		--enable-bash-completion \
-		--enable-documentation \
-		--enable-gcr \
-		--with-bash-completion-dir="$(get_bashcompdir)" \
-		--with-dbus-service-dir="${EPREFIX}"/usr/share/dbus-1/services \
-		--with-systemduserunitdir="$(systemd_get_userunitdir)" \
-		$(use_enable afp) \
-		$(use_enable archive) \
-		$(use_enable bluray) \
-		$(use_enable cdda) \
-		$(use_enable fuse) \
-		$(use_enable gnome-keyring keyring) \
-		$(use_enable gnome-online-accounts goa) \
-		$(use_enable google) \
-		$(use_enable gphoto2) \
-		$(use_enable gtk) \
-		$(use_enable http) \
-		$(use_enable ios afc) \
-		$(use_enable mtp libmtp) \
-		$(use_enable nfs) \
-		$(use_enable policykit admin) \
-		$(use_enable samba) \
-		$(use_enable systemd libsystemd-login) \
-		$(use_enable udev gudev) \
-		$(use_enable udev) \
-		$(use_enable udisks udisks2) \
-		$(use_enable zeroconf avahi)
+	local emesonargs=(
+		-Dgdu=false
+		-Dgcr=true
+		-Dsystemduserunitdir="$(systemd_get_userunitdir)"
+		$(meson_use mtp)
+		$(meson_use afp)
+		$(meson_use archive)
+		$(meson_use bluray)
+		$(meson_use cdda)
+		$(meson_use fuse)
+		$(meson_use gnome-online-accounts goa)
+		$(meson_use gnome-keyring keyring)
+		$(meson_use google)
+		$(meson_use gphoto2)
+		$(meson_use http)
+		$(meson_use ios afc)
+		$(meson_use nfs)
+		$(meson_use policykit admin)
+		$(meson_use systemd logind)
+		$(meson_use udev gudev)
+		$(meson_use udisks udisks2)
+		$(meson_use samba smb)
+	)
+
+	meson_src_configure
+}
+
+src_compile() {
+	meson_src_compile
+}
+
+src_install() {
+	meson_src_install
 }
