@@ -3,7 +3,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 python{3_4,3_5,3_6} pypy )
+PYTHON_COMPAT=( python2_7 pypy )
 
 inherit multilib-minimal python-any-r1
 
