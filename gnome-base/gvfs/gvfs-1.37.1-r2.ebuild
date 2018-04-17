@@ -49,7 +49,7 @@ RDEPEND="
 		sys-auth/polkit
 		sys-libs/libcap )
 	samba? ( >=net-fs/samba-4.5.10[client] )
-	systemd? ( >=sys-apps/systemd-206:0= )
+	>=sys-apps/systemd-206:0=
 	udev? (
 		cdda? ( dev-libs/libcdio-paranoia )
 		virtual/libgudev:= )
