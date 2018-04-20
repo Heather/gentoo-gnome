@@ -12,7 +12,7 @@ HOMEPAGE="https://wiki.gnome.org/Projects/gvfs"
 LICENSE="LGPL-2+"
 SLOT="0"
 
-IUSE="afp archive avahi bluray cdda fuse google gnome-keyring gnome-online-accounts gphoto2 +http ios nfs policykit systemd test +udev udisks zeroconf samba +mtp"
+IUSE="afp archive bluray cdda fuse google gnome-keyring gnome-online-accounts gphoto2 +http ios nfs policykit systemd test +udev udisks zeroconf samba +mtp"
 REQUIRED_USE="
 	cdda? ( udev )
 	google? ( gnome-online-accounts )
@@ -29,7 +29,6 @@ RDEPEND="
 	dev-libs/libxml2:2
 	net-misc/openssh
 	afp? ( >=dev-libs/libgcrypt-1.2.2:0= )
-	avahi? ( net-dns/avahi )
 	archive? ( app-arch/libarchive:= )
 	bluray? ( media-libs/libbluray )
 	fuse? ( >=sys-fs/fuse-2.8.0 )
@@ -104,7 +103,6 @@ src_configure() {
 		-Dsystemduserunitdir="$(systemd_get_userunitdir)"
 		$(meson_use mtp)
 		$(meson_use afp)
-		$(meson_use avahi dnssd)
 		$(meson_use archive)
 		$(meson_use bluray)
 		$(meson_use cdda)
@@ -121,6 +119,7 @@ src_configure() {
 		$(meson_use udev gudev)
 		$(meson_use udisks udisks2)
 		$(meson_use samba smb)
+		$(meson_use zeroconf dnssd)
 	)
 
 	meson_src_configure
