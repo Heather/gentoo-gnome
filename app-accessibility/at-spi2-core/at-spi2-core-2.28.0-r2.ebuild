@@ -61,8 +61,13 @@ multilib_src_configure() {
 	fi
 }
 
-multilib_src_compile() { meson_src_compile; }
-multilib_src_install() { meson_src_install; }
+multilib_src_compile() {
+	eninja
+}
+
+multilib_src_install() {
+	DESTDIR="${D}" eninja install
+}
 
 # weird hacks (needs for multilib support)
 pkg_postinst() {
