@@ -1,0 +1,3733 @@
+diff --git a/Makefile.am b/Makefile.am
+new file mode 100644
+index 0000000..edc6976
+--- /dev/null
++++ b/Makefile.am
+@@ -0,0 +1,28 @@
++# Process this file with automake to create Makefile.in.
++ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
++
++SUBDIRS = atk tests docs po win32
++
++meson_dist_files = \
++	meson_options.txt \
++	meson.build \
++	atk/meson.build \
++	docs/meson.build \
++	docs/xml/meson.build \
++	docs/xml/gtkdocentities.ent.in \
++	po/meson.build \
++	tests/meson.build \
++	$()
++
++EXTRA_DIST = 			\
++	MAINTAINERS		\
++	atk.pc.in		\
++	config.h.win32		\
++	$(meson_dist_files)
++
++pkgconfigdir = $(libdir)/pkgconfig
++pkgconfig_DATA = atk.pc
++
++DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc --enable-introspection
++
++DISTCLEANFILES = atk.pc
+diff --git a/README b/README
+index 4461bde..92f19bd 100644
+--- a/README
++++ b/README
+@@ -26,20 +26,28 @@ You can also clone the ATK master branch from GNOME repository:
+ Building
+ --------
+ 
+-You can use Meson and Ninja:
++To buid ATK from a release tarball you can use Autotools:
++
++    $ ./configure
++    $ make
++    # make install
++
++Alternatively, you can use Meson and Ninja:
+ 
+     $ meson _build .
+     $ ninja -C _build
+     # ninja -C _build install
+ 
+-Tarball
+--------
+-
+-If you want a tarball with the ATK source code, you can also use
+-Meson:
++To build ATK from a Git clone using Autotools, run the autogen.sh script
++instead of the configure one; before running autogen.sh or configure, make
++sure you have libtool in your path. If you use Meson, no changes are
++necessary.
+ 
+-  $ meson _build .
+-  $ ninja -C _build dist
++Note that autogen.sh runs the configure script for you. If you wish to pass
++options like --prefix=/usr to configure you can give those options to
++autogen.sh and they will be passed on to configure; if you wish to run
++autogen.sh without running the configure script, export the NOCONFIGURE
++environment variable.
+ 
+ How to report bugs
+ ------------------
+diff --git a/atk/Makefile.am b/atk/Makefile.am
+new file mode 100644
+index 0000000..c8f9419
+--- /dev/null
++++ b/atk/Makefile.am
+@@ -0,0 +1,252 @@
++# We set GPATH here; this gives us semantics for GNU make
++# which are more like other make's VPATH.
++GPATH = $(srcdir)
++
++include $(INTROSPECTION_MAKEFILE)
++INTROSPECTION_GIRS =
++INTROSPECTION_SCANNER_ENV = CC="$(CC)"
++
++EXTRA_DIST =
++CLEANFILES =
++DISTCLEANFILES =
++
++if PLATFORM_WIN32
++no_undefined = -no-undefined
++else
++no_undefined =
++endif
++
++AM_CPPFLAGS = \
++	-I$(top_srcdir)	\
++	-I$(top_builddir) \
++	-DGLIB_DISABLE_DEPRECATION_WARNINGS \
++	-DATK_DISABLE_DEPRECATIO_WARNINGS \
++	-DATK_COMPILATION \
++	-DATK_LOCALEDIR="\"$(datadir)/locale\""	\
++	$(DEP_CFLAGS) \
++	$(ATK_HIDDEN_VISIBILITY_CFLAGS)
++
++lib_LTLIBRARIES = libatk-1.0.la
++
++libatk_1_0_la_LDFLAGS = \
++	-version-info $(LT_VERSION_INFO) \
++	$(no_undefined)
++libatk_1_0_la_LIBADD = \
++       $(DEP_LIBS) \
++       $(INTLLIBS)
++
++atk_sources = \
++	atkaction.c		\
++	atkcomponent.c		\
++	atkdocument.c		\
++	atkeditabletext.c	\
++	atkgobjectaccessible.c	\
++	atkhyperlink.c		\
++	atkhyperlinkimpl.c	\
++	atkhypertext.c		\
++	atkimage.c		\
++	atknoopobject.c		\
++	atknoopobjectfactory.c	\
++	atkobject.c		\
++	atkobjectfactory.c	\
++	atkplug.c		\
++	atkprivate.h		\
++	atkprivate.c		\
++	atkrange.c		\
++	atkregistry.c		\
++	atkrelation.c		\
++	atkrelationset.c	\
++	atkselection.c		\
++	atksocket.c		\
++	atkstate.c		\
++	atkstateset.c		\
++	atkstreamablecontent.c	\
++	atktable.c		\
++	atktablecell.c		\
++	atktext.c		\
++	atkutil.c		\
++	atkmisc.c		\
++	atkvalue.c 		\
++	atkversion.c 		\
++	atkwindow.c
++
++libatk_1_0_la_SOURCES = 	\
++	$(atk_sources)		\
++	atkmarshal.c		\
++	atk-enum-types.c
++
++libatkincludedir=$(includedir)/atk-1.0/atk
++
++atk_headers = \
++        atkaction.h		\
++        atkcomponent.h		\
++        atkdocument.h		\
++        atkeditabletext.h	\
++        atkgobjectaccessible.h	\
++        atkhyperlink.h		\
++        atkhyperlinkimpl.h	\
++        atkhypertext.h		\
++        atknoopobject.h		\
++        atknoopobjectfactory.h	\
++        atkobject.h		\
++	atkobjectfactory.h	\
++        atkplug.h		\
++        atkimage.h		\
++	atkrange.h		\
++        atkregistry.h		\
++        atkrelation.h		\
++        atkrelationtype.h	\
++        atkrelationset.h	\
++        atkselection.h		\
++        atksocket.h		\
++        atkstate.h		\
++        atkstateset.h		\
++        atkstreamablecontent.h	\
++        atktable.h		\
++        atktablecell.h		\
++        atktext.h		\
++        atkutil.h		\
++        atkmisc.h		\
++        atkvalue.h 		\
++        atkwindow.h
++
++libatkinclude_HEADERS =		\
++        atk.h			\
++	$(atk_headers)		\
++	atkversion.h 		\
++	atk-enum-types.h
++
++
++# ---------- Handle built sources ----------
++
++BUILT_SOURCES = atkmarshal.h atkmarshal.c atk-enum-types.h atk-enum-types.c
++
++atkmarshal.h: stamp-atkmarshal.h
++	@true
++stamp-atkmarshal.h: @REBUILD@ atkmarshal.list
++	$(AM_V_GEN) $(GLIB_GENMARSHAL) --prefix=atk_marshal $(srcdir)/atkmarshal.list --header >> xgen-gmh \
++	&& (cmp -s xgen-gmh atkmarshal.h || cp xgen-gmh atkmarshal.h) \
++	&& rm -f xgen-gmh xgen-gmh~					\
++	&& echo timestamp > $(@F)
++
++atkmarshal.c: stamp-atkmarshal.c
++	@true
++stamp-atkmarshal.c: @REBUILD@ atkmarshal.list
++	$(AM_V_GEN) $(GLIB_GENMARSHAL) --prefix=atk_marshal $(srcdir)/atkmarshal.list --body >> xgen-gmc \
++	&& (cmp -s xgen-gmc atkmarshal.c || cp xgen-gmc atkmarshal.c) \
++	&& rm -f xgen-gmc xgen-gmc~					\
++	&& echo timestamp > $(@F)
++
++EXTRA_DIST += atkmarshal.list
++CLEANFILES += stamp-atkmarshal.h stamp-atkmarshal.c
++DISTCLEANFILES += atkmarshal.h atkmarshal.c
++
++atk-enum-types.h: s-enum-types-h
++	@true
++s-enum-types-h: @REBUILD@ $(atk_headers) $(top_srcdir)/atk/atk-enum-types.h.template Makefile
++	$(AM_V_GEN) $(GLIB_MKENUMS) \
++		--template $(top_srcdir)/atk/atk-enum-types.h.template \
++	$(addprefix $(srcdir)/, $(atk_headers)) > tmp-atk-enum-types.h \
++	&& (cmp -s tmp-atk-enum-types.h atk-enum-types.h || cp -f tmp-atk-enum-types.h atk-enum-types.h ) \
++	&& rm -f tmp-atk-enum-types.h \
++	&& echo timestamp > $(@F)
++
++atk-enum-types.c: s-enum-types-c
++	@true
++s-enum-types-c: @REBUILD@ $(atk_headers) $(top_srcdir)/atk/atk-enum-types.c.template Makefile
++	$(AM_V_GEN) $(GLIB_MKENUMS) \
++		--template $(top_srcdir)/atk/atk-enum-types.c.template \
++	$(addprefix $(srcdir)/, $(atk_headers)) > tmp-atk-enum-types.c \
++	&& (cmp -s tmp-atk-enum-types.c atk-enum-types.c || cp tmp-atk-enum-types.c atk-enum-types.c ) \
++	&& rm -f tmp-atk-enum-types.c \
++	&& echo timestamp > $(@F)
++
++EXTRA_DIST += atk-enum-types.h.template atk-enum-types.c.template
++CLEANFILES += s-enum-types-h s-enum-types-c
++DISTCLEANFILES += atk-enum-types.h atk-enum-types.c
++
++if HAVE_INTROSPECTION
++introspection_sources = \
++    $(atk_headers)	\
++    $(atk_sources)
++introspection_generated_sources = \
++    atkversion.h 	\
++    atk-enum-types.c	\
++    atk-enum-types.h
++
++Atk-1.0.gir: libatk-1.0.la Makefile
++Atk_1_0_gir_INCLUDES = GObject-2.0
++Atk_1_0_gir_CFLAGS = $(AM_CPPFLAGS)
++Atk_1_0_gir_LIBS = libatk-1.0.la
++Atk_1_0_gir_SCANNERFLAGS = --pkg-export=atk --warn-all --c-include="atk/atk.h"
++Atk_1_0_gir_FILES = $(introspection_sources) $(introspection_generated_sources)
++INTROSPECTION_GIRS += Atk-1.0.gir
++
++girdir = $(datadir)/gir-1.0
++gir_DATA = $(INTROSPECTION_GIRS)
++
++typelibsdir = $(libdir)/girepository-1.0
++typelibs_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
++
++CLEANFILES += $(gir_DATA) $(typelibs_DATA)
++endif
++
++# ---------- Win32 stuff ----------
++if OS_WIN32
++libatk_1_0_la_LDFLAGS += -no-undefined -Wl,atk-win32-res.o
++libatk_1_0_la_DEPENDENCIES = atk-win32-res.o
++endif
++
++atk-win32-res.o: atk.rc
++	$(WINDRES) $< $@
++
++EXTRA_DIST += atk.rc.in atk.rc
++
++# ---------- MSVC Project Items ---------
++MSVCPROJS = atk
++
++atk_FILES = $(libatk_1_0_la_SOURCES)
++atk_EXCLUDES = atkdummy
++
++atk_HEADERS_DIR = $(libatkincludedir)
++atk_HEADERS_INST = $(libatkinclude_HEADERS) atkversion.h
++atk_HEADERS_EXCLUDES = $(builddir)/atkversion.h
++
++include $(top_srcdir)/win32/Makefile.msvcproj
++
++if HAVE_INTROSPECTION
++# Introspection Items for MSVC
++MSVC_INTROSPECT_GIRS = Atk-1.0.gir
++
++INTROSPECTION_INTERMEDIATE_ITEMS = \
++	$(top_builddir)/win32/Atk-1.0.gir.msvc.introspect	\
++	$(top_builddir)/win32/Atk_1_0_gir_list
++
++Atk_1_0_gir_MSVC_EXPORT_PACKAGES = atk
++Atk_1_0_gir_MSVC_INCLUDE_GIRS = $(Atk_1_0_gir_INCLUDES)
++Atk_1_0_gir_MSVC_LIBS = atk-1.0
++Atk_1_0_gir_MSVC_FILES =		\
++	$(introspection_sources)	\
++	atkversion.h			\
++	atk-enum-types.c		\
++	atk-enum-types.h
++
++Atk_1_0_gir_MSVC_CFLAGS =		\
++	-I..				\
++	-DG_DISABLE_DEPRECATED	\
++	-DATK_DISABLE_DEPRECATED	\
++	-DATK_COMPILATION	\
++	-DATK_LOCALEDIR="\\\"/dummy/share/locale\\\""
++
++Atk_1_0_gir_MSVC_SCANNERFLAGS = --warn-all --c-include "atk/atk.h"
++
++include $(top_srcdir)/win32/Makefile.msvc-introspection
++
++else
++INTROSPECTION_INTERMEDIATE_ITEMS =
++endif
++
++dist-hook: \
++	$(top_builddir)/win32/vs9/atk.vcproj	\
++	$(top_builddir)/win32/vs9/atk.headers	\
++	$(INTROSPECTION_INTERMEDIATE_ITEMS)
+diff --git a/autogen.sh b/autogen.sh
+new file mode 100755
+index 0000000..1dc2281
+--- /dev/null
++++ b/autogen.sh
+@@ -0,0 +1,38 @@
++#!/bin/sh
++# Run this to generate all the initial makefiles, etc.
++test -n "$srcdir" || srcdir=$(dirname "$0")
++test -n "$srcdir" || srcdir=.
++
++olddir=$(pwd)
++
++cd $srcdir
++
++(test -f configure.ac) || {
++	echo "*** ERROR: Directory '$srcdir' does not look like the top-level project directory ***"
++	exit 1
++}
++
++# shellcheck disable=SC2016
++PKG_NAME=$(autoconf --trace 'AC_INIT:$1' configure.ac)
++
++if [ "$#" = 0 -a "x$NOCONFIGURE" = "x" ]; then
++	echo "*** WARNING: I am going to run 'configure' with no arguments." >&2
++	echo "*** If you wish to pass any to it, please specify them on the" >&2
++	echo "*** '$0' command line." >&2
++	echo "" >&2
++fi
++
++aclocal --install || exit 1
++gtkdocize --copy || exit 1
++autoreconf --verbose --force --install || exit 1
++
++cd "$olddir"
++if [ "$NOCONFIGURE" = "" ]; then
++	$srcdir/configure "$@" || exit 1
++
++	if [ "$1" = "--help" ]; then exit 0 else
++		echo "Now type 'make' to compile $PKG_NAME" || exit 1
++fi
++else
++	echo "Skipping configure process."
++fi
+diff --git a/config.h.win32.in b/config.h.win32.in
+new file mode 100644
+index 0000000..d815b58
+--- /dev/null
++++ b/config.h.win32.in
+@@ -0,0 +1,107 @@
++/* config.h.win32.in Hand written to suit the MSVC/MinGW compilers  */
++/* config.h.in.  Generated from configure.in by autoheader.  */
++
++/* always defined to indicate that i18n is enabled */
++#define ENABLE_NLS 1
++
++/* Define the gettext package to be used */
++#define GETTEXT_PACKAGE "@GETTEXT_PACKAGE@"
++
++/* Define to 1 if you have the `bind_textdomain_codeset' function. */
++#define HAVE_BIND_TEXTDOMAIN_CODESET 1
++
++/* Define to 1 if you have the `dcgettext' function. */
++#define HAVE_DCGETTEXT 1
++
++/* Define to 1 if you have the <dlfcn.h> header file. */
++/*#undef HAVE_DLFCN_H*/
++
++/* Define if the GNU gettext() function is already present or preinstalled. */
++#define HAVE_GETTEXT 1
++
++/* Define to 1 if you have the <inttypes.h> header file. */
++#ifndef _MSC_VER
++#define HAVE_INTTYPES_H 1
++#else
++/* #undef HAVE_INTTYPES_H */
++#endif
++
++/* Define if your <locale.h> file defines LC_MESSAGES. */
++/*#undef HAVE_LC_MESSAGES*/
++
++/* Define to 1 if you have the <locale.h> header file. */
++#define HAVE_LOCALE_H 1
++
++/* Define to 1 if you have the <memory.h> header file. */
++#define HAVE_MEMORY_H 1
++
++/* Define to 1 if you have the <stdint.h> header file. */
++#ifdef _MSC_VER
++#if (_MSC_VER >= 1600)
++#define HAVE_STDINT_H 1
++#else
++/* #undef HAVE_STDINT_H */
++#endif
++#else /*not MSVC*/
++#define HAVE_STDINT_H 1
++#endif
++
++/* Define to 1 if you have the <stdlib.h> header file. */
++#define HAVE_STDLIB_H 1
++
++/* Define to 1 if you have the <strings.h> header file. */
++/*#undef HAVE_STRINGS_H*/
++
++/* Define to 1 if you have the <string.h> header file. */
++#define HAVE_STRING_H 1
++
++/* Define to 1 if you have the <sys/stat.h> header file. */
++#define HAVE_SYS_STAT_H 1
++
++/* Define to 1 if you have the <sys/types.h> header file. */
++#define HAVE_SYS_TYPES_H 1
++
++/* Define to 1 if you have the <unistd.h> header file. */
++#ifndef _MSC_VER
++#define HAVE_UNISTD_H 1
++#else
++/* #undef HAVE_UNISTD_H */
++#endif
++
++/* Define to the sub-directory in which libtool stores uninstalled libraries.
++   */
++#define LT_OBJDIR ".libs/"
++
++/* Name of package */
++#define PACKAGE "ATK"
++
++/* Define to the address where bug reports for this package should be sent. */
++#define PACKAGE_BUGREPORT "http://bugzilla.gnome.org/enter_bug.cgi?product=atk"
++
++/* Define to the full name of this package. */
++#define PACKAGE_NAME "atk"
++
++/* Define to the full name and version of this package. */
++#define PACKAGE_STRING "atk @ATK_MAJOR_VERSION@.@ATK_MINOR_VERSION@.@ATK_MICRO_VERSION@"
++
++/* Define to the one symbol short name of this package. */
++#define PACKAGE_TARNAME "atk"
++
++/* Define to the home page for this package. */
++#define PACKAGE_URL "http://www.gtk.org/"
++
++/* Define to the version of this package. */
++#define PACKAGE_VERSION "@ATK_MAJOR_VERSION@.@ATK_MINOR_VERSION@.@ATK_MICRO_VERSION@"
++
++/* Define to 1 if you have the ANSI C header files. */
++#define STDC_HEADERS 1
++
++/* Version number of package */
++#define VERSION "@ATK_MAJOR_VERSION@.@ATK_MINOR_VERSION@.@ATK_MICRO_VERSION@"
++
++/* defines how to decorate public symbols while building */
++#ifdef _MSC_VER
++#define _ATK_EXTERN __declspec (dllexport) extern
++#else
++#define _ATK_EXTERN __attribute__((visibility("default"))) __declspec (dllexport) extern
++#endif
+diff --git a/configure.ac b/configure.ac
+new file mode 100644
+index 0000000..61e94c8
+--- /dev/null
++++ b/configure.ac
+@@ -0,0 +1,260 @@
++dnl Process this file with autoconf to produce a configure script.
++
++AC_PREREQ([2.63])
++
++dnl ==========================================================================
++dnl                              Versioning              
++dnl ==========================================================================
++
++dnl Making releases:
++dnl   ATK_MICRO_VERSION += 1;
++dnl   ATK_INTERFACE_AGE += 1;
++dnl   ATK_BINARY_AGE += 1;
++dnl if any functions have been added, set ATK_INTERFACE_AGE to 0.
++dnl if backwards compatibility has been broken,
++dnl set ATK_BINARY_AGE _and_ ATK_INTERFACE_AGE to 0.
++
++dnl The triplet 
++m4_define([atk_major_version], [2])
++m4_define([atk_minor_version], [29])
++m4_define([atk_micro_version], [1])
++m4_define([atk_version],
++          [atk_major_version.atk_minor_version.atk_micro_version])
++
++dnl The X.Y in -latk-X.Y line. This is expected to stay 1.0 until Atk 3.
++m4_define([atk_api_version], [1.0])
++
++dnl Number of releases since we've added interfaces
++m4_define([atk_interface_age], [1])
++
++dnl binary_age includes major version as ATK 2 is still fully API and ABI compatible
++m4_define([atk_binary_age],
++          [m4_eval(10000 * atk_major_version + 100 * atk_minor_version + 10 + atk_micro_version)])
++
++m4_define([lt_current],
++          [m4_eval(10000 * atk_major_version + 100 * atk_minor_version + 10 + atk_micro_version - atk_interface_age)])
++m4_define([lt_revision], [atk_interface_age])
++m4_define([lt_age], [m4_eval(atk_binary_age - atk_interface_age)])
++m4_define([lt_version_info], [lt_current:lt_revision:lt_age])
++m4_define([lt_current_minus_age], [m4_eval(lt_current - lt_age)])
++
++AC_INIT([atk],
++        [atk_version],
++        [http://bugzilla.gnome.org/enter_bug.cgi?product=atk],
++        [atk])
++
++AC_CONFIG_HEADERS([config.h])
++AC_CONFIG_SRCDIR([README])
++AC_CONFIG_MACRO_DIR([m4])
++
++AM_INIT_AUTOMAKE([1.11 foreign -Wno-portability no-dist-gzip dist-xz tar-ustar])
++
++# Support silent build rules, requires at least automake-1.11. Disable
++# by either passing --disable-silent-rules to configure or passing V=1
++# to make
++m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
++
++dnl ==========================================================================
++dnl
++dnl If you add a version number here, you *must* add an AC_SUBST line for
++dnl it too, or it will never make it into the spec file!
++dnl
++dnl ==========================================================================
++
++ATK_MAJOR_VERSION=atk_major_version
++ATK_MINOR_VERSION=atk_minor_version
++ATK_MICRO_VERSION=atk_micro_version
++ATK_VERSION=atk_version
++ATK_API_VERSION=atk_api_version
++ATK_INTERFACE_AGE=atk_interface_age
++ATK_BINARY_AGE=atk_binary_age
++
++AC_SUBST(ATK_MAJOR_VERSION)
++AC_SUBST(ATK_MINOR_VERSION)
++AC_SUBST(ATK_VERSION)
++AC_SUBST(ATK_API_VERSION)
++AC_SUBST(ATK_MICRO_VERSION)
++AC_SUBST(ATK_INTERFACE_AGE)
++AC_SUBST(ATK_BINARY_AGE)
++
++dnl libtool versioning
++LT_VERSION_INFO=lt_version_info
++LT_CURRENT_MINUS_AGE=lt_current_minus_age
++AC_SUBST(LT_VERSION_INFO)
++AC_SUBST(LT_CURRENT_MINUS_AGE)
++
++dnl ==========================================================================
++
++# Check for programs
++AC_PROG_CC
++
++# Initialize libtool
++LT_PREREQ([2.2])
++LT_INIT([disable-static win32-dll])
++
++AC_CHECK_FUNCS(bind_textdomain_codeset)
++
++AC_MSG_CHECKING([for some Win32 platform])
++case "$host" in
++  *-*-mingw*|*-*-cygwin*)
++    platform_win32=yes
++    ;;
++  *)
++    platform_win32=no
++    ;;
++esac
++AC_MSG_RESULT([$platform_win32])
++AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = "yes")
++
++AC_MSG_CHECKING([for native Win32 platform])
++case "$host" in
++  *-*-mingw*)
++    atk_native_win32=yes
++    case "$host" in
++      x86_64-*-*)
++	LIB_EXE_MACHINE_FLAG=X64
++	;;
++      *)
++	LIB_EXE_MACHINE_FLAG=X86
++	;;
++    esac
++    ;;
++  *)
++    atk_native_win32=no
++    ;;
++esac
++AC_MSG_RESULT([$atk_native_win32])
++AM_CONDITIONAL(OS_WIN32, test "$atk_native_win32" = "yes")
++
++AC_SUBST(LIB_EXE_MACHINE_FLAG)
++
++if test "$atk_native_win32" = "yes"; then
++  AC_CHECK_TOOL(WINDRES, windres, no)
++  if test "$WINDRES" = no; then
++    AC_MSG_ERROR([*** Could not find an implementation of windres in your PATH.])
++  fi
++  AC_CHECK_PROG(ms_librarian, lib.exe, yes, no)
++
++fi
++AM_CONDITIONAL(MS_LIB_AVAILABLE, test x$ms_librarian = xyes)
++
++dnl Cache $ACLOCAL_FLAGS
++AC_CACHE_CHECK([for aclocal flags], ac_cv_atk_aclocal_flags,[
++   ac_cv_atk_aclocal_flags="$ACLOCAL_FLAGS"
++])
++ACLOCAL="$ACLOCAL $ac_cv_atk_aclocal_flags"
++
++AC_ARG_ENABLE(rebuilds,
++              [AS_HELP_STRING([--disable-rebuilds],
++                              [disable all source autogeneration rules])],,
++              [enable_rebuilds=yes])
++
++CPPFLAGS="$CPPFLAGS -DG_DISABLE_SINGLE_INCLUDES -DATK_DISABLE_SINGLE_INCLUDES"
++
++changequote(,)dnl
++if test "x$GCC" = "xyes"; then
++  case " $CFLAGS " in
++  *[\ \ ]-Wall[\ \	]*) ;;
++  *) CFLAGS="$CFLAGS -Wall" ;;
++  esac
++fi
++changequote([,])dnl
++
++GLIB_REQUIRED_VERSION=2.31.2
++AC_SUBST(GLIB_REQUIRED_VERSION)
++
++PKG_CHECK_MODULES(DEP, [gobject-2.0 >= $GLIB_REQUIRED_VERSION])
++AC_SUBST(DEP_CFLAGS)
++AC_SUBST(DEP_LIBS)
++
++GLIB_MKENUMS=`$PKG_CONFIG --variable=glib_mkenums glib-2.0`
++GLIB_GENMARSHAL=`$PKG_CONFIG --variable=glib_genmarshal glib-2.0`
++AC_SUBST(GLIB_MKENUMS)
++AC_SUBST(GLIB_GENMARSHAL)
++
++# i18n stuff
++AM_GNU_GETTEXT_VERSION([0.19.2])
++AM_GNU_GETTEXT([external])
++
++GETTEXT_PACKAGE=atk10
++AC_SUBST(GETTEXT_PACKAGE)
++AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, ["$GETTEXT_PACKAGE"],
++  [Define the gettext package to be used])
++
++# Introspection support
++GOBJECT_INTROSPECTION_CHECK([1.32.0])
++
++# Documentation support
++GTK_DOC_CHECK([1.25])
++
++# define a MAINT-like variable REBUILD which is set if Perl
++# and awk are found, so autogenerated sources can be rebuilt
++
++AC_PROG_AWK
++AC_CHECK_PROGS(PERL, perl5 perl)
++
++# Check whether MSVC toolset is explicitly set
++AM_CONDITIONAL(MSVC_BASE_NO_TOOLSET_SET, [test x$MSVC_BASE_TOOLSET = x])
++AM_CONDITIONAL(MSVC_NO_TOOLSET_SET, [test x$MSVC_TOOLSET = x])
++
++REBUILD=\#
++if test "x$enable_rebuilds" = "xyes" && \
++	test -n "$PERL" && \
++	$PERL -e 'exit !($] >= 5.002)' > /dev/null 2>&1 && \
++     test -n "$AWK" ; then
++  REBUILD=
++fi
++AC_SUBST(REBUILD)
++
++# Check for the visibility flags
++ATK_HIDDEN_VISIBILITY_CFLAGS=""
++case "$host" in
++  *-*-mingw*)
++    dnl on mingw32 we do -fvisibility=hidden and __declspec(dllexport)
++    AC_DEFINE([_ATK_EXTERN], [__attribute__((visibility("default"))) __declspec(dllexport) extern],
++              [defines how to decorate public symbols while building])
++    CFLAGS="${CFLAGS} -fvisibility=hidden"
++    ;;
++  *)
++    dnl on other compilers, check if we can do -fvisibility=hidden
++    SAVED_CFLAGS="${CFLAGS}"
++    CFLAGS="-fvisibility=hidden"
++    AC_MSG_CHECKING([for -fvisibility=hidden compiler flag])
++    AC_TRY_COMPILE([], [int main (void) { return 0; }],
++                   AC_MSG_RESULT(yes)
++                   enable_fvisibility_hidden=yes,
++                   AC_MSG_RESULT(no)
++                   enable_fvisibility_hidden=no)
++    CFLAGS="${SAVED_CFLAGS}"
++
++    AS_IF([test "${enable_fvisibility_hidden}" = "yes"], [
++      AC_DEFINE([_ATK_EXTERN], [__attribute__((visibility("default"))) extern],
++                [defines how to decorate public symbols while building])
++      ATK_HIDDEN_VISIBILITY_CFLAGS="-fvisibility=hidden"
++    ])
++    ;;
++esac
++AC_SUBST(ATK_HIDDEN_VISIBILITY_CFLAGS)
++
++AC_CONFIG_FILES([
++Makefile
++po/Makefile.in
++atk.pc
++atk/Makefile
++atk/atk.rc
++atk/atkversion.h
++tests/Makefile
++win32/Makefile
++win32/vs9/Makefile
++win32/vs9/atk-version-paths.vsprops
++win32/vs10/Makefile
++win32/vs10/atk-version-paths.props
++win32/vs11/Makefile
++win32/vs12/Makefile
++win32/vs14/Makefile
++win32/vs15/Makefile
++docs/Makefile
++config.h.win32
++])
++
++AC_OUTPUT
+diff --git a/docs/Makefile.am b/docs/Makefile.am
+new file mode 100644
+index 0000000..21ab956
+--- /dev/null
++++ b/docs/Makefile.am
+@@ -0,0 +1,46 @@
++## Process this file with automake to produce Makefile.in
++
++# The name of the module.
++DOC_MODULE = atk
++
++# The top-level SGML file.
++DOC_MAIN_SGML_FILE = atk-docs.xml
++
++# Extra options to supply to gtkdoc-scan
++SCAN_OPTIONS = --deprecated-guards=ATK_DISABLE_DEPRECATED
++
++# The directory containing the source code (if it contains documentation).
++DOC_SOURCE_DIR = $(top_srcdir)/atk $(top_builddir)/atk
++
++# Used for dependencies
++HFILE_GLOB = $(top_srcdir)/atk/*.h
++CFILE_GLOB = $(top_srcdir)/atk/*.c
++
++# Header files to ignore when scanning
++IGNORE_HFILES =	\
++	atkmarshal.h \
++	atkintl.h
++
++# CFLAGS and LDFLAGS for compiling scan program. Only needed
++# if $(DOC_MODULE).types is non-empty.
++AM_CPPFLAGS = 			\
++	-I$(top_srcdir)		\
++	-I$(top_builddir)	\
++	-DATK_DISABLE_DEPRECATION_WARNINGS \
++	$(DEP_CFLAGS)
++
++GTKDOC_LIBS = \
++	$(top_builddir)/atk/libatk-$(ATK_API_VERSION).la \
++	$(DEP_LIBS)
++
++# gtkdoc-mkdb related varaibles
++MKDB_OPTIONS =
++
++content_files =
++
++HTML_IMAGES =
++
++include $(top_srcdir)/gtk-doc.make
++
++# Other files to distribute
++#EXTRA_DIST +=
+diff --git a/po/Makevars b/po/Makevars
+new file mode 100644
+index 0000000..5e55bab
+--- /dev/null
++++ b/po/Makevars
+@@ -0,0 +1,78 @@
++# Makefile variables for PO directory in any package using GNU gettext.
++
++# Usually the message domain is the same as the package name.
++DOMAIN = atk10
++
++# These two variables depend on the location of this directory.
++subdir = po
++top_builddir = ..
++
++# These options get passed to xgettext.
++XGETTEXT_OPTIONS = --from-code=UTF-8 --keyword=_ --keyword=N_ --keyword=C_:1c,2 --keyword=NC_:1c,2 --keyword=g_dngettext:2,3 --add-comments
++
++# This is the copyright holder that gets inserted into the header of the
++# $(DOMAIN).pot file.  Set this to the copyright holder of the surrounding
++# package.  (Note that the msgstr strings, extracted from the package's
++# sources, belong to the copyright holder of the package.)  Translators are
++# expected to transfer the copyright for their translations to this person
++# or entity, or to disclaim their copyright.  The empty string stands for
++# the public domain; in this case the translators are expected to disclaim
++# their copyright.
++COPYRIGHT_HOLDER = ATK contributors
++
++# This tells whether or not to prepend "GNU " prefix to the package
++# name that gets inserted into the header of the $(DOMAIN).pot file.
++# Possible values are "yes", "no", or empty.  If it is empty, try to
++# detect it automatically by scanning the files in $(top_srcdir) for
++# "GNU packagename" string.
++PACKAGE_GNU = no
++
++# This is the email address or URL to which the translators shall report
++# bugs in the untranslated strings:
++# - Strings which are not entire sentences, see the maintainer guidelines
++#   in the GNU gettext documentation, section 'Preparing Strings'.
++# - Strings which use unclear terms or require additional context to be
++#   understood.
++# - Strings which make invalid assumptions about notation of date, time or
++#   money.
++# - Pluralisation problems.
++# - Incorrect English spelling.
++# - Incorrect formatting.
++# It can be your email address, or a mailing list address where translators
++# can write to without being subscribed, or the URL of a web page through
++# which the translators can contact you.
++MSGID_BUGS_ADDRESS = https://bugzilla.gnome.org/enter_bug.cgi?product=atk&keywords=I18N+L10N&component=general
++
++# This is the list of locale categories, beyond LC_MESSAGES, for which the
++# message catalogs shall be used.  It is usually empty.
++EXTRA_LOCALE_CATEGORIES =
++
++# This tells whether the $(DOMAIN).pot file contains messages with an 'msgctxt'
++# context.  Possible values are "yes" and "no".  Set this to yes if the
++# package uses functions taking also a message context, like pgettext(), or
++# if in $(XGETTEXT_OPTIONS) you define keywords with a context argument.
++USE_MSGCTXT = no
++
++# These options get passed to msgmerge.
++# Useful options are in particular:
++#   --previous            to keep previous msgids of translated messages,
++#   --quiet               to reduce the verbosity.
++MSGMERGE_OPTIONS =
++
++# These options get passed to msginit.
++# If you want to disable line wrapping when writing PO files, add
++# --no-wrap to MSGMERGE_OPTIONS, XGETTEXT_OPTIONS, and
++# MSGINIT_OPTIONS.
++MSGINIT_OPTIONS =
++
++# This tells whether or not to regenerate a PO file when $(DOMAIN).pot
++# has changed.  Possible values are "yes" and "no".  Set this to no if
++# the POT file is checked in the repository and the version control
++# program ignores timestamps.
++PO_DEPENDS_ON_POT = no
++
++# This tells whether or not to forcibly update $(DOMAIN).pot and
++# regenerate PO files on "make dist".  Possible values are "yes" and
++# "no".  Set this to no if the POT file and PO files are maintained
++# externally.
++DIST_DEPENDS_ON_UPDATE_PO = no
+diff --git a/tests/Makefile.am b/tests/Makefile.am
+new file mode 100644
+index 0000000..d2bb2fd
+--- /dev/null
++++ b/tests/Makefile.am
+@@ -0,0 +1,31 @@
++if PLATFORM_WIN32
++no_undefined = -no-undefined
++else
++no_undefined =
++endif
++
++libatk = $(top_builddir)/atk/libatk-$(ATK_API_VERSION).la
++
++AM_CPPFLAGS = -I$(top_srcdir)	\
++	-DG_DISABLE_DEPRECATED	\
++	$(DEP_CFLAGS)
++DEPS = \
++	$(libatk)
++
++noinst_PROGRAMS = testdocument \
++		  testrole  \
++		  testrelation  \
++		  teststateset  \
++		  testvalue
++
++LDADD = $(libatk) $(DEP_LIBS)
++
++testdocument_SOURCES = testdocument.c
++testrole_SOURCES = testrole.c
++testrelation_SOURCES = testrelation.c
++teststateset_SOURCES = teststateset.c
++testvalue_SOURCES = testvalue.c
++
++EXTRA_DIST = testatk_vc.mak
++
++DISTCLEANFILES = testatk_vc.mak
+diff --git a/win32/Makefile-newvs.am b/win32/Makefile-newvs.am
+new file mode 100644
+index 0000000..3a91862
+--- /dev/null
++++ b/win32/Makefile-newvs.am
+@@ -0,0 +1,55 @@
++# Centralized autotools file
++# Create the Visual Studio 2012/2013/2015 project files
++# from the Visual Studio 2010 project files
++
++# This autotools file, from GLib, can be used in other projects
++# that have Visual Studio build support.
++
++# Author: Fan, Chun-wei
++# November 05, 2012
++
++# MSVC_BASE_VER: Baseline MSVC 201x version to copy/process project files from (100 for 2010, 120 for 2013)
++# MSVC_BASE_VER_LONG: Long Version of baseline Visual Studio 201x version (2010, 2012, 2013, 14, 15)
++# MSVC_BASE_TOOLSET: Use if baseline MSVC toolset is not in the form v$(MSVC_BASE_VER)0, meaning v$(MSVC_BASE_TOOLSET)
++# MSVC_VER_LONG: Long Version of target Visual Studio (2012, 2013, 14 and so on)
++# MSVC_VER: Short Version of target Visual Studio (110 for 2012, 120 for 2013, 140 for 2015, 141 for 2017)
++# MSVC_TOOLSET: Use if target MSVC toolsett is not in the form v $(MSVC_VER)0, meaning v$(MSVC_TOOLSET)
++
++if MSVC_BASE_NO_TOOLSET_SET
++MSVC_BASE_TOOLSET = $(MSVC_BASE_VER)0
++endif
++
++if MSVC_NO_TOOLSET_SET
++MSVC_TOOLSET = $(MSVC_VER)0
++endif
++
++%.sln:
++	sed 's/11\.00/12\.00/g' < $(top_srcdir)/win32/vs$(MSVC_BASE_VER)/$@ > $(top_builddir)/win32/vs$(MSVC_VER)/$@.tmp
++	sed 's/$(MSVC_BASE_VER_LONG)/$(MSVC_VER_LONG)/g' < $(top_builddir)/win32/vs$(MSVC_VER)/$@.tmp > $(top_builddir)/win32/vs$(MSVC_VER)/$@
++	rm $(top_builddir)/win32/vs$(MSVC_VER)/$@.tmp
++
++%.txt:
++	sed 's/vs$(MSVC_BASE_VER)/vs$(MSVC_VER)/g' < $(top_srcdir)/win32/vs$(MSVC_BASE_VER)/$@ > $(top_builddir)/win32/vs$(MSVC_VER)/$@.tmp
++	sed 's/VS$(MSVC_BASE_VER)/VS$(MSVC_VER)/g' < $(top_builddir)/win32/vs$(MSVC_VER)/$@.tmp > $(top_builddir)/win32/vs$(MSVC_VER)/$@
++	rm $(top_builddir)/win32/vs$(MSVC_VER)/$@.tmp
++
++%.vcxproj:
++	if test -e $(top_srcdir)/win32/vs$(MSVC_BASE_VER)/$@; then \
++		sed 's/v$(MSVC_BASE_TOOLSET)/v$(MSVC_TOOLSET)/g' < $(top_srcdir)/win32/vs$(MSVC_BASE_VER)/$@ > $(top_builddir)/win32/vs$(MSVC_VER)/$@; \
++	else \
++		sed 's/v$(MSVC_BASE_TOOLSET)/v$(MSVC_TOOLSET)/g' < $(top_builddir)/win32/vs$(MSVC_BASE_VER)/$@ > $(top_builddir)/win32/vs$(MSVC_VER)/$@; \
++	fi
++
++%.props: $(top_builddir)/win32/vs$(MSVC_BASE_VER)/Makefile
++	if test -e $(top_srcdir)/win32/vs$(MSVC_BASE_VER)/$@; then \
++		sed 's/<VSVer>$(MSVC_BASE_VER)<\/VSVer>/<VSVer>$(MSVC_VER)<\/VSVer>/g' < $(top_srcdir)/win32/vs$(MSVC_BASE_VER)/$@ > $(top_builddir)/win32/vs$(MSVC_VER)/$@; \
++	else \
++		sed 's/<VSVer>$(MSVC_BASE_VER)<\/VSVer>/<VSVer>$(MSVC_VER)<\/VSVer>/g' < $(top_builddir)/win32/vs$(MSVC_BASE_VER)/$@ > $(top_builddir)/win32/vs$(MSVC_VER)/$@; \
++	fi
++
++%.vcxproj.filters:
++	if test -e $(top_srcdir)/win32/vs$(MSVC_BASE_VER)/$@; then \
++		cp $(top_srcdir)/win32/vs$(MSVC_BASE_VER)/$@ $(top_builddir)/win32/vs$(MSVC_VER)/$@; \
++	else \
++		cp $(top_builddir)/win32/vs$(MSVC_BASE_VER)/$@ $(top_builddir)/win32/vs$(MSVC_VER)/$@; \
++	fi
+diff --git a/win32/Makefile.am b/win32/Makefile.am
+new file mode 100644
+index 0000000..7d333d0
+--- /dev/null
++++ b/win32/Makefile.am
+@@ -0,0 +1,37 @@
++if HAVE_INTROSPECTION
++GENERATED_ITEMS = \
++	introspection.body.mak	\
++	Atk_1_0_gir_list
++
++introspection.body.mak: Atk-1.0.gir.msvc.introspect
++	-$(RM) introspection.body.mak
++	for F in `ls *.msvc.introspect`; do \
++		case $$F in \
++			*)	cat $(top_builddir)/win32/$$F >>$@ \
++			;; \
++		esac; \
++	done
++	$(RM) Atk-1.0.gir.msvc.introspect
++
++DISTCLEANFILES = $(GENERATED_ITEMS)
++
++else
++GENERATED_ITEMS =
++endif
++
++SUBDIRS =	\
++	vs9	\
++	vs10	\
++	vs11	\
++	vs12	\
++	vs14	\
++	vs15
++
++EXTRA_DIST =	\
++	detectenv-msvc.mak	\
++	introspection-msvc.mak	\
++	atk-introspection-msvc.mak	\
++	atkpc.py	\
++	pc_base.py	\
++	replace.py	\
++	$(GENERATED_ITEMS)
+diff --git a/win32/Makefile.msvc-introspection b/win32/Makefile.msvc-introspection
+new file mode 100644
+index 0000000..1a244e0
+--- /dev/null
++++ b/win32/Makefile.msvc-introspection
+@@ -0,0 +1,129 @@
++# Author: Fan, Chun-wei
++# Common autotools file for constructing the g-ir-scanner and
++# g-ir-compiler command lines for Visual Studio builds.
++
++# This is copied from $(srcroot)/win32 from the gobject-introspection
++# project, which may be included in projects that support both
++# Visual Studio builds and introspection.
++
++# * Input variables:
++#
++#   MSVC_INTROSPECT_GIRS - List of .gir's that should be built
++#                          in the NMake Makefiles
++#
++# * Simple tutorial
++#
++# Add this to Makefile.am where your library/program is built:
++#   (Either YourLib_1_0_gir_MSVC_LIBS or YourLib_1_0_gir_MSVC_PROGRAM
++#    is required unless --headers-only is specified in
++#    YourLib_1_0_gir__MSVC_SCANNERFLAGS)
++#
++#   include <this Makefile.msvc-introspection>
++#   MSVC_INTROSPECT_GIRS = YourLib-1.0.gir
++#   YourLib_1_0_gir_NAMESPACE = YourLib # This is optional
++#   YourLib_1_0_gir_VERSION = 1.0 # This is optional
++#   YourLib_1_0_gir_MSVC_LIBS = yourlib-1.0
++#   YourLib_1_0_gir_MSVC_FILES = $(libyourlib_1_0_SOURCES)
++#   YourLib_1_0_gir_MSVC_PROGRAM = YourProgram
++#   YourLib_1_0_gir_MSVC_PACKAGES = (Dependent .pc files)
++#   YourLib_1_0_gir_MSVC_INCLUDE_GIRS = (Dependent external .gir's)
++#   YourLib_1_0_gir_MSVC_EXPORT_PACKAGES = (Packages exported by this .gir)
++#   YourLib_1_0_gir_MSVC_C_INCLUDES = (List of public C headers which need to be included by
++#                                      consumers at compile time to make use of the API)
++
++# Private functions
++
++## Transform the MSVC project filename (no filename extensions) to something which can reference through a variable
++## without automake/make complaining, eg Gtk-2.0 -> Gtk_2_0
++_gir_name=$(subst /,_,$(subst -,_,$(subst .,_,$(1))))
++
++# Namespace and Version is either fetched from the gir filename
++# or the _NAMESPACE/_VERSION variable combo
++_gir_namespace_msvc = $(or $($(_gir_name)_NAMESPACE),$(firstword $(subst -, ,$(notdir $(1)))))
++_gir_version_msvc = $(or $($(_gir_name)_VERSION),$(lastword $(subst -, ,$(1:.gir=))))
++_typelib_basename_msvc = $(_gir_namespace_msvc)'-'$(_gir_version_msvc)
++
++# _PROGRAM is an optional variable which needs its own --program argument
++_gir_program_msvc = $(if $($(_gir_name)_MSVC_PROGRAM),--program=$($(_gir_name)_MSVC_PROGRAM))
++
++# Deduce the sub-folder from $(srcroot) where the sources reside in
++_gir_source_path_raw_msvc:=$(subst $(abs_top_srcdir),,$(abs_srcdir))
++_gir_source_path_msvc=$(subst /,\\,$(_gir_source_path_raw_msvc))
++_gir_source_subdir_int_msvc=$(subst \\\\,\\,\\$(_gir_source_path_msvc)\\)
++_gir_source_subdir_msvc=$(subst \\.\\,\\,$(_gir_source_subdir_int_msvc))
++
++_gir_files_raw_msvc=$(subst /,\\,$($(_gir_name)_MSVC_FILES))
++_gir_files_msvc=$(subst $(srcdir)\\,,$(subst $(builddir)\\,,$(subst $(top_builddir)\\$(_gir_source_path_msvc)\\,\\,$(_gir_files_raw_msvc))))
++
++# Create a list of items for:
++# - Libraries
++# - Packages
++# - GIRs to include
++# - packages to export
++
++_gir_libraries_msvc = $(foreach lib,$($(_gir_name)_MSVC_LIBS),--library=$(lib))
++_gir_packages_msvc = $(foreach pkg,$($(_gir_name)_MSVC_PACKAGES),--pkg=$(pkg))
++_gir_includes_msvc = $(foreach include,$($(_gir_name)_MSVC_INCLUDE_GIRS),--include=$(include))
++_gir_export_packages_msvc = $(foreach pkg,$($(_gir_name)_MSVC_EXPORT_PACKAGES),--pkg-export=$(pkg))
++_gir_c_includes_msvc = $(foreach include,$($(_gir_name)_MSVC_C_INCLUDES),--c-include=$(include))
++
++#
++# Create NMake Makefile Sections for Building Introspection files
++# from autotools files
++# $(1) - File Name of the .gir that is to be generated
++#
++
++define gir-nmake-builder
++
++# Basic sanity check, to make sure required variables are set
++$(if $($(_gir_name)_MSVC_FILES),,$(error Need to define $(_gir_name)_MSVC_FILES))
++$(if $(or $(findstring --header-only,$($(_gir_name)_MSVC_SCANNERFLAGS)),
++          $($(_gir_name)_MSVC_LIBS),
++          $($(_gir_name)_MSVC_PROGRAM)),,
++    $(error Need to define $(_gir_name)_MSVC_LIBS or $(_gir_name)_MSVC_PROGRAM))
++
++$(top_builddir)/win32/$(_gir_name)_list:
++	for F in $(_gir_files_msvc); do \
++		case $$$$F in \
++		*.c|*.cpp|*.cc|*.cxx|*.h|*.hpp|*.hh|*.hxx) \
++			echo '..'$(_gir_source_subdir_msvc)$$$$F >>$(top_builddir)/win32/$(_gir_name)_list \
++			;; \
++		esac; \
++	done
++
++$(top_builddir)/win32/$(1).msvc.introspect:
++	-$(RM) $(top_builddir)/win32/$(1).msvc.introspect
++
++# Assemble the Command to Run g-ir-scanner
++	echo $(1)': '$(_gir_name)'_list '$($(_gir_name)_MSVC_GIR_DEPS)>>$(top_builddir)/win32/$(1).msvc.introspect
++	echo '	@-echo Generating $$$$@...'>>$(top_builddir)/win32/$(1).msvc.introspect
++	echo '	$$$$(PYTHON) $$$$(G_IR_SCANNER)	\'>>$(top_builddir)/win32/$(1).msvc.introspect
++	echo '	--verbose -no-libtool	\'>>$(top_builddir)/win32/$(1).msvc.introspect
++	echo '	--namespace='$(_gir_namespace_msvc)'	\'>>$(top_builddir)/win32/$(1).msvc.introspect
++	echo '	--nsversion='$(_gir_version_msvc)'	\'>>$(top_builddir)/win32/$(1).msvc.introspect
++	echo '	'$(_gir_packages_msvc)'	\'>>$(top_builddir)/win32/$(1).msvc.introspect
++	echo '	'$(_gir_libraries_msvc)'	\'>>$(top_builddir)/win32/$(1).msvc.introspect
++	echo '	'$(_gir_program_msvc)'	\'>>$(top_builddir)/win32/$(1).msvc.introspect
++	echo '	--add-include-path=$$$$(G_IR_INCLUDEDIR)	\'>>$(top_builddir)/win32/$(1).msvc.introspect
++	echo '	'$(_gir_includes_msvc)'	\'>>$(top_builddir)/win32/$(1).msvc.introspect
++	echo '	'$(_gir_export_packages_msvc)'	\'>>$(top_builddir)/win32/$(1).msvc.introspect
++	echo '  '$(_gir_c_includes_msvc)'	\'>>$(top_builddir)/win32/$(1).msvc.introspect
++	echo '	--cflags-begin	\'>>$(top_builddir)/win32/$(1).msvc.introspect
++	echo '	'$($(_gir_name)_MSVC_CFLAGS)'	\'>>$(top_builddir)/win32/$(1).msvc.introspect
++	echo '	--cflags-end	\'>>$(top_builddir)/win32/$(1).msvc.introspect
++	echo '	'$($(_gir_name)_MSVC_SCANNERFLAGS)'	\'>>$(top_builddir)/win32/$(1).msvc.introspect
++	echo '	--filelist='$(_gir_name)'_list	\'>>$(top_builddir)/win32/$(1).msvc.introspect
++	echo '	-o $$$$@'>>$(top_builddir)/win32/$(1).msvc.introspect
++	echo '' >>$(top_builddir)/win32/$(1).msvc.introspect
++
++# Finally Assemble the Command to Compile the generated .gir
++	echo '$(_typelib_basename_msvc).typelib: '$(_typelib_basename_msvc)'.gir'>>$(top_builddir)/win32/$(1).msvc.introspect
++	echo '	@-echo Compiling $$$$@...'>>$(top_builddir)/win32/$(1).msvc.introspect
++	echo '	$$$$(G_IR_COMPILER)	\'>>$(top_builddir)/win32/$(1).msvc.introspect
++	echo '	--includedir=. --debug --verbose	\'>>$(top_builddir)/win32/$(1).msvc.introspect
++	echo '	'$(1)'	\'>>$(top_builddir)/win32/$(1).msvc.introspect
++	echo '	-o $$$$@'>>$(top_builddir)/win32/$(1).msvc.introspect
++	echo '' >>$(top_builddir)/win32/$(1).msvc.introspect
++endef
++
++$(foreach gir,$(MSVC_INTROSPECT_GIRS),$(eval $(call gir-nmake-builder,$(gir))))
+diff --git a/win32/Makefile.msvcproj b/win32/Makefile.msvcproj
+new file mode 100644
+index 0000000..fe15b8d
+--- /dev/null
++++ b/win32/Makefile.msvcproj
+@@ -0,0 +1,153 @@
++# Author: Fan, Chun-wei
++# Common Autotools file used to generate Visual Studio 2008+
++# Projects from their templates
++
++# This autotools file, from GLib, can be used in other projects
++# that have Visual Studio build support.
++
++# * Input variables:
++#
++#   MSVCPROJS - List of Projects that should be generated
++#
++# * Simple tutorial
++#
++# Add this to Makefile.am where your library/program is built:
++#   include $(top_srcdir)/Makefile.msvcproj
++#   MSVCPROJS = YourProject (can be multiple projects in a single srcdir)
++#   YourProject_FILES = $(libyourlib_1_0_SOURCES)
++#   YourProject_EXCLUDES = ... # list of sources to exclude, separated by '|', wildcards allowed; use random unsed value if none
++#   (the following 3 lines if headers need to be installed)
++#   YourProject_HEADERS_DIR = $(libyourlibincludedir)
++#   YourProject_HEADERS_INST = $(libyourlib_1_0_HEADERS)
++#   YourProject_HEADERS_EXCLUDES = ... # <list of headers to exclude from installation, separated by '|', wildcards allowed; use random unsed value if none>
++#
++#   dist-hook: \ # (or add to it if it is already there, note the vs9 items will also call the vs10 items in the process)
++#   	$(top_builddir)/win32/vs9/YourProject.vcproj	\
++#   	$(top_builddir)/win32/vs9/YourProject.headers	# if headers need to be installed
++#
++#   --or, if Visual Studio 2013 or later is required--
++#   dist-hook: \ # (or add to it if it is already there, this does -not- call other vs items in the process)
++#	$(top_builddir)/win32/vs12/YourProject.vcxproj	\
++#	$(top_builddir)/win32/vs12/YourProject.vs12.headers	# if headers need to be installed
++
++# Private functions
++
++## Transform the MSVC project filename (no filename extensions) to something which can reference through a variable
++## without automake/make complaining, eg Gtk-2.0 -> Gtk_2_0
++_proj_name=$(subst /,_,$(subst -,_,$(subst .,_,$(1))))
++_proj_path_raw:=$(subst $(abs_top_srcdir),,$(abs_srcdir))
++_proj_path=$(subst /,\\,$(_proj_path_raw))
++_proj_subdir_int=$(subst \\\\,\\,\\$(_proj_path)\\)
++_proj_subdir=$(subst \\.\\,\\,$(_proj_subdir_int))
++
++_proj_files_raw=$(subst /,\\,$($(_proj_name)_FILES))
++_proj_files=$(subst $(srcdir)\\,,$(subst $(builddir)\\,,$(subst $(top_builddir)\\$(_proj_path)\\,\\,$(_proj_files_raw))))
++_proj_filters=$($(_proj_name)_EXCLUDES)
++
++_proj_headers_raw=$(subst /,\\,$($(_proj_name)_HEADERS_INST))
++_proj_headers=$(subst $(srcdir)\\,,$(subst $(builddir)\\,,$(subst $(top_builddir)\\$(_proj_path)\\,\\,$(_proj_headers_raw))))
++_proj_headers_excludes=$($(_proj_name)_HEADERS_EXCLUDES)
++
++_headers_dest_posix=$(subst $(includedir),,$($(_proj_name)_HEADERS_DIR))
++_headers_destdir=$(subst /,\\,$(_headers_dest_posix))
++
++#
++# Creates Visual Studio 2008/2010 projects from items passed in from autotools files
++# $(1) - Base Name of the MSVC project files (outputs)
++#
++
++define msvcproj-builder
++
++$(top_builddir)/win32/vs10/$(1).vcxproj: $(top_builddir)/win32/vs9/$(1).vcproj
++$(top_builddir)/win32/vs10/$(1).vcxproj.filters: $(top_builddir)/win32/vs9/$(1).vcproj
++$(1).sourcefiles: $(top_builddir)/win32/vs9/$(1).vcproj
++$(1).vs10.sourcefiles: $(top_builddir)/win32/vs9/$(1).vcproj
++$(1).vs10.sourcefiles.filters: $(top_builddir)/win32/vs9/$(1).vcproj
++
++$(top_builddir)/win32/vs9/$(1).vcproj: Makefile
++	-$(RM) $(top_builddir)/win32/vs9/$(1).vcproj
++	-$(RM) $(top_builddir)/win32/vs10/$(1).vcxproj
++	-$(RM) $(top_builddir)/win32/vs10/$(1).vcxproj.filters
++	-$(RM) $(top_builddir)/win32/vs11/$(1).vcxproj
++	-$(RM) $(top_builddir)/win32/vs11/$(1).vcxproj.filters
++	-$(RM) $(top_builddir)/win32/vs12/$(1).vcxproj
++	-$(RM) $(top_builddir)/win32/vs12/$(1).vcxproj.filters
++	-$(RM) $(top_builddir)/win32/vs14/$(1).vcxproj
++	-$(RM) $(top_builddir)/win32/vs14/$(1).vcxproj.filters
++
++
++	for F in $(_proj_files); do \
++		case $$$$F in \
++		$(_proj_filters)) \
++			;; \
++		*.c|*.cpp|*.cc|*.cxx) \
++			echo '   <File RelativePath="..\..'$(_proj_subdir)$$$$F'" />' >>$(1).sourcefiles && \
++			echo '   <ClCompile Include="..\..'$(_proj_subdir)$$$$F'" />' >>$(1).vs10.sourcefiles && \
++			echo '   <ClCompile Include="..\..'$(_proj_subdir)$$$$F'"><Filter>Source Files</Filter></ClCompile>' >>$(1).vs10.sourcefiles.filters \
++			;; \
++		esac;	\
++	done
++
++
++	$(CPP) -P - <$(top_srcdir)/win32/vs9/$(1).vcprojin >$(top_builddir)/win32/vs9/$(1).vcproj
++	$(CPP) -P - <$(top_srcdir)/win32/vs10/$(1).vcxprojin >$(top_builddir)/win32/vs10/$(1).vcxproj
++	$(CPP) -P - <$(top_srcdir)/win32/vs10/$(1).vcxproj.filtersin >$(top_builddir)/win32/vs10/$(1).vcxproj.filters
++	$(RM) $(1).sourcefiles
++	$(RM) $(1).vs10.sourcefiles
++	$(RM) $(1).vs10.sourcefiles.filters
++
++$(top_builddir)/win32/vs10/$(1).vs10.headers: $(top_builddir)/win32/vs9/$(1).headers
++
++$(top_builddir)/win32/vs9/$(1).headers: Makefile
++	-$(RM) $(top_builddir)/win32/vs9/$(1).headers
++	-$(RM) $(top_builddir)/win32/vs10/$(1).vs10.headers
++
++	for F in $(_proj_headers); do \
++		case $$$$F in \
++		$(_proj_headers_excludes)) \
++			;; \
++		*.h|*.hpp|*.hh|*.hxx) \
++			echo 'copy ..\..'$(_proj_subdir)$$$$F' $$$$(CopyDir)\include'$(_headers_destdir)'\'$$$$F'&#x0D;&#x0A;' >>$(top_builddir)/win32/vs9/$(1).headers && \
++			echo 'copy ..\..'$(_proj_subdir)$$$$F' $$$$(CopyDir)\include'$(_headers_destdir)'\'$$$$F >>$(top_builddir)/win32/vs10/$(1).vs10.headers \
++			;; \
++		esac;	\
++	done
++
++$(top_builddir)/win32/vs12/$(1).vcxproj.filters: $(top_builddir)/win32/vs12/$(1).vcxproj
++
++$(top_builddir)/win32/vs12/$(1).vcxproj: Makefile
++	-$(RM) $(top_builddir)/win32/vs14/$(1).vcxproj
++	-$(RM) $(top_builddir)/win32/vs14/$(1).vcxproj.filters
++
++	for F in $(_proj_files); do \
++		case $$$$F in \
++		$(_proj_filters)) \
++			;; \
++		*.c|*.cpp|*.cc|*.cxx) \
++			echo '   <ClCompile Include="..\..'$(_proj_subdir)$$$$F'" />' >>$(1).vs12.sourcefiles && \
++			echo '   <ClCompile Include="..\..'$(_proj_subdir)$$$$F'"><Filter>Source Files</Filter></ClCompile>' >>$(1).vs12.sourcefiles.filters \
++			;; \
++		esac;	\
++	done
++
++	$(CPP) -P - <$(top_srcdir)/win32/vs12/$(1).vcxprojin >$(top_builddir)/win32/vs12/$(1).vcxproj
++	$(CPP) -P - <$(top_srcdir)/win32/vs12/$(1).vcxproj.filtersin >$(top_builddir)/win32/vs12/$(1).vcxproj.filters
++	$(RM) $(1).vs12.sourcefiles
++	$(RM) $(1).vs12.sourcefiles.filters
++
++$(top_builddir)/win32/vs12/$(1).vs12.headers: Makefile
++	-$(RM) $(top_builddir)/win32/vs12/$(1).vs12.headers
++
++	for F in $(_proj_headers); do \
++		case $$$$F in \
++		$(_proj_headers_excludes)) \
++			;; \
++		*.h|*.hpp|*.hh|*.hxx) \
++			echo 'copy ..\..'$(_proj_subdir)$$$$F' $$$$(CopyDir)\include'$(_headers_destdir)'\'$$$$F >>$(top_builddir)/win32/vs12/$(1).vs12.headers \
++			;; \
++		esac;	\
++	done
++
++endef
++
++$(foreach proj,$(MSVCPROJS),$(eval $(call msvcproj-builder,$(proj))))
+diff --git a/win32/atk-introspection-msvc.mak b/win32/atk-introspection-msvc.mak
+new file mode 100644
+index 0000000..6bac289
+--- /dev/null
++++ b/win32/atk-introspection-msvc.mak
+@@ -0,0 +1,33 @@
++# NMake Makefile to build Introspection Files for ATK
++
++!include detectenv-msvc.mak
++
++APIVERSION = 1.0
++
++CHECK_PACKAGE = gobject-2.0
++
++!include introspection-msvc.mak
++
++!if "$(BUILD_INTROSPECTION)" == "TRUE"
++all: setgirbuildenv Atk-$(APIVERSION).gir Atk-$(APIVERSION).typelib
++
++setgirbuildenv:
++	@-set PYTHONPATH=$(PREFIX)\lib\gobject-introspection
++	@-set PATH=vs$(VSVER)\$(CFG)\$(PLAT)\bin;$(PREFIX)\bin;$(PATH)
++	@-set PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)
++	@-set LIB=vs$(VSVER)\$(CFG)\$(PLAT)\bin;$(LIB)
++
++!include introspection.body.mak
++
++install-introspection: all
++	@-copy Atk-$(APIVERSION).gir $(G_IR_INCLUDEDIR)
++	@-copy /b Atk-$(APIVERSION).typelib $(G_IR_TYPELIBDIR)
++
++!else
++all:
++	@-echo $(ERROR_MSG)
++!endif
++
++clean:
++	@-del /f/q Atk-$(APIVERSION).typelib
++	@-del /f/q Atk-$(APIVERSION).gir
+diff --git a/win32/atkpc.py b/win32/atkpc.py
+new file mode 100644
+index 0000000..3515a45
+--- /dev/null
++++ b/win32/atkpc.py
+@@ -0,0 +1,31 @@
++#!/usr/bin/python
++#
++# Utility script to generate .pc files for ATK
++# for Visual Studio builds, to be used for
++# building introspection files
++
++# Author: Fan, Chun-wei
++# Date: April 20, 2016
++
++import os
++import sys
++
++from replace import replace_multi
++from pc_base import BasePCItems
++
++def main(argv):
++    base_pc = BasePCItems()
++    
++    base_pc.setup(argv)
++    pkg_replace_items = {'@GLIB_PACKAGES@': 'gobject-2.0 glib-2.0',
++                         '@ATK_API_VERSION@': '1.0'}
++
++    pkg_replace_items.update(base_pc.base_replace_items)
++
++    # Generate atk.pc
++    replace_multi(base_pc.top_srcdir + '/atk.pc.in',
++                  base_pc.srcdir + '/atk.pc',
++                  pkg_replace_items)
++
++if __name__ == '__main__':
++    sys.exit(main(sys.argv))
+diff --git a/win32/detectenv-msvc.mak b/win32/detectenv-msvc.mak
+new file mode 100644
+index 0000000..6fd96cc
+--- /dev/null
++++ b/win32/detectenv-msvc.mak
+@@ -0,0 +1,78 @@
++# Common NMake Makefile module for checking the build environment
++# This can be copied from $(glib_srcroot)\build\win32 for GNOME items
++# that support MSVC builds and introspection under MSVC, and can be used
++# for building test programs as well.
++
++# Check to see we are configured to build with MSVC (MSDEVDIR, MSVCDIR or
++# VCINSTALLDIR) or with the MS Platform SDK (MSSDK or WindowsSDKDir)
++!if !defined(VCINSTALLDIR) && !defined(WINDOWSSDKDIR)
++MSG = ^
++This Makefile is only for Visual Studio 2008 and later.^
++You need to ensure that the Visual Studio Environment is properly set up^
++before running this Makefile.
++!error $(MSG)
++!endif
++
++ERRNUL  = 2>NUL
++_HASH=^#
++
++!if ![echo VCVERSION=_MSC_VER > vercl.x] \
++    && ![echo $(_HASH)if defined(_M_IX86) >> vercl.x] \
++    && ![echo PLAT=Win32 >> vercl.x] \
++    && ![echo $(_HASH)elif defined(_M_AMD64) >> vercl.x] \
++    && ![echo PLAT=x64 >> vercl.x] \
++    && ![echo $(_HASH)endif >> vercl.x] \
++    && ![cl -nologo -TC -P vercl.x $(ERRNUL)]
++!include vercl.i
++!if ![echo VCVER= ^\> vercl.vc] \
++    && ![set /a $(VCVERSION) / 100 - 6 >> vercl.vc]
++!include vercl.vc
++!endif
++!endif
++!if ![del $(ERRNUL) /q/f vercl.x vercl.i vercl.vc]
++!endif
++
++!if $(VCVERSION) > 1499 && $(VCVERSION) < 1600
++VSVER = 9
++!elseif $(VCVERSION) > 1599 && $(VCVERSION) < 1700
++VSVER = 10
++!elseif $(VCVERSION) > 1699 && $(VCVERSION) < 1800
++VSVER = 11
++!elseif $(VCVERSION) > 1799 && $(VCVERSION) < 1900
++VSVER = 12
++!elseif $(VCVERSION) > 1899 && $(VCVERSION) < 1910
++VSVER = 14
++!elseif $(VCVERSION) > 1909 && $(VCVERSION) < 2000
++VSVER = 15
++!else
++VSVER = 0
++!endif
++
++!if "$(VSVER)" == "0"
++MSG = ^
++This NMake Makefile set supports Visual Studio^
++9 (2008) through 14 (2015).  Your Visual Studio^
++version is not supported.
++!error $(MSG)
++!endif
++
++VALID_CFGSET = FALSE
++!if "$(CFG)" == "release" || "$(CFG)" == "debug" || "$(CFG)" == "Release" || "$(CFG)" == "Debug"
++VALID_CFGSET = TRUE
++!endif
++
++# We want debugging symbols logged for all builds,
++# using .pdb files for release builds
++CFLAGS_BASE = /Zi
++
++!if "$(CFG)" == "release" || "$(CFG)" == "Release"
++CFLAGS_ADD = /MD /O2 $(CFLAGS_BASE)
++!else
++CFLAGS_ADD = /MDd /Od $(CFLAGS_BASE)
++!endif
++
++!if "$(PLAT)" == "x64"
++LDFLAGS_ARCH = /machine:x64
++!else
++LDFLAGS_ARCH = /machine:x86
++!endif
+diff --git a/win32/introspection-msvc.mak b/win32/introspection-msvc.mak
+new file mode 100644
+index 0000000..26501f5
+--- /dev/null
++++ b/win32/introspection-msvc.mak
+@@ -0,0 +1,94 @@
++# Common NMake Makefile module for checking the build environment is sane
++# for building introspection files under MSVC/NMake.
++# This can be copied from $(gi_srcroot)\build\win32 for GNOME items
++# that support MSVC builds and introspection under MSVC.
++
++# Can override with env vars as needed
++# You will need to have built gobject-introspection for this to work.
++# Change or pass in or set the following to suit your environment
++
++!if "$(PREFIX)" == ""
++PREFIX = ..\..\vs$(VSVER)\$(PLAT)
++!endif
++
++!if ![setlocal]		&& \
++    ![set PFX=$(PREFIX)]	&& \
++    ![for %P in (%PFX%) do @echo PREFIX_FULL=%~dpnfP > pfx.x]
++!endif
++!include pfx.x
++
++!if "$(PKG_CONFIG_PATH)" == ""
++PKG_CONFIG_PATH=$(PREFIX_FULL)\lib\pkgconfig
++!else
++PKG_CONFIG_PATH=$(PREFIX_FULL)\lib\pkgconfig;$(PKG_CONFIG_PATH)
++!endif
++
++!if ![del $(ERRNUL) /q/f pfx.x]
++!endif
++
++# Note: The PYTHON must be the Python release series that was used to build
++# the GObject-introspection scanner Python module!
++# Either having python.exe your PATH will work or passing in
++# PYTHON=<full path to your Python interpretor> will do
++
++# This is required, and gobject-introspection needs to be built
++# before this can be successfully run.
++!if "$(PYTHON)" == ""
++PYTHON=python
++!endif
++
++# Path to the pkg-config tool, if not already in the PATH
++!if "$(PKG_CONFIG)" == ""
++PKG_CONFIG=pkg-config
++!endif
++
++# Don't change anything following this line!
++
++GIR_SUBDIR = share\gir-1.0
++GIR_TYPELIBDIR = lib\girepository-1.0
++G_IR_SCANNER = $(PREFIX)\bin\g-ir-scanner
++G_IR_COMPILER = $(PREFIX)\bin\g-ir-compiler.exe
++G_IR_INCLUDEDIR = $(PREFIX)\$(GIR_SUBDIR)
++G_IR_TYPELIBDIR = $(PREFIX)\$(GIR_TYPELIBDIR)
++
++VALID_PKG_CONFIG_PATH = FALSE
++
++MSG_INVALID_PKGCONFIG = You must set or specifiy a valid PKG_CONFIG_PATH
++MSG_INVALID_CFG = You need to specify or set CFG to be release or debug to use this Makefile to build the Introspection Files
++
++ERROR_MSG =
++
++BUILD_INTROSPECTION = TRUE
++
++!if ![set PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)]	\
++	&& ![$(PKG_CONFIG) --print-errors --errors-to-stdout $(CHECK_PACKAGE) > pkgconfig.x]	\
++	&& ![setlocal]	\
++	&& ![set file="pkgconfig.x"]	\
++	&& ![FOR %A IN (%file%) DO @echo PKG_CHECK_SIZE=%~zA > pkgconfig.chksize]	\
++	&& ![del $(ERRNUL) /q/f pkgconfig.x]
++!endif
++
++!include pkgconfig.chksize
++!if "$(PKG_CHECK_SIZE)" == "0"
++VALID_PKG_CONFIG_PATH = TRUE
++!else
++VALID_PKG_CONFIG_PATH = FALSE
++!endif
++
++!if ![del $(ERRNUL) /q/f pkgconfig.chksize]
++!endif
++
++VALID_CFGSET = FALSE
++!if "$(CFG)" == "release" || "$(CFG)" == "debug" || "$(CFG)" == "Release" || "$(CFG)" == "Debug"
++VALID_CFGSET = TRUE
++!endif
++
++!if "$(VALID_PKG_CONFIG_PATH)" != "TRUE"
++BUILD_INTROSPECTION = FALSE
++ERROR_MSG = $(MSG_INVALID_PKGCONFIG)
++!endif
++
++!if "$(VALID_CFGSET)" != "TRUE"
++BUILD_INTROSPECTION = FALSE
++ERROR_MSG = $(MSG_INVALID_CFG)
++!endif
+diff --git a/win32/pc_base.py b/win32/pc_base.py
+new file mode 100644
+index 0000000..285b6cd
+--- /dev/null
++++ b/win32/pc_base.py
+@@ -0,0 +1,124 @@
++#!/usr/bin/python
++#
++# Simple utility script to generate the basic info
++# needed in a .pc (pkg-config) file, used especially
++# for introspection purposes
++
++# This can be used in various projects where
++# there is the need to generate .pc files,
++# and is copied from GLib's $(srcroot)/build/win32
++
++# Author: Fan, Chun-wei
++# Date: March 10, 2016
++
++import os
++import sys
++import argparse
++
++class BasePCItems:
++    def __init__(self):
++        self.base_replace_items = {}
++        self.exec_prefix = ''
++        self.includedir = ''
++        self.libdir = ''
++        self.prefix = ''
++        self.srcdir = os.path.dirname(__file__)
++        self.top_srcdir = self.srcdir + '\\..'
++        self.version = ''
++
++    def setup(self, argv, parser=None):
++        if parser is None:
++            parser = argparse.ArgumentParser(description='Setup basic .pc file info')
++        parser.add_argument('--prefix', help='prefix of the installed library',
++                            required=True)
++        parser.add_argument('--exec-prefix',
++                            help='prefix of the installed programs, \
++                                  if different from the prefix')
++        parser.add_argument('--includedir',
++                            help='includedir of the installed library, \
++                                  if different from ${prefix}/include')
++        parser.add_argument('--libdir',
++                            help='libdir of the installed library, \
++                                  if different from ${prefix}/lib')
++        parser.add_argument('--version', help='Version of the package',
++                            required=True)
++        args = parser.parse_args()
++
++        self.version = args.version
++
++        # check whether the prefix and exec_prefix are valid
++        if not os.path.exists(args.prefix):
++            raise SystemExit('Specified prefix \'%s\' is invalid' % args.prefix)
++
++        # use absolute paths for prefix
++        self.prefix = os.path.abspath(args.prefix).replace('\\','/')
++
++        # check and setup the exec_prefix
++        if getattr(args, 'exec_prefix', None) is None:
++            exec_prefix_use_shorthand = True
++            self.exec_prefix = '${prefix}'
++        else:
++            if args.exec_prefix.startswith('${prefix}'):
++                exec_prefix_use_shorthand = True
++                input_exec_prefix = args.prefix + args.exec_prefix[len('${prefix}'):]
++            else:
++                exec_prefix_use_shorthand = False
++                input_exec_prefix = args.exec_prefix
++            if not os.path.exists(input_exec_prefix):
++                raise SystemExit('Specified exec_prefix \'%s\' is invalid' %
++                                  args.exec_prefix)
++            if exec_prefix_use_shorthand is True:
++                self.exec_prefix = args.exec_prefix.replace('\\','/')
++            else:
++                self.exec_prefix = os.path.abspath(input_exec_prefix).replace('\\','/')
++
++        # check and setup the includedir
++        if getattr(args, 'includedir', None) is None:
++            self.includedir = '${prefix}/include'
++        else:
++            if args.includedir.startswith('${prefix}'):
++                includedir_use_shorthand = True
++                input_includedir = args.prefix + args.includedir[len('${prefix}'):]
++            else:
++                if args.includedir.startswith('${exec_prefix}'):
++                    includedir_use_shorthand = True
++                    input_includedir = input_exec_prefix + args.includedir[len('${exec_prefix}'):]
++                else:
++                    includedir_use_shorthand = False
++                    input_includedir = args.includedir
++            if not os.path.exists(input_includedir):
++                raise SystemExit('Specified includedir \'%s\' is invalid' %
++                                  args.includedir)
++            if includedir_use_shorthand is True:
++                self.includedir = args.includedir.replace('\\','/')
++            else:
++                self.includedir = os.path.abspath(input_includedir).replace('\\','/')
++
++        # check and setup the libdir
++        if getattr(args, 'libdir', None) is None:
++            self.libdir = '${prefix}/lib'
++        else:
++            if args.libdir.startswith('${prefix}'):
++                libdir_use_shorthand = True
++                input_libdir = args.prefix + args.libdir[len('${prefix}'):]
++            else:
++                if args.libdir.startswith('${exec_prefix}'):
++                    libdir_use_shorthand = True
++                    input_libdir = input_exec_prefix + args.libdir[len('${exec_prefix}'):]
++                else:
++                    libdir_use_shorthand = False
++                    input_libdir = args.libdir
++            if not os.path.exists(input_libdir):
++                raise SystemExit('Specified libdir \'%s\' is invalid' %
++			                      args.libdir)
++            if libdir_use_shorthand is True:
++                self.libdir = args.libdir.replace('\\','/')
++            else:
++                self.libdir = os.path.abspath(input_libdir).replace('\\','/')
++
++        # setup dictionary for replacing items in *.pc.in
++        self.base_replace_items.update({'@VERSION@': self.version})
++        self.base_replace_items.update({'@prefix@': self.prefix})
++        self.base_replace_items.update({'@exec_prefix@': self.exec_prefix})
++        self.base_replace_items.update({'@libdir@': self.libdir})
++        self.base_replace_items.update({'@includedir@': self.includedir})
+diff --git a/win32/replace.py b/win32/replace.py
+new file mode 100644
+index 0000000..f215cce
+--- /dev/null
++++ b/win32/replace.py
+@@ -0,0 +1,115 @@
++#!/usr/bin/python
++#
++# Simple utility script to manipulate
++# certain types of strings in a file
++
++# This can be used in various projects where
++# there is the need to replace strings in files,
++# and is copied from GLib's $(srcroot)/build/win32
++
++# Author: Fan, Chun-wei
++# Date: September 03, 2014
++
++import os
++import sys
++import re
++import string
++import argparse
++
++valid_actions = ['remove-prefix',
++                 'replace-var',
++                 'replace-str',
++                 'remove-str']
++
++def open_file(filename, mode):
++    if sys.version_info[0] < 3:
++        return open(filename, mode=mode)
++    else:
++        return open(filename, mode=mode, encoding='utf-8')
++
++def replace_multi(src, dest, replace_items):
++    with open_file(src, 'r') as s:
++        with open_file(dest, 'w') as d:
++            for line in s:
++                replace_dict = dict((re.escape(key), value) \
++                               for key, value in replace_items.items())
++                replace_pattern = re.compile("|".join(replace_dict.keys()))
++                d.write(replace_pattern.sub(lambda m: \
++                        replace_dict[re.escape(m.group(0))], line))
++
++def replace(src, dest, instring, outstring):
++    replace_item = {instring: outstring}
++    replace_multi(src, dest, replace_item)
++
++def check_required_args(args, params):
++    for param in params:
++        if getattr(args, param, None) is None:
++            raise SystemExit('%s: error: --%s argument is required' % (__file__, param))
++
++def warn_ignored_args(args, params):
++    for param in params:
++        if getattr(args, param, None) is not None:
++            print('%s: warning: --%s argument is ignored' % (__file__, param))
++
++def main(argv):
++
++    parser = argparse.ArgumentParser(description='Process strings in a file.')
++    parser.add_argument('-a',
++                        '--action',
++                        help='Action to carry out.  Can be one of:\n'
++                             'remove-prefix\n'
++                             'replace-var\n'
++                             'replace-str\n'
++                             'remove-str',
++                        choices=valid_actions)
++    parser.add_argument('-i', '--input', help='Input file')
++    parser.add_argument('-o', '--output', help='Output file')
++    parser.add_argument('--instring', help='String to replace or remove')
++    parser.add_argument('--var', help='Autotools variable name to replace')
++    parser.add_argument('--outstring',
++                        help='New String to replace specified string or variable')
++    parser.add_argument('--removeprefix', help='Prefix of string to remove')
++
++    args = parser.parse_args()
++
++    input_string = ''
++    output_string = ''
++
++    # We must have action, input, output for all operations
++    check_required_args(args, ['action','input','output'])
++
++    # Build the arguments by the operation that is to be done,
++    # to be fed into replace()
++
++    # Get rid of prefixes from a string
++    if args.action == 'remove-prefix':
++        check_required_args(args, ['instring','removeprefix'])
++        warn_ignored_args(args, ['outstring','var'])
++        input_string = args.removeprefix + args.instring
++        output_string = args.instring
++
++    # Replace an m4-style variable (those surrounded by @...@)
++    if args.action == 'replace-var':
++        check_required_args(args, ['var','outstring'])
++        warn_ignored_args(args, ['instring','removeprefix'])
++        input_string = '@' + args.var + '@'
++        output_string = args.outstring
++
++    # Replace a string
++    if args.action == 'replace-str':
++        check_required_args(args, ['instring','outstring'])
++        warn_ignored_args(args, ['var','removeprefix'])
++        input_string = args.instring
++        output_string = args.outstring
++
++    # Remove a string
++    if args.action == 'remove-str':
++        check_required_args(args, ['instring'])
++        warn_ignored_args(args, ['var','outstring','removeprefix'])
++        input_string = args.instring
++        output_string = ''
++
++    replace(args.input, args.output, input_string, output_string)
++
++if __name__ == '__main__':
++    sys.exit(main(sys.argv))
+diff --git a/win32/vs10/.gitignore b/win32/vs10/.gitignore
+new file mode 100644
+index 0000000..0231580
+--- /dev/null
++++ b/win32/vs10/.gitignore
+@@ -0,0 +1,3 @@
++atk.vcxproj
++atk.vcxproj.filters
++atk-install.props
+diff --git a/win32/vs10/Makefile.am b/win32/vs10/Makefile.am
+new file mode 100644
+index 0000000..846c43d
+--- /dev/null
++++ b/win32/vs10/Makefile.am
+@@ -0,0 +1,28 @@
++GENERATED_ITEMS = \
++	atk.vcxproj	\
++	atk.vcxproj.filters	\
++	atk-install.props
++
++EXTRA_DIST =	\
++	README.txt	\
++	atk.sln	\
++	atk.vcxprojin	\
++	atk.vcxproj.filtersin	\
++	atk-install.vcxproj	\
++	atk-install.vcxproj.filters	\
++	atk-introspect.vcxproj	\
++	atk-build-defines.props	\
++	atk-gen-src.props	\
++	atk-install.propsin	\
++	atk-version-paths.props	\
++	$(GENERATED_ITEMS)
++
++atk-install.props: $(top_srcdir)/win32/vs10/atk-install.propsin atk.vs10.headers
++	-$(RM) $(top_builddir)/win32/vs11/atk-install.props
++	-$(RM) $(top_builddir)/win32/vs12/atk-install.props
++	-$(RM) $(top_builddir)/win32/vs14/atk-install.props
++	-$(RM) $(top_builddir)/win32/vs15/atk-install.props
++	$(CPP) -P - <$(top_srcdir)/win32/vs10/atk-install.propsin >$@
++	rm atk.vs10.headers
++
++DISTCLEANFILES = $(GENERATED_ITEMS)
+diff --git a/win32/vs10/README.txt b/win32/vs10/README.txt
+new file mode 100644
+index 0000000..40f8a7d
+--- /dev/null
++++ b/win32/vs10/README.txt
+@@ -0,0 +1,109 @@
++Please do not build this package in a path that contains spaces to avoid
++possible problems during the build or during the usage of the library.
++
++Please refer to the following GNOME Live! page for more detailed
++instructions on building ATK and its dependencies with Visual C++:
++
++https://live.gnome.org/GTK%2B/Win32/MSVCCompilationOfGTKStack
++
++This VS10 solution and the projects it includes are intented to be used
++in a ATK source tree unpacked from a tarball. In a git checkout you
++first need to use some Unix-like environment or manual work to expand
++the .in files needed, mainly config.h.win32.in into config.h.win32.
++You will also need to expand atk.vcxprojin and atk.vcxproj.filtersin here
++into atk.vcxproj and atk.vcxproj.filters respectively.
++
++The dependencies for this package are gettext-runtime (libintl), GLib*
++and ZLib.
++
++You will also need a Python 2.7.x or 3.x installation, as Python will be
++used to run glib-genmarshal, which was converted into a Python script from
++a compiled C program, in addition to generating the atk.pc pkg-config
++file for the build.  See PythonDir (32-bit builds) or PythonDirX64 (x64
++builds) in atk-version-paths.props to see that they point to the correct paths.
++
++a) look for all of the dependencies (except GLib*) under
++
++   http://ftp.gnome.org/pub/GNOME/binaries/win32/dependencies/ (32-bit) -OR-
++   http://ftp.gnome.org/pub/GNOME/binaries/win64/dependencies/ (64-bit)
++
++   Please use the latest versions of these libraries that are available there,
++   these are packaged by Tor Lillqvist, which are built with MinGW/GCC.
++   Please see b) below regarding the build of  GLib*
++
++-OR-
++
++b) Build them yourself with VS10 (but you may most probably wish to get
++   gettext-runtime from the URL(s) mentioned in a)).  Use the latest
++   stable versions for them (you may need to get the latest unstable version of
++   GLib if you are using an unstable version of ATK):
++
++   GLib*:   Grab the latest sources from http://www.gtk.org under "Download"
++            (stable only-please make a search for the latest unstable versions)
++   ZLib:   http://www.zlib.net
++
++   The above 2 packages all have supported mechanisms (Makefiles and/or Project
++   Files) for building under VS10 (upgrade the Project Files from earlier VS
++   versions will do for these, when applicable)
++
++* This GLib refers to a build that is built by VS10
++
++Set up the source tree as follows under some arbitrary top
++folder <root>:
++
++<root>\atk\<this-atk-source-tree>
++<root>\vs10\<PlatformName>
++
++*this* file you are now reading is thus located at
++<root>\atk\<this-atk-source-tree>\win32\vs10\README.
++
++<PlatformName> is either Win32 or x64, as in VS10 project files.
++
++You should unpack the <dependent-package>-dev and <dependent-packge> (runtime)
++into <root>\vs10\<PlatformName>, if you download any of the packages from
++
++http://ftp.gnome.org/pub/GNOME/binaries/win32/dependencies/ (32-bit) -OR-
++http://ftp.gnome.org/pub/GNOME/binaries/win64/dependencies/ (64-bit)
++
++so that for instance libintl.h end up at 
++<root>\vs10\<PlatformName>\include\libintl.h.
++
++If you build any of the dependencies yourselves, copy the: 
++-DLLs and EXEs into <root>\vs10\<PlatformName>\bin
++-headers into <root>\vs10\<PlatformName>\include\
++-LIBs into <root>\vs10\<PlatformName>\lib
++
++If you have not built GLib with VS10 and placed the LIBs and headers in a
++place where VS10 can find them automatically, you should also uncompress
++your GLib sources in <root>\ and build it from there, following the
++instructions in <root>\glib<-version>\win32\vs10, so that the required
++headers, EXEs, DLLs and LIBs will end up in
++<root>\vs10\<PlatformName>\include\glib-2.0 (headers)
++<root>\vs10\<PlatformName>\lib (LIBs, also glib-2.0/include/glibconfig.h)
++<root>\vs10\<PlatformName>\bin (EXEs/DLLs)
++respectively.
++
++Building introspection files is now integrated in the solution files, but this is
++not built by default.  In order for this to work, ensure that PythonDir (32-bit builds)
++or PythonDirX64 (x64 builds) are set at the installation directory of where your
++Python installation is.  Please note the following:
++
++-This Python installation must be the same installation/configuration as the
++ one that was used to build GObject-Introspection.
++
++-g-ir-scanner needs to be found at <root>\vs10\<PlatformName>\bin, and the
++ other Python items needs to be under <root>\vs10\<PlatformName>\lib\gobject-introspection.
++
++-Use the rebuild command on this project, atk-introspect, to re-build or build for other
++ configurations.
++
++After the build of ATK, the "install" project will copy build results
++and headers into their appropriate location under <root>\vs10\<PlatformName>.
++For instance, built DLLs go into <root>\vs10\<PlatformName>\bin, built LIBs into
++<root>\vs10\<PlatformName>\lib and atk headers into
++<root>\vs10\<PlatformName>\include\atk-1.0. This is then from where
++project files higher in the stack are supposed to look for them, not
++from a specific ATK source tree.
++
++--Chun-wei Fan <fanc999@yahoo.com.tw>
++--(adapted from the GLib VS9 README.txt file originally written by Tor Lillqvist)
+diff --git a/win32/vs10/atk-build-defines.props b/win32/vs10/atk-build-defines.props
+new file mode 100644
+index 0000000..1b16038
+--- /dev/null
++++ b/win32/vs10/atk-build-defines.props
+@@ -0,0 +1,47 @@
++<?xml version="1.0" encoding="utf-8"?>
++<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++  <ImportGroup Label="PropertySheets">
++    <Import Project="atk-version-paths.props" />
++  </ImportGroup>
++  <PropertyGroup Label="UserMacros">
++    <AtkDefines>ATK_COMPILATION;DLL_EXPORT;ATK_LOCALEDIR="/dummy/share/locale"</AtkDefines>
++    <AtkIntrospectNMakeCmd>cd ..
++set VCInstallDir=$(VCInstallDir)
++nmake -f atk-introspection-msvc.mak CFG=$(Configuration) PREFIX=$(GlibEtcInstallRoot)</AtkIntrospectNMakeCmd>
++    <AtkIntrospectBuiltFiles>$(SolutionDir)\..\Atk-1.0.gir;$(SolutionDir)\..\Atk-1.0.typelib</AtkIntrospectBuiltFiles>
++  </PropertyGroup>
++  <PropertyGroup>
++    <_PropertySheetDisplayName>atkbuilddefinesprops</_PropertySheetDisplayName>
++    <OutDir>$(SolutionDir)$(Configuration)\$(PlatformName)\bin\</OutDir>
++    <IntDir>$(SolutionDir)$(Configuration)\$(PlatformName)\obj\$(ProjectName)\</IntDir>
++  </PropertyGroup>
++  <ItemDefinitionGroup>
++    <ClCompile>
++      <AdditionalIncludeDirectories>..\..;..\..\atk;$(GLibEtcInstallRoot)\include\glib-2.0;$(GLibEtcInstallRoot)\lib\glib-2.0\include;$(GLibEtcInstallRoot)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>HAVE_CONFIG_H;G_DISABLE_SINGLE_INCLUDES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <ForcedIncludeFiles>msvc_recommended_pragmas.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
++      <MultiProcessorCompilation>true</MultiProcessorCompilation>
++      <AdditionalOptions>/d2Zi+ %(AdditionalOptions)</AdditionalOptions>
++    </ClCompile>
++    <Link>
++      <AdditionalDependencies>glib-2.0.lib;gobject-2.0.lib;gmodule-2.0.lib;intl.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalLibraryDirectories>$(GLibEtcInstallRoot)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
++      <ProgramDatabaseFile>$(OutDir)$(AtkDllPrefix)$(ProjectName)$(AtkDllSuffix).pdb</ProgramDatabaseFile>
++      <AdditionalOptions Condition="'$(VisualStudioVersion)|$(Platform)'=='11.0|x64'">/HIGHENTROPYVA %(AdditionalOptions)</AdditionalOptions>
++      <AdditionalOptions Condition="'$(VisualStudioVersion)|$(Platform)'=='12.0|x64'">/HIGHENTROPYVA %(AdditionalOptions)</AdditionalOptions>
++      <AdditionalOptions Condition="'$(VisualStudioVersion)|$(Platform)'=='14.0|x64'">/HIGHENTROPYVA %(AdditionalOptions)</AdditionalOptions>
++      <AdditionalOptions Condition="'$(VisualStudioVersion)|$(Platform)'=='15.0|x64'">/HIGHENTROPYVA %(AdditionalOptions)</AdditionalOptions>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemGroup>
++    <BuildMacro Include="AtkDefines">
++      <Value>$(AtkDefines)</Value>
++    </BuildMacro>
++    <BuildMacro Include="AtkIntrospectNMakeCmd">
++      <Value>$(AtkIntrospectNMakeCmd)</Value>
++    </BuildMacro>
++    <BuildMacro Include="AtkIntrospectBuiltFiles">
++      <Value>$(AtkIntrospectBuiltFiles)</Value>
++    </BuildMacro>
++  </ItemGroup>
++</Project>
+diff --git a/win32/vs10/atk-gen-src.props b/win32/vs10/atk-gen-src.props
+new file mode 100644
+index 0000000..76f0dfa
+--- /dev/null
++++ b/win32/vs10/atk-gen-src.props
+@@ -0,0 +1,39 @@
++<?xml version="1.0" encoding="utf-8"?>
++<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++  <ImportGroup Label="PropertySheets">
++    <Import Project="atk-build-defines.props" />
++  </ImportGroup>
++  <PropertyGroup Label="UserMacros">
++    <GenConfigH>if not exist ..\..\config.h copy ..\..\config.h.win32 ..\..\config.h</GenConfigH>
++    <GenMarshalSrc>
++cd ..\..\atk
++$(PythonDir)\python $(GLibEtcInstallRoot)\bin\glib-genmarshal --prefix=atk_marshal --quiet --header --output=atkmarshal.h atkmarshal.list 2&gt;nul &amp; set ERRORLEVEL=0
++if not exist atkmarshal.h $(GLibEtcInstallRoot)\bin\glib-genmarshal --prefix=atk_marshal atkmarshal.list --header &gt; atkmarshal.h
++$(PythonDir)\python $(GLibEtcInstallRoot)\bin\glib-genmarshal --prefix=atk_marshal --quiet --body --output=atkmarshal.c atkmarshal.list 2&gt;nul &amp; set ERRORLEVEL=0
++if not exist atkmarshal.c $(GLibEtcInstallRoot)\bin\glib-genmarshal --prefix=atk_marshal atkmarshal.list --body &gt; atkmarshal.c
++cd $(SolutionDir)
++    </GenMarshalSrc>
++    <GenMarshalSrcX64>
++cd ..\..\atk
++$(PythonDirX64)\python $(GLibEtcInstallRoot)\bin\glib-genmarshal --prefix=atk_marshal --quiet --header --output=atkmarshal.h atkmarshal.list 2&gt;nul &amp; set ERRORLEVEL=0
++if not exist atkmarshal.h $(GLibEtcInstallRoot)\bin\glib-genmarshal --prefix=atk_marshal atkmarshal.list --header --output=atkmarshal.h
++$(PythonDirX64)\python $(GLibEtcInstallRoot)\bin\glib-genmarshal --prefix=atk_marshal --quiet --body --output=atkmarshal.c atkmarshal.list 2&gt;nul &amp; set ERRORLEVEL=0
++if not exist atkmarshal.c $(GLibEtcInstallRoot)\bin\glib-genmarshal --prefix=atk_marshal atkmarshal.list --body &gt; atkmarshal.c
++cd $(SolutionDir)
++    </GenMarshalSrcX64>
++  </PropertyGroup>
++  <PropertyGroup>
++    <_PropertySheetDisplayName>atkgensrcprops</_PropertySheetDisplayName>
++  </PropertyGroup>
++  <ItemGroup>
++    <BuildMacro Include="GenConfigH">
++      <Value>$(GenConfigH)</Value>
++    </BuildMacro>
++    <BuildMacro Include="GenMarshalSrc">
++      <Value>$(GenMarshalSrc)</Value>
++    </BuildMacro>
++    <BuildMacro Include="GenMarshalSrcX64">
++      <Value>$(GenMarshalSrcX64)</Value>
++    </BuildMacro>
++  </ItemGroup>
++</Project>
+diff --git a/win32/vs10/atk-install.propsin b/win32/vs10/atk-install.propsin
+new file mode 100644
+index 0000000..6f71d14
+--- /dev/null
++++ b/win32/vs10/atk-install.propsin
+@@ -0,0 +1,42 @@
++<?xml version="1.0" encoding="utf-8"?>
++<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++  <ImportGroup Label="PropertySheets">
++    <Import Project="atk-build-defines.props" />
++  </ImportGroup>
++  <PropertyGroup Label="UserMacros">
++    <BinDir>$(SolutionDir)$(Configuration)\$(Platform)\bin</BinDir>
++    <InstalledDlls>$(BinDir)\$(AtkDllPrefix)atk(AtkDllSuffix).dll</InstalledDlls>
++    <AtkDoInstall>
++mkdir $(CopyDir)\bin
++
++copy $(BinDir)\$(AtkDllPrefix)atk$(AtkDllSuffix).dll $(CopyDir)\bin
++copy $(BinDir)\$(AtkDllPrefix)atk$(AtkDllSuffix).pdb $(CopyDir)\bin
++
++mkdir $(CopyDir)\lib
++copy $(BinDir)\atk-$(ApiVersion).lib $(CopyDir)\lib
++
++mkdir $(CopyDir)\include\atk-$(ApiVersion)\atk
++#include "atk.vs10.headers"
++
++mkdir $(CopyDir)\lib\pkgconfig
++copy ..\atk.pc $(CopyDir)\lib\pkgconfig
++    </AtkDoInstall>
++    <AtkGenPC>$(PythonDir)\python.exe ..\atkpc.py --prefix=$(CopyDir) --version=$(AtkMajorVersion).$(AtkMinorVersion).$(AtkMicroVersion)</AtkGenPC>
++    <AtkGenPCX64>$(PythonDirX64)\python.exe ..\atkpc.py --prefix=$(CopyDir) --version=$(AtkMajorVersion).$(AtkMinorVersion).$(AtkMicroVersion)</AtkGenPCX64>
++    <AtkPCFiles>..\atk.pc</AtkPCFiles>
++  </PropertyGroup>
++  <ItemGroup>
++    <BuildMacro Include="BinDir">
++      <Value>$(BinDir)</Value>
++    </BuildMacro>
++    <BuildMacro Include="InstalledDlls">
++      <Value>$(InstalledDlls)</Value>
++    </BuildMacro>
++    <BuildMacro Include="AtkDoInstall">
++      <Value>$(AtkDoInstall)</Value>
++    </BuildMacro>
++    <BuildMacro Include="AtkPCFiles">
++      <Value>$(AtkPCFiles)</Value>
++    </BuildMacro>
++  </ItemGroup>
++</Project>
+diff --git a/win32/vs10/atk-install.vcxproj b/win32/vs10/atk-install.vcxproj
+new file mode 100644
+index 0000000..2b36db2
+--- /dev/null
++++ b/win32/vs10/atk-install.vcxproj
+@@ -0,0 +1,117 @@
++﻿<?xml version="1.0" encoding="utf-8"?>
++<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++  <ItemGroup Label="ProjectConfigurations">
++    <ProjectConfiguration Include="Debug|Win32">
++      <Configuration>Debug</Configuration>
++      <Platform>Win32</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Debug|x64">
++      <Configuration>Debug</Configuration>
++      <Platform>x64</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Release|Win32">
++      <Configuration>Release</Configuration>
++      <Platform>Win32</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Release|x64">
++      <Configuration>Release</Configuration>
++      <Platform>x64</Platform>
++    </ProjectConfiguration>
++  </ItemGroup>
++  <PropertyGroup Label="Globals">
++    <ProjectGuid>{00702787-1566-484D-991F-3E7E459BB909}</ProjectGuid>
++    <RootNamespace>atkinstall</RootNamespace>
++  </PropertyGroup>
++  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
++    <ConfigurationType>Utility</ConfigurationType>
++    <CharacterSet>MultiByte</CharacterSet>
++    <WholeProgramOptimization>true</WholeProgramOptimization>
++    <PlatformToolset>v100</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
++    <ConfigurationType>Utility</ConfigurationType>
++    <CharacterSet>MultiByte</CharacterSet>
++    <WholeProgramOptimization>true</WholeProgramOptimization>
++    <PlatformToolset>v100</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
++    <ConfigurationType>Utility</ConfigurationType>
++    <CharacterSet>MultiByte</CharacterSet>
++    <PlatformToolset>v100</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
++    <ConfigurationType>Utility</ConfigurationType>
++    <CharacterSet>MultiByte</CharacterSet>
++    <PlatformToolset>v100</PlatformToolset>
++  </PropertyGroup>
++  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
++  <ImportGroup Label="ExtensionSettings">
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
++    <Import Project="atk-install.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
++    <Import Project="atk-install.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
++    <Import Project="atk-install.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
++    <Import Project="atk-install.props" />
++  </ImportGroup>
++  <PropertyGroup Label="UserMacros" />
++  <PropertyGroup>
++    <OutDir Condition="'$(Configuration)'=='Debug'">$(GLibEtcInstallRoot)\</OutDir>
++    <IntDir Condition="'$(Configuration)'=='Debug'">$(Configuration)\</IntDir>
++    <OutDir Condition="'$(Configuration)'=='Release'">$(GLibEtcInstallRoot)\</OutDir>
++    <IntDir Condition="'$(Configuration)'=='Release'">$(Configuration)\</IntDir>
++  </PropertyGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
++  </ItemDefinitionGroup>
++  <ItemGroup>
++    <CustomBuild Include="..\..\config.h.win32">
++      <Message Condition="'$(Configuration)'=='Debug'">Installing Build Results...</Message>
++      <AdditionalInputs Condition="'$(Configuration)'=='Debug'">$(AtkPCFiles)</AdditionalInputs>
++      <Command Condition="'$(Configuration)'=='Debug'">$(AtkDoInstall)</Command>
++      <Outputs Condition="'$(Configuration)'=='Debug'">$(InstalledDlls);%(Outputs)</Outputs>
++      <Message Condition="'$(Configuration)'=='Release'">Installing Build Results...</Message>
++      <AdditionalInputs Condition="'$(Configuration)'=='Release'">$(AtkPCFiles)</AdditionalInputs>
++      <Command Condition="'$(Configuration)'=='Release'">$(AtkDoInstall)</Command>
++      <Outputs Condition="'$(Configuration)'=='Release'">$(InstalledDlls);%(Outputs)</Outputs>
++    </CustomBuild>
++    <CustomBuild Include="..\..\atk.pc.in">
++      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating atk.pc...</Message>
++      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(AtkGenPC)</Command>
++      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(AtkPCFiles);%(Outputs)</Outputs>
++      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating atk.pc...</Message>
++      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(AtkGenPCX64)</Command>
++      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(AtkPCFiles);%(Outputs)</Outputs>
++      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating atk.pc...</Message>
++      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(AtkGenPC)</Command>
++      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(AtkPCFiles);%(Outputs)</Outputs>
++      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating atk.pc...</Message>
++      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(AtkGenPCX64)</Command>
++      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(AtkPCFiles);%(Outputs)</Outputs>
++    </CustomBuild>
++  </ItemGroup>
++  <ItemGroup>
++    <ProjectReference Include="atk.vcxproj">
++      <Project>{86eacd59-f69f-4aad-854b-aa03d5447360}</Project>
++      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
++    </ProjectReference>
++  </ItemGroup>
++  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
++  <ImportGroup Label="ExtensionTargets">
++  </ImportGroup>
++</Project>
+diff --git a/win32/vs10/atk-install.vcxproj.filters b/win32/vs10/atk-install.vcxproj.filters
+new file mode 100644
+index 0000000..c004f98
+--- /dev/null
++++ b/win32/vs10/atk-install.vcxproj.filters
+@@ -0,0 +1,13 @@
++﻿<?xml version="1.0" encoding="utf-8"?>
++<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++  <ItemGroup>
++    <Filter Include="Resource Files">
++      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
++      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
++    </Filter>
++  </ItemGroup>
++  <ItemGroup>
++    <CustomBuild Include="..\..\config.h.win32"><Filter>Resource Files</Filter></CustomBuild>
++    <CustomBuild Include="..\..\atk.pc.in"><Filter>Resource Files</Filter></CustomBuild>
++  </ItemGroup>
++</Project>
+diff --git a/win32/vs10/atk-introspect.vcxproj b/win32/vs10/atk-introspect.vcxproj
+new file mode 100644
+index 0000000..965d636
+--- /dev/null
++++ b/win32/vs10/atk-introspect.vcxproj
+@@ -0,0 +1,103 @@
++﻿<?xml version="1.0" encoding="utf-8"?>
++<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++  <ItemGroup Label="ProjectConfigurations">
++    <ProjectConfiguration Include="Debug|Win32">
++      <Configuration>Debug</Configuration>
++      <Platform>Win32</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Release|Win32">
++      <Configuration>Release</Configuration>
++      <Platform>Win32</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Debug|x64">
++      <Configuration>Debug</Configuration>
++      <Platform>x64</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Release|x64">
++      <Configuration>Release</Configuration>
++      <Platform>x64</Platform>
++    </ProjectConfiguration>
++  </ItemGroup>
++  <PropertyGroup Label="Globals">
++    <ProjectGuid>{7034D75B-2AC9-4EA6-97A2-DB4F8526EC5A}</ProjectGuid>
++    <RootNamespace>atkintrospect</RootNamespace>
++  </PropertyGroup>
++  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
++    <ConfigurationType>Makefile</ConfigurationType>
++    <UseDebugLibraries>true</UseDebugLibraries>
++    <CharacterSet>MultiByte</CharacterSet>
++    <PlatformToolset>v100</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
++    <ConfigurationType>Makefile</ConfigurationType>
++    <UseDebugLibraries>false</UseDebugLibraries>
++    <WholeProgramOptimization>true</WholeProgramOptimization>
++    <CharacterSet>MultiByte</CharacterSet>
++    <PlatformToolset>v100</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
++    <ConfigurationType>Makefile</ConfigurationType>
++    <CharacterSet>MultiByte</CharacterSet>
++    <PlatformToolset>v100</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
++    <ConfigurationType>Makefile</ConfigurationType>
++    <CharacterSet>MultiByte</CharacterSet>
++    <WholeProgramOptimization>true</WholeProgramOptimization>
++    <PlatformToolset>v100</PlatformToolset>
++  </PropertyGroup>
++  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
++  <ImportGroup Label="ExtensionSettings">
++  </ImportGroup>
++  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
++    <Import Project="atk-build-defines.props" />
++  </ImportGroup>
++  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
++    <Import Project="atk-build-defines.props" />
++  </ImportGroup>
++  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
++    <Import Project="atk-build-defines.props" />
++  </ImportGroup>
++  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
++    <Import Project="atk-build-defines.props" />
++  </ImportGroup>
++  <PropertyGroup Label="UserMacros" />
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
++    <NMakeBuildCommandLine>$(AtkIntrospectNMakeCmd) $(IntrospectPythonParam) install-introspection</NMakeBuildCommandLine>
++    <NMakeReBuildCommandLine>$(AtkIntrospectNMakeCmd) $(IntrospectPythonParam) clean install-introspection</NMakeReBuildCommandLine>
++    <NMakeCleanCommandLine>$(AtkIntrospectNMakeCmd) $(IntrospectPythonParam) clean</NMakeCleanCommandLine>
++    <NMakeOutput>$(AtkIntrospectBuiltFiles)</NMakeOutput>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
++    <NMakeBuildCommandLine>$(AtkIntrospectNMakeCmd) $(IntrospectPythonParam) install-introspection</NMakeBuildCommandLine>
++    <NMakeReBuildCommandLine>$(AtkIntrospectNMakeCmd) $(IntrospectPythonParam) clean install-introspection</NMakeReBuildCommandLine>
++    <NMakeCleanCommandLine>$(AtkIntrospectNMakeCmd) $(IntrospectPythonParam) clean</NMakeCleanCommandLine>
++    <NMakeOutput>$(AtkIntrospectBuiltFiles)</NMakeOutput>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
++    <NMakeBuildCommandLine>$(AtkIntrospectNMakeCmd) $(IntrospectPythonParamX64) install-introspection</NMakeBuildCommandLine>
++    <NMakeReBuildCommandLine>$(AtkIntrospectNMakeCmd) $(IntrospectPythonParamX64) clean install-introspection</NMakeReBuildCommandLine>
++    <NMakeCleanCommandLine>$(AtkIntrospectNMakeCmd) $(IntrospectPythonParamX64) clean</NMakeCleanCommandLine>
++    <NMakeOutput>$(AtkIntrospectBuiltFiles)</NMakeOutput>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
++    <NMakeBuildCommandLine>$(AtkIntrospectNMakeCmd) $(IntrospectPythonParamX64) install-introspection</NMakeBuildCommandLine>
++    <NMakeReBuildCommandLine>$(AtkIntrospectNMakeCmd) $(IntrospectPythonParamX64) clean install-introspection</NMakeReBuildCommandLine>
++    <NMakeCleanCommandLine>$(AtkIntrospectNMakeCmd) $(IntrospectPythonParamX64) clean</NMakeCleanCommandLine>
++    <NMakeOutput>$(AtkIntrospectBuiltFiles)</NMakeOutput>
++  </PropertyGroup>
++  <ItemGroup>
++    <ProjectReference Include="atk-install.vcxproj">
++      <Project>{00702787-1566-484d-991f-3e7e459bb909}</Project>
++      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
++    </ProjectReference>
++  </ItemGroup>
++  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
++  <ImportGroup Label="ExtensionTargets">
++  </ImportGroup>
++</Project>
+\ No newline at end of file
+diff --git a/win32/vs10/atk-version-paths.props.in b/win32/vs10/atk-version-paths.props.in
+new file mode 100644
+index 0000000..52e7f41
+--- /dev/null
++++ b/win32/vs10/atk-version-paths.props.in
+@@ -0,0 +1,79 @@
++<?xml version="1.0" encoding="utf-8"?>
++<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++  <PropertyGroup Label="UserMacros">
++    <VSVer>10</VSVer>
++    <ApiVersion>1.0</ApiVersion>
++    <AtkMajorVersion>@ATK_MAJOR_VERSION@</AtkMajorVersion>
++    <AtkMinorVersion>@ATK_MINOR_VERSION@</AtkMinorVersion>
++    <AtkMicroVersion>@ATK_MICRO_VERSION@</AtkMicroVersion>
++    <GlibEtcInstallRoot>$(SolutionDir)\..\..\..\vs$(VSVer)\$(Platform)</GlibEtcInstallRoot>
++    <CopyDir>$(GLibEtcInstallRoot)</CopyDir>
++    <AtkLibtoolCompatibleDllPrefix>lib</AtkLibtoolCompatibleDllPrefix>
++    <AtkLibtoolCompatibleDllSuffix>-$(ApiVersion)-0</AtkLibtoolCompatibleDllSuffix>
++    <AtkSeparateVSDllPrefix />
++    <AtkSeparateVSDllSuffix>-1-vs$(VSVer)</AtkSeparateVSDllSuffix>
++    <AtkDllPrefix>$(AtkSeparateVSDllPrefix)</AtkDllPrefix>
++    <AtkDllSuffix>$(AtkSeparateVSDllSuffix)</AtkDllSuffix>
++    <PythonDir Condition="'$(VisualStudioVersion)' == '10.0'">c:\\python34</PythonDir>
++    <PythonDir Condition="'$(VisualStudioVersion)' == '11.0'">c:\\python34</PythonDir>
++    <PythonDir Condition="'$(VisualStudioVersion)' == '12.0'">c:\\python34</PythonDir>
++    <PythonDir Condition="'$(VisualStudioVersion)' == '14.0'">c:\\python36</PythonDir>
++    <PythonDir Condition="'$(VisualStudioVersion)' == '15.0'">c:\\python36</PythonDir>
++    <PythonDirX64>$(PythonDir).x64</PythonDirX64>
++    <IntrospectPythonParam>PYTHON=$(PythonDir)\python.exe</IntrospectPythonParam>
++    <IntrospectPythonParamX64>PYTHON=$(PythonDirX64)\python.exe</IntrospectPythonParamX64>
++  </PropertyGroup>
++  <PropertyGroup>
++    <_PropertySheetDisplayName>atkversionpathsprops</_PropertySheetDisplayName>
++  </PropertyGroup>
++  <ItemGroup>
++    <BuildMacro Include="ApiVersion">
++      <Value>$(ApiVersion)</Value>
++    </BuildMacro>
++    <BuildMacro Include="AtkMajorVersion">
++      <Value>$(AtkMajorVersion)</Value>
++    </BuildMacro>
++    <BuildMacro Include="AtkMinorVersion">
++      <Value>$(AtkMinorVersion)</Value>
++    </BuildMacro>
++    <BuildMacro Include="AtkMicroVersion">
++      <Value>$(AtkMicroVersion)</Value>
++    </BuildMacro>
++    <BuildMacro Include="GLibEtcInstallRoot">
++      <Value>$(GLibEtcInstallRoot)</Value>
++    </BuildMacro>
++    <BuildMacro Include="CopyDir">
++      <Value>$(CopyDir)</Value>
++    </BuildMacro>
++    <BuildMacro Include="AtkLibtoolCompatibleDllPrefix">
++      <Value>$(AtkLibtoolCompatibleDllPrefix)</Value>
++    </BuildMacro>
++    <BuildMacro Include="AtkLibtoolCompatibleDllSuffix">
++      <Value>$(AtkLibtoolCompatibleDllSuffix)</Value>
++    </BuildMacro>
++    <BuildMacro Include="AtkSeparateVSDllPrefix">
++      <Value>$(AtkSeparateVSDllPrefix)</Value>
++    </BuildMacro>
++    <BuildMacro Include="AtkSeparateVSDllSuffix">
++      <Value>$(AtkSeparateVSDllSuffix)</Value>
++    </BuildMacro>
++    <BuildMacro Include="AtkDllPrefix">
++      <Value>$(AtkDllPrefix)</Value>
++    </BuildMacro>
++    <BuildMacro Include="AtkDllSuffix">
++      <Value>$(AtkDllSuffix)</Value>
++    </BuildMacro>
++    <BuildMacro Include="PythonDir">
++      <Value>$(PythonDir)</Value>
++    </BuildMacro>
++    <BuildMacro Include="PythonDirX64">
++      <Value>$(PythonDirX64)</Value>
++    </BuildMacro>
++    <BuildMacro Include="IntrospectPythonParam">
++      <Value>$(IntrospectPythonParam)</Value>
++    </BuildMacro>
++    <BuildMacro Include="IntrospectPythonParamX64">
++      <Value>$(IntrospectPythonParamX64)</Value>
++    </BuildMacro>
++  </ItemGroup>
++</Project>
+diff --git a/win32/vs10/atk.sln b/win32/vs10/atk.sln
+new file mode 100644
+index 0000000..f5f2905
+--- /dev/null
++++ b/win32/vs10/atk.sln
+@@ -0,0 +1,42 @@
++﻿
++Microsoft Visual Studio Solution File, Format Version 11.00
++# Visual Studio 2010
++Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "atk", "atk.vcxproj", "{86EACD59-F69F-4AAD-854B-AA03D5447360}"
++EndProject
++Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "atk-install", "atk-install.vcxproj", "{00702787-1566-484D-991F-3E7E459BB909}"
++EndProject
++Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "atk-introspect", "atk-introspect.vcxproj", "{7034D75B-2AC9-4EA6-97A2-DB4F8526EC5A}"
++EndProject
++Global
++	GlobalSection(SolutionConfigurationPlatforms) = preSolution
++		Debug|Win32 = Debug|Win32
++		Debug|x64 = Debug|x64
++		Release|Win32 = Release|Win32
++		Release|x64 = Release|x64
++	EndGlobalSection
++	GlobalSection(ProjectConfigurationPlatforms) = postSolution
++		{86EACD59-F69F-4AAD-854B-AA03D5447360}.Debug|Win32.ActiveCfg = Debug|Win32
++		{86EACD59-F69F-4AAD-854B-AA03D5447360}.Debug|Win32.Build.0 = Debug|Win32
++		{86EACD59-F69F-4AAD-854B-AA03D5447360}.Debug|x64.ActiveCfg = Debug|x64
++		{86EACD59-F69F-4AAD-854B-AA03D5447360}.Debug|x64.Build.0 = Debug|x64
++		{86EACD59-F69F-4AAD-854B-AA03D5447360}.Release|Win32.ActiveCfg = Release|Win32
++		{86EACD59-F69F-4AAD-854B-AA03D5447360}.Release|Win32.Build.0 = Release|Win32
++		{86EACD59-F69F-4AAD-854B-AA03D5447360}.Release|x64.ActiveCfg = Release|x64
++		{86EACD59-F69F-4AAD-854B-AA03D5447360}.Release|x64.Build.0 = Release|x64
++		{00702787-1566-484D-991F-3E7E459BB909}.Debug|Win32.ActiveCfg = Debug|Win32
++		{00702787-1566-484D-991F-3E7E459BB909}.Debug|Win32.Build.0 = Debug|Win32
++		{00702787-1566-484D-991F-3E7E459BB909}.Debug|x64.ActiveCfg = Debug|x64
++		{00702787-1566-484D-991F-3E7E459BB909}.Debug|x64.Build.0 = Debug|x64
++		{00702787-1566-484D-991F-3E7E459BB909}.Release|Win32.ActiveCfg = Release|Win32
++		{00702787-1566-484D-991F-3E7E459BB909}.Release|Win32.Build.0 = Release|Win32
++		{00702787-1566-484D-991F-3E7E459BB909}.Release|x64.ActiveCfg = Release|x64
++		{00702787-1566-484D-991F-3E7E459BB909}.Release|x64.Build.0 = Release|x64
++		{7034D75B-2AC9-4EA6-97A2-DB4F8526EC5A}.Debug|Win32.ActiveCfg = Debug|Win32
++		{7034D75B-2AC9-4EA6-97A2-DB4F8526EC5A}.Release|Win32.ActiveCfg = Release|Win32
++		{7034D75B-2AC9-4EA6-97A2-DB4F8526EC5A}.Debug|x64.ActiveCfg = Debug|x64
++		{7034D75B-2AC9-4EA6-97A2-DB4F8526EC5A}.Release|x64.ActiveCfg = Release|x64
++	EndGlobalSection
++	GlobalSection(SolutionProperties) = preSolution
++		HideSolutionNode = FALSE
++	EndGlobalSection
++EndGlobal
+diff --git a/win32/vs10/atk.vcxproj.filtersin b/win32/vs10/atk.vcxproj.filtersin
+new file mode 100644
+index 0000000..0e5ec63
+--- /dev/null
++++ b/win32/vs10/atk.vcxproj.filtersin
+@@ -0,0 +1,29 @@
++﻿<?xml version="1.0" encoding="utf-8"?>
++<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++  <ItemGroup>
++    <Filter Include="Sources">
++      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
++      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
++    </Filter>
++    <Filter Include="Headers">
++      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
++      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
++    </Filter>
++    <Filter Include="Resource Files">
++      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
++      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
++    </Filter>
++  </ItemGroup>
++  <ItemGroup>
++#include "atk.vs10.sourcefiles.filters"
++  </ItemGroup>
++  <ItemGroup>
++    <CustomBuild Include="..\..\config.h.win32"><Filter>Resource Files</Filter></CustomBuild>
++    <CustomBuild Include="..\..\atk\atkmarshal.list"><Filter>Resource Files</Filter></CustomBuild>
++  </ItemGroup>
++  <ItemGroup>
++    <ResourceCompile Include="..\..\atk\atk.rc">
++      <Filter>Resource Files</Filter>
++    </ResourceCompile>
++  </ItemGroup>
++</Project>
+diff --git a/win32/vs10/atk.vcxprojin b/win32/vs10/atk.vcxprojin
+new file mode 100644
+index 0000000..b1c79d2
+--- /dev/null
++++ b/win32/vs10/atk.vcxprojin
+@@ -0,0 +1,181 @@
++﻿<?xml version="1.0" encoding="utf-8"?>
++<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++  <ItemGroup Label="ProjectConfigurations">
++    <ProjectConfiguration Include="Debug|Win32">
++      <Configuration>Debug</Configuration>
++      <Platform>Win32</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Debug|x64">
++      <Configuration>Debug</Configuration>
++      <Platform>x64</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Release|Win32">
++      <Configuration>Release</Configuration>
++      <Platform>Win32</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Release|x64">
++      <Configuration>Release</Configuration>
++      <Platform>x64</Platform>
++    </ProjectConfiguration>
++  </ItemGroup>
++  <PropertyGroup Label="Globals">
++    <ProjectGuid>{86EACD59-F69F-4AAD-854B-AA03D5447360}</ProjectGuid>
++    <RootNamespace>atk</RootNamespace>
++    <Keyword>Win32Proj</Keyword>
++  </PropertyGroup>
++  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
++    <ConfigurationType>DynamicLibrary</ConfigurationType>
++    <CharacterSet>MultiByte</CharacterSet>
++    <WholeProgramOptimization>true</WholeProgramOptimization>
++    <PlatformToolset>v100</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
++    <ConfigurationType>DynamicLibrary</ConfigurationType>
++    <CharacterSet>MultiByte</CharacterSet>
++    <PlatformToolset>v100</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
++    <ConfigurationType>DynamicLibrary</ConfigurationType>
++    <CharacterSet>MultiByte</CharacterSet>
++    <PlatformToolset>v100</PlatformToolset>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
++    <ConfigurationType>DynamicLibrary</ConfigurationType>
++    <CharacterSet>MultiByte</CharacterSet>
++    <PlatformToolset>v100</PlatformToolset>
++  </PropertyGroup>
++  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
++  <ImportGroup Label="ExtensionSettings">
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
++    <Import Project="atk-gen-src.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
++    <Import Project="atk-gen-src.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
++    <Import Project="atk-gen-src.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
++    <Import Project="atk-gen-src.props" />
++  </ImportGroup>
++  <PropertyGroup Label="UserMacros" />
++  <PropertyGroup>
++    <LinkIncremental Condition="'$(Configuration)'=='Debug'">true</LinkIncremental>
++    <LinkIncremental Condition="'$(Configuration)'=='Release'">false</LinkIncremental>
++  </PropertyGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
++    <ClCompile>
++      <Optimization>Disabled</Optimization>
++      <PreprocessorDefinitions>_DEBUG;$(AtkDefines);%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <MinimalRebuild>true</MinimalRebuild>
++      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
++      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
++      <PrecompiledHeader>
++      </PrecompiledHeader>
++      <WarningLevel>Level3</WarningLevel>
++      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
++    </ClCompile>
++    <Link>
++      <OutputFile>$(OutDir)$(AtkDllPrefix)$(ProjectName)$(AtkDllSuffix).dll</OutputFile>
++      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
++      <GenerateDebugInformation>true</GenerateDebugInformation>
++      <SubSystem>Windows</SubSystem>
++      <ImportLibrary>$(OutDir)$(ProjectName)-$(ApiVersion).lib</ImportLibrary>
++      <TargetMachine>MachineX86</TargetMachine>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
++    <ClCompile>
++      <Optimization>MaxSpeed</Optimization>
++      <IntrinsicFunctions>true</IntrinsicFunctions>
++      <PreprocessorDefinitions>$(AtkDefines);%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
++      <FunctionLevelLinking>true</FunctionLevelLinking>
++      <PrecompiledHeader>
++      </PrecompiledHeader>
++      <WarningLevel>Level3</WarningLevel>
++      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
++    </ClCompile>
++    <Link>
++      <OutputFile>$(OutDir)$(AtkDllPrefix)$(ProjectName)$(AtkDllSuffix).dll</OutputFile>
++      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
++      <GenerateDebugInformation>true</GenerateDebugInformation>
++      <SubSystem>Windows</SubSystem>
++      <OptimizeReferences>true</OptimizeReferences>
++      <EnableCOMDATFolding>true</EnableCOMDATFolding>
++      <ImportLibrary>$(OutDir)$(ProjectName)-$(ApiVersion).lib</ImportLibrary>
++      <TargetMachine>MachineX86</TargetMachine>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
++    <ClCompile>
++      <Optimization>Disabled</Optimization>
++      <PreprocessorDefinitions>_DEBUG;$(AtkDefines);%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <MinimalRebuild>true</MinimalRebuild>
++      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
++      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
++      <PrecompiledHeader>
++      </PrecompiledHeader>
++      <WarningLevel>Level3</WarningLevel>
++      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
++    </ClCompile>
++    <Link>
++      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
++      <OutputFile>$(OutDir)$(AtkDllPrefix)$(ProjectName)$(AtkDllSuffix).dll</OutputFile>
++      <GenerateDebugInformation>true</GenerateDebugInformation>
++      <SubSystem>Windows</SubSystem>
++      <ImportLibrary>$(TargetDir)$(ProjectName)-$(ApiVersion).lib</ImportLibrary>
++      <TargetMachine>MachineX64</TargetMachine>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
++    <ClCompile>
++      <PreprocessorDefinitions>$(AtkDefines);%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
++      <PrecompiledHeader>
++      </PrecompiledHeader>
++      <WarningLevel>Level3</WarningLevel>
++      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
++    </ClCompile>
++    <Link>
++      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
++      <OutputFile>$(OutDir)$(AtkDllPrefix)$(ProjectName)$(AtkDllSuffix).dll</OutputFile>
++      <GenerateDebugInformation>true</GenerateDebugInformation>
++      <SubSystem>Windows</SubSystem>
++      <OptimizeReferences>true</OptimizeReferences>
++      <EnableCOMDATFolding>true</EnableCOMDATFolding>
++      <ImportLibrary>$(TargetDir)$(ProjectName)-$(ApiVersion).lib</ImportLibrary>
++      <TargetMachine>MachineX64</TargetMachine>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemGroup>
++#include "atk.vs10.sourcefiles"
++  </ItemGroup>
++  <ItemGroup>
++    <CustomBuild Include="..\..\config.h.win32">
++      <Message>Copying config.h from config.h.win32...</Message>
++      <Command>$(GenConfigH)</Command>
++      <Outputs>..\..\config.h;%(Outputs)</Outputs>
++    </CustomBuild>
++    <CustomBuild Include="..\..\atk\atkmarshal.list">
++      <Message Condition="'$(Platform)'=='Win32'">Generating Marshalling Sources...</Message>
++      <Command Condition="'$(Platform)'=='Win32'">$(GenMarshalSrc)</Command>
++      <Outputs Condition="'$(Platform)'=='Win32'">..\..\atk\atkmarshal.h;..\..\atk\atkmarshal.c;%(Outputs)</Outputs>
++      <Message Condition="'$(Platform)'=='x64'">Generating Marshalling Sources...</Message>
++      <Command Condition="'$(Platform)'=='x64'">$(GenMarshalSrcX64)</Command>
++      <Outputs Condition="'$(Platform)'=='x64'">..\..\atk\atkmarshal.h;..\..\atk\atkmarshal.c;%(Outputs)</Outputs>
++    </CustomBuild>
++  </ItemGroup>
++  <ItemGroup>
++    <ResourceCompile Include="..\..\atk\atk.rc" />
++  </ItemGroup>
++  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
++  <ImportGroup Label="ExtensionTargets">
++  </ImportGroup>
++</Project>
+diff --git a/win32/vs11/Makefile.am b/win32/vs11/Makefile.am
+new file mode 100644
+index 0000000..5551c66
+--- /dev/null
++++ b/win32/vs11/Makefile.am
+@@ -0,0 +1,23 @@
++EXTRA_DIST = \
++	README.txt \
++	atk.sln \
++	atk.vcxproj \
++	atk.vcxproj.filters \
++	atk-install.vcxproj	\
++	atk-install.vcxproj.filters	\
++	atk-introspect.vcxproj	\
++	atk-build-defines.props	\
++	atk-install.props	\
++	atk-version-paths.props	\
++	atk-gen-src.props
++
++DISTCLEANFILES = $(EXTRA_DIST)
++
++MSVC_SLN = atk
++
++MSVC_BASE_VER = 10
++MSVC_BASE_VER_LONG = 2010
++MSVC_VER = 11
++MSVC_VER_LONG = 2012
++
++include $(top_srcdir)/win32/Makefile-newvs.am
+diff --git a/win32/vs12/Makefile.am b/win32/vs12/Makefile.am
+new file mode 100644
+index 0000000..91e5be7
+--- /dev/null
++++ b/win32/vs12/Makefile.am
+@@ -0,0 +1,23 @@
++EXTRA_DIST = \
++	README.txt \
++	atk.sln \
++	atk.vcxproj \
++	atk.vcxproj.filters \
++	atk-install.vcxproj	\
++	atk-install.vcxproj.filters	\
++	atk-introspect.vcxproj	\
++	atk-build-defines.props	\
++	atk-install.props	\
++	atk-version-paths.props	\
++	atk-gen-src.props
++
++DISTCLEANFILES = $(EXTRA_DIST)
++
++MSVC_SLN = atk
++
++MSVC_BASE_VER = 10
++MSVC_BASE_VER_LONG = 2010
++MSVC_VER = 12
++MSVC_VER_LONG = 2013
++
++include $(top_srcdir)/win32/Makefile-newvs.am
+diff --git a/win32/vs14/Makefile.am b/win32/vs14/Makefile.am
+new file mode 100644
+index 0000000..b1b9fe8
+--- /dev/null
++++ b/win32/vs14/Makefile.am
+@@ -0,0 +1,23 @@
++EXTRA_DIST = \
++	README.txt \
++	atk.sln \
++	atk.vcxproj \
++	atk.vcxproj.filters \
++	atk-install.vcxproj	\
++	atk-install.vcxproj.filters	\
++	atk-introspect.vcxproj	\
++	atk-build-defines.props	\
++	atk-install.props	\
++	atk-version-paths.props	\
++	atk-gen-src.props
++
++DISTCLEANFILES = $(EXTRA_DIST)
++
++MSVC_SLN = atk
++
++MSVC_BASE_VER = 10
++MSVC_BASE_VER_LONG = 2010
++MSVC_VER = 14
++MSVC_VER_LONG = 14
++
++include $(top_srcdir)/win32/Makefile-newvs.am
+diff --git a/win32/vs15/Makefile.am b/win32/vs15/Makefile.am
+new file mode 100644
+index 0000000..63d101d
+--- /dev/null
++++ b/win32/vs15/Makefile.am
+@@ -0,0 +1,24 @@
++EXTRA_DIST = \
++	README.txt \
++	atk.sln \
++	atk.vcxproj \
++	atk.vcxproj.filters \
++	atk-install.vcxproj	\
++	atk-install.vcxproj.filters	\
++	atk-introspect.vcxproj	\
++	atk-build-defines.props	\
++	atk-install.props	\
++	atk-version-paths.props	\
++	atk-gen-src.props
++
++DISTCLEANFILES = $(EXTRA_DIST)
++
++MSVC_SLN = atk
++
++MSVC_BASE_VER = 10
++MSVC_BASE_VER_LONG = 2010
++MSVC_VER = 15
++MSVC_VER_LONG = 15
++MSVC_TOOLSET = 141
++
++include $(top_srcdir)/win32/Makefile-newvs.am
+diff --git a/win32/vs9/.gitignore b/win32/vs9/.gitignore
+new file mode 100644
+index 0000000..0e18109
+--- /dev/null
++++ b/win32/vs9/.gitignore
+@@ -0,0 +1,2 @@
++atk.vcproj
++atk-install.vsprops
+diff --git a/win32/vs9/Makefile.am b/win32/vs9/Makefile.am
+new file mode 100644
+index 0000000..48dcdc1
+--- /dev/null
++++ b/win32/vs9/Makefile.am
+@@ -0,0 +1,21 @@
++GENERATED_ITEMS = \
++	atk.vcproj	\
++	atk-install.vsprops
++
++EXTRA_DIST =	\
++	README.txt	\
++	atk.sln	\
++	atk.vcprojin	\
++	atk-install.vcproj	\
++	atk-introspect.vcproj	\
++	atk-build-defines.vsprops	\
++	atk-gen-src.vsprops	\
++	atk-install.vspropsin	\
++	atk-version-paths.vsprops	\
++	$(GENERATED_ITEMS)
++
++atk-install.vsprops: $(top_srcdir)/win32/vs9/atk-install.vspropsin atk.headers
++	$(CPP) -P - <$(top_srcdir)/win32/vs9/atk-install.vspropsin >$@
++	rm atk.headers
++
++DISTCLEANFILES = $(GENERATED_ITEMS)
+diff --git a/win32/vs9/README.txt b/win32/vs9/README.txt
+new file mode 100644
+index 0000000..b517104
+--- /dev/null
++++ b/win32/vs9/README.txt
+@@ -0,0 +1,109 @@
++Please do not build this package in a path that contains spaces to avoid
++possible problems during the build or during the usage of the library.
++
++Please refer to the following GNOME Live! page for more detailed
++instructions on building ATK and its dependencies with Visual C++:
++
++https://live.gnome.org/GTK%2B/Win32/MSVCCompilationOfGTKStack
++
++This VS9 solution and the projects it includes are intented to be used
++in a ATK source tree unpacked from a tarball. In a git checkout you
++first need to use some Unix-like environment or manual work to expand
++the .in files needed, mainly config.h.win32.in into config.h.win32.
++You will also need to expand atk.vcprojin here into
++atk.vcproj.
++
++The dependencies for this package are gettext-runtime (libintl), GLib*
++and ZLib.
++
++You will also need a Python 2.7.x or 3.x installation, as Python will be
++used to run glib-genmarshal, which was converted into a Python script from
++a compiled C program, in addition to generating the atk.pc pkg-config
++file for the build.  See PythonDir (32-bit builds) or PythonDirX64 (x64
++builds) in atk-version-paths.vsprops to see that they point to the correct paths.
++
++a) look for all of the dependencies (except GLib*) under
++
++   http://ftp.gnome.org/pub/GNOME/binaries/win32/dependencies/ (32-bit) -OR-
++   http://ftp.gnome.org/pub/GNOME/binaries/win64/dependencies/ (64-bit)
++
++   Please use the latest versions of these libraries that are available there,
++   these are packaged by Tor Lillqvist, which are built with MinGW/GCC.
++   Please see b) below regarding the build of  GLib*
++
++-OR-
++
++b) Build them yourself with VS9 (but you may most probably wish to get
++   gettext-runtime from the URL(s) mentioned in a)).  Use the latest
++   stable versions for them (you may need to get the latest unstable version of
++   GLib if you are using an unstable version of ATK):
++
++   GLib*:   Grab the latest sources from http://www.gtk.org under "Download"
++            (stable only-please make a search for the latest unstable versions)
++   ZLib:   http://www.zlib.net
++
++   The above 2 packages all have supported mechanisms (Makefiles and/or Project
++   Files) for building under VS9 (upgrade the Project Files from earlier VS
++   versions will do for these, when applicable)
++
++* This GLib refers to a build that is built by VS9
++
++Set up the source tree as follows under some arbitrary top
++folder <root>:
++
++<root>\atk\<this-atk-source-tree>
++<root>\vs9\<PlatformName>
++
++*this* file you are now reading is thus located at
++<root>\atk\<this-atk-source-tree>\win32\vs9\README.
++
++<PlatformName> is either Win32 or x64, as in VS9 project files.
++
++You should unpack the <dependent-package>-dev and <dependent-packge> (runtime)
++into <root>\vs9\<PlatformName>, if you download any of the packages from
++
++http://ftp.gnome.org/pub/GNOME/binaries/win32/dependencies/ (32-bit) -OR-
++http://ftp.gnome.org/pub/GNOME/binaries/win64/dependencies/ (64-bit)
++
++so that for instance libintl.h end up at 
++<root>\vs9\<PlatformName>\include\libintl.h.
++
++If you build any of the dependencies yourselves, copy the: 
++-DLLs and EXEs into <root>\vs9\<PlatformName>\bin
++-headers into <root>\vs9\<PlatformName>\include\
++-LIBs into <root>\vs9\<PlatformName>\lib
++
++If you have not built GLib with VS9 and placed the LIBs and headers in a
++place where VS9 can find them automatically, you should also uncompress
++your GLib sources in <root>\ and build it from there, following the
++instructions in <root>\glib<-version>\win32\vs9, so that the required
++headers, EXEs, DLLs and LIBs will end up in
++<root>\vs9\<PlatformName>\include\glib-2.0 (headers)
++<root>\vs9\<PlatformName>\lib (LIBs, also glib-2.0/include/glibconfig.h)
++<root>\vs9\<PlatformName>\bin (EXEs/DLLs)
++respectively.
++
++Building introspection files is now integrated in the solution files, but this is
++not built by default.  In order for this to work, ensure that PythonDir (32-bit builds)
++and/or PythonDirX64 (x64 builds) are set at the installation directory of where your
++Python installation is.  Please note the following:
++
++-This Python installation must be the same installation/configuration as the
++ one that was used to build GObject-Introspection.
++
++-g-ir-scanner needs to be found at <root>\vs9\<PlatformName>\bin, and the
++ other Python items needs to be under <root>\vs9\<PlatformName>\lib\gobject-introspection.
++
++-Use the rebuild command on this project, atk-introspect, to re-build or build for other
++ configurations.
++
++After the build of ATK, the "install" project will copy build results
++and headers into their appropriate location under <root>\vs9\<PlatformName>.
++For instance, built DLLs go into <root>\vs9\<PlatformName>\bin, built LIBs into
++<root>\vs9\<PlatformName>\lib and atk headers into
++<root>\vs9\<PlatformName>\include\atk-1.0. This is then from where
++project files higher in the stack are supposed to look for them, not
++from a specific ATK source tree.
++
++--Chun-wei Fan <fanc999@yahoo.com.tw>
++--(adapted from the GLib VS9 README.txt file originally written by Tor Lillqvist)
+diff --git a/win32/vs9/atk-build-defines.vsprops b/win32/vs9/atk-build-defines.vsprops
+new file mode 100644
+index 0000000..e363626
+--- /dev/null
++++ b/win32/vs9/atk-build-defines.vsprops
+@@ -0,0 +1,34 @@
++<?xml version="1.0" encoding="Windows-1252"?>
++<VisualStudioPropertySheet
++	ProjectType="Visual C++"
++	Version="8.00"
++	Name="atkbuilddefinesprops"
++	OutputDirectory="$(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin"
++	IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(PlatformName)\obj\$(ProjectName)\"
++	InheritedPropertySheets=".\atk-version-paths.vsprops"
++	>
++	<Tool
++		Name="VCCLCompilerTool"
++		AdditionalIncludeDirectories="..\..;..\..\atk;$(GLibEtcInstallRoot)\include\glib-2.0;$(GLibEtcInstallRoot)\lib\glib-2.0\include;$(GLibEtcInstallRoot)\include"
++		PreprocessorDefinitions="HAVE_CONFIG_H;G_DISABLE_SINGLE_INCLUDES"
++		ForcedIncludeFiles="msvc_recommended_pragmas.h"
++		AdditionalOptions="/MP"
++	/>
++	<Tool
++		Name="VCLinkerTool"
++		AdditionalDependencies="glib-2.0.lib gobject-2.0.lib gmodule-2.0.lib intl.lib"
++		AdditionalLibraryDirectories="$(GLibEtcInstallRoot)\lib"
++	/>
++	<UserMacro
++		Name="AtkDefines"
++		Value="ATK_COMPILATION;DLL_EXPORT;ATK_LOCALEDIR=\&quot;/dummy/share/locale\&quot;"
++	/>
++	<UserMacro
++		Name="AtkIntrospectNMakeCmd"
++		Value="cd ..&#x0D;&#x0A;set VCInstallDir=$(VCInstallDir)&#x0D;&#x0A;nmake -f atk-introspection-msvc.mak CFG=$(ConfigurationName) PREFIX=$(GlibEtcInstallRoot)"
++	/>
++	<UserMacro
++		Name="AtkIntrospectBuiltFiles"
++		Value="$(SolutionDir)\..\Atk-1.0.gir;$(SolutionDir)\..\Atk-1.0.typelib"
++	/>
++</VisualStudioPropertySheet>
+diff --git a/win32/vs9/atk-gen-src.vsprops b/win32/vs9/atk-gen-src.vsprops
+new file mode 100644
+index 0000000..8468687
+--- /dev/null
++++ b/win32/vs9/atk-gen-src.vsprops
+@@ -0,0 +1,34 @@
++<?xml version="1.0" encoding="Windows-1252"?>
++<VisualStudioPropertySheet
++	ProjectType="Visual C++"
++	Version="8.00"
++	Name="atkgensrcprops"
++	InheritedPropertySheets=".\atk-build-defines.vsprops"
++	>
++	<UserMacro
++		Name="GenConfigH"
++		Value="if not exist ..\..\config.h copy ..\..\config.h.win32 ..\..\config.h"
++	/>
++	<UserMacro
++		Name="GenMarshalSrc"
++		Value="
++cd ..\..\atk&#x0D;&#x0A;
++$(PythonDir)\python $(GLibEtcInstallRoot)\bin\glib-genmarshal --prefix=atk_marshal --quiet --header --output=atkmarshal.h atkmarshal.list 2&gt;nul &amp; set ERRORLEVEL=0&#x0D;&#x0A;
++if not exist atkmarshal.h $(GLibEtcInstallRoot)\bin\glib-genmarshal --prefix=atk_marshal atkmarshal.list --header &gt; atkmarshal.h&#x0D;&#x0A;
++$(PythonDir)\python $(GLibEtcInstallRoot)\bin\glib-genmarshal --prefix=atk_marshal --quiet --body --output=atkmarshal.c atkmarshal.list 2&gt;nul &amp; set ERRORLEVEL=0&#x0D;&#x0A;
++if not exist atkmarshal.c $(GLibEtcInstallRoot)\bin\glib-genmarshal --prefix=atk_marshal atkmarshal.list --body &gt; atkmarshal.c&#x0D;&#x0A;
++cd $(SolutionDir)&#x0D;&#x0A;
++		      "
++	/>
++	<UserMacro
++                Name="GenMarshalSrcX64"
++                Value="
++cd ..\..\atk&#x0D;&#x0A;
++$(PythonDirX64)\python $(GLibEtcInstallRoot)\bin\glib-genmarshal --prefix=atk_marshal --quiet --header --output=atkmarshal.h atkmarshal.list 2&gt;nul &amp; set ERRORLEVEL=0&#x0D;&#x0A;
++if not exist atkmarshal.h $(GLibEtcInstallRoot)\bin\glib-genmarshal --prefix=atk_marshal atkmarshal.list --header &gt; atkmarshal.h&#x0D;&#x0A;
++$(PythonDirX64)\python $(GLibEtcInstallRoot)\bin\glib-genmarshal --prefix=atk_marshal --quiet --body --output=atkmarshal.c atkmarshal.list 2&gt;nul &amp; set ERRORLEVEL=0&#x0D;&#x0A;
++if not exist atkmarshal.c $(GLibEtcInstallRoot)\bin\glib-genmarshal --prefix=atk_marshal atkmarshal.list --body &gt; atkmarshal.c&#x0D;&#x0A;
++cd $(SolutionDir)&#x0D;&#x0A;
++                      "
++        />
++</VisualStudioPropertySheet>
+diff --git a/win32/vs9/atk-install.vcproj b/win32/vs9/atk-install.vcproj
+new file mode 100644
+index 0000000..ff970ce
+--- /dev/null
++++ b/win32/vs9/atk-install.vcproj
+@@ -0,0 +1,122 @@
++<?xml version="1.0" encoding="big5"?>
++<VisualStudioProject
++	ProjectType="Visual C++"
++	Version="9.00"
++	Name="atk-install"
++	ProjectGUID="{00702787-1566-484D-991F-3E7E459BB909}"
++	RootNamespace="atkinstall"
++	TargetFrameworkVersion="196613"
++	>
++	<Platforms>
++		<Platform
++			Name="Win32"
++		/>
++		<Platform
++			Name="x64"
++		/>
++	</Platforms>
++	<ToolFiles>
++	</ToolFiles>
++	<Configurations>
++		<Configuration
++			Name="Debug|Win32"
++			OutputDirectory="$(GLibEtcInstallRoot)"
++			IntermediateDirectory="$(ConfigurationName)"
++			ConfigurationType="10"
++			InheritedPropertySheets=".\atk-install.vsprops"
++			CharacterSet="2"
++			>
++			<Tool
++				Name="VCPostBuildEventTool"
++				CommandLine="$(AtkDoInstall)"
++			/>
++		</Configuration>
++		<Configuration
++			Name="Debug|x64"
++			OutputDirectory="$(GLibEtcInstallRoot)"
++			InheritedPropertySheets=".\atk-install.vsprops"
++			ConfigurationType="10"
++			CharacterSet="2"
++			DeleteExtensionsOnClean=""
++			>
++			<Tool
++				Name="VCPostBuildEventTool"
++				CommandLine="$(AtkDoInstall)"
++			/>
++		</Configuration>
++		<Configuration
++			Name="Release|Win32"
++			OutputDirectory="$(GLibEtcInstallRoot)"
++			IntermediateDirectory="$(ConfigurationName)"
++			ConfigurationType="10"
++			InheritedPropertySheets=".\atk-install.vsprops"
++			CharacterSet="2"
++			WholeProgramOptimization="1"
++			>
++			<Tool
++				Name="VCPostBuildEventTool"
++				CommandLine="$(AtkDoInstall)"
++			/>
++		</Configuration>
++		<Configuration
++			Name="Release|x64"
++			OutputDirectory="$(GLibEtcInstallRoot)"
++			InheritedPropertySheets=".\atk-install.vsprops"
++			ConfigurationType="10"
++			CharacterSet="2"
++			WholeProgramOptimization="1"
++			DeleteExtensionsOnClean=""
++			>
++			<Tool
++				Name="VCPostBuildEventTool"
++				CommandLine="$(AtkDoInstall)"
++			/>
++		</Configuration>
++	</Configurations>
++	<References>
++	</References>
++	<Files>
++		<Filter
++			Name="Resource Files"
++			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
++			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
++			>
++			<File RelativePath="..\..\atk.pc.in">
++				<FileConfiguration Name="Debug|Win32">
++					<Tool
++						Name="VCCustomBuildTool"
++						Description="Generating atk.pc..."
++						CommandLine="$(AtkGenPC)"
++						Outputs="..\atk.pc"
++					/>
++				</FileConfiguration>
++				<FileConfiguration Name="Release|Win32">
++					<Tool
++						Name="VCCustomBuildTool"
++						Description="Generating atk.pc..."
++						CommandLine="$(AtkGenPC)"
++						Outputs="..\atk.pc"
++					/>
++				</FileConfiguration>
++				<FileConfiguration Name="Debug|x64">
++					<Tool
++						Name="VCCustomBuildTool"
++						Description="Generating atk.pc..."
++						CommandLine="$(AtkGenPCX64)"
++						Outputs="..\atk.pc"
++					/>
++				</FileConfiguration>
++				<FileConfiguration Name="Release|x64">
++					<Tool
++						Name="VCCustomBuildTool"
++						Description="Generating atk.pc..."
++						CommandLine="$(AtkGenPCX64)"
++						Outputs="..\atk.pc"
++					/>
++				</FileConfiguration>
++			</File>
++		</Filter>
++	</Files>
++	<Globals>
++	</Globals>
++</VisualStudioProject>
+diff --git a/win32/vs9/atk-install.vspropsin b/win32/vs9/atk-install.vspropsin
+new file mode 100644
+index 0000000..dcb22d4
+--- /dev/null
++++ b/win32/vs9/atk-install.vspropsin
+@@ -0,0 +1,34 @@
++<?xml version="1.0" encoding="Windows-1252"?>
++<VisualStudioPropertySheet
++	ProjectType="Visual C++"
++	Version="8.00"
++	Name="atkinstallprops"
++	InheritedPropertySheets=".\atk-build-defines.vsprops"
++	>
++	<UserMacro
++		Name="AtkDoInstall"
++		Value="
++mkdir $(CopyDir)&#x0D;&#x0A;
++mkdir $(CopyDir)\bin&#x0D;&#x0A;
++copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\$(AtkDllPrefix)atk$(AtkDllSuffix).dll $(CopyDir)\bin&#x0D;&#x0A;
++copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\$(AtkDllPrefix)atk$(AtkDllSuffix).pdb $(CopyDir)\bin&#x0D;&#x0A;
++
++mkdir $(CopyDir)\lib&#x0D;&#x0A;
++copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\atk-$(ApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
++
++mkdir $(CopyDir)\include\atk-$(ApiVersion)\atk&#x0D;&#x0A;
++#include "atk.headers"
++
++mkdir $(CopyDir)\lib\pkgconfig&#x0D;&#x0A;
++copy ..\atk.pc $(CopyDir)\lib\pkgconfig&#x0D;&#x0A;
++"
++	/>
++	<UserMacro
++		Name="AtkGenPC"
++		Value="$(PythonDir)\python.exe ..\atkpc.py --prefix=$(CopyDir) --version=$(AtkMajorVersion).$(AtkMinorVersion).$(AtkMicroVersion)"
++	/>
++	<UserMacro
++		Name="AtkGenPCX64"
++		Value="$(PythonDirX64)\python.exe ..\atkpc.py --prefix=$(CopyDir) --version=$(AtkMajorVersion).$(AtkMinorVersion).$(AtkMicroVersion)"
++	/>
++</VisualStudioPropertySheet>
+diff --git a/win32/vs9/atk-introspect.vcproj b/win32/vs9/atk-introspect.vcproj
+new file mode 100644
+index 0000000..49805d7
+--- /dev/null
++++ b/win32/vs9/atk-introspect.vcproj
+@@ -0,0 +1,76 @@
++<?xml version="1.0" encoding="Windows-1252"?>
++<VisualStudioProject
++	ProjectType="Visual C++"
++	Version="9.00"
++	Name="atk-introspect"
++	ProjectGUID="{7034D75B-2AC9-4EA6-97A2-DB4F8526EC5A}"
++	Keyword="MakeFileProj"
++	TargetFrameworkVersion="196613"
++	>
++	<Platforms>
++		<Platform
++			Name="Win32"
++		/>
++		<Platform
++			Name="x64"
++		/>
++	</Platforms>
++	<ToolFiles>
++	</ToolFiles>
++	<Configurations>
++		<Configuration
++			Name="Debug|Win32"
++			ConfigurationType="0"
++			InheritedPropertySheets=".\atk-build-defines.vsprops"
++			>
++			<Tool
++				Name="VCNMakeTool"
++				BuildCommandLine="$(AtkIntrospectNMakeCmd) $(IntrospectPythonParam) install-introspection"
++				ReBuildCommandLine="$(AtkIntrospectNMakeCmd) $(IntrospectPythonParam) clean install-introspection"
++				CleanCommandLine="$(AtkIntrospectNMakeCmd) $(IntrospectPythonParam) clean"
++				Output="$(AtkIntrospectBuiltFiles)"
++			/>
++		</Configuration>
++		<Configuration
++			Name="Debug|x64"
++			ConfigurationType="0"
++			InheritedPropertySheets=".\atk-build-defines.vsprops"
++			>
++			<Tool
++				Name="VCNMakeTool"
++				BuildCommandLine="$(AtkIntrospectNMakeCmd) $(IntrospectPythonParamX64) install-introspection"
++				ReBuildCommandLine="$(AtkIntrospectNMakeCmd) $(IntrospectPythonParamX64) clean install-introspection"
++				CleanCommandLine="$(AtkIntrospectNMakeCmd) $(IntrospectPythonParamX64) clean"
++				Output="$(AtkIntrospectBuiltFiles)"
++			/>
++		</Configuration>
++		<Configuration
++			Name="Release|Win32"
++			ConfigurationType="0"
++			InheritedPropertySheets=".\atk-build-defines.vsprops"
++			CharacterSet="2"
++			DeleteExtensionsOnClean=""
++			>
++			<Tool
++				Name="VCNMakeTool"
++				BuildCommandLine="$(AtkIntrospectNMakeCmd) $(IntrospectPythonParam) install-introspection"
++				ReBuildCommandLine="$(AtkIntrospectNMakeCmd) $(IntrospectPythonParam) clean install-introspection"
++				CleanCommandLine="$(AtkIntrospectNMakeCmd) $(IntrospectPythonParam) clean"
++				Output="$(AtkIntrospectBuiltFiles)"
++			/>
++		</Configuration>
++		<Configuration
++			Name="Release|x64"
++			ConfigurationType="0"
++			InheritedPropertySheets=".\atk-build-defines.vsprops"
++			>
++			<Tool
++				Name="VCNMakeTool"
++				BuildCommandLine="$(AtkIntrospectNMakeCmd) $(IntrospectPythonParamX64) install-introspection"
++				ReBuildCommandLine="$(AtkIntrospectNMakeCmd) $(IntrospectPythonParamX64) clean install-introspection"
++				CleanCommandLine="$(AtkIntrospectNMakeCmd) $(IntrospectPythonParamX64) clean"
++				Output="$(AtkIntrospectBuiltFiles)"
++			/>
++		</Configuration>
++	</Configurations>
++</VisualStudioProject>
+diff --git a/win32/vs9/atk-version-paths.vsprops.in b/win32/vs9/atk-version-paths.vsprops.in
+new file mode 100644
+index 0000000..9d9973a
+--- /dev/null
++++ b/win32/vs9/atk-version-paths.vsprops.in
+@@ -0,0 +1,77 @@
++<?xml version="1.0" encoding="Windows-1252"?>
++<VisualStudioPropertySheet
++	ProjectType="Visual C++"
++	Version="8.00"
++	Name="atkversionpathsprops"
++	>
++	<UserMacro
++		Name="VSVer"
++		Value="9"
++	/>
++	<UserMacro
++		Name="ApiVersion"
++		Value="1.0"
++	/>
++	<UserMacro
++		Name="AtkMajorVersion"
++		Value="@ATK_MAJOR_VERSION@"
++	/>
++	<UserMacro
++		Name="AtkMinorVersion"
++		Value="@ATK_MINOR_VERSION@"
++	/>
++	<UserMacro
++		Name="AtkMicroVersion"
++		Value="@ATK_MICRO_VERSION@"
++	/>
++	<UserMacro
++		Name="GLibEtcInstallRoot"
++		Value="$(SolutionDir)\..\..\..\vs$(VSVER)\$(PlatformName)"
++	/>
++	<UserMacro
++		Name="CopyDir"
++		Value="$(GLibEtcInstallRoot)"
++	/>
++	<UserMacro
++		Name="AtkLibtoolCompatibleDllPrefix"
++		Value="lib"
++	/>
++	<UserMacro
++		Name="AtkLibtoolCompatibleDllSuffix"
++		Value="-$(ApiVersion)-0"
++	/>
++	<UserMacro
++		Name="AtkSeparateVSDllPrefix"
++		Value=""
++	/>
++	<UserMacro
++		Name="AtkSeparateVSDllSuffix"
++		Value="-1-vs$(VSVER)"
++	/>
++	<!-- Change these two to AtkLibtoolCompatibleDllPrefix and
++	AtkLibtoolCompatibleDllSuffix if that is what you want -->
++	<UserMacro
++		Name="AtkDllPrefix"
++		Value="$(AtkSeparateVSDllPrefix)"
++	/>
++	<UserMacro
++		Name="AtkDllSuffix"
++		Value="$(AtkSeparateVSDllSuffix)"
++	/>
++	<UserMacro
++		Name="PythonDir"
++		Value="c:\\python27"
++	/>
++	<UserMacro
++		Name="PythonDirX64"
++		Value="$(PythonDir).x64"
++	/>
++	<UserMacro
++		Name="IntrospectPythonParam"
++		Value="PYTHON=$(PythonDir)\python.exe"
++	/>
++	<UserMacro
++		Name="IntrospectPythonParamX64"
++		Value="PYTHON=$(PythonDirX64)\python.exe"
++	/>
++</VisualStudioPropertySheet>
+diff --git a/win32/vs9/atk.sln b/win32/vs9/atk.sln
+new file mode 100644
+index 0000000..06ed938
+--- /dev/null
++++ b/win32/vs9/atk.sln
+@@ -0,0 +1,49 @@
++﻿
++Microsoft Visual Studio Solution File, Format Version 10.00
++# Visual Studio 2008
++Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "atk", "atk.vcproj", "{86EACD59-F69F-4AAD-854B-AA03D5447360}"
++EndProject
++Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "atk-install", "atk-install.vcproj", "{00702787-1566-484D-991F-3E7E459BB909}"
++	ProjectSection(ProjectDependencies) = postProject
++		{86EACD59-F69F-4AAD-854B-AA03D5447360} = {86EACD59-F69F-4AAD-854B-AA03D5447360}
++	EndProjectSection
++EndProject
++Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "atk-introspect", "atk-introspect.vcproj", "{7034D75B-2AC9-4EA6-97A2-DB4F8526EC5A}"
++	ProjectSection(ProjectDependencies) = postProject
++		{86EACD59-F69F-4AAD-854B-AA03D5447360} = {86EACD59-F69F-4AAD-854B-AA03D5447360}
++		{00702787-1566-484D-991F-3E7E459BB909} = {00702787-1566-484D-991F-3E7E459BB909}
++	EndProjectSection
++EndProject
++Global
++	GlobalSection(SolutionConfigurationPlatforms) = preSolution
++		Debug|Win32 = Debug|Win32
++		Debug|x64 = Debug|x64
++		Release|Win32 = Release|Win32
++		Release|x64 = Release|x64
++	EndGlobalSection
++	GlobalSection(ProjectConfigurationPlatforms) = postSolution
++		{86EACD59-F69F-4AAD-854B-AA03D5447360}.Debug|Win32.ActiveCfg = Debug|Win32
++		{86EACD59-F69F-4AAD-854B-AA03D5447360}.Debug|Win32.Build.0 = Debug|Win32
++		{86EACD59-F69F-4AAD-854B-AA03D5447360}.Release|Win32.ActiveCfg = Release|Win32
++		{86EACD59-F69F-4AAD-854B-AA03D5447360}.Release|Win32.Build.0 = Release|Win32
++		{86EACD59-F69F-4AAD-854B-AA03D5447360}.Debug|x64.ActiveCfg = Debug|x64
++		{86EACD59-F69F-4AAD-854B-AA03D5447360}.Debug|x64.Build.0 = Debug|x64
++		{86EACD59-F69F-4AAD-854B-AA03D5447360}.Release|x64.ActiveCfg = Release|x64
++		{86EACD59-F69F-4AAD-854B-AA03D5447360}.Release|x64.Build.0 = Release|x64
++		{00702787-1566-484D-991F-3E7E459BB909}.Debug|Win32.ActiveCfg = Debug|Win32
++		{00702787-1566-484D-991F-3E7E459BB909}.Debug|Win32.Build.0 = Debug|Win32
++		{00702787-1566-484D-991F-3E7E459BB909}.Release|Win32.ActiveCfg = Release|Win32
++		{00702787-1566-484D-991F-3E7E459BB909}.Release|Win32.Build.0 = Release|Win32
++		{00702787-1566-484D-991F-3E7E459BB909}.Debug|x64.ActiveCfg = Debug|x64
++		{00702787-1566-484D-991F-3E7E459BB909}.Debug|x64.Build.0 = Debug|x64
++		{00702787-1566-484D-991F-3E7E459BB909}.Release|x64.ActiveCfg = Release|x64
++		{00702787-1566-484D-991F-3E7E459BB909}.Release|x64.Build.0 = Release|x64
++		{7034D75B-2AC9-4EA6-97A2-DB4F8526EC5A}.Debug|Win32.ActiveCfg = Debug|Win32
++		{7034D75B-2AC9-4EA6-97A2-DB4F8526EC5A}.Release|Win32.ActiveCfg = Release|Win32
++		{7034D75B-2AC9-4EA6-97A2-DB4F8526EC5A}.Debug|x64.ActiveCfg = Debug|x64
++		{7034D75B-2AC9-4EA6-97A2-DB4F8526EC5A}.Release|x64.ActiveCfg = Release|x64
++	EndGlobalSection
++	GlobalSection(SolutionProperties) = preSolution
++		HideSolutionNode = FALSE
++	EndGlobalSection
++EndGlobal
+diff --git a/win32/vs9/atk.vcprojin b/win32/vs9/atk.vcprojin
+new file mode 100644
+index 0000000..a51a747
+--- /dev/null
++++ b/win32/vs9/atk.vcprojin
+@@ -0,0 +1,243 @@
++<?xml version="1.0" encoding="big5"?>
++<VisualStudioProject
++	ProjectType="Visual C++"
++	Version="9.00"
++	Name="atk"
++	ProjectGUID="{86EACD59-F69F-4AAD-854B-AA03D5447360}"
++	RootNamespace="atk"
++	Keyword="Win32Proj"
++	TargetFrameworkVersion="196613"
++	>
++	<Platforms>
++		<Platform
++			Name="Win32"
++		/>
++		<Platform
++			Name="x64"
++		/>
++	</Platforms>
++	<ToolFiles>
++	</ToolFiles>
++	<Configurations>
++		<Configuration
++			Name="Debug|Win32"
++			ConfigurationType="2"
++			InheritedPropertySheets=".\atk-gen-src.vsprops"
++			CharacterSet="2"
++			>
++			<Tool
++				Name="VCPreBuildEventTool"
++			/>
++			<Tool
++				Name="VCCLCompilerTool"
++				Optimization="0"
++				PreprocessorDefinitions="_DEBUG;$(AtkDefines)"
++				MinimalRebuild="true"
++				BasicRuntimeChecks="3"
++				RuntimeLibrary="3"
++				UsePrecompiledHeader="0"
++				WarningLevel="3"
++				DebugInformationFormat="4"
++			/>
++			<Tool
++				Name="VCLinkerTool"
++				OutputFile="$(OutDir)\$(AtkDllPrefix)$(ProjectName)$(AtkDllSuffix).dll"
++				LinkIncremental="2"
++				IgnoreDefaultLibraryNames=""
++				GenerateDebugInformation="true"
++				SubSystem="2"
++				ImportLibrary="$(OutDir)\$(ProjectName)-$(ApiVersion).lib"
++				TargetMachine="1"
++			/>
++		</Configuration>
++		<Configuration
++			Name="Release|Win32"
++			ConfigurationType="2"
++			InheritedPropertySheets=".\atk-gen-src.vsprops"
++			CharacterSet="2"
++			WholeProgramOptimization="1"
++			>
++			<Tool
++				Name="VCPreBuildEventTool"
++			/>
++			<Tool
++				Name="VCCLCompilerTool"
++				Optimization="2"
++				EnableIntrinsicFunctions="true"
++				PreprocessorDefinitions="$(AtkDefines)"
++				RuntimeLibrary="2"
++				EnableFunctionLevelLinking="true"
++				UsePrecompiledHeader="0"
++				WarningLevel="3"
++				DebugInformationFormat="3"
++			/>
++			<Tool
++				Name="VCLinkerTool"
++				OutputFile="$(OutDir)\$(AtkDllPrefix)$(ProjectName)$(AtkDllSuffix).dll"
++				LinkIncremental="1"
++				IgnoreDefaultLibraryNames=""
++				GenerateDebugInformation="true"
++				SubSystem="2"
++				OptimizeReferences="2"
++				EnableCOMDATFolding="2"
++				ImportLibrary="$(OutDir)\$(ProjectName)-$(ApiVersion).lib"
++				TargetMachine="1"
++			/>
++		</Configuration>
++		<Configuration
++			Name="Debug|x64"
++			InheritedPropertySheets=".\atk-gen-src.vsprops"
++			ConfigurationType="2"
++			CharacterSet="2"
++			>
++			<Tool
++				Name="VCPreBuildEventTool"
++			/>
++			<Tool
++				Name="VCCLCompilerTool"
++				Optimization="0"
++				PreprocessorDefinitions="_DEBUG;$(AtkDefines)"
++				MinimalRebuild="true"
++				BasicRuntimeChecks="3"
++				RuntimeLibrary="3"
++				UsePrecompiledHeader="0"
++				WarningLevel="3"
++				DebugInformationFormat="3"
++			/>
++			<Tool
++				Name="VCLinkerTool"
++				AdditionalDependencies=""
++				OutputFile="$(OutDir)\$(AtkDllPrefix)$(ProjectName)$(AtkDllSuffix).dll"
++				LinkIncremental="2"
++				GenerateDebugInformation="true"
++				SubSystem="2"
++				ImportLibrary="$(TargetDir)$(ProjectName)-$(ApiVersion).lib"
++				TargetMachine="17"
++			/>
++		</Configuration>
++		<Configuration
++			Name="Release|x64"
++			InheritedPropertySheets=".\atk-gen-src.vsprops"
++			ConfigurationType="2"
++			CharacterSet="2"
++			>
++			<Tool
++				Name="VCPreBuildEventTool"
++			/>
++			<Tool
++				Name="VCCLCompilerTool"
++				PreprocessorDefinitions="$(AtkDefines)"
++				RuntimeLibrary="2"
++				UsePrecompiledHeader="0"
++				WarningLevel="3"
++				DebugInformationFormat="3"
++			/>
++			<Tool
++				Name="VCLinkerTool"
++				AdditionalDependencies=""
++				OutputFile="$(OutDir)\$(AtkDllPrefix)$(ProjectName)$(AtkDllSuffix).dll"
++				LinkIncremental="2"
++				GenerateDebugInformation="true"
++				SubSystem="2"
++				OptimizeReferences="2"
++				EnableCOMDATFolding="2"
++				ImportLibrary="$(TargetDir)$(ProjectName)-$(ApiVersion).lib"
++				TargetMachine="17"
++			/>
++		</Configuration>
++	</Configurations>
++	<References>
++	</References>
++	<Files>
++		<Filter
++			Name="Sources"
++			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
++			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
++			>
++#include "atk.sourcefiles"
++		</Filter>
++		<Filter
++			Name="Headers"
++			Filter="h;hpp;hxx;hm;inl;inc;xsd"
++			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
++			>
++		</Filter>
++		<Filter
++			Name="Resource Files"
++			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
++			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
++			>
++			<File RelativePath="..\..\config.h.win32">
++				<FileConfiguration Name="Debug|Win32">
++					<Tool
++						Name="VCCustomBuildTool"
++						Description="Copying config.h from config.h.win32..."
++						CommandLine="$(GenConfigH)"
++						Outputs="..\..\config.h"
++					/>
++				</FileConfiguration>
++				<FileConfiguration Name="Release|Win32">
++					<Tool
++						Name="VCCustomBuildTool"
++						Description="Copying config.h from config.h.win32..."
++						CommandLine="$(GenConfigH)"
++						Outputs="..\..\config.h"
++					/>
++				</FileConfiguration>
++				<FileConfiguration Name="Debug|x64">
++					<Tool
++						Name="VCCustomBuildTool"
++						Description="Copying config.h from config.h.win32..."
++						CommandLine="$(GenConfigH)"
++						Outputs="..\..\config.h"
++					/>
++				</FileConfiguration>
++				<FileConfiguration Name="Release|x64">
++					<Tool
++						Name="VCCustomBuildTool"
++						Description="Copying config.h from config.h.win32..."
++						CommandLine="$(GenConfigH)"
++						Outputs="..\..\config.h"
++					/>
++				</FileConfiguration>
++			</File>
++			<File RelativePath="..\..\atk\atkmarshal.list">
++				<FileConfiguration Name="Debug|Win32">
++					<Tool
++						Name="VCCustomBuildTool"
++						Description="Generating Marshalling Sources..."
++						CommandLine="$(GenMarshalSrc)"
++						Outputs="..\..\atk\atkmarshal.h;..\..\atk\atkmarshal.c"
++					/>
++				</FileConfiguration>
++				<FileConfiguration Name="Release|Win32">
++					<Tool
++						Name="VCCustomBuildTool"
++						Description="Generating Marshalling Sources..."
++						CommandLine="$(GenMarshalSrc)"
++						Outputs="..\..\atk\atkmarshal.h;..\..\atk\atkmarshal.c"
++					/>
++				</FileConfiguration>
++				<FileConfiguration Name="Debug|x64">
++					<Tool
++						Name="VCCustomBuildTool"
++						Description="Generating Marshalling Sources..."
++						CommandLine="$(GenMarshalSrcX64)"
++						Outputs="..\..\atk\atkmarshal.h;..\..\atk\atkmarshal.c"
++					/>
++				</FileConfiguration>
++				<FileConfiguration Name="Release|x64">
++					<Tool
++						Name="VCCustomBuildTool"
++						Description="Generating Marshalling Sources..."
++						CommandLine="$(GenMarshalSrcX64)"
++						Outputs="..\..\atk\atkmarshal.h;..\..\atk\atkmarshal.c"
++					/>
++				</FileConfiguration>
++			</File>
++			<File RelativePath="..\..\atk\atk.rc" />
++		</Filter>
++	</Files>
++	<Globals>
++	</Globals>
++</VisualStudioProject>
