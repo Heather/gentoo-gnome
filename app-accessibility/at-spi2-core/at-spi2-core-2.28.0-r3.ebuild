@@ -4,7 +4,7 @@
 EAPI=6
 GNOME2_LA_PUNT="yes"
 
-inherit eutils gnome2 multilib-minimal autotools
+inherit eutils gnome2 multilib-minimal meson
 
 DESCRIPTION="D-Bus accessibility specifications and registration daemon"
 HOMEPAGE="https://wiki.gnome.org/Accessibility"
@@ -42,19 +42,18 @@ PATCHES=(
 	"${FILESDIR}/${PN}-2.0.2-disable-teamspaces-test.patch"
 )
 
-src_prepare() {
-	eapply "${FILESDIR}"/autotools.patch
-	eautoreconf
-	gnome2_src_prepare
+meson_use_enable() {
+	echo "-Denable-${2:-${1}}=$(usex ${1} 'yes' 'no')"
 }
 
 multilib_src_configure() {
-	# xevie is deprecated/broken since xorg-1.6/1.7
-	ECONF_SOURCE=${S} \
-	gnome2_src_configure \
-		--disable-xevie \
-		$(multilib_native_use_enable introspection) \
-		$(use_enable X x11)
+	local emesonargs=(
+		-Denable-xevie=false
+		$(meson_use_enable introspection)
+		$(meson_use_enable X x11)
+	)
+
+	meson_src_configure
 
 	# work-around gtk-doc out-of-source brokedness
 	if multilib_is_native_abi; then
@@ -62,5 +61,25 @@ multilib_src_configure() {
 	fi
 }
 
-multilib_src_compile() { gnome2_src_compile; }
-multilib_src_install() { gnome2_src_install; }
+multilib_src_compile() {
+	eninja
+}
+
+multilib_src_install() {
+	DESTDIR="${D}" eninja install
+}
+
+# weird hacks (needs for multilib support)
+pkg_postinst() {
+	if [ -f /usr/lib64/pkgconfig/atspi-2.pc ]; then
+		if [ -f /usr/lib32/libatspi.so.0 ]; then
+			cp -f /usr/lib64/pkgconfig/atspi-2.pc /usr/lib32/pkgconfig/atspi-2.pc
+			sed -i -e 's@lib64@lib32@g' /usr/lib32/pkgconfig/atspi-2.pc
+		fi
+	fi
+	if [ -f /usr/lib32/libatspi.so.0 ]; then
+		if [ ! -f /usr/lib32/libatspi.so ]; then
+			ln /usr/lib32/libatspi.so.0 /usr/lib32/libatspi.so
+		fi
+	fi
+}

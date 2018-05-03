@@ -1,8 +1,8 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit gnome2 multilib-minimal autotools
+inherit gnome2 multilib-minimal
 
 DESCRIPTION="GTK+ & GNOME Accessibility Toolkit"
 HOMEPAGE="https://wiki.gnome.org/Accessibility"
@@ -24,8 +24,6 @@ DEPEND="${RDEPEND}
 "
 
 src_prepare() {
-	eapply "${FILESDIR}"/autotools.patch
-	eautoreconf
 	gnome2_src_prepare
 
 	if ! use test; then
@@ -39,8 +37,14 @@ src_prepare() {
 }
 
 multilib_src_configure() {
+#	ECONF_SOURCE=${S} \
 	gnome2_src_configure \
 		$(multilib_native_use_enable introspection)
+
+	# work-around gtk-doc out-of-source brokedness
+#	if multilib_is_native_abi; then
+#		ln -s "${S}"/docs/html docs/html || die
+#	fi
 }
 
 multilib_src_install() {
