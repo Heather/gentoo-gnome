@@ -4,7 +4,7 @@
 EAPI=6
 GNOME2_LA_PUNT="yes"
 
-inherit eutils gnome2 multilib-minimal autotools
+inherit eutils gnome2 meson multilib-minimal
 
 DESCRIPTION="D-Bus accessibility specifications and registration daemon"
 HOMEPAGE="https://wiki.gnome.org/Accessibility"
@@ -42,25 +42,19 @@ PATCHES=(
 	"${FILESDIR}/${PN}-2.0.2-disable-teamspaces-test.patch"
 )
 
-src_prepare() {
-	eapply "${FILESDIR}"/autotools.patch
-	eautoreconf
-	gnome2_src_prepare
+meson_use_enable() {
+	echo "-Denable-${2:-${1}}=$(usex ${1} 'yes' 'no')"
 }
 
 multilib_src_configure() {
-	# xevie is deprecated/broken since xorg-1.6/1.7
-	ECONF_SOURCE=${S} \
-	gnome2_src_configure \
-		--disable-xevie \
-		$(multilib_native_use_enable introspection) \
-		$(use_enable X x11)
+	local emesonargs=(
+		-Denable-xevie=false
+		$(meson_use_enable introspection)
+		$(meson_use_enable X x11)
+	)
 
-	# work-around gtk-doc out-of-source brokedness
-	if multilib_is_native_abi; then
-		ln -s "${S}"/doc/libatspi/html doc/libatspi/html || die
-	fi
+	meson_src_configure
 }
 
-multilib_src_compile() { gnome2_src_compile; }
-multilib_src_install() { gnome2_src_install; }
+multilib_src_compile() { meson_src_compile; }
+multilib_src_install() { meson_src_install; }
