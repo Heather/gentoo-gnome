@@ -24,6 +24,7 @@ RDEPEND="
 	>=dev-libs/libxml2-2.9.1-r4:2[${MULTILIB_USEDEP}]
 	>=dev-libs/libcroco-0.6.8-r1[${MULTILIB_USEDEP}]
 	>=x11-libs/gdk-pixbuf-2.30.7:2[introspection?,${MULTILIB_USEDEP}]
+        virtual/rust[${MULTILIB_USEDEP}]
 	introspection? ( >=dev-libs/gobject-introspection-0.10.8:= )
 	tools? ( >=x11-libs/gtk+-3.10.0:3 )
 "
@@ -32,13 +33,20 @@ DEPEND="${RDEPEND}
 	dev-libs/vala-common
 	>=dev-util/gtk-doc-am-1.13
 	>=virtual/pkgconfig-0-r1[${MULTILIB_USEDEP}]
+        dev-util/cargo
 	vala? ( $(vala_depend) )
 "
 # >=gtk-doc-am-1.13, gobject-introspection-common, vala-common needed by eautoreconf
 
+# Rust does not know the *-pc-* variants of target triples, but these ones.
+CHOST_amd64=x86_64-unknown-linux-gnu
+CHOST_x86=i686-unknown-linux-gnu
+CHOST_arm64=aarch64-unknown-linux-gnu
+
 src_prepare() {
 	# https://bugzilla.gnome.org/show_bug.cgi?id=653323
 	eapply "${FILESDIR}/${PN}-2.40.12-gtk-optional.patch"
+	eapply "${FILESDIR}/${PN}-2.42.2-dladdr-libdl.patch"
 
 	eautoreconf
 
@@ -57,7 +65,9 @@ multilib_src_configure() {
 	# --disable-tools even when USE=tools; the tools/ subdirectory is useful
 	# only for librsvg developers
 	ECONF_SOURCE=${S} \
+	cross_compiling=yes \
 	gnome2_src_configure \
+		--build=${CHOST_default} \
 		--disable-static \
 		--disable-tools \
 		$(multilib_native_use_enable introspection) \
