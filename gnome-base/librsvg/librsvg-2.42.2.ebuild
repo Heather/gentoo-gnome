@@ -44,6 +44,8 @@ CHOST_x86=i686-unknown-linux-gnu
 CHOST_arm64=aarch64-unknown-linux-gnu
 
 src_prepare() {
+	local build_dir
+
 	# https://bugzilla.gnome.org/show_bug.cgi?id=653323
 	eapply "${FILESDIR}/${PN}-2.40.12-gtk-optional.patch"
 	eapply "${FILESDIR}/${PN}-2.42.2-dladdr-libdl.patch"
@@ -52,6 +54,14 @@ src_prepare() {
 
 	use vala && vala_src_prepare
 	gnome2_src_prepare
+
+	# Work around issue where vala file is expected in local
+	# directory instead of source directory.
+	for v in $(multilib_get_enabled_abi_pairs); do
+		build_dir="${S%%/}-${v}"
+		mkdir -p "${build_dir}"
+		cp -p "${S}/Rsvg-2.0-custom.vala" "${build_dir}"|| die
+	done
 }
 
 multilib_src_configure() {
