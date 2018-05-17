@@ -3,7 +3,7 @@
 
 EAPI=6
 
-inherit gnome2-utils git-r3 cmake-utils
+inherit gnome2-utils git-r3 meson
 
 DESCRIPTION="Elementary icon theme is designed to be smooth, sexy, clear, and efficient"
 HOMEPAGE="https://launchpad.net/elementaryicons"
