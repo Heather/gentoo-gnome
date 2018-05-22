@@ -1,6 +1,9 @@
 #needs for gjs
 dev-lang/spidermonkey
 
+#needs for gvfs
+sys-auth/polkit
+
 # Gnome Team <gnome@gentoo.org> (19 sep 2016)
 # Gnome 3.22 mask
 >=app-accessibility/at-spi2-atk-2.21

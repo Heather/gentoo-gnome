@@ -46,7 +46,7 @@ RDEPEND="
 	mtp? ( >=media-libs/libmtp-1.1.12 )
 	nfs? ( >=net-fs/libnfs-1.9.7 )
 	policykit? (
-		sys-auth/polkit
+		>=sys-auth/polkit-0.114
 		sys-libs/libcap )
 	samba? ( >=net-fs/samba-4.5.10[client] )
 	>=sys-apps/systemd-206:0=
