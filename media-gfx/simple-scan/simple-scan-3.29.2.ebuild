@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -7,8 +7,7 @@ inherit gnome2 vala versionator meson
 DESCRIPTION="Simple document scanning utility"
 HOMEPAGE="https://launchpad.net/simple-scan"
 
-#MY_PV=$(get_version_component_range 1-2)
-SRC_URI="https://git.gnome.org/browse/${PN}/snapshot/${P}.tar.xz"
+MY_PV=$(get_version_component_range 1-2)
 
 LICENSE="GPL-3"
 SLOT="0"
