@@ -1,0 +1,23 @@
+diff -ur librsvg-2.42.2.orig/configure.ac librsvg-2.42.2/configure.ac
+--- librsvg-2.42.2.orig/configure.ac	2018-01-23 21:21:06.000000000 +0100
++++ librsvg-2.42.2/configure.ac	2018-05-08 20:40:08.990034003 +0200
+@@ -138,6 +138,9 @@
+ 
+ AC_CHECK_FUNCS(strtok_r)
+ 
++AC_CHECK_LIB(c, dladdr, LIBDL="", [AC_CHECK_LIB(dl, dladdr, LIBDL="-ldl")])
++AC_SUBST(LIBDL)
++
+ # ===========================================================================
+ # GTK
+ # ===========================================================================
+--- librsvg-2.42.2.orig/Makefile.am	2018-05-11 00:24:02.424962390 +0200
++++ librsvg-2.42.2/Makefile.am	2018-05-11 00:22:55.024962390 +0200
+@@ -169,6 +169,7 @@
+ librsvg_@RSVG_API_MAJOR_VERSION@_la_LIBADD = \
+ 	$(LIBRSVG_LIBS) 	\
+ 	$(LIBM)			\
++	$(LIBDL)		\
+ 	$(RUST_LIB)
+ 
+ librsvgincdir = $(includedir)/librsvg-$(RSVG_API_VERSION)/librsvg
