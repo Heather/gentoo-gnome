@@ -16,7 +16,7 @@ inherit autotools bash-completion-r1 eutils flag-o-matic gnome2 libtool linux-in
 
 DESCRIPTION="The GLib library of C routines"
 HOMEPAGE="http://www.gtk.org/"
-SRC_URI="https://download.gnome.org/sources/glib/2.56/glib-${PV}.tar.xz
+SRC_URI="https://download.gnome.org/sources/glib/2.57/glib-${PV}.tar.xz
 	https://pkgconfig.freedesktop.org/releases/pkg-config-0.28.tar.gz" # pkg.m4 for eautoreconf
 
 LICENSE="LGPL-2+"
