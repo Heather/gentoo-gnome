@@ -93,7 +93,6 @@ src_configure() {
 		--enable-man-pages \
 		--disable-gtk-doc \
 		--disable-examples \
-		--with-mozjs=mozjs185 \
 		$(use_enable elogind libelogind) \
 		$(use_enable introspection) \
 		$(use_enable nls) \
