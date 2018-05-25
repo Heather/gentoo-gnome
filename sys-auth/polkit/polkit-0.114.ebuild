@@ -17,11 +17,9 @@ IUSE="elogind examples gtk +introspection jit kde nls pam selinux systemd test"
 REQUIRED_USE="?? ( elogind systemd )"
 
 CDEPEND="
-	dev-lang/spidermonkey:0/mozjs185[-debug]
 	dev-libs/glib:2
 	dev-libs/expat
 	elogind? ( sys-auth/elogind )
-	introspection? ( dev-libs/gobject-introspection )
 	pam? (
 		sys-auth/pambase
 		virtual/pam
@@ -94,7 +92,6 @@ src_configure() {
 		--enable-man-pages \
 		--disable-gtk-doc \
 		--disable-examples \
-		--with-mozjs=mozjs185 \
 		$(use_enable elogind libelogind) \
 		$(use_enable introspection) \
 		$(use_enable nls) \
