@@ -17,7 +17,6 @@ IUSE="elogind examples gtk +introspection jit kde nls pam selinux systemd test"
 REQUIRED_USE="?? ( elogind systemd )"
 
 CDEPEND="
-	dev-lang/spidermonkey:0/mozjs185[-debug]
 	dev-libs/glib:2
 	dev-libs/expat
 	elogind? ( sys-auth/elogind )
