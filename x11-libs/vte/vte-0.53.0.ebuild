@@ -17,8 +17,6 @@ IUSE="+crypt debug glade +introspection vala"
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux ~x64-solaris ~x86-solaris"
 REQUIRED_USE="vala? ( introspection )"
 
-SRC_URI="https://git.gnome.org/browse/vte/snapshot/${P}.tar.xz"
-
 RDEPEND="
 	>=dev-libs/glib-2.40:2
 	>=dev-libs/libpcre2-10.21
