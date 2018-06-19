@@ -10,7 +10,7 @@ HOMEPAGE="https://abiword.github.io/enchant/"
 SRC_URI="https://github.com/AbiWord/enchant/releases/download/${PN}-${MY_PV}/${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
-SLOT="0"
+SLOT="1"
 KEYWORDS="alpha amd64 arm ~arm64 hppa ia64 ~mips ppc ppc64 ~sh sparc x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~x86-solaris"
 
 IUSE="aspell +hunspell static-libs test"
@@ -53,4 +53,6 @@ src_configure() {
 src_install() {
 	default
 	find "${D}" -name '*.la' -delete || die
+	#this conflicts with enchant-2
+	rm "${D}/usr/share/enchant/enchant.ordering" || die
 }
