@@ -18,6 +18,7 @@ REQUIRED_USE="|| ( hunspell aspell )"
 
 # FIXME: depends on unittest++ but through pkgconfig which is a Debian hack, bug #629742
 COMMON_DEPENDS="
+	!app-text/enchant:0
 	>=dev-libs/glib-2.6:2
 	aspell? ( app-text/aspell )
 	hunspell? ( >=app-text/hunspell-1.2.1:0= )"
