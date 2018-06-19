@@ -1,9 +1,8 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
-inherit autotools gnome2
+inherit gnome2 meson
 
 DESCRIPTION="The Gnome System Monitor"
 HOMEPAGE="https://help.gnome.org/users/gnome-system-monitor/"
@@ -33,18 +32,16 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig
 "
 
-src_prepare() {
-	# fixed upstream
-	#eapply "${FILESDIR}"/gcc-fix.patch
-
-	eautoreconf
-	gnome2_src_prepare
+meson_use_enable() {
+	echo "-Denable-${2:-${1}}=$(usex ${1} 'yes' 'no')"
 }
 
 src_configure() {
-	# XXX: appdata is deprecated by appstream-glib, upstream must upgrade
-	gnome2_src_configure \
-		$(use_enable systemd) \
-		$(use_enable X wnck) \
-		APPDATA_VALIDATE="$(type -P true)"
+	local emesonargs=(
+		-Denable-xevie=false
+		$(meson_use_enable systemd)
+		$(meson_use_enable X wnck)
+	)
+
+	meson_src_configure
 }
