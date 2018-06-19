@@ -4,7 +4,7 @@
 EAPI=6
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2 multilib-minimal
+inherit gnome2 meson multilib-minimal
 
 DESCRIPTION="Gtk module for bridging AT-SPI to Atk"
 HOMEPAGE="https://wiki.gnome.org/Accessibility"
@@ -15,8 +15,8 @@ KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x8
 IUSE="test"
 
 COMMON_DEPEND="
-	>=app-accessibility/at-spi2-core-2.28.0-r3[${MULTILIB_USEDEP}]
-	>=dev-libs/atk-2.25.2[${MULTILIB_USEDEP}]
+	>=app-accessibility/at-spi2-core-2.29.1[${MULTILIB_USEDEP}]
+	>=dev-libs/atk-2.29.1[${MULTILIB_USEDEP}]
 	>=dev-libs/glib-2.32:2[${MULTILIB_USEDEP}]
 	>=sys-apps/dbus-1.5[${MULTILIB_USEDEP}]
 "
@@ -35,14 +35,17 @@ src_prepare() {
 	gnome2_src_prepare
 }
 
+meson_use_enable() {
+	echo "-Denable-${2:-${1}}=$(usex ${1} 'yes' 'no')"
+}
+
 multilib_src_configure() {
-	ECONF_SOURCE=${S} \
-	gnome2_src_configure --enable-p2p $(use_with test tests)
+	local emesonargs=(
+		$(meson_use_enable test tests)
+	)
+
+	meson_src_configure
 }
 
-multilib_src_test() {
-	emake check TESTS_ENVIRONMENT="dbus-run-session"
-}
-
-multilib_src_compile() { gnome2_src_compile; }
-multilib_src_install() { gnome2_src_install; }
+multilib_src_compile() { meson_src_compile; }
+multilib_src_install() { meson_src_install; }
