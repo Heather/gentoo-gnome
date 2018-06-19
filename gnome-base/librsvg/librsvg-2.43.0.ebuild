@@ -46,10 +46,6 @@ CHOST_arm64=aarch64-unknown-linux-gnu
 src_prepare() {
 	local build_dir
 
-	# https://bugzilla.gnome.org/show_bug.cgi?id=653323
-	eapply "${FILESDIR}/${PN}-2.40.12-gtk-optional.patch"
-	eapply "${FILESDIR}/${PN}-2.42.2-dladdr-libdl.patch"
-
 	eautoreconf
 
 	use vala && vala_src_prepare
