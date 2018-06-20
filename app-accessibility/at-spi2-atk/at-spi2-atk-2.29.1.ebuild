@@ -12,7 +12,7 @@ HOMEPAGE="https://wiki.gnome.org/Accessibility"
 LICENSE="LGPL-2+"
 SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux ~x64-macos ~x86-macos"
-IUSE="test"
+IUSE=""
 
 COMMON_DEPEND="
 	>=app-accessibility/at-spi2-core-2.29.1[${MULTILIB_USEDEP}]
@@ -35,15 +35,7 @@ src_prepare() {
 	gnome2_src_prepare
 }
 
-meson_use_enable() {
-	echo "-Denable-${2:-${1}}=$(usex ${1} 'yes' 'no')"
-}
-
 multilib_src_configure() {
-	local emesonargs=(
-		$(meson_use_enable test tests)
-	)
-
 	meson_src_configure
 }
 

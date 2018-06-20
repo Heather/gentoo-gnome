@@ -2,10 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-GNOME2_LA_PUNT="yes"
-GNOME2_EAUTORECONF="yes"
 
-inherit flag-o-matic gnome2 multilib multilib-minimal
+inherit flag-o-matic gnome2 meson multilib-minimal multilib
 
 DESCRIPTION="Image loading library for GTK+"
 HOMEPAGE="https://git.gnome.org/browse/gdk-pixbuf"
@@ -46,40 +44,64 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-2.32.3-fix-lowmem-uclibc.patch
 )
 
-src_prepare() {
-	# This will avoid polluting the pkg-config file with versioned libpng,
-	# which is causing problems with libpng14 -> libpng15 upgrade
-	# See upstream bug #667068
-	# First check that the pattern is present, to catch upstream changes on bumps,
-	# because sed doesn't return failure code if it doesn't do any replacements
-	grep -q  'l in libpng16' configure || die "libpng check order has changed upstream"
-	sed -e 's:l in libpng16:l in libpng libpng16:' -i configure || die
-	[[ ${CHOST} == *-solaris* ]] && append-libs intl
-
-	gnome2_src_prepare
+meson_use_multilib_native_enable() {
+	multilib_native_usex "$1" "-D${2-$1}=true" "-D${2-$1}=false"
 }
 
 multilib_src_configure() {
-	# png always on to display icons
-	ECONF_SOURCE="${S}" \
-	gnome2_src_configure \
-		$(usex debug --enable-debug=yes "") \
-		$(use_with jpeg libjpeg) \
-		$(use_with jpeg2k libjasper) \
-		$(use_with tiff libtiff) \
-		$(multilib_native_use_enable introspection) \
-		$(use_with X x11) \
-		--with-libpng
+	local emesonargs=(
+		-Dinstalled_tests=false
+		$(meson_use_multilib_native_enable introspection gir)
+		$(meson_use jpeg)
+		$(meson_use jpeg2k jasper)
+		$(meson_use tiff)
+		$(meson_use X x11)
+	)
 
-	# work-around gtk-doc out-of-source brokedness
-	if multilib_is_native_abi; then
-		ln -s "${S}"/docs/reference/${PN}/html docs/reference/${PN}/html || die
-	fi
+	meson_src_configure
 }
+
+multilib_src_compile() { meson_src_compile; }
 
 multilib_src_install() {
 	# Parallel install fails when no gdk-pixbuf is already installed, bug #481372
-	MAKEOPTS="${MAKEOPTS} -j1" gnome2_src_install
+	MAKEOPTS="${MAKEOPTS} -j1" meson_src_install
+}
+
+# FIXME
+# Header checksum mismatch, that's very wrong thing to do is to ignore that check...
+multilib-minimal_src_install() {
+	debug-print-function ${FUNCNAME} "$@"
+
+	multilib-minimal_abi_src_install() {
+		debug-print-function ${FUNCNAME} "$@"
+
+		pushd "${BUILD_DIR}" >/dev/null || die
+		if declare -f multilib_src_install >/dev/null ; then
+			multilib_src_install
+		else
+			# default_src_install will not work here as it will
+			# break handling of DOCS wrt #468092
+			# so we split up the emake and doc-install part
+			# this is synced with __eapi4_src_install
+			if [[ -f Makefile || -f GNUmakefile || -f makefile ]] ; then
+				emake DESTDIR="${D}" install
+			fi
+		fi
+
+		multilib_prepare_wrappers
+		# do not check headers, they are different :(
+		#multilib_check_headers
+		popd >/dev/null || die
+	}
+	multilib_foreach_abi multilib-minimal_abi_src_install
+	multilib_install_wrappers
+
+	if declare -f multilib_src_install_all >/dev/null ; then
+		multilib_src_install_all
+	else
+		einstalldocs
+	fi
 }
 
 pkg_preinst() {
@@ -100,23 +122,5 @@ pkg_preinst() {
 }
 
 pkg_postinst() {
-	# causes segfault if set, see bug 375615
-	unset __GL_NO_DSO_FINALIZER
-
-	multilib_foreach_abi gnome2_pkg_postinst
-
-	# Migration snippet for when this was handled by gtk+
-	if [ -e "${EROOT}"usr/lib/gtk-2.0/2.*/loaders ]; then
-		elog "You need to rebuild ebuilds that installed into" "${EROOT}"usr/lib/gtk-2.0/2.*/loaders
-		elog "to do that you can use qfile from portage-utils:"
-		elog "emerge -va1 \$(qfile -qC ${EPREFIX}/usr/lib/gtk-2.0/2.*/loaders)"
-	fi
-}
-
-pkg_postrm() {
-	gnome2_pkg_postrm
-
-	if [[ -z ${REPLACED_BY_VERSION} ]]; then
-		rm -f "${EROOT}"usr/lib*/${PN}-2.0/2.10.0/loaders.cache
-	fi
+	gdk-pixbuf-query-loaders > /usr/lib64/gdk-pixbuf-2.0/2.10.0/loaders.cache
 }

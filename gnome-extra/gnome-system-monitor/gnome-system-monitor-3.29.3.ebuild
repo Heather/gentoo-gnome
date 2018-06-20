@@ -32,15 +32,10 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig
 "
 
-meson_use_enable() {
-	echo "-Denable-${2:-${1}}=$(usex ${1} 'yes' 'no')"
-}
-
 src_configure() {
 	local emesonargs=(
-		-Denable-xevie=false
-		$(meson_use_enable systemd)
-		$(meson_use_enable X wnck)
+		$(meson_use systemd)
+		$(meson_use X wnck)
 	)
 
 	meson_src_configure
