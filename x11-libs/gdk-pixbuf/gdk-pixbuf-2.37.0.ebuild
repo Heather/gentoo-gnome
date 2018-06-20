@@ -68,7 +68,7 @@ multilib_src_install() {
 	MAKEOPTS="${MAKEOPTS} -j1" meson_src_install
 }
 
-# FIXME
+# FIXME: use MULTILIB_WRAPPED_HEADERS
 # Header checksum mismatch, that's very wrong thing to do is to ignore that check...
 multilib-minimal_src_install() {
 	debug-print-function ${FUNCNAME} "$@"
