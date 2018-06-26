@@ -1,12 +1,13 @@
 # Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 inherit gnome2 meson
 
-DESCRIPTION="A set of backgrounds packaged with the GNOME desktop"
-HOMEPAGE="https://git.gnome.org/browse/gnome-backgrounds"
+DESCRIPTION="A set of backgrounds"
+HOMEPAGE="https://github.com/adapta-project/adapta-backgrounds"
+
+SRC_URI="https://github.com/adapta-project/adapta-backgrounds/archive/${PV}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
