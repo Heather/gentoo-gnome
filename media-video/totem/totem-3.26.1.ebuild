@@ -40,7 +40,7 @@ RDEPEND="
 	>=media-libs/grilo-0.3.0:0.3[playlist]
 	media-plugins/grilo-plugins:0.3
 	>=media-libs/gstreamer-1.6.0:1.0
-	>=media-libs/gst-plugins-base-1.6.0:1.0[X,introspection?,pango]
+	>=media-libs/gst-plugins-base-1.6.0:1.0[introspection?,pango]
 	media-libs/gst-plugins-good:1.0
 	media-plugins/gst-plugins-meta:1.0
 	media-plugins/gst-plugins-taglib:1.0
@@ -60,7 +60,7 @@ RDEPEND="
 		>=dev-python/pygobject-2.90.3:3[${PYTHON_USEDEP}]
 		dev-python/pyxdg[${PYTHON_USEDEP}]
 		dev-python/dbus-python[${PYTHON_USEDEP}]
-		>=x11-libs/gtk+-3.5.2:3[introspection] 
+		>=x11-libs/gtk+-3.5.2:3[introspection]
 		dev-python/pylint )
 	zeitgeist? ( >=gnome-extra/zeitgeist-0.9.12 )
 "
