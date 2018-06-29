@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -72,8 +72,7 @@ DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.50.1
 	sys-devel/gettext
 	virtual/pkgconfig
-	x11-proto/xextproto
-	x11-proto/xproto
+	x11-base/xorg-proto
 
 	dev-libs/gobject-introspection-common
 	gnome-base/gnome-common

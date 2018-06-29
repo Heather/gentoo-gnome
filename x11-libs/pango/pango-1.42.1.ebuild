@@ -32,7 +32,7 @@ DEPEND="${RDEPEND}
 	>=dev-util/gtk-doc-am-1.20
 	virtual/pkgconfig[${MULTILIB_USEDEP}]
 	test? ( media-fonts/cantarell )
-	X? ( >=x11-proto/xproto-7.0.24[${MULTILIB_USEDEP}] )
+	X? ( x11-base/xorg-proto[${MULTILIB_USEDEP}] )
 	!<=sys-devel/autoconf-2.63:2.5
 	>=dev-libs/fribidi-0.19.7[${MULTILIB_USEDEP}]
 "

@@ -51,13 +51,8 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig
 	>=sys-devel/libtool-2
 	X? (
-		>=x11-proto/renderproto-0.11.1-r1[${MULTILIB_USEDEP}]
+		x11-base/xorg-proto[${MULTILIB_USEDEP}]
 	)"
-#[[ ${PV} == *9999* ]] && DEPEND="${DEPEND}
-#	doc? (
-#		>=dev-util/gtk-doc-1.6
-#		~app-text/docbook-xml-dtd-4.2
-#	)"
 
 REQUIRED_USE="
 	gles2? ( !opengl )

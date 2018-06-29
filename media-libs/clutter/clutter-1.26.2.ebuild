@@ -47,7 +47,7 @@ RDEPEND="
 		>=x11-libs/libX11-1.3.1
 		x11-libs/libXext
 		x11-libs/libXdamage
-		x11-proto/inputproto
+		x11-base/xorg-proto
 		>=x11-libs/libXi-1.3
 		>=x11-libs/libXcomposite-0.4 )
 	wayland? (
