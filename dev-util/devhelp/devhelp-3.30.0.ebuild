@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-PYTHON_COMPAT=( python{3_4,3_5,3_6} )
+PYTHON_COMPAT=( python{3_4,3_5,3_6,3_7} )
 
 inherit gnome2 python-single-r1 toolchain-funcs meson
 
@@ -19,7 +19,7 @@ COMMON_DEPEND="
 	>=dev-libs/glib-2.37.3:2[dbus]
 	>=x11-libs/gtk+-3.19.3:3
 	>=net-libs/webkit-gtk-2.20:4
-	>=dev-libs/amtk-4.99.1
+	>=dev-libs/amtk-5.0.0
 "
 RDEPEND="${COMMON_DEPEND}
 	${PYTHON_DEPS}

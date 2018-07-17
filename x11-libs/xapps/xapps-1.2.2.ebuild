@@ -1,9 +1,9 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
-inherit autotools gnome2-utils xdg-utils
+inherit meson gnome2-utils xdg-utils
 
 DESCRIPTION="Cross-desktop libraries and common resources"
 HOMEPAGE="https://github.com/linuxmint/xapps/"
@@ -30,28 +30,6 @@ DEPEND="${RDEPEND}
 	dev-util/gtk-doc
 	dev-util/gtk-doc-am
 "
-
-src_prepare() {
-	xdg_environment_reset
-	default
-	eautoreconf
-}
-
-src_configure() {
-	econf \
-		--enable-gtk-doc \
-		--enable-gtk-doc-html \
-		$(use_enable introspection) \
-		$(use_enable static-libs static)
-}
-
-src_install() {
-	default
-	rm -rf "${ED%/}"/usr/bin || die
-
-	# package provides .pc files
-	find "${D}" -name '*.la' -delete || die
-}
 
 pkg_postinst() {
 	gnome2_icon_cache_update
