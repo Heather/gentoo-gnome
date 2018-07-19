@@ -3,7 +3,7 @@
 
 EAPI=6
 GNOME2_LA_PUNT="yes"
-PYTHON_COMPAT=( python{3_4,3_5,3_6} )
+PYTHON_COMPAT=( python{3_4,3_5,3_6,3_7} )
 
 inherit autotools gnome2 multilib pax-utils python-r1 systemd meson ninja-utils
 if [[ ${PV} = 9999 ]]; then
@@ -44,7 +44,7 @@ COMMON_DEPEND="
 	>=sys-auth/polkit-0.100[introspection]
 	>=x11-libs/libXfixes-5.0
 	x11-libs/libXtst
-	>=x11-wm/mutter-3.29.2[introspection]
+	>=x11-wm/mutter-${PV}[introspection]
 	>=x11-libs/startup-notification-0.11
 	dev-lang/sassc
 
