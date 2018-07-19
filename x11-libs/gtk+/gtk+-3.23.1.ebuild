@@ -7,7 +7,7 @@ GNOME2_LA_PUNT="yes"
 inherit autotools flag-o-matic gnome2 multilib virtualx multilib-minimal
 
 DESCRIPTION="Gimp ToolKit +"
-HOMEPAGE="http://www.gtk.org/"
+HOMEPAGE="https://www.gtk.org/"
 
 LICENSE="LGPL-2+"
 SLOT="3"
@@ -17,8 +17,7 @@ REQUIRED_USE="
 	xinerama? ( X )
 "
 
-#gtk+-3.23.0/gtk/gtkfontchooserwidget.c:63:10: fatal error: language-names.h: No such file or directory
-#KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="~alpha amd64 ~arm ~arm64 ~hppa ia64 ~mips ~ppc ~ppc64 ~s390 ~sh sparc x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 
 # Upstream wants us to do their job:
 # https://bugzilla.gnome.org/show_bug.cgi?id=768662#c1
@@ -28,12 +27,12 @@ RESTRICT="test"
 # bug #????
 COMMON_DEPEND="
 	>=dev-libs/atk-2.15[introspection?,${MULTILIB_USEDEP}]
-	>=dev-libs/glib-2.53.4:2[${MULTILIB_USEDEP}]
+	>=dev-libs/glib-2.49.4:2[${MULTILIB_USEDEP}]
 	media-libs/fontconfig[${MULTILIB_USEDEP}]
-	>=media-libs/libepoxy-1.4[X(+)?,${MULTILIB_USEDEP}]
+	>=media-libs/libepoxy-1.0[X(+)?,${MULTILIB_USEDEP}]
 	>=x11-libs/cairo-1.14[aqua?,glib,svg,X?,${MULTILIB_USEDEP}]
 	>=x11-libs/gdk-pixbuf-2.30:2[introspection?,${MULTILIB_USEDEP}]
-	>=x11-libs/pango-1.41.0[introspection?,${MULTILIB_USEDEP}]
+	>=x11-libs/pango-1.37.3[introspection?,${MULTILIB_USEDEP}]
 	x11-misc/shared-mime-info
 
 	cloudprint? (
@@ -44,7 +43,7 @@ COMMON_DEPEND="
 	introspection? ( >=dev-libs/gobject-introspection-1.39:= )
 	wayland? (
 		>=dev-libs/wayland-1.9.91[${MULTILIB_USEDEP}]
-		>=dev-libs/wayland-protocols-1.7
+		>=dev-libs/wayland-protocols-1.12
 		media-libs/mesa[wayland,${MULTILIB_USEDEP}]
 		>=x11-libs/libxkbcommon-0.2[${MULTILIB_USEDEP}]
 	)
@@ -66,30 +65,26 @@ DEPEND="${COMMON_DEPEND}
 	app-text/docbook-xml-dtd:4.1.2
 	dev-libs/libxslt
 	dev-libs/gobject-introspection-common
+	>=dev-util/gdbus-codegen-2.48
 	>=dev-util/gtk-doc-am-1.20
 	>=sys-devel/gettext-0.19.7[${MULTILIB_USEDEP}]
 	virtual/pkgconfig[${MULTILIB_USEDEP}]
-	X? (
-		x11-base/xorg-proto[${MULTILIB_USEDEP}]
-	)
+	X? ( x11-base/xorg-proto )
 	test? (
 		media-fonts/font-misc-misc
 		media-fonts/font-cursor-misc )
 "
 # gtk+-3.2.2 breaks Alt key handling in <=x11-libs/vte-0.30.1:2.90
 # gtk+-3.3.18 breaks scrolling in <=x11-libs/vte-0.31.0:2.90
-# >=xorg-server-1.11.4 needed for
-#  https://mail.gnome.org/archives/desktop-devel-list/2012-March/msg00024.html
 RDEPEND="${COMMON_DEPEND}
 	>=dev-util/gtk-update-icon-cache-3
 	!<gnome-base/gail-1000
 	!<x11-libs/vte-0.31.0:2.90
-	>=x11-themes/adwaita-icon-theme-3.14
-	X? ( !<x11-base/xorg-server-1.11.4 )
 "
 # librsvg for svg icons (PDEPEND to avoid circular dep), bug #547710
 PDEPEND="
 	gnome-base/librsvg[${MULTILIB_USEDEP}]
+	>=x11-themes/adwaita-icon-theme-3.14
 	vim-syntax? ( app-vim/gtk-syntax )
 "
 
@@ -125,6 +120,9 @@ src_prepare() {
 	# gtk-update-icon-cache is installed by dev-util/gtk-update-icon-cache
 	eapply "${FILESDIR}"/${PN}-3.22.2-update-icon-cache.patch
 
+	# Fix broken autotools logic
+	eapply "${FILESDIR}"/${PN}-3.22.20-libcloudproviders-automagic.patch
+
 	eautoreconf
 	gnome2_src_prepare
 }
@@ -132,6 +130,7 @@ src_prepare() {
 multilib_src_configure() {
 	# need libdir here to avoid a double slash in a path that libtool doesn't
 	# grok so well during install (// between $EPREFIX and usr ...)
+	# cloudprovider is not packaged in Gentoo
 	ECONF_SOURCE=${S} \
 	gnome2_src_configure \
 		$(use_enable aqua quartz-backend) \
@@ -148,8 +147,9 @@ multilib_src_configure() {
 		$(use_enable X xkb) \
 		$(use_enable X xrandr) \
 		$(use_enable xinerama) \
-		--disable-papi \
+		--disable-cloudproviders \
 		--disable-mir-backend \
+		--disable-papi \
 		--enable-man \
 		--with-xml-catalog="${EPREFIX}"/etc/xml/catalog \
 		--libdir="${EPREFIX}"/usr/$(get_libdir) \
