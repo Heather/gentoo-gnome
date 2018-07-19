@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -16,11 +16,12 @@ KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~spa
 IUSE="X +introspection test"
 
 RDEPEND="
-	>=media-libs/harfbuzz-1.2.3:=[glib(+),truetype(+),${MULTILIB_USEDEP}]
+	>=media-libs/harfbuzz-1.4.2:=[glib(+),truetype(+),${MULTILIB_USEDEP}]
 	>=dev-libs/glib-2.34.3:2[${MULTILIB_USEDEP}]
-	>=media-libs/fontconfig-2.10.92:1.0=[${MULTILIB_USEDEP}]
+	>=media-libs/fontconfig-2.12.92:1.0=[${MULTILIB_USEDEP}]
 	>=media-libs/freetype-2.5.0.1:2=[${MULTILIB_USEDEP}]
 	>=x11-libs/cairo-1.12.14-r4:=[X?,${MULTILIB_USEDEP}]
+	>=dev-libs/fribidi-0.19.7[${MULTILIB_USEDEP}]
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5:= )
 	X? (
 		>=x11-libs/libXrender-0.9.8[${MULTILIB_USEDEP}]
@@ -32,9 +33,8 @@ DEPEND="${RDEPEND}
 	>=dev-util/gtk-doc-am-1.20
 	virtual/pkgconfig[${MULTILIB_USEDEP}]
 	test? ( media-fonts/cantarell )
-	X? ( x11-base/xorg-proto[${MULTILIB_USEDEP}] )
+	X? ( x11-base/xorg-proto )
 	!<=sys-devel/autoconf-2.63:2.5
-	>=dev-libs/fribidi-0.19.7[${MULTILIB_USEDEP}]
 "
 
 multilib_src_configure() {
