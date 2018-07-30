@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit gnome2 pax-utils virtualx
+inherit gnome2 pax-utils virtualx flag-o-matic
 
 DESCRIPTION="Javascript bindings for GNOME"
 HOMEPAGE="https://wiki.gnome.org/Projects/Gjs"
@@ -18,7 +18,7 @@ RDEPEND="
 	>=dev-libs/gobject-introspection-1.41.4:=
 
 	sys-libs/readline:0
-	dev-lang/spidermonkey:52
+	dev-lang/spidermonkey:60
 	virtual/libffi
 	cairo? ( x11-libs/cairo[X] )
 	gtk? ( x11-libs/gtk+:3 )
@@ -38,6 +38,7 @@ src_configure() {
 	# FIXME: add systemtap/dtrace support, like in glib:2
 	# FIXME: --enable-systemtap installs files in ${D}/${D} for some reason
 	# XXX: Do NOT enable coverage, completely useless for portage installs
+	append-cxxflags -std=c++14
 	gnome2_src_configure \
 		--disable-systemtap \
 		--disable-dtrace \
