@@ -35,7 +35,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~s
 
 # gdbus-codegen-6.6.6 is ugly compatibility hack
 RDEPEND="
-	>=dev-libs/libpcre-8.13:3[${MULTILIB_USEDEP},static-libs?]
+	>=dev-libs/libpcre-8.31:3[${MULTILIB_USEDEP},static-libs?]
 	>=virtual/libiconv-0-r1[${MULTILIB_USEDEP}]
 	>=virtual/libffi-3.0.13-r1[${MULTILIB_USEDEP}]
 	>=virtual/libintl-0-r2[${MULTILIB_USEDEP}]
