@@ -32,7 +32,7 @@ COMMON_DEPEND="
 	>=media-libs/libepoxy-1.0[X(+)?,${MULTILIB_USEDEP}]
 	>=x11-libs/cairo-1.14[aqua?,glib,svg,X?,${MULTILIB_USEDEP}]
 	>=x11-libs/gdk-pixbuf-2.30:2[introspection?,${MULTILIB_USEDEP}]
-	>=x11-libs/pango-1.37.3[introspection?,${MULTILIB_USEDEP}]
+	>=x11-libs/pango-1.41.0[introspection?,${MULTILIB_USEDEP}]
 	x11-misc/shared-mime-info
 
 	cloudprint? (
