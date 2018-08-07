@@ -120,15 +120,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	# ssh-agent handling must be done at xinitrc.d, bug #220603
-	eapply "${FILESDIR}/${PN}-2.32.0-xinitrc-ssh-agent.patch"
-
-	# Gentoo does not have a fingerprint-auth pam stack
-	eapply "${FILESDIR}/${PN}-3.8.4-fingerprint-auth.patch"
-
-	# Show logo when branding is enabled
-	use branding && eapply "${FILESDIR}/${PN}-3.8.4-logo.patch"
-
 	eautoreconf
 	gnome2_src_prepare
 }
