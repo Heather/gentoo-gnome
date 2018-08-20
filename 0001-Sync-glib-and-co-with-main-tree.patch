@@ -1,0 +1,926 @@
+From 79b4c8b5b58552ee0be37a95ca8cc11a7bbe81b5 Mon Sep 17 00:00:00 2001
+From: Mart Raudsepp <leio@gentoo.org>
+Date: Mon, 20 Aug 2018 10:57:42 +0300
+Subject: [PATCH] Sync glib and co with main tree
+
+Remove ancient stale patches in glib/files
+---
+ .../files/glib-1.2.10-automake-1.13.patch     | 23 -----
+ .../glib/files/glib-1.2.10-automake.patch     | 29 ------
+ .../files/glib-1.2.10-configure-LANG.patch    | 44 ---------
+ .../glib/files/glib-1.2.10-gcc34-fix.patch    | 41 --------
+ dev-libs/glib/files/glib-1.2.10-m4.patch      |  9 --
+ .../glib-2.40.0-external-gdbus-codegen.patch  | 95 -------------------
+ .../files/glib-2.44.1-bionic-nameser.patch    | 15 ---
+ dev-libs/glib/files/glib-2.51.3.patch         | 13 ---
+ ... glib-2.54.3-external-gdbus-codegen.patch} | 55 +++++------
+ ...ib-2.57.2.ebuild => glib-2.57.2-r1.ebuild} | 95 ++++++++++++-------
+ dev-util/gdbus-codegen/Manifest               |  1 +
+ .../files/gdbus-codegen-2.56.1-sitedir.patch  | 54 +++++++++++
+ dev-util/gdbus-codegen/files/setup.py-2.32.4  |  6 ++
+ .../gdbus-codegen/gdbus-codegen-2.57.2.ebuild | 47 +++++++++
+ .../gdbus-codegen/gdbus-codegen-6.6.6.ebuild  | 20 ----
+ dev-util/glib-utils/Manifest                  |  1 +
+ dev-util/glib-utils/glib-utils-2.57.2.ebuild  | 43 +++++++++
+ dev-util/glib-utils/metadata.xml              | 11 +++
+ 18 files changed, 247 insertions(+), 355 deletions(-)
+ delete mode 100644 dev-libs/glib/files/glib-1.2.10-automake-1.13.patch
+ delete mode 100644 dev-libs/glib/files/glib-1.2.10-automake.patch
+ delete mode 100644 dev-libs/glib/files/glib-1.2.10-configure-LANG.patch
+ delete mode 100644 dev-libs/glib/files/glib-1.2.10-gcc34-fix.patch
+ delete mode 100644 dev-libs/glib/files/glib-1.2.10-m4.patch
+ delete mode 100644 dev-libs/glib/files/glib-2.40.0-external-gdbus-codegen.patch
+ delete mode 100644 dev-libs/glib/files/glib-2.44.1-bionic-nameser.patch
+ delete mode 100644 dev-libs/glib/files/glib-2.51.3.patch
+ rename dev-libs/glib/files/{glib-2.50.0-external-gdbus-codegen.patch => glib-2.54.3-external-gdbus-codegen.patch} (61%)
+ rename dev-libs/glib/{glib-2.57.2.ebuild => glib-2.57.2-r1.ebuild} (72%)
+ create mode 100644 dev-util/gdbus-codegen/Manifest
+ create mode 100644 dev-util/gdbus-codegen/files/gdbus-codegen-2.56.1-sitedir.patch
+ create mode 100644 dev-util/gdbus-codegen/files/setup.py-2.32.4
+ create mode 100644 dev-util/gdbus-codegen/gdbus-codegen-2.57.2.ebuild
+ delete mode 100644 dev-util/gdbus-codegen/gdbus-codegen-6.6.6.ebuild
+ create mode 100644 dev-util/glib-utils/Manifest
+ create mode 100644 dev-util/glib-utils/glib-utils-2.57.2.ebuild
+ create mode 100644 dev-util/glib-utils/metadata.xml
+
+diff --git a/dev-libs/glib/files/glib-1.2.10-automake-1.13.patch b/dev-libs/glib/files/glib-1.2.10-automake-1.13.patch
+deleted file mode 100644
+index abca1ed8..00000000
+--- a/dev-libs/glib/files/glib-1.2.10-automake-1.13.patch
++++ /dev/null
+@@ -1,23 +0,0 @@
+-Replace macros deprecated in automake-1.13; fixed upstream in glib-2.36
+-
+-diff --git a/configure.in b/configure.in
+-index e94cc77..d88d834 100644
+---- a/configure.in
+-+++ b/configure.in
+-@@ -60,7 +60,7 @@ PACKAGE=glib
+- AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
+- 
+- # Specify a configuration file
+--AM_CONFIG_HEADER(config.h)
+-+AC_CONFIG_HEADERS(config.h)
+- 
+- AC_DEFINE_UNQUOTED(GLIB_MAJOR_VERSION, $GLIB_MAJOR_VERSION)
+- AC_DEFINE_UNQUOTED(GLIB_MINOR_VERSION, $GLIB_MINOR_VERSION)
+-@@ -151,7 +151,6 @@ AC_DEFINE_UNQUOTED(G_COMPILED_WITH_DEBUGGING, "${enable_debug}")
+- 
+- # Checks for programs.
+- AC_PROG_CC
+--AM_PROG_CC_STDC
+- AC_PROG_INSTALL
+- 
+- changequote(,)dnl
+diff --git a/dev-libs/glib/files/glib-1.2.10-automake.patch b/dev-libs/glib/files/glib-1.2.10-automake.patch
+deleted file mode 100644
+index c4f8fd32..00000000
+--- a/dev-libs/glib/files/glib-1.2.10-automake.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-fix errors with newer automake:
+-
+-gmodule/Makefile.am:44: testgmodule_LDFLAGS must be set with `=' before using `+='
+-
+-Makefile.am:73: BUILT_SOURCES multiply defined in condition TRUE ...
+-Makefile.am:11: ... `BUILT_SOURCES' previously defined here
+-
+---- Makefile.am
+-+++ Makefile.am
+-@@ -70,7 +70,7 @@
+- 
+- CONFIGURE_DEPENDENCIES = acglib.m4		
+- 
+--BUILT_SOURCES = stamp-gc-h #note: not glibconfig.h
+-+BUILT_SOURCES += stamp-gc-h #note: not glibconfig.h
+- glibconfig.h: stamp-gc-h
+- 	@:
+- stamp-gc-h: config.status
+---- gmodule/Makefile.am
+-+++ gmodule/Makefile.am
+-@@ -41,7 +41,7 @@
+- libgplugin_b_la_LIBADD = @G_MODULE_LIBS@  $(libglib)
+- 
+- noinst_PROGRAMS = testgmodule
+--testgmodule_LDFLAGS += @G_MODULE_LDFLAGS@
+-+testgmodule_LDFLAGS = @G_MODULE_LDFLAGS@
+- testgmodule_LDADD = libgmodule.la $(libglib) @G_MODULE_LIBS@
+- 
+- .PHONY: files release
+diff --git a/dev-libs/glib/files/glib-1.2.10-configure-LANG.patch b/dev-libs/glib/files/glib-1.2.10-configure-LANG.patch
+deleted file mode 100644
+index b5e9e82a..00000000
+--- a/dev-libs/glib/files/glib-1.2.10-configure-LANG.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-The LANG vars aren't reset early enough so when sed tries to use [a-zA-Z] in 
+-option parsing, it may break.
+-
+-http://bugs.gentoo.org/133679
+-
+---- configure
+-+++ configure
+-@@ -54,6 +54,19 @@
+- infodir='${prefix}/info'
+- mandir='${prefix}/man'
+- 
+-+# NLS nuisances.
+-+for as_var in \
+-+  LANG LANGUAGE LC_ADDRESS LC_ALL LC_COLLATE LC_CTYPE LC_IDENTIFICATION \
+-+  LC_MEASUREMENT LC_MESSAGES LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER \
+-+  LC_TELEPHONE LC_TIME
+-+do
+-+  if (set +x; test -z "`(eval $as_var=C; export $as_var) 2>&1`"); then
+-+    eval $as_var=C; export $as_var
+-+  else
+-+    unset $as_var
+-+  fi
+-+done
+-+
+- # Initialize some other variables.
+- subdirs=
+- MFLAGS= MAKEFLAGS=
+-@@ -452,16 +463,6 @@
+-   esac
+- done
+- 
+--# NLS nuisances.
+--# Only set these to C if already set.  These must not be set unconditionally
+--# because not all systems understand e.g. LANG=C (notably SCO).
+--# Fixing LC_MESSAGES prevents Solaris sh from translating var values in `set'!
+--# Non-C LC_CTYPE values break the ctype check.
+--if test "${LANG+set}"   = set; then LANG=C;   export LANG;   fi
+--if test "${LC_ALL+set}" = set; then LC_ALL=C; export LC_ALL; fi
+--if test "${LC_MESSAGES+set}" = set; then LC_MESSAGES=C; export LC_MESSAGES; fi
+--if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
+--
+- # confdefs.h avoids OS command line length limits that DEFS can exceed.
+- rm -rf conftest* confdefs.h
+- # AIX cpp loses on an empty file, so make sure it contains at least a newline.
+diff --git a/dev-libs/glib/files/glib-1.2.10-gcc34-fix.patch b/dev-libs/glib/files/glib-1.2.10-gcc34-fix.patch
+deleted file mode 100644
+index 1b896484..00000000
+--- a/dev-libs/glib/files/glib-1.2.10-gcc34-fix.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+---- glib-1.2.10/gstrfuncs.c.orig	2001-02-27 07:00:22.000000000 +0100
+-+++ glib-1.2.10/gstrfuncs.c	2004-03-01 13:19:49.531603760 +0100
+-@@ -867,7 +867,7 @@
+-                   /* beware of positional parameters
+-                    */
+-                 case '$':
+--                  g_warning (G_GNUC_PRETTY_FUNCTION
+-+                  g_warning ("%s%s", G_GNUC_PRETTY_FUNCTION,
+-                              "(): unable to handle positional parameters (%%n$)");
+-                   len += 1024; /* try adding some safety padding */
+-                   break;
+-@@ -1034,7 +1034,7 @@
+-                   /*          n   .   dddddddddddddddddddddddd   E   +-  eeee */
+-                   conv_len += 1 + 1 + MAX (24, spec.precision) + 1 + 1 + 4;
+-                   if (spec.mod_extra_long)
+--                    g_warning (G_GNUC_PRETTY_FUNCTION
+-+                    g_warning ("%s%s", G_GNUC_PRETTY_FUNCTION,
+-                                "(): unable to handle long double, collecting double only");
+- #ifdef HAVE_LONG_DOUBLE
+- #error need to implement special handling for long double
+-@@ -1077,7 +1077,7 @@
+-                   conv_done = TRUE;
+-                   if (spec.mod_long)
+-                     {
+--                      g_warning (G_GNUC_PRETTY_FUNCTION
+-+                      g_warning ("%s%s", G_GNUC_PRETTY_FUNCTION,
+-                                  "(): unable to handle wide char strings");
+-                       len += 1024; /* try adding some safety padding */
+-                     }
+-@@ -1108,9 +1108,8 @@
+-                   conv_len += format - spec_start;
+-                   break;
+-                 default:
+--                  g_warning (G_GNUC_PRETTY_FUNCTION
+--                             "(): unable to handle `%c' while parsing format",
+--                             c);
+-+                  g_warning ("%s(): unable to handle `%c' while parsing format",
+-+                             G_GNUC_PRETTY_FUNCTION, c);
+-                   break;
+-                 }
+-               conv_done |= conv_len > 0;
+diff --git a/dev-libs/glib/files/glib-1.2.10-m4.patch b/dev-libs/glib/files/glib-1.2.10-m4.patch
+deleted file mode 100644
+index f57ecf7c..00000000
+--- a/dev-libs/glib/files/glib-1.2.10-m4.patch
++++ /dev/null
+@@ -1,9 +0,0 @@
+-Fix aclocal warning:
+-/usr/share/aclocal/glib.m4:8: warning: underquoted definition of AM_PATH_GLIB
+---- glib-1.2.10/glib.m4
+-+++ glib-1.2.10/glib.m4
+-@@ -7,3 +7,3 @@
+- dnl
+--AC_DEFUN(AM_PATH_GLIB,
+-+AC_DEFUN([AM_PATH_GLIB],
+- [dnl 
+diff --git a/dev-libs/glib/files/glib-2.40.0-external-gdbus-codegen.patch b/dev-libs/glib/files/glib-2.40.0-external-gdbus-codegen.patch
+deleted file mode 100644
+index 50a9370e..00000000
+--- a/dev-libs/glib/files/glib-2.40.0-external-gdbus-codegen.patch
++++ /dev/null
+@@ -1,95 +0,0 @@
+-diff --git a/configure.ac b/configure.ac
+-index a01e58d..59d4527 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -367,14 +367,14 @@ AC_SUBST(PERL_PATH)
+- # option to specify python interpreter to use; this just sets $PYTHON, so that
+- # we will fallback to reading $PYTHON if --with-python is not given, and
+- # python.m4 will get the expected input
+--AC_ARG_WITH(python,
+--            AS_HELP_STRING([--with-python=PATH],
+--                           [Path to Python interpreter; searches $PATH if only a program name is given; if not given, searches for a few standard names such as "python3" or "python2"]),
+--            [PYTHON="$withval"], [])
+--if test x"$PYTHON" = xyes; then
+--  AC_MSG_ERROR([--with-python option requires a path or program argument])
+--fi
+--AM_PATH_PYTHON(2.5,,PYTHON="/usr/bin/env python2.5")
+-+# AC_ARG_WITH(python,
+-+#             AS_HELP_STRING([--with-python=PATH],
+-+#                            [Path to Python interpreter; searches $PATH if only a program name is given; if not given, searches for a few standard names such as "python3" or "python2"]),
+-+#             [PYTHON="$withval"], [])
+-+# if test x"$PYTHON" = xyes; then
+-+#   AC_MSG_ERROR([--with-python option requires a path or program argument])
+-+# fi
+-+# AM_PATH_PYTHON(2.5,,PYTHON="/usr/bin/env python2.5")
+- 
+- 
+- dnl ***********************
+-@@ -3580,7 +3580,6 @@ gobject/glib-mkenums
+- gobject/tests/Makefile
+- gthread/Makefile
+- gio/Makefile
+--gio/gdbus-2.0/codegen/Makefile
+- gio/gdbus-2.0/codegen/config.py
+- gio/gnetworking.h
+- gio/xdgmime/Makefile
+-diff --git a/docs/reference/gio/Makefile.am b/docs/reference/gio/Makefile.am
+-index 47fdd38..c7eb136 100644
+---- a/docs/reference/gio/Makefile.am
+-+++ b/docs/reference/gio/Makefile.am
+-@@ -157,8 +157,7 @@ man_MANS +=			\
+- 	glib-compile-resources.1	\
+- 	gsettings.1		\
+- 	gresource.1		\
+--	gdbus.1			\
+--	gdbus-codegen.1
+-+	gdbus.1
+- 
+- XSLTPROC_FLAGS = \
+-         --nonet \
+-diff --git a/gio/Makefile.am b/gio/Makefile.am
+-index e993e2f..025ad94 100644
+---- a/gio/Makefile.am
+-+++ b/gio/Makefile.am
+-@@ -1,6 +1,6 @@
+- include $(top_srcdir)/glib.mk
+- 
+--SUBDIRS = gdbus-2.0/codegen
+-+SUBDIRS =
+- 
+- if OS_UNIX
+- SUBDIRS += xdgmime
+-diff --git a/gio/tests/Makefile.am b/gio/tests/Makefile.am
+-index 2c54e59..3cd3c5a 100644
+---- a/gio/tests/Makefile.am
+-+++ b/gio/tests/Makefile.am
+-@@ -437,10 +437,8 @@ gnotification_SOURCES                    = $(gdbus_sessionbus_sources) gnotifica
+- 
+- BUILT_SOURCES += gdbus-test-codegen-generated.c gdbus-test-codegen-generated.h
+- gdbus-test-codegen.o: gdbus-test-codegen-generated.h
+--gdbus-test-codegen-generated.h: test-codegen.xml Makefile $(top_builddir)/gio/gdbus-2.0/codegen/gdbus-codegen
+--	$(AM_V_GEN) UNINSTALLED_GLIB_SRCDIR=$(top_srcdir) \
+--		UNINSTALLED_GLIB_BUILDDIR=$(top_builddir) \
+--		$(PYTHON) $(top_builddir)/gio/gdbus-2.0/codegen/gdbus-codegen \
+-+gdbus-test-codegen-generated.h: test-codegen.xml Makefile
+-+	$(AM_V_GEN) gdbus-codegen \
+- 		--interface-prefix org.project. \
+- 		--generate-c-code gdbus-test-codegen-generated \
+- 		--c-generate-object-manager \
+-diff --git a/gio/tests/gdbus-object-manager-example/Makefile.am b/gio/tests/gdbus-object-manager-example/Makefile.am
+-index d6d1412..62ef706 100644
+---- a/gio/tests/gdbus-object-manager-example/Makefile.am
+-+++ b/gio/tests/gdbus-object-manager-example/Makefile.am
+-@@ -11,10 +11,8 @@ GDBUS_GENERATED = \
+- 	gdbus-example-objectmanager-generated-org.gtk.GDBus.Example.ObjectManager.Cat.xml	\
+- 	$(NULL)
+- 
+--$(GDBUS_GENERATED) : gdbus-example-objectmanager.xml Makefile $(top_builddir)/gio/gdbus-2.0/codegen/gdbus-codegen
+--	$(AM_V_GEN) UNINSTALLED_GLIB_SRCDIR=$(top_srcdir) \
+--		UNINSTALLED_GLIB_BUILDDIR=$(top_builddir) \
+--		$(PYTHON) $(top_builddir)/gio/gdbus-2.0/codegen/gdbus-codegen \
+-+$(GDBUS_GENERATED) : gdbus-example-objectmanager.xml Makefile
+-+	$(AM_V_GEN) gdbus-codegen \
+- 		--interface-prefix org.gtk.GDBus.Example.ObjectManager. \
+- 		--c-namespace Example \
+- 		--c-generate-object-manager \
+diff --git a/dev-libs/glib/files/glib-2.44.1-bionic-nameser.patch b/dev-libs/glib/files/glib-2.44.1-bionic-nameser.patch
+deleted file mode 100644
+index 259b5720..00000000
+--- a/dev-libs/glib/files/glib-2.44.1-bionic-nameser.patch
++++ /dev/null
+@@ -1,15 +0,0 @@
+-https://bugzilla.gnome.org/756477
+-
+-fix build w/newer releases of bionic (android)
+-
+---- a/gio/gthreadedresolver.c
+-+++ b/gio/gthreadedresolver.c
+-@@ -263,7 +263,7 @@ lookup_by_address_finish (GResolver     *resolver,
+- 
+- #if defined(G_OS_UNIX)
+- 
+--#ifdef __BIONIC__
+-+#if defined __BIONIC__ && !defined BIND_4_COMPAT
+- /* Copy from bionic/libc/private/arpa_nameser_compat.h
+-  * and bionic/libc/private/arpa_nameser.h */
+- typedef struct {
+diff --git a/dev-libs/glib/files/glib-2.51.3.patch b/dev-libs/glib/files/glib-2.51.3.patch
+deleted file mode 100644
+index d040fbd0..00000000
+--- a/dev-libs/glib/files/glib-2.51.3.patch
++++ /dev/null
+@@ -1,13 +0,0 @@
+-diff --git a/configure.ac b/configure.ac
+-index 954d86e9e..96cbcee52 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -3446,7 +3446,6 @@ win32/vs10/glib-version-paths.props
+- win32/vs11/Makefile
+- win32/vs12/Makefile
+- win32/vs14/Makefile
+--win32/vs15/Makefile
+- glib/Makefile
+- glib/libcharset/Makefile
+- glib/gnulib/Makefile
+-
+diff --git a/dev-libs/glib/files/glib-2.50.0-external-gdbus-codegen.patch b/dev-libs/glib/files/glib-2.54.3-external-gdbus-codegen.patch
+similarity index 61%
+rename from dev-libs/glib/files/glib-2.50.0-external-gdbus-codegen.patch
+rename to dev-libs/glib/files/glib-2.54.3-external-gdbus-codegen.patch
+index 2c942d55..a27966e0 100644
+--- a/dev-libs/glib/files/glib-2.50.0-external-gdbus-codegen.patch
++++ b/dev-libs/glib/files/glib-2.54.3-external-gdbus-codegen.patch
+@@ -1,31 +1,21 @@
++From 2e47d49bc91d83cd0abea4c1944bfca4336040fa Mon Sep 17 00:00:00 2001
++From: Sobhan Mohammadpour <sobhan@gentoo.org>
++Date: Fri, 23 Feb 2018 15:27:33 +0330
++Subject: [PATCH] glib-2.54.3-external-gdbus-codegen-for-autotools
++
++---
++ configure.ac                                       |  1 -
++ docs/reference/gio/Makefile.am                     |  1 -
++ gio/Makefile.am                                    |  2 +-
++ gio/tests/Makefile.am                              |  6 ++----
++ gio/tests/gdbus-object-manager-example/Makefile.am |  6 ++----
++ 5 files changed, 5 insertions(+), 11 deletions(-)
++
+ diff --git a/configure.ac b/configure.ac
+-index e8e7553..216e59d 100644
++index 0457c90..07166c9 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -385,14 +385,14 @@ AC_SUBST(PERL_PATH)
+- # option to specify python interpreter to use; this just sets $PYTHON, so that
+- # we will fallback to reading $PYTHON if --with-python is not given, and
+- # python.m4 will get the expected input
+--AC_ARG_WITH(python,
+--            AS_HELP_STRING([--with-python=PATH],
+--                           [Path to Python interpreter; searches $PATH if only a program name is given; if not given, searches for a few standard names such as "python3" or "python2"]),
+--            [PYTHON="$withval"], [])
+--if test x"$PYTHON" = xyes; then
+--  AC_MSG_ERROR([--with-python option requires a path or program argument])
+--fi
+--AM_PATH_PYTHON(2.5,,PYTHON="/usr/bin/env python2.5")
+-+# AC_ARG_WITH(python,
+-+#             AS_HELP_STRING([--with-python=PATH],
+-+#                            [Path to Python interpreter; searches $PATH if only a program name is given; if not given, searches for a few standard names such as "python3" or "python2"]),
+-+#             [PYTHON="$withval"], [])
+-+# if test x"$PYTHON" = xyes; then
+-+#   AC_MSG_ERROR([--with-python option requires a path or program argument])
+-+# fi
+-+# AM_PATH_PYTHON(2.5,,PYTHON="/usr/bin/env python2.5")
+- 
+- 
+- dnl ***********************
+-@@ -3453,7 +3453,6 @@ gobject/glib-mkenums
++@@ -3469,7 +3469,6 @@ gobject/glib-mkenums
+  gobject/tests/Makefile
+  gthread/Makefile
+  gio/Makefile
+@@ -46,22 +36,22 @@ index 5741a3e..d38e768 100644
+  	$(NULL)
+  
+ diff --git a/gio/Makefile.am b/gio/Makefile.am
+-index ffe5ee2..929d1b5 100644
++index b2db995..53d7162 100644
+ --- a/gio/Makefile.am
+ +++ b/gio/Makefile.am
+ @@ -1,6 +1,6 @@
+  include $(top_srcdir)/glib.mk
+  
+ -SUBDIRS = gdbus-2.0/codegen
+-+SUBDIRS =
+++SUBDIRS = 
+  
+  if OS_UNIX
+- SUBDIRS += xdgmime
++ if !OS_COCOA
+ diff --git a/gio/tests/Makefile.am b/gio/tests/Makefile.am
+-index 749267b..f2a8c63 100644
++index acc1da4..7c51eab 100644
+ --- a/gio/tests/Makefile.am
+ +++ b/gio/tests/Makefile.am
+-@@ -449,10 +449,8 @@ gnotification_SOURCES                    = $(gdbus_sessionbus_sources) gnotifica
++@@ -460,10 +460,8 @@ gnotification_SOURCES                    = $(gdbus_sessionbus_sources) gnotifica
+  
+  BUILT_SOURCES += gdbus-test-codegen-generated.c gdbus-test-codegen-generated.h
+  gdbus-test-codegen.o: gdbus-test-codegen-generated.h
+@@ -75,7 +65,7 @@ index 749267b..f2a8c63 100644
+  		--generate-c-code gdbus-test-codegen-generated \
+  		--c-generate-object-manager \
+ diff --git a/gio/tests/gdbus-object-manager-example/Makefile.am b/gio/tests/gdbus-object-manager-example/Makefile.am
+-index 1d0464c..0603d9b 100644
++index 1d0464c..f390dca 100644
+ --- a/gio/tests/gdbus-object-manager-example/Makefile.am
+ +++ b/gio/tests/gdbus-object-manager-example/Makefile.am
+ @@ -11,10 +11,8 @@ GDBUS_GENERATED = \
+@@ -91,3 +81,6 @@ index 1d0464c..0603d9b 100644
+  		--interface-prefix org.gtk.GDBus.Example.ObjectManager. \
+  		--c-namespace Example \
+  		--c-generate-object-manager \
++-- 
++2.16.1
++
+diff --git a/dev-libs/glib/glib-2.57.2.ebuild b/dev-libs/glib/glib-2.57.2-r1.ebuild
+similarity index 72%
+rename from dev-libs/glib/glib-2.57.2.ebuild
+rename to dev-libs/glib/glib-2.57.2-r1.ebuild
+index 43b340cc..f18c2acd 100644
+--- a/dev-libs/glib/glib-2.57.2.ebuild
++++ b/dev-libs/glib/glib-2.57.2-r1.ebuild
+@@ -1,41 +1,35 @@
+ # Copyright 1999-2018 Gentoo Foundation
+ # Distributed under the terms of the GNU General Public License v2
+ 
++EAPI=6
++PYTHON_COMPAT=( python{2_7,3_5,3_6,3_7} )
++GNOME2_EAUTORECONF=yes
++
++inherit autotools bash-completion-r1 epunt-cxx flag-o-matic gnome2 libtool linux-info \
++	multilib multilib-minimal pax-utils python-any-r1 toolchain-funcs virtualx
++
+ # Until bug #537330 glib is a reverse dependency of pkgconfig and, then
+ # adding new dependencies end up making stage3 to grow. Every addition needs
+ # then to be think very closely.
+ 
+-EAPI=6
+-PYTHON_COMPAT=( python2_7 python3_{4,5,6} pypy )
+-# Completely useless with or without USE static-libs, people need to use
+-# pkg-config
+-GNOME2_LA_PUNT="yes"
+-
+-inherit autotools bash-completion-r1 eutils flag-o-matic gnome2 libtool linux-info \
+-	multilib multilib-minimal pax-utils python-r1  toolchain-funcs versionator virtualx
+-
+ DESCRIPTION="The GLib library of C routines"
+-HOMEPAGE="http://www.gtk.org/"
+-SRC_URI="https://download.gnome.org/sources/glib/2.57/glib-${PV}.tar.xz
++HOMEPAGE="https://www.gtk.org/"
++SRC_URI="${SRC_URI}
+ 	https://pkgconfig.freedesktop.org/releases/pkg-config-0.28.tar.gz" # pkg.m4 for eautoreconf
+ 
+-LICENSE="LGPL-2+"
++LICENSE="LGPL-2.1+"
+ SLOT="2"
+ IUSE="dbus debug fam kernel_linux +mime selinux static-libs systemtap test utils xattr"
+-REQUIRED_USE="
+-	${PYTHON_REQUIRED_USE}
+-	test? ( ${PYTHON_REQUIRED_USE} )
+-"
+ 
+-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~sparc-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux"
++KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux"
+ 
+ # Added util-linux multilib dependency to have libmount support (which
+ # is always turned on on linux systems, unless explicitly disabled, but
+ # this ebuild does not do that anyway) (bug #599586)
+ 
+-# gdbus-codegen-6.6.6 is ugly compatibility hack
+ RDEPEND="
+-	>=dev-libs/libpcre-8.31:3[${MULTILIB_USEDEP},static-libs?]
++	!<dev-util/gdbus-codegen-${PV}
++	>=dev-libs/libpcre-8.13:3[${MULTILIB_USEDEP},static-libs?]
+ 	>=virtual/libiconv-0-r1[${MULTILIB_USEDEP}]
+ 	>=virtual/libffi-3.0.13-r1[${MULTILIB_USEDEP}]
+ 	>=virtual/libintl-0-r2[${MULTILIB_USEDEP}]
+@@ -44,9 +38,10 @@ RDEPEND="
+ 	selinux? ( >=sys-libs/libselinux-2.2.2-r5[${MULTILIB_USEDEP}] )
+ 	xattr? ( >=sys-apps/attr-2.4.47-r1[${MULTILIB_USEDEP}] )
+ 	fam? ( >=virtual/fam-0-r1[${MULTILIB_USEDEP}] )
+-	${PYTHON_DEPS}
+-	virtual/libelf:0=
+-	>=dev-util/gdbus-codegen-6.6.6
++	utils? (
++		>=dev-util/gdbus-codegen-${PV}
++		virtual/libelf:0=
++	)
+ "
+ DEPEND="${RDEPEND}
+ 	app-text/docbook-xml-dtd:4.1.2
+@@ -54,19 +49,24 @@ DEPEND="${RDEPEND}
+ 	>=sys-devel/gettext-0.11
+ 	>=dev-util/gtk-doc-am-1.20
+ 	systemtap? ( >=dev-util/systemtap-1.3 )
++	${PYTHON_DEPS}
+ 	test? (
+ 		sys-devel/gdb
+-		${PYTHON_DEPS}
++		>=dev-util/gdbus-codegen-${PV}
+ 		>=sys-apps/dbus-1.2.14 )
+ 	!<dev-util/gtk-doc-1.15-r2
+ "
+-PDEPEND="!<gnome-base/gvfs-1.6.4-r990
++# Migration of glib-genmarshal, glib-mkenums and gtester-report to a separate
++# python depending package, which can be buildtime depended in packages that
++# need these tools, without pulling in python at runtime.
++RDEPEND="${RDEPEND}
++	>=dev-util/glib-utils-${PV}"
++PDEPEND="
+ 	dbus? ( gnome-base/dconf )
+ 	mime? ( x11-misc/shared-mime-info )
+ "
+ # shared-mime-info needed for gio/xdgmime, bug #409481
+ # dconf is needed to be able to save settings, bug #498436
+-# Earlier versions of gvfs do not work with glib
+ 
+ MULTILIB_CHOST_TOOLS=(
+ 	/usr/bin/gio-querymodules$(get_exeext)
+@@ -81,6 +81,7 @@ pkg_setup() {
+ 		fi
+ 		linux-info_pkg_setup
+ 	fi
++	python-any-r1_pkg_setup
+ }
+ 
+ src_prepare() {
+@@ -114,11 +115,10 @@ src_prepare() {
+ 		sed -i -e 's/ tests//' {.,gio,glib}/Makefile.am || die
+ 	fi
+ 
+-	# Also needed to prevent cross-compile failures, see bug #267603
+-	eautoreconf
++	# gdbus-codegen is a separate package
++	eapply "${FILESDIR}"/${PN}-2.54.3-external-gdbus-codegen.patch
+ 
+ 	gnome2_src_prepare
+-
+ 	epunt_cxx
+ }
+ 
+@@ -133,6 +133,8 @@ multilib_src_configure() {
+ 		fi
+ 		export LIBFFI_CFLAGS="-I$(echo /usr/$(get_libdir)/libffi-*/include)"
+ 		export LIBFFI_LIBS="-lffi"
++		export PCRE_CFLAGS=" " # test -n "$PCRE_CFLAGS" needs to pass
++		export PCRE_LIBS="-lpcre"
+ 	fi
+ 
+ 	# These configure tests don't work when cross-compiling.
+@@ -166,6 +168,7 @@ multilib_src_configure() {
+ 		$(use_enable systemtap dtrace) \
+ 		$(use_enable systemtap systemtap) \
+ 		$(multilib_native_use_enable utils libelf) \
++		--with-python=${EPYTHON} \
+ 		--disable-compile-warnings \
+ 		--enable-man \
+ 		--with-pcre=system \
+@@ -184,6 +187,7 @@ multilib_src_test() {
+ 	export XDG_DATA_DIRS=/usr/local/share:/usr/share
+ 	export G_DBUS_COOKIE_SHA1_KEYRING_DIR="${T}/temp"
+ 	export LC_TIME=C # bug #411967
++	unset GSETTINGS_BACKEND # bug #596380
+ 	python_setup
+ 
+ 	# Related test is a bit nitpicking
+@@ -201,20 +205,30 @@ multilib_src_test() {
+ }
+ 
+ multilib_src_install() {
+-	gnome2_src_install completiondir="$(get_bashcompdir)"
++	emake DESTDIR="${D}" completiondir="$(get_bashcompdir)" install
+ 	keepdir /usr/$(get_libdir)/gio/modules
+ }
+ 
+ multilib_src_install_all() {
+ 	einstalldocs
+ 
+-	python_replicate_script "${ED}"/usr/bin/gtester-report
++	# These are installed by dev-util/glib-utils
++	# TODO: With patching we might be able to get rid of the python-any deps and removals, and test depend on glib-utils instead; revisit with meson
++	rm "${ED}usr/bin/glib-genmarshal" || die
++	rm "${ED}usr/share/man/man1/glib-genmarshal.1" || die
++	rm "${ED}usr/bin/glib-mkenums" || die
++	rm "${ED}usr/share/man/man1/glib-mkenums.1" || die
++	rm "${ED}usr/bin/gtester-report" || die
++	rm "${ED}usr/share/man/man1/gtester-report.1" || die
+ 
+ 	# Do not install charset.alias even if generated, leave it to libiconv
+-	rm -f "${ED}/usr/lib/charset.alias"
++	rm -f "${ED}/usr/$(get_libdir)/charset.alias"
+ 
+ 	# Don't install gdb python macros, bug 291328
+ 	rm -rf "${ED}/usr/share/gdb/" "${ED}/usr/share/glib-2.0/gdb/"
++
++	# Completely useless with or without USE static-libs, people need to use pkg-config
++	find "${ED}" -name '*.la' -delete || die
+ }
+ 
+ pkg_preinst() {
+@@ -231,7 +245,7 @@ pkg_preinst() {
+ 
+ 	multilib_pkg_preinst() {
+ 		# Make giomodule.cache belong to glib alone
+-		local cache="usr/$(get_libdir)/gio/giomodule.cache"
++		local cache="usr/$(get_libdir)/gio/modules/giomodule.cache"
+ 
+ 		if [[ -e ${EROOT}${cache} ]]; then
+ 			cp "${EROOT}"${cache} "${ED}"/${cache} || die
+@@ -240,7 +254,11 @@ pkg_preinst() {
+ 		fi
+ 	}
+ 
+-	multilib_foreach_abi multilib_pkg_preinst
++	# Don't run the cache ownership when cross-compiling, as it would end up with an empty cache
++	# file due to inability to create it and GIO might not look at any of the modules there
++	if ! tc-is-cross-compiler ; then
++		multilib_foreach_abi multilib_pkg_preinst
++	fi
+ }
+ 
+ pkg_postinst() {
+@@ -253,7 +271,14 @@ pkg_postinst() {
+ 		gnome2_giomodule_cache_update \
+ 			|| die "Update GIO modules cache failed (for ${ABI})"
+ 	}
+-	multilib_foreach_abi multilib_pkg_postinst
++	if ! tc-is-cross-compiler ; then
++		multilib_foreach_abi multilib_pkg_postinst
++	else
++		ewarn "Updating of GIO modules cache skipped due to cross-compilation."
++		ewarn "You might want to run gio-querymodules manually on the target for"
++		ewarn "your final image for performance reasons and re-run it when packages"
++		ewarn "installing GIO modules get upgraded or added to the image."
++	fi
+ }
+ 
+ pkg_postrm() {
+@@ -261,7 +286,7 @@ pkg_postrm() {
+ 
+ 	if [[ -z ${REPLACED_BY_VERSION} ]]; then
+ 		multilib_pkg_postrm() {
+-			rm -f "${EROOT}"usr/$(get_libdir)/gio/giomodule.cache
++			rm -f "${EROOT}"usr/$(get_libdir)/gio/modules/giomodule.cache
+ 		}
+ 		multilib_foreach_abi multilib_pkg_postrm
+ 		rm -f "${EROOT}"usr/share/glib-2.0/schemas/gschemas.compiled
+diff --git a/dev-util/gdbus-codegen/Manifest b/dev-util/gdbus-codegen/Manifest
+new file mode 100644
+index 00000000..c618c287
+--- /dev/null
++++ b/dev-util/gdbus-codegen/Manifest
+@@ -0,0 +1 @@
++DIST glib-2.57.2.tar.xz 4883340 BLAKE2B 3e712347bc13d75155aeae7c7191d8d48d4c39505923645622dc9cba25e5fc73015022b696853d664783ae2f5ff494d69e40d2e68d3fe3dc5d89af84ca462bb0 SHA512 372de80d738063c1ad359435deb095803d92e449abc64d2a8311d217fe0cb517dc12c05193b4618164ec2016ab0f83e4e331aae1488d5585e552bd36e5c8591f
+diff --git a/dev-util/gdbus-codegen/files/gdbus-codegen-2.56.1-sitedir.patch b/dev-util/gdbus-codegen/files/gdbus-codegen-2.56.1-sitedir.patch
+new file mode 100644
+index 00000000..30f0d7dc
+--- /dev/null
++++ b/dev-util/gdbus-codegen/files/gdbus-codegen-2.56.1-sitedir.patch
+@@ -0,0 +1,54 @@
++From 9eaaa76e2e36e46a43dbd419724696fd7ff8ea64 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?R=C3=A9mi=20Cardona?= <remi@gentoo.org>
++Date: Sat, 14 Apr 2018 09:55:22 +0200
++Subject: [PATCH 1/2] gdbus-codegen-2.54.3-sitedir.patch
++
++---
++ gio/gdbus-2.0/codegen/gdbus-codegen.in | 28 --------------------------
++ 1 file changed, 28 deletions(-)
++
++diff --git a/gio/gdbus-2.0/codegen/gdbus-codegen.in b/gio/gdbus-2.0/codegen/gdbus-codegen.in
++index 67d367543..190afa28f 100755
++--- a/gdbus-codegen.in
+++++ b/gdbus-codegen.in
++@@ -20,36 +20,8 @@
++ # Author: David Zeuthen <davidz@redhat.com>
++ 
++ 
++-import os
++ import sys
++ 
++-srcdir = os.getenv('UNINSTALLED_GLIB_SRCDIR', None)
++-filedir = os.path.dirname(__file__)
++-
++-if srcdir is not None:
++-    path = os.path.join(srcdir, 'gio', 'gdbus-2.0')
++-elif os.path.basename(filedir) == 'bin':
++-    # Make the prefix containing gdbus-codegen 'relocatable' at runtime by
++-    # adding /some/prefix/bin/../share/glib-2.0 to the python path
++-    path = os.path.join(filedir, '..', 'share', 'glib-2.0')
++-else:
++-    # Assume that the modules we need are in the current directory and add the
++-    # parent directory to the python path.
++-    path = os.path.join(filedir, '..')
++-
++-# Canonicalize, then do further testing
++-path = os.path.abspath(path)
++-
++-# If the above path detection failed, use the hard-coded datadir. This can
++-# happen when, for instance, bindir and datadir are not in the same prefix or
++-# on Windows where we cannot make any guarantees about the directory structure.
++-#
++-# In these cases our installation cannot be relocatable, but at least we should
++-# be able to find the codegen module.
++-if not os.path.isfile(os.path.join(path, 'codegen', 'codegen_main.py')):
++-    path = os.path.join('@DATADIR@', 'glib-2.0')
++-
++-sys.path.insert(0, path)
++-from codegen import codegen_main
+++from gdbus_codegen import codegen_main
++ 
++ sys.exit(codegen_main.codegen_main())
++-- 
++2.17.0
++
+diff --git a/dev-util/gdbus-codegen/files/setup.py-2.32.4 b/dev-util/gdbus-codegen/files/setup.py-2.32.4
+new file mode 100644
+index 00000000..c5318e30
+--- /dev/null
++++ b/dev-util/gdbus-codegen/files/setup.py-2.32.4
+@@ -0,0 +1,6 @@
++from distutils.core import setup
++setup(name="gdbus_codegen",
++      version="@PV@",
++      packages=["gdbus_codegen"],
++      package_dir={"gdbus_codegen" : ""},
++      scripts=["gdbus-codegen"])
+diff --git a/dev-util/gdbus-codegen/gdbus-codegen-2.57.2.ebuild b/dev-util/gdbus-codegen/gdbus-codegen-2.57.2.ebuild
+new file mode 100644
+index 00000000..7e995206
+--- /dev/null
++++ b/dev-util/gdbus-codegen/gdbus-codegen-2.57.2.ebuild
+@@ -0,0 +1,47 @@
++# Copyright 1999-2018 Gentoo Foundation
++# Distributed under the terms of the GNU General Public License v2
++
++EAPI=6
++GNOME_ORG_MODULE="glib"
++PYTHON_COMPAT=( python{2_7,3_4,3_5,3_6} )
++PYTHON_REQ_USE="xml"
++DISTUTILS_SINGLE_IMPL=1
++
++inherit gnome.org distutils-r1
++
++DESCRIPTION="GDBus code and documentation generator"
++HOMEPAGE="https://www.gtk.org/"
++
++LICENSE="LGPL-2+"
++SLOT="0"
++KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux ~x64-macos ~x86-macos"
++IUSE=""
++
++RDEPEND="${PYTHON_DEPS}"
++DEPEND="${RDEPEND}"
++
++# To prevent circular dependencies with glib[test]
++PDEPEND=">=dev-libs/glib-${PV}:2"
++
++S="${WORKDIR}/glib-${PV}/gio/gdbus-2.0/codegen"
++
++python_prepare_all() {
++	PATCHES=(
++		"${FILESDIR}/${PN}-2.56.1-sitedir.patch"
++	)
++	distutils-r1_python_prepare_all
++
++	sed -e 's:@PYTHON@:python:' gdbus-codegen.in > gdbus-codegen || die
++	cp "${FILESDIR}/setup.py-2.32.4" setup.py || die "cp failed"
++	sed -e "s/@PV@/${PV}/" -i setup.py || die "sed setup.py failed"
++}
++
++src_test() {
++	einfo "Skipping tests. This package is tested by dev-libs/glib"
++	einfo "when merged with FEATURES=test"
++}
++
++python_install_all() {
++	distutils-r1_python_install_all # no-op, but prevents QA warning
++	#doman "${WORKDIR}/glib-${PV}/docs/reference/gio/gdbus-codegen.1" # This is not pregenerated in 2.57.2, would have to generate it with xsltproc ourselves as docs/reference/Makefile.am does
++}
+diff --git a/dev-util/gdbus-codegen/gdbus-codegen-6.6.6.ebuild b/dev-util/gdbus-codegen/gdbus-codegen-6.6.6.ebuild
+deleted file mode 100644
+index ff2588d2..00000000
+--- a/dev-util/gdbus-codegen/gdbus-codegen-6.6.6.ebuild
++++ /dev/null
+@@ -1,20 +0,0 @@
+-# Copyright 1999-2017 Gentoo Foundation
+-# Distributed under the terms of the GNU General Public License v2
+-
+-EAPI=6
+-GNOME_ORG_MODULE="glib"
+-PYTHON_COMPAT=( python{2_7,3_4,3_5,3_6} )
+-PYTHON_REQ_USE="xml"
+-
+-inherit eutils
+-
+-DESCRIPTION="GDBus if part of glibc"
+-HOMEPAGE="http://www.gtk.org/"
+-
+-LICENSE="LGPL-2+"
+-SLOT="0"
+-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~sparc-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux ~x64-macos ~x86-macos"
+-IUSE=""
+-
+-RDEPEND="${PYTHON_DEPS}"
+-DEPEND="${RDEPEND}"
+diff --git a/dev-util/glib-utils/Manifest b/dev-util/glib-utils/Manifest
+new file mode 100644
+index 00000000..c618c287
+--- /dev/null
++++ b/dev-util/glib-utils/Manifest
+@@ -0,0 +1 @@
++DIST glib-2.57.2.tar.xz 4883340 BLAKE2B 3e712347bc13d75155aeae7c7191d8d48d4c39505923645622dc9cba25e5fc73015022b696853d664783ae2f5ff494d69e40d2e68d3fe3dc5d89af84ca462bb0 SHA512 372de80d738063c1ad359435deb095803d92e449abc64d2a8311d217fe0cb517dc12c05193b4618164ec2016ab0f83e4e331aae1488d5585e552bd36e5c8591f
+diff --git a/dev-util/glib-utils/glib-utils-2.57.2.ebuild b/dev-util/glib-utils/glib-utils-2.57.2.ebuild
+new file mode 100644
+index 00000000..d1e53c7c
+--- /dev/null
++++ b/dev-util/glib-utils/glib-utils-2.57.2.ebuild
+@@ -0,0 +1,43 @@
++# Copyright 1999-2018 Gentoo Foundation
++# Distributed under the terms of the GNU General Public License v2
++
++EAPI=6
++PYTHON_COMPAT=( python{3_5,3_6,3_7} )
++GNOME_ORG_MODULE="glib"
++
++inherit gnome.org python-single-r1
++
++DESCRIPTION="Build utilities for GLib using projects"
++HOMEPAGE="https://www.gtk.org/"
++
++LICENSE="LGPL-2.1+"
++SLOT="0" # /usr/bin utilities that can't be parallel installed by their nature
++IUSE=""
++
++KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux"
++
++RDEPEND="${PYTHON_DEPS}
++	!<dev-libs/glib-2.56.2:2
++"
++DEPEND="${RDEPEND}"
++
++src_configure() { :; }
++
++src_compile() {
++	sed -e "s:@VERSION@:${PV}:g;s:@PYTHON@:python:g" gobject/glib-genmarshal.in > gobject/glib-genmarshal
++	sed -e "s:@VERSION@:${PV}:g;s:@PYTHON@:python:g" gobject/glib-mkenums.in > gobject/glib-mkenums
++}
++
++src_install() {
++	python_fix_shebang gobject/glib-genmarshal
++	python_fix_shebang gobject/glib-mkenums
++	python_fix_shebang glib/gtester-report
++	exeinto /usr/bin
++	doexe gobject/glib-genmarshal
++	doexe gobject/glib-mkenums
++	doexe glib/gtester-report
++	# These are not pregenerated in 2.57.2, would have to generate them with xsltproc ourselves as docs/reference/Makefile.am does
++	#doman docs/reference/gobject/glib-genmarshal.1
++	#doman docs/reference/gobject/glib-mkenums.1
++	#doman docs/reference/glib/gtester-report.1
++}
+diff --git a/dev-util/glib-utils/metadata.xml b/dev-util/glib-utils/metadata.xml
+new file mode 100644
+index 00000000..0da0d356
+--- /dev/null
++++ b/dev-util/glib-utils/metadata.xml
+@@ -0,0 +1,11 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
++<pkgmetadata>
++	<maintainer type="project">
++		<email>gnome@gentoo.org</email>
++		<name>Gentoo GNOME Desktop</name>
++	</maintainer>
++	<upstream>
++		<remote-id type="cpe">cpe:/a:gnome:glib</remote-id>
++	</upstream>
++</pkgmetadata>
+-- 
+2.17.0
+
