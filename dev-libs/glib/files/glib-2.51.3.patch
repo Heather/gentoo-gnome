@@ -1,0 +1,13 @@
+diff --git a/configure.ac b/configure.ac
+index 954d86e9e..96cbcee52 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -3446,7 +3446,6 @@ win32/vs10/glib-version-paths.props
+ win32/vs11/Makefile
+ win32/vs12/Makefile
+ win32/vs14/Makefile
+-win32/vs15/Makefile
+ glib/Makefile
+ glib/libcharset/Makefile
+ glib/gnulib/Makefile
+

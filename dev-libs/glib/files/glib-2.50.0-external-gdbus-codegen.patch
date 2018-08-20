@@ -1,21 +1,31 @@
-From 2e47d49bc91d83cd0abea4c1944bfca4336040fa Mon Sep 17 00:00:00 2001
-From: Sobhan Mohammadpour <sobhan@gentoo.org>
-Date: Fri, 23 Feb 2018 15:27:33 +0330
-Subject: [PATCH] glib-2.54.3-external-gdbus-codegen-for-autotools
-
----
- configure.ac                                       |  1 -
- docs/reference/gio/Makefile.am                     |  1 -
- gio/Makefile.am                                    |  2 +-
- gio/tests/Makefile.am                              |  6 ++----
- gio/tests/gdbus-object-manager-example/Makefile.am |  6 ++----
- 5 files changed, 5 insertions(+), 11 deletions(-)
-
 diff --git a/configure.ac b/configure.ac
-index 0457c90..07166c9 100644
+index e8e7553..216e59d 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -3469,7 +3469,6 @@ gobject/glib-mkenums
+@@ -385,14 +385,14 @@ AC_SUBST(PERL_PATH)
+ # option to specify python interpreter to use; this just sets $PYTHON, so that
+ # we will fallback to reading $PYTHON if --with-python is not given, and
+ # python.m4 will get the expected input
+-AC_ARG_WITH(python,
+-            AS_HELP_STRING([--with-python=PATH],
+-                           [Path to Python interpreter; searches $PATH if only a program name is given; if not given, searches for a few standard names such as "python3" or "python2"]),
+-            [PYTHON="$withval"], [])
+-if test x"$PYTHON" = xyes; then
+-  AC_MSG_ERROR([--with-python option requires a path or program argument])
+-fi
+-AM_PATH_PYTHON(2.5,,PYTHON="/usr/bin/env python2.5")
++# AC_ARG_WITH(python,
++#             AS_HELP_STRING([--with-python=PATH],
++#                            [Path to Python interpreter; searches $PATH if only a program name is given; if not given, searches for a few standard names such as "python3" or "python2"]),
++#             [PYTHON="$withval"], [])
++# if test x"$PYTHON" = xyes; then
++#   AC_MSG_ERROR([--with-python option requires a path or program argument])
++# fi
++# AM_PATH_PYTHON(2.5,,PYTHON="/usr/bin/env python2.5")
+ 
+ 
+ dnl ***********************
+@@ -3453,7 +3453,6 @@ gobject/glib-mkenums
  gobject/tests/Makefile
  gthread/Makefile
  gio/Makefile
@@ -36,22 +46,22 @@ index 5741a3e..d38e768 100644
  	$(NULL)
  
 diff --git a/gio/Makefile.am b/gio/Makefile.am
-index b2db995..53d7162 100644
+index ffe5ee2..929d1b5 100644
 --- a/gio/Makefile.am
 +++ b/gio/Makefile.am
 @@ -1,6 +1,6 @@
  include $(top_srcdir)/glib.mk
  
 -SUBDIRS = gdbus-2.0/codegen
-+SUBDIRS = 
++SUBDIRS =
  
  if OS_UNIX
- if !OS_COCOA
+ SUBDIRS += xdgmime
 diff --git a/gio/tests/Makefile.am b/gio/tests/Makefile.am
-index acc1da4..7c51eab 100644
+index 749267b..f2a8c63 100644
 --- a/gio/tests/Makefile.am
 +++ b/gio/tests/Makefile.am
-@@ -460,10 +460,8 @@ gnotification_SOURCES                    = $(gdbus_sessionbus_sources) gnotifica
+@@ -449,10 +449,8 @@ gnotification_SOURCES                    = $(gdbus_sessionbus_sources) gnotifica
  
  BUILT_SOURCES += gdbus-test-codegen-generated.c gdbus-test-codegen-generated.h
  gdbus-test-codegen.o: gdbus-test-codegen-generated.h
@@ -65,7 +75,7 @@ index acc1da4..7c51eab 100644
  		--generate-c-code gdbus-test-codegen-generated \
  		--c-generate-object-manager \
 diff --git a/gio/tests/gdbus-object-manager-example/Makefile.am b/gio/tests/gdbus-object-manager-example/Makefile.am
-index 1d0464c..f390dca 100644
+index 1d0464c..0603d9b 100644
 --- a/gio/tests/gdbus-object-manager-example/Makefile.am
 +++ b/gio/tests/gdbus-object-manager-example/Makefile.am
 @@ -11,10 +11,8 @@ GDBUS_GENERATED = \
@@ -81,6 +91,3 @@ index 1d0464c..f390dca 100644
  		--interface-prefix org.gtk.GDBus.Example.ObjectManager. \
  		--c-namespace Example \
  		--c-generate-object-manager \
--- 
-2.16.1
-

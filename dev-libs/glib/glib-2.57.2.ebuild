@@ -1,35 +1,41 @@
 # Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-PYTHON_COMPAT=( python{2_7,3_5,3_6,3_7} )
-GNOME2_EAUTORECONF=yes
-
-inherit autotools bash-completion-r1 epunt-cxx flag-o-matic gnome2 libtool linux-info \
-	multilib multilib-minimal pax-utils python-any-r1 toolchain-funcs virtualx
-
 # Until bug #537330 glib is a reverse dependency of pkgconfig and, then
 # adding new dependencies end up making stage3 to grow. Every addition needs
 # then to be think very closely.
 
+EAPI=6
+PYTHON_COMPAT=( python2_7 python3_{4,5,6} pypy )
+# Completely useless with or without USE static-libs, people need to use
+# pkg-config
+GNOME2_LA_PUNT="yes"
+
+inherit autotools bash-completion-r1 eutils flag-o-matic gnome2 libtool linux-info \
+	multilib multilib-minimal pax-utils python-r1  toolchain-funcs versionator virtualx
+
 DESCRIPTION="The GLib library of C routines"
-HOMEPAGE="https://www.gtk.org/"
-SRC_URI="${SRC_URI}
+HOMEPAGE="http://www.gtk.org/"
+SRC_URI="https://download.gnome.org/sources/glib/2.57/glib-${PV}.tar.xz
 	https://pkgconfig.freedesktop.org/releases/pkg-config-0.28.tar.gz" # pkg.m4 for eautoreconf
 
-LICENSE="LGPL-2.1+"
+LICENSE="LGPL-2+"
 SLOT="2"
 IUSE="dbus debug fam kernel_linux +mime selinux static-libs systemtap test utils xattr"
+REQUIRED_USE="
+	${PYTHON_REQUIRED_USE}
+	test? ( ${PYTHON_REQUIRED_USE} )
+"
 
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux"
+KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~sparc-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux"
 
 # Added util-linux multilib dependency to have libmount support (which
 # is always turned on on linux systems, unless explicitly disabled, but
 # this ebuild does not do that anyway) (bug #599586)
 
+# gdbus-codegen-6.6.6 is ugly compatibility hack
 RDEPEND="
-	!<dev-util/gdbus-codegen-${PV}
-	>=dev-libs/libpcre-8.13:3[${MULTILIB_USEDEP},static-libs?]
+	>=dev-libs/libpcre-8.31:3[${MULTILIB_USEDEP},static-libs?]
 	>=virtual/libiconv-0-r1[${MULTILIB_USEDEP}]
 	>=virtual/libffi-3.0.13-r1[${MULTILIB_USEDEP}]
 	>=virtual/libintl-0-r2[${MULTILIB_USEDEP}]
@@ -38,10 +44,9 @@ RDEPEND="
 	selinux? ( >=sys-libs/libselinux-2.2.2-r5[${MULTILIB_USEDEP}] )
 	xattr? ( >=sys-apps/attr-2.4.47-r1[${MULTILIB_USEDEP}] )
 	fam? ( >=virtual/fam-0-r1[${MULTILIB_USEDEP}] )
-	utils? (
-		>=dev-util/gdbus-codegen-${PV}
-		virtual/libelf:0=
-	)
+	${PYTHON_DEPS}
+	virtual/libelf:0=
+	>=dev-util/gdbus-codegen-6.6.6
 "
 DEPEND="${RDEPEND}
 	app-text/docbook-xml-dtd:4.1.2
@@ -49,24 +54,19 @@ DEPEND="${RDEPEND}
 	>=sys-devel/gettext-0.11
 	>=dev-util/gtk-doc-am-1.20
 	systemtap? ( >=dev-util/systemtap-1.3 )
-	${PYTHON_DEPS}
 	test? (
 		sys-devel/gdb
-		>=dev-util/gdbus-codegen-${PV}
+		${PYTHON_DEPS}
 		>=sys-apps/dbus-1.2.14 )
 	!<dev-util/gtk-doc-1.15-r2
 "
-# Migration of glib-genmarshal, glib-mkenums and gtester-report to a separate
-# python depending package, which can be buildtime depended in packages that
-# need these tools, without pulling in python at runtime.
-RDEPEND="${RDEPEND}
-	>=dev-util/glib-utils-${PV}"
-PDEPEND="
+PDEPEND="!<gnome-base/gvfs-1.6.4-r990
 	dbus? ( gnome-base/dconf )
 	mime? ( x11-misc/shared-mime-info )
 "
 # shared-mime-info needed for gio/xdgmime, bug #409481
 # dconf is needed to be able to save settings, bug #498436
+# Earlier versions of gvfs do not work with glib
 
 MULTILIB_CHOST_TOOLS=(
 	/usr/bin/gio-querymodules$(get_exeext)
@@ -81,7 +81,6 @@ pkg_setup() {
 		fi
 		linux-info_pkg_setup
 	fi
-	python-any-r1_pkg_setup
 }
 
 src_prepare() {
@@ -115,10 +114,11 @@ src_prepare() {
 		sed -i -e 's/ tests//' {.,gio,glib}/Makefile.am || die
 	fi
 
-	# gdbus-codegen is a separate package
-	eapply "${FILESDIR}"/${PN}-2.54.3-external-gdbus-codegen.patch
+	# Also needed to prevent cross-compile failures, see bug #267603
+	eautoreconf
 
 	gnome2_src_prepare
+
 	epunt_cxx
 }
 
@@ -133,8 +133,6 @@ multilib_src_configure() {
 		fi
 		export LIBFFI_CFLAGS="-I$(echo /usr/$(get_libdir)/libffi-*/include)"
 		export LIBFFI_LIBS="-lffi"
-		export PCRE_CFLAGS=" " # test -n "$PCRE_CFLAGS" needs to pass
-		export PCRE_LIBS="-lpcre"
 	fi
 
 	# These configure tests don't work when cross-compiling.
@@ -168,7 +166,6 @@ multilib_src_configure() {
 		$(use_enable systemtap dtrace) \
 		$(use_enable systemtap systemtap) \
 		$(multilib_native_use_enable utils libelf) \
-		--with-python=${EPYTHON} \
 		--disable-compile-warnings \
 		--enable-man \
 		--with-pcre=system \
@@ -187,7 +184,6 @@ multilib_src_test() {
 	export XDG_DATA_DIRS=/usr/local/share:/usr/share
 	export G_DBUS_COOKIE_SHA1_KEYRING_DIR="${T}/temp"
 	export LC_TIME=C # bug #411967
-	unset GSETTINGS_BACKEND # bug #596380
 	python_setup
 
 	# Related test is a bit nitpicking
@@ -205,30 +201,20 @@ multilib_src_test() {
 }
 
 multilib_src_install() {
-	emake DESTDIR="${D}" completiondir="$(get_bashcompdir)" install
+	gnome2_src_install completiondir="$(get_bashcompdir)"
 	keepdir /usr/$(get_libdir)/gio/modules
 }
 
 multilib_src_install_all() {
 	einstalldocs
 
-	# These are installed by dev-util/glib-utils
-	# TODO: With patching we might be able to get rid of the python-any deps and removals, and test depend on glib-utils instead; revisit with meson
-	rm "${ED}usr/bin/glib-genmarshal" || die
-	rm "${ED}usr/share/man/man1/glib-genmarshal.1" || die
-	rm "${ED}usr/bin/glib-mkenums" || die
-	rm "${ED}usr/share/man/man1/glib-mkenums.1" || die
-	rm "${ED}usr/bin/gtester-report" || die
-	rm "${ED}usr/share/man/man1/gtester-report.1" || die
+	python_replicate_script "${ED}"/usr/bin/gtester-report
 
 	# Do not install charset.alias even if generated, leave it to libiconv
-	rm -f "${ED}/usr/$(get_libdir)/charset.alias"
+	rm -f "${ED}/usr/lib/charset.alias"
 
 	# Don't install gdb python macros, bug 291328
 	rm -rf "${ED}/usr/share/gdb/" "${ED}/usr/share/glib-2.0/gdb/"
-
-	# Completely useless with or without USE static-libs, people need to use pkg-config
-	find "${ED}" -name '*.la' -delete || die
 }
 
 pkg_preinst() {
@@ -245,7 +231,7 @@ pkg_preinst() {
 
 	multilib_pkg_preinst() {
 		# Make giomodule.cache belong to glib alone
-		local cache="usr/$(get_libdir)/gio/modules/giomodule.cache"
+		local cache="usr/$(get_libdir)/gio/giomodule.cache"
 
 		if [[ -e ${EROOT}${cache} ]]; then
 			cp "${EROOT}"${cache} "${ED}"/${cache} || die
@@ -254,11 +240,7 @@ pkg_preinst() {
 		fi
 	}
 
-	# Don't run the cache ownership when cross-compiling, as it would end up with an empty cache
-	# file due to inability to create it and GIO might not look at any of the modules there
-	if ! tc-is-cross-compiler ; then
-		multilib_foreach_abi multilib_pkg_preinst
-	fi
+	multilib_foreach_abi multilib_pkg_preinst
 }
 
 pkg_postinst() {
@@ -271,14 +253,7 @@ pkg_postinst() {
 		gnome2_giomodule_cache_update \
 			|| die "Update GIO modules cache failed (for ${ABI})"
 	}
-	if ! tc-is-cross-compiler ; then
-		multilib_foreach_abi multilib_pkg_postinst
-	else
-		ewarn "Updating of GIO modules cache skipped due to cross-compilation."
-		ewarn "You might want to run gio-querymodules manually on the target for"
-		ewarn "your final image for performance reasons and re-run it when packages"
-		ewarn "installing GIO modules get upgraded or added to the image."
-	fi
+	multilib_foreach_abi multilib_pkg_postinst
 }
 
 pkg_postrm() {
@@ -286,7 +261,7 @@ pkg_postrm() {
 
 	if [[ -z ${REPLACED_BY_VERSION} ]]; then
 		multilib_pkg_postrm() {
-			rm -f "${EROOT}"usr/$(get_libdir)/gio/modules/giomodule.cache
+			rm -f "${EROOT}"usr/$(get_libdir)/gio/giomodule.cache
 		}
 		multilib_foreach_abi multilib_pkg_postrm
 		rm -f "${EROOT}"usr/share/glib-2.0/schemas/gschemas.compiled
