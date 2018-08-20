@@ -39,6 +39,7 @@ RDEPEND="
 	xattr? ( >=sys-apps/attr-2.4.47-r1[${MULTILIB_USEDEP}] )
 	fam? ( >=virtual/fam-0-r1[${MULTILIB_USEDEP}] )
 	utils? (
+		!=dev-util/gdbus-codegen-6.6.6
 		>=dev-util/gdbus-codegen-${PV}
 		virtual/libelf:0=
 	)
