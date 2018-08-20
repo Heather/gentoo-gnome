@@ -21,7 +21,7 @@ RDEPEND="${PYTHON_DEPS}"
 DEPEND="${RDEPEND}"
 
 # To prevent circular dependencies with glib[test]
-PDEPEND=">=dev-libs/glib-${PV}:2"
+PDEPEND=">=dev-libs/glib-${PVR}:2"
 
 S="${WORKDIR}/glib-${PV}/gio/gdbus-2.0/codegen"
 
