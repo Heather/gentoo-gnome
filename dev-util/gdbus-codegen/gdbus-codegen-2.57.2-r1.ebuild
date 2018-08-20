@@ -17,11 +17,13 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux ~x64-macos ~x86-macos"
 IUSE=""
 
-RDEPEND="${PYTHON_DEPS}"
-DEPEND="${RDEPEND}"
+DEPEND="${PYTHON_DEPS}"
+RDEPEND="${RDEPEND}
+	!<dev-libs/glib-2.7.2-r1:2
+"
 
 # To prevent circular dependencies with glib[test]
-PDEPEND=">=dev-libs/glib-${PVR}:2"
+PDEPEND=">=dev-libs/glib-${PV}:2"
 
 S="${WORKDIR}/glib-${PV}/gio/gdbus-2.0/codegen"
 
