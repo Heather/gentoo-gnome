@@ -19,7 +19,6 @@ Major differences with the main tree
 -------------------------
 
  - To use the latest versions of vala, mask the old vala version to see the limitations. Currently, the only way to use the new vala is to port everything to this overlay.
- - gdbus-codegen was removed. (`666` version is just used for compatibility with tree packages)
 
 Information
 -----------
