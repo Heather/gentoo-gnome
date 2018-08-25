@@ -1,8 +1,12 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit gnome2 bash-completion-r1 virtualx meson
+
+VALA_USE_DEPEND="vapigen"
+VALA_MIN_API_VERSION="0.39"
+
+inherit gnome2 bash-completion-r1 virtualx meson vala
 
 DESCRIPTION="Simple low-level configuration system"
 HOMEPAGE="https://wiki.gnome.org/action/show/Projects/dconf"
@@ -22,9 +26,15 @@ DEPEND="${RDEPEND}
 	dev-libs/libxslt
 	>=dev-util/gtk-doc-am-1.15
 	sys-devel/gettext
+	app-shells/bash-completion
 	virtual/pkgconfig
-	>=dev-lang/vala-0.39.4
+	$(vala_depend)
 "
+
+src_prepare() {
+	vala_src_prepare
+	default
+}
 
 src_install() {
 	meson_src_install
