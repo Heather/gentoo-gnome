@@ -1,15 +1,18 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
 EAPI=6
 VALA_USE_DEPEND="vapigen"
-VALA_MIN_API_VERSION="0.24"
+VALA_MIN_API_VERSION="0.30"
 
 inherit eutils gnome2 vala autotools
 
 DESCRIPTION="Library providing a virtual terminal emulator widget"
 HOMEPAGE="https://wiki.gnome.org/action/show/Apps/Terminal/VTE"
+
+# because gnome team always forget to release it and put on downloads
+SRC_URI="https://gitlab.gnome.org/GNOME/vte/-/archive/${PV}/vte-${PV}.tar.gz"
 
 LICENSE="LGPL-2+"
 SLOT="2.91"
