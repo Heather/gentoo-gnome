@@ -1,9 +1,9 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 GNOME2_LA_PUNT="yes"
-PYTHON_COMPAT=( python2_7 )
+PYTHON_COMPAT=( python3_6 python3_7 )
 
 inherit autotools bash-completion-r1 eutils gnome2 linux-info multilib python-any-r1 vala versionator virtualx
 
@@ -13,7 +13,7 @@ HOMEPAGE="https://wiki.gnome.org/Projects/Tracker"
 LICENSE="GPL-2+ LGPL-2.1+"
 SLOT="0/100"
 IUSE="cue elibc_glibc exif ffmpeg firefox-bookmarks flac gif gsf gstreamer gtk
-iptc +iso +jpeg kernel_linux libav +miner-fs mp3 nautilus networkmanager pdf
+iptc +iso +jpeg kernel_linux libav +miner-fs mp3 networkmanager pdf
 playlist rss stemmer test thunderbird +tiff upnp-av upower +vorbis +xml xmp
 xps"
 
@@ -31,7 +31,7 @@ REQUIRED_USE="
 RDEPEND="
 	>=app-i18n/enca-1.9
 	>dev-db/sqlite-3.8.4.2:=
-	>=dev-libs/glib-2.53.4:2
+	>=dev-libs/glib-2.44:2
 	>=dev-libs/gobject-introspection-0.9.5:=
 	>=dev-libs/icu-4.8.1.1:=
 	>=media-libs/libpng-1.2:0=
@@ -87,6 +87,7 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	${PYTHON_DEPS}
 	$(vala_depend)
+	dev-util/gdbus-codegen
 	>=dev-util/gtk-doc-am-1.8
 	>=dev-util/intltool-0.40.0
 	>=sys-devel/gettext-0.17
@@ -96,7 +97,7 @@ DEPEND="${RDEPEND}
 		>=dev-libs/dbus-glib-0.82-r1
 		>=sys-apps/dbus-1.3.1[X] )
 "
-PDEPEND="nautilus? ( ~gnome-extra/nautilus-tracker-tags-${PV} )"
+PDEPEND=""
 
 function inotify_enabled() {
 	if linux_config_exists; then
@@ -148,7 +149,7 @@ src_configure() {
 	# unicode-support: libunistring, libicu or glib ?
 	# According to NEWS, introspection is required
 	# is not being generated
-	# nautilus extension is in a separate package, nautilus-tracker-tags
+	# nautilus extension is dropped since 2 version
 	# miner-evolution disabled as it's incompatible with current eds
 	gnome2_src_configure \
 		--disable-hal \
