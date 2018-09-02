@@ -21,20 +21,20 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~x86"
 # Newer pygobject needed due upstream bug #723951
 COMMON_DEPEND="
 	${PYTHON_DEPS}
-	dev-libs/glib:2[dbus]
-	>=dev-python/pygobject-3.10.2:3[${PYTHON_USEDEP}]
-	>=gnome-base/gsettings-desktop-schemas-3.21.2
+	>=dev-libs/glib-2.58.0:2[dbus]
+	>=dev-python/pygobject-3.30.0:3[${PYTHON_USEDEP}]
+	>=gnome-base/gsettings-desktop-schemas-3.28.1
 "
 # g-s-d, gnome-desktop, gnome-shell etc. needed at runtime for the gsettings schemas
 RDEPEND="${COMMON_DEPEND}
-	>=gnome-base/gnome-desktop-3.6.0.1:3=[introspection]
-	>=x11-libs/gtk+-3.12:3[introspection]
+	>=gnome-base/gnome-desktop-3.30.0:3=[introspection]
+	>=x11-libs/gtk+-3.24.0:3[introspection]
 
 	net-libs/libsoup:2.4[introspection]
 	x11-libs/libnotify[introspection]
 
 	>=gnome-base/gnome-settings-daemon-3
-	gnome-base/gnome-shell
+	>=gnome-base/gnome-shell-3.30.0
 	>=gnome-base/nautilus-3
 "
 DEPEND="${COMMON_DEPEND}
