@@ -11,9 +11,6 @@ inherit eutils gnome2 vala autotools
 DESCRIPTION="Library providing a virtual terminal emulator widget"
 HOMEPAGE="https://wiki.gnome.org/action/show/Apps/Terminal/VTE"
 
-# because gnome team always forget to release it and put on downloads
-SRC_URI="https://gitlab.gnome.org/GNOME/vte/-/archive/${PV}/vte-${PV}.tar.gz"
-
 LICENSE="LGPL-2+"
 SLOT="2.91"
 IUSE="+crypt debug glade +introspection vala"
