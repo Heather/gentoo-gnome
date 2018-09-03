@@ -3,7 +3,7 @@
 
 EAPI=6
 GNOME2_LA_PUNT="yes"
-PYTHON_COMPAT=( python3_{4,5,6} )
+PYTHON_COMPAT=( python3_{4,5,6,7} )
 VALA_USE_DEPEND="vapigen"
 
 inherit db-use flag-o-matic gnome2 python-any-r1 systemd vala virtualx cmake-utils
