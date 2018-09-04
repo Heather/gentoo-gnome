@@ -3,9 +3,6 @@
 
 EAPI=6
 inherit autotools gnome2 virtualx
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
 
 DESCRIPTION="GNOME 3 compositing window manager based on Clutter"
 HOMEPAGE="https://git.gnome.org/browse/mutter/"

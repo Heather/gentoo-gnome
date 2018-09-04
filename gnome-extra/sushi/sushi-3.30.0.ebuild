@@ -12,9 +12,6 @@ SLOT="0"
 KEYWORDS="~alpha amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc x86"
 IUSE="office"
 
-# Optional app-office/unoconv support (OOo to pdf)
-# freetype needed for font loader
-# gtk+[X] optionally needed for sushi_create_foreign_window(); when wayland is more widespread, might want to not force it
 COMMON_DEPEND="
 	>=x11-libs/gdk-pixbuf-2.23[introspection]
 	>=dev-libs/gjs-1.40
@@ -41,7 +38,7 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig
 "
 RDEPEND="${COMMON_DEPEND}
-	>=gnome-base/nautilus-3.1.90
+	>=gnome-base/nautilus-3.30.0
 "
 
 src_configure() {

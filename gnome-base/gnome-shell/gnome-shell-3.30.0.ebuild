@@ -6,9 +6,6 @@ GNOME2_LA_PUNT="yes"
 PYTHON_COMPAT=( python{3_4,3_5,3_6,3_7} )
 
 inherit autotools gnome2 multilib pax-utils python-r1 systemd meson ninja-utils
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
 
 DESCRIPTION="Provides core UI functions for the GNOME 3 desktop"
 HOMEPAGE="https://wiki.gnome.org/Projects/GnomeShell"
