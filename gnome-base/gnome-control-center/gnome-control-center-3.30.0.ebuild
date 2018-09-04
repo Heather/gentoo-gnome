@@ -18,10 +18,10 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~x86 ~x86-fbsd ~amd64-linux ~
 QA_CONFIGURE_OPTIONS=".*"
 
 COMMON_DEPEND="
-	>=dev-libs/glib-2.44.0:2[dbus]
+	>=dev-libs/glib-2.58.0:2[dbus]
 	>=x11-libs/gdk-pixbuf-2.23.0:2
 	>=x11-libs/gtk+-3.22.0:3[X,wayland?]
-	>=gnome-base/gsettings-desktop-schemas-3.21.4
+	>=gnome-base/gsettings-desktop-schemas-3.28.0
 	>=gnome-base/gnome-desktop-3.27.90:3=
 	>=gnome-base/gnome-settings-daemon-3.25.2[policykit]
 	>=x11-misc/colord-0.1.34:0=
