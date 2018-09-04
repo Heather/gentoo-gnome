@@ -15,9 +15,9 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~
 # cairo[X] needed for gnome-bg
 COMMON_DEPEND="
 	app-text/iso-codes
-	>=dev-libs/glib-2.53.4:2[dbus]
+	>=dev-libs/glib-2.58.0:2[dbus]
 	>=x11-libs/gdk-pixbuf-2.36.5:2[introspection?]
-	>=x11-libs/gtk+-3.3.6:3[X,introspection?]
+	>=x11-libs/gtk+-3.24.0:3[X,introspection?]
 	x11-libs/cairo:=[X]
 	x11-libs/libX11
 	x11-misc/xkeyboard-config
