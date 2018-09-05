@@ -5,8 +5,8 @@ EAPI=6
 
 inherit gnome2 multilib-minimal meson
 
-DESCRIPTION="libdazzle"
-HOMEPAGE="https://git.gnome.org/browse/libdazzle/"
+DESCRIPTION="JSON RPC GLIB"
+HOMEPAGE="https://wiki.gnome.org/Projects/JsonGlib"
 
 LICENSE="LGPL-2.1+"
 SLOT="0"
@@ -14,7 +14,7 @@ KEYWORDS="alpha amd64 arm ~arm64 hppa ia64 ~mips ppc ppc64 ~s390 sparc x86 ~amd6
 IUSE="debug +introspection"
 
 RDEPEND="
-	>=dev-libs/glib-2.53.4:2[${MULTILIB_USEDEP}]
+	>=dev-libs/glib-2.58.0:2[${MULTILIB_USEDEP}]
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5:= )
 "
 DEPEND="${RDEPEND}
