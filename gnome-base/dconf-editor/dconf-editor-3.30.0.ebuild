@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -16,7 +16,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-
 COMMON_DEPEND="
 	dev-libs/appstream-glib
 	>=dev-libs/glib-2.46.0:2
-	>=gnome-base/dconf-0.25.1
+	>=gnome-base/dconf-0.30.0
 	>=x11-libs/gtk+-3.21.6:3
 "
 DEPEND="${COMMON_DEPEND}
