@@ -13,7 +13,7 @@ IUSE="test"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 
 COMMON_DEPEND="
-	>=dev-libs/glib-2.45.8:2
+	>=dev-libs/glib-2.58.0:2
 	>=x11-libs/gtk+-3.3.8:3
 	>=x11-libs/cairo-1
 	>=sys-power/upower-0.99:=
