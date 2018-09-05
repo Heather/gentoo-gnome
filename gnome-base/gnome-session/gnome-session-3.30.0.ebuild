@@ -17,7 +17,7 @@ IUSE="doc elibc_FreeBSD ipv6 systemd"
 # xdg-user-dirs-update is run during login (see 10-user-dirs-update-gnome below).
 # gdk-pixbuf used in the inhibit dialog
 COMMON_DEPEND="
-	>=dev-libs/glib-2.46.0:2[dbus]
+	>=dev-libs/glib-2.58.0:2[dbus]
 	x11-libs/gdk-pixbuf:2
 	>=x11-libs/gtk+-3.18.0:3
 	>=dev-libs/json-glib-0.10
@@ -46,8 +46,8 @@ COMMON_DEPEND="
 # gnome-themes-standard is needed for the failwhale dialog themeing
 # sys-apps/dbus[X] is needed for session management
 RDEPEND="${COMMON_DEPEND}
-	>=gnome-base/gnome-settings-daemon-3.26.2
-	>=gnome-base/gsettings-desktop-schemas-0.1.7
+	>=gnome-base/gnome-settings-daemon-3.30.0
+	>=gnome-base/gsettings-desktop-schemas-3.28.1
 	x11-themes/adwaita-icon-theme
 	sys-apps/dbus[X]
 	!systemd? (

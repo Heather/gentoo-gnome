@@ -30,11 +30,11 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86"
 # We need either systemd or >=openrc-0.12 to restart gdm properly, bug #463784
 COMMON_DEPEND="
 	app-text/iso-codes
-	>=dev-libs/glib-2.53.4:2[dbus]
+	>=dev-libs/glib-2.58.0:2[dbus]
 	>=x11-libs/gtk+-2.91.1:3
 	>=gnome-base/dconf-0.20
-	>=gnome-base/gnome-settings-daemon-3.1.4
-	gnome-base/gsettings-desktop-schemas
+	>=gnome-base/gnome-settings-daemon-3.30.0
+	>=gnome-base/gsettings-desktop-schemas-3.28.1
 	>=media-libs/fontconfig-2.5.0:1.0
 	>=media-libs/libcanberra-0.4[gtk3]
 	sys-apps/dbus
