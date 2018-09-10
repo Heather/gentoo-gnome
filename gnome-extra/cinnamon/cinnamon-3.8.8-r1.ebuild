@@ -3,7 +3,7 @@
 
 EAPI=6
 GNOME2_LA_PUNT="yes"
-PYTHON_COMPAT=( python2_7 )
+PYTHON_COMPAT=( python{2_7,3_5,3_6,3_7} )
 PYTHON_REQ_USE="xml"
 
 inherit autotools eutils flag-o-matic gnome2 multilib pax-utils python-r1
@@ -19,8 +19,7 @@ SRC_URI="https://github.com/linuxmint/Cinnamon/archive/${MY_PV}.tar.gz -> ${MY_P
 LICENSE="GPL-2+"
 SLOT="0"
 
-# bluetooth support dropped due to bug #511648
-IUSE="+nls +networkmanager" #+bluetooth
+IUSE="+nls"
 
 # We need *both* python 2.x and 3.x
 REQUIRED_USE="${PYTHON_REQUIRED_USE}
@@ -43,7 +42,7 @@ COMMON_DEPEND="${PYTHON_DEPS}
 	gnome-base/librsvg
 	>=gnome-extra/cinnamon-desktop-3.6:0=[introspection]
 	>=gnome-extra/cinnamon-menus-3.6[introspection]
-	>=gnome-extra/cjs-3.6.0
+	>=gnome-extra/cjs-3.8.0
 	>=media-libs/clutter-1.10:1.0[introspection]
 	media-libs/cogl:1.0=[introspection]
 	>=gnome-base/gsettings-desktop-schemas-2.91.91
@@ -52,18 +51,13 @@ COMMON_DEPEND="${PYTHON_DEPS}
 	net-libs/libsoup:2.4[introspection]
 	>=sys-auth/polkit-0.100[introspection]
 	x11-libs/gdk-pixbuf:2[introspection]
-	>=x11-libs/gtk+-3.9.12:3[introspection]
+	>=x11-libs/gtk+-3.12.0:3[introspection]
 	x11-libs/pango[introspection]
 	>=x11-libs/startup-notification-0.11
 	x11-libs/libX11
 	>=x11-libs/libXfixes-5.0
-	>=x11-wm/muffin-3.8.1[introspection]
-	networkmanager? (
-		gnome-base/libgnome-keyring
-		>=net-misc/networkmanager-0.8.999:=[introspection] )
+	>=x11-wm/muffin-3.8.0[introspection]
 "
-#bluetooth? ( >=net-wireless/gnome-bluetooth-3.1:=[introspection] )
-
 # Runtime-only deps are probably incomplete and approximate.
 # Each block:
 # 2. Introspection stuff + dconf needed via imports.gi.*
@@ -84,8 +78,8 @@ RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/libgnomekbd-2.91.4[introspection]
 	|| ( sys-power/upower[introspection] sys-power/upower-pm-utils[introspection] )
 
-	>=gnome-extra/cinnamon-session-3.6
-	>=gnome-extra/cinnamon-settings-daemon-3.6
+	>=gnome-extra/cinnamon-session-3.8
+	>=gnome-extra/cinnamon-settings-daemon-3.8
 
 	>=app-accessibility/caribou-0.3
 
@@ -94,7 +88,7 @@ RDEPEND="${COMMON_DEPEND}
 
 	dev-python/dbus-python[${PYTHON_USEDEP}]
 	dev-python/pygobject:3[${PYTHON_USEDEP}]
-
+	$(python_gen_cond_dep 'dev-python/gconf-python:2[${PYTHON_USEDEP}]' 'python2*')
 	$(python_gen_cond_dep 'dev-python/lxml[${PYTHON_USEDEP}]' 'python2*')
 	$(python_gen_cond_dep 'dev-python/pexpect[${PYTHON_USEDEP}]' 'python2*')
 	$(python_gen_cond_dep 'dev-python/pycairo[${PYTHON_USEDEP}]' 'python2*')
@@ -102,22 +96,17 @@ RDEPEND="${COMMON_DEPEND}
 	$(python_gen_cond_dep 'dev-python/pypam[${PYTHON_USEDEP}]' 'python2*')
 	$(python_gen_cond_dep 'dev-python/pillow[${PYTHON_USEDEP}]' 'python2*')
 
+	x11-themes/gnome-themes-standard
 	x11-themes/adwaita-icon-theme
 
-	>=gnome-extra/nemo-3.6
-	>=gnome-extra/cinnamon-control-center-3.6
-	>=gnome-extra/cinnamon-screensaver-3.6
+	>=gnome-extra/nemo-3.8
+	>=gnome-extra/cinnamon-control-center-3.8
+	>=gnome-extra/cinnamon-screensaver-3.8
 
 	gnome-extra/polkit-gnome
 
-	networkmanager? (
-		gnome-extra/nm-applet
-		net-misc/mobile-broadband-provider-info
-		sys-libs/timezone-data )
-	nls? ( >=gnome-extra/cinnamon-translations-2.4 )
+	nls? ( >=gnome-extra/cinnamon-translations-3.8 )
 "
-#bluetooth? ( net-wireless/cinnamon-bluetooth )
-
 DEPEND="${COMMON_DEPEND}
 	$(python_gen_cond_dep 'dev-python/polib[${PYTHON_USEDEP}]' 'python2*')
 	dev-util/gtk-doc
@@ -139,7 +128,7 @@ pkg_setup() {
 src_prepare() {
 	# Fix backgrounds path as cinnamon doesn't provide them
 	# https://github.com/linuxmint/Cinnamon/issues/3575
-	eapply "${FILESDIR}"/${PN}-2.8.0-background.patch
+	eapply "${FILESDIR}"/${PN}-3.8.0-gnome-background-compatibility.patch
 
 	# Use wheel group instead of sudo (from Fedora/Arch)
 	# https://github.com/linuxmint/Cinnamon/issues/3576
@@ -153,10 +142,6 @@ src_prepare() {
 	# https://github.com/linuxmint/Cinnamon/issues/3579
 	sed -i 's/RequiredComponents=\(.*\)$/RequiredComponents=\1polkit-gnome-authentication-agent-1;/' \
 		files/usr/share/cinnamon-session/sessions/cinnamon*.session || die
-
-	if ! use networkmanager; then
-		rm -rv files/usr/share/cinnamon/applets/network@cinnamon.org || die
-	fi
 
 	# python 2-and-3 shebang fixing craziness
 	local p
@@ -177,11 +162,8 @@ src_prepare() {
 src_configure() {
 	gnome2_src_configure \
 		--libdir="${EPREFIX}/usr/$(get_libdir)" \
-		--disable-jhbuild-wrapper-script \
-		$(use_enable networkmanager) \
 		--with-ca-certificates="${EPREFIX}/etc/ssl/certs/ca-certificates.crt" \
-		BROWSER_PLUGIN_DIR="${EPREFIX}/usr/$(get_libdir)/nsbrowser/plugins" \
-		--without-bluetooth
+		BROWSER_PLUGIN_DIR="${EPREFIX}/usr/$(get_libdir)/nsbrowser/plugins"
 }
 
 src_install() {
