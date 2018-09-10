@@ -3,7 +3,7 @@
 
 EAPI=6
 GNOME2_LA_PUNT="yes"
-PYTHON_COMPAT=( python3_{4,5,6,7} )
+PYTHON_COMPAT=( python3_{5,6,7} )
 
 inherit meson eutils python-any-r1 virtualx
 
@@ -57,4 +57,3 @@ DEPEND="${COMMON_DEPEND}
 	dev-util/gtk-doc
 	gnome-base/gnome-common
 "
-

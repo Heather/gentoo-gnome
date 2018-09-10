@@ -1,10 +1,9 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
-EAPI=5
+EAPI=6
 
-PYTHON_COMPAT=( python{2_6,2_7} )
+PYTHON_COMPAT=( python3_{5,6,7} )
 VALA_MIN_API_VERSION=0.20
 VALA_USE_DEPEND=vapigen
 

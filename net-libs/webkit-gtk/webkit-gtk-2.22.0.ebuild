@@ -1,9 +1,9 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 CMAKE_MAKEFILE_GENERATOR="ninja"
-PYTHON_COMPAT=( python2_7 )
+PYTHON_COMPAT=( python3_{5,6,7} )
 USE_RUBY="ruby22 ruby23 ruby24 ruby25"
 
 inherit check-reqs cmake-utils eutils flag-o-matic gnome2 pax-utils python-any-r1 ruby-single toolchain-funcs versionator virtualx

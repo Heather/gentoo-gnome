@@ -1,9 +1,9 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 GNOME2_LA_PUNT="yes"
-PYTHON_COMPAT=( python{3_4,3_5,3_6} )
+PYTHON_COMPAT=( python{3_5,3_6,3_7} )
 VALA_MIN_API_VERSION="0.32" # Needed when gtk+-3.20 is found
 
 inherit gnome2 pax-utils python-r1 vala

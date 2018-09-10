@@ -1,9 +1,8 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
-GCONF_DEBUG="no"
-PYTHON_COMPAT=( python2_7 )
+EAPI=6
+PYTHON_COMPAT=( python3_{5,6,7} )
 VALA_MIN_API_VERSION="0.18"
 VALA_USE_DEPEND="vapigen"
 

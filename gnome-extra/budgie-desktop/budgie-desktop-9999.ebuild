@@ -3,7 +3,7 @@
 
 EAPI=6
 VALA_MIN_API_VERSION="0.34"
-PYTHON_COMPAT=( python3_{4,5,6} )
+PYTHON_COMPAT=( python3_{5,6,7} )
 
 inherit eutils fdo-mime git-r3 gnome2-utils meson multiprocessing ninja-utils vala python-single-r1
 
