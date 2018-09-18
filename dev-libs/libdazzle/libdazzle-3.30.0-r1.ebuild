@@ -2,10 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
+VALA_USE_DEPEND="vapigen"
 
-inherit gnome2 multilib-minimal meson
+inherit gnome2 multilib-minimal meson vala
 
-DESCRIPTION="libdazzle"
+DESCRIPTION="Companion library to GObject and Gtk+"
 HOMEPAGE="https://git.gnome.org/browse/libdazzle/"
 
 LICENSE="LGPL-2.1+"
@@ -20,8 +21,14 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	~app-text/docbook-xml-dtd-4.1.2
 	app-text/docbook-xsl-stylesheets
+	dev-lang/vala
 	dev-libs/libxslt
 	>=dev-util/gtk-doc-am-1.20
 	>=sys-devel/gettext-0.18
 	virtual/pkgconfig[${MULTILIB_USEDEP}]
 "
+
+src_prepare() {
+	default
+	vala_src_prepare
+}
