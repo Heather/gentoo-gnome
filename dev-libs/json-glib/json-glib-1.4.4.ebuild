@@ -14,7 +14,7 @@ KEYWORDS="alpha amd64 arm ~arm64 hppa ia64 ~mips ppc ppc64 ~s390 sparc x86 ~amd6
 IUSE="debug +introspection"
 
 RDEPEND="
-	>=dev-libs/glib-2.53.4:2
+	>=dev-libs/glib-2.58.0:2
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5:= )
 "
 DEPEND="${RDEPEND}
