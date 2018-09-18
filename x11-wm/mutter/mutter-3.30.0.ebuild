@@ -57,7 +57,7 @@ COMMON_DEPEND="
 	introspection? ( >=dev-libs/gobject-introspection-1.42:= )
 	>=dev-libs/libinput-1.4
 	>=dev-libs/wayland-1.6.90
-	>=dev-libs/wayland-protocols-1.7
+	>=dev-libs/wayland-protocols-1.16
 	>=media-libs/mesa-10.3[egl,gbm,wayland]
 	sys-apps/systemd:=
 	>=virtual/libudev-232:=
