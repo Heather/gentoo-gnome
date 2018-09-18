@@ -2,8 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
+VALA_MIN_API_VERSION="0.36"
 
-inherit gnome2 meson
+inherit gnome2 meson vala
 
 DESCRIPTION="Graphical tool for editing the dconf configuration database"
 HOMEPAGE="https://git.gnome.org/browse/dconf-editor"
@@ -15,9 +16,9 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-
 
 COMMON_DEPEND="
 	dev-libs/appstream-glib
-	>=dev-libs/glib-2.46.0:2
+	>=dev-libs/glib-2.58.0:2
 	>=gnome-base/dconf-0.30.0
-	>=x11-libs/gtk+-3.21.6:3
+	>=x11-libs/gtk+-3.22.27:3
 "
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.50
@@ -27,3 +28,8 @@ DEPEND="${COMMON_DEPEND}
 RDEPEND="${COMMON_DEPEND}
 	!<gnome-base/dconf-0.22[X]
 "
+
+src_prepare() {
+	default
+	vala_src_prepare
+}
