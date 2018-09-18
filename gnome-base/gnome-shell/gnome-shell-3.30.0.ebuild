@@ -81,7 +81,7 @@ COMMON_DEPEND="
 RDEPEND="${COMMON_DEPEND}
 	app-accessibility/at-spi2-core:2[introspection]
 	>=app-accessibility/caribou-0.4.8
-	dev-libs/libgweather:2[introspection]
+	dev-libs/libgweather:2
 	>=sys-apps/accountsservice-0.6.14[introspection]
 	>=sys-power/upower-0.99:=[introspection]
 	x11-libs/pango[introspection]

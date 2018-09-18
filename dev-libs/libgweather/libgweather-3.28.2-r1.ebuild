@@ -4,32 +4,26 @@
 EAPI=6
 VALA_USE_DEPEND="vapigen"
 
-inherit vala gnome2 meson
+inherit gnome2 vala meson
 
 DESCRIPTION="Library to access weather information from online services"
 HOMEPAGE="https://wiki.gnome.org/Projects/LibGWeather"
 
 LICENSE="GPL-2+"
-SLOT="2/3-6" # subslot = 3-(libgweather-3 soname suffix)
+SLOT="2/15"  # subslot = 3-(libgweather-3 soname suffix)
 
-IUSE="glade +introspection vala"
-REQUIRED_USE="vala? ( introspection )"
+IUSE="glade vala"
 
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~x86-solaris"
 
 COMMON_DEPEND="
-	>=x11-libs/gtk+-3.13.5:3[introspection?]
-	>=dev-libs/glib-2.35.1:2
+	>=x11-libs/gtk+-3.13.5:3
+	>=dev-libs/glib-2.58.0:2
 	>=net-libs/libsoup-2.44:2.4
 	>=dev-libs/libxml2-2.6.0:2
 	sci-geosciences/geocode-glib
 	>=sys-libs/timezone-data-2010k
-
 	glade? ( >=dev-util/glade-3.16:3.10 )
-	introspection? ( >=dev-libs/gobject-introspection-0.9.5:= )
-"
-RDEPEND="${COMMON_DEPEND}
-	!<gnome-base/gnome-applets-2.22.0
 "
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/gtk-doc-am-1.11
@@ -43,4 +37,12 @@ src_prepare() {
 	use vala && vala_src_prepare
 	gnome2_src_prepare
 	default
+}
+
+src_configure() {
+	local emesonargs=(
+		-Denable_vala=$(usex vala true false)
+		-Dglade_catalog=$(usex glade true false)
+	)
+	meson_src_configure
 }
