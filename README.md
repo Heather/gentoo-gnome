@@ -6,7 +6,7 @@ Unofficial GNOME overlay
 Versions
 --------
 
- - GNOME `3.30.x`
+ - GNOME `3.31.x`
  - Pantheon `live` ebuilds (They are slightly outdated possibly)
 
 Communication
