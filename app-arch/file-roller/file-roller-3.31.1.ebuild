@@ -17,7 +17,9 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-linu
 # gdk-pixbuf used extensively in the source
 # cairo used in eggtreemultidnd.c
 # pango used in fr-window
+# meson 0.48.0 is broken https://github.com/mesonbuild/meson/issues/4257
 RDEPEND="
+	|| ( >=dev-util/meson-0.48.1 <dev-util/meson-0.48.0 )
 	>=app-arch/libarchive-3:=
 	>=dev-libs/glib-2.36:2
 	>=dev-libs/json-glib-0.14
