@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit gnome2 virtualx
+inherit gnome2 virtualx meson
 
 DESCRIPTION="Libraries for the gnome desktop that are not part of the UI"
 HOMEPAGE="https://git.gnome.org/browse/gnome-desktop"
@@ -40,19 +40,16 @@ DEPEND="${COMMON_DEPEND}
 	virtual/pkgconfig
 "
 
-# Includes X11/Xatom.h in libgnome-desktop/gnome-bg.c which comes from xproto
-
-src_configure() {
-	gnome2_src_configure \
-		--disable-static \
-		--with-gnome-distributor=Gentoo \
-		--enable-desktop-docs \
-		$(usex debug --enable-debug=yes ' ') \
-		$(use_enable debug debug-tools) \
-		$(use_enable introspection) \
-		$(use_enable udev)
+meson_use_enable() {
+	usex "$1" "-D${2-$1}=enabled" "-D${2-$1}=disabled"
 }
 
-src_test() {
-	virtx emake check
+src_configure() {
+	local emesonargs=(
+		-Dgnome_distributor=Gentoo
+		$(meson_use debug debug_tools)
+		$(meson_use_enable udev)
+	)
+
+	meson_src_configure
 }
