@@ -6,7 +6,7 @@ GNOME2_LA_PUNT="yes"
 PYTHON_COMPAT=( python{3_5,3_6,3_7} )
 VALA_MIN_API_VERSION="0.32" # Needed when gtk+-3.20 is found
 
-inherit gnome2 pax-utils python-r1 vala
+inherit gnome2 pax-utils python-r1 vala meson
 
 DESCRIPTION="git repository viewer for GNOME"
 HOMEPAGE="https://wiki.gnome.org/Apps/Gitg"
@@ -60,25 +60,4 @@ pkg_setup() {
 src_prepare() {
 	gnome2_src_prepare
 	vala_src_prepare
-}
-
-src_configure() {
-	gnome2_src_configure \
-		--disable-static \
-		--disable-deprecations \
-		$(use_enable glade glade-catalog) \
-		$(use_enable python)
-}
-
-src_install() {
-	# -j1: bug #???
-	gnome2_src_install -j1
-
-	if use python ; then
-		install_gi_override() {
-			python_moduleinto "$(python_get_sitedir)/gi/overrides"
-			python_domodule "${S}"/libgitg-ext/GitgExt.py
-		}
-		python_foreach_impl install_gi_override
-	fi
 }
