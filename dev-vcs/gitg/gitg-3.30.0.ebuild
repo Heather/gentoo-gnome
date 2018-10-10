@@ -23,7 +23,7 @@ REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 RDEPEND="
 	app-crypt/libsecret[vala]
 	dev-libs/libgee:0.8[introspection]
-	>=app-text/gtkspell-3.0.3:3
+	>=app-text/gtkspell-3.0.3:3[vala]
 	>=dev-libs/glib-2.38:2[dbus]
 	>=dev-libs/gobject-introspection-0.10.1:=
 	dev-libs/libgit2:=[threads]
