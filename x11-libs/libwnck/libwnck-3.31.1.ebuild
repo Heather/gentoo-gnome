@@ -4,7 +4,7 @@
 EAPI=6
 GNOME2_LA_PUNT="yes"
 
-inherit flag-o-matic gnome2
+inherit gnome2 meson
 
 DESCRIPTION="A window navigation construction kit"
 HOMEPAGE="https://developer.gnome.org/libwnck/stable/"
@@ -31,13 +31,3 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext
 	virtual/pkgconfig
 "
-
-src_configure() {
-	# Don't collide with SLOT=1
-	gnome2_src_configure \
-		--disable-static \
-		$(use_enable introspection) \
-		$(use_enable startup-notification) \
-		$(use_enable tools) \
-		--program-suffix=-${SLOT}
-}
