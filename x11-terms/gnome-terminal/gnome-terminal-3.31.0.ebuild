@@ -1,6 +1,5 @@
 # Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI="6"
 GNOME2_LA_PUNT="yes"
@@ -19,7 +18,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~
 RDEPEND="
 	>=dev-libs/glib-2.54.0:2[dbus]
 	>=x11-libs/gtk+-3.20:3[X]
-	>=x11-libs/vte-0.54.2
+	>=x11-libs/vte-0.55.0
 	>=dev-libs/libpcre2-10
 	>=gnome-base/dconf-0.14
 	>=gnome-base/gsettings-desktop-schemas-0.1.0
