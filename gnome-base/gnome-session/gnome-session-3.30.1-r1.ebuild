@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -10,7 +10,7 @@ HOMEPAGE="https://git.gnome.org/browse/gnome-session"
 LICENSE="GPL-2 LGPL-2 FDL-1.1"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~x86-solaris"
-IUSE="doc elibc_FreeBSD ipv6 systemd"
+IUSE="doc systemd man"
 
 # x11-misc/xdg-user-dirs{,-gtk} are needed to create the various XDG_*_DIRs, and
 # create .config/user-dirs.dirs which is read by glib to get G_USER_DIRECTORY_*
@@ -22,7 +22,6 @@ COMMON_DEPEND="
 	>=x11-libs/gtk+-3.18.0:3
 	>=dev-libs/json-glib-0.10
 	>=gnome-base/gnome-desktop-3.27.90:3
-	elibc_FreeBSD? ( dev-libs/libexecinfo )
 
 	media-libs/mesa[egl,gles2]
 
@@ -41,6 +40,7 @@ COMMON_DEPEND="
 
 	systemd? ( >=sys-apps/systemd-183:0= )
 "
+
 # Pure-runtime deps from the session files should *NOT* be added here
 # Otherwise, things like gdm pull in gnome-shell
 # gnome-themes-standard is needed for the failwhale dialog themeing
@@ -55,6 +55,7 @@ RDEPEND="${COMMON_DEPEND}
 		>=dev-libs/dbus-glib-0.76
 	)
 "
+
 DEPEND="${COMMON_DEPEND}
 	dev-libs/libxslt
 	>=dev-util/intltool-0.40.6
@@ -65,6 +66,18 @@ DEPEND="${COMMON_DEPEND}
 		app-text/xmlto
 		dev-libs/libxslt )
 "
+
+src_configure() {
+	local emesonargs=(
+		$(meson_use systemd)
+		$(meson_use systemd systemd_journal)
+		$(meson_use !systemd consolekit)
+		$(meson_use doc docbook)
+		$(meson_use man)
+	)
+
+	meson_src_configure
+}
 
 pkg_postinst() {
 	gnome2_pkg_postinst
