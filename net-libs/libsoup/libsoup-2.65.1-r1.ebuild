@@ -38,12 +38,6 @@ DEPEND="${RDEPEND}
 	test? ( >=dev-libs/glib-2.40:2[${MULTILIB_USEDEP}] )
 	vala? ( $(vala_depend) )
 "
-#	test? (	www-servers/apache[ssl,apache2_modules_auth_digest,apache2_modules_alias,apache2_modules_auth_basic,
-#		apache2_modules_authn_file,apache2_modules_authz_host,apache2_modules_authz_user,apache2_modules_dir,
-#		apache2_modules_mime,apache2_modules_proxy,apache2_modules_proxy_http,apache2_modules_proxy_connect]
-#		dev-lang/php[apache2,xmlrpc]
-#		net-misc/curl
-#		net-libs/glib-networking[ssl])"
 
 src_prepare() {
 	if ! use test; then
@@ -70,6 +64,7 @@ multilib_src_configure() {
 	gnome2_src_configure \
 		--disable-static \
 		--disable-tls-check \
+		--disable-gtk-doc \
 		--without-gnome \
 		--without-apache-httpd \
 		$(usex debug --enable-debug=yes ' ') \
@@ -77,11 +72,6 @@ multilib_src_configure() {
 		$(multilib_native_use_enable introspection) \
 		$(multilib_native_use_enable vala) \
 		$(use_with samba ntlm-auth '${EPREFIX}'/usr/bin/ntlm_auth)
-
-	if multilib_is_native_abi; then
-		# fix gtk-doc
-		ln -s "${S}"/docs/reference/html docs/reference/html || die
-	fi
 }
 
 multilib_src_install() {
