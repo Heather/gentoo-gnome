@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit gnome2
+inherit gnome2 meson
 
 DESCRIPTION="A quick previewer for Nautilus, the GNOME file manager"
 HOMEPAGE="https://git.gnome.org/browse/sushi"
@@ -40,7 +40,3 @@ DEPEND="${RDEPEND}
 RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/nautilus-3.30.0
 "
-
-src_configure() {
-	gnome2_src_configure --disable-static
-}
