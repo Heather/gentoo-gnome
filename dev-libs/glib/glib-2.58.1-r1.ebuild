@@ -44,6 +44,7 @@ RDEPEND="
 	)
 "
 DEPEND="${RDEPEND}
+	dev-util/gtk-doc
 	app-text/docbook-xml-dtd:4.1.2
 	>=dev-libs/libxslt-1.0
 	>=sys-devel/gettext-0.11

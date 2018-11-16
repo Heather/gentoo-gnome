@@ -19,7 +19,6 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 RDEPEND="
 	${PYTHON_DEPS}
-	>=dev-libs/glib-2.6:2
 	>=dev-lang/perl-5.18
 	dev-libs/libxslt
 	>=dev-libs/libxml2-2.3.6:2
