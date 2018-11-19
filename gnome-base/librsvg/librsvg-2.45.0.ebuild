@@ -24,7 +24,7 @@ RDEPEND="
 	>=dev-libs/libxml2-2.9.1-r4:2[${MULTILIB_USEDEP}]
 	>=dev-libs/libcroco-0.6.8-r1[${MULTILIB_USEDEP}]
 	>=x11-libs/gdk-pixbuf-2.30.7:2[introspection?,${MULTILIB_USEDEP}]
-        || ( >=dev-lang/rust-1.27.0[${MULTILIB_USEDEP}] >=dev-lang/rust-bin-1.27.0[${MULTILIB_USEDEP}] )
+	|| ( >=dev-lang/rust-1.27.0[${MULTILIB_USEDEP}] >=dev-lang/rust-bin-1.27.0[${MULTILIB_USEDEP}] )
 	introspection? ( >=dev-libs/gobject-introspection-0.10.8:= )
 	tools? ( >=x11-libs/gtk+-3.10.0:3 )
 "
@@ -33,7 +33,7 @@ DEPEND="${RDEPEND}
 	dev-libs/vala-common
 	>=dev-util/gtk-doc-am-1.13
 	>=virtual/pkgconfig-0-r1[${MULTILIB_USEDEP}]
-        virtual/cargo
+	virtual/cargo
 	vala? ( $(vala_depend) )
 "
 # >=gtk-doc-am-1.13, gobject-introspection-common, vala-common needed by eautoreconf
