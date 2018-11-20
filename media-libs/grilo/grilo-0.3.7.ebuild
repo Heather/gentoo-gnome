@@ -5,10 +5,10 @@
 EAPI=6
 GNOME2_LA_PUNT="yes"
 PYTHON_COMPAT=( python3_{5,6,7} )
-VALA_MIN_API_VERSION="0.28"
+VALA_MIN_API_VERSION="0.30"
 VALA_USE_DEPEND="vapigen"
 
-inherit gnome2 python-any-r1 vala virtualx
+inherit gnome2 python-any-r1 vala virtualx meson
 
 DESCRIPTION="A framework for easy media discovery and browsing"
 HOMEPAGE="https://wiki.gnome.org/Projects/Grilo"
@@ -40,7 +40,6 @@ DEPEND="${RDEPEND}
 			dev-python/pygobject:3[${PYTHON_USEDEP}]')
 		media-plugins/grilo-plugins:${SLOT%/*} )
 "
-# eautoreconf requires gnome-common
 
 python_check_deps() {
 	has_version "dev-python/pygobject:2[${PYTHON_USEDEP}]" && \
@@ -52,43 +51,18 @@ pkg_setup() {
 }
 
 src_prepare() {
-	sed -e "s:GETTEXT_PACKAGE=grilo$:GETTEXT_PACKAGE=grilo-${SLOT%/*}:" \
-		-i configure.ac configure || die "sed configure.ac configure failed"
-
-	# Don't build examples
-	sed -e '/SUBDIRS/s/examples//' \
-		-i Makefile.am -i Makefile.in || die
-
-	use vala && vala_src_prepare
 	gnome2_src_prepare
 }
 
 src_configure() {
-	# --enable-debug only changes CFLAGS, useless for us
-	gnome2_src_configure \
-		--disable-static \
-		--disable-debug \
-		$(use_enable gtk test-ui) \
-		$(use_enable introspection) \
-		$(use_enable network grl-net) \
-		$(use_enable playlist grl-pls) \
-		$(use_enable test tests) \
-		$(use_enable vala)
+	local emesonargs=(
+		$(meson_use network enable-grl-net)
+		$(meson_use playlist enable-grl-pls)
+		$(meson_use introspection enable-introspection)
+		$(meson_use test enable-test-ui)
+		$(meson_use vala enable-vala)
+	)
+
+	meson_src_configure
 }
 
-src_test() {
-	virtx emake check
-}
-
-src_install() {
-	gnome2_src_install
-	# Upstream made this conditional on gtk-doc build...
-	DOC_MODULE_VERSION=${SLOT%/*} \
-	emake -C doc install DESTDIR="${ED}"
-
-	if use examples; then
-		# Install example code
-		insinto /usr/share/doc/${PF}/examples
-		doins "${S}"/examples/*.c
-	fi
-}
