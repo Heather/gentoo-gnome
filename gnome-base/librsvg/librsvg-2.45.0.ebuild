@@ -19,7 +19,7 @@ REQUIRED_USE="vala? ( introspection )"
 
 RDEPEND="
 	>=dev-libs/glib-2.34.3:2[${MULTILIB_USEDEP}]
-	>=x11-libs/cairo-1.12.14-r4[${MULTILIB_USEDEP}]
+	>=x11-libs/cairo-1.15.12[${MULTILIB_USEDEP}]
 	>=x11-libs/pango-1.36.3[${MULTILIB_USEDEP}]
 	>=dev-libs/libxml2-2.9.1-r4:2[${MULTILIB_USEDEP}]
 	>=dev-libs/libcroco-0.6.8-r1[${MULTILIB_USEDEP}]
