@@ -119,8 +119,6 @@ DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1.10 )
 	geolocation? ( dev-util/gdbus-codegen )
 	introspection? ( jit? ( sys-apps/paxctl ) )
-
-	sys-apps/bubblewrap
 "
 #	test? (
 #		dev-python/pygobject:3[python_targets_python2_7]
@@ -222,6 +220,7 @@ src_configure() {
 	fi
 
 	local mycmakeargs=(
+		-DENABLE_BUBBLEWRAP_SANDBOX=OFF
 		-DENABLE_QUARTZ_TARGET=$(usex aqua)
 		-DENABLE_API_TESTS=$(usex test)
 		-DENABLE_GTKDOC=$(usex doc)
