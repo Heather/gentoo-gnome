@@ -119,6 +119,8 @@ DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1.10 )
 	geolocation? ( dev-util/gdbus-codegen )
 	introspection? ( jit? ( sys-apps/paxctl ) )
+
+	sys-apps/bubblewrap
 "
 #	test? (
 #		dev-python/pygobject:3[python_targets_python2_7]
