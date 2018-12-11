@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="6"
@@ -65,7 +65,7 @@ src_prepare() {
 }
 
 src_configure() {
-	DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README"
+	DOCS="AUTHORS ChangeLog MAINTAINERS NEWS"
 
 	gnome2_src_configure \
 		--disable-deprecations \
