@@ -17,7 +17,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~amd64-
 RDEPEND="
 	>=dev-libs/glib-2.40:2
 	>=x11-libs/gtk+-3.19.3:3
-	x11-libs/gtksourceview:4.0[vala]
+	x11-libs/gtksourceview:4[vala]
 	>=net-libs/libsoup-2.42:2.4
 	dev-libs/libxml2:2
 	dev-libs/mpc:=
