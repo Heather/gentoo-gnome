@@ -13,7 +13,7 @@ HOMEPAGE="https://wiki.gnome.org/Apps/Nautilus"
 
 LICENSE="GPL-2+ LGPL-2+ FDL-1.1"
 SLOT="0"
-IUSE="exif gnome packagekit +previewer selinux +extensions"
+IUSE="exif gnome packagekit +previewer selinux +introspection +extensions"
 
 KEYWORDS="~amd64 ~x86 ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux"
 
@@ -41,7 +41,7 @@ COMMON_DEPEND="
 	x11-libs/libXrender
 
 	exif? ( >=media-libs/libexif-0.6.20 )
-	>=dev-libs/gobject-introspection-0.6.4:=
+	introspection? ( >=dev-libs/gobject-introspection-0.6.4:= )
 	selinux? ( >=sys-libs/libselinux-2 )
 	>=app-misc/tracker-2.0:=
 "
