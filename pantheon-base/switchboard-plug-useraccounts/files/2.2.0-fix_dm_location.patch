@@ -1,0 +1,110 @@
+--- /home/dirli/switchboard-plug-useraccounts-2.2.0/src/Misc/Utils.vala	2018-10-23 12:16:42.000000000 +0300
++++ /home/dirli/Utils.vala	2018-11-04 13:04:42.623381121 +0300
+@@ -21,42 +21,60 @@
+ 
+ namespace SwitchboardPlugUserAccounts {
+     public static string get_display_manager () {
+-        //TODO: add file location for different, non-debian-based distros
+-        string file = "/etc/X11/default-display-manager";
+-        string output = "";
++        string file = "/etc/systemd/system/display-manager.service";
+ 
+-        try {
+-            FileUtils.get_contents (file, out output);
+-        } catch (Error e) {
+-            warning (e.message);
++        if (FileUtils.test(file, FileTest.IS_REGULAR)) {
++            string output = "";
++            Regex regex = new Regex ("^ExecStart");
++            string? read_content = "";
++            try {
++                FileUtils.get_contents (file, out read_content);
++            } catch (Error e) {
++                warning (e.message);
++                return "";
++            }
++            var content_array = read_content.split ("\n");
++            foreach (string line in content_array) {
++                if (regex.match (line)) {
++                    output = line;
++                    break;
++                }
++            }
++            if (output.index_of ("/") != -1) {
++                output = output.slice (output.last_index_of ("/") + 1, output.length).chomp ();
++            } else if (output.index_of ("=") != -1) {
++                output = output.slice (output.last_index_of ("=") + 1, output.length).chomp ();
++            }
++            return output;
++        } else {
+             return "";
+         }
+-
+-        output = output.slice (output.last_index_of ("/") + 1, output.length).chomp ();
+-        return output;
+     }
+ 
+-    private static string[]? installed_languages = null;
++    private static Gee.ArrayList<string> installed_languages = null;
+ 
+-    public static string[]? get_installed_languages () {
++    public static Gee.ArrayList<string> get_installed_languages () {
+         if (installed_languages != null)
+             return installed_languages;
+ 
+-        string output;
+-        int status;
++        installed_languages = new Gee.ArrayList<string> ();
++
++        string directory = "/usr/share/locale/";
++        Dir dir = Dir.open (directory, 0);
++		string? name = null;
+ 
+         try {
+-            Process.spawn_sync (null, 
+-                {"/usr/share/language-tools/language-options" , null}, 
+-                Environ.get (),
+-                SpawnFlags.SEARCH_PATH,
+-                null,
+-                out output,
+-                null,
+-                out status);
++		    while ((name = dir.read_name ()) != null) {
++			    string path = Path.build_filename (directory, name);
+ 
+-                installed_languages = output.split("\n");
+-                return installed_languages;
++			    if (FileUtils.test (path, FileTest.IS_DIR)) {
++                    string code = name.slice (0, 2);
++                    if (!installed_languages.contains (code)) {
++                        installed_languages.add (code);
++                    }
++			    }
++		    }
++            return installed_languages;
+         } catch (Error e) {
+             critical (e.message);
+             return null;
+@@ -70,7 +88,7 @@
+             return default_regions;
+ 
+         default_regions = new Gee.HashMap<string, string> ();
+-        string file = "/usr/share/language-tools/main-countries";
++        string file = "/usr/share/locale/main-countries";
+         string? output = "";
+         try {
+             FileUtils.get_contents (file, out output);
+@@ -144,7 +162,12 @@
+         if (current_user != null)
+             return current_user;
+ 
+-        current_user = get_usermanager ().get_user (GLib.Environment.get_user_name ());
++        foreach (unowned Act.User temp_user in get_usermanager ().list_users ()) {
++            if (temp_user.get_user_name() == GLib.Environment.get_user_name ()) {
++                current_user = temp_user;
++                break;
++            }
++        }
+         return current_user;
+     }
+ 

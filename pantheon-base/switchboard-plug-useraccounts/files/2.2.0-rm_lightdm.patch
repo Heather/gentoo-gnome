@@ -1,0 +1,51 @@
+--- cli/GuestSessionToggle.vala	2018-10-23 12:16:42.000000000 +0300
++++ cli/GuestSessionToggle.vala	2018-11-03 15:43:53.374172086 +0300
+@@ -17,8 +17,7 @@
+ namespace GuestSessionToggle {
+ 
+ 	const string LIGHTDM_CONF = "/etc/lightdm/lightdm.conf";
+-	const string LIGHTDM_CONF_D = "/etc/lightdm/lightdm.conf.d";
+-	const string GUEST_SESSION_CONF = "/usr/share/lightdm/lightdm.conf.d/60-guest-session.conf";
++	const string GUEST_SESSION_CONF = "/usr/share/lightdm/60-guest-session.conf";
+ 
+ 	const OptionEntry[] options = {
+ 		{ "show", 0, 0, OptionArg.NONE, ref SHOW, "Show whether guest-session is enabled", null },
+@@ -123,10 +122,6 @@
+ 		if (@value != null)
+ 			return @value;
+ 
+-		@value = get_config_from_directory (LIGHTDM_CONF_D, group, key);
+-		if (@value != null)
+-			return @value;
+-
+ 		@value = get_config_from_directories (Environment.get_system_config_dirs (), group, key);
+ 		if (@value != null)
+ 			return @value;
+@@ -143,10 +138,13 @@
+ 		string? result = null;
+ 
+ 		foreach (unowned string dir in dirs) {
+-			var full_dir = Path.build_filename (dir, "lightdm", "lightdm.conf.d");
+-			result = get_config_from_directory (full_dir, group, key);
+-			if (result != null)
+-				return result;
++			var full_dir = Path.build_filename (dir, "lightdm");
++			if (FileUtils.test(full_dir, FileTest.IS_DIR)) {
++				result = get_config_from_directory (full_dir, group, key);
++				if (result != null)
++					return result;
++			}
++
+ 		}
+ 
+ 		return null;
+@@ -202,9 +200,6 @@
+ 		if (set_config_in_file (LIGHTDM_CONF, group, key, @value))
+ 			return true;
+ 
+-		if (set_config_in_directory (LIGHTDM_CONF_D, group, key, @value))
+-			return true;
+-
+ 		if (set_config_in_directories (Environment.get_system_config_dirs (), group, key, @value))
+ 			return true;
+ 
