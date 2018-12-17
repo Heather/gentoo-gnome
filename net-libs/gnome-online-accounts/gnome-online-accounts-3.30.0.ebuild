@@ -13,7 +13,7 @@ HOMEPAGE="https://wiki.gnome.org/Projects/GnomeOnlineAccounts"
 
 LICENSE="LGPL-2+"
 SLOT="0/1"
-IUSE="debug gnome +introspection kerberos" # telepathy"
+IUSE="debug gnome +introspection kerberos vala" # telepathy"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 
 # pango used in goaeditablelabel
@@ -82,7 +82,8 @@ src_configure() {
 		--enable-telepathy \
 		--enable-windows-live \
 		$(usex debug --enable-debug=yes ' ') \
-		$(use_enable kerberos)
+		$(use_enable kerberos) \
+		$(use_enable vala)
 		#$(use_enable telepathy)
 	# gudev & cheese from sub-configure is overriden
 	# by top level configure, and disabled so leave it like that
