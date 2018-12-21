@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -13,14 +13,9 @@ HOMEPAGE="https://wiki.gnome.org/Projects/GnomeOnlineAccounts"
 
 LICENSE="LGPL-2+"
 SLOT="0/1"
-IUSE="debug gnome +introspection kerberos" # telepathy"
+IUSE="debug gnome +introspection kerberos vala"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 
-# pango used in goaeditablelabel
-# libsoup used in goaoauthprovider
-# goa kerberos provider is incompatible with app-crypt/heimdal, see
-# https://bugzilla.gnome.org/show_bug.cgi?id=692250
-# json-glib-0.16 needed for bug #485092
 RDEPEND="
 	>=dev-libs/glib-2.53.4:2
 	>=app-crypt/libsecret-0.5
@@ -38,8 +33,7 @@ RDEPEND="
 		app-crypt/gcr:0=
 		app-crypt/mit-krb5 )
 "
-#	telepathy? ( net-libs/telepathy-glib )
-# goa-daemon can launch gnome-control-center
+
 PDEPEND="gnome? ( >=gnome-base/gnome-control-center-3.2[gnome-online-accounts(+)] )"
 
 DEPEND="${RDEPEND}
@@ -53,9 +47,7 @@ DEPEND="${RDEPEND}
 	dev-libs/gobject-introspection-common
 	gnome-base/gnome-common
 "
-# eautoreconf needs gobject-introspection-common, gnome-common
 
-# Due to sub-configure
 QA_CONFIGURE_OPTIONS=".*"
 
 src_prepare() {
@@ -64,8 +56,6 @@ src_prepare() {
 }
 
 src_configure() {
-	# TODO: Give users a way to set the G/FB/Windows Live secrets
-	# telepathy optional support is really a badly one, bug #494456
 	gnome2_src_configure \
 		--disable-static \
 		--enable-backend \
@@ -82,8 +72,6 @@ src_configure() {
 		--enable-telepathy \
 		--enable-windows-live \
 		$(usex debug --enable-debug=yes ' ') \
-		$(use_enable kerberos)
-		#$(use_enable telepathy)
-	# gudev & cheese from sub-configure is overriden
-	# by top level configure, and disabled so leave it like that
+		$(use_enable kerberos) \
+		$(use_enable vala)
 }
