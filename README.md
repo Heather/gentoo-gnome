@@ -12,7 +12,7 @@ Versions
 Communication
 -------------
 
- - [Gentoo discord server](https://discord.gg/Gentoo)
+ - [![Gentoo discord server](https://img.shields.io/discord/249111029668249601.svg?style=flat-square&label=Gentoo%20Linux)](https://discord.gg/Gentoo)
  - [issues](https://github.com/Heather/gentoo-gnome/issues)
 
 Major differences with the main tree
