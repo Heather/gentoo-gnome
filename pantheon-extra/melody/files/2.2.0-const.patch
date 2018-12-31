@@ -1,0 +1,11 @@
+--- src/Application.vala	2018-11-17 18:41:11.000000000 +0300
++++ src/Application.vala	2018-12-17 23:54:20.739000281 +0300
+@@ -30,7 +30,7 @@
+         public string DB_PATH { get; private set; }
+         public string COVER_FOLDER { get; private set; }
+         public string CACHE_FOLDER { get; private set; }
+-        public string QUEUE_SYS_NAME { get; default = "__queue__";}
++        public const string QUEUE_SYS_NAME = "__queue__";
+ 
+         PlayMyMusic.Settings settings;
+ 

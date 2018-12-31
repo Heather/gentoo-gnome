@@ -3,13 +3,11 @@
 
 EAPI=6
 
-VALA_MIN_API_VERSION=0.40
-
 inherit gnome2-utils meson vala xdg-utils
 
-DESCRIPTION="Manage processes and monitor system resources."
-HOMEPAGE="https://github.com/stsdc/monitor"
-SRC_URI="https://github.com/stsdc/monitor/archive/${PV}.tar.gz -> ${P}.tar.gz"
+DESCRIPTION="A multimedia file converter"
+HOMEPAGE="https://robertsanseries.github.io/ciano/"
+SRC_URI="https://github.com/robertsanseries/ciano/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -17,24 +15,20 @@ KEYWORDS="~amd64"
 IUSE="nls"
 
 DEPEND="
-	>=dev-lang/vala-0.40
+$(vala_depend)
 	nls? ( sys-devel/gettext )
 	virtual/pkgconfig
 "
 RDEPEND="${DEPEND}
 	dev-libs/glib:2
 	dev-libs/granite
-	dev-libs/libgee:0.8
-	gnome-base/libgtop:2
-	x11-libs/bamf
-	x11-libs/gtk+:3
-	x11-libs/libwnck:3
+	>=x11-libs/gtk+-3.22:3
 "
 
 src_prepare() {
 	eapply_user
-	epatch "${FILESDIR}/0.3.6-desktop_name.patch"
-	vala_src_prepare --vala-api-version 0.40
+	epatch "${FILESDIR}/0.2.1-desktop_name.patch"
+	vala_src_prepare
 }
 
 pkg_preinst() {
@@ -53,3 +47,6 @@ pkg_postrm() {
 	gnome2_schemas_update
 	xdg_desktop_database_update
 }
+
+
+

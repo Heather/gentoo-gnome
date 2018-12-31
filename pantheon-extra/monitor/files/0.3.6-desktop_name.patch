@@ -1,0 +1,11 @@
+--- data/meson.build	2018-11-23 18:27:29.000000000 +0300
++++ data/meson.build	2018-12-18 02:07:49.057078276 +0300
+@@ -18,7 +18,7 @@
+ 
+ i18n.merge_file(
+     input: meson.project_name() + '.desktop.in',
+-    output: meson.project_name() + '.desktop',
++    output: 'io.elementary.monitor.desktop',
+     po_dir: join_paths(meson.source_root(), 'po', 'extra'),
+     type: 'desktop',
+     install: true,

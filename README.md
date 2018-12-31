@@ -7,7 +7,7 @@ Versions
 --------
 
  - GNOME `3.31.x`
- - Pantheon `live` ebuilds (They are slightly outdated possibly)
+ - Pantheon `Juno` ebuilds
 
 Communication
 -------------
@@ -31,9 +31,7 @@ Information
 
 Pantheon
 --------
-
- - [This fix](http://elementaryos.stackexchange.com/questions/1946/have-application-menu-open-up-with-only-windows-key/2083#2083) was used for the Super_L key.
- - Entries from `/usr/share/gnome/autoload` are loaded.
+ - Entries from `/usr/share/gnome/autostart` are loaded.
 
 Here is an example `.xinitrc`:
 
