@@ -13,13 +13,13 @@ inherit gnome2-utils meson vala xdg-utils
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="amd64 ~x86"
 IUSE="nls plugins ipod"
 
 DEPEND="
-	>=dev-lang/vala-0.40
+	dev-lang/vala:0.40
 	nls? ( sys-devel/gettext )
-	virtual/pkgconfig
+	virtual/pkgconfig	
 "
 
 RDEPEND="${DEPEND}
@@ -60,7 +60,7 @@ src_configure() {
 	plugs=$plugs" ]"
 	local emesonargs=(
 		-D'build-plugins'=$(usex plugins true false)
-		-Dplugins="$plugs"
+		-Dplugins="$plugs"			
 	)
 	meson_src_configure
 }
