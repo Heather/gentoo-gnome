@@ -32,16 +32,16 @@ Information
 Pantheon
 --------
 minimal installation:
-    - pantheon-shell (excludes wingpanel-indicators, switchboard-plugs)
+ - pantheon-shell (excludes wingpanel-indicators, switchboard-plugs)
 full installation:
-    - pantheon-meta
-    - USE="minimal" excludes elementary-apps (default +minimal)
-    - bluetooth the section is not checked
-    - switchboard-plug-locale the plugin is tied to the Ubuntu. ideally, it should be rewritten. It's useless now
-    - switchboard-plug-useraccounts a little unfinished. it is tied to the accountsservice with patches from Debian. But these patches are not yet in gentoo.
+ - pantheon-meta
+ - USE="minimal" excludes elementary-apps (default +minimal)
+ - bluetooth the section is not checked
+ - switchboard-plug-locale the plugin is tied to the Ubuntu. ideally, it should be rewritten. It's useless now
+ - switchboard-plug-useraccounts a little unfinished. it is tied to the accountsservice with patches from Debian. But these patches are not yet in gentoo.
 
 (Dirli's cooment: below is written by someone else, left it, suddenly someone come in handy)
-    - Entries from `/usr/share/gnome/autostart` are loaded.
+ - Entries from `/usr/share/gnome/autostart` are loaded.
 
 Here is an example `.xinitrc`:
 
