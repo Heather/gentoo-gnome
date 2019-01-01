@@ -33,6 +33,7 @@ Pantheon
 --------
 minimal installation:
  - pantheon-shell (excludes wingpanel-indicators, switchboard-plugs)
+
 full installation:
  - pantheon-meta
  - USE="minimal" excludes elementary-apps (default +minimal)
