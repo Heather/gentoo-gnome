@@ -226,6 +226,7 @@ src_configure() {
 	fi
 
 	local mycmakeargs=(
+		-DENABLE_BUBBLEWRAP_SANDBOX=OFF
 		-DENABLE_QUARTZ_TARGET=$(usex aqua)
 		-DENABLE_API_TESTS=$(usex test)
 		-DENABLE_GTKDOC=$(usex doc)
