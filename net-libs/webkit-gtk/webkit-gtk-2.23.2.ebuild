@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -21,11 +21,7 @@ IUSE="aqua coverage doc +egl +geolocation gles2 gnome-keyring +gstreamer +intros
 
 # webgl needs gstreamer, bug #560612
 # gstreamer with opengl/gles2 needs egl
-# Review on bumps if fixed upstream and adjust accordingly:
-# non-GL builds are broken - https://bugs.webkit.org/show_bug.cgi?id=191997
-# GstreamerGL gets built even with GL disabled (thus requiring opengl or gles2 with gstreamer) - https://bugs.webkit.org/show_bug.cgi?id=191998
 REQUIRED_USE="
-	^^ ( opengl gles2 )
 	geolocation? ( introspection )
 	gles2? ( egl !opengl )
 	gstreamer? ( opengl? ( egl ) )
@@ -144,6 +140,16 @@ pkg_pretend() {
 			die 'The active compiler needs to be gcc 4.9 (or newer)'
 		fi
 	fi
+
+	if ! use opengl && ! use gles2; then
+		ewarn
+		ewarn "You are disabling OpenGL usage (USE=opengl or USE=gles) completely."
+		ewarn "This is an unsupported configuration meant for very specific embedded"
+		ewarn "use cases, where there truly is no GL possible (and even that use case"
+		ewarn "is very unlikely to come by). If you have GL (even software-only), you"
+		ewarn "really really should be enabling OpenGL!"
+		ewarn
+	fi
 }
 
 pkg_setup() {
@@ -220,7 +226,6 @@ src_configure() {
 	fi
 
 	local mycmakeargs=(
-		-DENABLE_BUBBLEWRAP_SANDBOX=OFF
 		-DENABLE_QUARTZ_TARGET=$(usex aqua)
 		-DENABLE_API_TESTS=$(usex test)
 		-DENABLE_GTKDOC=$(usex doc)
