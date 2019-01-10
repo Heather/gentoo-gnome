@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="6"
@@ -28,7 +28,7 @@ REQUIRED_USE="
 "
 
 RDEPEND="
-	>=app-editors/gedit-3.16
+	>=app-editors/gedit-3.31.3
 	>=dev-libs/glib-2.32:2
 	>=dev-libs/libpeas-1.7.0[gtk]
 	>=x11-libs/gtk+-3.9:3
