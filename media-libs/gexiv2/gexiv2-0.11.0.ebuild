@@ -1,11 +1,11 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
 PYTHON_COMPAT=( python{3_5,3_6,3_7} )
 
-inherit autotools eutils multilib python-r1 toolchain-funcs versionator xdg-utils
+inherit eutils multilib python-r1 toolchain-funcs versionator xdg-utils meson
 
 MY_PV=$(get_version_component_range 1-2)
 
@@ -30,27 +30,3 @@ RDEPEND="${PYTHON_DEPS}
 DEPEND="${RDEPEND}
 	virtual/pkgconfig"
 
-src_prepare() {
-	xdg_environment_reset
-	tc-export CXX
-	default
-	eautoreconf
-}
-
-src_configure() {
-	econf \
-		$(use_enable introspection) \
-		$(use_enable static-libs static)
-}
-
-src_install() {
-	emake DESTDIR="${D}" LIB="$(get_libdir)" install
-	dodoc AUTHORS NEWS README THANKS
-
-	if use python ; then
-		python_moduleinto gi/overrides/
-		python_foreach_impl python_domodule GExiv2.py
-	fi
-
-	use static-libs || prune_libtool_files --modules
-}
