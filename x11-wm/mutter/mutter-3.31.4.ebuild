@@ -1,8 +1,8 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit autotools gnome2 virtualx
+inherit gnome2 virtualx meson
 
 DESCRIPTION="GNOME 3 compositing window manager based on Clutter"
 HOMEPAGE="https://git.gnome.org/browse/mutter/"
@@ -10,7 +10,7 @@ HOMEPAGE="https://git.gnome.org/browse/mutter/"
 LICENSE="GPL-2+"
 SLOT="0"
 
-IUSE="debug gles2 input_devices_wacom +introspection test udev wayland"
+IUSE="+gles2 input_devices_wacom +introspection udev wayland"
 
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 
@@ -63,6 +63,8 @@ COMMON_DEPEND="
 	>=virtual/libudev-232:=
 	x11-base/xorg-server[wayland]
 	x11-libs/libdrm:=
+
+	media-video/pipewire
 "
 
 DEPEND="${COMMON_DEPEND}
@@ -76,63 +78,22 @@ RDEPEND="${COMMON_DEPEND}
 	!x11-misc/expocity
 "
 
-src_prepare() {
-	eautoreconf
-
-	# Disable building of noinst_PROGRAM for tests
-	if ! use test; then
-		sed -e '/^noinst_PROGRAMS/d' \
-			-i cogl/tests/conform/Makefile.{am,in} || die
-		sed -e '/noinst_PROGRAMS += testboxes/d' \
-			-i src/Makefile-tests.am || die
-		sed -e '/noinst_PROGRAMS/ s/testboxes$(EXEEXT)//' \
-			-i src/Makefile.in || die
-	fi
-
-	gnome2_src_prepare
-
-	# Leave the damn CFLAGS alone
-	sed -e 's/$CFLAGS -g/$CFLAGS /' \
-		-i clutter/configure || die
-	sed -e 's/$CFLAGS -g -O0/$CFLAGS /' \
-		-i cogl/configure || die
-	sed -e 's/$CFLAGS -g -O/$CFLAGS /' \
-		-i configure || die
+meson_use_enable() {
+	usex "$1" "-D${2-$1}=enabled" "-D${2-$1}=disabled"
 }
 
 src_configure() {
-	# Prefer gl driver by default
-	# GLX is forced by mutter but optional in clutter
-	# xlib-egl-platform required by mutter x11 backend
-	# native backend without wayland is useless
-	gnome2_src_configure \
-		--disable-static \
-		--enable-compile-warnings=minimum \
-		--enable-gl \
-		--enable-glx \
-		--enable-sm \
-		--enable-startup-notification \
-		--enable-verbose-mode \
-		--enable-xlib-egl-platform \
-		--with-default-driver=gl \
-		--with-libcanberra \
-		$(usex debug --enable-debug=yes "") \
-		$(use_enable gles2)        \
-		$(use_enable gles2 cogl-gles2) \
-		$(use_enable introspection) \
-		$(use_enable wayland) \
-		$(use_enable wayland kms-egl-platform) \
-		$(use_enable wayland native-backend) \
-		$(use_enable wayland wayland-egl-server) \
-		$(use_with input_devices_wacom libwacom) \
-		$(use_with udev gudev)
-}
+	local emesonargs=(
+		-Dopengl=true
+		-Degl=true
+		-Dglx=true
+		-Dsm=true
+		$(meson_use gles2)
+		$(meson_use gles2 native_backend)
+		$(meson_use wayland)
+		$(meson_use udev)
+		$(meson_use input_devices_wacom libwacom)
+	)
 
-src_test() {
-	virtx emake check
+	meson_src_configure
 }
-
-#pkg_postinst() {
-#	elog "Creating missing symlinks"
-#	ln /usr/"$(get_libdir)"/mutter/*.so /usr/"$(get_libdir)"/ || die
-#}
