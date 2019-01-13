@@ -9,7 +9,7 @@ HOMEPAGE="https://wiki.gnome.org/Projects/Gjs"
 
 LICENSE="MIT || ( MPL-1.1 LGPL-2+ GPL-2+ )"
 SLOT="0"
-IUSE="+cairo examples gtk test"
+IUSE="+cairo elibc_glibc examples gtk test"
 
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 
@@ -43,6 +43,7 @@ src_configure() {
 		--disable-systemtap \
 		--disable-dtrace \
 		--disable-coverage \
+		$(use_enable elibc_glibc profiler) \
 		$(use_with cairo cairo) \
 		$(use_with gtk) \
 		$(use_with test dbus-tests) \
