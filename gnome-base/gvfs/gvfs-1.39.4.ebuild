@@ -12,7 +12,7 @@ HOMEPAGE="https://wiki.gnome.org/Projects/gvfs"
 LICENSE="LGPL-2+"
 SLOT="0"
 
-IUSE="afp archive bluray cdda fuse google gnome-keyring gnome-online-accounts gphoto2 +http ios nfs policykit systemd test +udev udisks zeroconf samba +mtp"
+IUSE="afp archive bluray cdda fuse google gnome-keyring gnome-online-accounts gphoto2 +http ios nfs policykit +sftp systemd test +udev udisks zeroconf samba +mtp"
 REQUIRED_USE="
 	cdda? ( udev )
 	google? ( gnome-online-accounts )
@@ -27,7 +27,6 @@ RDEPEND="
 	>=dev-libs/glib-2.53.4:2
 	sys-apps/dbus
 	dev-libs/libxml2:2
-	net-misc/openssh
 	afp? ( >=dev-libs/libgcrypt-1.2.2:0= )
 	archive? ( app-arch/libarchive:= )
 	bluray? ( media-libs/libbluray )
@@ -38,7 +37,6 @@ RDEPEND="
 		>=dev-libs/libgdata-0.17.3:=[crypt,gnome-online-accounts]
 		>=net-libs/gnome-online-accounts-3.17.1:= )
 	gphoto2? ( >=media-libs/libgphoto2-2.5.0:= )
-	>=x11-libs/gtk+-3.0:3
 	http? ( >=net-libs/libsoup-2.42:2.4 )
 	ios? (
 		>=app-pda/libimobiledevice-1.2:=
@@ -49,7 +47,8 @@ RDEPEND="
 		>=sys-auth/polkit-0.114
 		sys-libs/libcap )
 	samba? ( >=net-fs/samba-4.5.10[client] )
-	>=sys-apps/systemd-206:0=
+	sftp? ( net-misc/openssh )
+	systemd? ( >=sys-apps/systemd-206:0= )
 	udev? (
 		cdda? ( dev-libs/libcdio-paranoia )
 		virtual/libgudev:= )
@@ -68,13 +67,7 @@ DEPEND="${RDEPEND}
 		|| (
 			net-analyzer/netcat
 			net-analyzer/netcat6 ) )
-	!udev? ( >=dev-libs/libgcrypt-1.2.2:0 )
 "
-# libgcrypt.m4, provided by libgcrypt, needed for eautoreconf, bug #399043
-# test dependencies needed per https://bugzilla.gnome.org/700162
-
-# Tests with multiple failures, this is being handled upstream at:
-# https://bugzilla.gnome.org/700162
 RESTRICT="test"
 
 PATCHES=(
@@ -87,20 +80,16 @@ src_prepare() {
 			-e 's/burn.mount.in/ /' \
 			-e 's/burn.mount/ /' \
 			-i daemon/Makefile.am || die
-
-		# Uncomment when eautoreconf stops being needed always
-		#eautoreconf
 	fi
 
 	gnome2_src_prepare
-	eautoreconf
 }
 
 src_configure() {
 	local emesonargs=(
-		-Dgdu=false
 		-Dgcr=true
-		-Dsystemduserunitdir="$(systemd_get_userunitdir)"
+		-Dsystemduserunitdir="$(usex systemd $(systemd_get_userunitdir) no)"
+		$(usex systemd "" -Dtmpfilesdir=no)
 		$(meson_use mtp)
 		$(meson_use afp)
 		$(meson_use archive)
@@ -119,6 +108,7 @@ src_configure() {
 		$(meson_use udev gudev)
 		$(meson_use udisks udisks2)
 		$(meson_use samba smb)
+		$(meson_use sftp)
 		$(meson_use zeroconf dnssd)
 	)
 
