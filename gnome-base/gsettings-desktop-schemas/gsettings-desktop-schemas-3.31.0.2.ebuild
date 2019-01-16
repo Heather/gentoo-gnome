@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit gnome2 autotools
+inherit gnome2 meson
 
 DESCRIPTION="Collection of GSettings schemas for GNOME desktop"
 HOMEPAGE="https://git.gnome.org/browse/gsettings-desktop-schemas"
@@ -23,11 +23,3 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig
 "
 
-src_prepare() {
-	default
-	eautoreconf
-}
-
-src_configure() {
-	gnome2_src_configure $(use_enable introspection)
-}
