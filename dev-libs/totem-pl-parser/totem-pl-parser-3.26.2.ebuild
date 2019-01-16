@@ -15,7 +15,6 @@ KEYWORDS="~alpha amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sparc x86 ~x86-fbsd"
 
 RDEPEND="
 	>=dev-libs/glib-2.36:2
-	dev-libs/gmime
 	>=net-libs/libsoup-2.43:2.4
 	archive? ( >=app-arch/libarchive-3 )
 	crypt? ( dev-libs/libgcrypt:0= )
