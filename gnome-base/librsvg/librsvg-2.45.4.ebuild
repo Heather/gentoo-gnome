@@ -17,6 +17,7 @@ KEYWORDS="alpha amd64 arm ~arm64 hppa ia64 ~mips ppc ppc64 ~s390 ~sh ~sparc x86 
 IUSE="+introspection tools vala"
 REQUIRED_USE="vala? ( introspection )"
 
+# TODO not working with rust-bin >=dev-lang/rust-bin-1.31.1[${MULTILIB_USEDEP}] https://github.com/Heather/gentoo-gnome/issues/295
 RDEPEND="
 	>=dev-libs/glib-2.34.3:2[${MULTILIB_USEDEP}]
 	>=x11-libs/cairo-1.15.12[${MULTILIB_USEDEP}]
@@ -24,7 +25,7 @@ RDEPEND="
 	>=dev-libs/libxml2-2.9.1-r4:2[${MULTILIB_USEDEP}]
 	>=dev-libs/libcroco-0.6.8-r1[${MULTILIB_USEDEP}]
 	>=x11-libs/gdk-pixbuf-2.30.7:2[introspection?,${MULTILIB_USEDEP}]
-	|| ( >=dev-lang/rust-1.31.1[${MULTILIB_USEDEP}] >=dev-lang/rust-bin-1.31.1[${MULTILIB_USEDEP}] )
+	>=dev-lang/rust-1.31.1[${MULTILIB_USEDEP}]
 	introspection? ( >=dev-libs/gobject-introspection-0.10.8:= )
 	tools? ( >=x11-libs/gtk+-3.10.0:3 )
 "
