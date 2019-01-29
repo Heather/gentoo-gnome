@@ -147,6 +147,7 @@ sys-auth/polkit
 >=x11-themes/gnome-themes-standard-3.21
 app-i18n/ibus
 app-text/enchant
+app-text/gtk-spell
 
 # for epiphany
 =dev-libs/nettle-3.4

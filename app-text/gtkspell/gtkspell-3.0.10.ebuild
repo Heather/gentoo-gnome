@@ -16,7 +16,7 @@ KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc x86 ~x86-fbsd ~a
 IUSE="+introspection vala"
 
 RDEPEND="
-	>=app-text/enchant-1.1.6:0
+	>=app-text/enchant-2.1.0
 	app-text/iso-codes
 	dev-libs/glib:2
 	x11-libs/gtk+:3[introspection?]
