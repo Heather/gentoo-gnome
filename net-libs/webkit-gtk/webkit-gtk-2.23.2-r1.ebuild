@@ -67,7 +67,7 @@ RDEPEND="
 	dev-libs/libtasn1:=
 	>=dev-libs/libgcrypt-1.7.0:0=
 	nsplugin? ( >=x11-libs/gtk+-2.24.10:2 )
-	spell? ( >=app-text/enchant-0.22:= )
+	spell? ( >=app-text/enchant-0.22:0 )
 	gstreamer? (
 		>=media-libs/gstreamer-1.14:1.0
 		>=media-libs/gst-plugins-base-1.14:1.0[egl?,gles2?,opengl?]
