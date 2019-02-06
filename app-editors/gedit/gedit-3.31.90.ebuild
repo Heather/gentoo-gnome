@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python3_{5,6,7} )
 VALA_MIN_API_VERSION="0.26"
 VALA_USE_DEPEND="vapigen"
 
-inherit eutils gnome2 multilib python-single-r1 vala virtualx
+inherit eutils gnome2 meson multilib python-single-r1 vala virtualx
 
 DESCRIPTION="A text editor for the GNOME desktop"
 HOMEPAGE="https://wiki.gnome.org/Apps/Gedit"
@@ -53,7 +53,6 @@ DEPEND="${COMMON_DEPEND}
 	>=sys-devel/gettext-0.18
 	virtual/pkgconfig
 "
-# yelp-tools, gnome-common needed to eautoreconf
 
 pkg_setup() {
 	use python && [[ ${MERGE_TYPE} != binary ]] && python-single-r1_pkg_setup
@@ -62,30 +61,4 @@ pkg_setup() {
 src_prepare() {
 	vala_src_prepare
 	gnome2_src_prepare
-}
-
-src_configure() {
-	DOCS="AUTHORS ChangeLog MAINTAINERS NEWS"
-
-	gnome2_src_configure \
-		--disable-deprecations \
-		--disable-updater \
-		--enable-gvfs-metadata \
-		$(use_enable introspection) \
-		$(use_enable spell) \
-		$(use_enable python) \
-		$(use_enable vala)
-}
-
-src_test() {
-	"${EROOT}${GLIB_COMPILE_SCHEMAS}" --allow-any-name "${S}/data" || die
-	GSETTINGS_SCHEMA_DIR="${S}/data" virtx emake check
-}
-
-src_install() {
-	local args=()
-	# manually set pyoverridesdir due to bug #524018 and AM_PATH_PYTHON limitations
-	use python && args+=( pyoverridesdir="$(python_get_sitedir)/gi/overrides" )
-
-	gnome2_src_install "${args[@]}"
 }
