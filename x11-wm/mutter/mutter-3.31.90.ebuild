@@ -24,7 +24,7 @@ COMMON_DEPEND="
 	>=x11-libs/pango-1.30[introspection?]
 	>=x11-libs/cairo-1.14[X]
 	>=x11-libs/gtk+-3.19.8:3[X,introspection?]
-	>=dev-libs/glib-2.53.4:2[dbus]
+	>=dev-libs/glib-2.59.2:2[dbus]
 	>=media-libs/libcanberra-0.26[gtk3]
 	>=x11-libs/startup-notification-0.7
 	>=x11-libs/libXcomposite-0.2
@@ -83,6 +83,8 @@ meson_use_enable() {
 }
 
 src_configure() {
+	sed -i "/'-Werror=redundant-decls',/d" "${S}"/meson.build || die "sed failed"
+
 	local emesonargs=(
 		-Dopengl=true
 		-Degl=true
