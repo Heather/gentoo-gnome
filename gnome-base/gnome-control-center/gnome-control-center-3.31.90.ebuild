@@ -33,6 +33,7 @@ COMMON_DEPEND="
 	media-libs/fontconfig
 	>=sys-apps/accountsservice-0.6.39
 
+	>=media-libs/gsound-1.0.2
 	>=media-libs/libcanberra-0.13[gtk3]
 	>=media-sound/pulseaudio-2[glib]
 	>=sys-auth/polkit-0.97
@@ -49,7 +50,7 @@ COMMON_DEPEND="
 
 	media-video/cheese
 
-	>=net-wireless/gnome-bluetooth-3.28.0:=
+	>=net-wireless/gnome-bluetooth-3.31.1:=
 	net-libs/libsoup:2.4
 	>=x11-misc/colord-0.1.34:0=
 	>=x11-libs/colord-gtk-0.1.24
