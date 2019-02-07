@@ -11,8 +11,7 @@ LICENSE="GPL-2+ LGPL-2.1+ FDL-1.1+"
 SLOT="2/13" # subslot = libgnome-bluetooth soname version
 IUSE="debug +introspection"
 
-# bluez-5.51 is not released
-#KEYWORDS="amd64 ~arm ~ppc ~ppc64 x86"
+KEYWORDS="amd64 ~arm ~ppc ~ppc64 x86"
 
 COMMON_DEPEND="
 	>=dev-libs/glib-2.38:2
@@ -23,7 +22,7 @@ COMMON_DEPEND="
 	introspection? ( >=dev-libs/gobject-introspection-0.9.5:= )
 "
 RDEPEND="${COMMON_DEPEND}
-	>=net-wireless/bluez-5.51
+	>=net-wireless/bluez-5.50
 "
 DEPEND="${COMMON_DEPEND}
 	!net-wireless/bluez-gnome
