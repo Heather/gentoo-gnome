@@ -18,7 +18,7 @@ KEYWORDS="alpha amd64 arm ~arm64 ia64 ~mips ppc ppc64 ~sh sparc x86 ~amd64-fbsd 
 # Replace gkd gpg-agent with pinentry[gnome-keyring] one, bug #547456
 RDEPEND="
 	>=app-crypt/gcr-3.27.90:=[gtk]
-	>=dev-libs/glib-2.38:2
+	>=dev-libs/glib-2.59.2:2
 	app-misc/ca-certificates
 	>=dev-libs/libgcrypt-1.2.2:0=
 	caps? ( sys-libs/libcap-ng )
