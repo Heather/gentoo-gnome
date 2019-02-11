@@ -1,5 +1,7 @@
 Unofficial GNOME overlay
 [![Build Status](https://travis-ci.org/Heather/gentoo-gnome.png?branch=master)](https://travis-ci.org/Heather/gentoo-gnome)
+[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/Heather/gentoo-gnome.svg)](http://isitmaintained.com/project/Heather/gentoo-gnome "Average time to resolve an issue")
+[![Percentage of issues still open](http://isitmaintained.com/badge/open/Heather/gentoo-gnome.svg)](http://isitmaintained.com/project/Heather/gentoo-gnome "Percentage of issues still open")
 [![Twitter][]](http://www.twitter.com/Cynede)
 ------------------------
 
