@@ -14,8 +14,8 @@ HOMEPAGE="https://wiki.gnome.org/Projects/libsoup"
 LICENSE="LGPL-2+"
 SLOT="2.4"
 
-IUSE="gssapi samba +introspection"
-REQUIRED_USE=""
+IUSE="gssapi +introspection samba vala"
+REQUIRED_USE="vala? ( introspection )"
 
 #includes goes into wrong folder with meson?
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x86-solaris"
@@ -37,10 +37,21 @@ DEPEND="${RDEPEND}
 	>=net-libs/libpsl-0.20.0[${MULTILIB_USEDEP}]
 	>=virtual/pkgconfig-0-r1[${MULTILIB_USEDEP}]
 	>=dev-libs/glib-2.40:2[${MULTILIB_USEDEP}]
-	$(vala_depend)
+	vala? ( $(vala_depend) )
 "
 
 src_prepare() {
-	vala_src_prepare
+	use vala && vala_src_prepare
 	default
+}
+
+src_configure() {
+	local emesonargs=(
+		$(meson_use gssapi)
+		$(meson_use introspection)
+		$(meson_use samba ntlm)
+		$(meson_use vala vapi)
+		$(usex samba -Dntlm-auth="${EPREFIX}"/usr/bin/ntlm_auth "")
+	)
+	meson_src_configure
 }
