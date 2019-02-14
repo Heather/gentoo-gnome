@@ -91,7 +91,6 @@ multilib_src_configure() {
 	#TODO: there are some problems with cheese support
 	local emesonargs=(
 		-Dman=true
-		-Dgtk_doc=false
 		-Dinternal_pcre=false
 		$(meson_use xattr)
 		$(meson_use fam)
@@ -103,13 +102,6 @@ multilib_src_configure() {
 	)
 
 	meson_src_configure
-
-	if multilib_is_native_abi; then
-		local d
-		for d in glib gio gobject; do
-			ln -s "${S}"/docs/reference/${d}/html docs/reference/${d}/html || die
-		done
-	fi
 }
 
 multilib_src_compile() {
