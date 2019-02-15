@@ -52,6 +52,7 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-remove_postinstall.patch"
 	mkdir ${S}/tmpbin
 	ln -s $(echo $(whereis valac-) | grep -oE "[^[[:space:]]*$") ${S}/tmpbin/valac
+	vala_src_prepare
 	default
 }
 
