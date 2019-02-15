@@ -46,13 +46,12 @@ src_prepare() {
 }
 
 src_configure() {
-	#TODO:
-	#$(meson_use samba ntlm)
-	#$(usex samba -Dntlm-auth="${EPREFIX}"/usr/bin/ntlm_auth "")
 	local emesonargs=(
 		$(meson_use gssapi)
-		$(meson_use introspection)	
+		$(meson_use introspection)
+		$(meson_use samba ntlm)
 		$(meson_use vala vapi)
+		$(usex samba -Dntlm_auth="'${EPREFIX}/usr/bin/ntlm_auth'" "")
 	)
 	meson_src_configure
 }
