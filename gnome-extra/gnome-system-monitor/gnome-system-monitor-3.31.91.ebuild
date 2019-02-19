@@ -15,7 +15,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 
 RDEPEND="
 	>=dev-libs/glib-2.37.3:2
-	>=gnome-base/libgtop-2.39.90
+	>=gnome-base/libgtop-2.39.91
 	>=x11-libs/gtk+-3.12:3[X(+)]
 	>=dev-cpp/gtkmm-3.3.18:3.0
 	>=dev-cpp/glibmm-2.46:2
