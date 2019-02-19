@@ -16,8 +16,8 @@ KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x8
 IUSE="-test"
 
 COMMON_DEPEND="
-	>=app-accessibility/at-spi2-core-2.29.1[${MULTILIB_USEDEP}]
-	>=dev-libs/atk-2.29.2[${MULTILIB_USEDEP}]
+	>=app-accessibility/at-spi2-core-2.31.2[${MULTILIB_USEDEP}]
+	>=dev-libs/atk-2.31.90[${MULTILIB_USEDEP}]
 	>=dev-libs/glib-2.32:2[${MULTILIB_USEDEP}]
 	>=sys-apps/dbus-1.5[${MULTILIB_USEDEP}]
 "
