@@ -17,8 +17,7 @@ SLOT="2.4"
 IUSE="gssapi +introspection samba vala"
 REQUIRED_USE="vala? ( introspection )"
 
-#includes goes into wrong folder with meson?
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x86-solaris"
+#KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x86-solaris"
 
 RDEPEND="
 	>=dev-libs/glib-2.34.3:2[${MULTILIB_USEDEP}]
