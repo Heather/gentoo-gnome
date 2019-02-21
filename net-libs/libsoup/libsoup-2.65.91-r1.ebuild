@@ -6,7 +6,7 @@ GNOME2_LA_PUNT="yes"
 PYTHON_COMPAT=( python{3_5,3_6,3_7} )
 VALA_USE_DEPEND="vapigen"
 
-inherit gnome2 multilib-minimal meson python-any-r1 vala
+inherit gnome2 meson multilib-minimal python-any-r1 vala eutils
 
 DESCRIPTION="An HTTP library implementation in C"
 HOMEPAGE="https://wiki.gnome.org/Projects/libsoup"
@@ -17,7 +17,7 @@ SLOT="2.4"
 IUSE="gssapi +introspection samba vala"
 REQUIRED_USE="vala? ( introspection )"
 
-#KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x86-solaris"
+KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x86-solaris"
 
 RDEPEND="
 	>=dev-libs/glib-2.34.3:2[${MULTILIB_USEDEP}]
@@ -44,13 +44,31 @@ src_prepare() {
 	default
 }
 
-src_configure() {
-	local emesonargs=(
-		$(meson_use gssapi)
-		$(meson_use introspection)
-		$(meson_use samba ntlm)
-		$(meson_use vala vapi)
-		$(usex samba -Dntlm_auth="'${EPREFIX}/usr/bin/ntlm_auth'" "")
-	)
+multilib_src_configure() {
+	if multilib_is_native_abi; then
+		local emesonargs=(
+			$(meson_use gssapi)
+			$(meson_use introspection)
+			$(meson_use samba ntlm)
+			$(meson_use vala vapi)
+			$(usex samba -Dntlm_auth="'${EPREFIX}/usr/bin/ntlm_auth'" "")
+		)
+	else
+		local emesonargs=(
+			$(meson_use gssapi)
+			-Dintrospection=false
+			$(meson_use samba ntlm)
+			-Dvapi=false
+			$(usex samba -Dntlm_auth="'${EPREFIX}/usr/bin/ntlm_auth'" "")
+		)
+	fi
 	meson_src_configure
+}
+
+multilib_src_compile() {
+	meson_src_compile
+}
+
+multilib_src_install() {
+	meson_src_install
 }
