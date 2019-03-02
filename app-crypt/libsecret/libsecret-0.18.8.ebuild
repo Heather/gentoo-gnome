@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-PYTHON_COMPAT=( python3_{5,6,7} )
+PYTHON_COMPAT=( python3_{4,5,6,7} )
 VALA_USE_DEPEND=vapigen
 
 inherit gnome2 multilib-minimal python-any-r1 vala virtualx
@@ -18,7 +18,7 @@ IUSE="+crypt +introspection test vala"
 REQUIRED_USE="test? ( introspection )
 	vala? ( introspection )"
 
-KEYWORDS="alpha amd64 ~arm ~arm64 ia64 ~mips ppc ppc64 sparc x86 ~amd64-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~amd64-fbsd"
 
 RDEPEND="
 	>=dev-libs/glib-2.38:2[${MULTILIB_USEDEP}]
@@ -34,8 +34,7 @@ DEPEND="${RDEPEND}
 	dev-libs/libxslt
 	dev-util/gdbus-codegen
 	>=dev-util/gtk-doc-am-1.9
-	>=dev-util/intltool-0.35.0
-	sys-devel/gettext
+	>=sys-devel/gettext-0.19.8
 	virtual/pkgconfig[${MULTILIB_USEDEP}]
 	test? (
 		$(python_gen_any_dep '
