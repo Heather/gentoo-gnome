@@ -103,6 +103,7 @@ src_configure() {
 		-DENABLE_YTNEF=OFF
 		-DENABLE_PST_IMPORT=OFF
 		-DENABLE_GTKSPELL=$(usex spell ON OFF)
+		-DENABLE_WEATHER=$(usex weather ON OFF)
 	)
 	cmake-utils_src_configure
 }
