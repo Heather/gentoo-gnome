@@ -6,7 +6,7 @@ PYTHON_COMPAT=( python{3_5,3_6,3_7} )
 
 #TODO most of those classes are not used
 inherit meson bash-completion-r1 epunt-cxx flag-o-matic gnome2 libtool linux-info \
-	multilib multilib-minimal pax-utils python-any-r1 toolchain-funcs virtualx
+	multilib multilib-minimal pax-utils python-single-r1 toolchain-funcs virtualx
 
 # Until bug #537330 glib is a reverse dependency of pkgconfig and, then
 # adding new dependencies end up making stage3 to grow. Every addition needs
@@ -76,7 +76,7 @@ pkg_setup() {
 		fi
 		linux-info_pkg_setup
 	fi
-	python-any-r1_pkg_setup
+	python-single-r1_pkg_setup
 }
 
 meson_use_enable() {
