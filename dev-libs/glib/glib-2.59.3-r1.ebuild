@@ -59,6 +59,7 @@ DEPEND="${RDEPEND}
 # python depending package, which can be buildtime depended in packages that
 # need these tools, without pulling in python at runtime.
 RDEPEND="${RDEPEND}
+	${PYTHON_DEPS}
 	=dev-util/glib-utils-666"
 PDEPEND="
 	dbus? ( gnome-base/dconf )
