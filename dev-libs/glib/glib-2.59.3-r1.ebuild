@@ -109,6 +109,11 @@ multilib_src_compile() {
 }
 
 multilib_src_install() {
+	if multilib_is_native_abi; then
+		python_fix_shebang gobject/glib-genmarshal
+		python_fix_shebang gobject/glib-mkenums
+		python_fix_shebang glib/gtester-report
+	fi
 	meson_src_install
 }
 
