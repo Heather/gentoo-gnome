@@ -18,7 +18,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86"
 COMMON_DEPEND="
 	>=app-arch/xz-utils-5.0.5
 	>=app-crypt/libsecret-0.7
-	>=dev-libs/glib-2.31:2[dbus]
+	>=dev-libs/glib-2.60.0:2[dbus]
 	dev-libs/libpwquality
 	>=media-libs/libcanberra-0.1[gtk3]
 	>=media-libs/libdvdread-4.2.0
