@@ -7,7 +7,7 @@ inherit gnome2
 DESCRIPTION="Compiler for the GObject type system"
 HOMEPAGE="https://wiki.gnome.org/Projects/Vala"
 
-SRC_URI="https://download.gnome.org/sources/vala/0.43/vala-${PV}.tar.xz"
+SRC_URI="https://download.gnome.org/sources/vala/0.44/vala-${PV}.tar.xz"
 
 LICENSE="LGPL-2.1"
 SLOT="0.44"
