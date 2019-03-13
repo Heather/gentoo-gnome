@@ -8,7 +8,7 @@ Unofficial GNOME overlay
 Versions
 --------
 
- - GNOME `3.31.x`
+ - GNOME `3.32.x`
  - Pantheon `Juno` ebuilds
 
 Communication
