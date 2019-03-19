@@ -43,6 +43,7 @@ COMMON_DEPEND="
 	postscript? ( >=app-text/libspectre-0.2:= )
 	tiff? ( >=media-libs/tiff-3.6:0= )
 	xps? ( >=app-text/libgxps-0.2.1:= )
+	>=app-text/gspell-1.8.1-r1
 "
 RDEPEND="${COMMON_DEPEND}
 	gnome-base/gvfs
