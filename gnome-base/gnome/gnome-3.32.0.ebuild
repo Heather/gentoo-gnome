@@ -16,9 +16,9 @@ S="${WORKDIR}"
 
 RDEPEND="
 	>=gnome-base/gdm-${PV}
-	>=gnome-base/gnome-keyring-3.28.2
+	>=gnome-base/gnome-keyring-3.31.91
 	>=gnome-base/gnome-session-${PV}
 	>=gnome-extra/evolution-data-server-${PV}
 "
 DEPEND=""
-PDEPEND=">=gnome-base/gvfs-1.38.0"
+PDEPEND=">=gnome-base/gvfs-1.40.0"
