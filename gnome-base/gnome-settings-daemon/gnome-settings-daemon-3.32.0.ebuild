@@ -12,7 +12,7 @@ HOMEPAGE="https://git.gnome.org/browse/gnome-settings-daemon"
 
 LICENSE="GPL-2+"
 SLOT="0"
-IUSE="+cups debug +networkmanager policykit -smartcard test +udev wayland"
+IUSE="+colord +cups debug +networkmanager policykit -smartcard test +udev wayland"
 REQUIRED_USE="udev"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~x86-solaris"
 
