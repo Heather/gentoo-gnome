@@ -18,7 +18,7 @@ RDEPEND="
 	>=dev-libs/gobject-introspection-1.41.4:=
 
 	sys-libs/readline:0
-	=dev-lang/spidermonkey-60.1.0:60
+	dev-lang/spidermonkey:60
 	virtual/libffi
 	cairo? ( x11-libs/cairo[X] )
 	gtk? ( x11-libs/gtk+:3 )
