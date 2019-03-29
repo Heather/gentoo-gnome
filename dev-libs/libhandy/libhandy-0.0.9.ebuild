@@ -17,8 +17,6 @@ if [[ ${PV} == "9999" ]]; then
 else
 	SRC_URI="https://source.puri.sm/Librem5/${PN}/-/archive/v${PV}/${PN}-v${PV}.tar.gz -> ${P}.tar.gz"
 	S="${WORKDIR}/${PN}-v${PV}"
-
-	PATCHES=("${FILESDIR}/g-enum-no-auto-ptr.patch")
 fi
 
 LICENSE="LGPL-2.1+"
