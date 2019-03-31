@@ -25,6 +25,7 @@ RDEPEND="${COMMON_DEPEND}
 	>=net-wireless/bluez-5.50
 "
 DEPEND="${COMMON_DEPEND}
+	>=dev-util/meson-0.49.2
 	!net-wireless/bluez-gnome
 	app-text/docbook-xml-dtd:4.1.2
 	dev-libs/libxml2:2
