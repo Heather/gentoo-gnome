@@ -3,8 +3,8 @@
 
 EAPI=6
 CMAKE_MAKEFILE_GENERATOR="ninja"
-PYTHON_COMPAT=( python2_7 )
-USE_RUBY="ruby23 ruby24 ruby25"
+PYTHON_COMPAT=( python3_{4,5,6,7} )
+USE_RUBY="ruby23 ruby24 ruby25 ruby26"
 
 inherit check-reqs cmake-utils flag-o-matic gnome2 pax-utils python-any-r1 ruby-single toolchain-funcs virtualx
 
@@ -17,7 +17,7 @@ LICENSE="LGPL-2+ BSD"
 SLOT="4/37" # soname version of libwebkit2gtk-4.0
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-fbsd ~amd64-linux ~x86-linux ~x86-macos"
 
-IUSE="aqua coverage doc +egl +geolocation gles2 gnome-keyring +gstreamer +introspection +jit libnotify nsplugin +opengl spell wayland +webgl +X"
+IUSE="aqua coverage doc +egl +geolocation gles2 gnome-keyring +gstreamer +introspection +jit jpeg2k libnotify nsplugin +opengl spell wayland +webgl +X"
 
 # webgl needs gstreamer, bug #560612
 # gstreamer with opengl/gles2 needs egl
@@ -42,12 +42,12 @@ RESTRICT="test"
 # Missing OpenWebRTC checks and conditionals, but ENABLE_MEDIA_STREAM/ENABLE_WEB_RTC is experimental upstream (PRIVATE OFF)
 # >=gst-plugins-opus-1.14.4-r1 for opusparse (required by MSE)
 RDEPEND="
-	>=x11-libs/cairo-1.10.2:=[X?]
-	>=media-libs/fontconfig-2.8.0:1.0
-	>=media-libs/freetype-2.4.2:2
-	>=dev-libs/libgcrypt-1.6.0:0=
+	>=x11-libs/cairo-1.16.0:=[X?]
+	>=media-libs/fontconfig-2.13.0:1.0
+	>=media-libs/freetype-2.9.0:2
+	>=dev-libs/libgcrypt-1.7.0:0=
 	>=x11-libs/gtk+-3.22:3[aqua?,introspection?,wayland?,X?]
-	>=media-libs/harfbuzz-1.3.3:=[icu(+)]
+	>=media-libs/harfbuzz-1.4.2:=[icu(+)]
 	>=dev-libs/icu-3.8.1-r1:=
 	virtual/jpeg:0=
 	>=net-libs/libsoup-2.48:2.4[introspection?]
@@ -65,9 +65,8 @@ RDEPEND="
 	geolocation? ( >=app-misc/geoclue-2.1.5:2.0 )
 	introspection? ( >=dev-libs/gobject-introspection-1.32.0:= )
 	dev-libs/libtasn1:=
-	>=dev-libs/libgcrypt-1.7.0:0=
 	nsplugin? ( >=x11-libs/gtk+-2.24.10:2 )
-	spell? ( >=app-text/enchant-0.22:0 )
+	spell? ( >=app-text/enchant-0.22:= )
 	gstreamer? (
 		>=media-libs/gstreamer-1.14:1.0
 		>=media-libs/gst-plugins-base-1.14:1.0[egl?,gles2?,opengl?]
@@ -83,6 +82,7 @@ RDEPEND="
 
 	libnotify? ( x11-libs/libnotify )
 	dev-libs/hyphen
+	jpeg2k? ( >=media-libs/openjpeg-2.2.0:2= )
 
 	egl? ( media-libs/mesa[egl] )
 	gles2? ( media-libs/mesa[gles2] )
@@ -98,7 +98,6 @@ DEPEND="${RDEPEND}
 	${PYTHON_DEPS}
 	${RUBY_DEPS}
 	>=app-accessibility/at-spi2-core-2.5.3
-	>=dev-lang/perl-5.10
 	dev-util/glib-utils
 	>=dev-util/gtk-doc-am-1.10
 	>=dev-util/gperf-3.0.1
@@ -107,7 +106,7 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext
 	virtual/pkgconfig
 
-	dev-lang/perl
+	>=dev-lang/perl-5.10
 	virtual/perl-Data-Dumper
 	virtual/perl-Carp
 	virtual/perl-JSON-PP
@@ -226,7 +225,7 @@ src_configure() {
 	fi
 
 	local mycmakeargs=(
-		-DENABLE_BUBBLEWRAP_SANDBOX=OFF
+		#-DENABLE_UNIFIED_BUILDS=$(usex jumbo-build) # broken in 2.24.0
 		-DENABLE_QUARTZ_TARGET=$(usex aqua)
 		-DENABLE_API_TESTS=$(usex test)
 		-DENABLE_GTKDOC=$(usex doc)
@@ -239,6 +238,7 @@ src_configure() {
 		-DENABLE_JIT=$(usex jit)
 		-DUSE_LIBNOTIFY=$(usex libnotify)
 		-DUSE_LIBSECRET=$(usex gnome-keyring)
+		-DUSE_OPENJPEG=$(usex jpeg2k)
 		-DUSE_WOFF2=ON
 		-DENABLE_PLUGIN_PROCESS_GTK2=$(usex nsplugin)
 		-DENABLE_SPELLCHECK=$(usex spell)
