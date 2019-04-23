@@ -1,11 +1,10 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 PYTHON_COMPAT=( python3_{5,6,7} )
 
-inherit gnome2 python-any-r1 virtualx
+inherit gnome2 python-any-r1 virtualx meson
 
 DESCRIPTION="Log messages and event viewer"
 HOMEPAGE="https://wiki.gnome.org/Apps/Logs"
@@ -40,14 +39,4 @@ python_check_deps() {
 
 pkg_setup() {
 	use test && python-any-r1_pkg_setup
-}
-
-src_configure() {
-	gnome2_src_configure \
-		--enable-man \
-		$(use_enable test tests)
-}
-
-src_test() {
-	virtx emake check
 }
