@@ -4,9 +4,9 @@
 EAPI=6
 VALA_USE_DEPEND="vapigen"
 VALA_MIN_API_VERSION="0.30"
-VALA_MAX_API_VERSION="0.42"
+#VALA_MAX_API_VERSION="0.42"
 
-inherit eutils gnome2 vala autotools
+inherit eutils gnome2 vala meson
 
 # Gnome release team do ALWAYS forget to release vte and it likely will never change
 SRC_URI="https://gitlab.gnome.org/GNOME/vte/-/archive/${PV}/vte-${PV}.tar.bz2"
@@ -48,40 +48,11 @@ RDEPEND="${RDEPEND}
 "
 
 src_prepare() {
-	eautoreconf
-
 	use vala && vala_src_prepare
-
-	# build fails because of -Werror with gcc-5.x
-	sed -e 's#-Werror=format=2#-Wformat=2#' -i configure || die "sed failed"
-
 	gnome2_src_prepare
 }
 
-src_configure() {
-	local myconf=""
-
-	if [[ ${CHOST} == *-interix* ]]; then
-		myconf="${myconf} --disable-Bsymbolic"
-
-		# interix stropts.h is empty...
-		export ac_cv_header_stropts_h=no
-	fi
-
-	# Python bindings are via gobject-introspection
-	# Ex: from gi.repository import Vte
-	gnome2_src_configure \
-		--disable-test-application \
-		--disable-static \
-		$(use_enable debug) \
-		$(use_enable glade glade-catalogue) \
-		$(use_with crypt gnutls) \
-		$(use_enable introspection) \
-		$(use_enable vala) \
-		${myconf}
-}
-
 src_install() {
-	gnome2_src_install
+	meson_src_install
 	mv "${D}"/etc/profile.d/vte{,-${SLOT}}.sh || die
 }
