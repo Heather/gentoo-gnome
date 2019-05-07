@@ -47,5 +47,5 @@ src_install() {
 	dobin gtkdoc-rebase
 
 	insinto /usr/share/aclocal
-	doins gtk-doc.m4
+	doins "${S}/buildsystems/autotools/gtk-doc.m4"
 }
