@@ -10,7 +10,7 @@ HOMEPAGE="https://git.gnome.org/browse/mutter/"
 LICENSE="GPL-2+"
 SLOT="0"
 
-IUSE="+gles2 input_devices_wacom +introspection udev wayland"
+IUSE="elogind +gles2 input_devices_wacom +introspection systemd udev wayland"
 
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 
@@ -59,7 +59,8 @@ COMMON_DEPEND="
 	>=dev-libs/wayland-1.6.90
 	>=dev-libs/wayland-protocols-1.16
 	>=media-libs/mesa-10.3[egl,gbm,wayland]
-	sys-apps/systemd:=
+	systemd? ( sys-apps/systemd:= )
+	elogind? ( sys-auth/elogind )
 	>=virtual/libudev-232:=
 	x11-base/xorg-server[wayland]
 	x11-libs/libdrm:=
