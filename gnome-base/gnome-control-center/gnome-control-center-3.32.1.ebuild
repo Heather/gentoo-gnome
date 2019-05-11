@@ -11,7 +11,7 @@ HOMEPAGE="https://git.gnome.org/browse/gnome-control-center/"
 
 LICENSE="GPL-2+"
 SLOT="2"
-IUSE="+cups +i18n v4l wayland"
+IUSE="+cups +i18n v4l systemd wayland"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~x86-solaris"
 
 # False positives caused by nested configure scripts
@@ -48,8 +48,6 @@ COMMON_DEPEND="
 	>=media-libs/clutter-1.11.3[gtk]
 	media-libs/clutter-gtk[gtk]
 
-	media-video/cheese
-
 	>=net-wireless/gnome-bluetooth-3.31.1:=
 	net-libs/libsoup:2.4
 	>=x11-misc/colord-0.1.34:0=
@@ -76,7 +74,8 @@ COMMON_DEPEND="
 # Also we need newer driver versions to allow wacom and libinput drivers to
 # not collide
 RDEPEND="${COMMON_DEPEND}
-	|| ( >=sys-apps/systemd-31 ( app-admin/openrc-settingsd sys-auth/consolekit ) )
+	systemd? ( >=sys-apps/systemd-31 )
+	!systemd? ( || ( app-admin/openrc-settingsd sys-auth/consolekit ) )
 	x11-themes/adwaita-icon-theme
 	>=gnome-extra/gnome-color-manager-3.28.0
 	gnome-base/gnome-settings-daemon
@@ -114,6 +113,7 @@ src_configure() {
 		-Doption=disable-static
 		$(meson_use i18n ibus)
 		#$(meson_use v4l cheese)
+		-Dcheese=false
 		$(meson_use wayland)
 	)
 
