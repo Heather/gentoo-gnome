@@ -3,7 +3,7 @@
 
 EAPI=6
 GNOME2_LA_PUNT="yes"
-PYTHON_COMPAT=( python{3_5,3_6,3_7} )
+PYTHON_COMPAT=( python3_{5,6,7} )
 
 inherit autotools eutils gnome2 multilib python-single-r1 virtualx
 
