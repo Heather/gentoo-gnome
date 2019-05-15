@@ -28,7 +28,7 @@ REQUIRED_USE="
 "
 
 RDEPEND="
-	>=app-editors/gedit-3.32.0
+	>=app-editors/gedit-${PV}
 	>=dev-libs/glib-2.32:2
 	>=dev-libs/libpeas-1.7.0[gtk]
 	>=x11-libs/gtk+-3.9:3
