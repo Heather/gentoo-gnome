@@ -18,22 +18,17 @@ IUSE="" # test
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 COMMON_DEPEND="${PYTHON_DEPS}
-	>=dev-libs/atk-2.31.90
+	>=dev-libs/atk-2.33.1
 	dev-python/dbus-python[${PYTHON_USEDEP}]
 	>=dev-python/pygobject-2.90.1:3[${PYTHON_USEDEP}]
 "
 RDEPEND="${COMMON_DEPEND}
 	>=sys-apps/dbus-1
-	>=app-accessibility/at-spi2-core-2.32.1[introspection]
+	>=app-accessibility/at-spi2-core-2.33.1[introspection]
 "
 DEPEND="${COMMON_DEPEND}
 	virtual/pkgconfig
 "
-
-PATCHES=(
-	# https://bugzilla.gnome.org/show_bug.cgi?id=689957
-	"${FILESDIR}/${PN}-2.6.0-examples-python3.patch"
-)
 
 src_prepare() {
 	gnome2_src_prepare
