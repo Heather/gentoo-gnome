@@ -30,7 +30,7 @@ COMMON_DEPEND="
 	>=dev-libs/libcroco-0.6.8:0.6
 	>=gnome-base/gnome-desktop-3.7.90:3=[introspection]
 	>=gnome-base/gsettings-desktop-schemas-3.21.3
-	>=gnome-extra/evolution-data-server-3.17.2:=
+	>=gnome-extra/evolution-data-server-3.33.2:=
 	>=media-libs/gstreamer-0.11.92:1.0
 	>=net-im/telepathy-logger-0.2.4[introspection]
 	>=net-libs/telepathy-glib-0.19[introspection]
