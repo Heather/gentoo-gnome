@@ -27,10 +27,7 @@ RDEPEND="
 	>=dev-libs/glib-2.38:2[dbus]
 	>=dev-libs/gobject-introspection-0.10.1:=
 	dev-libs/libgit2:=[threads]
-
-	>=dev-libs/libgit2-glib-0.26.0[ssh]
-	<dev-libs/libgit2-glib-0.27.0
-
+	>=dev-libs/libgit2-glib-0.28.0[ssh]
 	>=dev-libs/libpeas-1.5.0[gtk]
 	>=dev-libs/libxml2-2.9.0:2
 	net-libs/libsoup:2.4
