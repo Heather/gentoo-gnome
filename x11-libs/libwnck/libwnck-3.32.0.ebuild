@@ -26,6 +26,7 @@ RDEPEND="
 	startup-notification? ( >=x11-libs/startup-notification-0.4 )
 "
 DEPEND="${RDEPEND}
+	>=dev-util/meson-0.50.1
 	dev-util/gtk-doc-am
 	>=dev-util/intltool-0.40.6
 	sys-devel/gettext
