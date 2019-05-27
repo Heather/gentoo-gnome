@@ -21,6 +21,7 @@ REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 # test if unbundling of libgd is possible
 # Currently it seems not to be (unstable API/ABI)
 RDEPEND="
+	>=dev-libs/libdazzle-3.33.1[introspection]
 	app-crypt/libsecret[vala]
 	dev-libs/libgee:0.8[introspection]
 	>=app-text/gtkspell-3.0.3:3[vala]
