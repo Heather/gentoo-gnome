@@ -5,6 +5,11 @@ Unofficial GNOME overlay
 [![Twitter][]](http://www.twitter.com/Cynede)
 ------------------------
 
+Note
+----
+
+There are several known issues with `17.1` profile
+
 Versions
 --------
 
