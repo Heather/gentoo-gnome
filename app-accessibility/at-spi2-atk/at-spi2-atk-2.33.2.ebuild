@@ -17,7 +17,7 @@ IUSE="-test"
 
 COMMON_DEPEND="
 	>=app-accessibility/at-spi2-core-${PV}[${MULTILIB_USEDEP}]
-	>=dev-libs/atk-2.33.1[${MULTILIB_USEDEP}]
+	>=dev-libs/atk-2.33.3[${MULTILIB_USEDEP}]
 	>=dev-libs/glib-2.32:2[${MULTILIB_USEDEP}]
 	>=sys-apps/dbus-1.5[${MULTILIB_USEDEP}]
 "

@@ -18,7 +18,7 @@ IUSE="" # test
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 COMMON_DEPEND="${PYTHON_DEPS}
-	>=dev-libs/atk-2.33.1
+	>=dev-libs/atk-2.33.3
 	dev-python/dbus-python[${PYTHON_USEDEP}]
 	>=dev-python/pygobject-2.90.1:3[${PYTHON_USEDEP}]
 "
