@@ -19,26 +19,33 @@ REQUIRED_USE="
 	vala? ( introspection )
 "
 
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+KEYWORDS="alpha amd64 ~arm arm64 hppa ~ia64 ~ppc ~ppc64 ~sparc x86"
 
 RDEPEND="
-	>=dev-libs/glib-2.38.0:2
-	>=dev-libs/json-glib-0.15
+	>=dev-libs/glib-2.44.0:2
+	>=dev-libs/json-glib-0.15[introspection?]
 	>=dev-libs/libxml2-2:2
 	>=net-libs/liboauth-0.9.4
 	>=net-libs/libsoup-2.55.90:2.4[introspection?]
 	>=x11-libs/gdk-pixbuf-2.14:2
 	crypt? ( app-crypt/gcr:= )
-	gnome-online-accounts? ( >=net-libs/gnome-online-accounts-3.8:= )
+	gnome-online-accounts? ( >=net-libs/gnome-online-accounts-3.8:=[introspection?,vala?] )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.7:= )
 "
 DEPEND="${RDEPEND}
+	dev-util/glib-utils
 	>=dev-util/gtk-doc-am-1.25
 	>=dev-util/intltool-0.40
+	sys-devel/autoconf-archive
 	virtual/pkgconfig
 	test? ( >=net-libs/uhttpmock-0.5 )
 	vala? ( $(vala_depend) )
 "
+# eautoreconf needs autoconf-archive
+
+PATCHES=(
+	"${FILESDIR}"/${PN}-0.17.8-disable-demos.patch
+)
 
 src_prepare() {
 	use vala && vala_src_prepare
@@ -56,8 +63,12 @@ src_configure() {
 		$(use_enable test always-build-tests)
 }
 
+src_compile() {
+	sed -i 's/@CODE_COVERAGE_RULES@//' "${S}/Makefile" || die "sed failed"
+	emake
+}
+
 src_test() {
 	unset ORBIT_SOCKETDIR
-	export GSETTINGS_BACKEND="memory" #486412
-	dbus-launch emake check
+	dbus-run-session emake check
 }
