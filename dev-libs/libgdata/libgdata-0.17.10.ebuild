@@ -5,7 +5,7 @@ EAPI=6
 VALA_USE_DEPEND="vapigen"
 GNOME2_EAUTORECONF="yes"
 
-inherit gnome2 vala
+inherit gnome2 vala meson
 
 DESCRIPTION="GLib-based library for accessing online service APIs using the GData protocol"
 HOMEPAGE="https://wiki.gnome.org/Projects/libgdata"
@@ -22,6 +22,7 @@ REQUIRED_USE="
 KEYWORDS="alpha amd64 ~arm arm64 hppa ~ia64 ~ppc ~ppc64 ~sparc x86"
 
 RDEPEND="
+	net-libs/uhttpmock
 	>=dev-libs/glib-2.44.0:2
 	>=dev-libs/json-glib-0.15[introspection?]
 	>=dev-libs/libxml2-2:2
@@ -34,41 +35,13 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	dev-util/glib-utils
-	>=dev-util/gtk-doc-am-1.25
-	>=dev-util/intltool-0.40
-	sys-devel/autoconf-archive
 	virtual/pkgconfig
 	test? ( >=net-libs/uhttpmock-0.5 )
 	vala? ( $(vala_depend) )
 "
-# eautoreconf needs autoconf-archive
-
-PATCHES=(
-	"${FILESDIR}"/${PN}-0.17.8-disable-demos.patch
-)
 
 src_prepare() {
 	use vala && vala_src_prepare
-	gnome2_src_prepare
+	default
 }
 
-src_configure() {
-	gnome2_src_configure \
-		--disable-build-demos \
-		$(use_enable crypt gnome) \
-		$(use_enable gnome-online-accounts goa) \
-		$(use_enable introspection) \
-		$(use_enable vala) \
-		$(use_enable static-libs static) \
-		$(use_enable test always-build-tests)
-}
-
-src_compile() {
-	sed -i 's/@CODE_COVERAGE_RULES@//' "${S}/Makefile" || die "sed failed"
-	emake
-}
-
-src_test() {
-	unset ORBIT_SOCKETDIR
-	dbus-run-session emake check
-}
