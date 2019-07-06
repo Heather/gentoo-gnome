@@ -44,13 +44,12 @@ CHOST_amd64=x86_64-unknown-linux-gnu
 CHOST_x86=i686-unknown-linux-gnu
 CHOST_arm64=aarch64-unknown-linux-gnu
 
+PATCHES=( "${FILESDIR}"/rust-link.patch )
+
 src_prepare() {
 	local build_dir
 
-	eautoreconf
-
 	use vala && vala_src_prepare
-	gnome2_src_prepare
 
 	# Work around issue where vala file is expected in local
 	# directory instead of source directory.
@@ -59,6 +58,11 @@ src_prepare() {
 		mkdir -p "${build_dir}"
 		cp -p "${S}/Rsvg-2.0-custom.vala" "${build_dir}"|| die
 	done
+
+	gnome2_src_prepare
+
+	# important to do it after patches
+	eautoreconf
 }
 
 multilib_src_configure() {
