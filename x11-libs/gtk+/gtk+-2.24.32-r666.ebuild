@@ -9,7 +9,7 @@ inherit eutils flag-o-matic gnome2 multilib multilib-minimal readme.gentoo-r1 vi
 
 DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="https://www.gtk.org/"
-SRC_URI+=" https://dev.gentoo.org/~leio/distfiles/${P}-patchset.tar.xz"
+SRC_URI+=" https://dev.gentoo.org/~leio/distfiles/${P}-patchset-r1.tar.xz"
 
 LICENSE="LGPL-2+"
 SLOT="2"
@@ -18,7 +18,7 @@ REQUIRED_USE="
 	xinerama? ( !aqua )
 "
 
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="alpha amd64 arm arm64 hppa ia64 ~mips ppc ppc64 s390 ~sh sparc x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 
 # Upstream wants us to do their job:
 # https://bugzilla.gnome.org/show_bug.cgi?id=768663#c1
@@ -57,12 +57,11 @@ DEPEND="${COMMON_DEPEND}
 	app-text/docbook-xml-dtd:4.3
 	dev-libs/libxslt
 	dev-libs/gobject-introspection-common
+	dev-util/glib-utils
 	>=dev-util/gtk-doc-am-1.20
 	>=sys-devel/gettext-0.18.3[${MULTILIB_USEDEP}]
 	>=virtual/pkgconfig-0-r1[${MULTILIB_USEDEP}]
-	!aqua? (
-		x11-base/xorg-proto[${MULTILIB_USEDEP}]
-	)
+	!aqua? ( x11-base/xorg-proto )
 	test? (
 		x11-themes/hicolor-icon-theme
 		media-fonts/font-misc-misc
@@ -101,7 +100,7 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-2.24.24-out-of-source.patch
 	# Rely on split gtk-update-icon-cache package, bug #528810
 	"${FILESDIR}"/${PN}-2.24.31-update-icon-cache.patch # requires eautoreconf
-	# Upstream gtk-2-24 branch up to 2018-05-06 state, bug #650536 safety
+	# Upstream gtk-2-24 branch up to 2018-09-08 state, bug #650536 safety
 	"${WORKDIR}"/patches/ # requires eautoreconf
 )
 
