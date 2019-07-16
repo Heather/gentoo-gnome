@@ -6,6 +6,7 @@ inherit gnome2 meson
 
 DESCRIPTION="A quick previewer for Nautilus, the GNOME file manager"
 HOMEPAGE="https://git.gnome.org/browse/sushi"
+SRC_URI="https://download.gnome.org/sources/sushi/3.33/sushi-${PV}.tar.xz"
 
 LICENSE="GPL-2+"
 SLOT="0"
@@ -40,3 +41,13 @@ DEPEND="${RDEPEND}
 RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/nautilus-3.30.0
 "
+
+src_prepare() {
+	sed -i -e "s/meson.add_install_script('meson-post-install.py', libexecdir, bindir)//" "${S}"/meson.build || die "sed failed"
+	default
+}
+
+pkg_postinst() {
+	addwrite /usr/bin/sushi
+	ln -s -f /usr/libexec/org.gnome.NautilusPreviewer /usr/bin/sushi
+}
