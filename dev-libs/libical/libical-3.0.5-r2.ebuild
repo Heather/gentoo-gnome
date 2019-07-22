@@ -87,3 +87,13 @@ src_install() {
 		dodoc -r examples
 	fi
 }
+
+pkg_postinst() {
+	# workaround for incorrect pkgconfig on 17.1 profile
+	if [[ -f "/usr/lib64/pkgconfig/libical-glib.pc" ]]; then
+		sed -i -e 's|libdir=${exec_prefix}/lib|libdir=${exec_prefix}/lib64|' /usr/lib64/pkgconfig/libical-glib.pc
+	fi
+	if [[ -f "/usr/lib64/pkgconfig/libical.pc" ]]; then
+		sed -i -e 's|libdir=${exec_prefix}/lib|libdir=${exec_prefix}/lib64|' /usr/lib64/pkgconfig/libical.pc
+	fi
+}
