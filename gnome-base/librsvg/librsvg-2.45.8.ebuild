@@ -44,8 +44,6 @@ CHOST_amd64=x86_64-unknown-linux-gnu
 CHOST_x86=i686-unknown-linux-gnu
 CHOST_arm64=aarch64-unknown-linux-gnu
 
-PATCHES=( "${FILESDIR}"/rust-link.patch )
-
 src_prepare() {
 	local build_dir
 
