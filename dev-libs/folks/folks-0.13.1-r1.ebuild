@@ -50,7 +50,10 @@ DEPEND="${COMMON_DEPEND}
 	virtual/pkgconfig
 
 	test? (
-		sys-apps/dbus ) )
+		sys-apps/dbus
+		bluetooth? (
+				>=gnome-extra/evolution-data-server-3.33.2
+				>=dev-libs/glib-2.40:2 ) )
 "
 
 src_prepare() {
