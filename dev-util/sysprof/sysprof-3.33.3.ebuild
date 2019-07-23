@@ -26,6 +26,7 @@ DEPEND="${RDEPEND}
 	dev-libs/appstream-glib
 	dev-libs/libxml2:2
 	dev-util/itstool
+	>=dev-libs/libdazzle-3.33.3
 	>=sys-devel/gettext-0.19.8
 	>=sys-kernel/linux-headers-2.6.32
 	virtual/pkgconfig
