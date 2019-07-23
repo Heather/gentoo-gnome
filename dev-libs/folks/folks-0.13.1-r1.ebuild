@@ -5,7 +5,7 @@ EAPI=6
 GNOME2_LA_PUNT="yes"
 VALA_USE_DEPEND="vapigen"
 
-inherit gnome2 meson vala virtualx
+inherit gnome.org xdg meson vala
 
 DESCRIPTION="Library for aggregating people from multiple sources"
 HOMEPAGE="https://wiki.gnome.org/Projects/Folks"
@@ -30,7 +30,7 @@ COMMON_DEPEND="
 	sys-libs/readline:0=
 
 	bluetooth? ( >=net-wireless/bluez-5 )
-	eds? ( >=gnome-extra/evolution-data-server-3.13.90:=[vala] )
+	eds? ( >=gnome-extra/evolution-data-server-3.33.2:=[vala] )
 	telepathy? ( >=net-libs/telepathy-glib-0.19.9[vala] )
 	tracker? ( >=app-misc/tracker-1:0= )
 "
@@ -50,25 +50,11 @@ DEPEND="${COMMON_DEPEND}
 	virtual/pkgconfig
 
 	test? (
-		sys-apps/dbus
-		bluetooth? (
-			>=gnome-extra/evolution-data-server-3.9.1
-			>=dev-libs/glib-2.40:2 ) )
+		sys-apps/dbus ) )
 "
 
-#PATCHES=(
-#	"${FILESDIR}"/${PV}-vala-0.42-compat.patch
-#)
-
 src_prepare() {
-	# Force re-generation of introspection files, otherwise it does not match installed libs
-	find -name "*.vala" -exec touch {} \; || die
-
 	vala_src_prepare
-	gnome2_src_prepare
+	xdg_src_prepare
 	meson_src_prepare
-}
-
-src_test() {
-	dbus-launch virtx emake check
 }
