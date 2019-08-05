@@ -20,6 +20,10 @@ REQUIRED_USE="python? ( introspection ${PYTHON_REQUIRED_USE} )"
 
 KEYWORDS="~amd64"
 
+PATCHES=(
+	"${FILESDIR}"/${P}.patch
+)
+
 # X libs are not needed for OSX (aqua)
 COMMON_DEPEND="
 	>=dev-libs/libxml2-2.5.0:2
