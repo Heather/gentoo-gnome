@@ -22,7 +22,6 @@ app-text/evince
 dev-cpp/glibmm
 dev-cpp/gtkmm
 dev-cpp/pangomm
-dev-lang/vala
 dev-libs/atk
 dev-libs/gdl
 dev-libs/glib
@@ -33,7 +32,6 @@ dev-libs/libgnome-games-support
 dev-libs/libgweather
 dev-libs/libpeas
 dev-libs/libsigc++
-dev-libs/vala-common
 dev-python/pyatspi
 dev-python/pygobject
 dev-util/anjuta
