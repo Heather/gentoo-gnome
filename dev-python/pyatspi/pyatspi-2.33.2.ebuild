@@ -24,7 +24,7 @@ COMMON_DEPEND="${PYTHON_DEPS}
 "
 RDEPEND="${COMMON_DEPEND}
 	>=sys-apps/dbus-1
-	>=app-accessibility/at-spi2-core-2.33.90[introspection]
+	>=app-accessibility/at-spi2-core-2.33.1[introspection]
 "
 DEPEND="${COMMON_DEPEND}
 	virtual/pkgconfig
