@@ -38,6 +38,15 @@ src_prepare() {
 	gnome2_src_prepare
 }
 
+src_configure() {
+	local emesonargs=(
+		-Dglade_catalog=$(usex glade true false)
+		-Dgir=$(usex introspection true false)
+		-Dvapi=$(usex vala true false)
+	)
+	meson_src_configure
+}
+
 src_install() {
 	meson_src_install
 
