@@ -80,7 +80,6 @@ multilib_src_configure() {
 		--disable-static \
 		--disable-tools \
 		$(multilib_native_use_enable introspection) \
-		$(multilib_native_use_with tools gtk3) \
 		$(multilib_native_use_enable vala) \
 		--enable-pixbuf-loader \
 		"${myconf[@]}"
