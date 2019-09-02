@@ -80,6 +80,7 @@ multilib_src_configure() {
 		--build=${CHOST_default} \
 		--disable-static \
 		--disable-tools \
+		$(multilib_native_use_enable gtk-doc) \
 		$(multilib_native_use_enable introspection) \
 		$(multilib_native_use_enable vala) \
 		--enable-pixbuf-loader \
