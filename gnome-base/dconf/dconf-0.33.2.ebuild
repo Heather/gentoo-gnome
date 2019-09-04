@@ -2,14 +2,14 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit bash-completion-r1 gnome.org gnome2-utils meson vala virtualx xdg
+inherit bash-completion-r1 gnome.org gnome2-utils meson virtualx xdg
 
 DESCRIPTION="Simple low-level configuration system"
 HOMEPAGE="https://wiki.gnome.org/Projects/dconf"
 
 LICENSE="LGPL-2.1+"
 SLOT="0"
-KEYWORDS="alpha amd64 arm arm64 ~hppa ~ia64 ~mips ppc ppc64 s390 ~sh ~sparc x86 ~amd64-fbsd ~x86-fbsd ~x86-linux"
+KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~amd64-fbsd ~x86-fbsd ~x86-linux"
 IUSE="gtk-doc"
 
 RDEPEND="
@@ -17,7 +17,6 @@ RDEPEND="
 	sys-apps/dbus
 "
 DEPEND="${RDEPEND}
-	$(vala_depend)
 	app-text/docbook-xml-dtd:4.2
 	app-text/docbook-xsl-stylesheets
 	dev-libs/libxslt
@@ -28,18 +27,18 @@ DEPEND="${RDEPEND}
 "
 
 PATCHES=(
-	"${FILESDIR}"/${PV}-bash-completion-dir.patch
+	"${FILESDIR}"/0.30.1-bash-completion-dir.patch
 )
 
 src_prepare() {
 	xdg_src_prepare
-	vala_src_prepare
 }
 
 src_configure() {
 	local emesonargs=(
 		-Dbash_completion_dir="$(get_bashcompdir)"
 		-Dman=true
+		-Dvapi=false
 		$(meson_use gtk-doc gtk_doc)
 	)
 	meson_src_configure
