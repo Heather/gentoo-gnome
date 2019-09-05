@@ -29,7 +29,7 @@ RDEPEND="
 	tools? ( >=x11-libs/gtk+-3.10.0:3 )
 "
 DEPEND="${RDEPEND}
-	>=dev-lang/rust-1.31.1[${MULTILIB_USEDEP}]
+	>=dev-lang/rust-1.34.2[${MULTILIB_USEDEP}]
 	dev-libs/gobject-introspection-common
 	dev-libs/vala-common
 	>=dev-util/gtk-doc-am-1.13
