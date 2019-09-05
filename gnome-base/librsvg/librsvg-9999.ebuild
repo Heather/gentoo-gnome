@@ -61,7 +61,17 @@ src_prepare() {
 }
 
 src_configure() {
-	default
+	local myconf=()
+
+	ECONF_SOURCE=${S} \
+	./configure \
+	--prefix=/usr \
+	--disable-static \
+	--disable-tools \
+		$(use_enable gtk-doc) \
+		$(use_enable introspection) \
+		--enable-pixbuf-loader \
+		"${myconf[@]}"
 }
 
 src_compile() {
