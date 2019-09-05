@@ -51,6 +51,13 @@ src_unpack() {
 
 src_prepare() {
 	default
+
+	local build_dir
+
+        if [[ "${PV}" == *9999* ]]; then
+	eautoreconf
+	fi
+
 }
 
 src_configure() {
