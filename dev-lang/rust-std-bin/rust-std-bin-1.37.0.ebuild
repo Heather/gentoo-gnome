@@ -21,7 +21,7 @@ IUSE="abi_x86_32 cpu_flags_x86_sse2"
 
 DEPEND=""
 RDEPEND="app-eselect/eselect-rust
-	=dev-lang/rust-bin-1.37.0-r0
+	=dev-lang/rust-bin-1.37.0*
 	!dev-lang/rust:0"
 
 REQUIRED_USE="x86? ( cpu_flags_x86_sse2 )"
