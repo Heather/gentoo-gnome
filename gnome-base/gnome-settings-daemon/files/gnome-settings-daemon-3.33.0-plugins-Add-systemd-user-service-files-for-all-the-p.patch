@@ -1,0 +1,1356 @@
+From 55150656f5346fe92d4e7186e40ef34d5a163558 Mon Sep 17 00:00:00 2001
+From: Benjamin Berg <bberg@redhat.com>
+Date: Sat, 20 Apr 2019 00:39:15 +0200
+Subject: [PATCH 1/3] plugins: Add systemd user service files for all the
+ plugins
+
+Using the facility added in the previous commit, we can add systemd user
+service files for all plugins and know when they have started up.
+
+This is roughly based on the work previously done by Iain Lane
+<iain@orangesquash.org.uk> and Bastien Nocera hadess@hadess.net>.
+
+For each g-s-d process we have a service and a target file. This
+separation only exists to contain dependency failures which would cause
+an OnFailure action to trigger and is needed so that we can use
+OnFailure for the gnome-session fail-whale
+(gnome-session-failed.target).
+
+In general, the approach taken is that we start g-s-d processes after
+gnome-session-initialized.target and before gnome-session.target.
+
+We want to be able to selectively start the services only when one or
+more dependencies are there, or even mask out services under some
+conditions. The approach taken is the following:
+ * To mask a service, use a Conflicts entry. This is e.g. used to not
+   start certain services in GDM using
+     Conflicts=gnome-session@gnome-login.target
+ * To depend on multiple targets to be up and running to start, we set
+   each of these targets in Requisite/After/PartOf/WantedBy. We always
+   do this for gnome-session-initialized.target but this method is
+   extensible to any number of further targets (e.g. bluetooth.target)
+---
+ meson.build                                   | 15 ++++
+ meson_options.txt                             |  1 +
+ .../gsd-a11y-settings.service.in              | 18 +++++
+ .../a11y-settings/gsd-a11y-settings.target.in | 10 +++
+ ...ome.SettingsDaemon.A11ySettings.desktop.in |  1 +
+ plugins/color/gsd-color.service.in            | 19 +++++
+ plugins/color/gsd-color.target.in             | 10 +++
+ .../org.gnome.SettingsDaemon.Color.desktop.in |  1 +
+ plugins/common/daemon-skeleton-gtk.h          | 48 ++----------
+ plugins/common/daemon-skeleton.h              | 47 ++----------
+ plugins/datetime/gsd-datetime.service.in      | 18 +++++
+ plugins/datetime/gsd-datetime.target.in       | 13 ++++
+ ...g.gnome.SettingsDaemon.Datetime.desktop.in |  1 +
+ plugins/dummy/gsd-dummy.service.in            | 18 +++++
+ plugins/dummy/gsd-dummy.target.in             | 28 +++++++
+ .../org.gnome.SettingsDaemon.Dummy.desktop.in |  1 +
+ .../housekeeping/gsd-housekeeping.service.in  | 18 +++++
+ .../housekeeping/gsd-housekeeping.target.in   | 13 ++++
+ ...ome.SettingsDaemon.Housekeeping.desktop.in |  1 +
+ plugins/keyboard/gsd-keyboard.service.in      | 18 +++++
+ plugins/keyboard/gsd-keyboard.target.in       | 10 +++
+ ...g.gnome.SettingsDaemon.Keyboard.desktop.in |  1 +
+ plugins/media-keys/gsd-media-keys.service.in  | 18 +++++
+ plugins/media-keys/gsd-media-keys.target.in   | 10 +++
+ ....gnome.SettingsDaemon.MediaKeys.desktop.in |  1 +
+ plugins/meson-add-wants.sh                    | 30 ++++++++
+ plugins/meson.build                           | 73 ++++++++++++++++++-
+ .../org.gnome.SettingsDaemon.Mouse.desktop.in |  1 +
+ plugins/power/gsd-power.service.in            | 18 +++++
+ plugins/power/gsd-power.target.in             | 10 +++
+ .../org.gnome.SettingsDaemon.Power.desktop.in |  1 +
+ .../gsd-print-notifications.service.in        | 18 +++++
+ .../gsd-print-notifications.target.in         | 10 +++
+ ...ttingsDaemon.PrintNotifications.desktop.in |  1 +
+ plugins/rfkill/gsd-rfkill.service.in          | 18 +++++
+ plugins/rfkill/gsd-rfkill.target.in           | 10 +++
+ ...org.gnome.SettingsDaemon.Rfkill.desktop.in |  1 +
+ .../gsd-screensaver-proxy.service.in          | 18 +++++
+ .../gsd-screensaver-proxy.target.in           | 13 ++++
+ ...SettingsDaemon.ScreensaverProxy.desktop.in |  1 +
+ plugins/sharing/gsd-sharing.service.in        | 18 +++++
+ plugins/sharing/gsd-sharing.target.in         | 13 ++++
+ ...rg.gnome.SettingsDaemon.Sharing.desktop.in |  1 +
+ plugins/smartcard/gsd-smartcard.service.in    | 18 +++++
+ plugins/smartcard/gsd-smartcard.target.in     | 17 +++++
+ ....gnome.SettingsDaemon.Smartcard.desktop.in |  1 +
+ plugins/sound/gsd-sound.service.in            | 18 +++++
+ plugins/sound/gsd-sound.target.in             | 14 ++++
+ .../org.gnome.SettingsDaemon.Sound.desktop.in |  1 +
+ plugins/wacom/gsd-wacom.service.in            | 18 +++++
+ plugins/wacom/gsd-wacom.target.in             | 16 ++++
+ .../org.gnome.SettingsDaemon.Wacom.desktop.in |  1 +
+ plugins/wwan/gsd-wwan.service.in              | 18 +++++
+ plugins/wwan/gsd-wwan.target.in               | 10 +++
+ plugins/xsettings/gsd-xsettings.service.in    | 18 +++++
+ plugins/xsettings/gsd-xsettings.target.in     | 16 ++++
+ ....gnome.SettingsDaemon.XSettings.desktop.in |  1 +
+ 57 files changed, 678 insertions(+), 83 deletions(-)
+ create mode 100644 plugins/a11y-settings/gsd-a11y-settings.service.in
+ create mode 100644 plugins/a11y-settings/gsd-a11y-settings.target.in
+ create mode 100644 plugins/color/gsd-color.service.in
+ create mode 100644 plugins/color/gsd-color.target.in
+ create mode 100644 plugins/datetime/gsd-datetime.service.in
+ create mode 100644 plugins/datetime/gsd-datetime.target.in
+ create mode 100644 plugins/dummy/gsd-dummy.service.in
+ create mode 100644 plugins/dummy/gsd-dummy.target.in
+ create mode 100644 plugins/housekeeping/gsd-housekeeping.service.in
+ create mode 100644 plugins/housekeeping/gsd-housekeeping.target.in
+ create mode 100644 plugins/keyboard/gsd-keyboard.service.in
+ create mode 100644 plugins/keyboard/gsd-keyboard.target.in
+ create mode 100644 plugins/media-keys/gsd-media-keys.service.in
+ create mode 100644 plugins/media-keys/gsd-media-keys.target.in
+ create mode 100755 plugins/meson-add-wants.sh
+ create mode 100644 plugins/power/gsd-power.service.in
+ create mode 100644 plugins/power/gsd-power.target.in
+ create mode 100644 plugins/print-notifications/gsd-print-notifications.service.in
+ create mode 100644 plugins/print-notifications/gsd-print-notifications.target.in
+ create mode 100644 plugins/rfkill/gsd-rfkill.service.in
+ create mode 100644 plugins/rfkill/gsd-rfkill.target.in
+ create mode 100644 plugins/screensaver-proxy/gsd-screensaver-proxy.service.in
+ create mode 100644 plugins/screensaver-proxy/gsd-screensaver-proxy.target.in
+ create mode 100644 plugins/sharing/gsd-sharing.service.in
+ create mode 100644 plugins/sharing/gsd-sharing.target.in
+ create mode 100644 plugins/smartcard/gsd-smartcard.service.in
+ create mode 100644 plugins/smartcard/gsd-smartcard.target.in
+ create mode 100644 plugins/sound/gsd-sound.service.in
+ create mode 100644 plugins/sound/gsd-sound.target.in
+ create mode 100644 plugins/wacom/gsd-wacom.service.in
+ create mode 100644 plugins/wacom/gsd-wacom.target.in
+ create mode 100644 plugins/wwan/gsd-wwan.service.in
+ create mode 100644 plugins/wwan/gsd-wwan.target.in
+ create mode 100644 plugins/xsettings/gsd-xsettings.service.in
+ create mode 100644 plugins/xsettings/gsd-xsettings.target.in
+
+diff --git a/meson.build b/meson.build
+index 98b2c03b..91f785ef 100644
+--- a/meson.build
++++ b/meson.build
+@@ -102,6 +102,18 @@ polkit_gobject_dep = dependency('polkit-gobject-1', version: '>= 0.114')
+ upower_glib_dep = dependency('upower-glib', version: '>= 0.99.0')
+ x11_dep = dependency('x11')
+ 
++enable_systemd = get_option('systemd')
++if enable_systemd
++  systemd_dep = dependency('systemd', required: false)
++  assert(systemd_dep.found(), 'Systemd support explicitly required, but systemd not found')
++
++  # XXX: Once https://github.com/systemd/systemd/issues/9595 is fixed and we can
++  # depend on this version, replace with something like:
++  #  systemduserunitdir = systemd_dep.get_pkgconfig_variable('systemduserunitdir')
++  # and uncomment systemd_dep below
++  systemd_userunitdir = join_paths(gsd_prefix, 'lib', 'systemd', 'user')
++endif
++
+ m_dep = cc.find_library('m')
+ 
+ # ALSA integration (default enabled)
+@@ -245,6 +257,9 @@ output += '        RFKill support:           ' + enable_rfkill.to_string() + '\n
+ if enable_smartcard
+   output += '        System nssdb:             ' + system_nssdb_dir + '\n'
+ endif
++if enable_systemd
++  output += '        Systemd user unit dir:    ' + systemd_userunitdir + '\n'
++endif
+ if enable_rfkill
+   output += '        udev dir:                 ' + udev_dir + '\n'
+ endif
+diff --git a/meson_options.txt b/meson_options.txt
+index 50bd1749..0e85a440 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -1,5 +1,6 @@
+ option('nssdb_dir', type: 'string', value: '', description: 'Absolute path to the system NSS database directory')
+ option('udev_dir', type: 'string', value: '', description: 'Absolute path of the udev base directory')
++option('systemd', type: 'boolean', value: true, description: 'Enable systemd integration')
+ 
+ option('alsa', type: 'boolean', value: true, description: 'build with ALSA support (not optional on Linux platforms)')
+ option('gudev', type: 'boolean', value: true, description: 'build with gudev device support (not optional on Linux platforms)')
+diff --git a/plugins/a11y-settings/gsd-a11y-settings.service.in b/plugins/a11y-settings/gsd-a11y-settings.service.in
+new file mode 100644
+index 00000000..d5fa3792
+--- /dev/null
++++ b/plugins/a11y-settings/gsd-a11y-settings.service.in
+@@ -0,0 +1,18 @@
++[Unit]
++Description=GNOME Accessibility settings
++# Note that we do the shenanigans with having a target and a service solely
++# so that OnFailure is not called in case of a dependency failure.
++# See also https://github.com/systemd/systemd/issues/12352
++OnFailure=gnome-session-failed.target
++CollectMode=inactive-or-failed
++RefuseManualStart=true
++RefuseManualStop=true
++
++PartOf=gsd-a11y-settings.target
++After=gnome-session-initialized.target
++
++[Service]
++Type=dbus
++ExecStart=@libexecdir@/gsd-a11y-settings
++Restart=on-failure
++BusName=@plugin_dbus_name@
+diff --git a/plugins/a11y-settings/gsd-a11y-settings.target.in b/plugins/a11y-settings/gsd-a11y-settings.target.in
+new file mode 100644
+index 00000000..638d2f70
+--- /dev/null
++++ b/plugins/a11y-settings/gsd-a11y-settings.target.in
+@@ -0,0 +1,10 @@
++[Unit]
++Description=GNOME Accessibility settings
++
++BindsTo=gsd-a11y-settings.service
++After=gsd-a11y-settings.service
++
++Requisite=gnome-session-initialized.target
++After=gnome-session-initialized.target
++PartOf=gnome-session-initialized.target
++Before=gnome-session.target
+diff --git a/plugins/a11y-settings/org.gnome.SettingsDaemon.A11ySettings.desktop.in b/plugins/a11y-settings/org.gnome.SettingsDaemon.A11ySettings.desktop.in
+index 2f0ac936..02faf401 100644
+--- a/plugins/a11y-settings/org.gnome.SettingsDaemon.A11ySettings.desktop.in
++++ b/plugins/a11y-settings/org.gnome.SettingsDaemon.A11ySettings.desktop.in
+@@ -7,3 +7,4 @@ NoDisplay=true
+ X-GNOME-Autostart-Phase=Initialization
+ X-GNOME-Autostart-Notify=true
+ X-GNOME-AutoRestart=true
++X-GNOME-HiddenUnderSystemd=@systemd_hidden@
+diff --git a/plugins/color/gsd-color.service.in b/plugins/color/gsd-color.service.in
+new file mode 100644
+index 00000000..b51b5e4e
+--- /dev/null
++++ b/plugins/color/gsd-color.service.in
+@@ -0,0 +1,19 @@
++[Unit]
++Description=GNOME Color management
++# Note that we do the shenanigans with having a target and a service solely
++# so that OnFailure is not called in case of a dependency failure.
++# See also https://github.com/systemd/systemd/issues/12352
++OnFailure=gnome-session-failed.target
++CollectMode=inactive-or-failed
++RefuseManualStart=true
++RefuseManualStop=true
++
++PartOf=gsd-color.target
++After=gnome-session-initialized.target
++
++[Service]
++Type=dbus
++ExecStart=@libexecdir@/gsd-color
++Restart=on-failure
++BusName=@plugin_dbus_name@
++
+diff --git a/plugins/color/gsd-color.target.in b/plugins/color/gsd-color.target.in
+new file mode 100644
+index 00000000..fe27b65c
+--- /dev/null
++++ b/plugins/color/gsd-color.target.in
+@@ -0,0 +1,10 @@
++[Unit]
++Description=GNOME Color management
++
++BindsTo=gsd-color.service
++After=gsd-color.service
++
++Requisite=gnome-session-initialized.target
++After=gnome-session-initialized.target
++PartOf=gnome-session-initialized.target
++Before=gnome-session.target
+diff --git a/plugins/color/org.gnome.SettingsDaemon.Color.desktop.in b/plugins/color/org.gnome.SettingsDaemon.Color.desktop.in
+index a9d72231..6cf58d41 100644
+--- a/plugins/color/org.gnome.SettingsDaemon.Color.desktop.in
++++ b/plugins/color/org.gnome.SettingsDaemon.Color.desktop.in
+@@ -7,3 +7,4 @@ NoDisplay=true
+ X-GNOME-Autostart-Phase=Initialization
+ X-GNOME-Autostart-Notify=true
+ X-GNOME-AutoRestart=true
++X-GNOME-HiddenUnderSystemd=@systemd_hidden@
+diff --git a/plugins/common/daemon-skeleton-gtk.h b/plugins/common/daemon-skeleton-gtk.h
+index d26d6950..522e5bb6 100644
+--- a/plugins/common/daemon-skeleton-gtk.h
++++ b/plugins/common/daemon-skeleton-gtk.h
+@@ -40,37 +40,6 @@ static GOptionEntry entries[] = {
+         {NULL}
+ };
+ 
+-static const char *gdm_helpers[] = {
+-	"a11y-keyboard",
+-	"a11y-settings",
+-	"clipboard",
+-	"color",
+-	"keyboard",
+-	"media-keys",
+-	"power",
+-	"smartcard",
+-	"sound",
+-	"xsettings",
+-	"wacom",
+-};
+-
+-static gboolean
+-should_run (void)
+-{
+-	const char *session_mode;
+-	guint i;
+-
+-	session_mode = g_getenv ("GNOME_SHELL_SESSION_MODE");
+-	if (g_strcmp0 (session_mode, "gdm") != 0)
+-		return TRUE;
+-
+-	for (i = 0; i < G_N_ELEMENTS (gdm_helpers); i++) {
+-		if (g_str_equal (PLUGIN_NAME, gdm_helpers[i]))
+-			return TRUE;
+-	}
+-	return FALSE;
+-}
+-
+ static void
+ respond_to_end_session (GDBusProxy *proxy)
+ {
+@@ -266,19 +235,16 @@ main (int argc, char **argv)
+         manager = NEW ();
+ 	register_with_gnome_session ();
+ 
+-	if (should_run ()) {
+-		error = NULL;
+-		if (!START (manager, &error)) {
+-			fprintf (stderr, "Failed to start: %s\n", error->message);
+-			g_error_free (error);
+-			exit (1);
+-		}
+-	}
++        if (!START (manager, &error)) {
++                fprintf (stderr, "Failed to start: %s\n", error->message);
++                g_error_free (error);
++                exit (1);
++        }
+ 
+         gtk_main ();
+ 
+-	if (should_run ())
+-		STOP (manager);
++        STOP (manager);
++
+         g_object_unref (manager);
+ 
+         return 0;
+diff --git a/plugins/common/daemon-skeleton.h b/plugins/common/daemon-skeleton.h
+index 7f099927..ba515d2d 100644
+--- a/plugins/common/daemon-skeleton.h
++++ b/plugins/common/daemon-skeleton.h
+@@ -39,36 +39,6 @@ static GOptionEntry entries[] = {
+         {NULL}
+ };
+ 
+-static const char *gdm_helpers[] = {
+-	"a11y-keyboard",
+-	"a11y-settings",
+-	"clipboard",
+-	"color",
+-	"keyboard",
+-	"media-keys",
+-	"power",
+-	"smartcard",
+-	"sound",
+-	"xsettings"
+-};
+-
+-static gboolean
+-should_run (void)
+-{
+-	const char *session_mode;
+-	guint i;
+-
+-	session_mode = g_getenv ("GNOME_SHELL_SESSION_MODE");
+-	if (g_strcmp0 (session_mode, "gdm") != 0)
+-		return TRUE;
+-
+-	for (i = 0; i < G_N_ELEMENTS (gdm_helpers); i++) {
+-		if (g_str_equal (PLUGIN_NAME, gdm_helpers[i]))
+-			return TRUE;
+-	}
+-	return FALSE;
+-}
+-
+ static void
+ respond_to_end_session (GDBusProxy *proxy)
+ {
+@@ -239,19 +209,16 @@ main (int argc, char **argv)
+         manager = NEW ();
+ 	register_with_gnome_session (loop);
+ 
+-	if (should_run ()) {
+-		error = NULL;
+-		if (!START (manager, &error)) {
+-			fprintf (stderr, "Failed to start: %s\n", error->message);
+-			g_error_free (error);
+-			exit (1);
+-		}
+-	}
++        if (!START (manager, &error)) {
++                fprintf (stderr, "Failed to start: %s\n", error->message);
++                g_error_free (error);
++                exit (1);
++        }
+ 
+         g_main_loop_run (loop);
+ 
+-	if (should_run ())
+-		STOP (manager);
++        STOP (manager);
++
+         g_object_unref (manager);
+ 
+         return 0;
+diff --git a/plugins/datetime/gsd-datetime.service.in b/plugins/datetime/gsd-datetime.service.in
+new file mode 100644
+index 00000000..980a6c91
+--- /dev/null
++++ b/plugins/datetime/gsd-datetime.service.in
+@@ -0,0 +1,18 @@
++[Unit]
++Description=GNOME Date & Time handling
++# Note that we do the shenanigans with having a target and a service solely
++# so that OnFailure is not called in case of a dependency failure.
++# See also https://github.com/systemd/systemd/issues/12352
++OnFailure=gnome-session-failed.target
++CollectMode=inactive-or-failed
++RefuseManualStart=true
++RefuseManualStop=true
++
++PartOf=gsd-datetime.target
++After=gnome-session-initialized.target
++
++[Service]
++Type=dbus
++ExecStart=@libexecdir@/gsd-datetime
++Restart=on-failure
++BusName=@plugin_dbus_name@
+diff --git a/plugins/datetime/gsd-datetime.target.in b/plugins/datetime/gsd-datetime.target.in
+new file mode 100644
+index 00000000..88df818c
+--- /dev/null
++++ b/plugins/datetime/gsd-datetime.target.in
+@@ -0,0 +1,13 @@
++[Unit]
++Description=GNOME Date & Time handling
++
++BindsTo=gsd-datetime.service
++After=gsd-datetime.service
++
++Requisite=gnome-session-initialized.target
++After=gnome-session-initialized.target
++PartOf=gnome-session-initialized.target
++Before=gnome-session.target
++
++Conflicts=gnome-session@gnome-login.target
++Conflicts=gnome-session@gnome-initial-setup.target
+diff --git a/plugins/datetime/org.gnome.SettingsDaemon.Datetime.desktop.in b/plugins/datetime/org.gnome.SettingsDaemon.Datetime.desktop.in
+index ac99312f..567b9a0a 100644
+--- a/plugins/datetime/org.gnome.SettingsDaemon.Datetime.desktop.in
++++ b/plugins/datetime/org.gnome.SettingsDaemon.Datetime.desktop.in
+@@ -7,3 +7,4 @@ NoDisplay=true
+ X-GNOME-Autostart-Phase=Initialization
+ X-GNOME-Autostart-Notify=true
+ X-GNOME-AutoRestart=true
++X-GNOME-HiddenUnderSystemd=@systemd_hidden@
+diff --git a/plugins/dummy/gsd-dummy.service.in b/plugins/dummy/gsd-dummy.service.in
+new file mode 100644
+index 00000000..554df09c
+--- /dev/null
++++ b/plugins/dummy/gsd-dummy.service.in
+@@ -0,0 +1,18 @@
++[Unit]
++Description=GNOME Settings Daemon dummy replacement plugin (@pluginname@)
++# Note that we do the shenanigans with having a target and a service solely
++# so that OnFailure is not called in case of a dependency failure.
++# See also https://github.com/systemd/systemd/issues/12352
++OnFailure=gnome-session-failed.target
++CollectMode=inactive-or-failed
++RefuseManualStart=true
++RefuseManualStop=true
++
++PartOf=gsd-dummy.target
++After=gnome-session-initialized.target
++
++[Service]
++Type=dbus
++ExecStart=@libexecdir@/gsd-dummy --dummy-name=@pluginname@
++Restart=on-failure
++BusName=@plugin_dbus_name@
+diff --git a/plugins/dummy/gsd-dummy.target.in b/plugins/dummy/gsd-dummy.target.in
+new file mode 100644
+index 00000000..bf680ef0
+--- /dev/null
++++ b/plugins/dummy/gsd-dummy.target.in
+@@ -0,0 +1,28 @@
++[Unit]
++Description=GNOME Settings Daemon dummy replacement plugin (@pluginname@)
++
++BindsTo=gsd-dummy.service
++After=gsd-dummy.service
++
++Requisite=gnome-session-initialized.target
++After=gnome-session-initialized.target
++PartOf=gnome-session-initialized.target
++Before=gnome-session.target
++
++# See require-started.target on how to require another unit to be already running
++# See dependency.target on how to start a dependency and require it to be present
++#
++#Requisite=require-started.target
++#After=require-started.target
++#PartOf=require-started.target
++#Requires=dependency.target
++#After=dependency.target
++#
++# Also add PartOf if this unit should be stopped together with dependency.target
++#PartOf=dependency.target
++
++# This is what the install section would look like, but we create the symlinks
++# through meson
++#[Install]
++#WantedBy=gnome-session-initialized.target
++##WantedBy=require-started.target
+diff --git a/plugins/dummy/org.gnome.SettingsDaemon.Dummy.desktop.in b/plugins/dummy/org.gnome.SettingsDaemon.Dummy.desktop.in
+index fa80c87d..a946da92 100644
+--- a/plugins/dummy/org.gnome.SettingsDaemon.Dummy.desktop.in
++++ b/plugins/dummy/org.gnome.SettingsDaemon.Dummy.desktop.in
+@@ -7,3 +7,4 @@ NoDisplay=true
+ X-GNOME-Autostart-Phase=Initialization
+ X-GNOME-Autostart-Notify=true
+ X-GNOME-AutoRestart=true
++X-GNOME-HiddenUnderSystemd=@systemd_hidden@
+diff --git a/plugins/housekeeping/gsd-housekeeping.service.in b/plugins/housekeeping/gsd-housekeeping.service.in
+new file mode 100644
+index 00000000..176e24d2
+--- /dev/null
++++ b/plugins/housekeeping/gsd-housekeeping.service.in
+@@ -0,0 +1,18 @@
++[Unit]
++Description=GNOME Maintenance of expirable data
++# Note that we do the shenanigans with having a target and a service solely
++# so that OnFailure is not called in case of a dependency failure.
++# See also https://github.com/systemd/systemd/issues/12352
++OnFailure=gnome-session-failed.target
++CollectMode=inactive-or-failed
++RefuseManualStart=true
++RefuseManualStop=true
++
++PartOf=gsd-housekeeping.target
++After=gnome-session-initialized.target
++
++[Service]
++Type=dbus
++ExecStart=@libexecdir@/gsd-housekeeping
++Restart=on-failure
++BusName=@plugin_dbus_name@
+diff --git a/plugins/housekeeping/gsd-housekeeping.target.in b/plugins/housekeeping/gsd-housekeeping.target.in
+new file mode 100644
+index 00000000..5b70f267
+--- /dev/null
++++ b/plugins/housekeeping/gsd-housekeeping.target.in
+@@ -0,0 +1,13 @@
++[Unit]
++Description=GNOME Maintenance of expirable data
++
++BindsTo=gsd-housekeeping.service
++After=gsd-housekeeping.service
++
++Requisite=gnome-session-initialized.target
++After=gnome-session-initialized.target
++PartOf=gnome-session-initialized.target
++Before=gnome-session.target
++
++Conflicts=gnome-session@gnome-login.target
++Conflicts=gnome-session@gnome-initial-setup.target
+diff --git a/plugins/housekeeping/org.gnome.SettingsDaemon.Housekeeping.desktop.in b/plugins/housekeeping/org.gnome.SettingsDaemon.Housekeeping.desktop.in
+index a557ff04..e13d3669 100644
+--- a/plugins/housekeeping/org.gnome.SettingsDaemon.Housekeeping.desktop.in
++++ b/plugins/housekeeping/org.gnome.SettingsDaemon.Housekeeping.desktop.in
+@@ -7,3 +7,4 @@ NoDisplay=true
+ X-GNOME-Autostart-Phase=Initialization
+ X-GNOME-Autostart-Notify=true
+ X-GNOME-AutoRestart=true
++X-GNOME-HiddenUnderSystemd=@systemd_hidden@
+diff --git a/plugins/keyboard/gsd-keyboard.service.in b/plugins/keyboard/gsd-keyboard.service.in
+new file mode 100644
+index 00000000..095468ee
+--- /dev/null
++++ b/plugins/keyboard/gsd-keyboard.service.in
+@@ -0,0 +1,18 @@
++[Unit]
++Description=GNOME Keyboard handling
++# Note that we do the shenanigans with having a target and a service solely
++# so that OnFailure is not called in case of a dependency failure.
++# See also https://github.com/systemd/systemd/issues/12352
++OnFailure=gnome-session-failed.target
++CollectMode=inactive-or-failed
++RefuseManualStart=true
++RefuseManualStop=true
++
++PartOf=gsd-keyboard.target
++After=gnome-session-initialized.target
++
++[Service]
++Type=dbus
++ExecStart=@libexecdir@/gsd-keyboard
++Restart=on-failure
++BusName=@plugin_dbus_name@
+diff --git a/plugins/keyboard/gsd-keyboard.target.in b/plugins/keyboard/gsd-keyboard.target.in
+new file mode 100644
+index 00000000..f46cfce3
+--- /dev/null
++++ b/plugins/keyboard/gsd-keyboard.target.in
+@@ -0,0 +1,10 @@
++[Unit]
++Description=GNOME Keyboard handling
++
++BindsTo=gsd-keyboard.service
++After=gsd-keyboard.service
++
++Requisite=gnome-session-initialized.target
++After=gnome-session-initialized.target
++PartOf=gnome-session-initialized.target
++Before=gnome-session.target
+diff --git a/plugins/keyboard/org.gnome.SettingsDaemon.Keyboard.desktop.in b/plugins/keyboard/org.gnome.SettingsDaemon.Keyboard.desktop.in
+index 9cf0fbd4..1e9e063a 100644
+--- a/plugins/keyboard/org.gnome.SettingsDaemon.Keyboard.desktop.in
++++ b/plugins/keyboard/org.gnome.SettingsDaemon.Keyboard.desktop.in
+@@ -7,3 +7,4 @@ NoDisplay=true
+ X-GNOME-Autostart-Phase=Initialization
+ X-GNOME-Autostart-Notify=true
+ X-GNOME-AutoRestart=true
++X-GNOME-HiddenUnderSystemd=@systemd_hidden@
+diff --git a/plugins/media-keys/gsd-media-keys.service.in b/plugins/media-keys/gsd-media-keys.service.in
+new file mode 100644
+index 00000000..0b715b6b
+--- /dev/null
++++ b/plugins/media-keys/gsd-media-keys.service.in
+@@ -0,0 +1,18 @@
++[Unit]
++Description=GNOME Media keys handling
++# Note that we do the shenanigans with having a target and a service solely
++# so that OnFailure is not called in case of a dependency failure.
++# See also https://github.com/systemd/systemd/issues/12352
++OnFailure=gnome-session-failed.target
++CollectMode=inactive-or-failed
++RefuseManualStart=true
++RefuseManualStop=true
++
++PartOf=gsd-media-keys.target
++After=gnome-session-initialized.target
++
++[Service]
++Type=dbus
++ExecStart=@libexecdir@/gsd-media-keys
++Restart=on-failure
++BusName=@plugin_dbus_name@
+diff --git a/plugins/media-keys/gsd-media-keys.target.in b/plugins/media-keys/gsd-media-keys.target.in
+new file mode 100644
+index 00000000..519738bb
+--- /dev/null
++++ b/plugins/media-keys/gsd-media-keys.target.in
+@@ -0,0 +1,10 @@
++[Unit]
++Description=GNOME Media keys handling
++
++BindsTo=gsd-media-keys.service
++After=gsd-media-keys.service
++
++Requisite=gnome-session-initialized.target
++After=gnome-session-initialized.target
++PartOf=gnome-session-initialized.target
++Before=gnome-session.target
+diff --git a/plugins/media-keys/org.gnome.SettingsDaemon.MediaKeys.desktop.in b/plugins/media-keys/org.gnome.SettingsDaemon.MediaKeys.desktop.in
+index de53c3f1..58f4cf4e 100644
+--- a/plugins/media-keys/org.gnome.SettingsDaemon.MediaKeys.desktop.in
++++ b/plugins/media-keys/org.gnome.SettingsDaemon.MediaKeys.desktop.in
+@@ -7,3 +7,4 @@ NoDisplay=true
+ X-GNOME-Autostart-Phase=Initialization
+ X-GNOME-Autostart-Notify=true
+ X-GNOME-AutoRestart=true
++X-GNOME-HiddenUnderSystemd=@systemd_hidden@
+diff --git a/plugins/meson-add-wants.sh b/plugins/meson-add-wants.sh
+new file mode 100755
+index 00000000..c33d1b4f
+--- /dev/null
++++ b/plugins/meson-add-wants.sh
+@@ -0,0 +1,30 @@
++#!/bin/sh
++set -eu
++
++# Script copied from systemd
++
++unitdir="$1"
++target="$2"
++unit="$3"
++
++case "$target" in
++    */?*) # a path, but not just a slash at the end
++        dir="${DESTDIR:-}${target}"
++        ;;
++    *)
++        dir="${DESTDIR:-}${unitdir}/${target}"
++        ;;
++esac
++
++unitpath="${DESTDIR:-}${unitdir}/${unit}"
++
++case "$target" in
++    */)
++        mkdir -vp -m 0755 "$dir"
++        ;;
++    *)
++        mkdir -vp -m 0755 "$(dirname "$dir")"
++        ;;
++esac
++
++ln -vfs --relative "$unitpath" "$dir"
+diff --git a/plugins/meson.build b/plugins/meson.build
+index 3db69da7..6e365aab 100644
+--- a/plugins/meson.build
++++ b/plugins/meson.build
+@@ -1,7 +1,12 @@
+ enabled_plugins = [
++<<<<<<< HEAD
+   ['a11y-settings', 'A11ySettings'],
+   ['clipboard', 'Clipboard'],
+   ['color', 'Color'],
++=======
++  ['a11y-settings', 'A11ySettings', ''],
++  ['color', 'Color', ''],
++>>>>>>> 50eccb08... plugins: Add systemd user service files for all the plugins
+   ['datetime', 'Datetime'],
+   ['dummy', ''],
+   ['power', 'Power'],
+@@ -20,7 +25,7 @@ if enable_smartcard
+ endif
+ 
+ if enable_wacom
+-  enabled_plugins += [['wacom', 'Wacom']]
++  enabled_plugins += [['wacom', 'Wacom', 'wacom.target.wants/']]
+ endif
+ 
+ if enable_cups
+@@ -31,31 +36,95 @@ if enable_rfkill
+   enabled_plugins += [['rfkill', 'Rfkill']]
+ endif
+ 
++plugin_install_extra_wants = {
++#  'dummy': ['required-started.target.wants/'],
++#  'xsettings': ['gnome-session-x11.target.wants/'],
++#  'wacom': ['wacom.target.wants/'],
++#  'smartcard': ['smartcard.target.wants/'],
++}
++
+ plugins_conf = configuration_data()
+ plugins_conf.set('libexecdir', gsd_libexecdir)
++plugins_conf.set('systemd_hidden', enable_systemd ? 'true' : 'false')
+ 
+ plugins_deps = [libgsd_dep]
+ 
+ plugins_cflags = ['-DGNOME_SETTINGS_LOCALEDIR="@0@"'.format(gsd_localedir)]
+ 
++enabled_plugins_file = []
++
+ foreach plugin: [['common', '']] + enabled_plugins
+   plugin_name = plugin[0]
++<<<<<<< HEAD
++=======
++  desktop = 'org.gnome.SettingsDaemon.@0@.desktop'.format(plugin[1])
++
++  if plugin[1] == '' # common or dummy
++    desktop_in_file = ''
++  else
++    desktop_in_file = files(join_paths(plugin_name, desktop + '.in'))
++  endif
++
++  enabled_plugins_file += [[plugin_name, plugin[1], desktop_in_file]]
++endforeach
++
++foreach plugin: enabled_plugins_file
++  plugin_name = plugin[0]
++  plugin_name_case = plugin[1]
++  plugin_dbus_name='org.gnome.SettingsDaemon.@0@'.format(plugin_name_case)
++>>>>>>> 50eccb08... plugins: Add systemd user service files for all the plugins
+ 
+   cflags = [
+     '-DG_LOG_DOMAIN="@0@-plugin"'.format(plugin_name),
+     '-DPLUGIN_NAME="@0@"'.format(plugin_name),
++<<<<<<< HEAD
++=======
++    '-DPLUGIN_DBUS_NAME="@0@"'.format(plugin_dbus_name),
++>>>>>>> 50eccb08... plugins: Add systemd user service files for all the plugins
+   ] + plugins_cflags
+ 
+   if not ['common', 'dummy'].contains(plugin_name)
+     desktop = 'org.gnome.SettingsDaemon.@0@.desktop'.format(plugin[1])
++    desktop_in_file = plugin[2]
++    user_target = 'gsd-@0@.target'.format(plugin_name)
++    user_service = 'gsd-@0@.service'.format(plugin_name)
++
++    unit_conf = configuration_data()
++    unit_conf.set('libexecdir', gsd_libexecdir)
++    unit_conf.set('plugin_dbus_name', plugin_dbus_name)
+ 
+     configure_file(
+-      input: join_paths(plugin_name, desktop + '.in'),
++      input: desktop_in_file,
+       output: desktop,
+       configuration: plugins_conf,
+       install: true,
+       install_dir: gsd_xdg_autostart
+     )
++    if enable_systemd
++      configure_file(
++        input: join_paths(plugin_name, user_service + '.in'),
++        output: user_service,
++        configuration: unit_conf,
++        install: true,
++        install_dir: systemd_userunitdir
++     )
++      configure_file(
++        input: join_paths(plugin_name, user_target + '.in'),
++        output: user_target,
++        configuration: unit_conf,
++        install: true,
++        install_dir: systemd_userunitdir
++     )
++
++     wants = ['gnome-session-initialized.target.wants/']
++     if plugin_name in plugin_install_extra_wants
++       wants += [plugin_install_extra_wants[plugin_name]]
++     endif
++
++     foreach target: wants
++       meson.add_install_script('meson-add-wants.sh', systemd_userunitdir, target, user_target)
++     endforeach
++   endif
+   endif
+ 
+   subdir(plugin_name)
+diff --git a/plugins/mouse/org.gnome.SettingsDaemon.Mouse.desktop.in b/plugins/mouse/org.gnome.SettingsDaemon.Mouse.desktop.in
+index fb4c7d3d..0ebc90a0 100644
+--- a/plugins/mouse/org.gnome.SettingsDaemon.Mouse.desktop.in
++++ b/plugins/mouse/org.gnome.SettingsDaemon.Mouse.desktop.in
+@@ -7,3 +7,4 @@ NoDisplay=true
+ X-GNOME-Autostart-Phase=Initialization
+ X-GNOME-Autostart-Notify=true
+ X-GNOME-AutoRestart=true
++X-GNOME-HiddenUnderSystemd=@systemd_hidden@
+diff --git a/plugins/power/gsd-power.service.in b/plugins/power/gsd-power.service.in
+new file mode 100644
+index 00000000..c1c57add
+--- /dev/null
++++ b/plugins/power/gsd-power.service.in
+@@ -0,0 +1,18 @@
++[Unit]
++Description=GNOME Power management handling
++# Note that we do the shenanigans with having a target and a service solely
++# so that OnFailure is not called in case of a dependency failure.
++# See also https://github.com/systemd/systemd/issues/12352
++OnFailure=gnome-session-failed.target
++CollectMode=inactive-or-failed
++RefuseManualStart=true
++RefuseManualStop=true
++
++PartOf=gsd-power.target
++After=gnome-session-initialized.target
++
++[Service]
++Type=dbus
++ExecStart=@libexecdir@/gsd-power
++Restart=on-failure
++BusName=@plugin_dbus_name@
+diff --git a/plugins/power/gsd-power.target.in b/plugins/power/gsd-power.target.in
+new file mode 100644
+index 00000000..bfc12811
+--- /dev/null
++++ b/plugins/power/gsd-power.target.in
+@@ -0,0 +1,10 @@
++[Unit]
++Description=GNOME Power management handling
++
++BindsTo=gsd-power.service
++After=gsd-power.service
++
++Requisite=gnome-session-initialized.target
++After=gnome-session-initialized.target
++PartOf=gnome-session-initialized.target
++Before=gnome-session.target
+diff --git a/plugins/power/org.gnome.SettingsDaemon.Power.desktop.in b/plugins/power/org.gnome.SettingsDaemon.Power.desktop.in
+index 82d1505d..81db05ff 100644
+--- a/plugins/power/org.gnome.SettingsDaemon.Power.desktop.in
++++ b/plugins/power/org.gnome.SettingsDaemon.Power.desktop.in
+@@ -7,3 +7,4 @@ NoDisplay=true
+ X-GNOME-Autostart-Phase=Initialization
+ X-GNOME-Autostart-Notify=true
+ X-GNOME-AutoRestart=true
++X-GNOME-HiddenUnderSystemd=@systemd_hidden@
+diff --git a/plugins/print-notifications/gsd-print-notifications.service.in b/plugins/print-notifications/gsd-print-notifications.service.in
+new file mode 100644
+index 00000000..6504c69b
+--- /dev/null
++++ b/plugins/print-notifications/gsd-print-notifications.service.in
+@@ -0,0 +1,18 @@
++[Unit]
++Description=GNOME Printer notifications
++# Note that we do the shenanigans with having a target and a service solely
++# so that OnFailure is not called in case of a dependency failure.
++# See also https://github.com/systemd/systemd/issues/12352
++OnFailure=gnome-session-failed.target
++CollectMode=inactive-or-failed
++RefuseManualStart=true
++RefuseManualStop=true
++
++PartOf=gsd-print-notifications.target
++After=gnome-session-initialized.target
++
++[Service]
++Type=dbus
++ExecStart=@libexecdir@/gsd-print-notifications
++Restart=on-failure
++BusName=@plugin_dbus_name@
+diff --git a/plugins/print-notifications/gsd-print-notifications.target.in b/plugins/print-notifications/gsd-print-notifications.target.in
+new file mode 100644
+index 00000000..90e63492
+--- /dev/null
++++ b/plugins/print-notifications/gsd-print-notifications.target.in
+@@ -0,0 +1,10 @@
++[Unit]
++Description=GNOME Printer notifications
++
++BindsTo=gsd-print-notifications.service
++After=gsd-print-notifications.service
++
++Requisite=gnome-session-initialized.target
++After=gnome-session-initialized.target
++PartOf=gnome-session-initialized.target
++Before=gnome-session.target
+diff --git a/plugins/print-notifications/org.gnome.SettingsDaemon.PrintNotifications.desktop.in b/plugins/print-notifications/org.gnome.SettingsDaemon.PrintNotifications.desktop.in
+index bbcd6abb..146cc16e 100644
+--- a/plugins/print-notifications/org.gnome.SettingsDaemon.PrintNotifications.desktop.in
++++ b/plugins/print-notifications/org.gnome.SettingsDaemon.PrintNotifications.desktop.in
+@@ -7,3 +7,4 @@ NoDisplay=true
+ X-GNOME-Autostart-Phase=Initialization
+ X-GNOME-Autostart-Notify=true
+ X-GNOME-AutoRestart=true
++X-GNOME-HiddenUnderSystemd=@systemd_hidden@
+diff --git a/plugins/rfkill/gsd-rfkill.service.in b/plugins/rfkill/gsd-rfkill.service.in
+new file mode 100644
+index 00000000..3dbb5150
+--- /dev/null
++++ b/plugins/rfkill/gsd-rfkill.service.in
+@@ -0,0 +1,18 @@
++[Unit]
++Description=GNOME RFKill handling
++# Note that we do the shenanigans with having a target and a service solely
++# so that OnFailure is not called in case of a dependency failure.
++# See also https://github.com/systemd/systemd/issues/12352
++OnFailure=gnome-session-failed.target
++CollectMode=inactive-or-failed
++RefuseManualStart=true
++RefuseManualStop=true
++
++PartOf=gsd-rfkill.target
++After=gnome-session-initialized.target
++
++[Service]
++Type=dbus
++ExecStart=@libexecdir@/gsd-rfkill
++Restart=on-failure
++BusName=@plugin_dbus_name@
+diff --git a/plugins/rfkill/gsd-rfkill.target.in b/plugins/rfkill/gsd-rfkill.target.in
+new file mode 100644
+index 00000000..8fca6efe
+--- /dev/null
++++ b/plugins/rfkill/gsd-rfkill.target.in
+@@ -0,0 +1,10 @@
++[Unit]
++Description=GNOME RFKill handling
++
++BindsTo=gsd-rfkill.service
++After=gsd-rfkill.service
++
++Requisite=gnome-session-initialized.target
++After=gnome-session-initialized.target
++PartOf=gnome-session-initialized.target
++Before=gnome-session.target
+diff --git a/plugins/rfkill/org.gnome.SettingsDaemon.Rfkill.desktop.in b/plugins/rfkill/org.gnome.SettingsDaemon.Rfkill.desktop.in
+index baa845b6..2607dd00 100644
+--- a/plugins/rfkill/org.gnome.SettingsDaemon.Rfkill.desktop.in
++++ b/plugins/rfkill/org.gnome.SettingsDaemon.Rfkill.desktop.in
+@@ -7,3 +7,4 @@ NoDisplay=true
+ X-GNOME-Autostart-Phase=Initialization
+ X-GNOME-Autostart-Notify=true
+ X-GNOME-AutoRestart=true
++X-GNOME-HiddenUnderSystemd=@systemd_hidden@
+diff --git a/plugins/screensaver-proxy/gsd-screensaver-proxy.service.in b/plugins/screensaver-proxy/gsd-screensaver-proxy.service.in
+new file mode 100644
+index 00000000..bd90ced6
+--- /dev/null
++++ b/plugins/screensaver-proxy/gsd-screensaver-proxy.service.in
+@@ -0,0 +1,18 @@
++[Unit]
++Description=GNOME Freedesktop screensaver handling
++# Note that we do the shenanigans with having a target and a service solely
++# so that OnFailure is not called in case of a dependency failure.
++# See also https://github.com/systemd/systemd/issues/12352
++OnFailure=gnome-session-failed.target
++CollectMode=inactive-or-failed
++RefuseManualStart=true
++RefuseManualStop=true
++
++PartOf=gsd-screensaver-proxy.target
++After=gnome-session-initialized.target
++
++[Service]
++Type=dbus
++ExecStart=@libexecdir@/gsd-screensaver-proxy
++Restart=on-failure
++BusName=@plugin_dbus_name@
+diff --git a/plugins/screensaver-proxy/gsd-screensaver-proxy.target.in b/plugins/screensaver-proxy/gsd-screensaver-proxy.target.in
+new file mode 100644
+index 00000000..71a604b7
+--- /dev/null
++++ b/plugins/screensaver-proxy/gsd-screensaver-proxy.target.in
+@@ -0,0 +1,13 @@
++[Unit]
++Description=GNOME Freedesktop screensaver handling
++
++BindsTo=gsd-screensaver-proxy.service
++After=gsd-screensaver-proxy.service
++
++Requisite=gnome-session-initialized.target
++After=gnome-session-initialized.target
++PartOf=gnome-session-initialized.target
++Before=gnome-session.target
++
++Conflicts=gnome-session@gnome-login.target
++Conflicts=gnome-session@gnome-initial-setup.target
+diff --git a/plugins/screensaver-proxy/org.gnome.SettingsDaemon.ScreensaverProxy.desktop.in b/plugins/screensaver-proxy/org.gnome.SettingsDaemon.ScreensaverProxy.desktop.in
+index 43822fb4..97a339f0 100644
+--- a/plugins/screensaver-proxy/org.gnome.SettingsDaemon.ScreensaverProxy.desktop.in
++++ b/plugins/screensaver-proxy/org.gnome.SettingsDaemon.ScreensaverProxy.desktop.in
+@@ -7,3 +7,4 @@ NoDisplay=true
+ X-GNOME-Autostart-Phase=Initialization
+ X-GNOME-Autostart-Notify=true
+ X-GNOME-AutoRestart=true
++X-GNOME-HiddenUnderSystemd=@systemd_hidden@
+diff --git a/plugins/sharing/gsd-sharing.service.in b/plugins/sharing/gsd-sharing.service.in
+new file mode 100644
+index 00000000..f4572482
+--- /dev/null
++++ b/plugins/sharing/gsd-sharing.service.in
+@@ -0,0 +1,18 @@
++[Unit]
++Description=GNOME Sharing handling
++# Note that we do the shenanigans with having a target and a service solely
++# so that OnFailure is not called in case of a dependency failure.
++# See also https://github.com/systemd/systemd/issues/12352
++OnFailure=gnome-session-failed.target
++CollectMode=inactive-or-failed
++RefuseManualStart=true
++RefuseManualStop=true
++
++PartOf=gsd-sharing.target
++After=gnome-session-initialized.target
++
++[Service]
++Type=dbus
++ExecStart=@libexecdir@/gsd-sharing
++Restart=on-failure
++BusName=@plugin_dbus_name@
+diff --git a/plugins/sharing/gsd-sharing.target.in b/plugins/sharing/gsd-sharing.target.in
+new file mode 100644
+index 00000000..f33f0620
+--- /dev/null
++++ b/plugins/sharing/gsd-sharing.target.in
+@@ -0,0 +1,13 @@
++[Unit]
++Description=GNOME Sharing handling
++
++BindsTo=gsd-sharing.service
++After=gsd-sharing.service
++
++Requisite=gnome-session-initialized.target
++After=gnome-session-initialized.target
++PartOf=gnome-session-initialized.target
++Before=gnome-session.target
++
++Conflicts=gnome-session@gnome-login.target
++Conflicts=gnome-session@gnome-initial-setup.target
+diff --git a/plugins/sharing/org.gnome.SettingsDaemon.Sharing.desktop.in b/plugins/sharing/org.gnome.SettingsDaemon.Sharing.desktop.in
+index 891ba205..dd5dc72b 100644
+--- a/plugins/sharing/org.gnome.SettingsDaemon.Sharing.desktop.in
++++ b/plugins/sharing/org.gnome.SettingsDaemon.Sharing.desktop.in
+@@ -7,3 +7,4 @@ NoDisplay=true
+ X-GNOME-Autostart-Phase=Initialization
+ X-GNOME-Autostart-Notify=true
+ X-GNOME-AutoRestart=true
++X-GNOME-HiddenUnderSystemd=@systemd_hidden@
+diff --git a/plugins/smartcard/gsd-smartcard.service.in b/plugins/smartcard/gsd-smartcard.service.in
+new file mode 100644
+index 00000000..e8a5a6a0
+--- /dev/null
++++ b/plugins/smartcard/gsd-smartcard.service.in
+@@ -0,0 +1,18 @@
++[Unit]
++Description=GNOME Smartcard handling
++# Note that we do the shenanigans with having a target and a service solely
++# so that OnFailure is not called in case of a dependency failure.
++# See also https://github.com/systemd/systemd/issues/12352
++OnFailure=gnome-session-failed.target
++CollectMode=inactive-or-failed
++RefuseManualStart=true
++RefuseManualStop=true
++
++PartOf=gsd-smartcard.target
++After=gnome-session-initialized.target
++
++[Service]
++Type=dbus
++ExecStart=@libexecdir@/gsd-smartcard
++Restart=on-failure
++BusName=@plugin_dbus_name@
+diff --git a/plugins/smartcard/gsd-smartcard.target.in b/plugins/smartcard/gsd-smartcard.target.in
+new file mode 100644
+index 00000000..0853e311
+--- /dev/null
++++ b/plugins/smartcard/gsd-smartcard.target.in
+@@ -0,0 +1,17 @@
++[Unit]
++Description=GNOME Smartcard handling
++
++BindsTo=gsd-smartcard.service
++After=gsd-smartcard.service
++
++Requisite=gnome-session-initialized.target
++After=gnome-session-initialized.target
++PartOf=gnome-session-initialized.target
++Before=gnome-session.target
++
++# Start when smartcard hardware is present (requires systemd v234)
++# https://github.com/systemd/systemd/issues/12330
++#Requisite=smartcard.target
++#After=smartcard.target
++#PartOf=smartcard.target
++# When done, also add the target to the meson.build file!
+diff --git a/plugins/smartcard/org.gnome.SettingsDaemon.Smartcard.desktop.in b/plugins/smartcard/org.gnome.SettingsDaemon.Smartcard.desktop.in
+index 71d058c2..9c5f3458 100644
+--- a/plugins/smartcard/org.gnome.SettingsDaemon.Smartcard.desktop.in
++++ b/plugins/smartcard/org.gnome.SettingsDaemon.Smartcard.desktop.in
+@@ -7,3 +7,4 @@ NoDisplay=true
+ X-GNOME-Autostart-Phase=Initialization
+ X-GNOME-Autostart-Notify=true
+ X-GNOME-AutoRestart=true
++X-GNOME-HiddenUnderSystemd=@systemd_hidden@
+diff --git a/plugins/sound/gsd-sound.service.in b/plugins/sound/gsd-sound.service.in
+new file mode 100644
+index 00000000..2babe33d
+--- /dev/null
++++ b/plugins/sound/gsd-sound.service.in
+@@ -0,0 +1,18 @@
++[Unit]
++Description=GNOME Sound sample caching handling
++# Note that we do the shenanigans with having a target and a service solely
++# so that OnFailure is not called in case of a dependency failure.
++# See also https://github.com/systemd/systemd/issues/12352
++OnFailure=gnome-session-failed.target
++CollectMode=inactive-or-failed
++RefuseManualStart=true
++RefuseManualStop=true
++
++PartOf=gsd-sound.target
++After=gnome-session-initialized.target
++
++[Service]
++Type=dbus
++ExecStart=@libexecdir@/gsd-sound
++Restart=on-failure
++BusName=@plugin_dbus_name@
+diff --git a/plugins/sound/gsd-sound.target.in b/plugins/sound/gsd-sound.target.in
+new file mode 100644
+index 00000000..2f18d163
+--- /dev/null
++++ b/plugins/sound/gsd-sound.target.in
+@@ -0,0 +1,14 @@
++[Unit]
++Description=GNOME Sound sample caching handling
++
++BindsTo=gsd-sound.service
++After=gsd-sound.service
++
++Requisite=gnome-session-initialized.target
++After=gnome-session-initialized.target
++PartOf=gnome-session-initialized.target
++Before=gnome-session.target
++
++Requires=pulseaudio.service
++After=pulseaudio.service
++# Keep running when pulseaudio.service stops
+diff --git a/plugins/sound/org.gnome.SettingsDaemon.Sound.desktop.in b/plugins/sound/org.gnome.SettingsDaemon.Sound.desktop.in
+index 2048b01b..4701a2a0 100644
+--- a/plugins/sound/org.gnome.SettingsDaemon.Sound.desktop.in
++++ b/plugins/sound/org.gnome.SettingsDaemon.Sound.desktop.in
+@@ -7,3 +7,4 @@ NoDisplay=true
+ X-GNOME-Autostart-Phase=Initialization
+ X-GNOME-Autostart-Notify=true
+ X-GNOME-AutoRestart=true
++X-GNOME-HiddenUnderSystemd=@systemd_hidden@
+diff --git a/plugins/wacom/gsd-wacom.service.in b/plugins/wacom/gsd-wacom.service.in
+new file mode 100644
+index 00000000..56cf0f7e
+--- /dev/null
++++ b/plugins/wacom/gsd-wacom.service.in
+@@ -0,0 +1,18 @@
++[Unit]
++Description=GNOME Wacom handling
++# Note that we do the shenanigans with having a target and a service solely
++# so that OnFailure is not called in case of a dependency failure.
++# See also https://github.com/systemd/systemd/issues/12352
++OnFailure=gnome-session-failed.target
++CollectMode=inactive-or-failed
++RefuseManualStart=true
++RefuseManualStop=true
++
++PartOf=gsd-wacom.target
++After=gnome-session-initialized.target
++
++[Service]
++Type=dbus
++ExecStart=@libexecdir@/gsd-wacom
++Restart=on-failure
++BusName=@plugin_dbus_name@
+diff --git a/plugins/wacom/gsd-wacom.target.in b/plugins/wacom/gsd-wacom.target.in
+new file mode 100644
+index 00000000..051dec72
+--- /dev/null
++++ b/plugins/wacom/gsd-wacom.target.in
+@@ -0,0 +1,16 @@
++[Unit]
++Description=GNOME Wacom handling
++
++BindsTo=gsd-wacom.service
++After=gsd-wacom.service
++
++Requisite=gnome-session-initialized.target
++After=gnome-session-initialized.target
++PartOf=gnome-session-initialized.target
++Before=gnome-session.target
++
++# Use the following once wacom.target or similar exists
++#Requisite=wacom.target
++#After=wacom.target
++#PartOf=wacom.target
++# When done, also add the target to the meson.build file!
+diff --git a/plugins/wacom/org.gnome.SettingsDaemon.Wacom.desktop.in b/plugins/wacom/org.gnome.SettingsDaemon.Wacom.desktop.in
+index efa5bf00..c10b461c 100644
+--- a/plugins/wacom/org.gnome.SettingsDaemon.Wacom.desktop.in
++++ b/plugins/wacom/org.gnome.SettingsDaemon.Wacom.desktop.in
+@@ -7,3 +7,4 @@ NoDisplay=true
+ X-GNOME-Autostart-Phase=Initialization
+ X-GNOME-Autostart-Notify=true
+ X-GNOME-AutoRestart=true
++X-GNOME-HiddenUnderSystemd=@systemd_hidden@
+diff --git a/plugins/wwan/gsd-wwan.service.in b/plugins/wwan/gsd-wwan.service.in
+new file mode 100644
+index 00000000..fd8bfdc8
+--- /dev/null
++++ b/plugins/wwan/gsd-wwan.service.in
+@@ -0,0 +1,18 @@
++[Unit]
++Description=GNOME WWan management
++# Note that we do the shenanigans with having a target and a service solely
++# so that OnFailure is not called in case of a dependency failure.
++# See also https://github.com/systemd/systemd/issues/12352
++OnFailure=gnome-session-failed.target
++CollectMode=inactive-or-failed
++RefuseManualStart=true
++RefuseManualStop=true
++
++PartOf=gsd-wwan.target
++After=gnome-session-initialized.target
++
++[Service]
++Type=dbus
++ExecStart=@libexecdir@/gsd-wwan
++Restart=on-failure
++BusName=@plugin_dbus_name@
+diff --git a/plugins/wwan/gsd-wwan.target.in b/plugins/wwan/gsd-wwan.target.in
+new file mode 100644
+index 00000000..fc11339f
+--- /dev/null
++++ b/plugins/wwan/gsd-wwan.target.in
+@@ -0,0 +1,10 @@
++[Unit]
++Description=GNOME WWan management
++
++BindsTo=gsd-wwan.service
++After=gsd-wwan.service
++
++Requisite=gnome-session-initialized.target
++After=gnome-session-initialized.target
++PartOf=gnome-session-initialized.target
++Before=gnome-session.target
+diff --git a/plugins/xsettings/gsd-xsettings.service.in b/plugins/xsettings/gsd-xsettings.service.in
+new file mode 100644
+index 00000000..e644c541
+--- /dev/null
++++ b/plugins/xsettings/gsd-xsettings.service.in
+@@ -0,0 +1,18 @@
++[Unit]
++Description=GNOME XSettings
++# Note that we do the shenanigans with having a target and a service solely
++# so that OnFailure is not called in case of a dependency failure.
++# See also https://github.com/systemd/systemd/issues/12352
++OnFailure=gnome-session-failed.target
++CollectMode=inactive-or-failed
++RefuseManualStart=true
++RefuseManualStop=true
++
++PartOf=gsd-xsettings.target
++After=gnome-session-initialized.target
++
++[Service]
++Type=dbus
++ExecStart=@libexecdir@/gsd-xsettings
++Restart=on-failure
++BusName=@plugin_dbus_name@
+diff --git a/plugins/xsettings/gsd-xsettings.target.in b/plugins/xsettings/gsd-xsettings.target.in
+new file mode 100644
+index 00000000..019c5719
+--- /dev/null
++++ b/plugins/xsettings/gsd-xsettings.target.in
+@@ -0,0 +1,16 @@
++[Unit]
++Description=GNOME XSettings
++
++BindsTo=gsd-xsettings.service
++After=gsd-xsettings.service
++
++Requisite=gnome-session-initialized.target
++After=gnome-session-initialized.target
++PartOf=gnome-session-initialized.target
++Before=gnome-session.target
++
++# Use something similar once appropriate an appropriate target exists for X11
++#Requisite=gnome-session-x11.target
++#After=gnome-session-x11.target
++#PartOf=gnome-session-x11.target
++# When done, also add the target to the meson.build file!
+diff --git a/plugins/xsettings/org.gnome.SettingsDaemon.XSettings.desktop.in b/plugins/xsettings/org.gnome.SettingsDaemon.XSettings.desktop.in
+index 249fafd7..59086a78 100644
+--- a/plugins/xsettings/org.gnome.SettingsDaemon.XSettings.desktop.in
++++ b/plugins/xsettings/org.gnome.SettingsDaemon.XSettings.desktop.in
+@@ -7,3 +7,4 @@ NoDisplay=true
+ X-GNOME-Autostart-Phase=Initialization
+ X-GNOME-Autostart-Notify=true
+ X-GNOME-AutoRestart=true
++X-GNOME-HiddenUnderSystemd=@systemd_hidden@
+-- 
+2.20.1
+
