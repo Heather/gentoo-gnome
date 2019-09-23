@@ -89,6 +89,9 @@ DEPEND="${COMMON_DEPEND}
 	x11-base/xorg-proto
 "
 
+# Enable reliable session start with systemd & bleeding-edge GNOME rdeps.
+PATCHES=( "${FILESDIR}/${P}-plugins-Add-systemd-user-service-files-for-all-the-p.patch" "${FILESDIR}/${P}-xsettings-Make-it-able-to-run-on-demand.patch" "${FILESDIR}/${P}-xsettings-Ensure-plugin-is-started-after-the-shell.patch" )
+
 src_prepare() {
 	gnome2_src_prepare
 }
