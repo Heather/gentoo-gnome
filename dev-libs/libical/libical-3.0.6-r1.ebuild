@@ -61,6 +61,12 @@ src_configure() {
 		-DICAL_GLIB_VAPI=$(usex vala)
 		-DGOBJECT_INTROSPECTION=$(usex introspection)
 	)
+	if use vala; then
+		mycmakeargs+=(
+			-DVALAC="${VALAC}"
+			-DVAPIGEN="${VAPIGEN}"
+		)
+	fi
 	cmake-utils_src_configure
 }
 
