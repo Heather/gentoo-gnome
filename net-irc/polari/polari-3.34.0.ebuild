@@ -1,9 +1,9 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit gnome2 meson
+inherit gnome.org meson xdg
 
 DESCRIPTION="An IRC client for Gnome"
 HOMEPAGE="https://wiki.gnome.org/Apps/Polari"
