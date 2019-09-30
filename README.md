@@ -13,7 +13,7 @@ There are several known issues with `17.1` profile
 Versions
 --------
 
- - GNOME `3.33.x`
+ - GNOME `~3.34.x`
  - Pantheon `Juno` ebuilds
 
 Communication
