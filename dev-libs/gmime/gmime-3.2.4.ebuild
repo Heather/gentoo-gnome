@@ -4,23 +4,21 @@
 EAPI=6
 VALA_USE_DEPEND="vapigen"
 
-inherit mono-env gnome2 vala
+inherit flag-o-matic gnome2 vala
 
 DESCRIPTION="Utilities for creating and parsing messages using MIME"
 HOMEPAGE="http://spruce.sourceforge.net/gmime/ https://developer.gnome.org/gmime/stable/"
 
 SLOT="3.0"
-LICENSE="LGPL-2.1"
-KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sparc x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~x86-solaris"
-IUSE="doc mono smime static-libs test vala"
+LICENSE="LGPL-2.1+"
+KEYWORDS="~alpha amd64 ~arm ~arm64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~x64-solaris ~x86-solaris"
+IUSE="crypt doc idn static-libs test vala"
 
 RDEPEND="
 	>=dev-libs/glib-2.32.0:2
 	sys-libs/zlib
-	mono? (
-		dev-lang/mono
-		>=dev-dotnet/gtk-sharp-2.12.21:2 )
-	smime? ( >=app-crypt/gpgme-1.1.6:1= )
+	crypt? ( >=app-crypt/gpgme-1.8.0:1= )
+	idn? ( net-dns/libidn2:= )
 	vala? (
 		$(vala_depend)
 		>=dev-libs/gobject-introspection-1.30.0:= )
@@ -34,35 +32,34 @@ DEPEND="${RDEPEND}
 "
 # gnupg is needed for tests if --enable-cryptography is enabled, which we do unconditionally
 
-pkg_setup() {
-	use mono && mono-env_pkg_setup
-}
-
 src_prepare() {
 	gnome2_src_prepare
 	use vala && vala_src_prepare
 }
 
 src_configure() {
+	if [[ ${CHOST} == *-solaris* ]]; then
+		# bug #???, why not use --with-libiconv
+		append-libs iconv
+	fi
+
 	gnome2_src_configure \
-		--enable-cryptography \
-		--disable-strict-parser \
-		$(use_enable mono) \
-		$(use_enable smime) \
+		$(use_enable crypt crypto) \
 		$(use_enable static-libs static) \
-		$(use_enable vala)
+		$(use_enable vala) \
+		$(use_with idn libidn) \
+		$(usex doc "" DB2HTML=)
 }
 
 src_compile() {
-	MONO_PATH="${S}" gnome2_src_compile
+	gnome2_src_compile
 	if use doc; then
 		emake -C docs/tutorial html
 	fi
 }
 
 src_install() {
-	GACUTIL_FLAGS="/root '${ED}/usr/$(get_libdir)' /gacdir '${EPREFIX}/usr/$(get_libdir)' /package ${PN}" \
-		gnome2_src_install
+	gnome2_src_install
 
 	if use doc ; then
 		docinto tutorial
