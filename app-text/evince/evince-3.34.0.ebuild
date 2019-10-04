@@ -3,6 +3,7 @@
 
 EAPI=6
 GNOME2_LA_PUNT="yes"
+GNOME2_EAUTORECONF="yes"
 
 inherit gnome2 systemd
 
@@ -12,21 +13,22 @@ HOMEPAGE="https://wiki.gnome.org/Apps/Evince"
 LICENSE="GPL-2+ CC-BY-SA-3.0"
 # subslot = evd3.(suffix of libevdocument3)-evv3.(suffix of libevview3)
 SLOT="0/evd3.4-evv3.3"
-IUSE="djvu dvi gstreamer gnome gnome-keyring +introspection nautilus nsplugin +postscript t1lib tiff xps"
+IUSE="djvu dvi gstreamer gnome gnome-keyring +introspection nautilus nsplugin postscript spell t1lib tiff xps"
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~x64-solaris"
 
 # atk used in libview
-# gdk-pixbuf used all over the place
+# bundles unarr
 COMMON_DEPEND="
 	dev-libs/atk
-	>=dev-libs/glib-2.53.4:2[dbus]
+	>=dev-libs/glib-2.36:2[dbus]
 	>=dev-libs/libxml2-2.5:2
 	sys-libs/zlib:=
-	x11-libs/gdk-pixbuf:2
-	>=x11-libs/gtk+-3.16.0:3[introspection?]
+	>=x11-libs/gdk-pixbuf-2.36.5:2
+	>=x11-libs/gtk+-3.22.0:3[introspection?]
 	gnome-base/gsettings-desktop-schemas
 	>=x11-libs/cairo-1.10:=
-	>=app-text/poppler-0.33:=[cairo]
+	>=app-text/poppler-0.33[cairo]
+	>=app-arch/libarchive-3.2.0
 	djvu? ( >=app-text/djvu-3.5.22:= )
 	dvi? (
 		virtual/tex-base
@@ -41,9 +43,9 @@ COMMON_DEPEND="
 	introspection? ( >=dev-libs/gobject-introspection-1:= )
 	nautilus? ( >=gnome-base/nautilus-2.91.4 )
 	postscript? ( >=app-text/libspectre-0.2:= )
+	spell? ( >=app-text/gspell-1.6.0:= )
 	tiff? ( >=media-libs/tiff-3.6:0= )
 	xps? ( >=app-text/libgxps-0.2.1:= )
-	>=app-text/gspell-1.8.1-r1
 "
 RDEPEND="${COMMON_DEPEND}
 	gnome-base/gvfs
@@ -54,15 +56,21 @@ RDEPEND="${COMMON_DEPEND}
 "
 DEPEND="${COMMON_DEPEND}
 	app-text/docbook-xml-dtd:4.3
-	app-text/yelp-tools
+	dev-util/gdbus-codegen
+	dev-util/glib-utils
 	>=dev-util/gtk-doc-am-1.13
 	>=dev-util/intltool-0.35
 	dev-util/itstool
 	sys-devel/gettext
 	virtual/pkgconfig
+	app-text/yelp-tools
 "
 # eautoreconf needs:
 #  app-text/yelp-tools
+
+PATCHES=(
+	"${FILESDIR}"/3.30.2-internal-synctex.patch # don't automagically link to synctex from texlive-core - always use internal copy of this small parser for now; requires eautoreconf
+)
 
 src_prepare() {
 	gnome2_src_prepare
@@ -90,6 +98,7 @@ src_configure() {
 		$(use_enable nautilus) \
 		$(use_enable nsplugin browser-plugin) \
 		$(use_enable postscript ps) \
+		$(use_with spell gspell) \
 		$(use_enable t1lib) \
 		$(use_enable tiff) \
 		$(use_enable xps) \
