@@ -51,6 +51,8 @@ pkg_setup() {
 }
 
 src_prepare() {
+	PATCHES=( "${FILESDIR}"/gcr-3.28.1-fix-cross-compile.patch )
+
 	# Disable stupid flag changes
 	sed -e 's/CFLAGS="$CFLAGS -g"//' \
 		-e 's/CFLAGS="$CFLAGS -O0"//' \
