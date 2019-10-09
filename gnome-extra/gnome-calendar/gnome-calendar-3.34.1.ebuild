@@ -1,8 +1,8 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-inherit gnome2 meson
+EAPI=7
+inherit gnome.org meson
 
 DESCRIPTION="Manage your online calendars with simple and modern interface"
 HOMEPAGE="https://wiki.gnome.org/Apps/Calendar"
