@@ -1,10 +1,10 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 GNOME2_LA_PUNT="yes"
 
-inherit meson bash-completion-r1 gnome2 systemd
+inherit meson bash-completion-r1 gnome.org systemd
 
 DESCRIPTION="Virtual filesystem implementation for gio"
 HOMEPAGE="https://wiki.gnome.org/Projects/gvfs"
@@ -30,7 +30,7 @@ RDEPEND="
 	afp? ( >=dev-libs/libgcrypt-1.2.2:0= )
 	archive? ( app-arch/libarchive:= )
 	bluray? ( media-libs/libbluray )
-	fuse? ( >=sys-fs/fuse-3.2.1 )
+	fuse? ( >=sys-fs/fuse-3.6.2:3= )
 	gnome-keyring? ( app-crypt/libsecret )
 	gnome-online-accounts? ( >=net-libs/gnome-online-accounts-3.7.1:= )
 	google? (
@@ -64,9 +64,8 @@ DEPEND="${RDEPEND}
 	dev-util/gtk-doc-am
 	test? (
 		>=dev-python/twisted-core-12.3.0
-		|| (
-			net-analyzer/netcat
-			net-analyzer/netcat6 ) )
+		net-analyzer/netcat
+	)
 "
 RESTRICT="test"
 
@@ -82,7 +81,7 @@ src_prepare() {
 			-i daemon/Makefile.am || die
 	fi
 
-	gnome2_src_prepare
+	default
 }
 
 src_configure() {

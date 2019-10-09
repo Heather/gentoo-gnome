@@ -1,12 +1,12 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 GNOME2_LA_PUNT="yes"
 PYTHON_COMPAT=( python3_{5,6,7} )
 VALA_USE_DEPEND="vapigen"
 
-inherit db-use flag-o-matic gnome2 python-any-r1 systemd vala virtualx cmake-utils
+inherit db-use flag-o-matic gnome.org python-any-r1 systemd vala virtualx cmake-utils
 
 DESCRIPTION="Evolution groupware backend"
 HOMEPAGE="https://wiki.gnome.org/Apps/Evolution"
