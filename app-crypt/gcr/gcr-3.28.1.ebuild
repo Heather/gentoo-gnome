@@ -5,7 +5,7 @@ EAPI=6
 VALA_USE_DEPEND="vapigen"
 PYTHON_COMPAT=( python3_{5,6,7} )
 
-inherit gnome2 python-any-r1 vala virtualx
+inherit autotools gnome2 python-any-r1 vala virtualx
 
 DESCRIPTION="Libraries for cryptographic UIs and accessing PKCS#11 modules"
 HOMEPAGE="https://git.gnome.org/browse/gcr"
@@ -60,6 +60,8 @@ src_prepare() {
 
 	use vala && vala_src_prepare
 	gnome2_src_prepare
+	# must run autoconf with patched configure.ac #680628
+	eautoconf
 }
 
 src_configure() {
