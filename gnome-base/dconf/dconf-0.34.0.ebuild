@@ -1,7 +1,7 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 inherit bash-completion-r1 gnome.org gnome2-utils meson virtualx xdg
 
 DESCRIPTION="Simple low-level configuration system"
@@ -9,8 +9,9 @@ HOMEPAGE="https://wiki.gnome.org/Projects/dconf"
 
 LICENSE="LGPL-2.1+"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~amd64-fbsd ~x86-fbsd ~x86-linux"
+KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-linux"
 IUSE="gtk-doc"
+RESTRICT="!test? ( test )" # IUSE=test comes from virtualx.eclass
 
 RDEPEND="
 	>=dev-libs/glib-2.44.0:2
@@ -28,24 +29,17 @@ DEPEND="${RDEPEND}
 
 PATCHES=(
 	"${FILESDIR}"/0.30.1-bash-completion-dir.patch
+	"${FILESDIR}"/0.32.0-drop-vapigen-dep.patch # .vapi/.deps are pregenerated, just install them without a vala dep
 )
-
-src_prepare() {
-	xdg_src_prepare
-}
 
 src_configure() {
 	local emesonargs=(
 		-Dbash_completion_dir="$(get_bashcompdir)"
 		-Dman=true
-		-Dvapi=false
 		$(meson_use gtk-doc gtk_doc)
+		-Dvapi=true
 	)
 	meson_src_configure
-}
-
-src_test() {
-	virtx meson_src_test
 }
 
 src_install() {
@@ -54,9 +48,16 @@ src_install() {
 	# GSettings backend may be one of: memory, gconf, dconf
 	# Only dconf is really considered functional by upstream
 	# must have it enabled over gconf if both are installed
+	# This snippet can't be removed until gconf package is
+	# ensured to not install a /etc/env.d/50gconf and then
+	# still consider the CONFIG_PROTECT_MASK bit.
 	echo 'CONFIG_PROTECT_MASK="/etc/dconf"' >> 51dconf
 	echo 'GSETTINGS_BACKEND="dconf"' >> 51dconf
 	doenvd 51dconf
+}
+
+src_test() {
+	virtx meson_src_test
 }
 
 pkg_postinst() {
