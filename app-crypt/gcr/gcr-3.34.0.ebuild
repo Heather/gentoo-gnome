@@ -3,24 +3,24 @@
 
 EAPI=6
 VALA_USE_DEPEND="vapigen"
-PYTHON_COMPAT=( python3_{5,6,7} )
+PYTHON_COMPAT=( python2_7 )
 
-inherit autotools gnome2 python-any-r1 vala virtualx
+inherit gnome2 python-any-r1 vala virtualx
 
 DESCRIPTION="Libraries for cryptographic UIs and accessing PKCS#11 modules"
-HOMEPAGE="https://git.gnome.org/browse/gcr"
+HOMEPAGE="https://gitlab.gnome.org/GNOME/gcr"
 
 LICENSE="GPL-2+ LGPL-2+"
 SLOT="0/1" # subslot = suffix of libgcr-3
 
-IUSE="debug gtk +introspection vala"
+IUSE="debug gtk +introspection +vala"
 REQUIRED_USE="vala? ( introspection )"
 
-KEYWORDS="alpha amd64 arm ~arm64 hppa ia64 ~mips ppc ppc64 ~sh sparc x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux ~sparc-solaris ~x86-solaris"
+KEYWORDS="alpha amd64 arm arm64 ~hppa ~ia64 ~mips ppc ppc64 ~sh sparc x86 ~amd64-linux ~x86-linux ~sparc-solaris ~x86-solaris"
 
 COMMON_DEPEND="
 	>=app-crypt/p11-kit-0.19
-	>=dev-libs/glib-2.53.4:2
+	>=dev-libs/glib-2.38:2
 	>=dev-libs/libgcrypt-1.2.2:0=
 	>=dev-libs/libtasn1-1:=
 	>=sys-apps/dbus-1
@@ -34,8 +34,11 @@ RDEPEND="${COMMON_DEPEND}
 DEPEND="${COMMON_DEPEND}
 	${PYTHON_DEPS}
 	dev-libs/gobject-introspection-common
+	dev-libs/libxml2:2
 	dev-libs/libxslt
 	dev-libs/vala-common
+	dev-util/gdbus-codegen
+	dev-util/glib-utils
 	>=dev-util/gtk-doc-am-1.9
 	>=dev-util/intltool-0.35
 	sys-devel/gettext
@@ -51,8 +54,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	PATCHES=( "${FILESDIR}"/gcr-3.28.1-fix-cross-compile.patch )
-
 	# Disable stupid flag changes
 	sed -e 's/CFLAGS="$CFLAGS -g"//' \
 		-e 's/CFLAGS="$CFLAGS -O0"//' \
@@ -60,8 +61,6 @@ src_prepare() {
 
 	use vala && vala_src_prepare
 	gnome2_src_prepare
-	# must run autoconf with patched configure.ac #680628
-	eautoconf
 }
 
 src_configure() {
