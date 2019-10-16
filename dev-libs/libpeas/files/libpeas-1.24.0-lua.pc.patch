@@ -1,0 +1,13 @@
+diff --git a/meson.build b/meson.build
+index 14dadf4..a9dd3d0 100644
+--- a/meson.build
++++ b/meson.build
+@@ -112,7 +112,7 @@ endif
+ 
+ python2_dep = dependency('python2', version: python2_req, required: false)
+ pygobject_dep = dependency('pygobject-3.0', version: pygobject_req, required: false)
+-lua51_dep = dependency('lua5.1', version: lua_req, required: false)
++lua51_dep = dependency('lua', version: lua_req, required: false)
+ lua51_lgi_dep = dependency('lua5.1-lgi', version: lua_lgi_req, required: false)
+ luajit_dep = dependency('luajit', version: luajit_req, required: false)
+ 
