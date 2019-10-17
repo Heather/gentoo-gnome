@@ -1,11 +1,13 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-GNOME2_LA_PUNT="yes"
-PYTHON_COMPAT=( python3_{5,6,7} )
+EAPI=7
 
-inherit autotools eutils gnome2 multilib python-single-r1 virtualx
+VALA_USE_DEPEND=vapigen
+
+PYTHON_COMPAT=( python3_{5,6,7} ) # python3_8 ready
+
+inherit gnome.org meson eutils python-single-r1 vala virtualx
 
 DESCRIPTION="A GObject plugins library"
 HOMEPAGE="https://developer.gnome.org/libpeas/stable/"
@@ -14,7 +16,7 @@ LICENSE="LGPL-2+"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ia64 ~ppc ~sparc ~x86 ~amd64-linux ~x86-linux"
 
-IUSE="+gtk glade jit lua +python"
+IUSE="+gtk gtk-doc glade lua +python introspection vala"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 RDEPEND="
@@ -22,53 +24,47 @@ RDEPEND="
 	>=dev-libs/gobject-introspection-1.39:=
 	glade? ( >=dev-util/glade-3.9.1:3.10 )
 	gtk? ( >=x11-libs/gtk+-3:3[introspection] )
-	lua? (
-		>=dev-lua/lgi-0.9.0
-		jit? ( >=dev-lang/luajit-2:2 )
-		!jit? ( =dev-lang/lua-5.1*:0 ) )
+	lua? ( =dev-lang/lua-5.1*:0 )
 	python? (
 		${PYTHON_DEPS}
 		>=dev-python/pygobject-3.2:3[${PYTHON_USEDEP}] )
 "
-DEPEND="${RDEPEND}
-	>=dev-util/gtk-doc-am-1.11
-	>=dev-util/intltool-0.40
+BDEPEND="
+	gtk-doc? ( >=dev-util/gtk-doc-am-1.11 )
 	virtual/pkgconfig
-
-	dev-libs/gobject-introspection-common
-	gnome-base/gnome-common
 "
-# eautoreconf needs gobject-introspection-common, gnome-common
+DEPEND="${RDEPEND}
+	introspection? ( dev-libs/gobject-introspection-common )
+	vala? ( $(vala_depend) )
+	>=dev-util/intltool-0.40
+	gnome-base/gnome-common:3
+"
 
+PATCHES=( "${FILESDIR}/${PN}-1.24.0-lua.pc.patch" )
 pkg_setup() {
 	use python && python-single-r1_pkg_setup
 }
 
 src_prepare() {
-	# Gentoo uses unversioned lua - lua.pc instad of lua5.1.pc, /usr/bin/lua instead of /usr/bin/lua5.1
-	eapply "${FILESDIR}"/${PN}-1.14.0-lua.pc.patch
-	eautoreconf
-	gnome2_src_prepare
+	vala_src_prepare
+
+	default
 }
 
 src_configure() {
-	# Wtf, --disable-gcov, --enable-gcov=no, --enable-gcov, all enable gcov
-	# What do we do about gdb, valgrind, gcov, etc?
-	local myconf=(
-		$(use_enable glade glade-catalog)
-		$(use_enable gtk)
-		--disable-static
-
-		# py2 not supported anymore
-		--disable-python2
-		$(use_enable python python3)
-
-		# lua
-		$(use_enable lua lua5.1)
-		$(use_enable $(usex jit lua jit) luajit)
+	local emesonargs=(
+		-Dlua51=$(usex lua true false)
+		-Dpython2=false
+		-Dpython3=$(usex python true false)
+		-Dintrospection=$(usex introspection true false)
+		-Dvapi=$(usex vala true false)
+		-Dwidgetry=$(usex gtk true false)
+		-Dglade_catalog=$(usex glade true false)
+		-Ddemos=false
+		-Dgtk_doc=$(usex gtk-doc true false)
 	)
 
-	gnome2_src_configure "${myconf[@]}"
+	meson_src_configure
 }
 
 src_test() {
