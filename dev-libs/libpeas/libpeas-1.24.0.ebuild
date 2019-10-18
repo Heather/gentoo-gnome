@@ -16,7 +16,7 @@ LICENSE="LGPL-2+"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ia64 ~ppc ~sparc ~x86 ~amd64-linux ~x86-linux"
 
-IUSE="+gtk gtk-doc glade lua +python introspection vala"
+IUSE="+gtk gtk-doc glade lua +python vala"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 RDEPEND="
@@ -34,7 +34,7 @@ BDEPEND="
 	virtual/pkgconfig
 "
 DEPEND="${RDEPEND}
-	introspection? ( dev-libs/gobject-introspection-common )
+	dev-libs/gobject-introspection-common
 	vala? ( $(vala_depend) )
 	>=dev-util/intltool-0.40
 	gnome-base/gnome-common:3
@@ -56,7 +56,7 @@ src_configure() {
 		-Dlua51=$(usex lua true false)
 		-Dpython2=false
 		-Dpython3=$(usex python true false)
-		-Dintrospection=$(usex introspection true false)
+		-Dintrospection=true
 		-Dvapi=$(usex vala true false)
 		-Dwidgetry=$(usex gtk true false)
 		-Dglade_catalog=$(usex glade true false)
