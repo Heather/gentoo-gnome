@@ -42,3 +42,11 @@ RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/nautilus-3.1.90
 	office? ( app-office/libreoffice )
 "
+
+src_compile() {
+       addpredict /dev/dri/renderD128
+       addpredict /dev/dri/card0
+
+       default
+}
+
