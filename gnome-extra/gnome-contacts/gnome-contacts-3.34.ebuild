@@ -35,12 +35,15 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	${VALA_DEPEND}
-	app-text/docbook-xml-dtd:4.2
-	app-text/docbook-xsl-stylesheets
 	dev-libs/appstream-glib
 	dev-libs/libxml2:2
 	dev-libs/libxslt
 	>=sys-devel/gettext-0.19.8
+"
+
+BDEPEND="
+	app-text/docbook-xml-dtd:4.2
+	app-text/docbook-xsl-stylesheets
 	virtual/pkgconfig
 "
 
