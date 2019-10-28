@@ -47,6 +47,6 @@ src_compile() {
        addpredict /dev/dri/renderD128
        addpredict /dev/dri/card0
 
-       default
+       meson_src_compile
 }
 
