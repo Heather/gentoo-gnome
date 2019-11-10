@@ -63,7 +63,7 @@ src_prepare() {
 
 	gnome2_src_prepare
 
-	eapply "${FILESDIR}"/${P}-rust-1.37.0-patch
+	eapply "${FILESDIR}"/${P}-rust-1.37.0.patch
 
 	# important to do it after patches
 	eautoreconf
