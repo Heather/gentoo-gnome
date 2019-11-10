@@ -12,9 +12,9 @@ HOMEPAGE="https://wiki.gnome.org/Projects/LibRsvg"
 
 LICENSE="LGPL-2"
 SLOT="2"
-KEYWORDS="alpha amd64 arm ~arm64 hppa ia64 ~mips ppc ppc64 ~s390 ~sh ~sparc x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux ~x64-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux ~x64-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
 
-IUSE="+introspection tools vala"
+IUSE="gtk-doc +introspection tools vala"
 REQUIRED_USE="vala? ( introspection )"
 
 # TODO not working with rust-bin >=dev-lang/rust-bin-1.31.1[${MULTILIB_USEDEP}] https://github.com/Heather/gentoo-gnome/issues/295
@@ -29,12 +29,16 @@ RDEPEND="
 	tools? ( >=x11-libs/gtk+-3.10.0:3 )
 "
 DEPEND="${RDEPEND}
-	>=dev-lang/rust-1.34.2[${MULTILIB_USEDEP}]
+	|| (	
+		>=dev-lang/rust-1.34.2[${MULTILIB_USEDEP}]
+		( >=dev-lang/rust-bin-1.34.2[${MULTILIB_USEDEP}] >=dev-lang/rust-std-bin-1.34.2[${MULTILIB_USEDEP}] )
+	)
 	dev-libs/gobject-introspection-common
 	dev-libs/vala-common
 	>=dev-util/gtk-doc-am-1.13
 	>=virtual/pkgconfig-0-r1[${MULTILIB_USEDEP}]
 	virtual/cargo
+	gtk-doc? ( >=dev-util/gtk-doc-1.13 )
 	vala? ( $(vala_depend) )
 "
 # >=gtk-doc-am-1.13, gobject-introspection-common, vala-common needed by eautoreconf
@@ -79,6 +83,7 @@ multilib_src_configure() {
 		--build=${CHOST_default} \
 		--disable-static \
 		--disable-tools \
+		$(multilib_native_use_enable gtk-doc) \
 		$(multilib_native_use_enable introspection) \
 		$(multilib_native_use_enable vala) \
 		--enable-pixbuf-loader \
