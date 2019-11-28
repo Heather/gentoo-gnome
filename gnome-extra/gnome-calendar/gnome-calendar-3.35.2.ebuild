@@ -13,10 +13,10 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 RDEPEND="
-	>=dev-libs/glib-2.58.0:2
+	>=dev-libs/glib-2.63.2:2
 	>=dev-libs/libical-1.0.1
 	>=gnome-base/gsettings-desktop-schemas-3.21.2
-	>=gnome-extra/evolution-data-server-3.17.1:=
+	>=gnome-extra/evolution-data-server-3.34.1:=
 	>=net-libs/gnome-online-accounts-3.2.0:=
 	>=x11-libs/gtk+-3.21.6:3
 	>=dev-libs/libdazzle-3.27.1
