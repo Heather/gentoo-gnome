@@ -29,8 +29,8 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	|| (	
-		>=dev-lang/rust-1.34.2[${MULTILIB_USEDEP}]
-		( >=dev-lang/rust-bin-1.34.2[${MULTILIB_USEDEP}] >=dev-lang/rust-std-bin-1.34.2[${MULTILIB_USEDEP}] )
+		>=dev-lang/rust-1.36.0[${MULTILIB_USEDEP}]
+		( >=dev-lang/rust-bin-1.36.0[${MULTILIB_USEDEP}] >=dev-lang/rust-std-bin-1.36.0[${MULTILIB_USEDEP}] )
 	)
 	dev-libs/gobject-introspection-common
 	dev-libs/vala-common
