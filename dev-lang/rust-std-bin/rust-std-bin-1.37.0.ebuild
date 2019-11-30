@@ -16,7 +16,7 @@ RUST_PROVIDER="rust-bin-1.37.0"
 
 LICENSE="|| ( MIT Apache-2.0 ) BSD-1 BSD-2 BSD-4 UoI-NCSA"
 SLOT="stable"
-KEYWORDS="~amd64"
+KEYWORDS="amd64"
 IUSE="abi_x86_32 cpu_flags_x86_sse2"
 
 DEPEND=""
