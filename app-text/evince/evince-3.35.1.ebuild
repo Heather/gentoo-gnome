@@ -14,7 +14,7 @@ LICENSE="GPL-2+ CC-BY-SA-3.0"
 # subslot = evd3.(suffix of libevdocument3)-evv3.(suffix of libevview3)
 SLOT="0/evd3.4-evv3.3"
 IUSE="djvu dvi gstreamer gnome gnome-keyring +introspection nautilus nsplugin postscript spell t1lib tiff xps"
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~x64-solaris"
+KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux ~x86-linux ~x64-solaris"
 
 # atk used in libview
 # bundles unarr
@@ -46,6 +46,7 @@ COMMON_DEPEND="
 	spell? ( >=app-text/gspell-1.6.0:= )
 	tiff? ( >=media-libs/tiff-3.6:0= )
 	xps? ( >=app-text/libgxps-0.2.1:= )
+	dev-util/gtk-doc
 "
 RDEPEND="${COMMON_DEPEND}
 	gnome-base/gvfs
@@ -56,6 +57,7 @@ RDEPEND="${COMMON_DEPEND}
 "
 DEPEND="${COMMON_DEPEND}
 	app-text/docbook-xml-dtd:4.3
+	dev-libs/appstream-glib
 	dev-util/gdbus-codegen
 	dev-util/glib-utils
 	>=dev-util/gtk-doc-am-1.13
@@ -76,7 +78,7 @@ src_prepare() {
 	gnome2_src_prepare
 
 	# Do not depend on adwaita-icon-theme, bug #326855, #391859
-	# https://bugs.freedesktop.org/show_bug.cgi?id=29942
+	# https://gitlab.freedesktop.org/xdg/default-icon-theme/issues/7
 	sed -e 's/adwaita-icon-theme >= $ADWAITA_ICON_THEME_REQUIRED//g' \
 		-i configure || die "sed failed"
 }
