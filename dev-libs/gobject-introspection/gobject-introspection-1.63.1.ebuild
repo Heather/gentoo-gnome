@@ -5,7 +5,7 @@ EAPI=6
 PYTHON_COMPAT=( python{3_5,3_6,3_7} )
 PYTHON_REQ_USE="xml"
 
-inherit gnome2 python-single-r1 toolchain-funcs versionator
+inherit gnome2 python-single-r1 toolchain-funcs versionator meson
 
 DESCRIPTION="Introspection system for GObject-based libraries"
 HOMEPAGE="https://wiki.gnome.org/Projects/GObjectIntrospection"
@@ -51,17 +51,11 @@ src_configure() {
 		export CAIRO_CFLAGS="-I${EPREFIX}/usr/include/cairo"
 	fi
 
-	# To prevent crosscompiling problems, bug #414105
-	gnome2_src_configure \
-		--disable-static \
-		CC="$(tc-getCC)" \
-		YACC="$(type -p yacc)" \
-		$(use_with cairo) \
-		$(use_enable doctool)
+	meson_src_configure
 }
 
 src_install() {
-	gnome2_src_install
+	meson_src_install
 
 	# Prevent collision with gobject-introspection-common
 	rm -v "${ED}"usr/share/aclocal/introspection.m4 \

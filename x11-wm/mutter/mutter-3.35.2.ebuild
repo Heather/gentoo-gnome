@@ -93,7 +93,6 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}"/3.32.2-no-cogl-gles2.patch
-	"${FILESDIR}"/3.32-eglmesaext-include.patch
 )
 
 src_configure() {

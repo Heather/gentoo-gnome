@@ -21,13 +21,14 @@ COMMON_DEPEND="
 	>=dev-libs/libcroco-0.6.8:0.6
 	>=gnome-extra/evolution-data-server-3.34.1:=
 	>=app-crypt/gcr-3.7.5[introspection]
-	>=gnome-base/gnome-desktop-3.33.90:3=[introspection]
+	>=gnome-base/gnome-desktop-3.34.2-r1:3=[introspection]
+	<gnome-base/gnome-desktop-3.35.3:3=[introspection]
 	>=dev-libs/glib-2.53.0:2
 	>=dev-libs/gobject-introspection-1.49.1:=
-	>=dev-libs/gjs-1.58.3
+	>=dev-libs/gjs-1.63.2
 	>=x11-libs/gtk+-3.15.0:3[introspection]
 	nsplugin? ( >=dev-libs/json-glib-0.13.2 )
-	>=x11-wm/mutter-3.35.1[introspection]
+	>=x11-wm/mutter-3.35.2[introspection]
 	>=sys-auth/polkit-0.100[introspection]
 	>=gnome-base/gsettings-desktop-schemas-3.33.1
 	>=x11-libs/startup-notification-0.11
@@ -114,7 +115,7 @@ DEPEND="${COMMON_DEPEND}
 
 PATCHES=(
 	# Change favorites defaults, bug #479918
-	"${FILESDIR}"/${PN}-3.22.0-defaults.patch
+	# "${FILESDIR}"/${PN}-3.22.0-defaults.patch
 )
 
 src_prepare() {

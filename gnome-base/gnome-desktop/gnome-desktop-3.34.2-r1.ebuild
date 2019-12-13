@@ -21,8 +21,8 @@ COMMON_DEPEND="
 	x11-libs/cairo:=[X]
 	x11-libs/libX11
 	x11-misc/xkeyboard-config
-	>=gnome-base/gsettings-desktop-schemas-3.28.0
-	introspection? ( >=dev-libs/gobject-introspection-0.9.7:= )
+	>=gnome-base/gsettings-desktop-schemas-3.34.0
+	introspection? ( >=dev-libs/gobject-introspection-1.63.1:= )
 	udev? (
 		sys-apps/hwids
 		virtual/libudev:= )
@@ -44,9 +44,11 @@ meson_use_enable() {
 	usex "$1" "-D${2-$1}=enabled" "-D${2-$1}=disabled"
 }
 
+#TODO: make systemd optional
 src_configure() {
 	local emesonargs=(
 		-Dgnome_distributor=Gentoo
+		-Dsystemd=enabled
 		$(meson_use debug debug_tools)
 		$(meson_use_enable udev)
 	)
