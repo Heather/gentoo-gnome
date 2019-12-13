@@ -21,7 +21,6 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	>=dev-util/gtk-doc-am-1.14
-	gnome-base/gnome-common
 	virtual/pkgconfig
 "
 
