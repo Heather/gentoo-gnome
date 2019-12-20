@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python3_{5,6,7} )
 PYTHON_REQ_USE="xml"
 VALA_MIN_API_VERSION="0.28"
 
-inherit eutils gnome2 multilib python-single-r1 vala
+inherit eutils gnome2 multilib python-single-r1 vala meson
 
 DESCRIPTION="Official plugins for gedit"
 HOMEPAGE="https://wiki.gnome.org/Apps/Gedit/ShippedPlugins"
@@ -28,6 +28,7 @@ REQUIRED_USE="
 "
 
 RDEPEND="
+	gnome-extra/zeitgeist
 	>=app-editors/gedit-${PV}
 	>=dev-libs/glib-2.32:2
 	>=dev-libs/libpeas-1.7.0[gtk]
@@ -64,34 +65,5 @@ pkg_setup() {
 
 src_prepare() {
 	use vala && vala_src_prepare
-	gnome2_src_prepare
-}
-
-src_configure() {
-	gnome2_src_configure \
-		$(use_enable python) \
-		$(use_enable vala) \
-		$(use_enable zeitgeist)
-}
-
-src_install() {
-	gnome2_src_install
-
-	# FIXME: crazy !!!
-	if use python; then
-		find "${ED}"/usr/share/gedit -name "*.py*" -delete || die
-		find "${ED}"/usr/share/gedit -type d -empty -delete || die
-	fi
-
-	# FIXME: upstream made this automagic...
-	clean_plugin charmap
-	clean_plugin git
-	clean_plugin terminal
-}
-
-clean_plugin() {
-	if use !${1} ; then
-		rm -rf "${ED}"/usr/share/gedit/plugins/${1}*
-		rm -rf "${ED}"/usr/$(get_libdir)/gedit/plugins/${1}*
-	fi
+	default
 }

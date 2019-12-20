@@ -20,12 +20,9 @@ REQUIRED_USE="python? ( introspection ${PYTHON_REQUIRED_USE} )"
 
 KEYWORDS="~amd64"
 
-PATCHES=(
-	"${FILESDIR}"/${P}.patch
-)
-
 # X libs are not needed for OSX (aqua)
 COMMON_DEPEND="
+	>=gui-libs/tepl-4.3
 	>=dev-libs/libxml2-2.5.0:2
 	>=dev-libs/glib-2.44:2[dbus]
 	>=x11-libs/gtk+-3.22.0:3[introspection?]
