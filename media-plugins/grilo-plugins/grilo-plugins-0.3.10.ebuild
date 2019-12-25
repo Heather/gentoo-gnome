@@ -19,7 +19,7 @@ IUSE="daap chromaprint flickr freebox gnome-online-accounts lua test thetvdb tra
 # TODO: validate upnp-av dleyna deps
 RDEPEND="
 	>=dev-libs/glib-2.44:2
-	>=media-libs/grilo-0.3.8:${SLOT}=[network,playlist]
+	>=media-libs/grilo-0.3.10:${SLOT}=[network,playlist]
 	freebox? (
 		net-dns/avahi )
 	>=dev-libs/gom-0.3.2-r1
@@ -38,7 +38,7 @@ RDEPEND="
 	dev-db/sqlite:3
 	>=dev-libs/totem-pl-parser-3.4.1
 	tracker? (
-		>=app-misc/tracker-0.10.5:= )
+		>=app-misc/tracker-2.3.0:= )
 	upnp-av? (
 		net-libs/dleyna-connector-dbus
 		net-misc/dleyna-server )
