@@ -8,7 +8,6 @@ inherit gnome2 meson
 
 DESCRIPTION="The Eye of GNOME image viewer"
 HOMEPAGE="https://wiki.gnome.org/Apps/EyeOfGnome"
-SRC_URI="https://download.gnome.org/sources/eog/3.33/eog-${PV}.tar.xz"
 
 LICENSE="GPL-2+"
 SLOT="1"
