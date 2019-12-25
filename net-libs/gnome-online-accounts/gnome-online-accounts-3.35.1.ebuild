@@ -12,49 +12,55 @@ HOMEPAGE="https://wiki.gnome.org/Projects/GnomeOnlineAccounts"
 
 LICENSE="LGPL-2+"
 SLOT="0/1"
-IUSE="debug gnome +introspection kerberos vala"
-KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+KEYWORDS="~alpha amd64 ~arm arm64 ~ia64 ~ppc ~ppc64 ~sparc x86"
 
+IUSE="debug gnome +introspection kerberos +vala"
+REQUIRED_USE="vala? ( introspection )"
+
+# pango used in goaeditablelabel
+# libsoup used in goaoauthprovider
+# goa kerberos provider is incompatible with app-crypt/heimdal, see
+# https://bugzilla.gnome.org/show_bug.cgi?id=692250
+# json-glib-0.16 needed for bug #485092
 RDEPEND="
-	>=dev-libs/glib-2.53.4:2
+	>=dev-libs/glib-2.52:2
 	>=app-crypt/libsecret-0.5
 	>=dev-libs/json-glib-0.16
 	dev-libs/libxml2:2
 	>=net-libs/libsoup-2.42:2.4
 	net-libs/rest:0.7
-	net-libs/telepathy-glib
-	>=net-libs/webkit-gtk-2.7.2:4
+	>=net-libs/webkit-gtk-2.12.0:4
 	>=x11-libs/gtk+-3.19.12:3
 	x11-libs/pango
 
 	introspection? ( >=dev-libs/gobject-introspection-0.6.2:= )
 	kerberos? (
-		app-crypt/gcr:0=
+		app-crypt/gcr:0=[gtk]
 		app-crypt/mit-krb5 )
 "
-
+#	telepathy? ( net-libs/telepathy-glib )
+# goa-daemon can launch gnome-control-center
 PDEPEND="gnome? ( >=gnome-base/gnome-control-center-3.2[gnome-online-accounts(+)] )"
 
 DEPEND="${RDEPEND}
-	$(vala_depend)
+	vala? ( $(vala_depend) )
 	dev-libs/libxslt
 	>=dev-util/gtk-doc-am-1.3
-	>=dev-util/intltool-0.50.1
-	sys-devel/gettext
+	>=dev-util/gdbus-codegen-2.30.0
+	>=sys-devel/gettext-0.19.8
 	virtual/pkgconfig
 
 	dev-libs/gobject-introspection-common
 	gnome-base/gnome-common
 "
 
-QA_CONFIGURE_OPTIONS=".*"
-
 src_prepare() {
+	use vala && vala_src_prepare
 	gnome2_src_prepare
-	vala_src_prepare
 }
 
 src_configure() {
+	# TODO: Give users a way to set the G/FB/Windows Live secrets
 	gnome2_src_configure \
 		--disable-static \
 		--enable-backend \
@@ -68,9 +74,9 @@ src_configure() {
 		--enable-media-server \
 		--enable-owncloud \
 		--enable-pocket \
-		--enable-telepathy \
 		--enable-windows-live \
 		$(usex debug --enable-debug=yes ' ') \
 		$(use_enable kerberos) \
+		$(use_enable introspection) \
 		$(use_enable vala)
 }
