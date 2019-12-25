@@ -15,7 +15,7 @@ IUSE="gnome +gstreamer gtk-doc +introspection packagekit +previewer seccomp seli
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux"
 
 COMMON_DEPEND="
-	>=dev-libs/glib-2.58.1:2
+	>=dev-libs/glib-2.63.3:2
 	>=media-libs/gexiv2-0.10.0
 	gstreamer? ( media-libs/gstreamer:1.0
 		media-libs/gst-plugins-base:1.0 )
@@ -23,7 +23,7 @@ COMMON_DEPEND="
 	gnome-base/gsettings-desktop-schemas
 	>=x11-libs/gtk+-3.22.27:3[X,introspection?]
 	seccomp? ( sys-libs/libseccomp )
-	>=x11-libs/pango-1.28.3
+	>=x11-libs/pango-1.44.7
 	selinux? ( >=sys-libs/libselinux-2.0 )
 	>=app-misc/tracker-2.0:=
 	x11-libs/libX11
