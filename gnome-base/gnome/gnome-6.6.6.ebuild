@@ -15,10 +15,10 @@ IUSE=""
 S="${WORKDIR}"
 
 RDEPEND="
-	>=gnome-base/gdm-${PV}
-	>=gnome-base/gnome-keyring-3.31.91
-	>=gnome-base/gnome-session-${PV}
-	>=gnome-extra/evolution-data-server-${PV}
+	>=gnome-base/gdm-3.34
+	>=gnome-base/gnome-keyring-3.34
+	>=gnome-base/gnome-session-3.34
+	>=gnome-extra/evolution-data-server-3.34
 "
 DEPEND=""
 PDEPEND=">=gnome-base/gvfs-1.40.0"
