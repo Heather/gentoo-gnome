@@ -2,10 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-PYTHON_COMPAT=( python{3_5,3_6,3_7} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 PYTHON_REQ_USE="xml"
 
-inherit gnome2 python-single-r1 toolchain-funcs versionator meson
+inherit gnome2 meson python-single-r1 toolchain-funcs versionator
 
 DESCRIPTION="Introspection system for GObject-based libraries"
 HOMEPAGE="https://wiki.gnome.org/Projects/GObjectIntrospection"
@@ -51,7 +51,18 @@ src_configure() {
 		export CAIRO_CFLAGS="-I${EPREFIX}/usr/include/cairo"
 	fi
 
+	# To prevent crosscompiling problems, bug #414105
+	local emesonargs=(
+		-Dcairo=$(usex cairo enabled disabled) \
+		-Ddoctool=$(usex doctool enabled disabled) \
+		-Dgtk_doc=$(usex doctool true false)
+		-Dpython=python3
+	)
 	meson_src_configure
+}
+
+src_compile() {
+	meson_src_compile
 }
 
 src_install() {
