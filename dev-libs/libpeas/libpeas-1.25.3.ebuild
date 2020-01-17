@@ -40,7 +40,6 @@ DEPEND="${RDEPEND}
 	gnome-base/gnome-common:3
 "
 
-PATCHES=( "${FILESDIR}/${PN}-1.24.0-lua.pc.patch" )
 pkg_setup() {
 	use python && python-single-r1_pkg_setup
 }
