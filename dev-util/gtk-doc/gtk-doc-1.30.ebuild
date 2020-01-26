@@ -31,6 +31,7 @@ RDEPEND="
 		vim? ( || ( app-editors/vim app-editors/gvim ) )
 		!vim? ( dev-util/source-highlight )
 	)
+	dev-python/pygments[${PYTHON_USEDEP}]
 "
 DEPEND="${RDEPEND}
 	~dev-util/gtk-doc-am-${PV}
