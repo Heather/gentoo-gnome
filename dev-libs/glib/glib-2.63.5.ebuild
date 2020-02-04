@@ -159,7 +159,7 @@ multilib_src_configure() {
 		-Ddefault_library=$(usex static-libs both shared)
 		$(meson_feature selinux)
 		$(meson_use xattr)
-		-Dlibmount=true # only used if host_system == 'linux'
+		-Dlibmount=disabled # only used if host_system == 'linux'
 		-Dinternal_pcre=false
 		-Dman=true
 		$(meson_use systemtap dtrace)
