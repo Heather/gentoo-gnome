@@ -5,7 +5,7 @@ EAPI=7
 
 VALA_USE_DEPEND=vapigen
 
-PYTHON_COMPAT=( python3_{5,6,7} ) # python3_8 ready
+PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit gnome.org meson eutils python-single-r1 vala virtualx
 
@@ -27,7 +27,10 @@ RDEPEND="
 	lua? ( =dev-lang/lua-5.1*:0 )
 	python? (
 		${PYTHON_DEPS}
-		>=dev-python/pygobject-3.2:3[${PYTHON_MULTI_USEDEP}] )
+		$(python_gen_cond_dep '
+			>=dev-python/pygobject-3.2:3[${PYTHON_MULTI_USEDEP}]
+		')
+	)
 "
 BDEPEND="
 	gtk-doc? ( >=dev-util/gtk-doc-am-1.11 )

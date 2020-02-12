@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-PYTHON_COMPAT=( python3_{5,6,7} )
+PYTHON_COMPAT=( python3_{6,7} )
 
 inherit gnome.org gnome2-utils meson pax-utils python-single-r1 virtualx xdg
 
@@ -54,7 +54,9 @@ COMMON_DEPEND="
 	>=x11-libs/libXfixes-5.0
 
 	${PYTHON_DEPS}
-	dev-python/pygobject:3[${PYTHON_MULTI_USEDEP}]
+	$(python_gen_cond_dep '
+		dev-python/pygobject:3[${PYTHON_MULTI_USEDEP}]
+	')
 	media-libs/mesa[X(+)]
 "
 
