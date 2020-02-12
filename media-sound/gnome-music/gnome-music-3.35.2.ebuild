@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -24,8 +24,8 @@ DEPEND="${PYTHON_DEPS}
 	>=media-libs/libmediaart-1.9.1:2.0[introspection]
 	net-libs/libsoup:2.4[introspection]
 	>=app-misc/tracker-2.2.0:=[introspection(+)]
-	>=dev-python/pygobject-3.29.1:3[cairo,${PYTHON_USEDEP}]
-	>=dev-python/pycairo-1.14.0[${PYTHON_USEDEP}]
+	>=dev-python/pygobject-3.29.1:3[cairo,${PYTHON_SINGLE_USEDEP}]
+	>=dev-python/pycairo-1.14.0[${PYTHON_SINGLE_USEDEP}]
 	>=media-libs/grilo-0.3.4:0.3[introspection]
 	>=media-plugins/grilo-plugins-0.3.8:0.3
 "

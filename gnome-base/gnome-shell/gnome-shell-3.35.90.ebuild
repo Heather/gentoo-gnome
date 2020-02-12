@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -54,7 +54,7 @@ COMMON_DEPEND="
 	>=x11-libs/libXfixes-5.0
 
 	${PYTHON_DEPS}
-	dev-python/pygobject:3[${PYTHON_USEDEP}]
+	dev-python/pygobject:3[${PYTHON_MULTI_USEDEP}]
 	media-libs/mesa[X(+)]
 "
 

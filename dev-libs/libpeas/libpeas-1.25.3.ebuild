@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -27,7 +27,7 @@ RDEPEND="
 	lua? ( =dev-lang/lua-5.1*:0 )
 	python? (
 		${PYTHON_DEPS}
-		>=dev-python/pygobject-3.2:3[${PYTHON_USEDEP}] )
+		>=dev-python/pygobject-3.2:3[${PYTHON_MULTI_USEDEP}] )
 "
 BDEPEND="
 	gtk-doc? ( >=dev-util/gtk-doc-am-1.11 )

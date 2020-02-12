@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -33,7 +33,7 @@ RDEPEND="pm-utils? ( sys-power/upower-pm-utils[introspection=] )
 DEPEND="${PYTHON_DEPS}
 	$(vala_depend)
 	dev-lang/sassc
-	introspection? ( >=dev-libs/gobject-introspection-1.44.0[${PYTHON_USEDEP}] )
+	introspection? ( >=dev-libs/gobject-introspection-1.44.0[${PYTHON_SINGLE_USEDEP}] )
 	>=x11-wm/mutter-3.25.90
 	media-libs/clutter:1.0
 	>=x11-libs/libwnck-3.14:3
