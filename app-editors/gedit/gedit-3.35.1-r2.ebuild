@@ -21,6 +21,7 @@ KEYWORDS="~alpha amd64 ~arm ~arm64 ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc x86 ~amd64
 
 # X libs are not needed for OSX (aqua)
 DEPEND="
+	gui-libs/tepl
 	>=dev-libs/glib-2.44:2
 	>=x11-libs/gtk+-3.22.0:3[introspection?]
 	>=x11-libs/gtksourceview-4.0.2:4[introspection?]
