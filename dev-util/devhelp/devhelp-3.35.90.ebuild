@@ -46,8 +46,8 @@ DEPEND="${COMMON_DEPEND}
 "
 
 PATCHES=(
-	"${FILESDIR}"/${PV}-optional-introspection.patch
-	"${FILESDIR}"/${PV}-optional-gedit.patch
+	"${FILESDIR}"/3.32.0-optional-introspection.patch
+	"${FILESDIR}"/3.32.0-optional-gedit.patch
 )
 
 pkg_setup() {
