@@ -20,8 +20,9 @@ REQUIRED_USE="vala? ( introspection )"
 # TODO not working with rust-bin >=dev-lang/rust-bin-1.31.1[${MULTILIB_USEDEP}] https://github.com/Heather/gentoo-gnome/issues/295
 RDEPEND="
 	>=dev-libs/glib-2.34.3:2[${MULTILIB_USEDEP}]
-	>=x11-libs/cairo-1.15.12[${MULTILIB_USEDEP}]
-	>=x11-libs/pango-1.36.3[${MULTILIB_USEDEP}]
+	>=media-libs/freetype-2.8.0[${MULTILIB_USEDEP}]
+	>=x11-libs/cairo-1.16.0[${MULTILIB_USEDEP}]
+	>=x11-libs/pango-1.38.0[${MULTILIB_USEDEP}]
 	>=dev-libs/libxml2-2.9.1-r4:2[${MULTILIB_USEDEP}]
 	>=x11-libs/gdk-pixbuf-2.30.7:2[introspection?,${MULTILIB_USEDEP}]
 	introspection? ( >=dev-libs/gobject-introspection-0.10.8:= )
@@ -29,8 +30,8 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	|| (	
-		>=dev-lang/rust-1.36.0[${MULTILIB_USEDEP}]
-		( >=dev-lang/rust-bin-1.36.0[${MULTILIB_USEDEP}] >=dev-lang/rust-std-bin-1.36.0[${MULTILIB_USEDEP}] )
+		>=dev-lang/rust-1.39.0[${MULTILIB_USEDEP}]
+		( >=dev-lang/rust-bin-1.39.0[${MULTILIB_USEDEP}] >=dev-lang/rust-std-bin-1.39.0[${MULTILIB_USEDEP}] )
 	)
 	dev-libs/gobject-introspection-common
 	dev-libs/vala-common
