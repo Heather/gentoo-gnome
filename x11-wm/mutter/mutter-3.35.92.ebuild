@@ -55,7 +55,7 @@ DEPEND="
 	>=media-libs/libcanberra-0.26
 	media-libs/mesa[X(+),egl,gles2?]
 	wayland? (
-		>=dev-libs/wayland-protocols-1.16
+		>=dev-libs/wayland-protocols-1.19
 		>=dev-libs/wayland-1.13.0
 		x11-libs/libdrm:=
 		>=media-libs/mesa-10.3[egl,gbm,wayland,gles2]
