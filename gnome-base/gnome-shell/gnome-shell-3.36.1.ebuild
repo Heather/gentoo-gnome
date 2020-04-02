@@ -21,7 +21,7 @@ COMMON_DEPEND="
 	>=dev-libs/libcroco-0.6.8:0.6
 	>=gnome-extra/evolution-data-server-3.34.1:=
 	>=app-crypt/gcr-3.7.5[introspection]
-	>=gnome-base/gnome-desktop-3.34.2-r1:3=[introspection]
+	>=gnome-base/gnome-desktop-3.36.0:3=[introspection]
 	>=dev-libs/glib-2.53.0:2
 	>=dev-libs/gobject-introspection-1.49.1:=
 	>=dev-libs/gjs-1.63.2
