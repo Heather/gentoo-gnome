@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-PYTHON_COMPAT=( python3_{5,6,7} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit gnome.org gnome2-utils meson python-single-r1 xdg
 
@@ -17,24 +17,27 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 KEYWORDS="~amd64 ~arm64 ~x86"
 
 DEPEND="${PYTHON_DEPS}
+	>=dev-libs/glib-2.50:2
 	net-libs/gnome-online-accounts[introspection]
 	>=dev-libs/gobject-introspection-1.54:=
 	>=x11-libs/gtk+-3.23.1:3[introspection]
 	>=dev-libs/libdazzle-3.28.0[introspection]
 	>=media-libs/libmediaart-1.9.1:2.0[introspection]
 	net-libs/libsoup:2.4[introspection]
-	>=app-misc/tracker-2.2.0:=[introspection(+)]
-	>=dev-python/pygobject-3.29.1:3[cairo,${PYTHON_SINGLE_USEDEP}]
-	>=dev-python/pycairo-1.14.0[${PYTHON_SINGLE_USEDEP}]
-	>=media-libs/grilo-0.3.4:0.3[introspection]
-	>=media-plugins/grilo-plugins-0.3.8:0.3
+	>=app-misc/tracker-2.3.0:=[introspection(+)]
+	$(python_gen_cond_dep '
+		>=dev-python/pygobject-3.29.1:3[cairo,${PYTHON_MULTI_USEDEP}]
+		>=dev-python/pycairo-1.14.0[${PYTHON_MULTI_USEDEP}]
+	')
+	>=media-libs/grilo-0.3.12:0.3[introspection]
+	>=media-plugins/grilo-plugins-0.3.11:0.3
 "
 # xdg-user-dirs-update needs to be there to create needed dirs
 # https://bugzilla.gnome.org/show_bug.cgi?id=731613
 RDEPEND="${DEPEND}
 	|| (
-		>=app-misc/tracker-miners-2.2.0[gstreamer]
-		>=app-misc/tracker-miners-2.2.0[ffmpeg]
+		>=app-misc/tracker-miners-2.3.0[gstreamer]
+		>=app-misc/tracker-miners-2.3.0[ffmpeg]
 	)
 	x11-libs/libnotify[introspection]
 	media-libs/gstreamer:1.0[introspection]
