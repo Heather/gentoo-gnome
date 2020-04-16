@@ -55,8 +55,6 @@ src_configure() {
 
 src_install() {
 	meson_src_install
-	# installed by sysprof-capture, as mutter needs it at build time
-	rm "${ED}"/usr/share/dbus-1/interfaces/org.gnome.Sysprof3.Profiler.xml || die
 }
 
 pkg_postinst() {
