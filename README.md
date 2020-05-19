@@ -5,15 +5,10 @@ Unofficial GNOME overlay
 [![Twitter][]](http://www.twitter.com/Cynede)
 ------------------------
 
-Note
-----
-
-There are several known issues with `17.1` profile
-
 Versions
 --------
 
- - GNOME `~3.34.x`
+ - GNOME `~3.36/37.x`
  - Pantheon `Juno` ebuilds
 
 Communication
