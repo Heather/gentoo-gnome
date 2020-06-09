@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-PYTHON_COMPAT=( python3_{6,7} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit gnome.org gnome2-utils meson pax-utils python-single-r1 virtualx xdg
 
@@ -11,9 +11,8 @@ HOMEPAGE="https://wiki.gnome.org/Projects/GnomeShell"
 
 LICENSE="GPL-2+ LGPL-2+"
 SLOT="0"
-IUSE="+bluetooth browser-extension elogind +ibus +networkmanager nsplugin systemd telepathy"
-REQUIRED_USE="${PYTHON_REQUIRED_USE}
-	?? ( elogind systemd )"
+IUSE="browser-extension elogind +ibus nsplugin telepathy"
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~x86"
 
@@ -33,12 +32,11 @@ COMMON_DEPEND="
 	>=x11-libs/startup-notification-0.11
 	>=net-wireless/gnome-bluetooth-3.9[introspection]
 	>=media-libs/gstreamer-0.11.92:1.0
-	networkmanager? (
-		>=gnome-extra/nm-applet-0.9.8[introspection]
-		>=net-misc/networkmanager-0.9.8:=[introspection]
-		>=app-crypt/libsecret-0.18
-		dev-libs/dbus-glib )
-	systemd? ( >=sys-apps/systemd-31 )
+	>=gnome-extra/nm-applet-0.9.8[introspection]
+	>=net-misc/networkmanager-0.9.8:=[introspection]
+	>=app-crypt/libsecret-0.18
+	dev-libs/dbus-glib
+	>=sys-apps/systemd-31
 	elogind? ( >=sys-auth/elogind-237 )
 
 	>=app-accessibility/at-spi2-atk-2.5.3
@@ -91,9 +89,8 @@ RDEPEND="${COMMON_DEPEND}
 
 	>=x11-themes/adwaita-icon-theme-3.26
 
-	networkmanager? (
-		net-misc/mobile-broadband-provider-info
-		sys-libs/timezone-data )
+	net-misc/mobile-broadband-provider-info
+	sys-libs/timezone-data
 	ibus? ( >=app-i18n/ibus-1.4.99[dconf(+),gtk,introspection] )
 	telepathy? (
 		>=net-im/telepathy-logger-0.2.4[introspection]
@@ -130,10 +127,6 @@ src_prepare() {
 src_configure() {
 	local emesonargs=(
 		$(meson_use nsplugin enable-browser-plugin)
-		-Denable-man=true
-		-Denable-bluetooth=$(usex bluetooth yes no)
-		-Denable-networkmanager=$(usex networkmanager yes no)
-		-Denable-systemd=$(usex systemd yes no)
 	)
 	meson_src_configure
 }
