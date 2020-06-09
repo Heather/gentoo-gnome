@@ -15,6 +15,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE="ayatana doc introspection lto modemmanager selinux teamd test wwan"
 
 DEPEND="
+	>=net-libs/libnma-1.8.27
 	app-crypt/libsecret
 	app-text/iso-codes
 	dev-libs/glib:2[dbus]
@@ -38,7 +39,7 @@ BDEPEND="doc? ( dev-util/gtk-doc )"
 # TODO
 RESTRICT="test"
 
-S="${WORKDIR}"/network-manager-applet-${PV}-dev
+S="${WORKDIR}"/network-manager-applet-${PV}
 
 src_configure() {
 	local emesonargs=(
