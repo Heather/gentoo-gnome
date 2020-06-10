@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -11,14 +11,15 @@ SRC_URI="http://ftp.gnome.org/pub/GNOME/sources/pango/$(ver_cut 1-2)/${P}.tar.xz
 
 LICENSE="LGPL-2+ FTL"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sparc ~x86 ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 
 # X USE flag is simply a stub until all revdeps have been adjusted to use X(+)
 IUSE="gtk-doc +introspection test +X"
+RESTRICT="!test? ( test )"
 
 RDEPEND="
 	>=dev-libs/fribidi-0.19.7[${MULTILIB_USEDEP}]
-	>=dev-libs/glib-2.59.2:2[${MULTILIB_USEDEP}]
+	>=dev-libs/glib-2.60.0:2[${MULTILIB_USEDEP}]
 	>=media-libs/fontconfig-2.12.92:1.0=[${MULTILIB_USEDEP}]
 	>=media-libs/freetype-2.5.0.1:2=[${MULTILIB_USEDEP}]
 	>=media-libs/harfbuzz-2.0:=[glib(+),truetype(+),${MULTILIB_USEDEP}]
@@ -53,6 +54,7 @@ multilib_src_configure() {
 	local emesonargs=(
 		-Dgtk_doc="$(multilib_native_usex gtk-doc true false)"
 		-Dintrospection="$(multilib_native_usex introspection true false)"
+		-Dinstall-tests=false
 	)
 	meson_src_configure
 }
@@ -63,6 +65,10 @@ muiltilib_src_compile() {
 
 multilib_src_install() {
 	meson_src_install
+}
+
+multilib_src_test() {
+	meson_src_test
 }
 
 pkg_postinst() {
