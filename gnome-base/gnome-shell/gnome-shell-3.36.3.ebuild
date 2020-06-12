@@ -23,7 +23,7 @@ COMMON_DEPEND="
 	>=gnome-base/gnome-desktop-3.36.0:3=[introspection]
 	>=dev-libs/glib-2.53.0:2
 	>=dev-libs/gobject-introspection-1.49.1:=
-	>=dev-libs/gjs-1.63.2
+	>=dev-libs/gjs-1.65.1
 	>=x11-libs/gtk+-3.15.0:3[introspection]
 	nsplugin? ( >=dev-libs/json-glib-0.13.2 )
 	>=x11-wm/mutter-3.36.2[introspection]
