@@ -1,5 +1,6 @@
 #needs for gjs
 dev-lang/spidermonkey
+dev-libs/gjs
 
 #needs for gvfs
 sys-auth/polkit
