@@ -26,6 +26,7 @@ KEYWORDS="~amd64 ~arm64 ~ia64 ~ppc ~ppc64 ~x86"
 # >=polkit-0.114 for .policy files gettext ITS
 # First block is toplevel meson.build deps in order of occurrence (plus deeper deps if in same conditional). Second block is dependency() from subdir meson.builds, sorted by directory name occurrence order
 DEPEND="
+	media-libs/grilo
 	>=gui-libs/libhandy-0.0.12:0.0=
 	gnome-online-accounts? ( >=net-libs/gnome-online-accounts-3.25.3:= )
 	>=media-sound/pulseaudio-2.0[glib]
