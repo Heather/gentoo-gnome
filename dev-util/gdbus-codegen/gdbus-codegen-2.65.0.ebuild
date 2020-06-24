@@ -3,9 +3,10 @@
 
 EAPI=7
 GNOME_ORG_MODULE="glib"
-PYTHON_COMPAT=( python{3_5,3_6,3_7} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 PYTHON_REQ_USE="xml"
 DISTUTILS_SINGLE_IMPL=1
+DISTUTILS_USE_SETUPTOOLS=no
 
 inherit gnome.org distutils-r1
 
@@ -14,7 +15,7 @@ HOMEPAGE="https://www.gtk.org/"
 
 LICENSE="LGPL-2+"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~x86-linux ~x64-macos ~x86-macos"
+KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86 ~amd64-linux ~x86-linux ~x64-macos ~x86-macos"
 IUSE=""
 
 RDEPEND="${PYTHON_DEPS}"
@@ -32,11 +33,12 @@ python_prepare_all() {
 	)
 	distutils-r1_python_prepare_all
 
+	local MAJOR_VERSION=$(ver_cut 1)
+	local MINOR_VERSION=$(ver_cut 2)
 	sed -e 's:@PYTHON@:python:' gdbus-codegen.in > gdbus-codegen || die
-	sed -e "s:@VERSION@:${PV}:" config.py.in > config.py || die
-	sed -i -e "s:@MAJOR_VERSION@:$(ver_cut 1):" config.py || die
-	sed -i -e "s:@MINOR_VERSION@:$(ver_cut 2):" config.py || die
-
+	sed -e "s:@VERSION@:${PV}:" \
+		-e "s:@MAJOR_VERSION@:${MAJOR_VERSION}:" \
+		-e "s:@MINOR_VERSION@:${MINOR_VERSION}:" config.py.in > config.py || die
 	cp "${FILESDIR}/setup.py-2.32.4" setup.py || die "cp failed"
 	sed -e "s/@PV@/${PV}/" -i setup.py || die "sed setup.py failed"
 }
