@@ -7,7 +7,7 @@ inherit gnome2-utils meson xdg-utils
 
 DESCRIPTION="GNOME applet for NetworkManager"
 HOMEPAGE="https://wiki.gnome.org/Projects/NetworkManager https://gitlab.gnome.org/GNOME/network-manager-applet"
-SRC_URI="https://download.gnome.org/sources/network-manager-applet/1.16/network-manager-applet-1.16.0.tar.xz"
+SRC_URI="https://download.gnome.org/sources/network-manager-applet/1.18/network-manager-applet-1.18.0.tar.xz"
 
 LICENSE="GPL-2+"
 SLOT="0"
