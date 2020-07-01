@@ -32,8 +32,7 @@ DEPEND="${RDEPEND}
 	>=virtual/rust-1.43.0[${MULTILIB_USEDEP}]
 	dev-libs/gobject-introspection-common
 	dev-libs/vala-common
-	>=dev-util/gtk-doc-am-1.13
-	>=virtual/pkgconfig-0-r1[${MULTILIB_USEDEP}]
+	>=virtual/pkgconfig-0-r1
 	gtk-doc? ( >=dev-util/gtk-doc-1.13 )
 	vala? ( $(vala_depend) )
 "
