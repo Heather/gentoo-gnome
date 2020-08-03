@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -26,7 +26,7 @@ COMMON_DEPEND="
 	media-libs/gstreamer:1.0[introspection]
 	media-libs/gst-plugins-base:1.0[introspection]
 	>=x11-libs/gtk+-3.13.2:3[X,introspection]
-	x11-libs/gtksourceview:3.0[introspection]
+	x11-libs/gtksourceview:4.0[introspection]
 	>=media-libs/harfbuzz-0.9.9:=
 	>=dev-libs/gobject-introspection-1.54:=
 	media-libs/musicbrainz:5=
