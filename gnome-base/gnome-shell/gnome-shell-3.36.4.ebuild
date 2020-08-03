@@ -17,6 +17,7 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~x86"
 
 COMMON_DEPEND="
+	app-arch/gnome-autoar
 	>=dev-libs/libcroco-0.6.8:0.6
 	>=gnome-extra/evolution-data-server-3.34.1:=
 	>=app-crypt/gcr-3.7.5[introspection]
