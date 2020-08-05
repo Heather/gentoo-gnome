@@ -27,7 +27,6 @@ REQUIRED_USE="
 "
 
 RDEPEND="
-	gnome-extra/zeitgeist
 	>=app-editors/gedit-3.16[vala]
 	>=dev-libs/glib-2.32:2
 	>=dev-libs/libpeas-1.7.0[gtk]
