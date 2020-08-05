@@ -35,13 +35,17 @@ DEPEND="${RDEPEND}
 	x11-base/xorg-proto
 "
 BDEPEND="
-	virtual/pkgconfig[${MULTILIB_USEDEP}]
+	virtual/pkgconfig
 	gtk-doc? (
 		>=dev-util/gtk-doc-1.20
 		app-text/docbook-xml-dtd:4.2
 		app-text/docbook-xml-dtd:4.5
 	)
 "
+
+PATCHES=(
+	"${FILESDIR}"/${PN}-1.44.7-tests-test-break.c-Only-test-Thai-breaks-with-libtha.patch
+)
 
 src_prepare() {
 	xdg_src_prepare
