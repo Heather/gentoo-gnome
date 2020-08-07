@@ -6,6 +6,9 @@
 		<name>Gentoo GNOME Desktop</name>
 	</maintainer>
 	<use>
-		<flag name="gles2">Enable OpenGL ES 2.0 support</flag>
+		<flag name="brotli">Enable brotli decompression support</flag>
+		<flag name="gssapi">Enable GSSAPI support</flag>
+		<flag name="samba">Use <pkg>net-fs/samba</pkg> for NTLM Single
+			Sign-On</flag>
 	</use>
 </pkgmetadata>

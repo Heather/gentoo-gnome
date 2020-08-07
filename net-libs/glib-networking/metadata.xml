@@ -5,4 +5,8 @@
 		<email>gnome@gentoo.org</email>
 		<name>Gentoo GNOME Desktop</name>
 	</maintainer>
+	<use>
+		<flag name="libproxy">Use <pkg>net-libs/libproxy</pkg> for getting the HTTP/HTTPS/SOCKS proxy configuration</flag>
+		<flag name="gnome">Extract HTTP/HTTPS/SOCKS proxy configuration stored using GSettings</flag>
+	</use>
 </pkgmetadata>
