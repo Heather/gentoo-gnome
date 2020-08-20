@@ -1,88 +1,71 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 GNOME2_LA_PUNT="yes"
 VALA_USE_DEPEND="vapigen"
 
-inherit autotools eutils gnome2 multilib-minimal vala
+inherit gnome2 multilib-minimal rust-toolchain vala
 
 DESCRIPTION="Scalable Vector Graphics (SVG) rendering library"
 HOMEPAGE="https://wiki.gnome.org/Projects/LibRsvg"
 
-LICENSE="LGPL-2"
+LICENSE="LGPL-2+"
 SLOT="2"
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~arm-linux ~x86-linux ~x64-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
 
-IUSE="gtk-doc +introspection tools vala"
+IUSE="+introspection +vala"
 REQUIRED_USE="vala? ( introspection )"
 
-# TODO not working with rust-bin >=dev-lang/rust-bin-1.31.1[${MULTILIB_USEDEP}] https://github.com/Heather/gentoo-gnome/issues/295
 RDEPEND="
-	>=dev-libs/glib-2.34.3:2[${MULTILIB_USEDEP}]
-	>=media-libs/freetype-2.8.0[${MULTILIB_USEDEP}]
 	>=x11-libs/cairo-1.16.0[${MULTILIB_USEDEP}]
-	>=x11-libs/pango-1.38.0[${MULTILIB_USEDEP}]
+	>=media-libs/freetype-2.9:2[${MULTILIB_USEDEP}]
+	>=x11-libs/gdk-pixbuf-2.20:2[introspection?,${MULTILIB_USEDEP}]
+	>=dev-libs/glib-2.50.0:2[${MULTILIB_USEDEP}]
+	>=media-libs/harfbuzz-2.0.0:=[${MULTILIB_USEDEP}]
 	>=dev-libs/libxml2-2.9.1-r4:2[${MULTILIB_USEDEP}]
-	>=x11-libs/gdk-pixbuf-2.30.7:2[introspection?,${MULTILIB_USEDEP}]
+	>=x11-libs/pango-1.38.0[${MULTILIB_USEDEP}]
+
 	introspection? ( >=dev-libs/gobject-introspection-0.10.8:= )
-	tools? ( >=x11-libs/gtk+-3.10.0:3 )
 "
 DEPEND="${RDEPEND}
-	>=virtual/rust-1.43.0[${MULTILIB_USEDEP}]
-	dev-libs/gobject-introspection-common
-	dev-libs/vala-common
-	>=virtual/pkgconfig-0-r1
-	gtk-doc? ( >=dev-util/gtk-doc-1.13 )
+	>=virtual/rust-1.39[${MULTILIB_USEDEP}]
+	dev-util/glib-utils
+	>=sys-devel/gettext-0.19.8
+	virtual/pkgconfig
 	vala? ( $(vala_depend) )
 "
 # >=gtk-doc-am-1.13, gobject-introspection-common, vala-common needed by eautoreconf
 
-# Rust does not know the *-pc-* variants of target triples, but these ones.
-CHOST_amd64=x86_64-unknown-linux-gnu
-CHOST_x86=i686-unknown-linux-gnu
-CHOST_arm64=aarch64-unknown-linux-gnu
+RESTRICT="test" # Lots of issues on 32bit builds, 64bit build seems to get into an infinite compilation sometimes, etc.
 
 src_prepare() {
-	local build_dir
-
 	use vala && vala_src_prepare
-
-	# Work around issue where vala file is expected in local
-	# directory instead of source directory.
-	for v in $(multilib_get_enabled_abi_pairs); do
-		build_dir="${S%%/}-${v}"
-		mkdir -p "${build_dir}"
-		cp -p "${S}/Rsvg-2.0-custom.vala" "${build_dir}"|| die
-	done
-
 	gnome2_src_prepare
-
-	# important to do it after patches
-	eautoreconf
 }
 
 multilib_src_configure() {
-	local myconf=()
+	local myconf=(
+		--disable-static
+		--disable-debug
+		--disable-tools # the tools/ subdirectory is useful only for librsvg devs
+		$(multilib_native_use_enable introspection)
+		$(multilib_native_use_enable vala)
+		--enable-pixbuf-loader
+	)
 
-	# -Bsymbolic is not supported by the Darwin toolchain
-	if [[ ${CHOST} == *-darwin* ]]; then
-		myconf+=( --disable-Bsymbolic )
+	if ! multilib_is_native_abi; then
+		myconf+=(
+			# Set the rust target, which can differ from CHOST
+			RUST_TARGET="$(rust_abi)"
+			# RUST_TARGET is only honored if cross_compiling, but non-native ABIs aren't cross as
+			# far as C parts and configure auto-detection are concerned as CHOST equals CBUILD
+			cross_compiling=yes
+		)
 	fi
 
-	# --disable-tools even when USE=tools; the tools/ subdirectory is useful
-	# only for librsvg developers
 	ECONF_SOURCE=${S} \
-	cross_compiling=yes \
-	gnome2_src_configure \
-		--build=${CHOST_default} \
-		--disable-static \
-		--disable-tools \
-		$(multilib_native_use_enable gtk-doc) \
-		$(multilib_native_use_enable introspection) \
-		$(multilib_native_use_enable vala) \
-		--enable-pixbuf-loader \
-		"${myconf[@]}"
+	gnome2_src_configure "${myconf[@]}"
 
 	if multilib_is_native_abi; then
 		ln -s "${S}"/doc/html doc/html || die
@@ -110,3 +93,4 @@ pkg_postrm() {
 	unset __GL_NO_DSO_FINALIZER
 	multilib_foreach_abi gnome2_pkg_postrm
 }
+
