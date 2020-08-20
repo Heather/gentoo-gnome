@@ -14,7 +14,7 @@ LICENSE="LGPL-2+"
 SLOT="2"
 KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
 
-IUSE="+introspection +vala"
+IUSE="gtk-doc +introspection +vala"
 REQUIRED_USE="vala? ( introspection )"
 
 RDEPEND="
@@ -33,6 +33,7 @@ DEPEND="${RDEPEND}
 	dev-util/glib-utils
 	>=sys-devel/gettext-0.19.8
 	virtual/pkgconfig
+	gtk-doc? ( >=dev-util/gtk-doc-1.13 )
 	vala? ( $(vala_depend) )
 "
 # >=gtk-doc-am-1.13, gobject-introspection-common, vala-common needed by eautoreconf
