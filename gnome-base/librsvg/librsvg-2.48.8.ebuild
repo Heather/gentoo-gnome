@@ -55,6 +55,14 @@ multilib_src_configure() {
 		--enable-pixbuf-loader
 	)
 
+
+	if tc-is-cross-compiler; then
+		myconf+=(
+			--host=${CHOST_default}
+			RUST_TARGET="$(rust_abi)"
+		)
+	fi
+
 	if ! multilib_is_native_abi; then
 		myconf+=(
 			# Set the rust target, which can differ from CHOST
