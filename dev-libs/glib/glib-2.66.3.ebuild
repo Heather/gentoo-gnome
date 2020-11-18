@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-PYTHON_COMPAT=( python3_{6,7,8} )
+PYTHON_COMPAT=( python3_{6,7,8,9} )
 
 inherit flag-o-matic gnome.org gnome2-utils linux-info meson multilib multilib-minimal python-any-r1 toolchain-funcs xdg
 
@@ -11,7 +11,7 @@ HOMEPAGE="https://www.gtk.org/"
 
 LICENSE="LGPL-2.1+"
 SLOT="2"
-IUSE="dbus debug elibc_glibc fam gtk-doc kernel_linux +mime selinux static-libs systemtap test utils xattr"
+IUSE="dbus debug elibc_glibc fam gtk-doc kernel_linux +mime selinux static-libs sysprof systemtap test utils xattr"
 RESTRICT="!test? ( test )"
 
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86 ~amd64-linux ~x86-linux"
@@ -30,7 +30,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~riscv ~
 # them or just put the (build) deps in that rare consumer instead of recursive
 # RDEPEND here (due to lack of recursive DEPEND).
 RDEPEND="
-	!<dev-util/gdbus-codegen-${PV}
+	!<dev-util/gdbus-codegen-2.66.0
 	>=virtual/libiconv-0-r1[${MULTILIB_USEDEP}]
 	>=dev-libs/libpcre-8.31:3[${MULTILIB_USEDEP},static-libs?]
 	>=dev-libs/libffi-3.0.13-r1:=[${MULTILIB_USEDEP}]
@@ -42,13 +42,15 @@ RDEPEND="
 	!kernel_Winnt? ( virtual/libelf:0= )
 	fam? ( >=virtual/fam-0-r1[${MULTILIB_USEDEP}] )
 "
-DEPEND="${RDEPEND}"
+DEPEND="${RDEPEND}
+	sysprof? ( >=dev-util/sysprof-capture-3.38:4[${MULTILIB_USEDEP}] )
+"
 # libxml2 used for optional tests that get automatically skipped
 BDEPEND="
 	app-text/docbook-xsl-stylesheets
 	dev-libs/libxslt
 	>=sys-devel/gettext-0.19.8
-	gtk-doc? ( >=dev-util/gtk-doc-1.20
+	gtk-doc? ( >=dev-util/gtk-doc-1.32-r2
 		app-text/docbook-xml-dtd:4.2
 		app-text/docbook-xml-dtd:4.5 )
 	systemtap? ( >=dev-util/systemtap-1.3 )
@@ -168,6 +170,7 @@ multilib_src_configure() {
 		-Dman=true
 		$(meson_use systemtap dtrace)
 		$(meson_use systemtap)
+		$(meson_feature sysprof)
 		-Dgtk_doc=$(multilib_native_usex gtk-doc true false)
 		$(meson_use fam)
 		-Dinstalled_tests=false
