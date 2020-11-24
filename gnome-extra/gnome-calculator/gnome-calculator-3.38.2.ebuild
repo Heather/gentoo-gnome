@@ -1,8 +1,8 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-VALA_MAX_API_VERSION="0.44"
+VALA_MAX_API_VERSION="0.46"
 inherit gnome.org gnome2-utils meson vala xdg
 
 DESCRIPTION="A calculator application for GNOME"
@@ -23,6 +23,7 @@ RDEPEND="
 	dev-libs/libxml2:2
 	dev-libs/mpc:=
 	dev-libs/mpfr:0=
+	dev-libs/libgee
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
