@@ -51,7 +51,7 @@ RDEPEND="
 	systemd? ( >=sys-apps/systemd-206:0= )
 	udev? (
 		cdda? ( dev-libs/libcdio-paranoia )
-		virtual/libgudev:= )
+		>=dev-libs/libgudev-234 )
 	udisks? ( >=sys-fs/udisks-1.97:2 )
 	zeroconf? ( >=net-dns/avahi-0.6 )
 "
